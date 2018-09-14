@@ -98,6 +98,8 @@
     <Maybach_HL62TRM_1>	109	</Maybach_HL62TRM_1>
     <W-55>	110	</W-55>
     <Maybach_HL_210_TRM_P45A>	111	</Maybach_HL_210_TRM_P45A>
+    <Daimler-Benz_DB-603>	112	</Daimler-Benz_DB-603>
+    <Porsche_Typ_220>	114	</Porsche_Typ_220>
     <V12_cylinder_Boxer_Motor>	115	</V12_cylinder_Boxer_Motor>
     <MB-837-Aa_A>	116	</MB-837-Aa_A>
     <Porsche_Typ_100_3A>	117	</Porsche_Typ_100_3A>
@@ -113,6 +115,9 @@
     <Continental_AOS-895-3>	128	</Continental_AOS-895-3>
     <Maybach_HL_224>	129	</Maybach_HL_224>
     <Maybach_HL_210P30A_CN>	130	</Maybach_HL_210P30A_CN>
+    <Porsche_16_Cyl_Y1>	131	</Porsche_16_Cyl_Y1>
+    <Porsche_16_Cyl_Y2>	132	</Porsche_16_Cyl_Y2>
+    <MB517P>	133	</MB517P>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -763,15 +768,48 @@
       <price>	54520	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	720	</power>
+      <power>	800	</power>
       <weight>	900	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </Daimler-Benz_DB-603A2>
+    <Daimler-Benz_DB-603>
+      <userString>	#germany_vehicles:Daimler-Benz_DB-603	</userString>
+      <shortUserString>	#germany_vehicles:Daimler-Benz_DB-603_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	94000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1300	</power>
+      <weight>	920	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2395	</rpm_max>
+    </Daimler-Benz_DB-603>
+    <Porsche_Typ_220>
+      <userString>	#germany_vehicles:Porsche_Typ_220	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1550	</power>
+      <weight>	2500	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2620	</rpm_max>
+    </Porsche_Typ_220>
     <Maybach_HL66P>
       <userString>	#germany_vehicles:Maybach_HL66P	</userString>
       <tags>	gasoline	</tags>
@@ -877,16 +915,16 @@
       <level>	10	</level>
       <price>	120000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	900	</power>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	850	</power>
       <weight>	1200	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	170	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	488	</rpm_min>
-      <rpm_max>	2035	</rpm_max>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
     </Maybach_HL_234>
     <Maybach_HL_234P50>
       <userString>	#germany_vehicles:Maybach_HL_234P50	</userString>
@@ -1114,6 +1152,22 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	2050	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </Porsche_16_Cyl_Y>
+    <Porsche_16_Cyl_Y1>
+      <userString>	#germany_vehicles:Porsche_16_Cyl_Y1	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	58000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	2000	</weight>
       <maxHealth>	255	</maxHealth>
@@ -1122,7 +1176,23 @@
       <fireStartingChance>	0.15	</fireStartingChance>
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
-    </Porsche_16_Cyl_Y>
+    </Porsche_16_Cyl_Y1>
+    <Porsche_16_Cyl_Y2>
+      <userString>	#germany_vehicles:Porsche_16_Cyl_Y2	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	88000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	2050	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </Porsche_16_Cyl_Y2>
     <Engine_VK4502P>
       <userString>	#germany_vehicles:Engine_VK4502P	</userString>
       <tags>	diesel	</tags>
@@ -1231,16 +1301,16 @@
       <tags>	gasoline	</tags>
       <level>	8	</level>
       <price>	45000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	750	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	429	</rpm_min>
-      <rpm_max>	2817	</rpm_max>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
     </Maybach_HL_234P30_Ausf_A>
     <Tatra_V-103>
       <userString>	#germany_vehicles:Tatra_V-103	</userString>
@@ -1325,6 +1395,23 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </MB517>
+    <MB517P>
+      <userString>	#germany_vehicles:MB517P	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	920	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
+    </MB517P>
     <Maybach_HL66Px2>
       <userString>	#germany_vehicles:Maybach_HL66Px2	</userString>
       <tags>	gasoline	</tags>
@@ -1355,8 +1442,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2144	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </MB-837A>
     <MB-838_CAM-500>
       <userString>	#germany_vehicles:MB-838_CAM-500	</userString>
@@ -1949,16 +2036,16 @@
       <level>	5	</level>
       <price>	12000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	140	</power>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	220	</power>
       <weight>	600	</weight>
       <maxHealth>	40	</maxHealth>
       <maxRegenHealth>	19	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2562	</rpm_max>
+      <rpm_min>	487	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V12_cylinder_Boxer_Motor>
     <Praga_NS>
       <userString>	#germany_vehicles:Praga_NS	</userString>

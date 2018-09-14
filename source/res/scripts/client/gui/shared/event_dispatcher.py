@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 from adisp import process
+from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.battle_results import data_providers
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -22,35 +23,12 @@ class SETTINGS_TAB_INDEX(object):
     FEEDBACK = 6
 
 
-def _showBattleResults(arenaUniqueID, dataProvider):
-    """
-    :param arenaUniqueID: long, arena unique id
-    :param dataProvider: gui.battle_results.data_providers.* instance
-    """
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), ctx={'dataProvider': dataProvider}), EVENT_BUS_SCOPE.LOBBY)
+def showBattleResultsWindow(arenaUniqueID):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_RESULTS, getViewName(VIEW_ALIAS.BATTLE_RESULTS, str(arenaUniqueID)), {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBattleResultsFromData(battleResultsData):
-    """
-    :param battleResultsData: dict, gotten battle results
-    """
-    arenaUniqueID = battleResultsData['arenaUniqueID']
-    return _showBattleResults(arenaUniqueID, data_providers.DirectDataProvider(arenaUniqueID, battleResultsData))
-
-
-def showMyBattleResults(arenaUniqueID):
-    """
-    :param arenaUniqueID: long, arena unique id
-    """
-    return _showBattleResults(arenaUniqueID, data_providers.OwnResultsDataProvider(arenaUniqueID))
-
-
-def showUserBattleResults(arenaUniqueID, svrPackedData):
-    """
-    :param arenaUniqueID: long, arena unique id
-    :param svrPackedData: str or None, used to show other user post-battle results
-    """
-    return _showBattleResults(arenaUniqueID, data_providers.UserResultsDataProvider(arenaUniqueID, svrPackedData))
+def notifyBattleResultsPosted(arenaUniqueID):
+    g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleInfo(vehTypeCompDescr):
@@ -102,16 +80,19 @@ def hideBattleResults():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showAwardWindow(award, isUniqueName=True, viewAlias=VIEW_ALIAS.AWARD_WINDOW):
+def showAwardWindow(award, isUniqueName=True):
     """
     :param award: AwardAbstract instance object
     :param isUniqueName:
     """
+    if isPopupsWindowsOpenDisabled():
+        LOG_WARNING('Award popup disabled', award, isUniqueName)
+        return
     if isUniqueName:
-        name = getUniqueViewName(viewAlias)
+        name = getUniqueViewName(VIEW_ALIAS.AWARD_WINDOW)
     else:
-        name = viewAlias
-    g_eventBus.handleEvent(events.LoadViewEvent(viewAlias, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
+        name = VIEW_ALIAS.AWARD_WINDOW
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.AWARD_WINDOW, name=name, ctx={'award': award}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionAwardWindow(award):

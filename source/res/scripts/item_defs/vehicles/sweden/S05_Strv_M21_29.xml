@@ -214,7 +214,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -422,9 +421,9 @@
         </_37mm_kanon_m_Skoda>
         <_20mm_akan_m_Madsen>	shared	  <maxAmmo>	480	</maxAmmo>
           <unlocks>
-            <vehicle>	S03_Strv_M38	  <cost>	275	</cost>
-            </vehicle>
             <vehicle>	S09_L_120_TD	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	S03_Strv_M38	  <cost>	275	</cost>
             </vehicle>
           </unlocks>
           <armor>

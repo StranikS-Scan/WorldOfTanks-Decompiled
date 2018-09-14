@@ -13,5 +13,8 @@ class ColorSchemeManagerMeta(BaseDAAPIModule):
     def getColorScheme(self, schemeName):
         self._printOverrideError('getColorScheme')
 
+    def getIsColorBlind(self):
+        self._printOverrideError('getIsColorBlind')
+
     def as_updateS(self):
         return self.flashObject.as_update() if self._isDAAPIInited() else None

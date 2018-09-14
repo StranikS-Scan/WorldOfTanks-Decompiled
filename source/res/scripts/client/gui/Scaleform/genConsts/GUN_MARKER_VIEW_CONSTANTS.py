@@ -8,11 +8,11 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     Generated with yaml.
     __author__ = 'yaml_processor'
     """
-    DEFAULT_GUN_MARKER_LINKAGE = 'GunMarkerUI'
-    DEBUG_GUN_MARKER_LINKAGE = 'DebugGunMarkerUI'
-    SPG_GUN_MARKER_LINKAGE = 'SPGGunMarkerUI'
-    DEBUG_SPG_GUN_MARKER_LINKAGE = 'DebugSPGGunMarkerUI'
-    ARTY_HIT_MARKER_LINKAGE = 'ArtyHitMakerUI'
+    GUN_MARKER_LINKAGE = 'GunMarkerUI'
+    GUN_MARKER_DEBUG_LINKAGE = 'GunMarkerDebugUI'
+    GUN_MARKER_SPG_LINKAGE = 'GunMarkerSPGUI'
+    GUN_MARKER_SPG_DEBUG_LINKAGE = 'GunMarkerSPGDebugUI'
+    ARTY_HIT_MARKER_LINKAGE = 'ArtyHitMarkerUI'
     ARCADE_GUN_MARKER_NAME = 'arcadeGunMarker'
     SNIPER_GUN_MARKER_NAME = 'sniperGunMarker'
     SPG_GUN_MARKER_NAME = 'spgGunMarker'

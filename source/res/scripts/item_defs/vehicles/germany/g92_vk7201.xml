@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	43	</forward>
+    <forward>	33	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -27,7 +27,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	200	</armor_1>
+      <armor_1>	240	</armor_1>
       <armor_2>	200	</armor_2>
       <armor_3>	160	</armor_3>
       <armor_4>	120	</armor_4>
@@ -42,7 +42,8 @@
       <armor_12>	160	</armor_12>
       <armor_13>	80	</armor_13>
       <armor_14>	200	</armor_14>
-      <armor_16>	200	</armor_16>
+      <armor_15>	230	</armor_15>
+      <armor_16>	300	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	50970	</weight>
@@ -106,8 +107,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -218,13 +219,9 @@
         <gravity>	-8	</gravity>
         <elasticity>	1060	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.106	</offset>
@@ -233,7 +230,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.9	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -243,7 +239,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.8	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -253,7 +248,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -263,7 +257,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -273,7 +266,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L5	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -283,7 +275,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L6	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.4	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -293,7 +284,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L7	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.3	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -303,7 +293,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L8	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.2	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.061	</offset>
@@ -312,7 +301,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.106	</offset>
@@ -321,7 +309,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.9	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -331,7 +318,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.8	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -341,7 +327,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -351,7 +336,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -361,7 +345,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.5	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -371,7 +354,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R6	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.4	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -381,7 +363,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.3	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.08	</offset>
@@ -391,7 +372,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R8	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.2	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
           <offset>	-0.061	</offset>
@@ -400,35 +380,30 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.25	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.25	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.25	</forwardElastK>
           <backwardElastK>	0.75	</backwardElastK>
         </node>
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 1.21035 0.000000	</hullPosition>
@@ -490,7 +465,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_150mm_KwK44_L38_A>	shared	  <maxAmmo>	24	</maxAmmo>
+        <_150mm_KwK44_L38_A>	shared	  <maxAmmo>	35	</maxAmmo>
           <armor>
             <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -505,10 +480,10 @@
             <gun>	70	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	22	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <reloadTime>	20	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>

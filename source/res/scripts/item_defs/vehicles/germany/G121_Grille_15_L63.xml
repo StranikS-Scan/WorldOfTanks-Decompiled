@@ -9,7 +9,7 @@
   </crew>
   <speedLimits>
     <forward>	60	</forward>
-    <backward>	20	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.083	</moving>
@@ -195,7 +195,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -486,11 +485,11 @@
           <turretYawLimits>	-50 50	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.105	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.27	</shotDispersionRadius>
-          <reloadTime>	16.5	</reloadTime>
+          <reloadTime>	18	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.4	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -575,7 +574,7 @@
     <detailed>
       <engines>
         <Maybach_HL_234>
-          <smplEnginePower>	951.553	</smplEnginePower>
+          <smplEnginePower>	850	</smplEnginePower>
         </Maybach_HL_234>
       </engines>
       <chassis>

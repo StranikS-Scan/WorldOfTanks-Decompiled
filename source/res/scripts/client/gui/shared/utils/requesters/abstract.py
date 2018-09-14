@@ -250,7 +250,7 @@ class RequestsByIDProcessor(object):
         methodName, args, kwargs = chain[0]
         return self._sendRequest(ctx, methodName, chain[1:], *args, **kwargs)
 
-    def _makeResponse(self, code=0, errMsg='', data=None, ctx=None):
+    def _makeResponse(self, code=0, txtMsg='', data=None, ctx=None):
         return isCodeValid(code)
 
 
@@ -278,7 +278,7 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
 
 
 _Response = namedtuple('_Response', ['code',
- 'errStr',
+ 'txtStr',
  'data',
  'extraCode'])
 _Response.__new__.__defaults__ = (0, '', None, 0)
@@ -294,8 +294,8 @@ class Response(_Response):
     def getExtraCode(self):
         return self.extraCode
 
-    def getErrString(self):
-        return self.errStr
+    def getTxtString(self):
+        return self.txtStr
 
     def getData(self):
         return self.data
@@ -314,15 +314,15 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
     def _doCall(self, method, *args, **kwargs):
         requestID = self._idsGenerator.next()
 
-        def _callback(code, errStr, data):
+        def _callback(code, txtMsg, data):
             ctx = self._requests.get(requestID)
-            self._onResponseReceived(requestID, self._makeResponse(code, errStr, data, ctx))
+            self._onResponseReceived(requestID, self._makeResponse(code, txtMsg, data, ctx))
 
         method(callback=_callback, *args, **kwargs)
         return requestID
 
-    def _makeResponse(self, code=0, errMsg='', data=None, ctx=None, extraCode=0):
-        response = self.__responseClass(code, errMsg, data, extraCode)
+    def _makeResponse(self, code=0, txtMsg='', data=None, ctx=None, extraCode=0):
+        response = self.__responseClass(code, txtMsg, data, extraCode)
         if not response.isSuccess():
             LOG_WARNING('Client request error', ctx, response)
         return response

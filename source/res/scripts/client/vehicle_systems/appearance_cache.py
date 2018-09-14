@@ -110,7 +110,7 @@ class _AppearanceCache(object):
                 return
             if _ENABLE_CACHE_TRACKER:
                 LOG_DEBUG('Appearance cache. Constructed vID = {0}'.format(vId))
-            assemblerData.info.typeDescr.keepPrereqs(resourceRefs, True)
+            assemblerData.info.typeDescr.keepPrereqs(resourceRefs)
             assembler.appearance.start(resourceRefs)
             assembler.constructAppearance(BigWorld.player().playerVehicleID == vId)
             appearance = assembler.appearance

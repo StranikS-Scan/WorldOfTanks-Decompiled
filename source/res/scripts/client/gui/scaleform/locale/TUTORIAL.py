@@ -149,6 +149,4 @@ class TUTORIAL(object):
     CHAIN9_HINT_SELECT = '#tutorial:chain9/hint/select'
     CHAIN9_HINT_SUBMIT = '#tutorial:chain9/hint/submit'
     CUSTOMIZATION_SLOTS = '#tutorial:customization/slots'
-    ALCHEMY_BTN = '#tutorial:alchemy/btn'
-    CHRISTMAS_DECORATIONLIST = '#tutorial:christmas/decorationList'
     TRADEIN_SHOP = '#tutorial:tradeIn/shop'

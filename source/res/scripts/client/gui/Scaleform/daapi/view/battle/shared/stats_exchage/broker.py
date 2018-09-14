@@ -6,8 +6,6 @@ import Event
 from constants import IGR_TYPE
 from messenger.m_constants import USER_TAG
 from messenger.storage import storage_getter
-from messenger.m_constants import PROTO_TYPE
-from messenger.proto import proto_getter
 from shared_utils import AlwaysValidObject
 
 class IExchangeComponent(object):
@@ -295,10 +293,6 @@ class ExchangeCtx(object):
     def usersStorage(self):
         return None
 
-    @proto_getter(PROTO_TYPE.BW_CHAT2)
-    def bwProto(self):
-        return None
-
     def clear(self):
         self.__playerFormatter = None
         return
@@ -313,9 +307,6 @@ class ExchangeCtx(object):
         else:
             userTags = set()
         return self.addTagByIGRType(userTags, igrType)
-
-    def isPlayerSpeaking(self, accountDBID):
-        return self.bwProto.voipController.isPlayerSpeaking(accountDBID)
 
     @staticmethod
     def addTagByIGRType(userTags, igrType):

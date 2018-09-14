@@ -37,7 +37,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
     BOOSTER = 'booster'
     VEHICLE_FILTER = 'vehicleFilter'
-    CHRISTMAS = 'christmas'
+    VEH_CMP_CUSTOMIZATION = 'vehCmpCustomization'
+    RESERVE = 'reserve'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -60,6 +61,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     HANGAR_TUTORIAL = 'hangarTutorial'
     TECH_CUSTOMIZATION = 'techCustomization'
     BOOSTER = 'booster'
+    RESERVE = 'reserve'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

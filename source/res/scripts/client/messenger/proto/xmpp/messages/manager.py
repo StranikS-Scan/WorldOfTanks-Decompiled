@@ -152,7 +152,6 @@ class MessagesManager(ClientEventsHandler):
 
     def __handleLogin(self):
         self.__chatSessions.release()
-        self.__muc.release()
         self._addSysChannelsToStorage()
 
     def __handleDisconnected(self, reason, description):

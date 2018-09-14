@@ -12,9 +12,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
 from gui.shared.economics import getActionPrc
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import params_helper, formatters as params_formatters
+from gui.shared.items_parameters import params_helper, formatters as params_formatters, bonus_helper
 from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
@@ -69,7 +69,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
         statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
         if module.itemTypeID in statsModules:
-            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_FORMATTERS).construct()
+            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct()
             if len(commonStatsBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
         if not module.isRemovable and not statusConfig.isAwardWindow:
@@ -77,6 +77,8 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if len(statusBlock) > 0:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
+        if bonus_helper.isSituationalBonus(module.name):
+            items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL), img=RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
         return items
 
 
@@ -125,7 +127,7 @@ class ModuleTooltipBlockConstructor(object):
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
      GUI_ITEM_TYPE.GUN: (RELOAD_TIME_PROP_NAME,
                          'avgPiercingPower',
-                         'avgDamage',
+                         'avgDamageList',
                          'avgDamagePerMinute',
                          'dispertionRadius',
                          AIMING_TIME_PROP_NAME,
@@ -138,7 +140,7 @@ class ModuleTooltipBlockConstructor(object):
                              SHELL_RELOADING_TIME_PROP_NAME,
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
                              'avgPiercingPower',
-                             'avgDamage',
+                             'avgDamageList',
                              'avgDamagePerMinute',
                              'dispertionRadius',
                              'maxShotDistance',
@@ -243,12 +245,14 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 if isEqOrDev or showNeeded:
                     need = price - money
                     need = need.toNonNegative()
-                if price.credits > 0:
+                useGoldAndCredits = items.shop.isEnabledBuyingGoldEqsForCredits
+                if price.credits > 0 and (useGoldAndCredits or price.gold <= 0):
                     creditsActionPercent = getActionPrc(price.credits, defPrice.credits)
                     block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, creditsActionPercent, self._valueWidth, leftPadding))
                 if price.gold > 0:
                     goldActionPercent = getActionPrc(price.gold, defPrice.gold)
-                    block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=(101 if goldActionPercent > 0 else 81) + self.leftPadding)))
+                    if useGoldAndCredits:
+                        block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=(101 if goldActionPercent > 0 else 81) + self.leftPadding)))
                     block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, goldActionPercent, self._valueWidth, leftPadding))
             if sellPrice:
                 block.append(makePriceBlock(module.sellPrice.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.defaultSellPrice.credits, percent=module.sellActionPrc, valueWidth=self._valueWidth, leftPadding=leftPadding))
@@ -272,7 +276,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         super(CommonStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
         self._valueWidth = valueWidth
         self._slotIdx = slotIdx
-        self.__colorScheme = colorScheme or params_formatters.NO_COLORIZE_FORMATTERS
+        self.__colorScheme = colorScheme or params_formatters.COLORLESS_SCHEME
 
     def construct(self):
         module = self.module
@@ -280,7 +284,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         params = self.configuration.params
         block = []
         vDescr = vehicle.descriptor if vehicle is not None else None
-        moduleParams = dict(params_helper.getParameters(module, vDescr))
+        moduleParams = params_helper.getParameters(module, vDescr)
         paramsKeyName = module.itemTypeID
         if params:
             reloadingType = None
@@ -319,6 +323,7 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
     def __init__(self, module, configuration, leftPadding, rightPadding, stockParams, comparator):
         self.__stockParams = stockParams
         self.__comparator = comparator
+        self.__isSituational = bonus_helper.isSituationalBonus(module.name)
         super(SimplifiedStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
 
     def construct(self):
@@ -329,7 +334,7 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 value = parameter.value
                 if delta > 0:
                     value -= delta
-                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=formatters.packPadding(left=105, top=8)))
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
 
         return block
 
@@ -364,8 +369,14 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
         onUse = checkLocalization('%s/onUse' % module.descriptor['name'])
         always = checkLocalization('%s/always' % module.descriptor['name'])
         restriction = checkLocalization('%s/restriction' % module.descriptor['name'])
+        if bonus_helper.isSituationalBonus(module.name):
+            effectDesc = text_styles.bonusPreviewText(_ms(module.shortDescription))
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, 16, 16, 0, 4)
+            desc = params_formatters.packSituationalIcon(effectDesc, icon)
+        else:
+            desc = text_styles.bonusAppliedText(_ms(module.shortDescription))
         if module.itemTypeID == ITEM_TYPES.optionalDevice:
-            block.append(formatters.packTitleDescBlock(title='', desc=text_styles.bonusAppliedText(module.shortDescription), padding=formatters.packPadding(top=-8)))
+            block.append(formatters.packTitleDescBlock(title='', desc=desc, padding=formatters.packPadding(top=-8)))
         else:
             topPadding = 0
             if always[0] and len(always[1]) > 0:

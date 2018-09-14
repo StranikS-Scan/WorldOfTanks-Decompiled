@@ -8,9 +8,9 @@ class _ComponentUpdater(object):
     """
     This is a base updater class, it contains the common logic for updating Siege indicator.
     """
-    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState')
+    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState', '_isSmooth')
 
-    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState):
+    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
         """
         Constructor, initializes internal variables.
         :param parentObj: reference on SiegeModeIndicator class
@@ -25,6 +25,7 @@ class _ComponentUpdater(object):
         self._timeLeft = timeLeft
         self._siegeState = siegeState
         self._engineState = engineState
+        self._isSmooth = isSmooth
 
     def __repr__(self):
         return '_UpdaterComponent(totalTime = {}, timeLeft = {}, siegeState = {}, engineState = {})'.format(self._totalTime, self._timeLeft, self._siegeState, self._engineState)
@@ -52,7 +53,7 @@ class _ActionScriptUpdater(_ComponentUpdater):
     __slots__ = ()
 
     def _startTick(self):
-        self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._engineState)
+        self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._engineState, self._isSmooth)
 
     def _stopTick(self):
         pass
@@ -67,8 +68,8 @@ class _PythonUpdater(_ComponentUpdater):
     """
     __slots__ = ('_timeInterval', '_startTime', '_finishTime', '__weakref__')
 
-    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState):
-        super(_PythonUpdater, self).__init__(parentObj, totalTime, timeLeft, siegeState, engineState)
+    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
+        super(_PythonUpdater, self).__init__(parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth)
         self._timeInterval = TimeInterval(0.05, self, '_tick')
         self._startTime = BigWorld.serverTime()
         self._finishTime = self._startTime + timeLeft
@@ -85,6 +86,7 @@ class _PythonUpdater(_ComponentUpdater):
                 self._timeInterval.start()
         else:
             self._updateSnapshot(self._timeLeft)
+        self._isSmooth = False
 
     def _stopTick(self):
         self._timeInterval.stop()
@@ -95,7 +97,7 @@ class _PythonUpdater(_ComponentUpdater):
             self._updateSnapshot(timeLeft)
 
     def _updateSnapshot(self, timeLeft):
-        self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._engineState)
+        self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._engineState, self._isSmooth)
 
 
 class _SiegeComponent(object):
@@ -111,9 +113,9 @@ class _SiegeComponent(object):
         self._clazz = clazz
         return
 
-    def invalidate(self, totalTime, timeLeft, siegeState, engineState):
+    def invalidate(self, totalTime, timeLeft, siegeState, engineState, isSmooth):
         self._clearUpdater()
-        self._componentUpdater = self._clazz(self._parentObj, totalTime, timeLeft, siegeState, engineState)
+        self._componentUpdater = self._clazz(self._parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth)
         self._componentUpdater.show()
 
     def clear(self):

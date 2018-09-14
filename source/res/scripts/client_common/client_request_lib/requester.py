@@ -1331,6 +1331,572 @@ class StrongholdsAccessor(BaseAccessor):
         return self._data_source.get_strongholds_state(callback, clan_id, fields=fields)
 
 
+class WgshAccessor(BaseAccessor):
+    """
+    New strongholds info accessor
+    
+    Access new strongholds data from `data_source` instance
+    
+    :Example:
+    
+    >>> class SomeClass(object):
+    ...     wgsh = RequestDescriptor(WgshAccessor)
+    ...
+    >>> requester=SomeClass(DataAccessor())
+    >>> requester.wgsh.get_wgsh_unit_info(str, [101, 1])
+    """
+
+    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        request unit info and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.get_wgsh_unit_info(printer, 101, 1)
+        (
+            {<bunch of data in json>}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.get_wgsh_unit_info(callback, periphery_id, unit_server_id, fields=fields)
+
+    def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
+        """
+        change current user vehicle and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.set_vehicle(printer, 101, 1, 2265)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param vehicle_cd: vehicle compact descriptor
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type vehicle_cd: integer
+        :type fields: list of strings
+        """
+        return self._data_source.set_vehicle(callback, periphery_id, unit_server_id, vehicle_cd, fields=fields)
+
+    def set_readiness(self, callback, periphery_id, unit_server_id, is_ready, reset_vehicle, fields=None):
+        """
+        change current user readiness and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.set_readiness(printer, 101, True, False)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param is_ready: flag if player is ready
+        :param reset_vehicle: flag if vehicle should be reset
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type is_ready: boolean
+        :type reset_vehicle: boolean
+        :type fields: list of strings
+        """
+        return self._data_source.set_readiness(callback, periphery_id, unit_server_id, is_ready, reset_vehicle, fields=fields)
+
+    def invite_players(self, callback, periphery_id, unit_server_id, accounts_to_invite, comment, fields=None):
+        """
+        send invite to players and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.invite_players(printer, 101, [1, 2, 3], 'Hello')
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param accounts_to_invite: list if account ids to invite into battle
+        :param comment: comment to display to players
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type accounts_to_invite: list of integers
+        :type comment: string
+        :type fields: list of strings
+        """
+        return self._data_source.invite_players(callback, periphery_id, unit_server_id, accounts_to_invite, comment, fields=fields)
+
+    def assign_player(self, callback, periphery_id, unit_server_id, account_to_assign, slot_id_to_assign, fields=None):
+        """
+        assign player to battle and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.assign_player(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param account_to_assign: account id to assign
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type account_to_assign: integer
+        :type slot_id_to_assign: integer
+        :type fields: list of strings
+        """
+        return self._data_source.assign_player(callback, periphery_id, unit_server_id, account_to_assign, slot_id_to_assign, fields=fields)
+
+    def unassign_player(self, callback, periphery_id, unit_server_id, account_to_unassign, fields=None):
+        """
+        unassign player from battle and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.unassign_player(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param account_to_unassign: account id to unassign
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type account_to_unassign: integer
+        :type fields: list of strings
+        """
+        return self._data_source.unassign_player(callback, periphery_id, unit_server_id, account_to_unassign, fields=fields)
+
+    def give_leadership(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+        """
+        make player a leader and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.give_leadership(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param target_account_id: account id to make a leader
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type target_account_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.give_leadership(callback, periphery_id, unit_server_id, target_account_id, fields=fields)
+
+    def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        make player a leader and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.leave_room(printer, 101)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.leave_room(callback, periphery_id, unit_server_id, fields=fields)
+
+    def take_away_leadership(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        take away leadership if you have rights and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.take_away_leadership(printer, 101)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.take_away_leadership(callback, periphery_id, unit_server_id, fields=fields)
+
+    def kick_player(self, callback, periphery_id, unit_server_id, account_to_kick, fields=None):
+        """
+        make player a leader and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.kick_player(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param account_to_kick: account id to kick
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type account_to_kick: integer
+        :type fields: list of strings
+        """
+        return self._data_source.kick_player(callback, periphery_id, unit_server_id, account_to_kick, fields=fields)
+
+    def set_open(self, callback, periphery_id, unit_server_id, is_open, fields=None):
+        """
+        set unit to open and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.kick_player(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param is_open: flag whether unit should be opened
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type is_open: boolean
+        :type fields: list of strings
+        """
+        return self._data_source.set_open(callback, periphery_id, unit_server_id, is_open, fields=fields)
+
+    def lock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
+        """
+        lock given reserve and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.lock_reserve(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param reserve_id: account id to make a leader
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type reserve_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.lock_reserve(callback, periphery_id, unit_server_id, reserve_id, fields=fields)
+
+    def unlock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
+        """
+        unlock given reserve and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.unlock_reserve(printer, 101, 1, 123)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param reserve_id: reserve id to unlock
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type reserve_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.unlock_reserve(callback, periphery_id, unit_server_id, reserve_id, fields=fields)
+
+    def join_room(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        join room and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.join(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type reserve_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.join_room(callback, periphery_id, unit_server_id, fields=fields)
+
+    def clan_statistics(self, callback, clan_id, fields=None):
+        """
+        get clan statistics and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.unlock_reserve(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param clan_id: clan identifier
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type clan_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.clan_statistics(callback, clan_id, fields=fields)
+
+    def account_statistics(self, callback, account_id, fields=None):
+        """
+        get account statistics and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.unlock_reserve(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param account_id: account identifier in spa
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type account_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.account_statistics(callback, account_id, fields=fields)
+
+
 class Requester(object):
     """
     request all clan related information using data accessor provided
@@ -1340,7 +1906,6 @@ class Requester(object):
     >>> requester=Requester(DataAccessor())
     >>> requester.strongholds.get_info(str, 12312)
     >>> requester.clans.get_clans_info(str, [12312, 344])
-    
     """
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -1351,9 +1916,10 @@ class Requester(object):
     clans = RequestDescriptor(ClansAccessor)
     exporter = RequestDescriptor(ExporterAccessor)
     spa = RequestDescriptor(SpaAccessor)
+    wgsh = RequestDescriptor(WgshAccessor)
 
     @classmethod
-    def create_requester(cls, url_fetcher, config, client_lang=None):
+    def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):
         """
         create requester from config string.
         config string should have following form
@@ -1383,7 +1949,7 @@ class Requester(object):
         
         """
         assert config.type in cls.available_data_sources, '%s data source is unknown' % config.type
-        data_accessor = cls.available_data_sources[config.type](url_fetcher, config.url, client_lang=client_lang)
+        data_accessor = cls.available_data_sources[config.type](url_fetcher, config.url, client_lang=client_lang, user_agent=user_agent)
         return cls(data_accessor)
 
     def __init__(self, data_source):

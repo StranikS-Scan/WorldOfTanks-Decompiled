@@ -19,8 +19,9 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
 from gui.shared.money import ZERO_MONEY, Currency, Money
+from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
-from items import vehicles, tankmen, getTypeInfoByName
+from items import vehicles, tankmen, getTypeInfoByName, getTypeOfCompactDescr
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IFalloutController, IIGRController
 from skeletons.gui.server_events import IEventsCache
@@ -39,6 +40,7 @@ VEHICLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.LIGHT_TANK,
  VEHICLE_CLASS_NAME.AT_SPG,
  VEHICLE_CLASS_NAME.SPG)
 VEHICLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_TYPES_ORDER)))
+UNKNOWN_VEHICLE_CLASS_ORDER = 100
 
 def compareByVehTypeName(vehTypeA, vehTypeB):
     return VEHICLE_TYPES_ORDER_INDICES[vehTypeA] - VEHICLE_TYPES_ORDER_INDICES[vehTypeB]
@@ -164,6 +166,10 @@ class Vehicle(FittingItem, HasStrCD):
         self.canTradeOff = False
         self.tradeOffPriceFactor = 0
         self.tradeOffPrice = ZERO_MONEY
+        if self.isPremiumIGR:
+            self._searchableUserName = makeSearchableString(self.shortUserName)
+        else:
+            self._searchableUserName = makeSearchableString(self.userName)
         invData = dict()
         tradeInData = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.recycleBin.isSynced():
@@ -224,6 +230,7 @@ class Vehicle(FittingItem, HasStrCD):
         self.crew = self._buildCrew(crewList, proxy)
         self.lastCrew = invData.get('lastCrew')
         self.rentPackages = calcRentPackages(self, proxy)
+        self.hasModulesToSelect = self.__hasModulesToSelect()
         self.__customState = ''
         return
 
@@ -244,6 +251,10 @@ class Vehicle(FittingItem, HasStrCD):
         else:
             return currentPrice
             return
+
+    @property
+    def searchableUserName(self):
+        return self._searchableUserName
 
     def getUnlockDescrByIntCD(self, intCD):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -345,7 +356,7 @@ class Vehicle(FittingItem, HasStrCD):
                 layoutList.extend([cd, 0])
 
         result = list()
-        for idx, (intCD, count, _) in enumerate(LayoutIterator(layoutList)):
+        for intCD, count, _ in LayoutIterator(layoutList):
             defaultCount, isBoughtForCredits = defaultsDict.get(intCD, (0, False))
             result.append(Shell(intCD, count, defaultCount, proxy, isBoughtForCredits))
 
@@ -703,7 +714,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isInPrebattle(self):
-        return self.lock[0] in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
+        return self.lock[0] in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT)
 
     @property
     def isAwaitingBattle(self):
@@ -711,7 +722,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isInUnit(self):
-        return self.lock[0] in (LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
+        return self.lock[0] == LOCK_REASON.UNIT
 
     @property
     def typeOfLockingArena(self):
@@ -920,22 +931,56 @@ class Vehicle(FittingItem, HasStrCD):
     def getPerfectCrew(self):
         return self.getCrewBySkillLevels(100)
 
-    def getCrewBySkillLevels(self, *skillLevels):
+    def getCrewWithoutSkill(self, skillName):
         """
-        Generate sorted list of tankmans with provided skills levels
-        :param skillLevels: desired skills levels (list of integers)
-        :return: list of tuples [(role, gui_items.Tankman), (role, gui_items.Tankman), ...] sorted by tankmans roles
+        Gets crew without selected skill
+        if selected skill is last in tankman skills and its level less than MAX_SKILL_LEVEL,
+        then remove this skill and change tankman lastSkillLevel
         """
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
-        nationID, vehicleTypeID = self.descriptor.type.id
-        passport = tankmen.generatePassport(nationID)
-        skillLvlsCount = len(skillLevels)
-        for idx, tankmanID in enumerate(crewRoles):
-            role = self.descriptor.type.crewRoles[idx][0]
-            roleLevel = skillLevels[idx] if idx < skillLvlsCount else skillLevels[skillLvlsCount - 1]
-            if roleLevel is not None:
-                tankman = Tankman(tankmen.generateCompactDescr(passport, vehicleTypeID, role, roleLevel), vehicle=self)
+        for slotIdx, tman in self.crew:
+            if tman and skillName in tman.skillsMap:
+                tmanDescr = tman.descriptor
+                skills = tmanDescr.skills[:]
+                if tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
+                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+                else:
+                    lastSkillLevel = tmanDescr.lastSkillLevel
+                skills.remove(skillName)
+                unskilledTman = Tankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel), vehicle=self)
+                crewItems.append((slotIdx, unskilledTman))
+            crewItems.append((slotIdx, tman))
+
+        return _sortCrew(crewItems, crewRoles)
+
+    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None):
+        """
+        Generate sorted list of tankmans with provided skills levels and provided skills
+        :param defRoleLevel: desired skills levels
+        :param skillsByIdxs: desired skills for particular members (index of member) or crew,
+        dict-{tankmanIndex: [skill, skill, ...], ...}
+        :param levelByIdxs: desired roleLevel for particular members (index of member) or crew,
+        dict-{tankmanIndex: roleLevel, ...}
+        :param nativeVehsByIdxs: desired native vehicles references for particular members (index of member) or crew,
+        dict-{tankmanIndex: nativeVehicleReference, ...}
+        :return: list of tuples [(role, gui_items.Tankman), (role, gui_items.Tankman), ...] sorted by tankmans roles
+        """
+        skillsByIdxs = skillsByIdxs or {}
+        levelByIdxs = levelByIdxs or {}
+        nativeVehsByIdxs = nativeVehsByIdxs or {}
+        crewItems = list()
+        crewRoles = self.descriptor.type.crewRoles
+        for idx, _ in enumerate(crewRoles):
+            defRoleLevel = levelByIdxs.get(idx, defRoleLevel)
+            if defRoleLevel is not None:
+                role = self.descriptor.type.crewRoles[idx][0]
+                nativeVehicle = nativeVehsByIdxs.get(idx)
+                if nativeVehicle is not None:
+                    nationID, vehicleTypeID = nativeVehicle.descriptor.type.id
+                else:
+                    nationID, vehicleTypeID = self.descriptor.type.id
+                tankman = Tankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, [])), vehicle=self)
             else:
                 tankman = None
             crewItems.append((idx, tankman))
@@ -951,7 +996,9 @@ class Vehicle(FittingItem, HasStrCD):
             serverSettings = g_lobbyContext.getServerSettings()
             if serverSettings is not None and serverSettings.roaming.isInRoaming():
                 updatedVehCompactDescr = vehicles.stripCustomizationFromVehicleCompactDescr(updatedVehCompactDescr, True, True, False)[0]
-            return vehicles.VehicleDescr(compactDescr=updatedVehCompactDescr)
+            newDescriptor = vehicles.VehicleDescr(compactDescr=updatedVehCompactDescr)
+            newDescriptor.activeGunShotIndex = self.descriptor.activeGunShotIndex
+            return newDescriptor
         else:
             return self.descriptor
             return
@@ -1015,6 +1062,18 @@ class Vehicle(FittingItem, HasStrCD):
 
     def _sortByType(self, other):
         return compareByVehTypeName(self.type, other.type)
+
+    def __hasModulesToSelect(self):
+        components = []
+        for moduleCD in self.descriptor.type.installableComponents:
+            moduleType = getTypeOfCompactDescr(moduleCD)
+            if moduleType == GUI_ITEM_TYPE.FUEL_TANK:
+                continue
+            if moduleType in components:
+                return True
+            components.append(moduleType)
+
+        return False
 
 
 def getTypeUserName(vehType, isElite):
@@ -1133,3 +1192,19 @@ def _sortCrew(crewItems, crewRoles):
 
 def getLobbyDescription(vehicle):
     return text_styles.stats(i18n.makeString('#menu:header/level/%s' % vehicle.level)) + ' ' + text_styles.main(i18n.makeString('#menu:header/level', vTypeName=getTypeUserName(vehicle.type, vehicle.isElite)))
+
+
+def getOrderByVehicleClass(className=None):
+    if className and className in VEHICLE_BATTLE_TYPES_ORDER_INDICES:
+        result = VEHICLE_BATTLE_TYPES_ORDER_INDICES[className]
+    else:
+        result = UNKNOWN_VEHICLE_CLASS_ORDER
+    return result
+
+
+def getVehicleClassTag(tags):
+    subSet = vehicles.VEHICLE_CLASS_TAGS & tags
+    result = None
+    if len(subSet):
+        result = list(subSet).pop()
+    return result

@@ -107,26 +107,6 @@ def _readVarRefDialogSection(xmlCtx, section, _, dialogID, type, content):
     return chapter.PopUp(dialogID, type, content, _xml.readString(xmlCtx, section, 'var-ref'))
 
 
-def readTutorialSettingSection(xmlCtx, section, flags):
-    settingID = sub_parsers.parseID(xmlCtx, section, 'Specify a setting ID')
-    settingName = None
-    if 'setting-name' in section.keys():
-        settingName = _xml.readString(xmlCtx, section, 'setting-name')
-    else:
-        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a setting name')
-    settingValue = None
-    if 'setting-value' in section.keys():
-        settingValue = _xml.readBool(xmlCtx, section, 'setting-value')
-    else:
-        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a setting value')
-    return chapter.TutorialSetting(settingID, settingName, settingValue)
-
-
-def readSaveAccountSettingSection(xmlCtx, section, _, conditions):
-    settingID = sub_parsers.parseID(xmlCtx, section, 'Specify a setting ID')
-    return effects.HasTargetEffect(settingID, effects.EFFECT_TYPE.SAVE_ACCOUNT_SETTING, conditions=conditions)
-
-
 def init():
     sub_parsers.setTriggersParsers({'bonus': readBonusTriggerSection,
      'battleCount': readBattleCountTriggerSection,

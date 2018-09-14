@@ -10,6 +10,9 @@ class ProfileTechniqueMeta(ProfileSection):
     @extends ProfileSection
     """
 
+    def setSelectedTableColumn(self, index, sortDirection):
+        self._printOverrideError('setSelectedTableColumn')
+
     def as_responseVehicleDossierS(self, data):
         """
         :param data: Represented by ProfileVehicleDossierVO (AS)

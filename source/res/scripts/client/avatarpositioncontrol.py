@@ -45,9 +45,10 @@ class ConsistentMatrices(object):
 
     def notifyPreBind(self, avatar, targetVehicleID=None):
         bindMatrix = Math.Matrix(self.attachedVehicleMatrix)
+        vehicle = avatar.getVehicleAttached()
         useStatic = True
-        if avatar.vehicle is not None and avatar.vehicle.id == targetVehicleID:
-            bindMatrix = avatar.vehicle.matrix
+        if vehicle is not None and vehicle.id == targetVehicleID:
+            bindMatrix = vehicle.matrix
             useStatic = False
         self.__setTarget(bindMatrix, useStatic)
         return
@@ -115,9 +116,9 @@ class AvatarPositionControl(CallbackDelayer):
         else:
             self.stopCallback(self.__followCameraTick)
 
-    def switchViewpoint(self, toPrevious):
+    def switchViewpoint(self, isViewpoint, vehOrPointId):
         BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
-        self.__avatar.cell.switchViewpoint(toPrevious)
+        self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
 
     def moveTo(self, pos):
         self.__avatar.cell.moveTo(pos)

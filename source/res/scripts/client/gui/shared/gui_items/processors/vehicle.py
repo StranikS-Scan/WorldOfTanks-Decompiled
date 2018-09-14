@@ -8,10 +8,10 @@ from adisp import process, async
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice, formatGoldPrice
-from gui.shared.formatters.text_styles import neutral
+from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 from gui.shared.money import Money, ZERO_MONEY, Currency
@@ -338,7 +338,7 @@ class VehicleSlotBuyer(Processor):
             ctx = {}
         else:
             confirmationType = 'buySlotConfirmation'
-            ctx = {'gold': slotCost.gold}
+            ctx = {'goldCost': text_styles.concatStylesWithSpace(text_styles.gold(str(slotCost.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))}
         super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
         return
 

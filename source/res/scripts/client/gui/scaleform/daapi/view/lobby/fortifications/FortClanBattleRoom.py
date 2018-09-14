@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.FortClanBattleRoomMeta import FortClanBattleRoomMeta
-from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -126,7 +126,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, IUnitListener, FortViewHelper, 
         self._candidatesDP.rebuild(self.prbEntity.getCandidates())
 
     def inviteFriendRequest(self):
-        self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.STRONGHOLD_SEND_INVITES_WINDOW_PY, ctx={'prbName': PREBATTLE_TYPE_NAMES[PREBATTLE_TYPE.FORT_BATTLE],
          'ctrlType': CTRL_ENTITY_TYPE.UNIT,
          'showClanOnly': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -148,7 +148,8 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, IUnitListener, FortViewHelper, 
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeFortBattleVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
+        canInvite = entity.getPermissions().canSendInvite()
+        data = vo_converters.makeFortBattleVO(entity, unitIdx=entity.getUnitIdx(), app=self.app, canInvite=canInvite)
         self.as_updateRallyS(data)
 
     def _getVehicleSelectorDescription(self):

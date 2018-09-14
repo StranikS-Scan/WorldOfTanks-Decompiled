@@ -10,7 +10,6 @@ from ConnectionManager import connectionManager
 from debug_utils import LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.locale.QUESTS import QUESTS
-from gui.clubs.settings import getLeagueByDivision
 from gui.server_events.bonuses import getBonusObj, compareBonuses
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
@@ -177,6 +176,20 @@ class Group(ServerEventAbstract):
     def getGroupEvents(self):
         return self._data.get('groupContent', [])
 
+    def withManyTokenSources(self, svrEvents):
+        uniqueTokens = set()
+        uniqueChildren = set()
+        for qID in self.getGroupEvents():
+            quest = svrEvents.get(qID)
+            if quest is not None:
+                children = quest.getChildren()
+                if len(children) > 0:
+                    for key, value in children.iteritems():
+                        uniqueChildren |= set(value)
+                        uniqueTokens.add(key)
+
+        return len(uniqueTokens) == 1 and len(uniqueChildren) > 1
+
 
 class Quest(ServerEventAbstract):
 
@@ -282,6 +295,9 @@ class Quest(ServerEventAbstract):
                     return True
 
         return False
+
+    def getSuitableVehicles(self):
+        return self.vehicleReqs.getSuitableVehicles()
 
     def __checkGroupedCompletion(self, values, progress, bonusLimit=None, keyMaker=lambda v: v):
         bonusLimit = bonusLimit or self.bonusCond.getBonusLimit()
@@ -716,32 +732,6 @@ class PotapovQuest(Quest):
 
     def __repr__(self):
         return 'PQuest<id=%d; state=%s; unlocked=%s>' % (self._id, self.__pqProgress.state, self.isUnlocked())
-
-
-class ClubsQuest(Quest):
-
-    def __init__(self, seasonID, questDescr, progress=None):
-        Quest.__init__(self, questDescr.questID, questDescr.questData, progress)
-        self.__seasonID = seasonID
-
-    def getSeasonID(self):
-        return self.__seasonID
-
-    def getDivision(self):
-        """ Returns quest's divisino and league
-        """
-        clubCond = self.postBattleCond.getConditions().find('clubs')
-        division = clubCond.getDivision()
-        return (division, getLeagueByDivision(division))
-
-    def getUserName(self):
-        return i18n.makeString(Quest.getUserName(self))
-
-    def getDescription(self):
-        return i18n.makeString(Quest.getDescription(self))
-
-    def getType(self):
-        return constants.EVENT_TYPE.CLUBS_QUEST
 
 
 class MotiveQuest(Quest):

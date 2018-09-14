@@ -99,9 +99,10 @@ class ElementTooltip(BlocksTooltipData):
             data['itemsCount'] = None
         items.append(self._packTitleBlock(data))
         items.append(self._packIconBlock(data))
-        items.append(self._packBonusBlock(data))
-        if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            items.append(self._packConditionBlock(data))
+        if data['bonus_value'] > 0:
+            items.append(self._packBonusBlock(data))
+            if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+                items.append(self._packConditionBlock(data))
         if data['wasBought']:
             items.append(self._packAlreadyHaveBlock(data))
         else:
@@ -245,6 +246,7 @@ class ElementTooltip(BlocksTooltipData):
          'title': self._item.getName(),
          'itemsCount': self._item.numberOfItems,
          'icon': self._item.getTexturePath(),
+         'bonus_value': self._item.qualifier.getValue(),
          'bonus_icon': self._item.qualifier.getIcon42x42(),
          'bonus_title_local': self._item.qualifier.getFormattedValue(),
          'bonus_desc': self._item.qualifier.getExtendedName(),
@@ -437,9 +439,10 @@ class QuestElementTooltip(ElementTooltip):
         data = self._getItemData()
         items.append(self._packTitleBlock(data))
         items.append(self._packIconBlock(data))
-        items.append(self._packBonusBlock(data))
-        if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            items.append(self._packConditionBlock(data))
+        if data['bonus_value'] > 0:
+            items.append(self._packBonusBlock(data))
+            if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+                items.append(self._packConditionBlock(data))
         items.append(self._packAppliedToVehicles(data))
         items.append(self._packDurationBlock())
         if data['description'] is not None:

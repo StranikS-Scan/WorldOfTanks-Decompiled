@@ -100,7 +100,9 @@ class VehicleGunRotator(object):
             return
 
     def stop(self):
-        BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
+        playerInputHandler = BigWorld.player().inputHandler
+        if playerInputHandler is not None:
+            playerInputHandler.onCameraChanged -= self.__onCameraChanged
         if self.__timerID is not None:
             BigWorld.cancelCallback(self.__timerID)
             self.__timerID = None

@@ -160,11 +160,9 @@ def convertToFullForm(compactForm):
     personal['avatar'] = avatarResults = AVATAR_FULL_RESULTS.unpack(avatarResults)
     for vehTypeCompDescr, ownResults in fullResultsList.iteritems():
         vehPersonal = personal[vehTypeCompDescr] = VEH_FULL_RESULTS.unpack(ownResults)
+        if vehPersonal is None:
+            continue
         vehPersonal['details'] = VehicleInteractionDetails.fromPacked(vehPersonal['details']).toDict()
-        vehPersonal['isPrematureLeave'] = avatarResults['isPrematureLeave']
-        vehPersonal['fairplayViolations'] = avatarResults['fairplayViolations']
-        vehPersonal['club'] = avatarResults['club']
-        vehPersonal['enemyClub'] = avatarResults['enemyClub']
 
     commonAsList, playersAsList, vehiclesAsList, avatarsAsList = cPickle.loads(zlib.decompress(pickled))
     fullForm['common'] = COMMON_RESULTS.unpack(commonAsList)

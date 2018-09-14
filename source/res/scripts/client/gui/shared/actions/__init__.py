@@ -8,7 +8,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
 from gui.app_loader import g_appLoader
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.actions.chains import ActionsChain
 from gui.shared.events import LoginEventEx, GUICommonEvent
@@ -99,7 +99,7 @@ class DisconnectFromPeriphery(Action):
         if app:
             from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
             view = app.containerManager.getView(ViewTypes.DEFAULT)
-            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
+            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionManager.isDisconnected():
                 LOG_DEBUG('Disconnect action. Player came to login')
                 self._completed = True
                 self._running = False
@@ -240,19 +240,21 @@ class WaitFlagActivation(Action):
         return False
 
 
-class ShowCompanyWindow(Action):
+class OnLobbyInitedAction(Action):
 
-    def __init__(self):
-        super(ShowCompanyWindow, self).__init__()
+    def __init__(self, onInited=None):
+        super(OnLobbyInitedAction, self).__init__()
         self.__isLobbyInited = False
+        self.__onInited = onInited
         g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
 
     def invoke(self):
         self._running = True
         self._completed = False
         if self.__isLobbyInited:
-            from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-            battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.COMPANIES_LIST)
+            onInited = self.__onInited
+            if onInited and callable(onInited):
+                onInited()
             self._completed = True
             self._running = False
 

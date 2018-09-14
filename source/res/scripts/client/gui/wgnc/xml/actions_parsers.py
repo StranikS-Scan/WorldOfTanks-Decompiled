@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/xml/actions_parsers.py
 from gui.wgnc import actions
+from gui.wgnc.wgnc_helpers import parseSize
 from gui.wgnc.errors import ParseError
 from gui.wgnc.xml.shared_parsers import SectionParser, ParsersCollection
 
@@ -23,7 +24,10 @@ class _BrowseActionParser(SectionParser):
         url = self._readString('href', section)
         target = section.readString('target', 'internal')
         if target == 'internal':
-            action = actions.OpenInternalBrowser(name, url)
+            size = parseSize(section.readString('size'))
+            showRefresh = section.readBool('show_refresh')
+            webClientHandler = section.readString('web_client_handler')
+            action = actions.OpenInternalBrowser(name, url, size, showRefresh, webClientHandler)
         elif target == 'external':
             action = actions.OpenExternalBrowser(name, url)
         elif target == 'promo':

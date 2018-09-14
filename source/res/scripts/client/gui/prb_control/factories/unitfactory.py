@@ -6,8 +6,6 @@ from gui.prb_control import prb_getters
 from gui.prb_control.factories.ControlFactory import ControlFactory
 from gui.prb_control.entities.base.unit.ctx import LeaveUnitCtx
 from gui.prb_control.entities.base.unit.entity import UnitIntroEntity
-from gui.prb_control.entities.e_sport.unit.club.entity import ClubBrowserEntity, ClubEntity
-from gui.prb_control.entities.e_sport.unit.club.entity import ClubBrowserEntryPoint, ClubEntryPoint
 from gui.prb_control.entities.e_sport.unit.entity import ESportIntroEntity, ESportIntroEntry
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntity, PublicEntity
 from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEntryPoint, PublicEntryPoint
@@ -18,6 +16,7 @@ from gui.prb_control.entities.fort.unit.fort_battle.entity import FortBattleBrow
 from gui.prb_control.entities.fort.unit.entity import FortIntroEntity, FortIntroEntryPoint
 from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntity, SortieEntity
 from gui.prb_control.entities.fort.unit.sortie.entity import SortieBrowserEntryPoint, SortieEntryPoint
+from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
@@ -26,31 +25,31 @@ __all__ = ('UnitFactory',)
 _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_ACTION_NAME.EVENT_SQUAD: EventBattleSquadEntryPoint,
  PREBATTLE_ACTION_NAME.E_SPORT: ESportIntroEntry,
- PREBATTLE_ACTION_NAME.CLUBS_LIST: ClubBrowserEntryPoint,
  PREBATTLE_ACTION_NAME.PUBLICS_LIST: PublicBrowserEntryPoint,
  PREBATTLE_ACTION_NAME.FORT: FortIntroEntryPoint,
  PREBATTLE_ACTION_NAME.SORTIES_LIST: SortieBrowserEntryPoint,
- PREBATTLE_ACTION_NAME.FORT_BATTLES_LIST: FortBattleBrowserEntryPoint}
+ PREBATTLE_ACTION_NAME.FORT_BATTLES_LIST: FortBattleBrowserEntryPoint,
+ PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
  PREBATTLE_TYPE.FALLOUT: FalloutSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
  PREBATTLE_TYPE.SORTIE: SortieEntryPoint,
  PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntryPoint,
- PREBATTLE_TYPE.CLUBS: ClubEntryPoint}
+ PREBATTLE_TYPE.EXTERNAL: StrongholdEntryPoint}
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity,
  PREBATTLE_TYPE.FORT_COMMON: FortIntroEntity}
 _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.SORTIE: SortieBrowserEntity,
  PREBATTLE_TYPE.FORT_BATTLE: FortBattleBrowserEntity,
- PREBATTLE_TYPE.CLUBS: ClubBrowserEntity}
+ PREBATTLE_TYPE.EXTERNAL: StrongholdBrowserEntity}
 _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
  PREBATTLE_TYPE.FALLOUT: FalloutSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
  PREBATTLE_TYPE.SORTIE: SortieEntity,
  PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntity,
- PREBATTLE_TYPE.CLUBS: ClubEntity}
+ PREBATTLE_TYPE.EXTERNAL: StrongholdEntity}
 
 class UnitFactory(ControlFactory):
     """

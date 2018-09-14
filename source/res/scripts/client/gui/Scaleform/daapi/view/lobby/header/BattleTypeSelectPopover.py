@@ -28,7 +28,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def selectFight(self, actionName):
         battle_selector_items.getItems().select(actionName)
 
-    def getTooltipData(self, itemData):
+    def getTooltipData(self, itemData, itemIsDisabled):
         if itemData is None:
             return ''
         elif itemData == PREBATTLE_ACTION_NAME.RANDOM:
@@ -47,6 +47,11 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                     return '#tooltips:fortification/disabled/no_fort'
                 else:
                     return TOOLTIPS.BATTLETYPES_FORTIFICATION
+            elif itemData == PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST:
+                if not itemIsDisabled:
+                    return TOOLTIPS.BATTLETYPES_STRONGHOLDS
+                else:
+                    return TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
             else:
                 if itemData == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
                     return TOOLTIPS.BATTLETYPES_TRAINING

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/containers.py
 import weakref
 from Event import Event
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_UNEXPECTED, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.ScopeControllers import GlobalScopeController
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
@@ -42,20 +42,20 @@ class AbstractViewContainer(object):
         :param pyView: view to be added to this container.
         :return: True if view added to container, otherwise - False.
         """
-        raise NotImplementedError('IViewContainer.add must be implemented')
+        raise NotImplementedError('AbstractViewContainer.add must be implemented')
 
     def remove(self, pyView):
         """
         Removes view from container.
         :param pyView: view to be removed from this container.
         """
-        raise NotImplementedError('IViewContainer.remove must be implemented')
+        raise NotImplementedError('AbstractViewContainer.remove must be implemented')
 
     def clear(self):
         """
         Removes all views from container.
         """
-        raise NotImplementedError('IViewContainer.clear must be implemented')
+        raise NotImplementedError('AbstractViewContainer.clear must be implemented')
 
     def destroy(self):
         """
@@ -71,7 +71,7 @@ class AbstractViewContainer(object):
         :param criteria: criteria to find view in container.
         :return: object of view if view found in container, otherwise - None.
         """
-        raise NotImplementedError('IViewContainer.getView must be implemented')
+        raise NotImplementedError('AbstractViewContainer.getView must be implemented')
 
     def getViewCount(self, **kwargs):
         """
@@ -79,14 +79,14 @@ class AbstractViewContainer(object):
         :param kwargs: optional arguments.
         :return:
         """
-        raise NotImplementedError('IViewContainer.getViewCount must be implemented')
+        raise NotImplementedError('AbstractViewContainer.getViewCount must be implemented')
 
     def canCancelPreviousLoading(self):
         """
-        Is container allow cancelling a previous loading.
-        :return: True, if container allows cancelling a previous loading.
+        Is container allow to cancel loading of view that are being loaded at a period of time.
+        :return: True, if container allows to cancel loading of views being loaded in memory.
         """
-        raise NotImplementedError('IViewContainer.canCancelPreviousLoading must be implemented')
+        raise NotImplementedError('AbstractViewContainer.canCancelPreviousLoading must be implemented')
 
 
 class DefaultContainer(AbstractViewContainer):
@@ -123,7 +123,6 @@ class DefaultContainer(AbstractViewContainer):
                 self._manager.removeContainer(subContainerType)
             self.__view.onModuleDispose -= self.__handleModuleDispose
             self._manager.as_hideS(self.__view.uniqueName)
-            self._manager.removeLoadingView(self.__view.alias, self.__view.uniqueName)
             self.__view.destroy()
             self.__view = None
         return
@@ -135,7 +134,6 @@ class DefaultContainer(AbstractViewContainer):
         subContainerType = pyView.getSubContainerType()
         if subContainerType is not None:
             self._manager.removeContainer(subContainerType)
-        self._manager.removeLoadingView(pyView.alias, pyView.uniqueName)
         self.remove(pyView)
         return
 
@@ -273,52 +271,90 @@ class PopUpContainer(AbstractViewContainer):
 
 class ContainerManager(ContainerManagerMeta):
     """
-    Class of container manager.
+    The container manager manages overlapping of views and their life time based on their type
+    and scope. Performs loading of views through the specified loader.
+    
+    1. Overlapping of views
+    UI consists of several layers. Each layer has its own Z index. It allows to control overlapping
+    of views (views of the top level layer overlap views of underlying layers). The set of default
+    layers depends on entry (application) type (lobby and battle have their own configuration).
+    Each view can belong to one layer and it is defined by view's type. With each layer associated
+    one view container that is managed by the container manager. There are two types of layers
+    (view containers):
+    - DefaultContainer - only one top level view can be placed in the container (layer) and if a
+      new view is placed to it the previous one is destroyed;
+    - PopUpContainer - several views can exist at the same time in one layer.
+    Also any top level view can include a subview that is placed into a subcontainer. If a top
+    level vew can include a subview, the subcontainer (DefaultContainer) is created after the top
+    level view is loaded and initialized. When subview is loaded, it is placed into the top
+    level view's subcontainer. The subcontainer is destroyed when the top level view is destroyed.
+    
+    2. Views life time
+    The 'view scope' concept is introduced to simplify views lifetime management. View lifetime is
+    defined by its scope and is controlled by the container manager through the scope controller.
+    View scope defines when the view should be destroyed: if the parent view (parent scope) is
+    destroyed, the subview is destroyed too. For details please see ScopeController description.
     """
 
     def __init__(self, loader, *containers):
         super(ContainerManager, self).__init__()
         self.onViewAddedToContainer = Event()
-        proxy = weakref.proxy(self)
         self.__containers = {}
+        proxy = weakref.proxy(self)
         for container in containers:
             assert isinstance(container, AbstractViewContainer)
             self.__containers[container.getViewType()] = container(proxy)
 
-        self._loadingViews = dict()
         self.__loader = loader
-        self.__loader.onViewLoaded += self.__loader_onViewLoaded
+        self.__loader.onViewLoaded += self.__onViewLoaded
         self.__scopeController = GlobalScopeController()
         self.__scopeController.create()
 
     def load(self, alias, name=None, *args, **kwargs):
         """
-        Loads view to container.
-        :param alias:
-        :param name:
-        :param args:
-        :param kwargs:
-        :return:
+        Loads a view with the given alias and puts it to the appropriate container (layer).
+        
+        :param alias: View's alias to be loaded.
+        :param name: Name to be associated with the loaded view.
         """
         if name is None:
             name = alias
         isViewExists = self.as_getViewS(name)
-        if not isViewExists and (alias, name) not in self._loadingViews:
-            pyEntity = self.__loader.loadView(alias, name, *args, **kwargs)
-            self.__scopeController.addLoadingView(pyEntity, False)
+        if self.__scopeController.isViewLoading(alias=alias):
+            LOG_DEBUG('View with alias {} is already loading.'.format(alias))
+        else:
+            pyEntity = None
+            if isViewExists:
+                pyEntity = self.__scopeController.getViewByAlias(alias)
+                if pyEntity is None:
+                    isViewExists = False
+                    LOG_UNEXPECTED('Unexpected case: Could not find a view with alias {} in the scope ctrl. View will be reloaded.'.format(alias))
+                else:
+                    LOG_DEBUG('View with alias {} ({}) is already loaded.'.format(alias, str(pyEntity)))
+            if pyEntity is None:
+                LOG_DEBUG('Load view with alias "{}" (name - "{}")'.format(alias, name))
+                pyEntity = self.__loader.loadView(alias, name, *args, **kwargs)
             curType = pyEntity.settings.type
             if self.canCancelPreviousLoading(curType):
-                result = []
-                for kev, val in self._loadingViews.iteritems():
-                    if val.settings.type == pyEntity.settings.type:
-                        result.append(val)
-
-                if result:
-                    self.__cancelLoadingForPyEntities(result)
-            self._loadingViews[alias, name] = pyEntity
+                canceledViews = self.__scopeController.getLoadingViewsByType(curType)
+                scopeType = self.__scopeController.extractScopeFromView(pyEntity).getScopeType()
+                if scopeType != ScopeTemplates.GLOBAL_SCOPE.getScopeType():
+                    canceledViews.update(self.__scopeController.getLoadingViewsByScope(scopeType))
+                if canceledViews:
+                    self.__cancelLoadingForPyEntities(canceledViews)
+            if isViewExists:
+                pyEntity.validate()
+            else:
+                self.__scopeController.addLoadingView(pyEntity, False)
         return
 
     def canCancelPreviousLoading(self, containerType):
+        """
+        Returns True if it is required to cancel loading of top level views (and their subviews)
+        for the given container (layer) type.
+        
+        :param containerType: Container type that corresponds to view type.
+        """
         container = self.getContainer(containerType)
         if container is not None:
             return container.canCancelPreviousLoading()
@@ -327,6 +363,15 @@ class ContainerManager(ContainerManagerMeta):
             return
 
     def addContainer(self, viewType, name, container=None):
+        """
+        Adds container to managed containers. The method can be used to create subcontainer of
+        a top level view (if it can include subview)
+        
+        :param viewType: View type. @see ViewTypes.
+        :param name: Container name.
+        :param container: Instance of object extending AbstractViewContainer.
+        :return:
+        """
         result = True
         if viewType not in self.__containers:
             if container is None:
@@ -344,6 +389,10 @@ class ContainerManager(ContainerManagerMeta):
         return result
 
     def removeContainer(self, viewType):
+        """
+        Removes container from managed containers.
+        :param viewType: type of view. @see ViewTypes.
+        """
         self.__scopeController.removeSubScopeController(ScopeTemplates.VIEW_TYPES_TO_SCOPES[viewType].getScopeType())
         result = True
         if viewType in self.__containers:
@@ -356,9 +405,17 @@ class ContainerManager(ContainerManagerMeta):
         return result
 
     def getContainer(self, viewType):
+        """
+        Returns container by the given type or None if there is no such container.
+        
+        :param viewType: viewType: View type. @see ViewTypes.
+        """
         return self.__containers[viewType] if viewType in self.__containers else None
 
     def isModalViewsIsExists(self):
+        """
+        Returns True if a modal view exists, otherwise returns False.
+        """
         for viewType in _POPUPS_CONTAINERS:
             container = self.getContainer(viewType)
             if container is not None and container.getViewCount(isModal=True):
@@ -367,6 +424,13 @@ class ContainerManager(ContainerManagerMeta):
         return False
 
     def getView(self, viewType, criteria=None):
+        """
+        Gets view by the given type and criteria if it is defined.
+        
+        :param viewType: type of view. @see ViewTypes.
+        :param criteria: criteria to find view in container.
+        :return: instance of view.
+        """
         container = self.getContainer(viewType)
         if container is not None:
             view = container.getView(criteria=criteria)
@@ -375,6 +439,15 @@ class ContainerManager(ContainerManagerMeta):
         return view
 
     def isViewAvailable(self, viewType, criteria=None):
+        """
+        If you want to get some view from some container, it`s may be
+        unsafely operation. For example, I want to get a Hangar from a Lobby
+        view. it`s a bad situation and method "getView" detects this state.
+        Then, if you just want to detect an existing View, use isViewAvailable method.
+        
+        :param viewType: type of view. @see ViewTypes.
+        :param criteria: criteria to find view in container.
+        """
         container = self.getContainer(viewType)
         if container is not None:
             return container.getView(criteria=criteria) is not None
@@ -383,18 +456,39 @@ class ContainerManager(ContainerManagerMeta):
             return
 
     def showContainers(self, *viewTypes):
+        """
+        Shows containers for given view types.
+        
+        :param viewTypes: View types
+        """
         self.as_showContainersS(viewTypes)
 
     def hideContainers(self, *viewTypes):
+        """
+        Hides containers for given view types.
+        
+        :param viewTypes: View types
+        """
         self.as_hideContainersS(viewTypes)
 
     def isContainerShown(self, viewType):
+        """
+        Returns True if a container with the given view type is shown, otherwise returns False.
+        
+        :param viewType: View types
+        """
         return self.as_isContainerShownS(viewType)
 
     def closePopUps(self):
+        """
+        Closes all popUps: widows and dialogs.
+        """
         self.as_closePopUpsS()
 
     def clear(self):
+        """
+        Clears defined containers
+        """
         for viewType in _POPUPS_CONTAINERS:
             container = self.getContainer(viewType)
             if container is not None:
@@ -402,13 +496,9 @@ class ContainerManager(ContainerManagerMeta):
 
         return
 
-    def removeLoadingView(self, alias, uniqueName):
-        self._loadingViews.pop((alias, uniqueName), None)
-        return
-
     def _dispose(self):
         if self.__loader is not None:
-            self.__loader.onViewLoaded -= self.__loader_onViewLoaded
+            self.__loader.onViewLoaded -= self.__onViewLoaded
             self.__loader = None
         for viewType in _CONTAINERS_DESTROY_ORDER:
             if viewType in self.__containers:
@@ -422,42 +512,43 @@ class ContainerManager(ContainerManagerMeta):
         self.onViewAddedToContainer.clear()
         self.__scopeController.destroy()
         self.__scopeController = None
-        self._loadingViews.clear()
-        self._loadingViews = None
         super(ContainerManager, self)._dispose()
         return
 
     def __cancelLoadingForPyEntities(self, pyEntities):
+        LOG_DEBUG('Loading is canceled for the following views: ', pyEntities)
         for curEntity in pyEntities:
-            self._loadingViews.pop((curEntity.settings.alias, curEntity.uniqueName))
             self.__loader.cancelLoadingByName(curEntity.uniqueName)
-            curEntity.destroy()
+            self.__scopeController.removeLoadingView(curEntity)
+            if curEntity.isCreated():
+                curEntity.destroy()
 
-    def __loader_onViewLoaded(self, pyView):
+    def __onViewLoaded(self, pyView):
         viewType = pyView.settings.type
         if viewType is None:
             LOG_ERROR('Type of view is not defined', pyView.settings)
-        viewKey = (pyView.alias, pyView.uniqueName)
-        if viewKey in self._loadingViews:
-            self._loadingViews.pop(viewKey)
         if viewType in self.__containers:
             if ViewTypes.DEFAULT == viewType:
                 self.closePopUps()
-            if self.__scopeController.isViewLoading(pyView):
+            if self.__scopeController.isViewLoading(pyView=pyView):
                 container = self.__containers[viewType]
                 if container.add(pyView):
                     self.__scopeController.addView(pyView, False)
                     self.as_showS(pyView.uniqueName, 0, 0)
                     pyView.create()
-                    subContainerType = pyView.getSubContainerType()
-                    if subContainerType is not None:
-                        self.addContainer(subContainerType, pyView.uniqueName)
-                    LOG_DEBUG('View added to container', pyView)
-                    self.onViewAddedToContainer(container, pyView)
+                    if not pyView.isDisposed():
+                        subContainerType = pyView.getSubContainerType()
+                        if subContainerType is not None:
+                            LOG_DEBUG('Sub container {} is created for view {}.'.format(subContainerType, str(pyView)))
+                            self.addContainer(subContainerType, pyView.uniqueName)
+                        LOG_DEBUG('View {} is added to container {}.'.format(str(pyView), str(container)))
+                        self.onViewAddedToContainer(container, pyView)
+                    else:
+                        LOG_DEBUG('View {} has been destroyed during populating.'.format(str(pyView)))
             else:
-                LOG_DEBUG('"%s" view cancelled to load, because its scope has been destroyed.' % str(pyView))
+                LOG_DEBUG('{} view loading is cancelled because its scope has been destroyed.'.format(str(pyView)))
                 self.as_hideS(pyView.uniqueName)
                 pyView.destroy()
         else:
-            LOG_ERROR('Type "%s" of view "%s" is not supported' % (viewType, pyView))
+            LOG_ERROR('Type {} of view {} is not supported or sub container has not been properly created'.format(viewType, pyView))
         return

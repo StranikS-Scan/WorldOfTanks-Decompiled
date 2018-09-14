@@ -150,6 +150,14 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT32	</Arg>
     </resetLeaderChangeCooldown>
+    <activateOrder>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </activateOrder>
     <startPostcreation>
       <Arg>	MAILBOX	</Arg>
       <Arg>	STRING	</Arg>

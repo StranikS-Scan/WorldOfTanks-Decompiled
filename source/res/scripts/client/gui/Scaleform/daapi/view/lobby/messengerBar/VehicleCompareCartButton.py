@@ -13,13 +13,17 @@ class VehicleCompareCartButton(ButtonWithCounterMeta):
     def _populate(self):
         super(VehicleCompareCartButton, self)._populate()
         self.comparisonBasket.onChange += self.__onCountChanged
-        self.comparisonBasket.onSwitchChange += self.destroy
+        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
         self.__changeCount(self.comparisonBasket.getVehiclesCount())
 
     def _dispose(self):
         self.comparisonBasket.onChange -= self.__onCountChanged
-        self.comparisonBasket.onSwitchChange -= self.destroy
+        self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         super(VehicleCompareCartButton, self)._dispose()
+
+    def __onVehCmpBasketStateChanged(self):
+        if not self.comparisonBasket.isEnabled():
+            self.destroy()
 
     def __onCountChanged(self, _):
         """

@@ -228,8 +228,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 colliders.append((compound.node(TankPartNames.TURRET), compound.getBoundsForPart(TankPartIndexes.TURRET), compound.getPartGeometryLink(TankPartIndexes.TURRET)))
             colliders.append((compound.node(TankPartNames.HULL), compound.getBoundsForPart(TankPartIndexes.HULL), compound.getPartGeometryLink(TankPartIndexes.HULL)))
 
-        self.__cam.setDynamicColliders(colliders)
-        self.__aimingSystem.setDynamicColliders(colliders)
+        if self.__cam is not None:
+            self.__cam.setDynamicColliders(colliders)
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.setDynamicColliders(colliders)
+        return
 
     def focusOnPos(self, preferredPos):
         self.__aimingSystem.focusOnPos(preferredPos)
@@ -331,7 +334,9 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__accelerationSmoother.reset()
         self.__autoUpdateDxDyDz.set(0)
         self.__updatedByKeyboard = False
-        self.__inputInertia.teleport(self.__calcRelativeDist())
+        dist = self.__calcRelativeDist()
+        if dist is not None:
+            self.__inputInertia.teleport(dist)
         FovExtended.instance().resetFov()
         return
 
@@ -521,10 +526,12 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         return totalOffset
 
     def __calcRelativeDist(self):
-        distRange = self.__cfg['distRange']
-        curDist = self.__aimingSystem.distanceFromFocus
-        relDist = (curDist - distRange[0]) / (distRange[1] - distRange[0])
-        return relDist
+        if self.__aimingSystem is not None:
+            distRange = self.__cfg['distRange']
+            curDist = self.__aimingSystem.distanceFromFocus
+            return (curDist - distRange[0]) / (distRange[1] - distRange[0])
+        else:
+            return
 
     def __calcCurOscillatorAcceleration(self, deltaTime):
         vehicle = BigWorld.player().getVehicleAttached()

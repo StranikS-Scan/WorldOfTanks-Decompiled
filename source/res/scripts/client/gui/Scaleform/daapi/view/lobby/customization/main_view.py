@@ -69,6 +69,7 @@ def _getSlotVO(slotData, cType, slotIdx):
      'isInDossier': slotData['isInDossier'],
      'img': slotImage}
     if slotData['element'] is not None:
+        slotVO['bonusVisible'] = slotData['element'].qualifier.getValue() > 0
         slotVO['bonus'] = _getSlotBonusString(slotData['element'].qualifier, slotData['isInDossier'])
         if slotData['isInQuest']:
             purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON
@@ -273,12 +274,9 @@ class MainView(CustomizationMainViewMeta):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __setBonusData(self, blData):
-        crewPanelRenderList = _createBonusVOList(blData, QUALIFIER_TYPE_INDEX)
         visibilityPanelRenderList = _createBonusVOList(blData, [QUALIFIER_TYPE.CAMOUFLAGE])
-        self.as_setBonusPanelDataS({'crewPanel': {'bonusTitle': text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATIONBONUSPANEL_CREWTITLE),
-                       'bonusRenderersList': crewPanelRenderList},
-         'visibilityPanel': {'bonusTitle': text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATIONBONUSPANEL_VISIBILITYTITLE),
-                             'bonusRenderersList': visibilityPanelRenderList}})
+        self.as_setBonusPanelDataS({'bonusTitle': text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATIONBONUSPANEL_VISIBILITYTITLE),
+         'bonusRenderersList': visibilityPanelRenderList})
 
     def __setCarouselInitData(self):
         self.as_setCarouselInitS({'icoFilter': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
@@ -317,13 +315,14 @@ class MainView(CustomizationMainViewMeta):
                 label = priceFormatter('{0}{1}'.format(element.getPrice(item['duration']), priceIcon))
             data = {'id': element.getID(),
              'icon': element.getTexturePath(),
-             'bonusType': element.qualifier.getIcon16x16(),
-             'bonusPower': text_styles.stats('+{0}%{1}'.format(element.qualifier.getValue(), '*' if element.qualifier.getDescription() is not None else '')),
              'label': label,
              'selected': item['appliedToCurrentSlot'] or item['installedInCurrentSlot'] and not blData['hasAppliedItem'],
              'goToTaskBtnVisible': isInQuest,
              'goToTaskBtnText': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMCAROUSEL_RENDERER_GOTOTASK),
              'newElementIndicatorVisible': item['isNewElement']}
+            if element.qualifier.getValue() > 0:
+                data['bonusType'] = element.qualifier.getIcon16x16()
+                data['bonusPower'] = text_styles.stats('+{0}%{1}'.format(element.qualifier.getValue(), '*' if element.qualifier.getDescription() is not None else ''))
             if data['selected']:
                 selectedIndex = blData['items'].index(item)
             if element.isOnSale(item['duration']) and not element.isInDossier and not item['installedInCurrentSlot'] and not isInQuest:

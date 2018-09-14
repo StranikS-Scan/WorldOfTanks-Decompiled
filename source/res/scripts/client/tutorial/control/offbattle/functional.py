@@ -6,6 +6,7 @@ import MusicControllerWWISE
 import ResMgr
 from adisp import process
 from constants import QUEUE_TYPE
+from debug_utils import LOG_DEBUG
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx, DequeueCtx
@@ -23,6 +24,36 @@ from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR, LOG_WARNING
 from tutorial.settings import PLAYER_XP_LEVEL
 
+class FunctionalEnterModeEffect(FunctionalEffect):
+
+    def __init__(self, effect):
+        super(FunctionalEnterModeEffect, self).__init__(effect)
+        self.__stillRunning = False
+
+    def triggerEffect(self):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            self._doEffect(dispatcher)
+        else:
+            LOG_WARNING('Prebattle dispatcher is not defined')
+            self._tutorial.refuse()
+        return
+
+    @process
+    def _doEffect(self, dispatcher):
+        self.__stillRunning = True
+        result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
+        self.__stillRunning = False
+        if not result:
+            self._tutorial.refuse()
+
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__stillRunning
+
+
 class FunctionalEnterQueueEffect(FunctionalEffect):
 
     def __init__(self, effect):
@@ -36,17 +67,12 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
             if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
                 self._doEffect(dispatcher)
             else:
-                self._doSelect(dispatcher)
+                LOG_WARNING('Enter queue effect could not be played from different mode.')
+                self._tutorial.refuse()
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
             self._tutorial.refuse()
         return
-
-    @process
-    def _doSelect(self, dispatcher):
-        result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
-        if result:
-            self._doEffect(dispatcher)
 
     @process
     def _doEffect(self, dispatcher):
@@ -195,7 +221,11 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
             self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            self._doLeave(dispatcher)
+            state = dispatcher.getFunctionalState()
+            if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
+                self._doEffect(dispatcher)
+            else:
+                LOG_DEBUG('Refuse training is called from non-mode.')
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
         self._cache.setAfterBattle(False).write()
@@ -209,5 +239,5 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
         return False
 
     @process
-    def _doLeave(self, dispatcher):
-        yield dispatcher.doLeaveAction(LeavePrbAction(isExit=False))
+    def _doEffect(self, dispatcher):
+        yield dispatcher.doLeaveAction(LeavePrbAction())

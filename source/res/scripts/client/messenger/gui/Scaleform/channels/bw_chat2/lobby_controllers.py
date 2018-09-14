@@ -26,6 +26,10 @@ class UnitChannelController(LobbyLayout):
         super(UnitChannelController, self).setView(view)
         self._getChat().addHistory()
 
+    def getHistory(self):
+        self._getChat().addHistory()
+        return super(UnitChannelController, self).getHistory()
+
     def canSendMessage(self):
         result, errorMsg = True, ''
         if self._getChat().isBroadcastInCooldown():

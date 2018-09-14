@@ -299,6 +299,10 @@ class InvitesManager(UsersInfoHelper):
         self.__eventManager.clear()
 
     def onAvatarBecomePlayer(self):
+        if self.__inited & PRB_INVITES_INIT_STEP.STARTED == 0:
+            self.__inited |= PRB_INVITES_INIT_STEP.STARTED
+            if self.__inited == PRB_INVITES_INIT_STEP.INITED:
+                self.onInvitesListInited()
         self.__isInBattle = True
         self.__clearAcceptChain()
 

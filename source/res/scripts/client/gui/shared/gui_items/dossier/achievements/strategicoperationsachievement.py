@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/StrategicOperationsAchievement.py
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
+from abstract.mixins import Deprecated, NoProgressBar
 
-class StrategicOperationsAchievement(ClassProgressAchievement):
+class StrategicOperationsAchievement(Deprecated, NoProgressBar, ClassProgressAchievement):
 
     def __init__(self, dossier, value=None):
         super(StrategicOperationsAchievement, self).__init__('strategicOperations', _AB.RATED_7X7, dossier, value)

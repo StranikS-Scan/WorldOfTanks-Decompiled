@@ -112,7 +112,7 @@ class UnitSlotsValidator(CommanderValidator):
         return ValidationResult(False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS) if stats.readyCount != stats.occupiedSlotsCount else super(UnitSlotsValidator, self)._validate()
 
 
-class UnitLevelsValidator(CommanderValidator):
+class UnitLevelsValidator(ExceptDevModeValidator):
     """
     Validates unit vehicles levels
     """

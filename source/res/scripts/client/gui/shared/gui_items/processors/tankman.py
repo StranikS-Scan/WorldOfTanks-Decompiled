@@ -3,10 +3,11 @@
 import BigWorld
 from constants import EQUIP_TMAN_CODE
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice, formatPriceForCurrency
+from gui.shared.formatters import formatPrice, formatPriceForCurrency, text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
 from gui.shared.money import Money, ZERO_MONEY, Currency
@@ -358,25 +359,27 @@ class TankmanChangePassport(ItemProcessor):
 
     def __init__(self, tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
         hasUniqueData = self.__hasUniqueData(tankman, firstNameID, lastNameID, iconID)
-        super(TankmanChangePassport, self).__init__(tankman, (plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation'),))
+        isFemale = tankman.descriptor.isFemale
+        if isFemale:
+            price = g_itemsCache.items.shop.passportFemaleChangeCost
+        else:
+            price = g_itemsCache.items.shop.passportChangeCost
+        super(TankmanChangePassport, self).__init__(tankman, (plugins.MessageConfirmator('replacePassport/unique' if hasUniqueData else 'replacePassportConfirmation', ctx={'gold': text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))}),))
         self.firstNameID = firstNameID
         self.firstNameGroup = firstNameGroup
         self.lastNameID = lastNameID
         self.lastNameGroup = lastNameGroup
         self.iconID = iconID
         self.iconGroup = iconGroup
-        self.isFemale = tankman.descriptor.isFemale
+        self.isFemale = isFemale
         self.isPremium = tankman.descriptor.isPremium
+        self.price = price
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('replace_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
-        if self.isFemale:
-            goldPrice = g_itemsCache.items.shop.passportFemaleChangeCost
-        else:
-            goldPrice = g_itemsCache.items.shop.passportChangeCost
-        return makeI18nSuccess('replace_tankman/success', money=formatPrice(Money(gold=goldPrice)), type=SM_TYPE.PurchaseForGold)
+        return makeI18nSuccess('replace_tankman/success', money=formatPrice(Money(gold=self.price)), type=SM_TYPE.PurchaseForGold)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to change tankman passport:', self.item.invID, self.isPremium, self.isFemale, self.firstNameGroup, self.firstNameID, self.lastNameGroup, self.lastNameID)

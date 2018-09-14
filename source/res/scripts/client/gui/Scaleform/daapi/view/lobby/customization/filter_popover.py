@@ -111,7 +111,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
          'btnDefault': VEHICLE_CUSTOMIZATION.FILTER_POPOVER_GETDEFAULTSETTINGS,
          'bonusTypeId': FILTER_TYPE.QUALIFIER,
          'bonusType': _getBonusTypeVO(self.__filter.selectedBonuses),
-         'customizationBonusTypeVisible': isTypeNotCamouflage,
+         'customizationBonusTypeVisible': False,
          'enableGroupFilter': updateVO['enableGroupFilter'],
          'customizationTypeId': FILTER_TYPE.GROUP,
          'customizationType': groupsUserNames,

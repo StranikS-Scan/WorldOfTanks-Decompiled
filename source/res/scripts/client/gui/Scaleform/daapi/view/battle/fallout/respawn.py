@@ -7,9 +7,10 @@ from gui.Scaleform.daapi.view.meta.FalloutRespawnViewMeta import FalloutRespawnV
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
-from gui.battle_control.arena_info.arena_vos import getClassTag, isPremium, isPremiumIGR
+from gui.battle_control.arena_info.arena_vos import isPremium, isPremiumIGR
 from gui.battle_control.controllers.respawn_ctrl import IRespawnView
 from gui.shared.formatters.text_styles import standard, main, statInfo, warning
+from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import getIconPath
 from helpers import dependency
 from helpers import i18n, time_utils
@@ -92,7 +93,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
              'vehicleName': self.__getVehicleName(v),
              'flagIcon': _FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
              'vehicleIcon': getIconPath(v.type.name),
-             'vehicleType': _VEHICLE_TYPE_TEMPLATE % getClassTag(v.type.tags),
+             'vehicleType': _VEHICLE_TYPE_TEMPLATE % Vehicle.getVehicleClassTag(v.type.tags),
              'isElite': False,
              'isPremium': isPremium(v.type.tags),
              'vehicleLevel': _VEHICLE_LEVEL_TEMPLATE % v.type.level})

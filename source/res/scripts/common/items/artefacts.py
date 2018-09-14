@@ -5,7 +5,7 @@ import items
 import nations
 from items import _xml, vehicles
 from debug_utils import *
-from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP, IS_WEB, IS_DEVELOPMENT
+from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP, IS_WEB, IS_DEVELOPMENT, VISIBILITY, VEHICLE_TTC_ASPECTS
 from functools import partial
 if IS_CLIENT:
     from helpers import i18n
@@ -35,6 +35,9 @@ class OptionalDevice(object):
         return (True, None) if self.__filter is None else self.__filter.checkCompatibility(vehicleDescr)
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
+        pass
+
+    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         pass
 
     def updatePrice(self, newPrice, showInShop):
@@ -113,6 +116,12 @@ class Stereoscope(OptionalDevice):
         self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
         self.circularVisionRadiusFactor = _xml.readPositiveFloat(xmlCtx, section, 'circularVisionRadiusFactor')
 
+    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+        if aspect not in (VEHICLE_TTC_ASPECTS.DEFAULT, VEHICLE_TTC_ASPECTS.WHEN_STILL):
+            return
+        factorToCompensate = vehicleDescr.miscAttrs['circularVisionRadiusFactor']
+        factors['circularVisionRadius'] = self.circularVisionRadiusFactor / factorToCompensate
+
 
 class CamouflageNet(OptionalDevice):
 
@@ -121,6 +130,11 @@ class CamouflageNet(OptionalDevice):
 
     def _readConfig(self, xmlCtx, section):
         self.activateWhenStillSec = _xml.readNonNegativeFloat(xmlCtx, section, 'activateWhenStillSec')
+
+    def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
+        if aspect not in (VEHICLE_TTC_ASPECTS.WHEN_STILL,):
+            return
+        factors['invisibility'][0] += vehicleDescr.type.invisibilityDeltas['camouflageNetBonus']
 
 
 class EnhancedSuspension(OptionalDevice):
@@ -142,20 +156,17 @@ class EnhancedSuspension(OptionalDevice):
 
 
 class Grousers(OptionalDevice):
-    if not IS_CLIENT or IS_DEVELOPMENT:
 
-        def updateVehicleDescrAttrs(self, vehicleDescr):
-            r = vehicleDescr.physics['terrainResistance']
-            vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.factorMedium, r[2] * self.factorSoft)
-
-    else:
-
-        def updateVehicleDescrAttrs(self, vehicleDescr):
-            pass
+    def updateVehicleDescrAttrs(self, vehicleDescr):
+        r = vehicleDescr.physics['terrainResistance']
+        vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.__factorMedium, r[2] * self.__factorSoft)
+        rff = vehicleDescr.physics['rollingFrictionFactors']
+        rff[1] *= self.__factorMedium
+        rff[2] *= self.__factorSoft
 
     def _readConfig(self, xmlCtx, section):
-        self.factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
-        self.factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
+        self.__factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
+        self.__factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
 
 
 class AntifragmentationLining(OptionalDevice):

@@ -60,7 +60,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.950399 0.3031	</turret>
+      <turret>	0.000000 0.6521 0.3031	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F19_Lorraine40t/collision/Hull.model	</collisionModelServer>
@@ -75,17 +75,14 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.52152 0.48104 0.901031	</rayStart>
-        <rayEnd>	-1.34831 0.38106 0.901031	</rayEnd>
+        <rayStart>	-1.52832 0.469161 0.189537	</rayStart>
+        <rayEnd>	-1.35511 0.369185 0.189537	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.82	</size>
+        <size>	0.749	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F19_Lorraine40t/Lorraine40t_HangarShadowMap.dds	</hangarShadowTexture>
-    <camouflage>
-      <tiling>	3 3 0.000000 0.000000	</tiling>
-    </camouflage>
   </hull>
   <chassis>
     <Chassis_F19_Lorraine40t>
@@ -119,9 +116,9 @@
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
+        <size>	0.46 0.7	</size>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.46 0.7	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -129,47 +126,29 @@
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
         <textureScale>	-1.8	</textureScale>
       </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.655190 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.446060 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.864630	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.35753	</radius>
-          <syncAngle>	21.1765	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.155338	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.424274	</radius>
-          <syncAngle>	21.1765	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.459867	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.35753	</radius>
+          <radius>	0.325	</radius>
           <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.155338	</radius>
+          <radius>	0.125	</radius>
           <startIndex>	1	</startIndex>
           <count>	4	</count>
         </group>
@@ -177,13 +156,41 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
-          <radius>	0.424274	</radius>
+          <radius>	0.409495	</radius>
           <syncAngle>	21.1765	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.459867	</radius>
+          <radius>	0.432505	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.325	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.125	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.409495	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.432505	</radius>
           <startIndex>	0	</startIndex>
           <count>	5	</count>
         </group>
@@ -191,7 +198,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -204,16 +210,6 @@
       <topRightCarryingPoint>	1.3547 1.90126	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.655190 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.446060 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.864630	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <groundNodes>
         <group>
           <template>	Track_L	</template>
@@ -367,6 +363,8 @@
         <armor_6>	20	</armor_6>
         <armor_7>	40	</armor_7>
         <armor_8>	0	</armor_8>
+        <armor_9>	55	</armor_9>
+        <armor_10>	40	</armor_10>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7500	</weight>
@@ -401,7 +399,7 @@
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	50	</reloadTime>
+          <reloadTime>	36	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -409,10 +407,10 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
-            <count>	6	</count>
-            <rate>	22	</rate>
+            <count>	4	</count>
+            <rate>	24	</rate>
           </clip>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F19_Lorraine40t/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F19_Lorraine40t/crash/lod0/Gun_02.model	</destroyed>
@@ -433,8 +431,9 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <effects>	shot_mainext_mb	</effects>
           <camouflage>
-            <tiling>	2.4 1.8 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_SA_47_L>
       </guns>
@@ -447,36 +446,37 @@
         <collisionModelServer>	vehicles/french/F19_Lorraine40t/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F19_Lorraine40t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.2118 0.1011	</gunPosition>
+      <gunPosition>	0.000000 0.510099 0.1011	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.19466 0.115557 -1.22052	</rayStart>
-          <rayEnd>	-0.794662 0.115557 -1.2207	</rayEnd>
+          <rayStart>	-1.19481 0.118435 -1.27031	</rayStart>
+          <rayEnd>	-0.794815 0.118435 -1.27049	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.198	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
-        <inscription>
-          <rayStart>	1.19482 0.131936 -0.678862	</rayStart>
-          <rayEnd>	0.794817 0.13147 -0.679048	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.64	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
         <player>
-          <rayStart>	1.19466 0.115557 -1.22052	</rayStart>
-          <rayEnd>	0.794662 0.115557 -1.2207	</rayEnd>
+          <rayStart>	1.19481 0.119028 -1.26202	</rayStart>
+          <rayEnd>	0.794815 0.119028 -1.26201	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
+          <size>	0.198	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
+        <inscription>
+          <rayStart>	0.734346 0.205245 0.528773	</rayStart>
+          <rayEnd>	0.684111 0.0450557 0.420087	</rayEnd>
+          <rayUp>	-0.432032 0.0671937 -0.899351	</rayUp>
+          <size>	0.476	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.218 0.000 0.945 0.000 1.338 0.135 0.195 0.000 0.500 0.500 0.225 0.500 0.370 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.6 0.8 0.000000 0.000000	</tiling>
+        <tiling>	0.5 0.3 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_F19_Lorraine40t>
   </turrets0>
@@ -534,7 +534,9 @@
       </chassis>
     </detailed>
   </physics>
-  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <clientAdjustmentFactors>
+    <armour>	0.978068533	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

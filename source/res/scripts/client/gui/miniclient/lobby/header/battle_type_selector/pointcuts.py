@@ -45,6 +45,12 @@ class FalloutBattle(_BattleItemSelector):
         _BattleItemSelector.__init__(self, '_addFalloutBattleType', (aspects.FalloutBattle,))
 
 
+class StrongholdBattle(_BattleItemSelector):
+
+    def __init__(self):
+        _BattleItemSelector.__init__(self, '_addStrongholdsBattleType', (aspects.StrongholdBattle,))
+
+
 class OnBattleTypeSelectorPopulate(aop.Pointcut):
 
     def __init__(self):

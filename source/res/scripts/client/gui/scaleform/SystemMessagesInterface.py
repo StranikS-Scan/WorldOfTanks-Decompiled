@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/SystemMessagesInterface.py
 import time
 import account_helpers
-import constants
 from ConnectionManager import connectionManager
 from MemoryCriticalController import g_critMemHandler
 from PlayerEvents import g_playerEvents
@@ -16,6 +15,7 @@ from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
 from skeletons.gui.game_control import IEventsNotificationsController, IAOGASController, IGameSessionController
 from skeletons.gui.system_messages import ISystemMessages
+from helpers import getClientLanguage
 KOREA_TIME_TILL_MIDNIGHT = 7200
 
 class SystemMessagesInterface(ISystemMessages):
@@ -100,16 +100,10 @@ class SystemMessagesInterface(ISystemMessages):
 
     def __gameSession_onClientNotify(self, sessionDuration, timeTillMidnight, playTimeLeft):
         LOG_DEBUG('onGameSessionNotification', sessionDuration, timeTillMidnight, playTimeLeft)
-        if constants.IS_KOREA:
+        if getClientLanguage() == 'ko':
             key = '#system_messages:gameSessionControl/korea/{0:>s}'
-            msgList = [i18n.makeString(key.format('sessionTime'), sessionTime=time.strftime('%H:%M', time.gmtime(sessionDuration)))]
-            if not self.gameSession.isAdult and timeTillMidnight <= KOREA_TIME_TILL_MIDNIGHT:
-                msgList.append(i18n.makeString(key.format('timeTillMidnight'), timeLeft=time.strftime('%H:%M', time.gmtime(timeTillMidnight))))
-            if playTimeLeft is not None:
-                msgList.append(i18n.makeString(key.format('playTimeLeft'), timeLeft=time.strftime('%H:%M', time.gmtime(playTimeLeft))))
-            msgList.append(i18n.makeString(key.format('note')))
+            msgList = [i18n.makeString(key.format('sessionTime'), sessionTime=time.strftime('%H:%M', time.gmtime(sessionDuration))), i18n.makeString(key.format('note'))]
             self.proto.serviceChannel.pushClientSysMessage('\n'.join(msgList), SM_TYPE.Warning)
-        return
 
     def __onReceiveEventNotification(self, added, removed):
         self.__processNotifications(added, 'Begin')

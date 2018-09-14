@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
 from gui.shared.ItemsCache import g_itemsCache
 from gui.server_events import events_dispatcher
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 from tutorial.control.functional import FunctionalEffect
 from tutorial.data.hints import HintProps
 from tutorial.gui import GUI_EFFECT_NAME
@@ -89,11 +91,14 @@ class FunctionalShowAwardWindow(FunctionalEffect):
     def triggerEffect(self):
         window = self.getTarget()
         if window is not None:
-            content = window.getContent()
-            if not window.isContentFull():
-                query = self._tutorial._ctrlFactory.createContentQuery(window.getType())
-                query.invoke(content, window.getVarRef())
-            self._gui.showAwardWindow(window.getID(), window.getType(), content)
+            if isPopupsWindowsOpenDisabled():
+                LOG_DEBUG("Awards windows are disabled by setting 'popupsWindowsDisabled' in preferences.xml")
+            else:
+                content = window.getContent()
+                if not window.isContentFull():
+                    query = self._tutorial._ctrlFactory.createContentQuery(window.getType())
+                    query.invoke(content, window.getVarRef())
+                self._gui.showAwardWindow(window.getID(), window.getType(), content)
         else:
             LOG_ERROR('PopUp not found', self._effect.getTargetID())
         return

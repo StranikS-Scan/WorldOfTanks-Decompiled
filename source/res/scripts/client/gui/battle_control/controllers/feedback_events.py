@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_events.py
-from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
+from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
-from constants import ATTACK_REASON, ATTACK_REASONS
+from constants import ATTACK_REASON, ATTACK_REASONS, SHELL_TYPES_LIST
 
 def _unpackDamage(packedData):
     return _DamageExtra(*_BET.unpackDamage(packedData))
+
+
+def _unpackCrits(packedData):
+    return _CritsExtra(*_BET.unpackCrits(packedData))
 
 
 def _unpackInteger(packedData):
@@ -20,22 +24,36 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.TRACK_ASSIST: _FET.PLAYER_ASSIST_TO_KILL_ENEMY,
  _BET.BASE_CAPTURE_POINTS: _FET.PLAYER_CAPTURED_BASE,
  _BET.BASE_CAPTURE_DROPPED: _FET.PLAYER_DROPPED_CAPTURE,
- _BET.TANKING: _FET.PLAYER_USED_ARMOR}
+ _BET.TANKING: _FET.PLAYER_USED_ARMOR,
+ _BET.RECEIVED_DAMAGE: _FET.ENEMY_DAMAGED_HP_PLAYER,
+ _BET.RECEIVED_CRIT: _FET.ENEMY_DAMAGED_DEVICE_PLAYER}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
  _FET.PLAYER_DROPPED_CAPTURE: _unpackInteger,
  _FET.PLAYER_USED_ARMOR: _unpackDamage,
- _FET.PLAYER_DAMAGED_DEVICE_ENEMY: _unpackInteger}
+ _FET.PLAYER_DAMAGED_DEVICE_ENEMY: _unpackCrits,
+ _FET.ENEMY_DAMAGED_HP_PLAYER: _unpackDamage,
+ _FET.ENEMY_DAMAGED_DEVICE_PLAYER: _unpackCrits}
+
+def _getShellType(shellTypeID):
+    """
+    Returns shell type (see SHELL_TYPES) or None if shellTypeID == _BET.NONE_SHELL_TYPE.
+    :param shellTypeID: int, shell type index
+    """
+    return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
+
 
 class _DamageExtra(object):
-    __slots__ = ('__damage', '__attackReasonID', '__isBurst')
+    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold')
 
-    def __init__(self, damage=0, attackReasonID=0, isBurst=False):
+    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False):
         super(_DamageExtra, self).__init__()
         self.__damage = damage
         self.__attackReasonID = attackReasonID
         self.__isBurst = bool(isBurst)
+        self.__shellType = _getShellType(shellTypeID)
+        self.__isShellGold = bool(shellIsGold)
 
     def getDamage(self):
         """
@@ -49,8 +67,17 @@ class _DamageExtra(object):
         """
         return self.__attackReasonID
 
+    def getShellType(self):
+        """
+        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
+        """
+        return self.__shellType
+
     def isBurst(self):
         return self.__isBurst
+
+    def isShellGold(self):
+        return self.__isShellGold
 
     def isFire(self):
         return self.isAttackReason(ATTACK_REASON.FIRE)
@@ -60,6 +87,50 @@ class _DamageExtra(object):
 
     def isShot(self):
         return self.isAttackReason(ATTACK_REASON.SHOT)
+
+    def isWorldCollision(self):
+        return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
+
+    def isAttackReason(self, attackReason):
+        return ATTACK_REASONS[self.__attackReasonID] == attackReason
+
+
+class _CritsExtra(object):
+    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID')
+
+    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False):
+        super(_CritsExtra, self).__init__()
+        self.__critsCount = critsCount
+        self.__attackReasonID = attackReasonID
+        self.__shellType = _getShellType(shellTypeID)
+        self.__isShellGold = bool(shellIsGold)
+
+    def getCritsCount(self):
+        """
+        Returns count of damaged modules and tankmans.
+        """
+        return self.__critsCount
+
+    def getShellType(self):
+        """
+        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
+        """
+        return self.__shellType
+
+    def isShellGold(self):
+        return self.__isShellGold
+
+    def isFire(self):
+        return self.isAttackReason(ATTACK_REASON.FIRE)
+
+    def isRam(self):
+        return self.isAttackReason(ATTACK_REASON.RAM)
+
+    def isShot(self):
+        return self.isAttackReason(ATTACK_REASON.SHOT)
+
+    def isWorldCollision(self):
+        return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason

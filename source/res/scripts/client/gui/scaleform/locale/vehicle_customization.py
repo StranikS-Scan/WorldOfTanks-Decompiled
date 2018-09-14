@@ -1153,7 +1153,6 @@ class VEHICLE_CUSTOMIZATION(object):
     ITEM_CAMOUFLAGE2 = '#vehicle_customization:item/camouflage2'
     CUSTOMIZATIONHEADER_TITLE = '#vehicle_customization:customizationHeader/title'
     CUSTOMIZATIONHEADER_CLOSE = '#vehicle_customization:customizationHeader/close'
-    CUSTOMIZATIONBONUSPANEL_CREWTITLE = '#vehicle_customization:customizationBonusPanel/crewTitle'
     CUSTOMIZATIONBONUSPANEL_VISIBILITYTITLE = '#vehicle_customization:customizationBonusPanel/visibilityTitle'
     CUSTOMIZATION_FILTER_DURATION_ALWAYS = '#vehicle_customization:customization/filter/duration/always'
     CUSTOMIZATION_FILTER_DURATION_MONTH = '#vehicle_customization:customization/filter/duration/month'

@@ -212,7 +212,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         headerParams = []
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
+        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
             headerParams.append(PUtils.getTotalBattlesHeaderParam(self.__fortBattlesTargetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES))
             headerParams.append(PUtils.packLditItemData(PUtils.getFormattedWinsEfficiency(self.__fortBattlesTargetData), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY, 'wins40x32.png'))
         else:
@@ -220,42 +220,14 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
             headerParams.append(PUtils.packLditItemData(str(PUtils.UNAVAILABLE_VALUE), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLE_FORT_WINSEFFICIENCY, 'wins40x32.png'))
         headerParams.append(PUtils.getTotalBattlesHeaderParam(data[0], PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE))
         headerParams.append(PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIEWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIEWINSEFFICIENCY, 'wins40x32.png'))
-        headerParams.append(PUtils.packLditItemData(str(self.__avgFortSortiesLoot), PROFILE.SECTION_STATISTICS_SCORES_FORT_RESOURCE, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_RESOURCE, 'resources40x32.png'))
         return headerParams
 
     def _getDetailedData(self, data):
         targetData = data[0]
         dataList = []
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
+        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
             dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser, layout=FORT_STATISTICS_LAYOUT))
         dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE, targetData, isCurrentUser=self._isCurrentUser))
-        specificData = []
-        battlesCount = self.__fortBattlesTargetData.getBattlesCount()
-        lossesCount = self.__fortBattlesTargetData.getLossesCount()
-        winsCount = self.__fortBattlesTargetData.getWinsCount()
-        formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
-        specificDataColumn1 = []
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
-            specificDataColumn1.append(PUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTBATTLES, (DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTTOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, PUtils.createToolTipData((BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount)))),
-             DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS, PUtils.getFormattedWinsEfficiency(self.__fortBattlesTargetData), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS),
-             DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_LOOTING, self.__fortMiscTargetData.getEnemyBasePlunderNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_LOOTING),
-             DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_ATTACKS, self.__fortMiscTargetData.getAttackNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_ATTACKS),
-             DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_DEFENCES, self.__fortMiscTargetData.getDefenceHours(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_DEFENCES))))
-        battlesCount = targetData.getBattlesCount()
-        lossesCount = targetData.getLossesCount()
-        winsCount = targetData.getWinsCount()
-        drawsCount = targetData.getDrawsCount()
-        formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
-        specificDataColumn1.append(PUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTSORTIE, (DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORT_SORTIE, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_SORTIE, PUtils.createToolTipData((BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), BigWorld.wg_getIntegralFormat(drawsCount)))), DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIETOTALWINS, self._formattedWinsEfficiency, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIEWINS))))
-        specificData.append(specificDataColumn1)
-        resourcesDataList = [DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_AVGRESOURCES, self.__avgFortSortiesLoot, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES), DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(self.__totalSortiesLoot), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES)]
-        specificDataColumn2 = []
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
-            resourcesDataList.append(DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(self.__fortMiscTargetData.getLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES))
-            resourcesDataList.append(DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_MAXRESOURCES, BigWorld.wg_getIntegralFormat(self.__fortMiscTargetData.getMaxLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES))
-        specificDataColumn2.append(PUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RESOURCE, resourcesDataList))
-        specificData.append(specificDataColumn2)
-        dataList.append(PUtils.getLabelViewTypeDataObject(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_SPECIFIC, specificData, PUtils.VIEW_TYPE_TABLES))
         return dataList
 
 

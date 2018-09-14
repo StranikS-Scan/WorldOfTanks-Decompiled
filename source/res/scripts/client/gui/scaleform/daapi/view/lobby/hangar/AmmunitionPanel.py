@@ -17,17 +17,46 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IFalloutController
+OPTIONAL_DEVICE_SLOTS_COUNT = 3
+ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[9], GUI_ITEM_TYPE_NAMES[11])
+FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[2],
+ GUI_ITEM_TYPE_NAMES[3],
+ GUI_ITEM_TYPE_NAMES[4],
+ GUI_ITEM_TYPE_NAMES[5],
+ GUI_ITEM_TYPE_NAMES[7])
+FITTING_SLOTS = FITTING_MODULES + (GUI_ITEM_TYPE_NAMES[9], GUI_ITEM_TYPE_NAMES[11])
+
+def getFittingSlotsData(vehicle, slotsRange, VoClass=None):
+    devices = []
+    VoClass = VoClass or FittingSlotVO
+    for slotType in slotsRange:
+        data = g_itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
+        if slotType in ARTEFACTS_SLOTS:
+            for slotId in xrange(OPTIONAL_DEVICE_SLOTS_COUNT):
+                devices.append(VoClass(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+
+        devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+
+    return devices
+
+
+def getAmmo(shells):
+    outcome = []
+    for shell in shells:
+        if shell.isHidden:
+            continue
+        outcome.append({'id': str(shell.intCD),
+         'type': shell.type,
+         'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
+         'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
+         'count': shell.count,
+         'tooltip': '',
+         'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
+
+    return outcome
+
 
 class AmmunitionPanel(AmmunitionPanelMeta):
-    __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
-     GUI_ITEM_TYPE_NAMES[3],
-     GUI_ITEM_TYPE_NAMES[4],
-     GUI_ITEM_TYPE_NAMES[5],
-     GUI_ITEM_TYPE_NAMES[7],
-     GUI_ITEM_TYPE_NAMES[9],
-     GUI_ITEM_TYPE_NAMES[11])
-    __ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[9], GUI_ITEM_TYPE_NAMES[11])
-    OPTIONAL_DEVICE_SLOTS_COUNT = 3
     falloutCtrl = dependency.descriptor(IFalloutController)
 
     def update(self):
@@ -83,36 +112,13 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def __inventoryUpdateCallBack(self, *args):
         self.update()
 
-    def __updateAmmo(self):
+    def __updateDevices(self, vehicle):
         shells = []
         stateWarning = False
         if g_currentVehicle.isPresent():
-            vehicle = g_currentVehicle.item
             stateWarning = vehicle.isBroken or not vehicle.isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
-            for shell in vehicle.shells:
-                if shell.isHidden:
-                    continue
-                shells.append({'id': str(shell.intCD),
-                 'type': shell.type,
-                 'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
-                 'count': shell.count,
-                 'tooltip': '',
-                 'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
-
+            shells = getAmmo(vehicle.shells)
         self.as_setAmmoS(shells, stateWarning)
-
-    def __updateDevices(self, vehicle):
-        devices = []
-        self.__updateAmmo()
         self.as_setModulesEnabledS(True)
         self.as_setVehicleHasTurretS(vehicle.hasTurrets)
-        for slotType in AmmunitionPanel.__FITTING_SLOTS:
-            data = g_itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
-            if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
-                for slotId in xrange(self.OPTIONAL_DEVICE_SLOTS_COUNT):
-                    devices.append(FittingSlotVO(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
-
-            devices.append(FittingSlotVO(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
-
-        self.as_setDataS({'devices': devices})
+        self.as_setDataS({'devices': getFittingSlotsData(vehicle, FITTING_SLOTS)})

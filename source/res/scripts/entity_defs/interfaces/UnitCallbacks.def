@@ -13,12 +13,14 @@
     <onUnitJoin>
       <Arg>	INT32	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
     </onUnitJoin>
     <onUnitLeave>
       <Arg>	INT32	</Arg>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT64	</Arg>
       <Arg>	UINT32	</Arg>
     </onUnitLeave>
     <onUnitUpdate>

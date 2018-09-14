@@ -8,12 +8,11 @@ import Math
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.formatters import formatHealthProgress, normalizeHealthPercent
-from helpers import i18n
 from gui.Scaleform.daapi.view.meta.DamagePanelMeta import DamagePanelMeta
 from gui.Scaleform.genConsts.APP_CONTAINERS_NAMES import APP_CONTAINERS_NAMES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import vehicle_getter
-from gui.battle_control.battle_constants import VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG, VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_GUI_ITEMS, AUTO_ROTATION_FLAG
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from helpers import i18n

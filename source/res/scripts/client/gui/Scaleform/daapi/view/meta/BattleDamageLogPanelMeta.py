@@ -10,8 +10,8 @@ class BattleDamageLogPanelMeta(BaseDAAPIComponent):
     @extends BaseDAAPIComponent
     """
 
-    def as_showDamageLogComponentS(self, value):
-        return self.flashObject.as_showDamageLogComponent(value) if self._isDAAPIInited() else None
+    def as_setSettingsDamageLogComponentS(self, isVisible, isColorBlind):
+        return self.flashObject.as_setSettingsDamageLogComponent(isVisible, isColorBlind) if self._isDAAPIInited() else None
 
     def as_summaryStatsS(self, damage, blocked, assist):
         return self.flashObject.as_summaryStats(damage, blocked, assist) if self._isDAAPIInited() else None
@@ -25,14 +25,23 @@ class BattleDamageLogPanelMeta(BaseDAAPIComponent):
     def as_updateSummaryAssistValueS(self, value):
         return self.flashObject.as_updateSummaryAssistValue(value) if self._isDAAPIInited() else None
 
-    def as_detailStatsS(self, isVisible, messages):
+    def as_detailStatsTopS(self, isVisible, isShortMode, messages):
         """
         :param messages: Represented by Vector.<MessageRenderModel> (AS)
         """
-        return self.flashObject.as_detailStats(isVisible, messages) if self._isDAAPIInited() else None
+        return self.flashObject.as_detailStatsTop(isVisible, isShortMode, messages) if self._isDAAPIInited() else None
 
-    def as_addDetailMessageS(self, valueColor, value, actionTypeImg, vehicleTypeImg, vehicleName):
-        return self.flashObject.as_addDetailMessage(valueColor, value, actionTypeImg, vehicleTypeImg, vehicleName) if self._isDAAPIInited() else None
+    def as_addDetailMessageTopS(self, value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG):
+        return self.flashObject.as_addDetailMessageTop(value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG) if self._isDAAPIInited() else None
+
+    def as_detailStatsBottomS(self, isVisible, isShortMode, messages):
+        """
+        :param messages: Represented by Vector.<MessageRenderModel> (AS)
+        """
+        return self.flashObject.as_detailStatsBottom(isVisible, isShortMode, messages) if self._isDAAPIInited() else None
+
+    def as_addDetailMessageBottomS(self, value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG):
+        return self.flashObject.as_addDetailMessageBottom(value, actionTypeImg, vehicleTypeImg, vehicleName, shellTypeStr, shellTypeBG) if self._isDAAPIInited() else None
 
     def as_isDownCtrlButtonS(self, value):
         return self.flashObject.as_isDownCtrlButton(value) if self._isDAAPIInited() else None

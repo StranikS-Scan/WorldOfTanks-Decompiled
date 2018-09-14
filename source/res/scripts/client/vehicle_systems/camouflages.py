@@ -7,7 +7,7 @@ from debug_utils import LOG_ERROR
 import items
 from vehicle_systems.tankStructure import TankPartNames
 
-def prepareFashions(vDesc, isCurrentModelDamaged, camouflageId=None, newPhysic=True):
+def prepareFashions(vDesc, isCurrentModelDamaged, camouflageId=None):
     if isCurrentModelDamaged:
         fashions = [None,
          None,
@@ -15,7 +15,7 @@ def prepareFashions(vDesc, isCurrentModelDamaged, camouflageId=None, newPhysic=T
          None]
     else:
         drivenJoints = vDesc.gun.get('drivenJoints', None)
-        fashions = [BigWorld.WGVehicleFashion(False, 1.0, newPhysic),
+        fashions = [BigWorld.WGVehicleFashion(False, 1.0),
          None,
          None,
          BigWorld.WGGunRecoil('G', drivenJoints)]

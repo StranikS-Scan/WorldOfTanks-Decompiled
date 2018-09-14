@@ -36,6 +36,5 @@ class DAMAGE_INDICATOR_ATLAS_ITEMS(object):
     CRITS_RELOADER_CIRCLE = 'reloaderCircle'
     CRITS_TANKS_CIRCLE = 'tanksCircle'
     CRITS_TURRET_CIRCLE = 'turretCircle'
-    VALUE_LINE = 'lineForValue'
     DAMAGE_CIRCLE_BLIND = 'damageCircleBlind'
     DAMAGE_STANDARD_BLIND = 'damageStandardBlind'

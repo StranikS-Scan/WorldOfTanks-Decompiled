@@ -43,6 +43,16 @@ class HintsManager(object):
         self._gui = None
         return
 
+    def stopOnceOnlyHint(self, itemID):
+        if self._data is None:
+            return
+        else:
+            hint = self._data.hintForItem(itemID)
+            if hint is not None:
+                self._data.markAsShown(hint)
+                self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+            return
+
     def __loadHintsData(self):
         LOG_DEBUG('Hints are loading')
         shownHints = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
@@ -66,10 +76,8 @@ class HintsManager(object):
     def __onGUIInput(self, event):
         itemID = event.getTargetID()
         if itemID in self.__activeHints:
-            hint = self.__activeHints[itemID]
             self.__hideHint(itemID)
-            self._data.markAsShown(hint)
-            self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+            self.stopOnceOnlyHint(itemID)
             if self._data.hintsCount == 0:
                 self.stop()
 

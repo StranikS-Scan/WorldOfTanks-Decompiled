@@ -70,6 +70,8 @@ class ClientInvitations(object):
             except KeyError:
                 LOG_ERROR('Unknown invitation', uniqueId, self.__invitations, callback, code, errStr)
 
+        else:
+            self.__playerEvents.onPrebattleInvitationsError(invitationId, code, errStr)
         if callback is not None:
             callback(code, errStr)
         return

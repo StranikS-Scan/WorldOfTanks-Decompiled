@@ -1,4 +1,13 @@
 <list.xml>
+  <F01_RenaultFT>
+    <id>	2	</id>
+    <userString>	#france_vehicles:RenaultFT	</userString>
+    <shortUserString>	#france_vehicles:RenaultFT_short	</shortUserString>
+    <description>	#france_vehicles:RenaultFT_descr	</description>
+    <price>	0	</price>
+    <tags>	lightTank HD	</tags>
+    <level>	1	</level>
+  </F01_RenaultFT>
   <F03_D2>
     <id>	1	</id>
     <userString>	#france_vehicles:D2	</userString>
@@ -8,15 +17,6 @@
     <tags>	mediumTank wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
     <level>	3	</level>
   </F03_D2>
-  <F01_RenaultFT>
-    <id>	2	</id>
-    <userString>	#france_vehicles:RenaultFT	</userString>
-    <shortUserString>	#france_vehicles:RenaultFT_short	</shortUserString>
-    <description>	#france_vehicles:RenaultFT_descr	</description>
-    <price>	0	</price>
-    <tags>	lightTank	</tags>
-    <level>	1	</level>
-  </F01_RenaultFT>
   <F20_RenaultBS>
     <id>	3	</id>
     <userString>	#france_vehicles:RenaultBS	</userString>
@@ -41,7 +41,7 @@
     <shortUserString>	#france_vehicles:Hotchkiss_H35_short	</shortUserString>
     <description>	#france_vehicles:Hotchkiss_H35_descr	</description>
     <price>	4200	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedHorizontal_springs_user enhancedHorizontal_springs_user	</tags>
+    <tags>	lightTank wetCombatPack_class1_user enhancedHorizontal_springs_user enhancedHorizontal_springs_user HD	</tags>
     <level>	2	</level>
   </F12_Hotchkiss_H35>
   <F02_D1>
@@ -180,7 +180,7 @@
     <shortUserString>	#france_vehicles:AMX38_short	</shortUserString>
     <description>	#france_vehicles:AMX38_descr	</description>
     <price>	41000	</price>
-    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
+    <tags>	lightTank wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
     <level>	3	</level>
   </F13_AMX38>
   <F10_AMX_50B>
@@ -297,7 +297,7 @@
     <shortUserString>	#france_vehicles:ARL_V39_short	</shortUserString>
     <description>	#france_vehicles:ARL_V39_descr	</description>
     <price>	900000	</price>
-    <tags>	AT-SPG mediumAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user	</tags>
+    <tags>	AT-SPG mediumAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_class2_user HD	</tags>
     <level>	6	</level>
   </F34_ARL_V39>
   <F38_Bat_Chatillon155_58>
@@ -444,10 +444,10 @@
     <userString>	#france_vehicles:F19_Lorraine40t	</userString>
     <shortUserString>	#france_vehicles:F19_Lorraine40t_short	</shortUserString>
     <description>	#france_vehicles:F19_Lorraine40t_descr	</description>
-    <price>	100	  <gold></gold>
+    <price>	10700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD secret testTank	</tags>
+    <tags>	mediumTank wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	8	</level>
   </F19_Lorraine40t>
   <F74_AMX_M4_1949>
@@ -594,7 +594,7 @@
     <description>	#france_vehicles:RenaultFT_bot_descr	</description>
     <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank secret unrecoverable	</tags>
+    <tags>	lightTank secret unrecoverable HD	</tags>
     <level>	1	</level>
   </F01_RenaultFT_bot>
 </list.xml>

@@ -36,5 +36,14 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT64	</Arg>
     </onArenaMessage>
+    <onPlayerVehicles>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onPlayerVehicles>
+    <onPlayerRating>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </onPlayerRating>
   </BaseMethods>
 </ExternalBattleMgr.def>

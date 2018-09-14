@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	56	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -187,7 +187,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -225,7 +224,7 @@
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	36000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.23	</vehicleMovement>
         <vehicleRotation>	0.23	</vehicleRotation>
@@ -309,7 +308,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -359,7 +357,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5500	</weight>
       <maxHealth>	140	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -492,7 +490,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
       <maxHealth>	210	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -553,7 +551,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_75mm_KwK_40_L48>
         <_75mm_KwK_L70>	shared	  <maxAmmo>	79	</maxAmmo>
-          <reloadTime>	4.4	</reloadTime>
+          <reloadTime>	4.2	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 6 0.541667 6 0.605329 8 1 8	</maxPitch>
@@ -683,7 +681,7 @@
           <smplEnginePower>	687.2327	</smplEnginePower>
         </Maybach_HL_210_TRM_P30>
         <Maybach_HL_230_TRM_P30>
-          <smplEnginePower>	740.0968	</smplEnginePower>
+          <smplEnginePower>	750	</smplEnginePower>
         </Maybach_HL_230_TRM_P30>
       </engines>
       <chassis>
@@ -725,32 +723,32 @@
           <grounds>
             <ground>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </ground>
             <sand>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </sand>
             <wood>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </wood>
             <snow>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </snow>
             <stone>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </stone>
             <metal>
               <medium>
-                <rollingFriction>	0.10465	</rollingFriction>
+                <rollingFriction>	0.08	</rollingFriction>
               </medium>
             </metal>
           </grounds>

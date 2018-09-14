@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
 from gui.shared.formatters import icons, text_styles
-from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA
+from gui.shared.items_parameters import formatters as params_formatters
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
-from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.tooltips.common import ToolTipBaseData, BlocksTooltipData
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers.i18n import makeString as _ms
 
 def _packTimeLimitsBlock(block, limits):
@@ -162,3 +164,120 @@ class CommonStatsBlockConstructor(ConsumableOrderTooltipBlockConstructor):
 
     def __packParameterBloc(self, name, value, measureUnits):
         return formatters.packTextParameterBlockData(name=text_styles.main(name) + text_styles.standard(measureUnits), value=text_styles.stats(value), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
+
+
+__buildsDirectionMap = {'A': FORTIFICATIONS.FORT2BUILDS_DIRECTION_A,
+ 'B': FORTIFICATIONS.FORT2BUILDS_DIRECTION_B,
+ 'C': FORTIFICATIONS.FORT2BUILDS_DIRECTION_C,
+ 'D': FORTIFICATIONS.FORT2BUILDS_DIRECTION_D}
+
+def getBuildsDirection(direction):
+    return _ms(__buildsDirectionMap[direction])
+
+
+class ToolTipRefSysDirects(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ToolTipRefSysDirects, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+
+    @staticmethod
+    def __getTitle(index):
+        infoMap = (FORTIFICATIONS.FORT2BUILDS_POINT1,
+         FORTIFICATIONS.FORT2BUILDS_POINT2,
+         FORTIFICATIONS.FORT2BUILDS_POINT3,
+         FORTIFICATIONS.FORT2BUILDS_POINT4,
+         FORTIFICATIONS.FORT2BUILDS_POINT5,
+         FORTIFICATIONS.FORT2BUILDS_POINT6)
+        return _ms(infoMap[index])
+
+    @staticmethod
+    def __getPointReward(index):
+        infoMap = (FORTIFICATIONS.FORT2BUILDS_REWARDPOINT1,
+         FORTIFICATIONS.FORT2BUILDS_REWARDPOINT2,
+         FORTIFICATIONS.FORT2BUILDS_REWARDPOINT3,
+         FORTIFICATIONS.FORT2BUILDS_REWARDPOINT4,
+         FORTIFICATIONS.FORT2BUILDS_REWARDPOINT5,
+         FORTIFICATIONS.FORT2BUILDS_REWARDPOINT6)
+        return _ms(infoMap[index])
+
+    def buildMapPoints(self, size, teamBasePositions, playerTeam, isCurrentBattle):
+        minimapSize = 300
+        bottomLeft, upperRight = size
+        mapWidth, mapHeight = (upperRight - bottomLeft) / minimapSize
+        viewpoint = (upperRight + bottomLeft) * 0.5
+        pointsData = []
+        for team, points in enumerate(teamBasePositions, 1):
+            for baseNumber, basePoint in enumerate(points.values(), 2):
+                pos = (basePoint[0], 0, basePoint[1])
+                if isCurrentBattle:
+                    pointType = 'base'
+                    color = 'blue' if team == playerTeam else 'red'
+                else:
+                    pointType = 'control'
+                    color = 'empty'
+                pointsData.append({'x': pos[0] / mapWidth - viewpoint.x * 0.5,
+                 'y': pos[2] / mapHeight - viewpoint.y * 0.5,
+                 'pointType': pointType,
+                 'color': color,
+                 'id': baseNumber if len(points) > 1 else 1})
+
+        return pointsData
+
+    def getDisplayableData(self, *args, **kwargs):
+        import ArenaType
+        from gui.prb_control.dispatcher import g_prbLoader
+        from gui.shared.ClanCache import g_clanCache
+        from gui.prb_control.items.stronghold_items import isEnemyBattleIndex
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is None:
+            return
+        else:
+            entity = dispatcher.getEntity()
+            data = entity.getStrongholdData()
+            if data is None:
+                return
+            battleIndex = args[0]
+            battleSeriesStatus = data.getBattleSeriesStatus()
+            battle = battleSeriesStatus[battleIndex]
+            isCurrentBattle = battle.getCurrentBattle()
+            mapVisible = battle.getMapId() is not None
+            arenaType = ArenaType.g_cache[battle.getMapId()] if mapVisible else None
+            if arenaType:
+                mapName = _ms(FORTIFICATIONS.FORT2BUILDS_MAPNAME, mapName=arenaType.name)
+            else:
+                mapName = _ms(FORTIFICATIONS.FORT2BUILDS_MAPUNKNOWN)
+            isEnemyBuilding = isEnemyBattleIndex(battleIndex)
+            direction = getBuildsDirection(data.getDirection())
+            if isEnemyBuilding:
+                infoDirection = _ms(FORTIFICATIONS.FORT2BUILDS_DIRECTIONENEMY, direction=direction)
+            else:
+                infoDirection = _ms(FORTIFICATIONS.FORT2BUILDS_DIRECTION, direction=direction)
+            toolTipData = {}
+            toolTipData['infoTitle'] = self.__getTitle(battleIndex)
+            resourceMultiplier = data.getResourceMultiplier()
+            rewardOnePoint = battle.getBattleReward()
+            rewardTotal = rewardOnePoint
+            if isEnemyBuilding:
+                rewardResourceMultiplier = rewardOnePoint * (resourceMultiplier - 1)
+                rewardTotal += rewardResourceMultiplier
+            rewardRequisition = int(rewardTotal * data.getRequisitionBonusPercent() / 100)
+            rewardTotal += rewardRequisition
+            toolTipData['infoMapName'] = mapName
+            toolTipData['infoDirection'] = infoDirection
+            toolTipData['infoTotalValue'] = str(rewardTotal)
+            toolTipData['infoDescription1'] = self.__getPointReward(battleIndex)
+            toolTipData['infoValue1'] = str(rewardOnePoint)
+            if isEnemyBuilding and rewardResourceMultiplier:
+                toolTipData['infoDescription2'] = _ms(FORTIFICATIONS.FORT2BUILDS_REWARDFIRSTTIME, reward=str(resourceMultiplier))
+                toolTipData['infoValue2'] = str(rewardResourceMultiplier)
+            if rewardRequisition:
+                toolTipData['infoDescription3'] = _ms(FORTIFICATIONS.FORT2BUILDS_REWARDREQUISITION)
+                toolTipData['infoValue3'] = str(rewardRequisition)
+            toolTipData['infoTotalDescription'] = _ms(FORTIFICATIONS.FORT2BUILDS_TOTALDESCRIPTION)
+            toolTipData['isMapEnabled'] = mapVisible
+            if mapVisible:
+                toolTipData['mapTexture'] = RES_ICONS.getMapPath(arenaType.geometryName)
+                toolTipData['mapPoints'] = arenaType.controlPoints or []
+                playerTeam = 1 if g_clanCache.clanDBID == battle.getFirstClanId() else 2
+                toolTipData['mapPoints'] = self.buildMapPoints(arenaType.boundingBox, arenaType.teamBasePositions, playerTeam, isCurrentBattle)
+            return toolTipData

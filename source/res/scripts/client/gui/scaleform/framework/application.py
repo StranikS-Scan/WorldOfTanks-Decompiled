@@ -171,6 +171,8 @@ class SFApplication(Flash, ApplicationMeta):
         if state is not self.isActive:
             if state:
                 self._setup()
+            else:
+                self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
             super(SFApplication, self).active(state)
 
     def afterCreate(self):

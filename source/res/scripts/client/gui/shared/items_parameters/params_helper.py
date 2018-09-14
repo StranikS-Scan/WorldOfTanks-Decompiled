@@ -6,11 +6,9 @@ import time
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.items_parameters import params, RELATIVE_PARAMS, formatters, MAX_RELATIVE_VALUE
+from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
-from gui.shared.items_parameters.formatters import PARAMS_GROUPS
+from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst
@@ -23,6 +21,16 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.equipment: params.EquipmentParams,
  ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
  ITEM_TYPES.vehicle: params.VehicleParams}
+RELATIVE_POWER_PARAMS = ('avgDamage', 'avgPiercingPower', 'reloadTime', 'reloadTimeSecs', 'gunRotationSpeed', 'turretRotationSpeed', 'turretYawLimits', 'pitchLimits', 'gunYawLimits', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'avgDamagePerMinute')
+RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
+RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime')
+RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
+RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
+PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
+ 'relativeArmor': RELATIVE_ARMOR_PARAMS,
+ 'relativeMobility': RELATIVE_MOBILITY_PARAMS,
+ 'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
+ 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
 
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
@@ -50,35 +58,16 @@ def getCompatibles(item, vehicleDescr=None):
     return get(item, vehicleDescr).get('compatible')
 
 
-def getAllParametersTitles():
-    result = []
-    for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
-        data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
-        data['titleText'] = formatters.formatVehicleParamName(groupName)
-        data['isEnabled'] = True
-        data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
-        result.append(data)
-        for paramName in PARAMS_GROUPS[groupName]:
-            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName)
-            data['iconSource'] = formatters.getParameterIconPath(paramName)
-            data['titleText'] = formatters.formatVehicleParamName(paramName)
-            data['isEnabled'] = False
-            data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
-            result.append(data)
-
-    return result
-
-
 def idealCrewComparator(vehicle):
     vehicleParamsObject = params.VehicleParams(vehicle)
     vehicleParams = vehicleParamsObject.getParamsDict()
-    bonuses = vehicleParamsObject.getBonuses()
-    penalties = vehicleParamsObject.getPenalties()
-    possibleBonuses = g_paramsCache.getCompatibleBonuses(vehicle.descriptor)
+    bonuses = vehicleParamsObject.getBonuses(vehicle)
+    penalties = vehicleParamsObject.getPenalties(vehicle)
+    compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicle.descriptor)
     idealCrewVehicle = copy.copy(vehicle)
     idealCrewVehicle.crew = vehicle.getPerfectCrew()
     perfectVehicleParams = params.VehicleParams(idealCrewVehicle).getParamsDict()
-    return VehiclesComparator(vehicleParams, perfectVehicleParams, possibleBonuses, bonuses, penalties)
+    return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses, penalties)
 
 
 def itemOnVehicleComparator(vehicle, item):
@@ -132,7 +121,7 @@ def artifactComparator(vehicle, item, slotIdx):
 
 
 def vehiclesComparator(comparableVehicle, vehicle):
-    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict())
+    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
 
 
 def itemsComparator(currentItem, otherItem, vehicleDescr=None):
@@ -153,19 +142,42 @@ def camouflageComparator(vehicle, camouflage):
         pos = camouflageInfo['kind']
         oldCamouflageData = vDescr.camouflages[pos]
         vDescr.setCamouflage(pos, camouflageID, int(time.time()), 0)
-        newParams = params.VehicleParams(vehicle).getParamsDict()
+        newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
         vDescr.setCamouflage(pos, *oldCamouflageData)
     else:
         newParams = currParams.copy()
     return VehiclesComparator(newParams, currParams)
 
 
-def hasGroupBonuses(groupName, comparator):
-    for paramName in PARAMS_GROUPS[groupName]:
-        if len(comparator.getExtendedData(paramName).bonuses):
-            return True
+def shellOnVehicleComparator(shell, vehicle):
+    vDescriptor = vehicle.descriptor
+    oldIdx = vDescriptor.activeGunShotIndex
+    vehicleParams = params.VehicleParams(vehicle).getParamsDict()
+    idx, _ = findFirst(lambda (i, s): s['shell']['compactDescr'] == shell.intCD, enumerate(vDescriptor.gun['shots']), (0, None))
+    vDescriptor.activeGunShotIndex = idx
+    newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
+    vDescriptor.activeGunShotIndex = oldIdx
+    return VehiclesComparator(newParams, vehicleParams)
 
-    return False
+
+def shellComparator(shell, vehicle):
+    if vehicle is not None:
+        vDescriptor = vehicle.descriptor
+        basicShellDescr = getBasicShell(vDescriptor)
+        return ItemsComparator(params.ShellParams(shell.descriptor, vDescriptor).getParamsDict(), params.ShellParams(basicShellDescr, vDescriptor).getParamsDict())
+    else:
+        return
+
+
+def getGroupBonuses(groupName, comparator):
+    """
+    Gets set of bonuses for selected group
+    """
+    bonuses = set()
+    for paramName in PARAMS_GROUPS[groupName]:
+        bonuses.update(comparator.getExtendedData(paramName).bonuses)
+
+    return bonuses
 
 
 def hasGroupPenalties(groupName, comparator):
@@ -174,13 +186,6 @@ def hasGroupPenalties(groupName, comparator):
             return True
 
     return False
-
-
-def getBuffIcon(param, comparator):
-    if hasGroupPenalties(param.name, comparator):
-        return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE
-    else:
-        return ''
 
 
 def getCommonParam(state, name):
@@ -201,6 +206,7 @@ class SimplifiedBarVO(dict):
         self.setdefault('minValue', 0)
         self.setdefault('useAnim', False)
         self['maxValue'] = max(MAX_RELATIVE_VALUE, self['value'] + self['delta'])
+        self.setdefault('isOptional', False)
 
 
 class VehParamsBaseGenerator(object):

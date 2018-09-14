@@ -4,12 +4,12 @@ import math
 from random import uniform
 import BigWorld
 from AvatarInputHandler.mathUtils import clamp
-from constants import ARENA_PERIOD, VEHICLE_PHYSICS_MODE
+from constants import ARENA_PERIOD
+from helpers.CallbackDelayer import CallbackDelayer
 from svarog_script import auto_properties
 from svarog_script.auto_properties import LinkDescriptor
 from Event import Event
 import svarog_script.py_component
-from constants import VEHICLE_SIEGE_STATE
 
 class EngineState:
     _NORMAL = 0
@@ -30,7 +30,7 @@ _StateConvertor = {'destroyed': EngineState._DESTROYED,
  'repaired': EngineState._REPAIRED,
  'normal': EngineState._NORMAL}
 
-class DetailedEngineState(svarog_script.py_component.Component):
+class DetailedEngineState(svarog_script.py_component.Component, CallbackDelayer):
     rpm = property(lambda self: self._rpm)
     gearNum = property(lambda self: self._gearNum)
     gearUp = property(lambda self: self._gearUp)
@@ -44,6 +44,7 @@ class DetailedEngineState(svarog_script.py_component.Component):
     engineState = property(lambda self: self._engineState)
 
     def __init__(self):
+        CallbackDelayer.__init__(self)
         self._rpm = 0.0
         self._reativelRPM = 0.0
         self._gearNum = 0
@@ -57,24 +58,20 @@ class DetailedEngineState(svarog_script.py_component.Component):
         self._engineState = EngineState._NORMAL
         self._vehicle = None
         self._gearUpCbk = None
-        self.__startEngineCbk = None
         self.__prevArenaPeriod = BigWorld.player().arena.period
         self.onEngineStart = Event()
         self.onStateChanged = Event()
-        BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
         return
 
     def destroy(self):
-        BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
-        if self.__startEngineCbk is not None:
-            BigWorld.cancelCallback(self.__startEngineCbk)
-            self.__startEngineCbk = None
+        self.deactivate()
         self._vehicle = None
         self._gearUpCbk = None
         self.onEngineStart.clear()
         self.onStateChanged.clear()
         self.onEngineStart = None
         self.onStateChanged = None
+        CallbackDelayer.destroy(self)
         return
 
     def __arenaPeriodChanged(self, *args):
@@ -85,22 +82,16 @@ class DetailedEngineState(svarog_script.py_component.Component):
             maxTime = BigWorld.player().arena.periodEndTime - BigWorld.serverTime()
             maxTime = maxTime * 0.7 if maxTime > 0.0 else 1.0
             time = uniform(0.0, maxTime)
-            self.__startEngineCbk = BigWorld.callback(time, self.__startEngineFunc)
+            self.delayCallback(time, self.__startEngineFunc)
         elif period == ARENA_PERIOD.BATTLE:
-            if self.__startEngineCbk is None and self._mode == EngineLoad._STOPPED:
+            if not self.hasDelayedCallback(self.__startEngineFunc) and self._mode == EngineLoad._STOPPED:
                 self.onEngineStart()
             self.__starting = False
-        return
 
     def __startEngineFunc(self):
-        if self is None:
-            return
-        else:
-            self.__startEngineCbk = None
-            self.__starting = True
-            self._mode = EngineLoad._IDLE
-            self.onEngineStart()
-            return
+        self.__starting = True
+        self._mode = EngineLoad._IDLE
+        self.onEngineStart()
 
     def setMode(self, mode):
         if mode > EngineLoad._STOPPED:
@@ -122,14 +113,14 @@ class DetailedEngineState(svarog_script.py_component.Component):
 
     def activate(self):
         super(DetailedEngineState, self).activate()
-        if self.__prevArenaPeriod == ARENA_PERIOD.BATTLE or self.__prevArenaPeriod == ARENA_PERIOD.PREBATTLE:
-            self.__startEngineCbk = BigWorld.callback(0.1, self.__startEngineFunc)
+        BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
+        if self.__prevArenaPeriod == ARENA_PERIOD.BATTLE or self.__prevArenaPeriod == ARENA_PERIOD.PREBATTLE or BigWorld.player().arena.period == ARENA_PERIOD.BATTLE:
+            self.delayCallback(0.1, self.__startEngineFunc)
 
     def deactivate(self):
+        BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
         self._vehicle = None
-        if self.__startEngineCbk is not None:
-            BigWorld.cancelCallback(self.__startEngineCbk)
-            self.__startEngineCbk = None
+        self.clearCallbacks()
         super(DetailedEngineState, self).deactivate()
         return
 
@@ -198,13 +189,10 @@ class DetailedEngineStateWWISE(DetailedEngineState):
         if self._vehicle is None:
             return
         else:
-            state = self._vehicle.siegeState
-            if state in VEHICLE_SIEGE_STATE.SWITCHING:
-                return
             super(DetailedEngineStateWWISE, self).refresh(dt)
             self.calculateRPM()
             self.calculateGear()
-            if not self._vehicle.isPlayerVehicle or self._vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            if not self._vehicle.isPlayerVehicle:
                 speed = self._vehicle.speedInfo.value[0]
                 self.__speed += (speed - self.__speed) * 0.5 * dt
                 speedRange = self._vehicle.typeDescriptor.physics['speedLimits'][0] + self._vehicle.typeDescriptor.physics['speedLimits'][1]

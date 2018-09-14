@@ -179,6 +179,10 @@ class Research(ResearchMeta):
         self.invalidateFreeXP()
         self.as_setWalletStatusS(status)
 
+    def invalidateRestore(self, vehicles):
+        if self._data.getRootCD() in vehicles:
+            self.redraw()
+
     def compareVehicle(self, itemCD):
         self.cmpBasket.addVehicle(int(itemCD))
 

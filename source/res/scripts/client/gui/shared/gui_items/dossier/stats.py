@@ -339,7 +339,10 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
         return self._getAvgValue(self.getBattlesCountVer3, self.getDamageBlockedByArmor)
 
     def getDamageAssistedEfficiency(self):
-        return self._getAvgValue(self.getBattlesCountVer2, lambda : self.getDamageAssistedRadio() + self.getDamageAssistedTrack())
+        value = self._getAvgValue(self.getBattlesCountVer2, lambda : self.getDamageAssistedRadio() + self.getDamageAssistedTrack())
+        if value is not None:
+            value = round(value)
+        return value
 
     def getArmorUsingEfficiency(self):
         return self._getAvgValue(lambda : self.getPotentialDamageReceived() - self.getDamageBlockedByArmor(), self.getDamageBlockedByArmor)

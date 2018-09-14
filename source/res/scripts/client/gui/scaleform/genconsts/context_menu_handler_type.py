@@ -22,7 +22,6 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     TECHNICAL_MAINTENANCE = 'technicalMaintenance'
     CONTACTS_GROUP = 'contactsGroup'
     PLAYER_CONTACTS = 'playerContacts'
-    CLUB_STAFF = 'clubStaff'
     STORE_VEHICLE = 'storeVehicle'
     PROFILE_VEHICLE = 'profileVehicle'
     VEH_COMPARE = 'vehCompare'

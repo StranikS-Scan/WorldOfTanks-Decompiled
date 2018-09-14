@@ -184,7 +184,6 @@ CLIMB_TANG = 1.0
 STAB_DAMP_MP = 5.0
 STAB_EPSILON_AMBIT = 2.0
 STAB_EPSILON_PERIOD = 4.0
-g_vehiclePhysicsMode = VEHICLE_PHYSICS_MODE.DETAILED
 g_confUpdaters = []
 g_xphysicsOverrides = {}
 
@@ -324,52 +323,9 @@ g_defaultXPhysicsCfg = {'gravity': 9.81,
  'hullInertiaFactors': (1.0, 1.0, 1.8),
  'engineLoses': (0.5, 0.8),
  'enableSabilization': True}
-if IS_CELLAPP:
-
-    def _booleanFromString(stringValue):
-        return stringValue.lower() in ('true', 'yes', '1')
-
-
-    def _getVehiclePhysicsMode():
-        global g_vehiclePhysicsMode
-        return g_vehiclePhysicsMode
-
-
-    def _setVehiclePhysicsMode(stringValue):
-        try:
-            setVehiclePhysicsMode(_booleanFromString(stringValue))
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-
-    def addWatchers():
-        BigWorld.addWatcher('physics/vehiclePhysicsMode', _getVehiclePhysicsMode, _setVehiclePhysicsMode)
-
-
-    def delWatchers():
-        try:
-            BigWorld.delWatcher('physics/vehiclePhysicsMode')
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
 
 def init():
-    global g_vehiclePhysicsMode
-    if IS_CELLAPP:
-        from server_constants import BW_XML
-        vehiclePhysicsMode = BW_XML.readInt('wg/vehiclePhysicsMode', -1)
-        if vehiclePhysicsMode != -1:
-            LOG_DEBUG('Set vehicle physics mode to %d' % vehiclePhysicsMode)
-            g_vehiclePhysicsMode = vehiclePhysicsMode
-        else:
-            LOG_ERROR('Failed to read wg/vehiclePhysicsMode from bw.xml. Use default value (%d).' % g_vehiclePhysicsMode)
     updateCommonConf()
-
-
-def setVehiclePhysicsMode(mode):
-    global g_vehiclePhysicsMode
-    g_vehiclePhysicsMode = mode
-    updateConf()
 
 
 def updateCommonConf():
@@ -575,26 +531,24 @@ def applyRotationAndPowerFactors(cfg):
 
 def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, IS_EDITOR=False):
     physDescr = typeDesc.physics
-    useDetailedPhysics = g_vehiclePhysicsMode == VEHICLE_PHYSICS_MODE.DETAILED
     if IS_CELLAPP:
-        if useDetailedPhysics:
-            if forcedCfg:
-                useSimplifiedGearbox = forcedCfg['useSimplifiedGearbox']
-                baseCfg = forcedCfg
-                gravityFactor = forcedCfg['gravityFactor']
-            elif typeDesc.type.xphysics:
-                baseCfg = typeDesc.type.xphysics['detailed']
-                useSimplifiedGearbox = typeDesc.type.xphysics['useSimplifiedGearbox']
-                gravityFactor = baseCfg['gravityFactor']
-            else:
-                baseCfg = None
-                useSimplifiedGearbox = True
-                gravityFactor = 1.0
-            cfg = configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor)
-        if physics.detailedPhysicsEnabled != useDetailedPhysics:
+        if forcedCfg:
+            useSimplifiedGearbox = forcedCfg['useSimplifiedGearbox']
+            baseCfg = forcedCfg
+            gravityFactor = forcedCfg['gravityFactor']
+        elif typeDesc.type.xphysics:
+            baseCfg = typeDesc.type.xphysics['detailed']
+            useSimplifiedGearbox = typeDesc.type.xphysics['useSimplifiedGearbox']
+            gravityFactor = baseCfg['gravityFactor']
+        else:
+            baseCfg = None
+            useSimplifiedGearbox = True
+            gravityFactor = 1.0
+        cfg = configureXPhysics(physics, baseCfg, typeDesc, useSimplifiedGearbox, gravityFactor)
+        if not physics.detailedPhysicsEnabled:
             if saveTransform:
                 m = Math.Matrix(physics.matrix)
-            physics.detailedPhysicsEnabled = useDetailedPhysics
+            physics.detailedPhysicsEnabled = True
             if saveTransform:
                 physics.matrix = m
             physics.isFrozen = False
@@ -621,7 +575,7 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, IS_EDITOR=Fa
     else:
         hullMass = fullMass - suspMass
     g = G * GRAVITY_FACTOR
-    if useDetailedPhysics and not IS_CLIENT and not IS_EDITOR:
+    if not IS_CLIENT and not IS_EDITOR:
         clearance = cfg['clearance']
     else:
         clearance = (typeDesc.chassis['hullPosition'].y + hullMin.y) * CLEARANCE
@@ -633,7 +587,7 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg, saveTransform, IS_EDITOR=Fa
         carringSpringLength = clearance / suspCompression
     hmg = hullMass * g
     cmShift = _computeCenterOfMassShift(srcMass, srcEnginePower)
-    if not useDetailedPhysics or IS_CLIENT or IS_EDITOR:
+    if IS_CLIENT or IS_EDITOR:
         physics.centerOfMass = Math.Vector3((0.0, hullY + cmShift * hullHeight, 0.0))
     forcePtX = FORCE_POINT_X
     if IS_CLIENT or IS_EDITOR:

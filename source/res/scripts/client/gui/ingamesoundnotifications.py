@@ -14,8 +14,13 @@ class IngameSoundNotifications(object):
     QueueItem = namedtuple('QueueItem', ('soundPath', 'time', 'minTimeBetweenEvents', 'idToBind', 'checkFn', 'soundPos'))
 
     def __init__(self):
-        self.__readConfig()
+        self.__activeEvents = None
+        self.__soundQueues = None
         self.__isEnabled = False
+        self.__enabledSoundCategories = set()
+        self.__lastEnqueuedTime = {}
+        self.__readConfig()
+        return
 
     def start(self):
         self.__soundQueues = {'fx': [],
@@ -28,9 +33,10 @@ class IngameSoundNotifications(object):
         return
 
     def destroy(self):
-        for event in self.__activeEvents.itervalues():
-            if event is not None:
-                event['sound'].stop()
+        if self.__activeEvents:
+            for event in self.__activeEvents.itervalues():
+                if event is not None:
+                    event['sound'].stop()
 
         self.__activeEvents = None
         self.__soundQueues = None

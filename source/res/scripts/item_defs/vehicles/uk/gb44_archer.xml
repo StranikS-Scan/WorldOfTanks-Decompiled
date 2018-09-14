@@ -244,7 +244,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -360,9 +359,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1035	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -652,7 +648,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -768,9 +763,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1035	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
@@ -1115,8 +1107,8 @@
       <gunPosition>	0.000000 0.504025 0.747912	</gunPosition>
       <emblemSlots>
         <clan>
-          <rayStart>	0.431111 0.65547 1.01896	</rayStart>
-          <rayEnd>	0.358287 0.589372 0.844816	</rayEnd>
+          <rayStart>	0.400525 0.627709 0.94582	</rayStart>
+          <rayEnd>	0.388873 0.617133 0.917956	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>

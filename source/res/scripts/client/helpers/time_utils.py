@@ -125,7 +125,7 @@ def getTillTimeString(timeValue, keyNamespace, isRoundUp=False):
     elif timeValue >= ONE_MINUTE:
         fmtKey = 'min'
     else:
-        return i18n.makeString('%s/lessMin' % keyNamespace)
+        fmtKey = 'lessMin'
     fmtValues = {'day': str(time.struct_time(gmtime).tm_yday),
      'hour': time.strftime('%H', gmtime),
      'min': time.strftime('%M', gmtime),

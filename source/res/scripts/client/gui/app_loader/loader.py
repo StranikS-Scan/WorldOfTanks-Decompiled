@@ -122,9 +122,6 @@ class _AppLoader(object):
         self.__appFactory.createLobby()
         self.__updateState()
 
-    def startLogitech(self):
-        self.__appFactory.createLogitech()
-
     def changeSpace(self, spaceID):
         self.__ctx.guiSpaceID = spaceID
         return self.__updateState()
@@ -233,6 +230,7 @@ class _AppLoader(object):
             result = True
             self.onGUISpaceEntered(self.__ctx.guiSpaceID)
         else:
+            LOG_DEBUG('State is updated ctx:', self.__ctx)
             for appNS, appState in self.__getCreatedApps():
                 self.__state.update(self.__ctx)
                 self.__state.updateGUI(self.__appFactory, appNS)

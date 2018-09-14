@@ -428,9 +428,6 @@ def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
                 if IS_DEVELOPMENT:
                     bonus['name'] = sub.readString('', '').strip()
                 continue
-            elif name == 'repeat':
-                bonus['repeat'] = sub.readInt('', 1)
-                continue
             elif name == 'probability':
                 continue
             elif name not in bonusReaders:

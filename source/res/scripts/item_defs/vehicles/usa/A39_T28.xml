@@ -6,8 +6,8 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	18	</forward>
-    <backward>	7	</backward>
+    <forward>	22	</forward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.191	</moving>
@@ -135,7 +135,7 @@
       <terrainResistance>	1.3 1.7 3.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -219,7 +219,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -257,7 +256,7 @@
       <terrainResistance>	1.1 1.4 2.9	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.19	</vehicleMovement>
         <vehicleRotation>	0.19	</vehicleRotation>
@@ -341,7 +340,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -583,10 +581,10 @@
     <detailed>
       <engines>
         <Ford_GAF>
-          <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplEnginePower>	670	</smplEnginePower>
         </Ford_GAF>
         <Ford_GAFM2>
-          <smplEnginePower>	539.2134	</smplEnginePower>
+          <smplEnginePower>	780	</smplEnginePower>
         </Ford_GAFM2>
       </engines>
       <chassis>

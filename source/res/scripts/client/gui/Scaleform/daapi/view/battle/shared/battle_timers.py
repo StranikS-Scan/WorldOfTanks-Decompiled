@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/battle_timers.py
-import WWISE
+import SoundGroups
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
@@ -47,11 +47,18 @@ class BattleTimer(BattleTimerMeta):
     def __init__(self):
         super(BattleTimer, self).__init__()
         self.__isTicking = False
-        self.__state = COUNTDOWN_STATE.STOP
+        self.__state = COUNTDOWN_STATE.UNDEFINED
         self.__roundLength = self.arenaVisitor.type.getRoundLength()
         self.__endingSoonTime = self._getEndingSoonTime()
         self.__endWarningIsEnabled = self.__checkEndWarningStatus()
-        self._callWWISE(_WWISE_EVENTS.STOP_TICKING)
+        self.__sounds = dict()
+
+    def destroy(self):
+        for sound in self.__sounds.values():
+            sound.stop()
+
+        self.__sounds.clear()
+        super(BattleTimer, self).destroy()
 
     @property
     def arenaVisitor(self):
@@ -86,7 +93,11 @@ class BattleTimer(BattleTimerMeta):
         
         Pretected for testing purposes.
         """
-        WWISE.WW_eventGlobal(wwiseEventName)
+        sound = SoundGroups.g_instance.getSound2D(wwiseEventName)
+        if sound is not None:
+            sound.play()
+            self.__sounds[wwiseEventName] = sound
+        return
 
     def _getEndingSoonTime(self):
         return self.arenaVisitor.type.getBattleEndingSoonTime()

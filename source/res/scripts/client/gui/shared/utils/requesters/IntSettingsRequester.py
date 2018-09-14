@@ -4,7 +4,7 @@ import BigWorld
 import copy
 import constants
 from adisp import async, process
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.shared.utils import code2str
 
 class IntSettingsRequester(object):
@@ -70,7 +70,12 @@ class IntSettingsRequester(object):
         """
         Request data from server
         """
-        BigWorld.player().intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
+        player = BigWorld.player()
+        if player is not None and player.intUserSettings is not None:
+            player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
+        else:
+            LOG_WARNING('Player or intUserSettings is not defined', player, player.intUserSettings if player is not None else None)
+        return
 
     @async
     @process

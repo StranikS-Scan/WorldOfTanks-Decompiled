@@ -5,7 +5,8 @@ from collections import namedtuple
 from adisp import async, process
 import Event
 from client_request_lib.exceptions import ResponseCodes
-from gui import SystemMessages
+from gui import SystemMessages, GUI_SETTINGS
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -14,7 +15,8 @@ from helpers import dependency
 from helpers import i18n
 from helpers.local_cache import FileLocalCache
 from gui.shared.utils import sortByFields
-from debug_utils import LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui.LobbyContext import g_lobbyContext
 from gui.clans import interfaces, items, formatters
 from gui.clans.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
 from gui.clans.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
@@ -43,7 +45,7 @@ def showClanInviteSystemMsg(userName, isSuccess, code):
         if code == ResponseCodes.ACCOUNT_ALREADY_INVITED:
             error = 'clans/request/errors/Account already invited'
         if code == ResponseCodes.ACCOUNT_ALREADY_IN_CLAN:
-            error = 'clans/request/errors/Account is in clan already'
+            error = 'clans/request/errors/user is in clan already'
         msg = formatters.getInviteNotSentSysMsg(userName, error)
         msgType = SystemMessages.SM_TYPE.Error
     SystemMessages.pushMessage(msg, msgType)
@@ -561,6 +563,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         ctx = AccountInvitesCtx(accountDbID=self.__accountDbID, offset=offset, limit=count, statuses=self.__statuses, getTotalCount=isReset)
         result = yield self._requester.sendRequest(ctx, allowDelay=True)
         invites = ctx.getDataObj(result.data)
+        success = result.isSuccess()
         self.__lastStatus = result.isSuccess()
         if isReset:
             self.__totalCount = ctx.getTotalCount(result.data)
@@ -571,10 +574,18 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
+                if result.isSuccess():
+                    clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
+                else:
+                    clanRatings = {}
+                    success = False
                 ctx = ClansInfoCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
+                if result.isSuccess():
+                    clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
+                else:
+                    clanInfo = {}
+                    success = False
                 for item in clanInfo.itervalues():
                     self.getUserName(item.getLeaderDbID())
 
@@ -588,7 +599,12 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                     temp.add(item.getDbID())
                     self.__senderNameMapping[senderID] = temp
 
-                self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
+                if success:
+                    self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
+                else:
+                    self.__invitesCache = []
+                    self.__lastStatus = False
+                    self.revertOffset()
             else:
                 self.__invitesCache = []
         else:
@@ -712,3 +728,35 @@ class CachedValue(object):
 
     def _now(self):
         return time_utils.getTimestampFromUTC(datetime.utcnow().timetuple())
+
+
+def isStrongholdsEnabled():
+    try:
+        settings = g_lobbyContext.getServerSettings()
+        return settings.isStrongholdsEnabled()
+    except:
+        return False
+
+
+def getStrongholdUrl(urlName):
+    try:
+        return _getWgshHost() + GUI_SETTINGS.stronghold.get(urlName)
+    except (AttributeError, TypeError):
+        LOG_CURRENT_EXCEPTION()
+        return None
+
+    return None
+
+
+def getStrongholdClanCardUrl(clanDBID):
+    return getStrongholdUrl('clanCardUrl') + str(clanDBID)
+
+
+def _getWgshHost():
+    try:
+        return g_lobbyContext.getServerSettings().stronghold.wgshHostUrl
+    except AttributeError:
+        LOG_CURRENT_EXCEPTION()
+        return None
+
+    return None

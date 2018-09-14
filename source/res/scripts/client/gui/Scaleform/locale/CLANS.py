@@ -98,6 +98,7 @@ class CLANS(object):
     CLANPROFILE_MAINWINDOWTAB_SUMMARY = '#clans:clanProfile/mainWindowTab/summary'
     CLANPROFILE_MAINWINDOWTAB_PERSONNEL = '#clans:clanProfile/mainWindowTab/personnel'
     CLANPROFILE_MAINWINDOWTAB_FORTIFICATION = '#clans:clanProfile/mainWindowTab/fortification'
+    CLANPROFILE_MAINWINDOWTAB_STRONGHOLDS = '#clans:clanProfile/mainWindowTab/strongholds'
     CLANPROFILE_MAINWINDOWTAB_GLOBALMAP = '#clans:clanProfile/mainWindowTab/globalMap'
     CLANPROFILE_MAINWINDOW_DUMMY_HEADER = '#clans:clanProfile/mainWindow/dummy/header'
     CLANPROFILE_MAINWINDOW_DUMMY_BODY = '#clans:clanProfile/mainWindow/dummy/body'
@@ -393,6 +394,8 @@ class CLANS(object):
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_10_BODY = '#clans:clanProfile/summaryView/tooltip/fort_ELO_rage_10/body'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_8_HEADER = '#clans:clanProfile/summaryView/tooltip/fort_ELO_rage_8/header'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_8_BODY = '#clans:clanProfile/summaryView/tooltip/fort_ELO_rage_8/body'
+    CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_6_HEADER = '#clans:clanProfile/summaryView/tooltip/fort_ELO_rage_6/header'
+    CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_6_BODY = '#clans:clanProfile/summaryView/tooltip/fort_ELO_rage_6/body'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_SORTIE_COUNT_28_HEADER = '#clans:clanProfile/summaryView/tooltip/fort_sortie_count_28/header'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_SORTIE_COUNT_28_BODY = '#clans:clanProfile/summaryView/tooltip/fort_sortie_count_28/body'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_BATTLES_COUNT_28_HEADER = '#clans:clanProfile/summaryView/tooltip/fort_battles_count_28/header'
@@ -570,6 +573,7 @@ class CLANS(object):
     SEARCH_INFO_SERVERUNAVAILABLE_HEADER = '#clans:search/info/serverUnavailable/header'
     SEARCH_INFO_SERVERUNAVAILABLE_BODY = '#clans:search/info/serverUnavailable/body'
     FORT_HEADER_CLANPROFILEBTNLBL = '#clans:fort/header/clanProfileBtnLbl'
+    CLANINVITE_NOTIFICATION_USERNAMEERROR = '#clans:clanInvite/notification/userNameError'
     CLAN_POST_ENUM = (CLAN_POST_COMMANDER,
      CLAN_POST_EXECUTIVEOFFICER,
      CLAN_POST_PERSONNELOFFICER,

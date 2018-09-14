@@ -36,6 +36,7 @@ class HintsProxy(SfLobbyProxy):
 
     def fini(self):
         self.__eManager.clear()
+        self.eManager.clear()
         self.effects.stopAll()
         self.effects.clear()
         removeListener = g_eventBus.removeListener
@@ -44,7 +45,7 @@ class HintsProxy(SfLobbyProxy):
         removeListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def showHint(self, props):
-        self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, (ACTION_TAGS['click'],)))
+        self.playEffect(GUI_EFFECT_NAME.SHOW_HINT, (props, (ACTION_TAGS['click'], ACTION_TAGS['click-outside'])))
 
     def hideHint(self, hintID):
         self.stopEffect(GUI_EFFECT_NAME.SHOW_HINT, hintID)
@@ -60,3 +61,5 @@ class HintsProxy(SfLobbyProxy):
     def __onTriggerActivated(self, event):
         if event.settingsID == TUTORIAL_TRIGGER_TYPES.CLICK_TYPE and event.targetID:
             self.onHintClicked(ClickEvent(event.targetID))
+        elif event.settingsID == TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE and event.targetID:
+            self.onHintItemLost(event.targetID)

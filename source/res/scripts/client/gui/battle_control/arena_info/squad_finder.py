@@ -128,7 +128,8 @@ class ContinuousNumberingFinder(_SquadFinder):
                     yield (vehicleID, self._squadIndices[prebattleID])
 
 
-def createSquadFinder(arenaVisitor, teams):
+def createSquadFinder(arenaVisitor):
+    teams = arenaVisitor.type.getTeamsOnArenaRange()
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isFalloutClassic():
         finder = TeamScopeNumberingFinder(teams)

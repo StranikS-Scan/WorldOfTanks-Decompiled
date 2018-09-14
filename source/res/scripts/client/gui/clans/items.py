@@ -10,6 +10,7 @@ from predefined_hosts import g_preDefinedHosts
 from debug_utils import LOG_WARNING
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import MAX_CLAN_MEMBERS_COUNT, CLAN_INVITE_STATES_SORT_RULES, CLAN_INVITE_STATES
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from debug_utils import LOG_ERROR
 from helpers.time_utils import getTimeDeltaTilNow, ONE_DAY
 
@@ -174,6 +175,21 @@ def formatter(formatter=None):
             value = func(self)
             if doFmt and fmt:
                 value = fmt(value)
+            return value
+
+        return wrapper
+
+    return decorator
+
+
+def simpleFormatter(formatter=None):
+
+    def decorator(func):
+
+        def wrapper(self):
+            value = func(self)
+            if formatter and value is not None:
+                value = formatter(value)
             return value
 
         return wrapper
@@ -598,89 +614,45 @@ class ClanStrongholdInfoData(_ClanStrongholdInfoData, FieldsCheckerMixin):
 
 BuildingStats = namedtuple('BuildingStats', 'position type level hp storage')
 BuildingStats.__new__.__defaults__ = (0, 0, 0, 0, 0)
-_ClanStrongholdStatisticsData = namedtuple('ClanStrongholdData', ['buildings',
- 'buildings_count',
- 'clan_id',
- 'level',
- 'clan_name',
- 'clan_tag',
- 'directions',
- 'directions_count',
- 'off_day',
- 'periphery_id',
- 'vacation_finish',
- 'vacation_start',
- 'sortie_battles_wins_percentage_period',
- 'sortie_wins_period',
- 'sortie_battles_count_period',
- 'defence_battles_count_period'])
-_ClanStrongholdStatisticsData.__new__.__defaults__ = ([],
- 0,
- 0,
- 0,
- '',
- '',
- [],
- 0,
- -1,
- 0,
- None,
- None,
- None,
- None,
- 0,
- 0)
+_StrongholdStatisticsData = namedtuple('ClanStrongholdData', ['elo_10',
+ 'elo_8',
+ 'elo_6',
+ 'sorties_in_28_days',
+ 'fort_battles_in_28_days',
+ 'stronghold_level'])
+_StrongholdStatisticsData.__new__.__defaults__ = (None, None, None, None, None, None)
 
-class ClanStrongholdStatisticsData(_ClanStrongholdStatisticsData, FieldsCheckerMixin):
+class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
 
-    def hasFort(self):
-        return self.level > 0
+    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    def getElo10(self):
+        return self.elo_10
 
-    def getBuildings(self):
-        result = {}
-        for b in self.buildings:
-            result[b['type']] = makeTupleByDict(BuildingStats, b)
+    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    def getElo8(self):
+        return self.elo_8
 
-        return result
+    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    def getElo6(self):
+        return self.elo_6
 
-    @fmtUnavailableValue(fields=('defence_battles_count_period',))
-    def getFbBattlesCount28d(self):
-        return self.defence_battles_count_period
+    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    def getSortiesIn28Days(self):
+        return self.sorties_in_28_days
 
-    @fmtUnavailableValue(fields=('sortie_battles_count_period',))
-    def getFsBattlesCount28d(self):
-        return self.sortie_battles_count_period
+    @simpleFormatter(BigWorld.wg_getIntegralFormat)
+    def getFortBattlesIn28Days(self):
+        return self.fort_battles_in_28_days
 
-    @fmtUnavailableValue(fields=('sortie_wins_period',))
-    def getFsWinsCount28d(self):
-        return self.sortie_wins_period
+    @simpleFormatter(fort_formatters.getTextLevel)
+    def getStrongholdLevel(self):
+        return self.stronghold_level
 
-    @fmtUnavailableValue(fields=('sortie_battles_wins_percentage_period',))
-    def getSortieBattlesWinsPercentagePeriod(self):
-        return self.sortie_battles_wins_percentage_period
+    def hasSorties(self):
+        return self.sorties_in_28_days and self.sorties_in_28_days > 0
 
-    def getBuildingStats(self, typeID):
-        buildings = self.getBuildings()
-        return buildings.get(typeID, BuildingStats())
-
-    @fmtUnavailableValue(fields=('directions_count',))
-    def getDirectionsCount(self):
-        return self.directions_count
-
-    @fmtUnavailableValue(fields=('directions',))
-    def getDirectionsIDs(self):
-        return self.directions
-
-    def getPeripheryID(self):
-        return self.periphery_id
-
-    @fmtUnavailableValue(fields=('vacation_start', 'vacation_finish'))
-    def getVacationInfo(self):
-        return (_getTimestamp(self.vacation_start), _getTimestamp(self.vacation_finish)) if self.vacation_start is not None else (None, None)
-
-    @fmtUnavailableValue(fields=('off_day',))
-    def getOffDay(self):
-        return self.off_day
+    def hasFortBattles(self):
+        return self.fort_battles_in_28_days and self.fort_battles_in_28_days > 0
 
 
 _AccountClanData = namedtuple('_AccountClanData', ('account_id', 'joined_at', 'clan_id', 'role_bw_flag', 'role_name', 'in_clan_cooldown_till'))

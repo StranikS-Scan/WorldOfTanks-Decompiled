@@ -73,7 +73,7 @@ class BonusTooltip(BlocksTooltipData):
          'top': -4})
 
     def __getData(self, singleBonusData, qTypeName):
-        item = {'title': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BONUSPANEL_BONUS_HEADER, bonus=_ms(_BONUS_TOOLTIP_NAME[qTypeName]), bonusPower='+{0}%'.format(singleBonusData['bonusTotalCount'])),
+        item = {'title': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BONUSPANEL_BONUS_HEADER, bonus=_ms(_BONUS_TOOLTIP_NAME[qTypeName])),
          'description': {'img': singleBonusData['bonusIcon'],
                          'description': text_styles.main(_BONUS_TOOLTIP_BODY[qTypeName])},
          'customizationTypes': self.__aggregateBonusesInfo(singleBonusData)}

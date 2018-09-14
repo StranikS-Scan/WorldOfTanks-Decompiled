@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
 from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
-from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA
+from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA, MAX_RELATIVE_VALUE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
@@ -14,13 +15,15 @@ from helpers.i18n import makeString as _ms
 _TOOLTIP_MIN_WIDTH = 380
 _TOOLTIP_MAX_WIDTH = 420
 _AUTOCANNON_SHOT_DISTANCE = 400
+_ASTERISK = '*'
 
 class ShellBlockToolTipData(BlocksTooltipData):
 
-    def __init__(self, context):
+    def __init__(self, context, basicDataAllowed=True):
         super(ShellBlockToolTipData, self).__init__(context, TOOLTIP_TYPE.SHELL)
+        self.__basicDataAllowed = basicDataAllowed
         self.item = None
-        self._setContentMargin(top=0, left=0, bottom=20, right=20)
+        self._setContentMargin(top=0, left=0, bottom=20, right=0)
         self._setMargins(10, 15)
         self._setWidth(_TOOLTIP_MIN_WIDTH)
         return
@@ -39,50 +42,62 @@ class ShellBlockToolTipData(BlocksTooltipData):
         blockTopPadding = -4
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         textGap = -2
-        items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(shell, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
-        priceBlock, invalidWidth = PriceBlockConstructor(shell, statsConfig, 80, leftPadding, rightPadding).construct()
+        vDescr = paramsConfig.vehicle.descriptor if paramsConfig.vehicle is not None else None
+        params = params_helper.getParameters(shell, vDescr)
+        showBasicData = self.__basicDataAllowed and params['isBasic']
+        items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(shell, statsConfig, leftPadding, rightPadding, params).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
+        priceBlock, invalidWidth = PriceBlockConstructor(shell, statsConfig, 80).construct()
         if len(priceBlock) > 0:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
-        statsBlock = CommonStatsBlockConstructor(shell, paramsConfig, 80, leftPadding, rightPadding).construct()
+        if vDescr is not None and not showBasicData:
+            simplifiedStatsBlock = SimplifiedStatsBlockConstructor(shell, paramsConfig, params).construct()
+            if len(simplifiedStatsBlock) > 0:
+                items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, padding=blockPadding, gap=textGap))
+        statusBlock = StatusBlockConstructor(shell, statusConfig).construct()
+        if self.__basicDataAllowed:
+            statsBlock = CommonStatsBlockConstructor(shell, paramsConfig, 80, params).construct()
+        else:
+            statsBlock = _AdvancedCommonStatsBlockConstructior(shell, paramsConfig, 80, params).construct()
+        bottomPadding = 4 if len(statusBlock) > 0 or showBasicData else 0
         if len(statsBlock) > 0:
-            items.append(formatters.packBuildUpBlockData(statsBlock, padding=blockPadding, gap=textGap))
-        statusBlock = StatusBlockConstructor(shell, statusConfig, leftPadding, rightPadding).construct()
+            items.append(formatters.packBuildUpBlockData(statsBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=bottomPadding), gap=textGap))
         if len(statusBlock) > 0:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=lrPaddings))
+        if showBasicData:
+            boldText = text_styles.neutral(TOOLTIPS.SHELL_BASIC_DESCRIPTION_BOLD)
+            items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.standard(_ms(TOOLTIPS.SHELL_BASIC_DESCRIPTION, bold=boldText)), padding=lrPaddings)], padding=formatters.packPadding(right=rightPadding)))
         return items
 
 
 class ShellTooltipBlockConstructor(object):
 
-    def __init__(self, shell, configuration, leftPadding=20, rightPadding=20):
+    def __init__(self, shell, configuration, leftPadding=20, rightPadding=20, params=None):
         self.shell = shell
         self.configuration = configuration
         self.leftPadding = leftPadding
         self.rightPadding = rightPadding
+        self._params = params
 
     def construct(self):
-        return None
+        return NotImplemented
 
 
 class HeaderBlockConstructor(ShellTooltipBlockConstructor):
 
-    def __init__(self, shell, configuration, leftPadding, rightPadding):
-        super(HeaderBlockConstructor, self).__init__(shell, configuration, leftPadding, rightPadding)
-
     def construct(self):
         shell = self.shell
-        block = []
-        title = shell.userName
-        desc = '#item_types:shell/kinds/' + shell.type
-        block.append(formatters.packImageTextBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=shell.icon, imgPadding=formatters.packPadding(left=7), txtGap=-4, txtOffset=100 - self.leftPadding))
+        block = list()
+        block.append(formatters.packImageTextBlockData(title=text_styles.highTitle(shell.userName), desc=text_styles.standard('#item_types:shell/kinds/' + shell.type), img=shell.icon, imgPadding=formatters.packPadding(left=7), txtGap=-4, txtOffset=100 - self.leftPadding))
+        if self._params['isBasic']:
+            block.append(formatters.packAlignedTextBlockData(text=text_styles.neutral(TOOLTIPS.SHELL_BASIC), align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(right=self.rightPadding, top=-25, bottom=4)))
         return block
 
 
 class PriceBlockConstructor(ShellTooltipBlockConstructor):
 
-    def __init__(self, shell, configuration, valueWidth, leftPadding, rightPadding):
-        super(PriceBlockConstructor, self).__init__(shell, configuration, leftPadding, rightPadding)
+    def __init__(self, shell, configuration, valueWidth):
+        super(PriceBlockConstructor, self).__init__(shell, configuration)
         self._valueWidth = valueWidth
 
     def construct(self):
@@ -118,63 +133,135 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
             inventoryCount = shell.inventoryCount
             if inventoryCount:
                 block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(inventoryCount), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
-            notEnoughMoney = need > ZERO_MONEY
+            notEnoughMoney = need.credits > 0 or need.gold > 0
             hasAction = shell.actionPrc > 0 or shell.sellActionPrc > 0
             return (block, notEnoughMoney or hasAction)
 
 
-class CommonStatsBlockConstructor(ShellTooltipBlockConstructor):
+class SimplifiedStatsBlockConstructor(ShellTooltipBlockConstructor):
 
-    def __init__(self, shell, configuration, valueWidth, leftPadding, rightPadding):
-        super(CommonStatsBlockConstructor, self).__init__(shell, configuration, leftPadding, rightPadding)
-        self._valueWidth = valueWidth
+    def __init__(self, shell, configuration, params):
+        super(SimplifiedStatsBlockConstructor, self).__init__(shell, configuration, params=params)
 
     def construct(self):
         block = []
         if self.configuration.params:
-            shell = self.shell
-            vehicle = self.configuration.vehicle
-            vDescr = vehicle.descriptor if vehicle is not None else None
-            params = params_helper.getParameters(shell, vDescr)
-            piercingPower = params.pop('piercingPower')
-            piercingPowerTable = params.pop('piercingPowerTable')
-            maxShotDistance = params.pop('maxShotDistance') if 'maxShotDistance' in params else None
-            formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, params)
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
-            for paramName, paramValue in formattedParameters:
-                block.append(self.__packParameterBlock(_ms('#menu:moduleInfo/params/' + paramName), paramValue, params_formatters.measureUnitsForParameter(paramName)))
+            comparator = params_helper.shellOnVehicleComparator(self.shell, self.configuration.vehicle)
+            stockParams = params_helper.getParameters(g_itemsCache.items.getStockVehicle(self.configuration.vehicle.intCD))
+            for parameter in params_formatters.getRelativeDiffParams(comparator):
+                delta = parameter.state[1]
+                value = parameter.value
+                if delta > 0:
+                    value -= delta
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
+                 'delta': delta,
+                 'minValue': 0,
+                 'markerValue': stockParams.get(parameter.name, value),
+                 'maxValue': max(MAX_RELATIVE_VALUE, value + delta),
+                 'useAnim': False}, padding=formatters.packPadding(left=75)))
 
-            piercingUnits = _ms(params_formatters.measureUnitsForParameter('piercingPower'))
-            if isinstance(piercingPowerTable, list):
-                block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER)), padding=formatters.packPadding(bottom=8, top=8)))
-                for distance, value in piercingPowerTable:
-                    if maxShotDistance is not None and distance == _AUTOCANNON_SHOT_DISTANCE:
-                        piercingUnits += '*'
-                    block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE, dist=distance), params_formatters.baseFormatParameter('piercingPower', value), piercingUnits))
-
-                if maxShotDistance is not None:
-                    block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE)), padding=formatters.packPadding(top=8)))
-            else:
-                if piercingPowerTable != NO_DATA:
-                    piercingUnits += '*'
-                block.append(self.__packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGPOWER), params_formatters.baseFormatParameter('piercingPower', piercingPower), piercingUnits))
-                if piercingPowerTable != NO_DATA:
-                    title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
-                    distanceNote = ''
-                    if maxShotDistance is not None:
-                        distanceNote = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
-                    title = title % distanceNote
-                    block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=formatters.packPadding(top=8)))
         return block
 
-    def __packParameterBlock(self, name, value, measureUnits):
+
+class _BaseCommonStatsBlockConstructor(ShellTooltipBlockConstructor):
+
+    def __init__(self, shell, configuration, valueWidth, params):
+        super(_BaseCommonStatsBlockConstructor, self).__init__(shell, configuration, params=params)
+        self._valueWidth = valueWidth
+
+    def _packParameterBlock(self, name, value, measureUnits):
         return formatters.packTextParameterBlockData(name=text_styles.main(name) + text_styles.standard(measureUnits), value=text_styles.stats(value), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))
 
 
-class StatusBlockConstructor(ShellTooltipBlockConstructor):
+class _AdvancedCommonStatsBlockConstructior(_BaseCommonStatsBlockConstructor):
 
-    def __init__(self, shell, configuration, leftPadding, rightPadding):
-        super(StatusBlockConstructor, self).__init__(shell, configuration, leftPadding, rightPadding)
+    def construct(self):
+        block = []
+        if self.configuration.params:
+            bottom = 8
+            bottomPadding = formatters.packPadding(bottom=bottom)
+            shell = self.shell
+            comparator = params_helper.shellOnVehicleComparator(shell, self.configuration.vehicle)
+            isDistanceDependent = self._params.pop('piercingPowerTable') is not None
+            formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=bottomPadding))
+            for paramName, paramValue in formattedParameters:
+                if comparator is not None:
+                    paramValue = params_formatters.colorizedFormatParameter(comparator.getExtendedData(paramName), params_formatters.BASE_SCHEME)
+                if paramValue is not None:
+                    paramUnits = _ms(params_formatters.measureUnitsForParameter(paramName))
+                    isPiercingPower = paramName == 'avgPiercingPower'
+                    paramUnits += _ASTERISK if isPiercingPower and not isDistanceDependent else ''
+                    block.append(self._packParameterBlock(_ms('#menu:moduleInfo/params/' + paramName), paramValue, paramUnits))
+
+        return block
+
+
+class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
+
+    def __init__(self, shell, configuration, valueWidth, params):
+        super(CommonStatsBlockConstructor, self).__init__(shell, configuration, valueWidth, params=params)
+
+    def construct(self):
+        block = []
+        if self.configuration.params:
+            top = 8
+            bottom = 8
+            topPadding = formatters.packPadding(top=top)
+            bottomPadding = formatters.packPadding(bottom=bottom)
+            tbPadding = formatters.packPadding(top=top, bottom=bottom)
+            shell = self.shell
+            comparator = params_helper.shellComparator(shell, self.configuration.vehicle)
+            piercingPowerTable = self._params.pop('piercingPowerTable')
+            isDistanceDependent = piercingPowerTable is not None
+            maxShotDistance = self._params.pop('maxShotDistance', None)
+            formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=bottomPadding))
+            for paramName, paramValue in formattedParameters:
+                if comparator is not None:
+                    paramValue = params_formatters.colorizedFormatParameter(comparator.getExtendedData(paramName), params_formatters.BASE_SCHEME)
+                if paramValue is not None:
+                    paramUnits = _ms(params_formatters.measureUnitsForParameter(paramName))
+                    isPiercingPower = paramName == 'avgPiercingPower'
+                    paramUnits += _ASTERISK if isPiercingPower and not isDistanceDependent else ''
+                    if not (isPiercingPower and isDistanceDependent):
+                        block.append(self._packParameterBlock(_ms('#menu:moduleInfo/params/' + paramName), paramValue, paramUnits))
+
+            if isinstance(piercingPowerTable, list):
+                piercingUnits = _ms(params_formatters.measureUnitsForParameter('piercingPower'))
+                block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER)), padding=tbPadding))
+                for distance, value in self.__iteratePiercingPowerTable(piercingPowerTable, comparator):
+                    if maxShotDistance is not None and distance == _AUTOCANNON_SHOT_DISTANCE:
+                        piercingUnits += _ASTERISK
+                    block.append(self._packParameterBlock(_ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE, dist=distance), value, piercingUnits))
+
+                if maxShotDistance is not None:
+                    block.append(formatters.packTitleDescBlock(title=text_styles.standard(_ms(MENU.MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE)), padding=topPadding))
+            elif piercingPowerTable != NO_DATA:
+                title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
+                distanceNote = ''
+                if maxShotDistance is not None:
+                    distanceNote = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
+                title = title % distanceNote
+                block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=topPadding))
+        return block
+
+    @staticmethod
+    def __iteratePiercingPowerTable(table, comparator):
+        if comparator is not None:
+            extendedTable = comparator.getExtendedData('piercingPowerTable')
+            for (distance, value), (_, valueState) in zip(extendedTable.value, extendedTable.state):
+                fmtValue = params_formatters.formatParameter('piercingPower', value, valueState, params_formatters.BASE_SCHEME)
+                yield (distance, fmtValue)
+
+        else:
+            for distance, value in table:
+                yield (distance, params_formatters.formatParameter('piercingPower', value))
+
+        return
+
+
+class StatusBlockConstructor(ShellTooltipBlockConstructor):
 
     def construct(self):
         shell = self.shell

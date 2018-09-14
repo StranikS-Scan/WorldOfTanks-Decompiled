@@ -13,8 +13,11 @@ class TankCarouselFilterPopoverMeta(SmartPopOverView):
     def changeFilter(self, groupId, itemId):
         self._printOverrideError('changeFilter')
 
-    def setDefaultFilter(self):
-        self._printOverrideError('setDefaultFilter')
+    def changeSearchNameVehicle(self, inputText):
+        self._printOverrideError('changeSearchNameVehicle')
+
+    def switchCarouselType(self, selected):
+        self._printOverrideError('switchCarouselType')
 
     def as_setInitDataS(self, data):
         """
@@ -28,5 +31,5 @@ class TankCarouselFilterPopoverMeta(SmartPopOverView):
         """
         return self.flashObject.as_setState(data) if self._isDAAPIInited() else None
 
-    def as_enableDefBtnS(self, value):
-        return self.flashObject.as_enableDefBtn(value) if self._isDAAPIInited() else None
+    def as_showCounterS(self, countText):
+        return self.flashObject.as_showCounter(countText) if self._isDAAPIInited() else None

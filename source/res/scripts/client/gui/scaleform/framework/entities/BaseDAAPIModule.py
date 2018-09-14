@@ -37,7 +37,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
                 raise Exception('Can not initialize daapi in ' + str(self))
 
             if autoPopulate:
-                if self._isCreated():
+                if self.isCreated():
                     LOG_ERROR('object {0} is already created! Please, set flag autoPopulate=False'.format(str(self)))
                 else:
                     self.create()

@@ -3,9 +3,6 @@
 import BigWorld
 import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.locale.CHRISTMAS import CHRISTMAS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import text_styles
 from helpers import i18n, time_utils
 from gui import makeHtmlString
 from gui.shared import events, g_itemsCache

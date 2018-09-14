@@ -204,7 +204,6 @@ class ESportBrowserEntity(UnitBrowserEntity):
         g_eventDispatcher.loadUnit(self._prbType)
 
     def _unloadUnit(self):
-        g_eventDispatcher.loadHangar()
         g_eventDispatcher.removeUnitFromCarousel(self._prbType)
 
     def _showWindow(self):

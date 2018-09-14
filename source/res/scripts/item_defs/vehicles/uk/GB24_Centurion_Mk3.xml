@@ -6,7 +6,7 @@
     <loader>	radioman	</loader>
   </crew>
   <speedLimits>
-    <forward>	40	</forward>
+    <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -262,7 +262,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -453,7 +452,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -836,7 +834,7 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	11.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
             <afterShot>	4.0	</afterShot>

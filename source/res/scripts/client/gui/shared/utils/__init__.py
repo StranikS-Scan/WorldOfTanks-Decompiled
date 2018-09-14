@@ -8,6 +8,8 @@ import uuid
 import struct
 import BigWorld
 import AccountCommands
+import Settings
+import constants
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import getLanguageCode, i18n
@@ -246,6 +248,15 @@ def weightedAvg(*args):
         return 0
 
 
+def makeSearchableString(inputString):
+    """ Returns searchable string, i.e. utf-8 encoded and lower case
+    """
+    try:
+        return inputString.decode('utf-8').lower()
+    except ValueError:
+        LOG_ERROR('Given string cannot be decoded from UTF-8', inputString)
+
+
 class QUALIFIER_TYPE:
     ALL = 'all'
     RADIOMAN = 'radioman'
@@ -254,3 +265,12 @@ class QUALIFIER_TYPE:
     GUNNER = 'gunner'
     LOADER = 'loader'
     CAMOUFLAGE = 'camouflage'
+
+
+def isPopupsWindowsOpenDisabled():
+    """
+    development setting from preferences which allows not to open awards and some others windows
+    """
+    userPrefs = Settings.g_instance.userPrefs
+    ds = userPrefs['development']
+    return ds.readBool(Settings.POPUPS_WINDOWS_DISABLED) and constants.IS_DEVELOPMENT if ds is not None else False

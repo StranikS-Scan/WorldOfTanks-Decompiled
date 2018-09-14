@@ -10,7 +10,7 @@ from account_helpers.AccountValidator import AccountValidator
 from adisp import process
 from constants import HAS_DEV_RESOURCES
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
-from gui import SystemMessages, g_guiResetters, miniclient, macroses
+from gui import SystemMessages, g_guiResetters, miniclient
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
@@ -18,8 +18,6 @@ from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.app_loader import g_appLoader
-from gui.christmas.christmas_controller import g_christmasCtrl
-from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.goodies import g_goodiesCache
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import g_eventBus, g_itemsCache, events, EVENT_BUS_SCOPE
@@ -28,13 +26,14 @@ from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
+from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider
 from helpers import isPlayerAccount, time_utils, dependency
 from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
+from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.clans import IClanController
-from skeletons.gui.clubs import IClubsController
 from skeletons.gui.game_control import IGameStateTracker
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.server_events import IEventsCache
@@ -54,9 +53,9 @@ class ServicesLocator(object):
     eventsCache = dependency.descriptor(IEventsCache)
     soundCtrl = dependency.descriptor(ISoundsController)
     clanCtrl = dependency.descriptor(IClanController)
-    clubsCtrl = dependency.descriptor(IClubsController)
     settingsCache = dependency.descriptor(ISettingsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    battleResults = dependency.descriptor(IBattleResultsService)
 
     @classmethod
     def clear(cls):
@@ -96,15 +95,15 @@ def onAccountShowGUI(ctx):
         g_hangarSpace.init(premium)
     g_currentVehicle.init()
     g_currentPreviewVehicle.init()
+    if not g_prbLoader.isEnabled():
+        isLobbyLoaded = g_appLoader
     g_appLoader.showLobby()
     g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
-    ServicesLocator.clubsCtrl.start()
     ServicesLocator.clanCtrl.start()
     ServicesLocator.soundCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
-    g_christmasCtrl.start()
     guiModsSendEvent('onAccountShowGUI', ctx)
     Waiting.hide('enter')
 
@@ -122,11 +121,10 @@ def onAccountBecomeNonPlayer():
 
 @process
 def onAvatarBecomePlayer():
-    g_christmasCtrl.stop()
+    ServicesLocator.battleResults.clear()
     yield ServicesLocator.settingsCache.update()
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
-    ServicesLocator.clubsCtrl.stop()
     ServicesLocator.clanCtrl.stop()
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
@@ -212,7 +210,6 @@ def init(loadingScreenGUI=None):
     g_prbLoader.init()
     g_itemsCache.init()
     g_clanCache.init()
-    g_vehicleProgressCache.init()
     g_goodiesCache.init()
     BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
     if HAS_DEV_RESOURCES:
@@ -239,10 +236,9 @@ def fini():
     g_eventBus.clear()
     g_prbLoader.fini()
     g_clanCache.fini()
-    macroses.fini()
+    requesters.fini()
     g_itemsCache.fini()
     g_goodiesCache.fini()
-    g_vehicleProgressCache.fini()
     UsersInfoHelper.fini()
     connectionManager.onKickedFromServer -= onKickedFromServer
     g_playerEvents.onIGRTypeChanged -= onIGRTypeChanged
@@ -276,24 +272,22 @@ def onConnected():
 
 def onDisconnected():
     g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.DISCONNECTED)
-    g_christmasCtrl.stop(clearCache=True)
     guiModsSendEvent('onDisconnected')
+    g_appLoader.goToLoginByEvent()
+    ServicesLocator.battleResults.clear()
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
     ServicesLocator.soundCtrl.stop(isDisconnected=True)
     ServicesLocator.gameState.onDisconnected()
-    ServicesLocator.clubsCtrl.stop(isDisconnected=True)
     ServicesLocator.clanCtrl.stop()
     g_wgncProvider.clear()
     g_itemsCache.clear()
     g_goodiesCache.clear()
     ServicesLocator.clear()
     g_lobbyContext.clear()
-    g_vehicleProgressCache.clear()
     UsersInfoHelper.clear()
     Waiting.rollback()
     Waiting.cancelCallback()
-    g_appLoader.goToLoginByEvent()
 
 
 def onKickedFromServer(reason, isBan, expiryTime):

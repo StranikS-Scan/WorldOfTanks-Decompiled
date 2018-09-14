@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
+import Settings
+import constants
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO, LAST_PROMO_PATCH_VERSION
 from account_shared import getClientMainVersion
@@ -12,6 +14,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import gc_constants
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 from helpers import i18n, isPlayerAccount, dependency
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 
@@ -44,7 +47,9 @@ class PromoController(IPromoController):
         self._updatePromo(self._getPromoEventNotifications())
         self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
         self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
-        self._processPromo(self.eventsNotification.getEventsNotifications())
+        popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
+        if not popupsWindowsDisabled:
+            self._processPromo(self.eventsNotification.getEventsNotifications())
 
     def onAvatarBecomePlayer(self):
         self._stop()

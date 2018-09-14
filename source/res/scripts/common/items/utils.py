@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/utils.py
+import copy
 from operator import sub
-from copy import deepcopy
-from constants import IS_CLIENT
+from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
 from items import tankmen
 from items.qualifiers import QUALIFIER_TYPE
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
@@ -10,6 +10,33 @@ from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
 from VehicleDescrCrew import VehicleDescrCrew
 from VehicleQualifiersApplier import VehicleQualifiersApplier
 from debug_utils import *
+
+def _makeDefaultVehicleFactors(sample):
+    """It's a simple analog of copy.deepcopy to make copy of default factors,
+    but too faster than copy.deepcopy.
+    :param sample: dict containing sample that should be copy.
+    :return: dict containing copy of sample.
+    """
+    default = {}
+    for key, value in sample.iteritems():
+        if value is None:
+            default[key] = value
+        if isinstance(value, (float,
+         int,
+         long,
+         str)):
+            default[key] = value
+        if isinstance(value, (list, tuple)):
+            default[key] = value[:]
+        LOG_ERROR('Default value of vehicle attribute can not be resolved', key, value)
+
+    return default
+
+
+def makeDefaultVehicleAttributeFactors():
+    """Make copy of VEHICLE_ATTRIBUTE_FACTORS."""
+    return _makeDefaultVehicleFactors(VEHICLE_ATTRIBUTE_FACTORS)
+
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
@@ -96,6 +123,11 @@ if IS_CLIENT:
      'shotDispersion': 1.0}
     CLIENT_VEHICLE_ATTRIBUTE_FACTORS.update(VEHICLE_ATTRIBUTE_FACTORS)
 
+    def makeDefaultClientVehicleAttributeFactors():
+        """Make copy of CLIENT_VEHICLE_ATTRIBUTE_FACTORS."""
+        return _makeDefaultVehicleFactors(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)
+
+
     def _isFactor(a):
         return isinstance(a, (int, long, float))
 
@@ -133,19 +165,40 @@ if IS_CLIENT:
                 break
 
         baseInvisibility = vehicleDescr.computeBaseInvisibility(camouflageFactor, camouflageKind)
-        return (getInvisibility(factors, baseInvisibility, True), getInvisibility(factors, baseInvisibility, False))
+        invisibilityFactors = factors['invisibility']
+        factors['invisibility'] = invisibilityFactors[VEHICLE_TTC_ASPECTS.DEFAULT]
+        moving = getInvisibility(factors, baseInvisibility, True)
+        factors['invisibility'] = invisibilityFactors[VEHICLE_TTC_ASPECTS.WHEN_STILL]
+        still = getInvisibility(factors, baseInvisibility, False)
+        factors['invisibility'] = invisibilityFactors
+        return (moving, still)
+
+
+    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors):
+        extras = {}
+        extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
+        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
+        for aspect in extraAspects.keys():
+            currFactors = copy.deepcopy(factors)
+            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
+            for coefficient in extraAspects[aspect]:
+                extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
+
+        for coefficientName, coefficientValue in extras.iteritems():
+            coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
+            factors[coefficientName] = coefficientValue
 
 
     def getCrewAffectedFactors(vehicleDescr, crewCompactDescrs):
         defaultCrewCompactDescrs = _replaceMissingTankmenWithDefaultOnes(vehicleDescr, crewCompactDescrs)
-        defaultFactors = deepcopy(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)
-        updateVehicleAttrFactors(vehicleDescr, defaultCrewCompactDescrs, [], defaultFactors)
+        defaultFactors = makeDefaultClientVehicleAttributeFactors()
+        updateAttrFactorsWithSplit(vehicleDescr, defaultCrewCompactDescrs, [], defaultFactors)
         result = {}
         for i, (tankmanCompactDescr, roles) in enumerate(zip(crewCompactDescrs, vehicleDescr.type.crewRoles)):
             backupedtankmanCompactDescr = defaultCrewCompactDescrs[i]
             defaultCrewCompactDescrs[i] = _generateTankman(vehicleDescr, roles, MIN_ROLE_LEVEL if tankmanCompactDescr is None else MAX_SKILL_LEVEL)
-            tankmanAffectedFactors = deepcopy(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)
-            updateVehicleAttrFactors(vehicleDescr, defaultCrewCompactDescrs, [], tankmanAffectedFactors)
+            tankmanAffectedFactors = makeDefaultClientVehicleAttributeFactors()
+            updateAttrFactorsWithSplit(vehicleDescr, defaultCrewCompactDescrs, [], tankmanAffectedFactors)
             changedFactors = _compareFactors(tankmanAffectedFactors, defaultFactors)
             if changedFactors:
                 result[i] = changedFactors
@@ -158,15 +211,19 @@ if IS_CLIENT:
         return sum(filter(None, [ getattr(eq, 'crewLevelIncrease', None) for eq in eqs ]))
 
 
-    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors):
+    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
-        mainSkillBonuses = VehicleQualifiersApplier({}, vehicleDescr)[QUALIFIER_TYPE.MAIN_SKILL]
-        vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs, mainSkillBonuses)
-        vehicleDescrCrew.onCollectFactors(factors)
         for eq in eqs:
             if eq is not None:
                 eq.updateVehicleAttrFactors(factors)
 
+        for device in vehicleDescr.optionalDevices:
+            if device is not None:
+                device.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
+
+        mainSkillBonuses = VehicleQualifiersApplier({}, vehicleDescr)[QUALIFIER_TYPE.MAIN_SKILL]
+        vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs, mainSkillBonuses)
+        vehicleDescrCrew.onCollectFactors(factors)
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
         shotDispersionFactors = [1.0, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)

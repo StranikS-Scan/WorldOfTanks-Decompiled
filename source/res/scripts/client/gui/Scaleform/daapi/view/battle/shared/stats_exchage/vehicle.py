@@ -112,7 +112,6 @@ class VehicleInfoComponent(broker.ExchangeComponent):
          'region': parts.regionCode,
          'userTags': self._ctx.getUserTags(accountDBID, playerVO.igrType),
          'squadIndex': vInfoVO.squadIndex,
-         'isSpeaking': self._ctx.isPlayerSpeaking(accountDBID),
          'invitationStatus': overrides.getInvitationDeliveryStatus(vInfoVO),
          'vehicleID': vehicleID,
          'vehicleName': vTypeVO.shortName,

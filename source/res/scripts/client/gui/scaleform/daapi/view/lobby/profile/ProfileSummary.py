@@ -18,6 +18,7 @@ class ProfileSummary(ProfileSummaryMeta):
         super(ProfileSummary, self).__init__(*args)
 
     def _sendAccountData(self, targetData, accountDossier):
+        super(ProfileSummary, self)._sendAccountData(targetData, accountDossier)
         outcome = ProfileUtils.packProfileDossierInfo(targetData)
         outcome['avgDamage'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
         outcome['maxDestroyed'] = targetData.getMaxFrags()

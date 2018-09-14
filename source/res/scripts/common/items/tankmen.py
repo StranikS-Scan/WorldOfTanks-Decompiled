@@ -10,6 +10,7 @@ from items import _xml, vehicles, ITEM_TYPES
 from vehicles import VEHICLE_CLASS_TAGS
 from debug_utils import *
 from constants import IS_CLIENT, IS_WEB, ITEM_DEFS_PATH
+from account_shared import AmmoIterator
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
@@ -269,7 +270,7 @@ def compareMastery(tankmanDescr1, tankmanDescr2):
     return cmp(tankmanDescr1.totalXP(), tankmanDescr2.totalXP())
 
 
-def commanderTutorXpBonusFactorForCrew(crew):
+def commanderTutorXpBonusFactorForCrew(crew, ammo):
     tutorLevel = 0
     haveBrotherhood = True
     for t in crew:
@@ -283,6 +284,14 @@ def commanderTutorXpBonusFactorForCrew(crew):
     skillsConfig = getSkillsConfig()
     if haveBrotherhood:
         tutorLevel += skillsConfig['brotherhood']['crewLevelIncrease']
+    equipCrewLevelIncrease = 0
+    cache = vehicles.g_cache
+    for compDescr, count in AmmoIterator(ammo):
+        itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
+        if itemTypeIdx == ITEM_TYPES.equipment:
+            equipCrewLevelIncrease += getattr(cache.equipments()[itemIdx], 'crewLevelIncrease', 0)
+
+    tutorLevel += equipCrewLevelIncrease
     return tutorLevel * skillsConfig['commander_tutor']['xpBonusFactorPerLevel']
 
 
@@ -530,6 +539,17 @@ class TankmanDescr(object):
         self.firstNameID = firstNameID
         self.lastNameID = lastNameID
         self.iconID = iconID
+
+    def getPassport(self):
+        """
+        Gets passport data: nationID, isPremium, isFemale, firstNameID, lastNameID, iconID
+        """
+        return (self.nationID,
+         self.isPremium,
+         self.isFemale,
+         self.firstNameID,
+         self.lastNameID,
+         self.iconID)
 
     def makeCompactDescr(self):
         pack = struct.pack

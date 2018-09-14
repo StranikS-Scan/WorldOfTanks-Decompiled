@@ -441,6 +441,18 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_ASSISTTRACK = '#ingame_gui:efficiencyRibbons/assistTrack'
     EFFICIENCYRIBBONS_ASSISTSPOT = '#ingame_gui:efficiencyRibbons/assistSpot'
     EFFICIENCYRIBBONS_CRITS = '#ingame_gui:efficiencyRibbons/crits'
+    EFFICIENCYRIBBONS_WORLDCOLLISION = '#ingame_gui:efficiencyRibbons/worldCollision'
+    EFFICIENCYRIBBONS_RECEIVEDCRITS = '#ingame_gui:efficiencyRibbons/receivedCrits'
+    EFFICIENCYRIBBONS_RECEIVEDDAMAGE = '#ingame_gui:efficiencyRibbons/receivedDamage'
+    EFFICIENCYRIBBONS_RECEIVEDBURN = '#ingame_gui:efficiencyRibbons/receivedBurn'
+    EFFICIENCYRIBBONS_RECEIVEDRAM = '#ingame_gui:efficiencyRibbons/receivedRam'
+    EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION = '#ingame_gui:efficiencyRibbons/receivedWorldCollision'
+    DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
+    DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
+    DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
+    DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_CR = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_CR'
+    DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE = '#ingame_gui:damageLog/shellType/HOLLOW_CHARGE'
+    DAMAGELOG_MULTIPLIER = '#ingame_gui:damageLog/multiplier'
     RESPAWNVIEW_TITLE = '#ingame_gui:respawnView/title'
     RESPAWNVIEW_ADDITIONALTIP = '#ingame_gui:respawnView/additionalTip'
     RESPAWNVIEW_ADDITIONALTIPLIMITED = '#ingame_gui:respawnView/additionalTipLimited'
@@ -532,7 +544,13 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_SPOTTED,
      EFFICIENCYRIBBONS_ASSISTTRACK,
      EFFICIENCYRIBBONS_ASSISTSPOT,
-     EFFICIENCYRIBBONS_CRITS)
+     EFFICIENCYRIBBONS_CRITS,
+     EFFICIENCYRIBBONS_WORLDCOLLISION,
+     EFFICIENCYRIBBONS_RECEIVEDCRITS,
+     EFFICIENCYRIBBONS_RECEIVEDDAMAGE,
+     EFFICIENCYRIBBONS_RECEIVEDBURN,
+     EFFICIENCYRIBBONS_RECEIVEDRAM,
+     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION)
     SIEGEMODE_HINT_FORMODE_ENUM = (SIEGEMODE_HINT_FORMODE_0,
      SIEGEMODE_HINT_FORMODE_1,
      SIEGEMODE_HINT_FORMODE_2,

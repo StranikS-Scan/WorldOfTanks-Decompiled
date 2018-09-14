@@ -39,3 +39,15 @@ class QuestsCurrentTabMeta(QuestsTab):
 
     def as_setSelectedQuestS(self, questID):
         return self.flashObject.as_setSelectedQuest(questID) if self._isDAAPIInited() else None
+
+    def as_setTabBarDataS(self, value):
+        """
+        :param value: Represented by Vector.<TabBarDataVO> (AS)
+        """
+        return self.flashObject.as_setTabBarData(value) if self._isDAAPIInited() else None
+
+    def as_setTabBarCountersS(self, value):
+        """
+        :param value: Represented by Vector.<int> (AS)
+        """
+        return self.flashObject.as_setTabBarCounters(value) if self._isDAAPIInited() else None

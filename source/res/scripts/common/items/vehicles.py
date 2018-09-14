@@ -8,6 +8,7 @@ import itertools
 import copy
 import ResMgr
 from Math import Vector2, Vector3
+import math
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr
@@ -104,7 +105,9 @@ EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'isMirrored',
  'isUVProportional',
  'emblemId'])
-HullAimingSound = namedtuple('HullAimingSound', ['state', 'PC', 'NPC'])
+SoundPair = namedtuple('SoundPair', ['PC', 'NPC'])
+StatedSounds = namedtuple('StatedSound', ['state', 'underLimitSounds', 'overLimitSounds'])
+HullAimingSound = namedtuple('HullAimingSound', ['lodDist', 'angleLimitValue', 'sounds'])
 VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'turret/rotationSpeed': 1.0,
  'circularVisionRadius': 1.0,
@@ -698,7 +701,7 @@ class VehicleDescriptor(object):
 
         return list(prereqs)
 
-    def keepPrereqs(self, prereqs, newPhysic=True):
+    def keepPrereqs(self, prereqs):
         if not prereqs:
             return
         else:
@@ -707,15 +710,6 @@ class VehicleDescriptor(object):
                     if not readyPrereqs:
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
 
-            if self.chassis['effects'] is not None and not newPhysic:
-                if self.chassis['effects']['dust'] is not None:
-                    effGroup, readyPrereqs = self.chassis['effects']['dust']
-                    if not readyPrereqs:
-                        readyPrereqs.update(_extractNeededPrereqs(prereqs, self.__getChassisEffectNames(effGroup)))
-                if self.chassis['effects']['mud'] is not None:
-                    effGroup, readyPrereqs = self.chassis['effects']['mud']
-                    if not readyPrereqs:
-                        readyPrereqs.update(_extractNeededPrereqs(prereqs, self.__getChassisEffectNames(effGroup)))
             for turretDescr, gunDescr in self.turrets:
                 detachmentEff = turretDescr['turretDetachmentEffects']
                 detachmentEff = itertools.chain((detachmentEff['flight'], detachmentEff['flamingOnGround']), detachmentEff['collision'].itervalues())
@@ -745,10 +739,7 @@ class VehicleDescriptor(object):
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effectsDescr['armorCriticalHit'][1].prerequisites()))
 
             if self.type._prereqs is None:
-                if not newPhysic:
-                    resourceNames = list(self.hull['exhaust'].prerequisites())
-                else:
-                    resourceNames = []
+                resourceNames = []
                 for extra in self.extras:
                     resourceNames += extra.prerequisites()
 
@@ -979,7 +970,8 @@ class VehicleDescriptor(object):
              'navmeshGirth': chassis['navmeshGirth'],
              'carryingTriangles': chassis['carryingTriangles'],
              'brakeForce': chassis['brakeForce'],
-             'terrainResistance': chassis['terrainResistance']}
+             'terrainResistance': chassis['terrainResistance'],
+             'rollingFrictionFactors': [1.0, 1.0, 1.0]}
             self.miscAttrs = {'maxWeight': maxWeight,
              'repairSpeedFactor': 1.0,
              'additiveShotDispersionFactor': 1.0,
@@ -1346,8 +1338,6 @@ class Cache(object):
             self.__gunEffects = None
             self.__gunReloadEffects = None
             self.__gunRecoilEffects = None
-            self.__chassisEffects = None
-            self.__exhaustEffects = None
             self.__turretDetachmentEffects = None
             self.__customEffects = None
             self.__requestOncePrereqs = set()
@@ -1539,23 +1529,11 @@ class Cache(object):
         return self.__gunRecoilEffects
 
     @property
-    def _exhaustEffects(self):
-        if self.__exhaustEffects is None:
-            self.__exhaustEffects = _readExhaustEffectsGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects.xml')
-        return self.__exhaustEffects
-
-    @property
-    def _chassisEffects(self):
-        if self.__chassisEffects is None:
-            self.__chassisEffects = _readChassisEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/chassis_effects.xml')
-        return self.__chassisEffects
-
-    @property
     def _customEffects(self):
         if self.__customEffects is None:
             self.__customEffects = dict()
             self.__customEffects['slip'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/trackSlip_effects.xml')
-            self.__customEffects['exhaust'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects_np.xml')
+            self.__customEffects['exhaust'] = _readCustomEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects.xml')
         return self.__customEffects
 
     @property
@@ -1742,7 +1720,11 @@ def getVehicleType(compactDescr):
 
 
 def getVehicleClass(compactDescr):
-    for vehClass in VEHICLE_CLASS_TAGS & getVehicleType(compactDescr).tags:
+    return getVehicleClassFromVehicleType(getVehicleType(compactDescr))
+
+
+def getVehicleClassFromVehicleType(vehicleType):
+    for vehClass in VEHICLE_CLASS_TAGS & vehicleType.tags:
         return vehClass
 
     assert False
@@ -2051,13 +2033,11 @@ def _readHull(xmlCtx, section):
     if IS_CLIENT or IS_BOT:
         res['emblemSlots'] = _readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
-        from VehicleEffects import VehicleExhaustDescriptor
         res['models'] = _readModels(xmlCtx, section, 'models')
         res['swinging'] = {'lodDist': readLodDist(xmlCtx, section, 'swinging/lodDist'),
          'sensitivityToImpulse': _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'),
          'pitchParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6),
          'rollParams': _xml.readTupleOfFloats(xmlCtx, section, 'swinging/rollParams', 7)}
-        res['exhaust'] = VehicleExhaustDescriptor(section, g_cache._exhaustEffects, xmlCtx)
         res['customEffects'] = [ExhaustEffectDescriptor(section, xmlCtx, CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['exhaust'], xmlCtx, 'exhaust/pixie'), 'exhaust/nodes')]
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         if section.has_key('camouflage'):
@@ -2373,9 +2353,7 @@ def _readChassis(xmlCtx, section, compactDescr, unlocksDescrs=None, parentItem=N
         res['splineDesc'] = splineDesc
         res['leveredSuspension'] = _readLeveredSuspension(xmlCtx, section)
         res['suspensionSpringsLength'] = None
-        sounds, lodDist = _readHullAimingSound(xmlCtx, section)
-        res['hullAimingSound'] = {'lodDist': lodDist,
-         'sounds': sounds}
+        res['hullAimingSound'] = _readHullAimingSound(xmlCtx, section)
         res['effects'] = {'lodDist': readLodDist(xmlCtx, section, 'effects/lodDist')}
         res['sound'] = section.readString('sound', '')
         res['soundPC'] = section.readString('soundPC', '')
@@ -2414,20 +2392,24 @@ def _readLeveredSuspension(xmlCtx, section):
 
 def _readHullAimingSound(xmlCtx, section):
     if section['hullAiming'] is None:
-        return (None, None)
+        return
     else:
         try:
             lodDist = readLodDist(xmlCtx, section, 'hullAiming/audio/lodDist')
+            angleLimit = math.radians(_xml.readFloat(xmlCtx, section, 'hullAiming/audio/angleLimitValue', 0.0))
             sounds = []
             for actionName, actionSection in _xml.getChildren(xmlCtx, section, 'hullAiming/audio/sounds'):
                 ctx = (xmlCtx, 'hullAiming/audio/sounds')
-                sound = HullAimingSound(state=actionName, PC=_xml.readNonEmptyString(ctx, actionSection, 'wwsoundPC'), NPC=_xml.readNonEmptyString(ctx, actionSection, 'wwsoundNPC'))
+                underLimitSouns = SoundPair(PC=_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundPC'), NPC=_xml.readNonEmptyString(ctx, actionSection, 'underLimitSounds/wwsoundNPC'))
+                overLimitSounds = SoundPair(PC=_xml.readNonEmptyString(ctx, actionSection, 'overLimitSounds/wwsoundPC'), NPC=_xml.readNonEmptyString(ctx, actionSection, 'overLimitSounds/wwsoundNPC'))
+                sound = StatedSounds(state=actionName, underLimitSounds=underLimitSouns, overLimitSounds=overLimitSounds)
                 sounds.append(sound)
 
-            return (sounds, lodDist)
+            hullAimingSound = HullAimingSound(lodDist=lodDist, angleLimitValue=angleLimit, sounds=sounds)
+            return hullAimingSound
         except:
             LOG_DEBUG('Incorrect hullAiming/audio section')
-            return (None, None)
+            return
 
         return
 
@@ -3181,6 +3163,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         if res['icon'] is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
     _readPriceForItem(xmlCtx, section, compactDescr)
+    if IS_CELLAPP:
+        res['isGold'] = bool(_xml.readPrice(xmlCtx, section, 'price')[1])
     kind = intern(_xml.readNonEmptyString(xmlCtx, section, 'kind'))
     if kind not in _shellKinds:
         _xml.raiseWrongXml(xmlCtx, 'kind', "unknown shell kind '%s'" % kind)
@@ -3577,22 +3561,6 @@ def _readReloadEffectGroups(xmlPath):
         ctx = (xmlCtx, sname)
         res[sname] = __readReloadEffect(ctx, subsection)
 
-    return res
-
-
-def _readExhaustEffectsGroups(xmlPath):
-    from VehicleEffects import ExhaustEffectsDescriptor
-    res = {}
-    section = ResMgr.openSection(xmlPath)
-    defaultEffect = None
-    for name, subsection in section.items():
-        effect = ExhaustEffectsDescriptor(subsection)
-        res[name] = effect
-        if defaultEffect is None:
-            defaultEffect = effect
-
-    if defaultEffect is not None:
-        res['default'] = defaultEffect
     return res
 
 

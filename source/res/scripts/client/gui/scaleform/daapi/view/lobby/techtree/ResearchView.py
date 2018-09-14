@@ -144,6 +144,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     def invalidateRent(self, vehicles):
         raise NotImplementedError('Must be overridden in subclass')
 
+    def invalidateRestore(self, vehicles):
+        raise NotImplementedError('Must be overridden in subclass')
+
     def request4Info(self, itemCD, rootCD):
         """
         Overridden method of the class ResearchViewMeta.request4Info

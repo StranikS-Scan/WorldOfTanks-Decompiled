@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/offbattle/context.py
-from constants import FINISH_REASON, IS_TUTORIAL_ENABLED, QUEUE_TYPE
-from gui.prb_control.dispatcher import g_prbLoader
+from constants import FINISH_REASON, IS_TUTORIAL_ENABLED
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 from tutorial import doc_loader
 from tutorial.control import context, getServerSettings, game_vars
 from tutorial.control.battle.context import ExtendedBattleClientCtx
@@ -38,10 +38,15 @@ class OffbattleStartReqs(context.StartReqs):
     def process(self, descriptor, ctx):
         if ctx.cache.isFinished() and not ctx.restart:
             return False
+        popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
+        if not ctx.byRequest and popupsWindowsDisabled:
+            ctx.cache.setStartOnNextLogin(False)
+            ctx.cache.setRefused(True).write()
+            return False
+        self.__validateFinishReason(ctx)
+        if self.__validateTutorialsCompleted(ctx, descriptor):
+            return self.__validateTutorialState(ctx)
         else:
-            self.__validateFinishReason(ctx)
-            if self.__validateTutorialsCompleted(ctx, descriptor):
-                return self.__validateTutorialState(ctx)
             return self.__validateBattleCount(descriptor, ctx)
 
     def __validateFinishReason(self, ctx):
@@ -91,11 +96,6 @@ class OffbattleStartReqs(context.StartReqs):
 
     def __validateTutorialState(self, ctx):
         cache = ctx.cache
-        dispatcher = g_prbLoader.getDispatcher()
-        if dispatcher is not None:
-            if dispatcher.getEntity().isInQueue():
-                cache.setRefused(True).write()
-                return False
         if ctx.restart:
             return True
         elif not ctx.isFirstStart and not cache.isAfterBattle() and not ctx.restart:
@@ -114,7 +114,6 @@ class OffbattleStartReqs(context.StartReqs):
             result = not ctx.isAfterBattle and cache.doStartOnNextLogin()
             cache.setRefused(not result).write()
             return result
-            return
 
 
 class OffbattleBonusesRequester(LobbyBonusesRequester):

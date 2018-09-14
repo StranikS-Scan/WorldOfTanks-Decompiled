@@ -467,6 +467,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
+    VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -933,6 +934,8 @@ class SYSTEM_MESSAGES(object):
     UNIT_WARNINGS_WAITING_FOR_JOIN = '#system_messages:unit/warnings/WAITING_FOR_JOIN'
     UNIT_WARNINGS_CLAN_CHANGED = '#system_messages:unit/warnings/CLAN_CHANGED'
     UNIT_WARNINGS_FORT_BATTLE_END = '#system_messages:unit/warnings/FORT_BATTLE_END'
+    UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED = '#system_messages:unit/warnings/STRONGHOLDS_MODE_CHANGED'
+    UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED = '#system_messages:unit/warnings/STRONGHOLDS_DIRECTION_CHANGED'
     UNIT_NOTIFICATION_PLAYEROFFLINE = '#system_messages:unit/notification/playerOffline'
     UNIT_NOTIFICATION_PLAYERONLINE = '#system_messages:unit/notification/playerOnline'
     UNIT_NOTIFICATION_PLAYERADDED = '#system_messages:unit/notification/playerAdded'
@@ -959,11 +962,6 @@ class SYSTEM_MESSAGES(object):
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
     DRR_SCALE_STEP_UP = '#system_messages:drr_scale/step_up'
     DRR_SCALE_STEP_DOWN = '#system_messages:drr_scale/step_down'
-    CHRISTMAS_EVENT_STARTED = '#system_messages:christmas/event/started'
-    CHRISTMAS_EVENT_FINISHED = '#system_messages:christmas/event/finished'
-    CHRISTMAS_EVENT_INPROGRESSAGAIN = '#system_messages:christmas/event/inProgressAgain'
-    CHRISTMAS_EVENT_SUSPENDED = '#system_messages:christmas/event/suspended'
-    CHRISTMAS_ANIMATIONINPROCESS = '#system_messages:christmas/animationInProcess'
     FORTIFICATION_FIXEDPLAYERTOBUILDING = '#system_messages:fortification/fixedPlayerToBuilding'
     FORTIFICATION_MODERNIZATIONBUILDING = '#system_messages:fortification/modernizationBuilding'
     FORTIFICATION_BUILDINGPROCESS = '#system_messages:fortification/buildingProcess'
@@ -972,7 +970,6 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_DIRECTIONCLOSED = '#system_messages:fortification/directionClosed'
     FORTIFICATION_CREATED = '#system_messages:fortification/created'
     FORTIFICATION_ADDORDER = '#system_messages:fortification/addOrder'
-    FORTIFICATION_ACTIVATEORDER = '#system_messages:fortification/activateOrder'
     FORTIFICATION_TRANSPORT = '#system_messages:fortification/transport'
     FORTIFICATION_DEFENCEHOURSET = '#system_messages:fortification/defenceHourSet'
     FORTIFICATION_DEFENCEHOURSET_OFFDAY = '#system_messages:fortification/defenceHourSet/offDay'
@@ -1112,18 +1109,6 @@ class SYSTEM_MESSAGES(object):
     VEHICLECOMPARE_PREVIEWNOTALLOWED = '#system_messages:vehicleCompare/previewNotAllowed'
     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
-    CHRISTMASITEM_CONVERSION_SUCCESS = '#system_messages:christmasItem/conversion/success'
-    CHRISTMASITEM_CONVERSION_ERRORS_SERVER_ERROR = '#system_messages:christmasItem/conversion/errors/server_error'
-    CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_ITEMS = '#system_messages:christmasItem/conversion/errors/NOT_ENOUGH_ITEMS'
-    CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_SELECTED = '#system_messages:christmasItem/conversion/errors/NOT_ENOUGH_SELECTED'
-    CHRISTMASITEM_CONVERSION_ERRORS_RANK_LIMIT_EXCEEDED = '#system_messages:christmasItem/conversion/errors/RANK_LIMIT_EXCEEDED'
-    CHRISTMASITEM_CONVERSION_ERRORS_NO_ITEM = '#system_messages:christmasItem/conversion/errors/NO_ITEM'
-    CHRISTMASITEM_CHRISTMASTREEFILL_SUCCESS = '#system_messages:christmasItem/christmasTreeFill/success'
-    CHRISTMASITEM_CHRISTMASTREEFILL_ERRORS_SERVER_ERROR = '#system_messages:christmasItem/christmasTreeFill/errors/server_error'
-    CHRISTMASCHEST_OPEN_ERRORS_NO_CHESTS = '#system_messages:christmasChest/open/errors/NO_CHESTS'
-    CHRISTMASCHEST_OPEN_ERRORS_SERVER_ERROR = '#system_messages:christmasChest/open/errors/server_error'
-    CHRISTMASCHEST_OPEN_SUCCESS = '#system_messages:christmasChest/open/success'
-    CHRISTMAS_COMMON_ERROR = '#system_messages:christmas/common/error'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1187,7 +1172,9 @@ class SYSTEM_MESSAGES(object):
      UNIT_WARNINGS_ALREADY_INVITED,
      UNIT_WARNINGS_WAITING_FOR_JOIN,
      UNIT_WARNINGS_CLAN_CHANGED,
-     UNIT_WARNINGS_FORT_BATTLE_END)
+     UNIT_WARNINGS_FORT_BATTLE_END,
+     UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED,
+     UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
@@ -1809,6 +1796,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
+     VEHICLE_RESTORE_FINISHED,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -2275,6 +2263,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_WARNINGS_WAITING_FOR_JOIN,
      UNIT_WARNINGS_CLAN_CHANGED,
      UNIT_WARNINGS_FORT_BATTLE_END,
+     UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED,
+     UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
@@ -2301,11 +2291,6 @@ class SYSTEM_MESSAGES(object):
      INFO_NOAVAILABLE,
      DRR_SCALE_STEP_UP,
      DRR_SCALE_STEP_DOWN,
-     CHRISTMAS_EVENT_STARTED,
-     CHRISTMAS_EVENT_FINISHED,
-     CHRISTMAS_EVENT_INPROGRESSAGAIN,
-     CHRISTMAS_EVENT_SUSPENDED,
-     CHRISTMAS_ANIMATIONINPROCESS,
      FORTIFICATION_FIXEDPLAYERTOBUILDING,
      FORTIFICATION_MODERNIZATIONBUILDING,
      FORTIFICATION_BUILDINGPROCESS,
@@ -2314,7 +2299,6 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_DIRECTIONCLOSED,
      FORTIFICATION_CREATED,
      FORTIFICATION_ADDORDER,
-     FORTIFICATION_ACTIVATEORDER,
      FORTIFICATION_TRANSPORT,
      FORTIFICATION_DEFENCEHOURSET,
      FORTIFICATION_DEFENCEHOURSET_OFFDAY,
@@ -2453,19 +2437,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLECOMPARE_DISABLED,
      VEHICLECOMPARE_PREVIEWNOTALLOWED,
      PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
-     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES,
-     CHRISTMASITEM_CONVERSION_SUCCESS,
-     CHRISTMASITEM_CONVERSION_ERRORS_SERVER_ERROR,
-     CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_ITEMS,
-     CHRISTMASITEM_CONVERSION_ERRORS_NOT_ENOUGH_SELECTED,
-     CHRISTMASITEM_CONVERSION_ERRORS_RANK_LIMIT_EXCEEDED,
-     CHRISTMASITEM_CONVERSION_ERRORS_NO_ITEM,
-     CHRISTMASITEM_CHRISTMASTREEFILL_SUCCESS,
-     CHRISTMASITEM_CHRISTMASTREEFILL_ERRORS_SERVER_ERROR,
-     CHRISTMASCHEST_OPEN_ERRORS_NO_CHESTS,
-     CHRISTMASCHEST_OPEN_ERRORS_SERVER_ERROR,
-     CHRISTMASCHEST_OPEN_SUCCESS,
-     CHRISTMAS_COMMON_ERROR)
+     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

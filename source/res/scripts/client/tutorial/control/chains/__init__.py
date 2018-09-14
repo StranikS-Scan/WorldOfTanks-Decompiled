@@ -28,7 +28,6 @@ class ChainsControlsFactory(ControlsFactory):
          EFFECT_TYPE.REFUSE_TRAINING: core_func.FunctionalRefuseTrainingEffect,
          EFFECT_TYPE.GO_SCENE: core_func.GoToSceneEffect,
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
-         EFFECT_TYPE.SAVE_ACCOUNT_SETTING: core_func.SaveAccountSettingEffect,
          EFFECT_TYPE.SHOW_HINT: chains_func.FunctionalShowHint,
          EFFECT_TYPE.CLOSE_HINT: chains_func.FunctionalCloseHint,
          EFFECT_TYPE.ENTER_QUEUE: chains_func.FunctionalSwitchToRandom,

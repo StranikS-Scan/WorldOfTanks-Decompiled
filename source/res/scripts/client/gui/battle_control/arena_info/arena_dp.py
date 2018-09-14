@@ -26,13 +26,13 @@ class ArenaDataProvider(IArenaDataProvider):
     def __init__(self, setup):
         super(ArenaDataProvider, self).__init__()
         self.__playerTeam = avatar_getter.getPlayerTeam(avatar=setup.avatar)
-        self.__teamsOnArena = range(1, setup.arenaVisitor.type.getMaxTeamsOnArena() + 1)
+        self.__teamsOnArena = setup.arenaVisitor.type.getTeamsOnArenaRange()
         self.__playerVehicleID = avatar_getter.getPlayerVehicleID(setup.avatar)
         self.__vInfoVOs = {}
         self.__vStatsVOs = arena_vos.VehicleArenaStatsDict()
         self.__playersVIDs = {}
         self.__invitationStatuses = {}
-        self.__squadFinder = squad_finder.createSquadFinder(setup.arenaVisitor, self.__teamsOnArena)
+        self.__squadFinder = squad_finder.createSquadFinder(setup.arenaVisitor)
         self.__description = arena_descrs.createDescription(setup.arenaVisitor)
 
     def __del__(self):

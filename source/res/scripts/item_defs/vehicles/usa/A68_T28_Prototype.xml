@@ -7,8 +7,8 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	18	</forward>
-    <backward>	7	</backward>
+    <forward>	28	</forward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.132	</moving>
@@ -217,7 +217,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -506,7 +505,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -937,10 +935,10 @@
     <detailed>
       <engines>
         <Ford_GAF>
-          <smplEnginePower>	465.2037	</smplEnginePower>
+          <smplEnginePower>	670	</smplEnginePower>
         </Ford_GAF>
         <Ford_GAFM2>
-          <smplEnginePower>	539.2134	</smplEnginePower>
+          <smplEnginePower>	780	</smplEnginePower>
         </Ford_GAFM2>
       </engines>
       <chassis>

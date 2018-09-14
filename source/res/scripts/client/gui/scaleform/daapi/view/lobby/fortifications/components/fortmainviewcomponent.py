@@ -37,6 +37,7 @@ from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.settings import MUST_SHOW_FORT_UPGRADE, MUST_SHOW_DEFENCE_START
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils import isPopupsWindowsOpenDisabled
 from helpers import i18n, time_utils, setHangarVisibility
 from shared_utils import CONST_CONTAINER
 
@@ -351,7 +352,8 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
                 self.as_toggleCommanderHelpS(True)
                 self.__commanderHelpShown = True
             if mode == FORTIFICATION_ALIASES.MODE_COMMON_TUTORIAL:
-                self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+                if not isPopupsWindowsOpenDisabled():
+                    self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
                 if self.__currentMode == FORTIFICATION_ALIASES.MODE_DIRECTIONS_TUTORIAL:
                     self.__makeSystemMessages()
             isInTransportingMode = mode in (FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP,

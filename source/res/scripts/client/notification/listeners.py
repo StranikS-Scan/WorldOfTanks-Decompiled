@@ -1,16 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
 import collections
-import operator
+from collections import defaultdict
 import weakref
 from adisp import process
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.locale.CLANS import CLANS
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.contexts import GetClanInfoCtx
-from gui.clubs.club_helpers import ClubListener
-from gui.clubs.settings import CLIENT_CLUB_STATE
+from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.notifications import MsgCustomEvents
@@ -24,7 +24,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClubInviteDecorator, ClubAppsDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 
 class _NotificationListener(object):
@@ -307,84 +307,6 @@ class FriendshipRqsListener(_NotificationListener):
             self.__updateRequests()
 
 
-class ClubsInvitesListener(_NotificationListener, ClubListener):
-
-    def start(self, model):
-        result = super(ClubsInvitesListener, self).start(model)
-        self.startClubListening()
-        self.__addClubInvites()
-        self.__requestMyClub()
-        return result
-
-    def stop(self):
-        self.stopClubListening()
-        super(ClubsInvitesListener, self).stop()
-
-    def onAccountClubStateChanged(self, state):
-        model = self._model()
-        if model and self.clubsState.getStateID() == CLIENT_CLUB_STATE.UNKNOWN:
-            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_INVITE)
-            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_APPS)
-        else:
-            self.__requestMyClub()
-
-    def onAccountClubInvitesInited(self, invites):
-        self.__addClubInvites()
-
-    def onAccountClubInvitesChanged(self, added, removed, changed):
-        model = self._model()
-        if model is None:
-            return
-        else:
-            if len(added):
-                showInvitationInWindowsBar()
-            for invite in removed:
-                model.removeNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID())
-
-            for invite in added:
-                model.addNotification(ClubInviteDecorator(invite))
-
-            for invite in changed:
-                model.updateNotification(NOTIFICATION_TYPE.CLUB_INVITE, invite.getID(), invite, True)
-
-            return
-
-    def __requestMyClub(self):
-        self.clubsCtrl.getProfile().requestMyClub(self.__onMyClubReceived)
-
-    def __onMyClubReceived(self, club):
-        model = self._model()
-        if model is None:
-            return
-        else:
-            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_APPS)
-            if club:
-                limits = self.clubsCtrl.getLimits()
-                if limits.canAcceptApplication(self.clubsCtrl.getProfile(), club).success:
-                    activeApps = club.getApplicants(onlyActive=True)
-                    if not self.clubsCtrl.isAppsNotificationShown() and len(activeApps):
-                        model.addNotification(ClubAppsDecorator(club.getClubDbID(), activeApps))
-                        self.clubsCtrl.markAppsNotificationShown()
-            return
-
-    def __addClubInvites(self):
-        model = self._model()
-        profile = self.clubsCtrl.getProfile()
-        if model is None or not profile.isInvitesAvailable():
-            return
-        else:
-            model.removeNotificationsByType(NOTIFICATION_TYPE.CLUB_INVITE)
-            invites = profile.getInvites().values()
-            invites = sorted(invites, cmp=lambda invite, other: cmp(invite.getTimestamp(), other.getTimestamp()))
-            activeInvites = filter(operator.methodcaller('isActive'), invites)
-            if len(activeInvites):
-                showInvitationInWindowsBar()
-            for invite in invites:
-                model.addNotification(ClubInviteDecorator(invite))
-
-            return
-
-
 class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
 
     def __init__(self):
@@ -399,24 +321,15 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
         self.__startTime = time_utils.getCurrentTimestamp()
         if not self._canBeShown():
             return
-        else:
-            newReceivedItemType = self._getNewReceivediItemType()
-            itemsByType = []
-            for notification in g_wgncProvider.getNotMarkedNots():
-                proxyDataItem = notification.getProxyItemByType(newReceivedItemType)
-                if proxyDataItem is None:
-                    continue
-                notification.marked = True
-                itemsByType.append(proxyDataItem)
-
-            itemsByTypeCount = len(itemsByType)
-            LOG_DEBUG('Clan WGNC new notifications count with type = %d: %d' % (newReceivedItemType, itemsByTypeCount))
-            if itemsByTypeCount:
-                if itemsByTypeCount > 1:
-                    self._addMultiNotification(itemsByType)
-                else:
-                    self._addSingleNotification(itemsByType[0])
-            return result
+        storedItems = self._getStoredReceivedItems()
+        itemsByTypeCount = len(storedItems)
+        LOG_DEBUG('Clan WGNC new notifications count with type "%d": %d' % (self._getNewReceivedItemType(), itemsByTypeCount))
+        if itemsByTypeCount:
+            if itemsByTypeCount > 1:
+                self._addMultiNotification(storedItems)
+            else:
+                self._addSingleNotification(storedItems[0])
+        return result
 
     def stop(self):
         self.stopClanListening()
@@ -442,7 +355,7 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
     def _onProxyDataItemShow(self, notID, item):
         if not self._canBeShown():
             return True
-        elif self._getNewReceivediItemType() == item.getType():
+        elif self._getNewReceivedItemType() == item.getType():
             model = self._model()
             if self.__startTime:
                 if time_utils.getCurrentTimestamp() - self.__startTime < 5:
@@ -460,7 +373,30 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
         else:
             return False
 
-    def _getNewReceivediItemType(self):
+    def _getStoredReceivedItems(self):
+        """
+        Gets items received when user was offline or during the battle session
+        :return: list of gui.wgnc.proxy_data._ProxyDataItem
+        """
+        return self._getNotMarkedItemsByType(self._getNewReceivedItemType())
+
+    def _getNotMarkedItemsByType(self, itemType):
+        """
+        Gets not marked items by required type and marks them
+        :param itemType: wgnc_settings.WGNC_DATA_PROXY_TYPE.*
+        :return: list of gui.wgnc.proxy_data._ProxyDataItem
+        """
+        itemsByType = []
+        for notification in g_wgncProvider.getNotMarkedNots():
+            proxyDataItem = notification.getProxyItemByType(itemType)
+            if proxyDataItem is None:
+                continue
+            notification.marked = True
+            itemsByType.append(proxyDataItem)
+
+        return itemsByType
+
+    def _getNewReceivedItemType(self):
         raise NotImplementedError
 
     def _addSingleNotification(self, item):
@@ -488,21 +424,18 @@ class _ClanNotificationsCommonListener(_WGNCNotificationListener, ClanListener):
 
 
 class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
+    _TYPES_EXPECTED_USERS_NAMES = (NOTIFICATION_TYPE.CLAN_APP, NOTIFICATION_TYPE.CLAN_INVITE_ACTION)
 
     def __init__(self):
         super(_ClanAppsListener, self).__init__()
-        self.__pendingNotifications = {}
+        self.__userNamePendingNotifications = defaultdict(set)
 
     def stop(self):
         super(_ClanAppsListener, self).stop()
-        self.__pendingNotifications = {}
+        self.__userNamePendingNotifications = defaultdict(set)
 
     def onClanAppStateChanged(self, appId, state):
-        model = self._model()
-        clanSingleAppDecorator = model.getNotification(NOTIFICATION_TYPE.CLAN_APP, appId)
-        if clanSingleAppDecorator:
-            clanSingleAppDecorator.setState(state)
-            model.updateNotification(NOTIFICATION_TYPE.CLAN_APP, appId, clanSingleAppDecorator.getEntity(), False)
+        self.__updateNotificationState(appId, state)
 
     def onAccountClanProfileChanged(self, profile):
         """
@@ -516,35 +449,69 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
 
     def onUserNamesReceived(self, names):
         for userDBID, userName in names.iteritems():
-            if userDBID in self.__pendingNotifications:
-                clazz, args = self.__pendingNotifications[userDBID]
-                self._model().addNotification(clazz(userName=userName, *args))
-                del self.__pendingNotifications[userDBID]
+            if userDBID in self.__userNamePendingNotifications:
+                model = self._model()
+                for appId in self.__userNamePendingNotifications[userDBID]:
+                    for nType in self._TYPES_EXPECTED_USERS_NAMES:
+                        clanSingleAppDecorator = model.getNotification(nType, appId)
+                        if clanSingleAppDecorator:
+                            clanSingleAppDecorator.setUserName(userName)
+                            model.updateNotification(nType, appId, clanSingleAppDecorator.getEntity(), False)
+
+                self.__userNamePendingNotifications[userDBID] = set()
 
     def _onProxyDataItemShow(self, notID, item):
         isProcessed = super(_ClanAppsListener, self)._onProxyDataItemShow(notID, item)
         if not isProcessed:
             itemType = item.getType()
             if itemType == WGNC_DATA_PROXY_TYPE.CLAN_INVITE_ACCEPTED:
-                self.__addUserNotification(ClanInvitesActionDecorator, (item.getInviteId(), 'inviteAccepted'), item)
+                self.__addUserNotification(ClanInvitesActionDecorator, (item.getID(), 'inviteAccepted'), item)
                 isProcessed = True
             elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED:
-                self.__addUserNotification(ClanInvitesActionDecorator, (item.getInviteId(), 'inviteDeclined'), item)
+                self.__addUserNotification(ClanInvitesActionDecorator, (item.getID(), 'inviteDeclined'), item)
+                isProcessed = True
+            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS:
+                self.__updateNotificationState(item.getApplicationID(), CLAN_APPLICATION_STATES.ACCEPTED)
+                isProcessed = True
+            elif itemType == WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS:
+                self.__updateNotificationState(item.getApplicationID(), CLAN_APPLICATION_STATES.DECLINED)
                 isProcessed = True
         return isProcessed
 
-    def _getNewReceivediItemType(self):
+    def _getNewReceivedItemType(self):
         return wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP
+
+    def _getStoredReceivedItems(self):
+        storedClanAPPs = super(_ClanAppsListener, self)._getStoredReceivedItems()
+        processedClamAPPs = self._getNotMarkedItemsByType(wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS)
+        processedClamAPPs.extend(self._getNotMarkedItemsByType(wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS))
+        for processedAPP in processedClamAPPs:
+            for i in xrange(len(storedClanAPPs) - 1, -1, -1):
+                storedAPP = storedClanAPPs[i]
+                if processedAPP.getApplicationID() == storedAPP.getApplicationID():
+                    del storedClanAPPs[i]
+
+        return storedClanAPPs
 
     @process
     def _addSingleNotification(self, item):
+        """
+        Adds notification with type wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_APP only!
+        :param item: reference to gui.wgnc.proxy_data._ProxyDataItem
+        """
         ctx = GetClanInfoCtx(item.getAccountID())
+        self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item), item)
         accountResponse = yield self.clansCtrl.sendRequest(ctx)
-        isInCooldown = False
         if accountResponse.isSuccess():
             accountInfo = ctx.getDataObj(accountResponse.data)
             isInCooldown = isInClanEnterCooldown(accountInfo.getClanCooldownTill())
-        self.__addUserNotification(ClanSingleAppDecorator, (item.getID(), item, isInCooldown), item)
+            if isInCooldown:
+                model = self._model()
+                appId = item.getApplicationID()
+                clanSingleAppDecorator = model.getNotification(NOTIFICATION_TYPE.CLAN_APP, appId)
+                if clanSingleAppDecorator:
+                    clanSingleAppDecorator.setClanEnterCooldown(isInCooldown)
+                    model.updateNotification(NOTIFICATION_TYPE.CLAN_APP, appId, clanSingleAppDecorator.getEntity(), False)
 
     def _addMultiNotification(self, items, count=None):
         count = int(len(items) if items else count)
@@ -567,13 +534,32 @@ class _ClanAppsListener(_ClanNotificationsCommonListener, UsersInfoHelper):
         return canBeShown and profile.isInClan() and profile.getMyClanPermissions().canHandleClanInvites()
 
     def __addUserNotification(self, clazz, args, item):
+        """
+        Adds notifications which requires user name requesting
+        :param clazz: class of decorator
+        :param args: arguments will be passed into constructor of clazz
+        :param item: reference to corresponded gui.wgnc.proxy_data._ProxyDataItem
+        """
         userDatabaseID = item.getAccountID()
+        appId = item.getID()
         userName = self.getUserName(userDatabaseID)
         if not userName:
-            self.__pendingNotifications[userDatabaseID] = (clazz, args)
+            self.__userNamePendingNotifications[userDatabaseID].add(appId)
             self.syncUsersInfo()
+            userName = CLANS.CLANINVITE_NOTIFICATION_USERNAMEERROR
+        notification = clazz(userName=userName, *args)
+        notificationType = notification.getType()
+        if notificationType not in self._TYPES_EXPECTED_USERS_NAMES:
+            LOG_ERROR('Unexpected notification type "{}"'.format(notificationType))
         else:
-            self._model().addNotification(clazz(userName=userName, *args))
+            self._model().addNotification(notification)
+
+    def __updateNotificationState(self, appId, state):
+        model = self._model()
+        clanSingleAppDecorator = model.getNotification(NOTIFICATION_TYPE.CLAN_APP, appId)
+        if clanSingleAppDecorator:
+            clanSingleAppDecorator.setState(state)
+            model.updateNotification(NOTIFICATION_TYPE.CLAN_APP, appId, clanSingleAppDecorator.getEntity(), False)
 
 
 class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
@@ -616,7 +602,7 @@ class _ClanPersonalInvitesListener(_ClanNotificationsCommonListener):
                 isProcessed = True
         return isProcessed
 
-    def _getNewReceivediItemType(self):
+    def _getNewReceivedItemType(self):
         return wgnc_settings.WGNC_DATA_PROXY_TYPE.CLAN_INVITE
 
     def _addSingleNotification(self, item):
@@ -662,7 +648,7 @@ class _WGNCListener(_WGNCNotificationListener):
             popUp = notification.getItemByType(wgnc_settings.WGNC_GUI_TYPE.POP_UP)
             if popUp is None:
                 continue
-            addNotification(WGNCPopUpDecorator(notification.notID, popUp))
+            addNotification(WGNCPopUpDecorator(notification.notID, popUp, receivedAt=notification.order))
 
         self.__offset = 0.1
         return result
@@ -694,23 +680,25 @@ class _WGNCListenersContainer(_NotificationListener):
 
     def __init__(self):
         super(_WGNCListenersContainer, self).__init__()
-        self.__collection = (_WGNCListener(), _ClanAppsListener(), _ClanPersonalInvitesListener())
+        self.__wgncListener = _WGNCListener()
+        self.__clanListeners = (_ClanAppsListener(), _ClanPersonalInvitesListener())
 
     def start(self, model):
-        for listener in self.__collection:
-            listener.start(model)
-
+        self.__wgncListener.start(model)
         g_wgncProvider.showNoMarkedNots()
         g_wgncProvider.setEnabled(True)
-        for listener in self.__collection:
-            listener.onProviderEnabled()
+        for listener in self.__clanListeners:
+            listener.start(model)
 
+        self.__wgncListener.onProviderEnabled()
         return super(_WGNCListenersContainer, self).start(model)
 
     def stop(self):
-        for listener in self.__collection:
+        self.__wgncListener.stop()
+        for listener in self.__clanListeners:
             listener.stop()
 
+        g_wgncProvider.setEnabled(False)
         g_wgncProvider.setNotsAsMarked()
         super(_WGNCListenersContainer, self).stop()
 
@@ -770,9 +758,6 @@ class NotificationsListeners(_NotificationListener):
          PrbInvitesListener(),
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
-         ClubsInvitesListener(),
-         _ClanAppsListener(),
-         _ClanPersonalInvitesListener(),
          BattleTutorialListener())
 
     def start(self, model):

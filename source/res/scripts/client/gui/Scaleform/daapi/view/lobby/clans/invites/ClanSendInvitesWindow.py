@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanSendInvitesWindow.py
 from adisp import process
+from client_request_lib.exceptions import ResponseCodes
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
 from gui.Scaleform.locale.CLANS import CLANS
@@ -26,8 +27,13 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
         ctx = clan_ctx.CreateInviteCtx(self.__clanDbID, accountsToInvite, comment)
         self.as_onReceiveSendInvitesCooldownS(ctx.getCooldown())
         result = yield self.clansCtrl.sendRequest(ctx)
-        successAccounts = [ item.getAccountDbID() for item in ctx.getDataObj(result.data) ]
-        failedAccounts = set(accountsToInvite) - set(successAccounts)
+        expectedCodes = (ResponseCodes.ACCOUNT_ALREADY_APPLIED, ResponseCodes.ACCOUNT_ALREADY_INVITED, ResponseCodes.NO_ERRORS)
+        if result.getCode() in expectedCodes:
+            successAccounts = [ item.getAccountDbID() for item in ctx.getDataObj(result.data) ]
+            failedAccounts = set(accountsToInvite) - set(successAccounts)
+        else:
+            successAccounts = []
+            failedAccounts = accountsToInvite
         if len(accountsToInvite) > 1:
             if successAccounts:
                 accountNames = [ self.getUserName(userDbID) for userDbID in successAccounts ]

@@ -141,7 +141,6 @@ class _RemoteDataDownloader(object):
         self.__storageCache = None
         self.__lock = threading.RLock()
         self._pools = {'clans': _HttpHostDownloader('ce-ct.worldoftanks.net', 3),
-         'clubs': _HttpHostDownloader('ce-ct.worldoftanks.net', 3),
          'custom': threads.ThreadPool(workersLimit=2)}
         return
 
@@ -167,12 +166,6 @@ class _RemoteDataDownloader(object):
 
     def getClanEmblem64x64(self, clanDbID, callback):
         return self.__getRemoteFileByConnection('clans', '/dcont/clans/emblems/%d/emblem_64x64.png' % clanDbID, callback)
-
-    def getClubEmblem32x32(self, clubDbID, callback):
-        return self.__getRemoteFileByConnection('clubs', '/dcont/clans/emblems/%d/emblem_32x32.png' % clubDbID, callback)
-
-    def getClubEmblem64x64(self, clubDbID, callback):
-        return self.__getRemoteFileByConnection('clubs', '/dcont/clans/emblems/%d/emblem_64x64.png' % clubDbID, callback)
 
     def getUrlData(self, url, callback):
         return self.__getRemoteFile('custom', url, callback, _HttpOpenUrlJob)

@@ -2,21 +2,26 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/params.py
 import collections
 import copy
+import inspect
 import math
 import operator
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from operator import itemgetter
+from math import ceil
 from constants import SHELL_TYPES
+from debug_utils import LOG_DEBUG
 from gui import GUI_SETTINGS
+from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getShotsPerMinute, getGunDescriptors, getShellDescriptors, getOptionalDeviceWeight, NO_DATA
-from gui.shared.items_parameters.comparator import BACKWARD_QUALITY_PARAMS
+from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
+from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.items_parameters import functions
 from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, GUN_NORMAL, SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, GUN_CLIP, RELOAD_TIME_PROP_NAME, GUN_CAN_BE_CLIP
 from helpers import time_utils
 from items import getTypeOfCompactDescr, vehicles, getTypeInfoByIndex, ITEM_TYPES
 from items import utils as items_utils
-from gui.shared.items_parameters import formatters
+from shared_utils import findFirst
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
 PIERCING_DISTANCES = (100, 250, 500)
@@ -24,21 +29,22 @@ ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
 _Weight = namedtuple('_Weight', 'current, max')
 _Invisibility = namedtuple('_Invisibility', 'current, atShot')
+_PenaltyInfo = namedtuple('_PenaltyInfo', 'roleName, value, vehicleIsNotNative')
 MODULES = {ITEM_TYPES.vehicleRadio: lambda vehicleDescr: vehicleDescr.radio,
  ITEM_TYPES.vehicleEngine: lambda vehicleDescr: vehicleDescr.engine,
  ITEM_TYPES.vehicleChassis: lambda vehicleDescr: vehicleDescr.chassis,
  ITEM_TYPES.vehicleTurret: lambda vehicleDescr: vehicleDescr.turret,
  ITEM_TYPES.vehicleGun: lambda vehicleDescr: vehicleDescr.gun}
-_METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR = 3.6
+METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR = 3.6
 _GUN_EXCLUDED_PARAMS = {GUN_NORMAL: (SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME),
  GUN_CLIP: (RELOAD_TIME_PROP_NAME,),
  GUN_CAN_BE_CLIP: (SHELLS_COUNT_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME)}
-_UI_TO_SERVER_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 'relativePower'),
+_FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 'relativePower'),
  'circularVisionRadius': ('circularVisionRadius', 'relativeVisibility'),
  'radio/distance': ('radioDistance', 'relativeVisibility'),
  'gun/rotationSpeed': ('gunRotationSpeed', 'relativePower'),
  'gun/reloadTime': ('reloadTime',
-                    'damageAvgPerMinute',
+                    'avgDamagePerMinute',
                     'relativePower',
                     'reloadTimeSecs',
                     'clipFireRate'),
@@ -56,7 +62,7 @@ _AUTOCANNON_SHOT_DISTANCE = 400
 def _processExtraBonuses(vehicle):
     result = []
     withRareCamouflage = vehicle.intCD in g_paramsCache.getVehiclesWithoutCamouflage()
-    if any(map(itemgetter(0), vehicle.descriptor.camouflages)) or withRareCamouflage:
+    if withRareCamouflage or any(map(itemgetter(0), vehicle.descriptor.camouflages)):
         result.append(('camouflage', 'extra'))
     return result
 
@@ -78,37 +84,39 @@ def _getInstalledModuleVehicle(vehicleDescr, itemDescr):
     return curVehicle
 
 
+def _average(listOfNumbers):
+    return sum(listOfNumbers) / len(listOfNumbers)
+
+
 class _ParameterBase(object):
 
     def __init__(self, itemDescr, vehicleDescr=None):
         self._itemDescr = itemDescr
         self._vehicleDescr = vehicleDescr
-        self.__preCached = None
-        self.__avgParams = None
+        self.__preCachedInfo = None
+        self.__rawParams = None
         return
 
     def getParamsDict(self):
-        return {}
-
-    @property
-    def precachedParams(self):
-        if self.__preCached is None:
-            self.__preCached = g_paramsCache.getPrecachedParameters(self._itemDescr['compactDescr'])
-        return self.__preCached
-
-    @property
-    def avgParams(self):
-        if self.__avgParams is None:
-            self.__avgParams = self.getAvgParams()
-        return self.__avgParams
-
-    def getAvgParams(self):
-        return self.precachedParams.avgParams
+        return _ParamsDictProxy(self)
 
     def getAllDataDict(self):
         params = self.getParamsDict() if GUI_SETTINGS.technicalInfo else {}
         return {'parameters': params,
          'compatible': self._getCompatible()}
+
+    def _getPrecachedInfo(self):
+        if self.__preCachedInfo is None:
+            self.__preCachedInfo = g_paramsCache.getPrecachedParameters(self._itemDescr['compactDescr'])
+        return self.__preCachedInfo
+
+    def _getRawParams(self):
+        if self.__rawParams is None:
+            self.__rawParams = self._extractRawParams()
+        return self.__rawParams
+
+    def _extractRawParams(self):
+        return self._getPrecachedInfo().params
 
     def _getCompatible(self):
         return tuple()
@@ -122,7 +130,7 @@ class CompatibleParams(_ParameterBase):
 
     def _getCompatible(self):
         curVehicle = _getInstalledModuleVehicle(self._vehicleDescr, self._itemDescr)
-        return (('vehicles', formatters.formatCompatibles(curVehicle, self.compatibles)),)
+        return (('vehicles', _formatCompatibles(curVehicle, self.compatibles)),)
 
 
 class WeightedParam(CompatibleParams):
@@ -138,10 +146,6 @@ class RadioParams(WeightedParam):
     def radioDistance(self):
         return int(round(self._itemDescr['distance']))
 
-    def getParamsDict(self):
-        return {'radioDistance': self.radioDistance,
-         'weight': self.weight}
-
 
 class EngineParams(WeightedParam):
 
@@ -152,11 +156,6 @@ class EngineParams(WeightedParam):
     @property
     def fireStartingChance(self):
         return int(round(self._itemDescr['fireStartingChance'] * ONE_HUNDRED_PERCENTS))
-
-    def getParamsDict(self):
-        return {'enginePower': self.enginePower,
-         'fireStartingChance': self.fireStartingChance,
-         'weight': self.weight}
 
 
 class ChassisParams(WeightedParam):
@@ -171,13 +170,7 @@ class ChassisParams(WeightedParam):
 
     @property
     def isHydraulic(self):
-        return self.precachedParams.isHydraulic
-
-    def getParamsDict(self):
-        return {'maxLoad': self.maxLoad,
-         'rotationSpeed': self.rotationSpeed,
-         'weight': self.weight,
-         'isHydraulic': self.isHydraulic}
+        return self._getPrecachedInfo().isHydraulic
 
 
 class TurretParams(WeightedParam):
@@ -198,31 +191,22 @@ class TurretParams(WeightedParam):
     def gunCompatibles(self):
         return [ gun['userString'] for gun in self._itemDescr['guns'] ]
 
-    def getParamsDict(self):
-        return {'armor': self.armor,
-         'rotationSpeed': self.rotationSpeed,
-         'circularVisionRadius': self.circularVisionRadius,
-         'weight': self.weight}
-
     def _getCompatible(self):
         if self._vehicleDescr is not None:
             curGun = self._vehicleDescr.gun['userString']
         else:
             curGun = None
         compatibleVehicles = list(super(TurretParams, self)._getCompatible())
-        compatibleVehicles.append(('guns', formatters.formatCompatibles(curGun, self.gunCompatibles)))
+        compatibleVehicles.append(('guns', _formatCompatibles(curGun, self.gunCompatibles)))
         return tuple(compatibleVehicles)
 
 
 class VehicleParams(_ParameterBase):
 
     def __init__(self, vehicle):
-        super(VehicleParams, self).__init__(vehicle.getCustomizedDescriptor())
+        super(VehicleParams, self).__init__(self._getVehicleDescriptor(vehicle))
         self.__factors = functions.getVehicleFactors(vehicle)
         self.__coefficients = g_paramsCache.getSimplifiedCoefficients()
-        self.__compatibleBonuses = g_paramsCache.getCompatibleBonuses(vehicle.descriptor)
-        self.__penalties = self.__getPenalties(vehicle)
-        self.__bonuses = self.__getBonuses(vehicle)
 
     @property
     def maxHealth(self):
@@ -243,11 +227,11 @@ class VehicleParams(_ParameterBase):
     @property
     def speedLimits(self):
         limits = self._itemDescr.physics['speedLimits']
-        return map(lambda speed: round(speed * _METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2), limits)
+        return map(lambda speed: round(speed * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, 2), limits)
 
     @property
     def chassisRotationSpeed(self):
-        allTrfs = self.__factors['chassis/terrainResistance']
+        allTrfs = self.__getTerrainResistanceFactors()
         avgTrf = sum(allTrfs) / len(allTrfs)
         return math.degrees(items_utils.getChassisRotationSpeed(self._itemDescr, self.__factors)) / avgTrf
 
@@ -257,25 +241,27 @@ class VehicleParams(_ParameterBase):
 
     @property
     def damage(self):
-        shotShell = self._itemDescr.shot['shell']
-        damage = shotShell[DAMAGE_PROP_NAME][0]
-        damageRandomization = shotShell['damageRandomization']
-        return (round(damage - damage * damageRandomization), round(damage + damage * damageRandomization))
+        avgDamage = self.avgDamage
+        damageRandomization = self._itemDescr.shot['shell']['damageRandomization']
+        return (int(avgDamage - avgDamage * damageRandomization), int(ceil(avgDamage + avgDamage * damageRandomization)))
 
     @property
-    def damageAvg(self):
+    def avgDamage(self):
         return self._itemDescr.shot['shell'][DAMAGE_PROP_NAME][0]
 
     @property
-    def damageAvgPerMinute(self):
-        return round(self.reloadTime * self._itemDescr.shot['shell'][DAMAGE_PROP_NAME][0])
+    def avgDamagePerMinute(self):
+        return round(self.reloadTime * self.avgDamage)
+
+    @property
+    def avgPiercingPower(self):
+        return self._itemDescr.shot[PIERCING_POWER_PROP_NAME][0]
 
     @property
     def piercingPower(self):
-        shot = self._itemDescr.shot
-        piercingPower = shot[PIERCING_POWER_PROP_NAME][0]
-        piercingPowerRandomization = shot['shell']['piercingPowerRandomization']
-        return (round(piercingPower - piercingPower * piercingPowerRandomization), round(piercingPower + piercingPower * piercingPowerRandomization))
+        piercingPower = self.avgPiercingPower
+        delta = piercingPower * self._itemDescr.shot['shell']['piercingPowerRandomization']
+        return (int(piercingPower - delta), int(ceil(piercingPower + delta)))
 
     @property
     def reloadTime(self):
@@ -327,7 +313,7 @@ class VehicleParams(_ParameterBase):
         if self.__hasClipGun():
             return None
         else:
-            return round(time_utils.ONE_MINUTE / self.reloadTime, 1)
+            return round(time_utils.ONE_MINUTE / self.reloadTime, 3)
             return None
 
     @property
@@ -336,10 +322,16 @@ class VehicleParams(_ParameterBase):
         penetration = self._itemDescr.shot[PIERCING_POWER_PROP_NAME][0]
         rotationSpeed = self.turretRotationSpeed or self.gunRotationSpeed
         turretCoefficient = 1 if self.__hasTurret() else coeffs['turretCoefficient']
-        spgCorrection = 6 if 'SPG' in self._itemDescr.type.tags else 1
+        heCorrection = 1.0
+        if 'SPG' in self._itemDescr.type.tags:
+            spgCorrection = 6
+        else:
+            spgCorrection = 1
+            if self.__currentShot()['shell']['kind'] == 'HIGH_EXPLOSIVE':
+                heCorrection = coeffs['alphaDamage']
         gunCorrection = self.__adjustmentCoefficient('guns').get(self._itemDescr.gun['name'], {})
         gunCorrection = gunCorrection.get('caliberCorrection', 1)
-        value = round(self.damageAvgPerMinute * penetration / self.shotDispersionAngle * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection)
+        value = round(self.avgDamagePerMinute * penetration / self.shotDispersionAngle * (coeffs['rotationIntercept'] + coeffs['rotationSlope'] * rotationSpeed) * turretCoefficient * coeffs['normalization'] * self.__adjustmentCoefficient('power') * spgCorrection * gunCorrection * heCorrection)
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
@@ -435,37 +427,9 @@ class VehicleParams(_ParameterBase):
             return None
             return None
 
-    def getParamsDict(self):
-        result = {'maxHealth': self.maxHealth,
-         'vehicleWeight': self.vehicleWeight,
-         'enginePower': self.enginePower,
-         'enginePowerPerTon': self.enginePowerPerTon,
-         'speedLimits': self.speedLimits,
-         'chassisRotationSpeed': self.chassisRotationSpeed,
-         'hullArmor': self.hullArmor,
-         DAMAGE_PROP_NAME: self.damage,
-         'damageAvg': self.damageAvg,
-         'damageAvgPerMinute': self.damageAvgPerMinute,
-         PIERCING_POWER_PROP_NAME: self.piercingPower,
-         RELOAD_TIME_PROP_NAME: self.reloadTime,
-         'circularVisionRadius': self.circularVisionRadius,
-         'radioDistance': self.radioDistance,
-         'explosionRadius': self.explosionRadius,
-         AIMING_TIME_PROP_NAME: self.aimingTime,
-         'shotDispersionAngle': self.shotDispersionAngle,
-         'relativePower': self.relativePower,
-         'relativeArmor': self.relativeArmor,
-         'relativeMobility': self.relativeMobility,
-         'relativeVisibility': self.relativeVisibility,
-         'relativeCamouflage': self.relativeCamouflage,
-         'pitchLimits': self.pitchLimits,
-         'invisibilityStillFactor': self.invisibilityStillFactor,
-         'invisibilityMovingFactor': self.invisibilityMovingFactor,
-         'switchOnTime': self.switchOnTime,
-         'switchOffTime': self.switchOffTime}
-        conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs')
-        result.update(self.__packConditionalParams(conditionalParams))
-        return result
+    def getParamsDict(self, preload=False):
+        conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime')
+        return _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None),))
 
     def getAllDataDict(self):
 
@@ -482,23 +446,14 @@ class VehicleParams(_ParameterBase):
         result['base'] = base
         return result
 
-    def getBonuses(self):
-        return self.__bonuses
-
-    def getPenalties(self):
-        return self.__penalties
-
-    def __getBonuses(self, vehicle):
+    @staticmethod
+    def getBonuses(vehicle):
         result = map(lambda eq: (eq.name, eq.itemTypeName), [ item for item in vehicle.eqs if item is not None ])
         optDevs = map(lambda device: (device.name, device.itemTypeName), [ item for item in vehicle.optDevices if item is not None ])
         result.extend(optDevs)
         for _, tankman in vehicle.crew:
             if tankman is None:
                 continue
-            if tankman.roleLevel >= ONE_HUNDRED_PERCENTS:
-                for role in tankman.combinedRoles:
-                    result.append((role, 'role'))
-
             for skill in tankman.skills:
                 if skill.isEnable and skill.isActive:
                     result.append((skill.name, 'skill'))
@@ -506,50 +461,45 @@ class VehicleParams(_ParameterBase):
         result.extend(_processExtraBonuses(vehicle))
         return set(result)
 
-    def __getPenalties(self, vehicle):
+    def getPenalties(self, vehicle):
         crew, emptySlots, otherVehicleSlots = functions.extractCrewDescrs(vehicle, replaceNone=False)
         crewFactors = items_utils.getCrewAffectedFactors(vehicle.descriptor, crew)
         result = {}
-        currParams = self.getParamsDict()
-        roles = vehicle.descriptor.type.crewRoles
+        currParams = self.getParamsDict(True)
         for slotId, factors in crewFactors.iteritems():
             for factor, factorValue in factors.iteritems():
-                if factor in _UI_TO_SERVER_MAP:
+                if factor in _FACTOR_TO_SKILL_PENALTY_MAP:
                     oldFactor = copy.copy(self.__factors[factor])
                     self.__factors[factor] = _universalSum(oldFactor, factorValue)
-                    params = _UI_TO_SERVER_MAP[factor]
+                    params = _FACTOR_TO_SKILL_PENALTY_MAP[factor]
                     for paramName in params:
                         paramPenalties = result.setdefault(paramName, {})
                         if slotId not in emptySlots:
                             newValue = getattr(self, paramName)
                             if newValue is None:
                                 continue
-                            if isinstance(newValue, collections.Iterable):
-                                delta = sum(currParams[paramName]) - sum(newValue)
-                            else:
-                                delta = currParams[paramName] - newValue
-                            if delta > 0 and paramName in BACKWARD_QUALITY_PARAMS or delta < 0 and paramName not in BACKWARD_QUALITY_PARAMS:
-                                paramPenalties[slotId] = delta
+                            state = rateParameterState(paramName, currParams[paramName], newValue)
+                            if isinstance(currParams[paramName], collections.Iterable):
+                                states, deltas = zip(*state)
+                                if findFirst(lambda v: v == PARAM_STATE.WORSE, states):
+                                    paramPenalties[slotId] = deltas
+                            elif state[0] == PARAM_STATE.WORSE:
+                                paramPenalties[slotId] = state[1]
                         paramPenalties[slotId] = 0
 
                     self.__factors[factor] = oldFactor
 
+        roles = vehicle.descriptor.type.crewRoles
         for paramName, penalties in result.items():
-            result[paramName] = [ (roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in penalties.iteritems() ]
+            result[paramName] = [ _PenaltyInfo(roles[slotId][0], value, slotId in otherVehicleSlots) for slotId, value in penalties.iteritems() ]
 
-        return result
+        return {k:v for k, v in result.iteritems() if v}
+
+    def _getVehicleDescriptor(self, vehicle):
+        return vehicle.getCustomizedDescriptor()
 
     def __adjustmentCoefficient(self, paramName):
         return self._itemDescr.type.clientAdjustmentFactors[paramName]
-
-    def __packConditionalParams(self, params):
-        result = {}
-        for paramName in params:
-            paramValue = getattr(self, paramName)
-            if paramValue is not None:
-                result[paramName] = paramValue
-
-        return result
 
     def __getGunYawLimits(self):
         limits = self._itemDescr.gun['turretYawLimits']
@@ -562,11 +512,9 @@ class VehicleParams(_ParameterBase):
         return len(vDescr.hull['fakeTurrets']['lobby']) != len(vDescr.turrets)
 
     def __getRealSpeedLimit(self):
-        engineName = self._itemDescr.engine.get('name', '')
-        chassisName = self._itemDescr.chassis.get('name', '')
-        enginePower = self._itemDescr.type.xphysics['engines'][engineName]['smplEnginePower']
-        rollingFriction = self._itemDescr.type.xphysics['chassis'][chassisName]['grounds']['ground']['rollingFriction']
-        return enginePower / self.vehicleWeight.current * _METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
+        enginePower = self.__getEnginePhysics()['smplEnginePower']
+        rollingFriction = self.__getChassisPhysics()['grounds']['ground']['rollingFriction']
+        return enginePower / self.vehicleWeight.current * METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR * self.__factors['engine/power'] / 12.25 / rollingFriction
 
     def __getInvisibilityValues(self):
         camouflageFactor = self.__factors.get('camouflage', 1)
@@ -599,6 +547,24 @@ class VehicleParams(_ParameterBase):
     def __hasClipGun(self):
         return self._itemDescr.gun['clip'][0] != 1
 
+    def __getChassisPhysics(self):
+        chassisName = self._itemDescr.chassis.get('name', '')
+        return self._itemDescr.type.xphysics['chassis'][chassisName]
+
+    def __getEnginePhysics(self):
+        engineName = self._itemDescr.engine.get('name', '')
+        return self._itemDescr.type.xphysics['engines'][engineName]
+
+    @staticmethod
+    def __mapGrounds(itemsDict):
+        return (itemsDict['firm'], itemsDict['medium'], itemsDict['soft'])
+
+    def __currentShot(self):
+        return self._itemDescr.gun['shots'][self._itemDescr.activeGunShotIndex]
+
+    def __getTerrainResistanceFactors(self):
+        return map(operator.mul, self.__factors['chassis/terrainResistance'], self._itemDescr.physics['rollingFrictionFactors'])
+
 
 class GunParams(WeightedParam):
 
@@ -608,49 +574,52 @@ class GunParams(WeightedParam):
 
     @property
     def shellsCount(self):
-        return self.avgParams[SHELLS_COUNT_PROP_NAME]
+        return self._getRawParams()[SHELLS_COUNT_PROP_NAME]
 
     @property
     def shellReloadingTime(self):
-        return self.avgParams[SHELL_RELOADING_TIME_PROP_NAME]
+        return self._getRawParams()[SHELL_RELOADING_TIME_PROP_NAME]
 
     @property
     def reloadMagazineTime(self):
-        return self.avgParams[RELOAD_MAGAZINE_TIME_PROP_NAME]
+        return self._getRawParams()[RELOAD_MAGAZINE_TIME_PROP_NAME]
 
     @property
     def reloadTime(self):
-        return self.avgParams[RELOAD_TIME_PROP_NAME]
+        return self._getRawParams()[RELOAD_TIME_PROP_NAME]
 
     @property
     def avgPiercingPower(self):
-        return self.avgParams[PIERCING_POWER_PROP_NAME]
+        return self._getRawParams()[PIERCING_POWER_PROP_NAME]
 
     @property
-    def avgDamage(self):
-        return self.avgParams[DAMAGE_PROP_NAME]
+    def avgDamageList(self):
+        """
+        Returns: list of average damage for all possible shells
+        """
+        return self._getRawParams()[DAMAGE_PROP_NAME]
 
     @property
     def dispertionRadius(self):
-        return self.avgParams[DISPERSION_RADIUS_PROP_NAME]
+        return self._getRawParams()[DISPERSION_RADIUS_PROP_NAME]
 
     @property
     def aimingTime(self):
-        return self.avgParams[AIMING_TIME_PROP_NAME]
+        return self._getRawParams()[AIMING_TIME_PROP_NAME]
 
     @property
     def compatibles(self):
         allVehiclesNames = set(g_paramsCache.getComponentVehiclesNames(self._itemDescr['compactDescr']))
-        clipVehiclesNames = set(self.precachedParams.clipVehiclesNames)
+        clipVehiclesNames = set(self._getPrecachedInfo().clipVehiclesNames)
         return allVehiclesNames.difference(clipVehiclesNames)
 
     @property
     def clipVehiclesCompatibles(self):
-        return set(self.precachedParams.clipVehiclesNames)
+        return set(self._getPrecachedInfo().clipVehiclesNames)
 
     @property
     def shellsCompatibles(self):
-        return self.avgParams.get(SHELLS_PROP_NAME, tuple())
+        return self._getRawParams().get(SHELLS_PROP_NAME, tuple())
 
     @property
     def maxShotDistance(self):
@@ -658,42 +627,29 @@ class GunParams(WeightedParam):
 
     @property
     def turretsCompatibles(self):
-        return self.precachedParams.turrets
+        return self._getPrecachedInfo().turrets
 
     @property
     def clipVehiclesCD(self):
-        return self.precachedParams.clipVehicles
+        return self._getPrecachedInfo().clipVehicles
 
     @property
     def avgDamagePerMinute(self):
-        return round(self.reloadTime[0] * self.avgDamage[0])
+        return round(self.reloadTime[0] * self.avgDamageList[0])
 
-    def getAvgParams(self):
+    def _extractRawParams(self):
         if self._vehicleDescr is not None:
             descriptors = getGunDescriptors(self._itemDescr, self._vehicleDescr)
-            avgParams = calcGunParams(self._itemDescr, descriptors)
+            params = calcGunParams(self._itemDescr, descriptors)
         else:
-            avgParams = self.precachedParams.avgParams
-        return avgParams
+            params = self._getPrecachedInfo().params
+        return params
 
     def getParamsDict(self):
-        result = {'caliber': self.caliber,
-         'shellsCount': self.shellsCount,
-         'shellReloadingTime': self.shellReloadingTime,
-         'reloadMagazineTime': self.reloadMagazineTime,
-         'reloadTime': self.reloadTime,
-         'avgPiercingPower': self.avgPiercingPower,
-         'avgDamage': self.avgDamage,
-         'avgDamagePerMinute': self.avgDamagePerMinute,
-         'dispertionRadius': self.dispertionRadius,
-         'aimingTime': self.aimingTime,
-         'weight': self.weight}
-        if self.maxShotDistance == _AUTOCANNON_SHOT_DISTANCE:
-            result.update({'maxShotDistance': self.maxShotDistance})
-        return result
+        return _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE),))
 
     def getReloadingType(self, vehicleCD=None):
-        return self.precachedParams.getReloadingType(vehicleCD)
+        return self._getPrecachedInfo().getReloadingType(vehicleCD)
 
     def getAllDataDict(self):
         result = super(GunParams, self).getAllDataDict()
@@ -710,23 +666,15 @@ class GunParams(WeightedParam):
         result = []
         if len(clipVehicleNamesList) != 0:
             if len(vehiclesNamesList):
-                result.append(('uniChargedVehicles', formatters.formatCompatibles(curVehicle, vehiclesNamesList)))
-            result.append(('clipVehicles', formatters.formatCompatibles(curVehicle, clipVehicleNamesList)))
+                result.append(('uniChargedVehicles', _formatCompatibles(curVehicle, vehiclesNamesList)))
+            result.append(('clipVehicles', _formatCompatibles(curVehicle, clipVehicleNamesList)))
         else:
-            result.append(('vehicles', formatters.formatCompatibles(curVehicle, vehiclesNamesList)))
+            result.append(('vehicles', _formatCompatibles(curVehicle, vehiclesNamesList)))
         result.append(('shells', ', '.join(self.shellsCompatibles)))
         return tuple(result)
 
 
 class ShellParams(CompatibleParams):
-
-    def getAvgParams(self):
-        if self._vehicleDescr is not None:
-            descriptors = getShellDescriptors(self._itemDescr, self._vehicleDescr)
-            avgParams = calcShellParams(descriptors)
-        else:
-            avgParams = self.precachedParams.avgParams
-        return avgParams
 
     @property
     def caliber(self):
@@ -734,11 +682,19 @@ class ShellParams(CompatibleParams):
 
     @property
     def piercingPower(self):
-        return self.avgParams[PIERCING_POWER_PROP_NAME]
+        return self._getRawParams()[PIERCING_POWER_PROP_NAME]
 
     @property
     def damage(self):
-        return self.avgParams[DAMAGE_PROP_NAME]
+        return self._getRawParams()[DAMAGE_PROP_NAME]
+
+    @property
+    def avgDamage(self):
+        return self._itemDescr[DAMAGE_PROP_NAME][0]
+
+    @property
+    def avgPiercingPower(self):
+        return _average(self.piercingPower)
 
     @property
     def explosionRadius(self):
@@ -755,14 +711,13 @@ class ShellParams(CompatibleParams):
             result = []
             shellDescriptor = getShellDescriptors(self._itemDescr, self._vehicleDescr)[0]
             piercingMax, piercingMin = shellDescriptor[PIERCING_POWER_PROP_NAME]
-            randFactor = self._itemDescr['piercingPowerRandomization']
             lossPerMeter = (piercingMax - piercingMin) / 400.0
             maxDistance = self.maxShotDistance
             for distance in PIERCING_DISTANCES:
                 if distance > maxDistance:
                     distance = int(maxDistance)
                 currPiercing = piercingMax - lossPerMeter * (distance - 100.0)
-                result.append((distance, (currPiercing - randFactor * currPiercing, currPiercing + randFactor * currPiercing)))
+                result.append((distance, currPiercing))
 
             return result
         else:
@@ -777,19 +732,23 @@ class ShellParams(CompatibleParams):
         return
 
     @property
+    def isBasic(self):
+        return self._vehicleDescr is not None and getBasicShell(self._vehicleDescr)['compactDescr'] == self._itemDescr['compactDescr']
+
+    @property
     def compatibles(self):
-        return self.precachedParams.guns
+        return self._getPrecachedInfo().guns
 
     def getParamsDict(self):
-        result = {'caliber': self.caliber,
-         'piercingPower': self.piercingPower,
-         'damage': self.damage,
-         'explosionRadius': self.explosionRadius,
-         'piercingPowerTable': self.piercingPowerTable}
-        maxShotDistance = self.maxShotDistance
-        if maxShotDistance == _AUTOCANNON_SHOT_DISTANCE:
-            result.update({'maxShotDistance': maxShotDistance})
-        return result
+        return _ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == _AUTOCANNON_SHOT_DISTANCE),))
+
+    def _extractRawParams(self):
+        if self._vehicleDescr is not None:
+            descriptors = getShellDescriptors(self._itemDescr, self._vehicleDescr)
+            params = calcShellParams(descriptors)
+        else:
+            params = self._getPrecachedInfo().params
+        return params
 
     def _getCompatible(self):
         return (('shellGuns', ', '.join(self.compatibles)),)
@@ -799,15 +758,11 @@ class OptionalDeviceParams(WeightedParam):
 
     @property
     def weight(self):
-        return _Weight(*getOptionalDeviceWeight(self._itemDescr, self._vehicleDescr)) if self._vehicleDescr is not None else _Weight(*self.precachedParams.weight)
+        return _Weight(*getOptionalDeviceWeight(self._itemDescr, self._vehicleDescr)) if self._vehicleDescr is not None else _Weight(*self._getPrecachedInfo().weight)
 
     @property
     def nations(self):
-        return self.precachedParams.nations
-
-    def getParamsDict(self):
-        return {'weight': self.weight,
-         'nations': self.nations}
+        return self._getPrecachedInfo().nations
 
     def _getCompatible(self):
         return tuple()
@@ -817,9 +772,127 @@ class EquipmentParams(_ParameterBase):
 
     @property
     def nations(self):
-        return self.precachedParams.nations
+        return self._getPrecachedInfo().nations
 
     def getParamsDict(self):
         params = {'nations': self.nations}
-        params.update(self.avgParams)
+        params.update(self._getPrecachedInfo().params)
         return params
+
+
+class _ParamsDictProxy(dict):
+
+    def __init__(self, calculator, preload=False, conditions=None):
+        """
+        Args:
+            calculator: object which is used for calculation of returned params
+            preload: boolean, if true - all possible values are calculated and loaded
+                     immediately during initialization
+            conditions: (([key1, key2..], condition), ...) custom conditions for specialized keys
+                        for the same key can be added different conditions
+                        each condition is presented by function which takes value corresponding to specified key
+                        and returns boolean.
+                        If any of condition functions returns False __getitem__ will raise KeyError
+        """
+        super(_ParamsDictProxy, self).__init__()
+        self.__paramsCalculator = calculator
+        self.__cachedParams = {}
+        self.__allAreLoaded = False
+        self.__conditions = defaultdict(list)
+        self.__filteredByConditions = set()
+        self.__popped = set()
+        if conditions is not None:
+            for keys, condition in conditions:
+                for key in keys:
+                    self.__conditions[key].append(condition)
+
+        if preload:
+            self.__loadAllValues()
+        return
+
+    def pop(self, item, default=None):
+        self.__loadAllValues()
+        if item in self:
+            value = self[item]
+            self.__popped.add(item)
+            del self.__cachedParams[item]
+        else:
+            value = default
+        return value
+
+    def get(self, k, default=None):
+        if k in self:
+            return self[k]
+        else:
+            return default
+
+    def keys(self):
+        return list(self.__iter__())
+
+    def values(self):
+        self.__loadAllValues()
+        return self.__cachedParams.values()
+
+    def items(self):
+        self.__loadAllValues()
+        return self.__cachedParams.items()
+
+    def iteritems(self):
+        self.__loadAllValues()
+        return self.__cachedParams.iteritems()
+
+    def __getitem__(self, item):
+        if item not in self.__cachedParams:
+            if item not in self.__filteredByConditions and item not in self.__popped and hasattr(self.__paramsCalculator, item):
+                value = getattr(self.__paramsCalculator, item)
+                if inspect.ismethod(value) or not self.__checkConditions(item, value):
+                    self.__filteredByConditions.add(item)
+                    raise KeyError
+                self.__cachedParams[item] = value
+            else:
+                raise KeyError
+        return self.__cachedParams.get(item)
+
+    def __iter__(self):
+        self.__loadAllValues()
+        for k in self.__cachedParams.keys():
+            if k not in self.__popped:
+                yield k
+
+    def __len__(self):
+        self.__loadAllValues()
+        return len(self.__cachedParams)
+
+    def __contains__(self, item):
+        try:
+            _ = self[item]
+            return True
+        except KeyError:
+            return False
+
+    def __loadAllValues(self):
+        """
+        scans calculator object and loads all its properties, which fits conditions.
+        Is necessary for proper work of __iter__ an __len__
+        """
+        if not self.__allAreLoaded:
+            for k, v in self.__paramsCalculator.__class__.__dict__.iteritems():
+                if isinstance(v, property):
+                    value = getattr(self.__paramsCalculator, k)
+                    if self.__checkConditions(k, value):
+                        self.__cachedParams[k] = value
+
+            self.__allAreLoaded = True
+
+    def __checkConditions(self, key, value):
+        if key in self.__conditions:
+            for func in self.__conditions[key]:
+                if not func(value):
+                    self.__filteredByConditions.add(key)
+                    return False
+
+        return True
+
+
+def _formatCompatibles(name, collection):
+    return ', '.join([ (text_styles.neutral(c) if c == name else text_styles.main(c)) for c in collection ])

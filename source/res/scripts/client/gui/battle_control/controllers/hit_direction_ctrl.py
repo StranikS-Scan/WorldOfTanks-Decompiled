@@ -3,12 +3,14 @@
 from functools import partial
 import weakref
 import BigWorld
+from AvatarInputHandler import AvatarInputHandler
 from account_helpers.settings_core.settings_constants import DAMAGE_INDICATOR, GRAPHICS
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN, BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.battle_control.battle_constants import HIT_FLAGS
+from gui.battle_control import avatar_getter
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -17,7 +19,8 @@ _VISUAL_DAMAGE_INDICATOR_SETTINGS = (DAMAGE_INDICATOR.TYPE,
  DAMAGE_INDICATOR.VEHICLE_INFO,
  DAMAGE_INDICATOR.DAMAGE_VALUE,
  DAMAGE_INDICATOR.ANIMATION,
- GRAPHICS.COLOR_BLIND)
+ GRAPHICS.COLOR_BLIND,
+ DAMAGE_INDICATOR.DYNAMIC_INDICATOR)
 
 class DAMAGE_INDICATOR_PRESETS(CONST_CONTAINER):
     ALL = (0,)
@@ -142,10 +145,10 @@ class _HitDirection(object):
 
 
 class HitDirectionController(IViewComponentsController):
-    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorPreset', '__weakref__')
+    __slots__ = ('__pull', '__ui', '__isVisible', '__callbackIDs', '__damageIndicatorPreset', '__arenaDP', '__weakref__')
     settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self):
+    def __init__(self, setup):
         super(HitDirectionController, self).__init__()
         assert HIT_INDICATOR_MAX_ON_SCREEN, 'Can not be zero'
         self.__pull = [ _HitDirection(idx_) for idx_ in xrange(HIT_INDICATOR_MAX_ON_SCREEN) ]
@@ -153,6 +156,7 @@ class HitDirectionController(IViewComponentsController):
         self.__isVisible = True
         self.__callbackIDs = {}
         self.__damageIndicatorPreset = DAMAGE_INDICATOR_PRESETS.ALL
+        self.__arenaDP = weakref.proxy(setup.arenaDP)
         return
 
     def getControllerID(self):
@@ -165,8 +169,14 @@ class HitDirectionController(IViewComponentsController):
 
     def stopControl(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        handler = avatar_getter.getInputHandler()
+        if handler is not None:
+            if isinstance(handler, AvatarInputHandler):
+                handler.onPostmortemKillerVision -= self.__onPostmortemKillerVision
         g_eventBus.removeListener(GameEvent.GUI_VISIBILITY, self.__handleGUIVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__clearHideCallbacks()
+        self.__arenaDP = None
+        return
 
     def getContainer(self):
         return self.__ui
@@ -191,11 +201,17 @@ class HitDirectionController(IViewComponentsController):
         self.__ui.invalidateSettings()
         self.__ui.setVisible(self.__isVisible)
         proxy = weakref.proxy(self.__ui)
+        handler = avatar_getter.getInputHandler()
+        if handler is not None:
+            if isinstance(handler, AvatarInputHandler):
+                handler.onPostmortemKillerVision += self.__onPostmortemKillerVision
         for hit in self.__pull:
             idx = hit.getIndex()
             duration = hit.setIndicator(proxy)
             if duration:
                 self.__callbackIDs[idx] = BigWorld.callback(duration, partial(self.__tickToHideHit, idx))
+
+        return
 
     def clearViewComponents(self):
         for hit in self.__pull:
@@ -324,6 +340,10 @@ class HitDirectionController(IViewComponentsController):
 
         return
 
+    def __onPostmortemKillerVision(self, killerVehicleID):
+        if killerVehicleID != self.__arenaDP.getPlayerVehicleID():
+            self._hideAllHits()
+
 
 class HitDirectionControllerPlayer(HitDirectionController):
 
@@ -334,6 +354,6 @@ class HitDirectionControllerPlayer(HitDirectionController):
 
 def createHitDirectionController(setup):
     if setup.isReplayPlaying:
-        return HitDirectionControllerPlayer()
+        return HitDirectionControllerPlayer(setup)
     else:
-        return HitDirectionController()
+        return HitDirectionController(setup)

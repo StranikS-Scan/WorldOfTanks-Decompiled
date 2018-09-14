@@ -77,7 +77,6 @@ class SettingsCore(ISettingsCore):
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
          (GAME.BATTLE_LOADING_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_INFO, GAME.BATTLE_LOADING_INFO)),
-         (GAME.SIMPLIFIED_TTC, options.StorageAccountSetting(GAME.SIMPLIFIED_TTC, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
          (GAME.DYNAMIC_CAMERA, options.DynamicCamera(GAME.DYNAMIC_CAMERA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.INCREASED_ZOOM, options.IncreasedZoomSetting(GAME.INCREASED_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
@@ -110,12 +109,14 @@ class SettingsCore(ISettingsCore):
          (GAME.MINIMAP_MAX_VIEW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_MAX_VIEW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_DRAW_RANGE, options.StorageAccountSetting(GAME.MINIMAP_DRAW_RANGE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.CAROUSEL_TYPE, options.CarouselTypeSetting(GAME.CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.DOUBLE_CAROUSEL_TYPE, options.DoubleCarouselTypeSetting(GAME.DOUBLE_CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.VEHICLE_CAROUSEL_STATS, options.VehicleCarouselStatsSetting(GAME.VEHICLE_CAROUSEL_STATS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.RESOLUTION, options.ResolutionSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.REFRESH_RATE, options.RefreshRateSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.VIDEO_MODE, options.VideoModeSettings(storage=VIDEO_SETTINGS_STORAGE)),
-         (GRAPHICS.BORDERLESS_SIZE, options.BorderlessSizeSettings()),
+         (GRAPHICS.BORDERLESS_SIZE, options.BorderlessSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
          (GRAPHICS.TRIPLE_BUFFERED, options.TripleBufferedSetting()),
          (GRAPHICS.VERTICAL_SYNC, options.VerticalSyncSetting()),
@@ -123,7 +124,6 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.CUSTOM_AA, options.CustomAASetting()),
          (GRAPHICS.GRAPHICS_QUALITY_HD_SD, options.GraphicsQualityNote()),
          (GRAPHICS.GAMMA, options.GammaSetting()),
-         (GRAPHICS.ASPECT_RATIO, options.AspectRatioSetting()),
          (GRAPHICS.FPS_PERFOMANCER, options.FPSPerfomancerSetting(GRAPHICS.FPS_PERFOMANCER, storage=GRAPHICS_SETTINGS_STORAGE)),
          (GRAPHICS.COLOR_FILTER_INTENSITY, options.ColorFilterIntensitySetting()),
          (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
@@ -200,6 +200,7 @@ class SettingsCore(ISettingsCore):
          (DAMAGE_INDICATOR.DAMAGE_VALUE, options.StorageAccountSetting(DAMAGE_INDICATOR.DAMAGE_VALUE, storage=FEEDBACK_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.VEHICLE_INFO, options.StorageAccountSetting(DAMAGE_INDICATOR.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE)),
          (DAMAGE_INDICATOR.ANIMATION, options.StorageAccountSetting(DAMAGE_INDICATOR.ANIMATION, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_INDICATOR.DYNAMIC_INDICATOR, options.StorageAccountSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR, storage=FEEDBACK_SETTINGS_STORAGE)),
          (DAMAGE_LOG.TOTAL_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.TOTAL_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
          (DAMAGE_LOG.BLOCKED_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.BLOCKED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
          (DAMAGE_LOG.ASSIST_DAMAGE, options.StorageAccountSetting(DAMAGE_LOG.ASSIST_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
@@ -217,7 +218,12 @@ class SettingsCore(ISettingsCore):
          (BATTLE_EVENTS.BASE_CAPTURE, options.StorageAccountSetting(BATTLE_EVENTS.BASE_CAPTURE, storage=FEEDBACK_SETTINGS_STORAGE)),
          (BATTLE_EVENTS.ENEMY_CRITICAL_HIT, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_CRITICAL_HIT, storage=FEEDBACK_SETTINGS_STORAGE)),
          (BATTLE_EVENTS.EVENT_NAME, options.StorageAccountSetting(BATTLE_EVENTS.EVENT_NAME, storage=FEEDBACK_SETTINGS_STORAGE)),
-         (BATTLE_EVENTS.VEHICLE_INFO, options.StorageAccountSetting(BATTLE_EVENTS.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE))))
+         (BATTLE_EVENTS.VEHICLE_INFO, options.StorageAccountSetting(BATTLE_EVENTS.VEHICLE_INFO, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.ENEMY_WORLD_COLLISION, options.StorageAccountSetting(BATTLE_EVENTS.ENEMY_WORLD_COLLISION, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.RECEIVED_DAMAGE, options.StorageAccountSetting(BATTLE_EVENTS.RECEIVED_DAMAGE, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (BATTLE_EVENTS.RECEIVED_CRITS, options.StorageAccountSetting(BATTLE_EVENTS.RECEIVED_CRITS, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.SHOW_EVENT_TYPES, options.DamageLogEventTypesSetting(DAMAGE_LOG.SHOW_EVENT_TYPES, storage=FEEDBACK_SETTINGS_STORAGE)),
+         (DAMAGE_LOG.EVENT_POSITIONS, options.DamageLogEventPositionsSetting(DAMAGE_LOG.EVENT_POSITIONS, storage=FEEDBACK_SETTINGS_STORAGE))))
         self.__options.init()
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self.interfaceScale.init()

@@ -90,7 +90,7 @@ def _detectCurrentScreen():
             if dialog is not None:
                 dialog.cancel()
         view = lobby.containerManager.getView(ViewTypes.DEFAULT)
-        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected() and not _isConnecting:
+        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionManager.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
             BigWorld.callback(0.2, lambda : _detectCurrentScreen())

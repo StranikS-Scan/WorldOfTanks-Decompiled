@@ -66,8 +66,10 @@ class _PotapovQuestsProgressRequester(_QuestsProgressRequester):
         return self.__getQuestsData()['lastIDs'].get(nationID, (-1, -1, -1))
 
     def _response(self, resID, value, callback):
-        self.__pqStorage = potapov_quests.PQStorage(value['potapovQuests']['compDescr'])
+        if value is not None:
+            self.__pqStorage = potapov_quests.PQStorage(value['potapovQuests']['compDescr'])
         super(_QuestsProgressRequester, self)._response(resID, value, callback)
+        return
 
     def __getPotapovQuestsData(self):
         return self.getCacheValue('potapovQuests', {})

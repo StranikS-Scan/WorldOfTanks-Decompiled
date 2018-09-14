@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+from ConnectionManager import connectionManager
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.shared.notifications import NotificationPriorityLevel
 from messenger import g_settings
@@ -64,7 +65,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         mvcInstance = NotificationMVC.g_instance
         mvcInstance.getAlertController().onAllAlertsClosed -= self.__allAlertsMessageCloseHandler
         self.cleanUp()
-        mvcInstance.cleanUp()
+        mvcInstance.cleanUp(resetCounter=connectionManager.isDisconnected())
         super(NotificationPopUpViewer, self)._dispose()
 
     def __onNotificationReceived(self, notification):

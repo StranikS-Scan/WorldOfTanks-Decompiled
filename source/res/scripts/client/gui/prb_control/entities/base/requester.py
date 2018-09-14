@@ -28,3 +28,24 @@ class IPrbListRequester(object):
             ctx: request context
         """
         pass
+
+
+class IUnitRequestProcessor(object):
+
+    def __init__(self):
+        super(IUnitRequestProcessor, self).__init__()
+
+    def init(self):
+        pass
+
+    def fini(self):
+        pass
+
+    def doRequest(self, ctx, methodName, *args, **kwargs):
+        pass
+
+    def doRequestChain(self, ctx, chain):
+        pass
+
+    def doRawRequest(self, methodName, *args, **kwargs):
+        pass

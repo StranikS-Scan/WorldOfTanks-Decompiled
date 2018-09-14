@@ -45,3 +45,6 @@ class BrowserMeta(BaseDAAPIComponent):
 
     def as_hideServiceViewS(self):
         return self.flashObject.as_hideServiceView() if self._isDAAPIInited() else None
+
+    def as_changeTitleS(self, title):
+        return self.flashObject.as_changeTitle(title) if self._isDAAPIInited() else None

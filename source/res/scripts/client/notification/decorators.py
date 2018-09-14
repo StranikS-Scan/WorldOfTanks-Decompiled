@@ -18,10 +18,8 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, NOTIFICATION_GROUP
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
-from gui.clubs.formatters import ClubInviteHtmlTextFormatter, ClubAppsHtmlTextFormatter
 from helpers import time_utils
 from skeletons.gui.clans import IClanController
-from skeletons.gui.clubs import IClubsController
 
 def _makeShowTime():
     return BigWorld.time()
@@ -250,7 +248,7 @@ class PrbInviteDecorator(_NotificationDecorator):
                 cancelState |= NOTIFICATION_BUTTON_STATE.ENABLED
         else:
             submitState = cancelState = 0
-        message = g_settings.msgTemplates.format('invite', ctx={'text': formatter.getText(invite)}, data={'timestamp': self._createdAt,
+        message = g_settings.msgTemplates.format('invite', ctx={'text': formatter.getText(invite)}, data={'timestamp': invite.createTime,
          'icon': makePathToIcon(formatter.getIconName(invite)),
          'defaultIcon': makePathToIcon('prebattleInviteIcon'),
          'buttonsStates': {'submit': submitState,
@@ -320,10 +318,11 @@ class FriendshipRequestDecorator(_NotificationDecorator):
 
 
 class WGNCPopUpDecorator(_NotificationDecorator):
-    __slots__ = ('_itemName',)
+    __slots__ = ('_itemName', '__receivedAt')
 
-    def __init__(self, entityID, item, offset=0):
+    def __init__(self, entityID, item, offset=0, receivedAt=None):
         super(WGNCPopUpDecorator, self).__init__(entityID, item, NotificationGuiSettings(item.isNotify(), item.getPriority(), showAt=_makeShowTime() + offset))
+        self.__receivedAt = receivedAt
 
     def getType(self):
         return NOTIFICATION_TYPE.WGNC_POP_UP
@@ -332,7 +331,8 @@ class WGNCPopUpDecorator(_NotificationDecorator):
         return self.getEntity().getGroup()
 
     def getOrder(self):
-        return (self.showAt(), self._entityID)
+        timeCriteria = self.__receivedAt or self.showAt()
+        return (timeCriteria, self._entityID)
 
     def getSavedData(self):
         return self._itemName
@@ -389,121 +389,6 @@ class WGNCPopUpDecorator(_NotificationDecorator):
             states[buttonType] = state
 
         return (layout, states)
-
-
-class ClubInviteDecorator(_NotificationDecorator):
-    __slots__ = ('_createdAt',)
-    clubsCtrl = dependency.descriptor(IClubsController)
-
-    def __init__(self, invite):
-        self._createdAt = invite.getTimestamp()
-        super(ClubInviteDecorator, self).__init__(invite.getID(), invite)
-
-    def clear(self):
-        self._createdAt = 0
-        super(ClubInviteDecorator, self).clear()
-
-    def getVisibilityTime(self):
-        tm = None
-        invite = self.getEntity()
-        if not invite.isActive() and invite.getUpdatingTime() is not None:
-            tm = time_utils.makeLocalServerTime(invite.getUpdatingTime() + _CLUB_INVITE_VISIBILITY_INTERVAL)
-        return tm
-
-    def getSavedData(self):
-        return self.getID()
-
-    def getType(self):
-        return NOTIFICATION_TYPE.CLUB_INVITE
-
-    def getGroup(self):
-        return NOTIFICATION_GROUP.INVITE
-
-    def update(self, entity):
-        super(ClubInviteDecorator, self).update(entity)
-        self._make(entity)
-
-    def getOrder(self):
-        return (self.showAt(), self._createdAt)
-
-    def _make(self, invite=None, settings=None):
-        invite = invite or self.clubsCtrl.getProfile().getInvite(self._entityID)
-        if not invite:
-            LOG_ERROR('Invite not found', self._entityID)
-            self._vo = {}
-            self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=_makeShowTime())
-            return
-        if not invite.showAt() or invite.isActive():
-            if invite.showAt() > 0:
-                self._isOrderChanged = True
-            invite.setShowTime(_makeShowTime())
-        if invite.isActive():
-            self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=invite.showAt())
-        else:
-            self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=invite.showAt())
-        canAccept = invite.isActive()
-        canDecline = invite.isActive()
-        if canAccept or canDecline:
-            submitState = cancelState = NOTIFICATION_BUTTON_STATE.VISIBLE
-            if canAccept:
-                submitState |= NOTIFICATION_BUTTON_STATE.ENABLED
-            if canDecline:
-                cancelState |= NOTIFICATION_BUTTON_STATE.ENABLED
-        else:
-            submitState = cancelState = 0
-        formatter = ClubInviteHtmlTextFormatter()
-        message = g_settings.msgTemplates.format('clubInvite', ctx={'text': formatter.getText(invite)}, data={'timestamp': self._createdAt,
-         'icon': makePathToIcon('clubInviteIcon'),
-         'defaultIcon': makePathToIcon('prebattleInviteIcon'),
-         'buttonsStates': {'submit': submitState,
-                           'cancel': cancelState}})
-        self._vo = {'typeID': self.getType(),
-         'entityID': self.getID(),
-         'message': message,
-         'notify': self.isNotify(),
-         'auxData': []}
-
-
-class ClubAppsDecorator(_NotificationDecorator):
-    __slots__ = ('_createdAt',)
-
-    def __init__(self, clubDBID, activeApps):
-        self._createdAt = time_utils.getCurrentTimestamp()
-        super(ClubAppsDecorator, self).__init__(clubDBID, activeApps)
-
-    def clear(self):
-        self._createdAt = 0
-        super(ClubAppsDecorator, self).clear()
-
-    def getSavedData(self):
-        return self.getID()
-
-    def getType(self):
-        return NOTIFICATION_TYPE.CLUB_APPS
-
-    def getGroup(self):
-        return NOTIFICATION_GROUP.INVITE
-
-    def update(self, entity):
-        super(ClubAppsDecorator, self).update(entity)
-        self._make(entity)
-
-    def getOrder(self):
-        return (self.showAt(), self._createdAt)
-
-    def _make(self, activeApps=None, settings=None):
-        self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=_makeShowTime())
-        activeApps = activeApps or []
-        formatter = ClubAppsHtmlTextFormatter()
-        message = g_settings.msgTemplates.format('clubApps', ctx={'text': formatter.getText(len(activeApps))}, data={'timestamp': self._createdAt,
-         'icon': makePathToIcon('InformationIcon'),
-         'defaultIcon': makePathToIcon('InformationIcon'),
-         'buttonsStates': {'submit': NOTIFICATION_BUTTON_STATE.DEFAULT}})
-        self._vo = {'typeID': self.getType(),
-         'entityID': self.getID(),
-         'message': message,
-         'notify': self.isNotify(),
-         'auxData': []}
 
 
 class _ClanBaseDecorator(_NotificationDecorator):
@@ -582,10 +467,16 @@ class _ClanSingleDecorator(_ClanDecorator):
 
 class ClanSingleAppDecorator(_ClanSingleDecorator):
 
-    def __init__(self, entityID, entity=None, isInClanEnterCooldown=False, settings=None, userName=None):
+    def __init__(self, entityID, entity=None, settings=None, userName=None):
         self.__userName = userName
-        self.__isInClanEnterCooldown = isInClanEnterCooldown
+        self.__isInClanEnterCooldown = False
         super(ClanSingleAppDecorator, self).__init__(entityID, entity, settings)
+
+    def setUserName(self, value):
+        self.__userName = value
+
+    def setClanEnterCooldown(self, value):
+        self.__isInClanEnterCooldown = value
 
     def getUserName(self):
         return self.__userName
@@ -747,6 +638,9 @@ class ClanAppActionDecorator(_ClassBaseActionDecorator):
 
 
 class ClanInvitesActionDecorator(_ClassBaseActionDecorator):
+
+    def setUserName(self, value):
+        self._entity = value
 
     def getType(self):
         return NOTIFICATION_TYPE.CLAN_INVITE_ACTION

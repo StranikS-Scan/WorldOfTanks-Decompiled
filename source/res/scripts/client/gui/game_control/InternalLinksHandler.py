@@ -9,11 +9,9 @@ from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from helpers import dependency
 from skeletons.gui.game_control import IInternalLinksController, IBrowserController
-_LISTENERS = {OpenLinkEvent.CLUB_HELP: '_handleClubHelp',
- OpenLinkEvent.MEDKIT_HELP: '_handleVideoHelp',
+_LISTENERS = {OpenLinkEvent.MEDKIT_HELP: '_handleVideoHelp',
  OpenLinkEvent.REPAIRKITHELP_HELP: '_handleVideoHelp',
- OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP: '_handleVideoHelp',
- OpenLinkEvent.NY_RULES: '_handleNyRulesHelp'}
+ OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP: '_handleVideoHelp'}
 
 class InternalLinksHandler(IInternalLinksController):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -68,12 +66,6 @@ class InternalLinksHandler(IInternalLinksController):
         parsedUrl = yield self.getURL(urlName)
         if parsedUrl:
             self._browserID = yield self.browserCtrl.load(parsedUrl, browserID=self._browserID, title=title, browserSize=browserSize, showActionBtn=showActionBtn, showCloseBtn=showCloseBtn)
-
-    def _handleClubHelp(self, event):
-        self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.CLUB_SIZE)
-
-    def _handleNyRulesHelp(self, event):
-        self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.PROMO_SIZE)
 
     def _handleVideoHelp(self, event):
         self.__openInternalBrowse(event.eventType, event.title, browserSize=gc_constants.BROWSER.VIDEO_SIZE, showActionBtn=False, showCloseBtn=True)

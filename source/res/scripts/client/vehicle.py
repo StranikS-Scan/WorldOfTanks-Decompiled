@@ -12,7 +12,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.tankStructure import TankPartNames
 from debug_utils import *
 import constants
-from constants import VEHICLE_HIT_EFFECT, VEHICLE_PHYSICS_MODE, VEHICLE_SIEGE_STATE
+from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID, VEHICLE_VIEW_STATE
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
@@ -299,14 +299,6 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         if self.isStarted and self.isAlive():
             self.appearance.changeEngineMode(self.engineMode, True)
 
-    def set_physicsMode(self, prev):
-        if self.physicsMode != prev:
-            if self.isPlayer:
-                self.respawn(self.publicInfo.compDescr)
-                BigWorld.player().physicModeChanged(self.physicsMode)
-            else:
-                self.respawn(self.publicInfo.compDescr)
-
     def set_isStrafing(self, prev):
         if hasattr(self.filter, 'isStrafing'):
             self.filter.isStrafing = self.isStrafing
@@ -498,9 +490,6 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
         self.appearance.setVehicle(self)
         self.appearance.activate()
-        suspensionSound = self.appearance.suspensionSound
-        if suspensionSound is not None:
-            suspensionSound.deactivate()
         self.appearance.changeEngineMode(self.engineMode)
         self.appearance.onVehicleHealthChanged()
         if self.isPlayerVehicle:
@@ -551,17 +540,6 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
             va = self.appearance
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
-
-    def showPlayerMovementCommand(self, flags):
-        if not self.isStarted:
-            return
-        powerMode = self.engineMode[0]
-        if flags == 0 and powerMode != 0:
-            self.appearance.changeEngineMode((1, 0))
-            return
-        if flags != 0 and powerMode != 0:
-            self.appearance.changeEngineMode((3, flags))
-            return
 
     def _isDestructibleMayBeBroken(self, chunkID, itemIndex, matKind, itemFilename, itemScale, vehSpeed):
         desc = AreaDestructibles.g_cache.getDescByFilename(itemFilename)

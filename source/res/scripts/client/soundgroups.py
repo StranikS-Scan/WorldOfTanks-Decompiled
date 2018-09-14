@@ -364,7 +364,7 @@ class SoundGroups(object):
         from gui.app_loader import g_appLoader
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         player = BigWorld.player()
-        if player:
+        if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
         if self.__muteCallbackID is not None:
@@ -656,10 +656,13 @@ class SoundGroups(object):
         return WWISE.WW_getSoundPos(eventName, objectName, position)
 
     def changePlayMode(self, mode):
+        __ceilLess = None
         if BigWorld.player().getVehicleAttached() is not None:
-            __ceilLess = BigWorld.player().getVehicleAttached().typeDescriptor.turret['ceilless']
+            vehicleTypeDescriptor = BigWorld.player().getVehicleAttached().typeDescriptor
         else:
-            __ceilLess = BigWorld.player().vehicleTypeDescriptor.turret['ceilless']
+            vehicleTypeDescriptor = BigWorld.player().vehicleTypeDescriptor
+        if vehicleTypeDescriptor is not None:
+            __ceilLess = vehicleTypeDescriptor.turret['ceilless']
         if mode == 0:
             WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 1)
             if __ceilLess is True:
@@ -680,7 +683,6 @@ class SoundGroups(object):
             WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 2)
             WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_strategic')
             WWISE.WWsetCameraShift(None)
-        __ceilLess = None
         return
 
     def playStinger(self, event, priority):

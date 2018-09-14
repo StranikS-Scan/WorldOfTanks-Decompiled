@@ -1,0 +1,481 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/battle_results/components/base.py
+from collections import defaultdict, namedtuple
+import inspect
+import operator
+from debug_utils import LOG_WARNING
+from gui.shared.utils.decorators import ReprInjector
+
+class StatsComponent(object):
+    """Basic class of component to generate desired VO.
+    Component may includes other components or may be single.
+    So components can be organized as a tree."""
+    __slots__ = ()
+
+    def clone(self, *exclude):
+        """Create new instance of given component.
+        :param exclude: tuple containing indexes of child components
+        that should be excluded from new component.
+        :return: new instance of given component.
+        """
+        raise NotImplementedError
+
+    def clear(self):
+        """Clears data."""
+        pass
+
+    def addComponent(self, index, component):
+        """Adds child component by specified index.
+        :param index: integer containing child index.
+        :param component: instance of StatsComponent.
+        """
+        raise NotImplementedError
+
+    def getComponent(self, index):
+        """Gets child component by specified index.
+        :param index: integer containing child index.
+        :return: instance of StatsComponent.
+        """
+        raise NotImplementedError
+
+    def getRecordPath(self):
+        """Gets path to record that use to fetch desired record and
+        set to routine setRecord.
+        :return: tuple containing path.
+        """
+        raise NotImplementedError
+
+    def setRecord(self, record, reusable):
+        """Set record of battle results to fetch required data.
+        :param record:  dictionary containing record of battle results or data model from _ReusableInfo.
+        :param reusable: instance of _ReusableInfo.
+        """
+        raise NotImplementedError
+
+    def getField(self):
+        """Gets name of field in VO if component is added to other component.
+        :return: string containing name of field or empty string.
+        """
+        raise NotImplementedError
+
+    def getVO(self):
+        """Gets VO to set it to view.
+        :return: instance of VO
+        """
+        raise NotImplementedError
+
+
+class StatsComponentError(Exception):
+    """There is basic error in this module."""
+    pass
+
+
+@ReprInjector.simple(('_field', 'field'))
+class StatsItem(StatsComponent):
+    """Basic class of single component (leaf) that does not have any children
+    and generates simple VO."""
+    __slots__ = ('_field', '_value', '_path')
+
+    def __init__(self, field, *path):
+        super(StatsItem, self).__init__()
+        self._field = field
+        self._path = path
+        self._value = None
+        return
+
+    def clone(self):
+        return self.__class__(self._field, *self._path)
+
+    def addComponent(self, index, component):
+        """Other components can not be added to this component."""
+        raise ValueError('StatsItem is not supported method addComponent')
+
+    def getComponent(self, index):
+        """This component has no any children."""
+        raise ValueError('StatsItem is not supported method getComponent')
+
+    def getRecordPath(self):
+        return self._path
+
+    def setRecord(self, record, reusable):
+        if record is not None:
+            self._value = self._convert(record, reusable)
+        else:
+            self._value = None
+        return
+
+    def getField(self):
+        return self._field
+
+    def getVO(self):
+        return self._value
+
+    def _convert(self, value, reusable):
+        return value
+
+
+class DirectStatsItem(StatsItem):
+    """Class of single component that stores received record as VO."""
+    __slots__ = ('_value',)
+
+    def __init__(self, field, value=None):
+        super(DirectStatsItem, self).__init__(field)
+        self._value = value
+
+    def clone(self):
+        return self.__class__(self._field, value=self._value)
+
+    def setRecord(self, record, reusable):
+        self._value = record
+
+
+class VOMeta(object):
+    """Basic class describes how to generate VO in StatsComponent."""
+    __slots__ = ('_meta',)
+
+    def __init__(self, meta):
+        """Initialization.
+        :param meta: primitive containing raw rules to generate VO.
+        """
+        super(VOMeta, self).__init__()
+        self._meta = meta
+
+    def clone(self):
+        """Creates new instance of meta.
+        :return: new instance of meta.
+        """
+        return self.__class__(self._meta)
+
+    def bind(self, clazz):
+        """Binds meta to specified class of component.
+        :param clazz: class of component.
+        """
+        setattr(clazz, '__vo_meta__', self.clone())
+
+    def getDefault(self, field):
+        """Gets default value of field in a VO.
+        :param field: string containing name of field.
+        :return: default value of field or None.
+        """
+        return None
+
+    def isComponentGenerated(self, index):
+        """Is component generated by meta.
+        :param index: integer containing index of component.
+        :return: bool
+        """
+        return False
+
+    def registerComponent(self, component):
+        """Registers specified component in meta. If component is not valid, error will be raised."""
+        pass
+
+    def generateComponents(self):
+        """Gets components that is generated by meta.
+        :return: sequence containing (index, component).
+        """
+        pass
+
+    def generateVO(self, components):
+        """Generates VO for received list of components.
+        :param components: list of components
+        :return: generated VO.
+        """
+        raise NotImplementedError
+
+
+class DictMeta(VOMeta):
+    """Class to generate dictionary that represents VO."""
+    __slots__ = ('_auto', '_unregistered')
+
+    def __init__(self, meta=None, auto=None):
+        """Initialization.
+        :param meta: dictionary containing VO with default values.
+        :param auto: list containing components are created by meta automatically.
+        """
+        if meta is None:
+            meta = {}
+        super(DictMeta, self).__init__(meta)
+        self._auto = auto or ()
+        self._unregistered = set(meta.keys())
+        return
+
+    def clone(self):
+        auto = []
+        for index, component in self._auto:
+            auto.append((index, component.clone()))
+
+        return DictMeta(self._meta, auto)
+
+    def getDefault(self, field):
+        return self._meta.get(field)
+
+    def isComponentGenerated(self, index):
+        return index in map(operator.itemgetter(0), self._auto)
+
+    def registerComponent(self, component):
+        field = component.getField()
+        if field:
+            if field not in self._meta:
+                raise StatsComponentError('Field {} is not found in meta {}'.format(field, self._meta))
+            if field not in self._unregistered:
+                raise StatsComponentError('Component is already set to field {}'.format(field))
+            self._unregistered.discard(field)
+
+    def generateComponents(self):
+        for idx, component in self._auto:
+            yield (idx, component)
+
+    def generateVO(self, components):
+        vo = {}
+        for field in self._unregistered:
+            vo[field] = self.getDefault(field)
+
+        for component in components:
+            if component is None:
+                continue
+            field = component.getField()
+            value = component.getVO()
+            if field:
+                if value is not None:
+                    vo[field] = value
+                else:
+                    vo[field] = self._meta[field]
+            if value is not None:
+                vo.update(value)
+
+        return vo
+
+
+class ListMeta(VOMeta):
+    """Class to generate list that contains others VOs."""
+    __slots__ = ('_registered', '_runtime')
+
+    def __init__(self, meta=None, registered=False, runtime=True):
+        """Initialization.
+        :param meta: list containing default VOs.
+        :param registered: can this meta generate VO, otherwise - return default list.
+        :param runtime: are components created at runtime.
+        """
+        super(ListMeta, self).__init__(meta or [])
+        self._registered = registered
+        self._runtime = runtime
+
+    def getDefault(self, field):
+        return None
+
+    def isComponentGenerated(self, index):
+        """ Return True if fixed components should be created and copied in routine "clone",
+        otherwise - components are created at runtime by parent component.
+        :param index: integer containing index of component.
+        :return: bool.
+        """
+        return not self._runtime
+
+    def registerComponent(self, component):
+        """Marks this meta as registered to try generate VO in the method generateVO,
+            otherwise - return default list in the method generateVO.
+        :param component: instance of StatsComponent.
+        """
+        self._registered = True
+
+    def generateVO(self, components):
+        if not self._registered:
+            return self._meta[:]
+        vo = []
+        for component in components:
+            vo.append(component.getVO())
+
+        return vo
+
+
+def _getPropertyGetter(idx):
+
+    def _getter(self):
+        component = self.getComponent(idx)
+        if component is not None:
+            return component.getVO()
+        else:
+            return
+            return
+
+    return _getter
+
+
+def _getPropertySetter(idx):
+
+    def _setter(self, value):
+        component = self.getComponent(idx)
+        if component is not None:
+            if isinstance(value, PropertyValue):
+                component.setRecord(value.record, value.reusable)
+            else:
+                component.setRecord(value, None)
+        return
+
+    return _setter
+
+
+PropertyValue = namedtuple('PropertyValue', 'record reusable')
+
+class PropertyMeta(DictMeta):
+    """Class to generate dictionary that represents VO.
+    Additional, meta creates properties of components to bind property with some field in VO.
+    Use PropertyMeta instead DictMeta."""
+    __slots__ = ('_bind',)
+
+    def __init__(self, meta):
+        """Initialization.
+        :param meta: tuple containing data to create components, generate VO.
+        """
+        if not isinstance(meta, tuple):
+            raise StatsComponentError('Meta must be tuple')
+        converted = {}
+        self._bind = []
+        for idx, item in enumerate(meta):
+            if not isinstance(item, tuple):
+                raise StatsComponentError('Each item must be tuple in meta')
+            length = len(item)
+            if length > 1:
+                field, default = item[:2]
+                converted[field] = default
+                if length > 2:
+                    self._bind.append((idx,
+                     field,
+                     item[2],
+                     default))
+            raise StatsComponentError('Number of items must be more than 1')
+
+        super(PropertyMeta, self).__init__(converted)
+
+    def clone(self):
+        auto = []
+        for index, component in self.generateComponents():
+            auto.append((index, component))
+
+        return DictMeta(self._meta, auto)
+
+    def bind(self, clazz):
+        """Binds meta to specified class of component. Creates properties of component.
+            Class of component must have attribute  __slots__, all properties must be defined in __slots__.
+        :param clazz: class of component.
+        """
+        super(PropertyMeta, self).bind(clazz)
+        slots = set()
+        for parent in inspect.getmro(clazz):
+            slots = slots.union(getattr(parent, '__slots__', ()))
+
+        if not slots:
+            raise StatsComponentError('__slots__ must be defined in stats component {}'.format(clazz))
+        for idx, _, attribute, _ in self._bind:
+            if attribute not in slots:
+                raise StatsComponentError('Attribute {} is not found in __slots__ for {}'.format(attribute, clazz))
+            setattr(clazz, attribute, property(_getPropertyGetter(idx), _getPropertySetter(idx)))
+
+    def generateComponents(self):
+        for idx, field, attribute, default in self._bind:
+            if isinstance(default, StatsComponent):
+                yield (idx, default.clone())
+            yield (idx, DirectStatsItem(field, default))
+
+
+@ReprInjector.simple(('_field', 'field'), ('_path', 'path'))
+class StatsBlock(StatsComponent):
+    """Class of component (node) that has children and generates complex VO."""
+    __slots__ = ('_meta', '_components', '_field', '_path', '_records')
+    __vo_meta__ = None
+
+    def __init__(self, meta=None, field='', *path):
+        """Initialization.
+        :param meta: instance of VOMeta.
+        :param field: string containing name of field in VO and sets subVO in specified field
+            or empty string if block updates VO only.
+        :param path: tuple containing path to record in the results of battle receiving from server.
+        """
+        super(StatsBlock, self).__init__()
+        if meta is None and self.__vo_meta__ is not None:
+            meta = self.__vo_meta__
+        if isinstance(meta, VOMeta):
+            self._meta = meta.clone()
+        else:
+            raise StatsComponentError('Type of meta must be VOMeta. Received type is {}'.format(type(meta)))
+        self._components = []
+        self._field = field
+        self._path = path
+        self._records = defaultdict(list)
+        for index, component in self._meta.generateComponents():
+            self.addComponent(index, component)
+
+        return
+
+    def clone(self, *exclude):
+        """Makes clone of block.
+        :param exclude: tuple containing indexes that is not included to clone.
+        :return: new instance of block.
+        """
+        block = self.__class__(self._meta.clone(), self._field, *self._path)
+        for index, component in enumerate(self._components):
+            if index in exclude or self._meta.isComponentGenerated(index):
+                continue
+            if component is not None:
+                block.addComponent(index, component.clone())
+
+        return block
+
+    def addComponent(self, index, component):
+        if index < 0:
+            raise StatsComponentError('Index must be positive. Received index is {}'.format(index))
+        while index > len(self._components) - 1:
+            self._components.append(None)
+
+        if self._components[index] is not None:
+            raise StatsComponentError('Component is already set to position {}'.format(index))
+        self._meta.registerComponent(component)
+        self._records[component.getRecordPath()].append(index)
+        self._components[index] = component
+        return
+
+    def getComponent(self, index):
+        if -1 < index < len(self._components):
+            return self._components[index]
+        else:
+            return None
+            return None
+
+    def addNextComponent(self, component):
+        """Adds child component to end to list.
+        :param component: instance of StatsComponent.
+        """
+        self.addComponent(self.getNextComponentIndex(), component)
+
+    def getNextComponentIndex(self):
+        """Gets next free index of component.
+        :return: integer containing next free index of component.
+        """
+        return len(self._components)
+
+    def getRecordPath(self):
+        return self._path
+
+    def setRecord(self, result, reusable):
+        bypass = sorted(self._records.iteritems(), key=lambda item: len(item[0]))
+        for path, idxs in bypass:
+            record = result
+            for sub in path:
+                if sub in record:
+                    record = record[sub]
+                LOG_WARNING('Path of record is not found', path)
+                record = None
+
+            for idx in idxs:
+                component = self._components[idx]
+                if component is not None:
+                    component.setRecord(record, reusable)
+
+        return
+
+    def getField(self):
+        return self._field
+
+    def getVO(self):
+        return self._meta.generateVO(self._components)

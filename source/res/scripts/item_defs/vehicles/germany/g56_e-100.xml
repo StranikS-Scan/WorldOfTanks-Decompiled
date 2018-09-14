@@ -272,7 +272,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -567,9 +566,9 @@
       </surveyingDeviceHealth>
       <guns>
         <_128mm_KwK44_L55>	shared	  <maxAmmo>	72	</maxAmmo>
-          <reloadTime>	14.3	</reloadTime>
+          <reloadTime>	13.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.07	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -588,8 +587,8 @@
             </armor_6>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>

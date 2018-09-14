@@ -7,7 +7,7 @@ import time
 from functools import partial
 import Math
 from debug_utils import *
-from constants import IS_DEVELOPMENT, VEHICLE_PHYSICS_MODE
+from constants import IS_DEVELOPMENT
 import constants
 from OcclusionDecal import OcclusionDecal
 from ShadowForwardDecal import ShadowForwardDecal
@@ -129,7 +129,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
         self.__periodicTimerID = None
         self.__periodicTimerIDEngine = None
         self.__trailEffects = None
-        self.__exhaustEffects = None
         self.__customEffectManager = None
         self.__leftLightRotMat = None
         self.__rightLightRotMat = None
@@ -274,8 +273,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
         self.__originalFilter = vehicle.filter
         vehicle.filter = self.__filter
-        enableNewPhysics = vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED
-        vehicle.filter.enableNewPhysics(enableNewPhysics)
         if vehicle.isPlayerVehicle:
             vehicle.filter.enableStabilisedMatrix(True)
         self.__createStickers(prereqs)
@@ -338,8 +335,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
                 period = 0
         self.__stippleCallbackID = BigWorld.callback(period, self.__disableStipple)
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
-            self.__setupTrailParticles()
         return
 
     def startSystems(self):
@@ -428,29 +423,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def changeEngineMode(self, mode, forceSwinging=False):
         self.__engineMode = mode
         self.detailedEngineState.setMode(self.__engineMode[0])
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
-            if forceSwinging:
-                flags = mode[1]
-                prevFlags = self.__swingMoveFlags
-                fashion = self.fashion
-                moveMask = 3
-                rotMask = 12
-                if flags & moveMask ^ prevFlags & moveMask:
-                    swingPeriod = 2.0
-                    if flags & 1:
-                        fashion.accelSwingingDirection = -1
-                    elif flags & 2:
-                        fashion.accelSwingingDirection = 1
-                    else:
-                        fashion.accelSwingingDirection = 0
-                elif not flags & moveMask and flags & rotMask ^ prevFlags & rotMask:
-                    swingPeriod = 1.0
-                    fashion.accelSwingingDirection = 0
-                else:
-                    swingPeriod = 0.0
-                if swingPeriod > fashion.accelSwingingPeriod:
-                    fashion.accelSwingingPeriod = swingPeriod
-                self.__swingMoveFlags = flags
         return None if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress else None
 
     def stopSwinging(self):
@@ -814,7 +786,7 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def updateTracksScroll(self, leftScroll, rightScroll):
         self.__leftTrackScroll = leftScroll
         self.__rightTrackScroll = rightScroll
-        if self.__vehicle is not None and self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED:
+        if self.__vehicle is not None:
             self.customEffectManager.updateTrackScroll(leftScroll, rightScroll)
         return
 
@@ -864,14 +836,8 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def __updateEffectsLOD(self):
         pass
 
-    def __setupTrailParticles(self):
-        pass
-
     def __updateCurrTerrainMatKinds(self):
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED:
-            testPoints = (Math.Matrix(self.__customEffectManager.getTrackCenterNode(0)).translation, Math.Matrix(self.__customEffectManager.getTrackCenterNode(1)).translation, self.__vehicle.position)
-        else:
-            testPoints = (Math.Matrix(self.__trailEffects.getTrackCenterNode(0)).translation, Math.Matrix(self.__trailEffects.getTrackCenterNode(1)).translation, self.__vehicle.position)
+        testPoints = (Math.Matrix(self.__customEffectManager.getTrackCenterNode(0)).translation, Math.Matrix(self.__customEffectManager.getTrackCenterNode(1)).translation, self.__vehicle.position)
         isOnSoftTerrain = False
         for i in xrange(_MATKIND_COUNT):
             testPoint = testPoints[i]

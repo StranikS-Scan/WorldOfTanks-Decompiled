@@ -13,6 +13,7 @@ from client_request_lib.data_sources import base
 from base64 import b64encode
 import urllib
 import zlib
+from debug_utils import LOG_DEBUG
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
 SUCCESS_STATUSES = [200, 201]
@@ -62,18 +63,19 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     """
 
     def _apply_converters(self, data, converters):
-        if not isinstance(data, (tuple, list)):
-            data = [data]
-        for k, convert in converters.items():
-            if '.' in k:
-                prefix, body = k.split('.', 1)
-                for portion in data:
-                    if prefix in portion:
-                        self._apply_converters(portion[prefix], {body: convert})
+        if data:
+            if not isinstance(data, (tuple, list)):
+                data = [data]
+            for k, convert in converters.items():
+                if '.' in k:
+                    prefix, body = k.split('.', 1)
+                    for portion in data:
+                        if prefix in portion:
+                            self._apply_converters(portion[prefix], {body: convert})
 
-            for portion in data:
-                if k in portion:
-                    portion[k] = convert(portion[k])
+                for portion in data:
+                    if k in portion:
+                        portion[k] = convert(portion[k])
 
     def _preprocess_callback(self, callback, converters=None):
 
@@ -90,15 +92,13 @@ class GatewayDataAccessor(base.BaseDataAccessor):
                     data = None
 
                 if response.responseCode not in SUCCESS_STATUSES:
-                    data = data or None
-                    error = get_error_from_response(data and data['code'])
-                    error_data = {'description': error.description}
+                    error_data = None
                     if data:
-                        if data.get('extra_data'):
-                            error_data['extra_data'] = data['extra_data']
-                    else:
-                        error_data['extra_data'] = response.body
-                    return callback(error_data, error.status_code, error.response_code)
+                        error_data = {'description': data['description'],
+                         'title': data.get('title', ''),
+                         'notification_type': data.get('notification_type', ''),
+                         'extra_data': data.get('extra_data')}
+                    return callback(error_data, response.responseCode, response.responseCode)
                 else:
                     response_code = exceptions.ResponseCodes.NO_ERRORS
                     if func:
@@ -112,7 +112,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
 
         return wrapper
 
-    def __init__(self, url_fetcher, gateway_host, client_lang=None):
+    def __init__(self, url_fetcher, gateway_host, client_lang=None, user_agent=None):
         """
         url_fetcher is fetch_url method with following signature
         staging_hosts is dict of staging hosts for example
@@ -120,8 +120,12 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         :param url_fetcher: fetchURL callback with following signature
                 fetchURL(url, callback, headers={}, timeout=30, method='GET', post_data='')
         :param gateway_host: gateway host
+        :param client_lang: client language
+        :param user_agent: user agent to be passed to WGCG
         :type url_fetcher: function
-        :type staging_hosts: string
+        :type gateway_host: string
+        :type client_lang: string
+        :type user_agent: string
         
         :Example:
         
@@ -135,6 +139,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         self._session_id = None
         self.url_fetcher = url_fetcher
         self.gateway_host = gateway_host
+        self.user_agent = user_agent
         return
 
     def login(self, callback, account_id, spa_token):
@@ -171,6 +176,8 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         default_headers.update(headers or {})
         if self._session_id:
             default_headers['COOKIE'] = 'session=%s' % self._session_id
+        if self.user_agent:
+            default_headers['User-Agent'] = self.user_agent
         headers = tuple(('{}: {}'.format(*d) for d in default_headers.iteritems()))
         args = [headers, 30.0, method]
         if post_data:
@@ -542,3 +549,189 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         get_params = {'clan_id': clan_id}
         return self._request_data(callback, url, get_data=get_params, converters={'clan_id': int,
          'defence_hour': lambda x: dt_time(x, 0) if x >= 0 else None})
+
+    def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        return data from WGSH backend with info needed for prebattle window header
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int})
+
+    def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
+        """
+        request WGSH to change player vehicle
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/vehicles/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'vehicle_cd': vehicle_cd}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='PATCH', post_data=post_data)
+
+    def set_readiness(self, callback, periphery_id, unit_server_id, is_ready, reset_vehicle, fields=None):
+        """
+        request WGSH to change player readiness
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/readiness/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        patch_data = {'is_ready': is_ready,
+         'reset_vehicle': reset_vehicle}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='PATCH', post_data=patch_data)
+
+    def invite_players(self, callback, periphery_id, unit_server_id, accounts_to_invite, comment, fields=None):
+        """
+        request WGSH to send invites to players
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/invite/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'accounts_to_invite': accounts_to_invite,
+         'comment': comment}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def assign_player(self, callback, periphery_id, unit_server_id, account_to_assign, slot_id_to_assign, fields=None):
+        """
+        request WGSH to assign given player to battle
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/assign/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'account_to_assign': account_to_assign,
+         'slot_id_to_assign': slot_id_to_assign}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def unassign_player(self, callback, periphery_id, unit_server_id, account_to_unassign, fields=None):
+        """
+        request WGSH to unassign given player from battle
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/unassign/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'account_to_unassign': account_to_unassign}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def give_leadership(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+        """
+        request WGSH to make player a leader
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/give_leadership/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'target_account_id': target_account_id}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='PATCH', post_data=post_data)
+
+    def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        request WGSH to leave current user from room
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/leave/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST')
+
+    def take_away_leadership(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        request WGSH to take leadership on room if current user have rights
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/take_away_leadership/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='PATCH')
+
+    def kick_player(self, callback, periphery_id, unit_server_id, account_to_kick, fields=None):
+        """
+        request WGSH to kick player from unit
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/kick/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'account_to_kick': account_to_kick}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def set_open(self, callback, periphery_id, unit_server_id, is_open, fields=None):
+        """
+        request WGSH to set unit to open
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/set_open/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'is_open': is_open}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='PATCH', post_data=post_data)
+
+    def lock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
+        """
+        request WGSH to lock given reserve
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/lock_reserve/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'reserve_id': reserve_id}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def unlock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
+        """
+        request WGSH to unlock given reserve
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/unlock_reserve/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'reserve_id': reserve_id}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
+    def clan_statistics(self, callback, clan_id, fields=None):
+        """
+        request WGSH to get clan statistics
+        
+            .. _prebattle info API method:
+            https://confluence.wargaming.net/display/WEBDEV/WGSH+-+API+for+WoT+client+dialogs
+        """
+        url = '/wgsh/clans/{clan_id}/'.format(clan_id=clan_id)
+        return self._request_data(callback, url, get_data={}, converters={}, method='GET')
+
+    def join_room(self, callback, periphery_id, unit_server_id, fields=None):
+        """
+        request WGSH to join current user to room
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/join/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, method='POST')
+
+    def account_statistics(self, callback, account_id, fields=None):
+        """
+        request WGSH to get account statistics
+        
+            .. _prebattle info API method:
+            https://confluence.wargaming.net/display/WEBDEV/WGSH+-+API+for+WoT+client+dialogs
+        """
+        url = '/wgsh/accounts/{account_id}/'.format(account_id=account_id)
+        return self._request_data(callback, url, get_data={}, converters={}, method='GET')

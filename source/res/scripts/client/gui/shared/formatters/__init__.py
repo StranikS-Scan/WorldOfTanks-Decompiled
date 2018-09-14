@@ -10,11 +10,11 @@ from gui.shared.money import Money, Currency
 from helpers.i18n import makeString
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
-def formatPrice(price, reverse=False):
+def formatPrice(price, reverse=False, defaultCurrency=Currency.CREDITS):
     outPrice = []
     currencies = price.getSetCurrencies(byWeight=False)
     if not currencies:
-        currencies = [Currency.CREDITS]
+        currencies = [defaultCurrency]
     for currency in currencies:
         formatter = getBWFormatter(currency)
         cname = makeString('#menu:price/{}'.format(currency)) + ': '
@@ -29,7 +29,7 @@ def formatPriceForCurrency(money, currencyName):
 
 
 def formatGoldPrice(gold, reverse=False):
-    return formatPrice(Money(gold=gold), reverse)
+    return formatPrice(Money(gold=gold), reverse, defaultCurrency=Currency.GOLD)
 
 
 def getGlobalRatingFmt(globalRating):

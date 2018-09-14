@@ -18,7 +18,6 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.FORT_DESC: '_handleFortDescription',
  OpenLinkEvent.CLAN_SEARCH: '_handleClanSearch',
  OpenLinkEvent.CLAN_CREATE: '_handleClanCreate',
- OpenLinkEvent.CLUB_SETTINGS: '_handleClubSettings',
  OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL',
  OpenLinkEvent.GLOBAL_MAP_SUMMARY: '_handleGmSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
@@ -115,9 +114,6 @@ class ExternalLinksHandler(IExternalLinksController):
 
     def _handleClanCreate(self, _):
         self.__openParsedUrl('clanCreate')
-
-    def _handleClubSettings(self, _):
-        self.__openParsedUrl('clubSettings')
 
     def _handleInvitesManagementURL(self, _):
         self.__openParsedUrl('invitesManagementURL')

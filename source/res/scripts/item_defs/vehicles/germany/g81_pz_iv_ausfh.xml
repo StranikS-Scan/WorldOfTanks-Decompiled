@@ -208,7 +208,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -458,7 +457,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -671,7 +669,7 @@
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.083333 10 0.097222 7 0.419444 7 0.433333 10 0.566667 10 0.580556 7 0.902778 7 0.916667 10 1 10	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
@@ -720,7 +718,7 @@
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.083333 10 0.097222 6.8 0.419444 6.8 0.433333 9 0.566667 9 0.580556 6.8 0.902778 6.8 0.916667 10 1 10	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
@@ -846,7 +844,7 @@
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.083333 10 0.097222 7 0.419444 7 0.433333 10 0.566667 10 0.580556 7 0.902778 7 0.916667 10 1 10	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
@@ -894,7 +892,7 @@
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.083333 10 0.097222 6.8 0.419444 6.8 0.433333 9 0.566667 9 0.580556 6.8 0.902778 6.8 0.916667 10 1 10	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
@@ -941,7 +939,7 @@
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.069444 10 0.083333 5 0.419444 5 0.433333 8 0.566667 8 0.580556 5 0.916667 5 0.930556 10 1 10	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <maxAmmo>	59	</maxAmmo>

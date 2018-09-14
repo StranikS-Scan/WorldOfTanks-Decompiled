@@ -278,64 +278,6 @@ class UnitChatHandler(_EntityChatHandler):
         self.__channel = self._removeChannel(self.__channel)
 
 
-class ClubChatHandler(_EntityChatHandler):
-
-    def __init__(self, provider, adminChat):
-        super(ClubChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_CLUB_CHAT, _ACTIONS.DEINIT_CLUB_CHAT, _ACTIONS.ON_CLUB_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_CLUB_MESSAGE), wrappers.UnitDataFactory(), limits.UnitLimits())
-        self.__channel = None
-        return
-
-    def getClubChannel(self):
-        return self.__channel
-
-    def leave(self):
-        self.__doRemoveChannel()
-        super(ClubChatHandler, self).leave()
-
-    def clear(self):
-        self.__doRemoveChannel()
-        super(ClubChatHandler, self).clear()
-
-    def registerHandlers(self):
-        super(ClubChatHandler, self).registerHandlers()
-        register = self.provider().registerHandler
-        register(_ACTIONS.UPDATE_CLUB_MEMBERLIST, self._onMembersListUpdated)
-
-    def unregisterHandlers(self):
-        super(ClubChatHandler, self).unregisterHandlers()
-        unregister = self.provider().unregisterHandler
-        unregister(_ACTIONS.UPDATE_CLUB_MEMBERLIST, self._onMembersListUpdated)
-
-    def _doInit(self, args):
-        self.__doCreateChannel()
-
-    def _getChannel(self, message):
-        return self.__channel
-
-    def _getClientIDForCommand(self):
-        return self.__channel.getClientID() if self.__channel else 0
-
-    def _onMembersListUpdated(self, _, args):
-        if not self.__channel:
-            LOG_ERROR('Channel entity is not found, can not update members list', args)
-            return
-        flag, iterator = wrappers.getMembersListDelta(args)
-        if flag == 0:
-            self.__channel.clearMembers()
-            self.__channel.addMembers(iterator)
-        elif flag == -1:
-            self.__channel.removeMembers(iterator)
-        elif flag == 1:
-            self.__channel.addMembers(iterator)
-
-    def __doCreateChannel(self):
-        if not self.__channel:
-            self.__channel = self._addChannel(entities.BWClubChannelEntity())
-
-    def __doRemoveChannel(self):
-        self.__channel = self._removeChannel(self.__channel)
-
-
 class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFactory):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 

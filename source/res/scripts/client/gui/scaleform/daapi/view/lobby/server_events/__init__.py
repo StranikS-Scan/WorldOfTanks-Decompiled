@@ -14,7 +14,6 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.server_events.EventsWindow import EventsWindow
     from gui.Scaleform.daapi.view.lobby.server_events.QuestsCurrentTab import QuestsCurrentTab
-    from gui.Scaleform.daapi.view.lobby.server_events.QuestsLadderTab import QuestsLadderTab
     from gui.Scaleform.daapi.view.lobby.server_events.QuestsPersonalWelcomeView import QuestsPersonalWelcomeView
     from gui.Scaleform.daapi.view.lobby.server_events.QuestsSeasonAwardsWindow import QuestsSeasonAwardsWindow
     from gui.Scaleform.daapi.view.lobby.server_events.QuestsContentTabs import QuestsContentTabs
@@ -28,7 +27,6 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, QuestsSeasonAwardsWindow, 'questsSeasonAwardsWindow.swf', ViewTypes.WINDOW, 'pqSeasonAwards', None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.BEGINNER_QUESTS_VIEW_ALIAS, TutorialQuestsTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.COMMON_QUESTS_VIEW_ALIAS, QuestsCurrentTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(QUESTS_ALIASES.LADDER_QUESTS_VIEW_ALIAS, QuestsLadderTab, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.PERSONAL_WELCOME_VIEW_ALIAS, QuestsPersonalWelcomeView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.SEASONS_VIEW_ALIAS, QuestsSeasonsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(QUESTS_ALIASES.RANDOM_TILE_CHAINS_VIEW_ALIAS, RandomQuestsTileChainsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),

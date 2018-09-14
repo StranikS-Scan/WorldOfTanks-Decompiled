@@ -3,7 +3,6 @@
 import re
 import BigWorld
 from helpers import dependency
-from account_helpers.AccountSettings import AccountSettings
 from tutorial.control import TutorialProxyHolder, game_vars
 from tutorial.control.context import GlobalStorage
 from tutorial.data import chapter
@@ -702,16 +701,4 @@ class GoToSceneEffect(FunctionalEffect):
             return
         else:
             self._gui.goToScene(sceneID)
-            return
-
-
-class SaveAccountSettingEffect(FunctionalEffect):
-
-    def triggerEffect(self):
-        setting = self.getTarget()
-        if setting is None:
-            LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
-            return
-        else:
-            AccountSettings.setSettings(setting.getSettingName(), setting.getSettingValue())
             return

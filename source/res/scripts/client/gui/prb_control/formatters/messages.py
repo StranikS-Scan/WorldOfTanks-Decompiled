@@ -180,7 +180,11 @@ def getUnitMessage(errorCode, errorString):
 
 
 def getUnitKickedReasonMessage(reasonStr):
-    return i18n.makeString(SYSTEM_MESSAGES.unit_warnings(reasonStr))
+    return getUnitWarningMessage(reasonStr)
+
+
+def getUnitWarningMessage(key):
+    return i18n.makeString(SYSTEM_MESSAGES.unit_warnings(key))
 
 
 def getUnitBrowserMessage(errorCode, errorString):

@@ -164,7 +164,7 @@ class CrashedTrackController:
             model = resources[TankPartNames.CHASSIS]
             self.__model = model
             self.__model.matrix = self.__entity.filter.groundPlacingMatrix
-            self.__fashion = BigWorld.WGVehicleFashion(True, 1.0, False)
+            self.__fashion = BigWorld.WGVehicleFashion(True, 1.0)
             setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
             self.__model.setupFashions([self.__fashion])
             rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))

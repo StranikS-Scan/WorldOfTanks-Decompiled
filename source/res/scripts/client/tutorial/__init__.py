@@ -93,7 +93,7 @@ class Tutorial(object):
                 self._gui.setDispatcher(None)
                 LOG_ERROR('GUI can not init. Tutorial is stopping.')
                 return False
-            LOG_DEBUG('Start training', ctx)
+            LOG_DEBUG('Start training', self.getID())
             self._stopped = False
             proxy = weakref.proxy(self)
             setTutorialProxy(proxy)
@@ -142,6 +142,7 @@ class Tutorial(object):
             self._stopped = True
             self._initialized = 0
             self._triggeredEffects.clear()
+            LOG_DEBUG('Tutorial is stopped', self.getID())
             self.onStopped()
             return
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/scripts.py
 import weakref
+import sys
 from functools import partial
 from debug_utils import *
 
@@ -281,11 +282,21 @@ class RemoteScriptController(object):
         return taskID
 
 
+def _isExceptionInfo(value):
+    try:
+        return isinstance(value, tuple) and len(value) == 3 and issubclass(value[0], BaseException) and isinstance(value[1], BaseException) and isinstance(value[1], value[0])
+    except TypeError:
+        return False
+
+
 class LocalScript(Script):
 
     def __init__(self, entryPoint, *args, **kwargs):
         super(LocalScript, self).__init__()
-        self.__routine = _createScriptRoutine(entryPoint, *args, **kwargs)
+        if kwargs.pop('isScriptRoutine', False):
+            self.__routine = entryPoint(*args, **kwargs)
+        else:
+            self.__routine = _createScriptRoutine(entryPoint, *args, **kwargs)
         self.__interruptedRoutines = []
 
     def destroy(self):
@@ -299,7 +310,10 @@ class LocalScript(Script):
         try:
             if results:
                 results = results[0] if len(results) == 1 else tuple(results)
-                waitingTasks = self.__routine.send(results)
+                if _isExceptionInfo(results):
+                    waitingTasks = self.__routine.throw(*results)
+                else:
+                    waitingTasks = self.__routine.send(results)
             else:
                 waitingTasks = next(self.__routine)
             if waitingTasks is not None and not isinstance(waitingTasks, tuple):
@@ -367,14 +381,29 @@ class ScriptDriver(object):
         tasks = self.__tasks
         cancelledTasks = self.__cancelledTasks
         cancelledTasks.clear()
+        exc_info = None
         for task in list(tasks):
             if task.predecessors or task in cancelledTasks:
                 continue
-            status = task.process()
+            process = task.process
+            try:
+                status = process()
+            except ScriptInterrupt:
+                raise
+            except BaseException:
+                status = TASK_STATUS.RUNNING
+                exc_info = sys.exc_info()
+
             if status == TASK_STATUS.SUCCESS:
                 self.__removeTask(task, False)
 
+        if exc_info:
+            for task in list(tasks):
+                self.__removeTask(task, True)
+
+            self.__waitResults = exc_info
         cancelledTasks.clear()
+        return
 
     def beginInterrupt(self, interrupt):
         self.__beginInterrupt(interrupt)

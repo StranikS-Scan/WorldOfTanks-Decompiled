@@ -26,8 +26,8 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	60	</armor_1>
-      <armor_2>	60	</armor_2>
+      <armor_1>	85	</armor_1>
+      <armor_2>	50	</armor_2>
       <armor_3>	40	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	10	</armor_5>
@@ -174,7 +174,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -495,7 +494,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -967,7 +965,7 @@
           <reloadTime>	3.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
@@ -1013,8 +1011,8 @@
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>

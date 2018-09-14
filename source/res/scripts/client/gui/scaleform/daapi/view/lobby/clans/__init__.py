@@ -23,6 +23,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.clans.search.ClanSearchInfo import ClanSearchInfo
     from gui.Scaleform.daapi.view.lobby.clans.search.ClanSearchWindow import ClanSearchWindow
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationView import ClanProfileFortificationView
+    from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileStrongholdsView import ClanProfileStrongholdsView
     from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileGlobalMapView import ClanProfileGlobalMapView
     from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesView import ClanInvitesView
     from gui.Scaleform.daapi.view.lobby.clans.invites.ClanInvitesWindow import ClanInvitesWindow
@@ -38,6 +39,7 @@ def getViewSettings():
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_ALIAS, ClanProfileSummaryView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_PERSONNEL_VIEW_ALIAS, ClanProfilePersonnelView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_FORTIFICATION_VIEW_ALIAS, ClanProfileFortificationView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
+     ViewSettings(CLANS_ALIASES.CLAN_PROFILE_STRONGHOLDS_VIEW_ALIAS, ClanProfileStrongholdsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_VIEW_ALIAS, ClanProfileGlobalMapView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_PROMO_VIEW_ALIAS, ClanProfileGlobalMapPromoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_INFO_VIEW_ALIAS, ClanProfileGlobalMapInfoView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),

@@ -116,8 +116,8 @@ def getGuiServicesConfig(manager):
     :param manager: helpers.dependency.DependencyManager
     """
     from gui import battle_control
+    from gui import battle_results
     from gui import clans
-    from gui import clubs
     from gui import game_control
     from gui import login
     from gui import server_events
@@ -130,4 +130,4 @@ def getGuiServicesConfig(manager):
     manager.install(battle_control.getBattleSessionConfig)
     manager.install(sounds.getSoundsConfig)
     manager.install(clans.getClanServicesConfig)
-    manager.install(clubs.getClubsServicesConfig)
+    manager.install(battle_results.getBattleResultsServiceConfig)

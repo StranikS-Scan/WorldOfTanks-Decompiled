@@ -33,6 +33,7 @@ class UNIT_FLAGS:
     SORTIES_FORBIDDEN = 64
     RATED_BATTLE_FORBIDDEN = 128
     IN_PRE_ARENA = 256
+    IS_WGSH_TEST = 512
     IS_DYNAMIC = 1024
     DEFAULT = 0
     PRE_QUEUE = 0
@@ -162,6 +163,8 @@ class UNIT_ERROR:
     UNIT_LOCKED_IN_QUEUE = 95
     UNIT_KICKED_FROM_QUEUE = 96
     UNIT_BACK_TO_QUEUE = 97
+    EXTERNAL_UNIT_NOT_ENABLED = 98
+    BAD_ARENA_BONUS_TYPE = 99
 
 
 OK = UNIT_ERROR.OK
@@ -269,6 +272,7 @@ class UNIT_NOTIFY_CMD:
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
     REMOVED_VEHICLE = 13
+    UPD_VEHICLE_DESCRS = 14
 
 
 class CLIENT_UNIT_CMD:
@@ -301,6 +305,7 @@ class CLIENT_UNIT_CMD:
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
+FORCED_CLIENT_UNIT_CMDS = (CLIENT_UNIT_CMD.LEAVE_UNIT,)
 
 class UNIT_NOTIFY_ID:
     PARENT_UNIT_MGR = -1
@@ -525,6 +530,7 @@ class UnitBase(OpsUnpacker):
     def _setVehicleList(self, accountDBID, vehShortList):
         vehs = []
         vehInvIDs = []
+        vehTypeCompDescrs = []
         for vehInvID, vehTypeCompDescr in vehShortList:
             classTag = vehicles.getVehicleClass(vehTypeCompDescr)
             vehType = vehicles.getVehicleType(vehTypeCompDescr)
@@ -532,10 +538,12 @@ class UnitBase(OpsUnpacker):
             vehTuple = UnitVehicle(vehInvID, vehTypeCompDescr, vehType.level, vehClassIdx)
             vehs.append(vehTuple)
             vehInvIDs.append(vehInvID)
+            vehTypeCompDescrs.append(vehTypeCompDescr)
 
         self._vehicles[accountDBID] = vehs
         self.storeOp(UNIT_OP.SET_VEHICLE_LIST, accountDBID, vehShortList)
         self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [vehInvIDs])
+        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.UPD_VEHICLE_DESCRS, [accountDBID, vehTypeCompDescrs])
         self._dirty = 1
         return True
 
@@ -547,6 +555,7 @@ class UnitBase(OpsUnpacker):
         self._dirty = 1
         self.storeOp(UNIT_OP.CLEAR_VEHICLE, accountDBID)
         self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [[]])
+        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.UPD_VEHICLE_DESCRS, [accountDBID, []])
         return
 
     def _setMember(self, accountDBID, slotChosenIdx):
@@ -577,7 +586,7 @@ class UnitBase(OpsUnpacker):
     def _addPlayer(self, accountDBID, **kwargs):
         self._players[accountDBID] = kwargs
         self._dirty = 1
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         self._appendOp(UNIT_OP.ADD_PLAYER, packed)
@@ -628,7 +637,7 @@ class UnitBase(OpsUnpacker):
         return True
 
     _HEADER = '<HHHHHHBii'
-    _PLAYER_DATA = '<qiIHBHH'
+    _PLAYER_DATA = '<qiIHBHHq'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
@@ -671,7 +680,7 @@ class UnitBase(OpsUnpacker):
             packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
 
         for accountDBID, playerData in players.iteritems():
-            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
+            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0), playerData.get('clanDBID', 0))
             packed += packPascalString(playerData.get('nickName', ''))
             packed += packPascalString(playerData.get('clanAbbrev', ''))
 
@@ -711,11 +720,11 @@ class UnitBase(OpsUnpacker):
 
         sz = self._PLAYER_DATA_SIZE
         for i in xrange(0, playerCount):
-            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, unpacking)
+            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, unpacking)
             nickName, lenNickBytes = unpackPascalString(unpacking, sz)
             clanAbbrev, lenClanBytes = unpackPascalString(unpacking, sz + lenNickBytes)
             unpacking = unpacking[sz + lenNickBytes + lenClanBytes:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -792,9 +801,6 @@ class UnitBase(OpsUnpacker):
 
     def isInArena(self):
         return bool(self._flags & UNIT_FLAGS.IN_ARENA)
-
-    def isInPreArena(self):
-        return bool(self._flags & UNIT_FLAGS.IN_PRE_ARENA)
 
     def isSortiesForbidden(self):
         return bool(self._flags & UNIT_FLAGS.SORTIES_FORBIDDEN)
@@ -1076,10 +1082,10 @@ class UnitBase(OpsUnpacker):
 
     def _unpackPlayer(self, packedOps):
         sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, packedOps)
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, packedOps)
         nickName, lenNickBytes = unpackPascalString(packedOps, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedOps, sz + lenNickBytes)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
         self._addPlayer(accountDBID, **playerInfo)
         return packedOps[sz + lenNickBytes + lenClanBytes:]
 

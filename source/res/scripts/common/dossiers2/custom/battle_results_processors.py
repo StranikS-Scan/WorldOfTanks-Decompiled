@@ -10,9 +10,9 @@ from dossiers2.custom.utils import isVehicleSPG, getInBattleSeriesIndex
 from dossiers2.custom.records import RECORD_DB_IDS as DOSSIER_REC_DB_IDS
 from UnitBase import SORTIE_DIVISION_NAMES, SORTIE_DIVISION
 from debug_utils import *
-_divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle', 'middleWins'),
- 'CHAMPION': ('championBattlesCount', 'fortResourceInChampion', 'championWins'),
- 'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute', 'absoluteWins')}
+_divisionToRecordNames = {6: ('middleBattlesCount', 'fortResourceInMiddle', 'middleWins'),
+ 8: ('championBattlesCount', 'fortResourceInChampion', 'championWins'),
+ 10: ('absoluteBattlesCount', 'fortResourceInAbsolute', 'absoluteWins')}
 _saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 'achievements',
                                           'records': ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries', 'maxAimerSeries')}],
  BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7: [{'block': 'achievements7x7',
@@ -151,9 +151,8 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
         dossierDescr['fortSortiesInClan']['fortResource'] += battleResults['personalFortResource']
         __updateAggregatedValues(dossierDescr.expand('fortSortiesInClan'), dossierDescr.expand('fortSortiesInClan'), battleResults, dossierXP, frags8p)
         if battleResults['division']:
-            divisionNumber = getattr(SORTIE_DIVISION, battleResults['division'])
             fortSortiesInClanBlock = dossierDescr['fortSortiesInClan']
-            divisionLowerCase = SORTIE_DIVISION_NAMES[divisionNumber].lower()
+            divisionLowerCase = SORTIE_DIVISION_NAMES[battleResults['division']].lower()
             sortiesCombatsVar = '%sBattlesCount' % divisionLowerCase
             fortSortiesInClanBlock[sortiesCombatsVar] += 1
             if battleResults['team'] == battleResults['winnerTeam']:

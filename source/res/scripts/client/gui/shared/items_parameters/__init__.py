@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/__init__.py
 import math
 import sys
+from math import ceil
 from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
@@ -60,11 +61,11 @@ def calcShellParams(descriptors):
         shell = d['shell']
         ppRand = shell['piercingPowerRandomization']
         damageRand = shell['damageRandomization']
-        curPiercingPower = (round(piercingPower - piercingPower * ppRand), round(piercingPower + piercingPower * ppRand))
+        curPiercingPower = (int(piercingPower - piercingPower * ppRand), int(ceil(piercingPower + piercingPower * ppRand)))
         damage = shell[DAMAGE_PROP_NAME][0]
-        curDamage = (round(damage - damage * damageRand), round(damage + damage * damageRand))
-        result[PIERCING_POWER_PROP_NAME] = (min(result[PIERCING_POWER_PROP_NAME][0], curPiercingPower[0], curPiercingPower[1]), max(result[PIERCING_POWER_PROP_NAME][1], curPiercingPower[0], curPiercingPower[1]))
-        result[DAMAGE_PROP_NAME] = (min(result[DAMAGE_PROP_NAME][0], curDamage[0], curDamage[1]), max(result[DAMAGE_PROP_NAME][1], curDamage[0], curDamage[1]))
+        curDamage = (int(damage - damage * damageRand), int(ceil(damage + damage * damageRand)))
+        result[PIERCING_POWER_PROP_NAME] = (min(result[PIERCING_POWER_PROP_NAME][0], curPiercingPower[0]), max(result[PIERCING_POWER_PROP_NAME][1], curPiercingPower[1]))
+        result[DAMAGE_PROP_NAME] = (min(result[DAMAGE_PROP_NAME][0], curDamage[0]), max(result[DAMAGE_PROP_NAME][1], curDamage[1]))
 
     return result
 
@@ -108,8 +109,9 @@ def getGunDescriptors(gunDescr, vehicleDescr):
 
 def getShellDescriptors(shellDescriptor, vehicleDescr):
     descriptors = []
+    shellInNationID = shellDescriptor['id'][1]
     for shot in vehicleDescr.gun.get('shots', []):
-        if shot['shell']['id'][1] == shellDescriptor['id'][1]:
+        if shot['shell']['id'][1] == shellInNationID:
             descriptors.append(shot)
 
     return descriptors

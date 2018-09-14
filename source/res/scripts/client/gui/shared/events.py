@@ -146,7 +146,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_DESERTER_DLG = 'showDeserterDialog'
-    SHOW_CHRISTMAS_CONVERT_DIALOG = 'showChristmasConvertDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -188,6 +187,13 @@ class LoginEventEx(LoginEvent):
         self.showAutoLoginBtn = showAutoLoginBtn
 
 
+class RenameWindowEvent(HasCtxEvent):
+    RENAME_WINDOW = 'renameWindow'
+
+    def __init__(self, eventType, ctx):
+        super(RenameWindowEvent, self).__init__(eventType=eventType, ctx=ctx)
+
+
 class HideWindowEvent(HasCtxEvent):
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_RESULT_WINDOW = 'hideBattleResultsWindow'
@@ -213,6 +219,7 @@ class LobbySimpleEvent(HasCtxEvent):
     NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
+    BATTLE_RESULTS_POSTED = 'battleResultsPosted'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -264,8 +271,9 @@ class CoolDownEvent(SharedEvent):
     FORTIFICATION = 'fortificationCoolDown'
     BW_CHAT2 = 'bwChat2CoolDown'
     XMPP = 'xmppCoolDown'
-    CLUB = 'club'
+    BATTLE = 'battleCoolDown'
     CLAN = 'clan'
+    STRONGHOLD = 'stronghold'
 
     def __init__(self, eventType=None, requestID=0, coolDown=5.0):
         super(CoolDownEvent, self).__init__(eventType)
@@ -370,6 +378,13 @@ class CSVehicleSelectEvent(HasCtxEvent):
         super(CSVehicleSelectEvent, self).__init__(eventType, ctx)
 
 
+class CSReserveSelectEvent(HasCtxEvent):
+    RESERVE_SELECTED = 'reserveSelected'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(CSReserveSelectEvent, self).__init__(eventType, ctx)
+
+
 class CSRosterSlotSettingsWindow(HasCtxEvent):
     APPLY_SLOT_SETTINGS = 'applySlotSettings'
 
@@ -408,6 +423,16 @@ class FortOrderEvent(HasCtxEvent):
         super(FortOrderEvent, self).__init__(eventType, ctx)
 
 
+class StrongholdEvent(HasCtxEvent):
+    STRONGHOLD_ACTIVATED = 'strongholdActivated'
+    STRONGHOLD_DEACTIVATED = 'strongholdDeactivated'
+    STRONGHOLD_DATA_UNAVAILABLE = 'strongholdDataUnavailable'
+    STRONGHOLD_ON_TIMER = 'strongholdOnTimer'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(StrongholdEvent, self).__init__(eventType, ctx)
+
+
 class OpenLinkEvent(SharedEvent):
     SPECIFIED = 'openSpecifiedURL'
     REGISTRATION = 'openRegistrationURL'
@@ -419,8 +444,6 @@ class OpenLinkEvent(SharedEvent):
     FORT_DESC = 'fortDescription'
     CLAN_SEARCH = 'clanSearch'
     CLAN_CREATE = 'clanCreate'
-    CLUB_SETTINGS = 'clubSettings'
-    CLUB_HELP = 'clubHelp'
     MEDKIT_HELP = 'medkitHelp'
     REPAIRKITHELP_HELP = 'repairkitHelp'
     FIRE_EXTINGUISHERHELP_HELP = 'fireExtinguisherHelp'
@@ -430,7 +453,6 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_CAP = 'globalMapCap'
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
-    NY_RULES = 'nyRules'
 
     def __init__(self, eventType, url='', title=''):
         super(OpenLinkEvent, self).__init__(eventType)

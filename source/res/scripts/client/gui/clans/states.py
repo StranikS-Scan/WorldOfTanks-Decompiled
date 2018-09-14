@@ -148,13 +148,20 @@ class _ClanWebState(_ClanState):
         return
 
     @async
+    @process
     def sendRequest(self, ctx, callback, allowDelay=None):
+        result = yield self._sendRequest(ctx, allowDelay=allowDelay)
+        callback(result)
+
+    @async
+    def _sendRequest(self, ctx, callback, allowDelay=None):
+        requestControler = self.__requestsCtrl
 
         def _cbWrapper(result):
             LOG_DEBUG('Response is received:', ctx, result)
             callback(result)
 
-        self.__requestsCtrl.request(ctx, callback=_cbWrapper, allowDelay=allowDelay)
+        requestControler.request(ctx, callback=_cbWrapper, allowDelay=allowDelay)
 
     def getWebRequester(self):
         return self.__webRequester
@@ -184,9 +191,9 @@ class ClanUnavailableState(_ClanWebState):
 
     @async
     @process
-    def sendRequest(self, ctx, callback, allowDelay=True):
+    def _sendRequest(self, ctx, callback, allowDelay=True):
         if ctx.getRequestType() == CLAN_REQUESTED_DATA_TYPE.PING:
-            result = yield super(ClanUnavailableState, self).sendRequest(ctx, allowDelay=allowDelay)
+            result = yield super(ClanUnavailableState, self)._sendRequest(ctx, allowDelay=allowDelay)
         else:
             result = ClanRequestResponse(ResponseCodes.WGCG_ERROR, 'WGCG is not available.', None)
         callback(result)
@@ -229,6 +236,7 @@ class ClanAvailableState(_ClanWebState):
         self.__loginState = LOGIN_STATE.LOGGED_OFF
         self._tokenRequester = None
         self.__waitingRequests = list()
+        self.__clanSync = False
         return
 
     def init(self):
@@ -247,9 +255,15 @@ class ClanAvailableState(_ClanWebState):
     def getLimits(self, profile):
         return AccountClanLimits(profile)
 
+    def clanSync(self, ctx):
+        if not self.__clanSync and ctx.isClanSyncRequired():
+            if self._clanCtrl and self.isLoggedOn():
+                self._clanCtrl.onStateUpdated()
+                self.__clanSync = True
+
     @async
     @process
-    def sendRequest(self, ctx, callback, allowDelay=True):
+    def _sendRequest(self, ctx, callback, allowDelay=True):
         if ctx.isAuthorizationRequired() and not self.isLoggedOn():
             self.__waitingRequests.append((ctx,
              callback,
@@ -257,8 +271,9 @@ class ClanAvailableState(_ClanWebState):
              allowDelay))
             self.login()
         else:
+            self.clanSync(ctx)
             if self._clanCtrl and self._clanCtrl.simWGCGEnabled():
-                result = yield super(ClanAvailableState, self).sendRequest(ctx, allowDelay=allowDelay)
+                result = yield super(ClanAvailableState, self)._sendRequest(ctx, allowDelay=allowDelay)
             else:
                 result = ClanRequestResponse(ResponseCodes.WGCG_ERROR, 'Simulated WGCG error!', None)
             resultCode = result.code
@@ -299,7 +314,7 @@ class ClanAvailableState(_ClanWebState):
         self.__loginState = LOGIN_STATE.LOGGING_IN
         nextLoginState = LOGIN_STATE.LOGGED_OFF
         LOG_DEBUG('Requesting spa token...')
-        response = yield self._tokenRequester.request()
+        response = yield self._tokenRequester.request(allowDelay=True)
         if response and response.isValid():
             pDbID = getPlayerDatabaseID()
             if response.getDatabaseID() == pDbID:
@@ -312,8 +327,7 @@ class ClanAvailableState(_ClanWebState):
         else:
             LOG_WARNING('There is error while getting spa token for clan gate', response)
         self.__loginState = nextLoginState
-        if self.isLoggedOn():
-            self._clanCtrl.onStateUpdated()
+        self.__clanSync = False
         self.__processWaitingRequests()
         callback(self.isLoggedOn())
 
@@ -333,7 +347,7 @@ class ClanAvailableState(_ClanWebState):
         if self.isLoggedOn():
             while len(self.__waitingRequests):
                 ctx, clallback, prevResult, allowDelay = self.__waitingRequests.pop(0)
-                result = yield self.sendRequest(ctx, allowDelay=allowDelay)
+                result = yield self._sendRequest(ctx, allowDelay=allowDelay)
                 clallback(result)
 
         else:

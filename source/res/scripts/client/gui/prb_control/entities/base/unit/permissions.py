@@ -107,12 +107,6 @@ class IUnitPermissions(IPrbPermissions):
         """
         return False
 
-    def canChangeRated(self):
-        """
-        Can this player change unit's state to rated/unrated
-        """
-        return False
-
     @classmethod
     def isCommander(cls, roles):
         """
@@ -201,9 +195,6 @@ class UnitPermissions(IUnitPermissions):
 
     def canLead(self):
         return self._roles & UNIT_ROLE.CAN_LEAD > 0
-
-    def canChangeRated(self):
-        return self._roles & UNIT_ROLE.CHANGE_ROSTER > 0
 
     @classmethod
     def isCommander(cls, roles):

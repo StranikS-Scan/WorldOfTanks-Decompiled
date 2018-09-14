@@ -103,7 +103,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
         BigWorld.camera(None)
-        BigWorld.player().positionControl.followCamera(False)
+        positionControl = BigWorld.player().positionControl
+        if positionControl is not None:
+            positionControl.followCamera(False)
         self.__positionOscillator.reset()
         FovExtended.instance().resetFov()
         FovExtended.instance().enabled = True

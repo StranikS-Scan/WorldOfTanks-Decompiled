@@ -8,7 +8,7 @@ class FalloutCarouselFilter(CarouselFilter):
 
     def __init__(self):
         super(FalloutCarouselFilter, self).__init__()
-        self._sections = (FALLOUT_CAROUSEL_FILTER_1, FALLOUT_CAROUSEL_FILTER_2)
+        self._serverSections = (FALLOUT_CAROUSEL_FILTER_1, FALLOUT_CAROUSEL_FILTER_2)
         self._criteriesGroups = (EventCriteriesGroup(), FalloutBasicCriteriesGroup())
 
 

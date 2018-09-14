@@ -379,6 +379,10 @@ class FortBattlesDataProvider(SortableDAAPIDataProvider):
 
         return vo
 
+    def hasUnit(self, clientIdx):
+        _, unit = self.prbEntity.getUnit(clientIdx)
+        return unit is not None
+
     def getUnitVO(self, clientIdx):
         return makeFortBattleShortVO(self.prbEntity, unitIdx=clientIdx)
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OfflineMapCreator.py
 import BigWorld
+import MapActivities
 import Math
 import Keys
 import GUI
@@ -48,7 +49,6 @@ class OfflineMapCreator:
 
     def __init__(self):
         self.__spaceId = None
-        self.__accountID = None
         self.__cam = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
@@ -73,10 +73,16 @@ class OfflineMapCreator:
             self.__spaceId = BigWorld.createSpace()
             self.__isActive = True
             self.__arenaTypeID = self._arenaTypeIDByArenaName.get(mapName)
-            self.__accountID = BigWorld.createEntity('Account', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), dict())
             self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, 'spaces/' + mapName)
-            self.__vEntityId = BigWorld.createEntity('Avatar', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), dict())
-            BigWorld.player(BigWorld.entities[self.__vEntityId])
+            self.__vEntityId = BigWorld.createEntity('Avatar', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), {})
+            avatar = BigWorld.entities[self.__vEntityId]
+            avatar.arenaUniqueID = 0
+            avatar.arenaTypeID = self.__arenaTypeID
+            avatar.arenaBonusType = constants.ARENA_BONUS_TYPE.UNKNOWN
+            avatar.arenaGuiType = constants.ARENA_GUI_TYPE.UNKNOWN
+            avatar.arenaExtraData = {}
+            avatar.weatherPresetID = 0
+            BigWorld.player(avatar)
             self.__setupCamera()
             BigWorld.worldDrawEnabled(True)
         except:
@@ -97,10 +103,15 @@ class OfflineMapCreator:
             BigWorld.camera(None)
             self.__cam = None
             BigWorld.clearEntitiesAndSpaces()
-            BigWorld.releaseSpace(self.__spaceId)
+            MapActivities.g_mapActivities.stop()
+            if self.__spaceId and BigWorld.isClientSpace(self.__spaceId):
+                if self.__spaceMappingId:
+                    BigWorld.delSpaceGeometryMapping(self.__spaceId, self.__spaceMappingId)
+                BigWorld.clearSpace(self.__spaceId)
+                BigWorld.releaseSpace(self.__spaceId)
             self.__spaceId = 0
+            self.__spaceMappingId = 0
             self.__arenaTypeID = 0
-            accountId = 0
             self.__vEntityId = 0
             BigWorld.worldDrawEnabled(True)
         except:

@@ -75,6 +75,11 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             self.__unregisterPythonComponent(alias, res)
         return
 
+    def _invalidate(self):
+        super(BaseDAAPIComponent, self)._invalidate()
+        for c in self.__components.itervalues():
+            c.validate()
+
     def _dispose(self):
         self.__destroyPythonComponents(pyReloading=False)
         super(BaseDAAPIComponent, self)._dispose()

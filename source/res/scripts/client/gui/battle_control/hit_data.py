@@ -53,9 +53,6 @@ class HitData(object):
     def getDamage(self):
         return self.__damage
 
-    def hasHealthDamage(self):
-        return self.__damage > 0
-
     def getHitFlags(self):
         return self.__hitFlags
 

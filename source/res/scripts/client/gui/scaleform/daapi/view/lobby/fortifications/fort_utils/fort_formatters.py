@@ -39,7 +39,9 @@ def getTextLevel(value):
      'VII',
      'VIII',
      'IX',
-     'X']
+     'X',
+     'XI',
+     'XII']
     return levels[value - 1]
 
 

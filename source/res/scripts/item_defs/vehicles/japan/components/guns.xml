@@ -35,6 +35,7 @@
     <_105mm_Cannon_Type_14>	34	</_105mm_Cannon_Type_14>
     <_105mm_Experimental_Tank_Gun_Kai>	36	</_105mm_Experimental_Tank_Gun_Kai>
     <_37mm_APX_SA18_bot>	35	</_37mm_APX_SA18_bot>
+    <_150mm_45_41st_Year_Type>	37	</_150mm_45_41st_Year_Type>
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
@@ -1277,7 +1278,7 @@
           <speed>	930	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	171 156	</piercingPower>
+          <piercingPower>	194 168	</piercingPower>
         </_88mm_Pzgr.40>
         <_88mm_Sprg.18>
           <defaultPortion>	0.2	</defaultPortion>
@@ -2023,6 +2024,56 @@
         </_150mm_HE_Type96>
       </shots>
     </_150mm_Howitzer_Type96>
+    <_150mm_45_41st_Year_Type>
+      <userString>	#japan_vehicles:_150mm_45_41st_Year_Type	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	332000	</price>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	20.0	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	6700	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_150mm_Common_Type_0_HE>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	75 75	</piercingPower>
+        </_150mm_Common_Type_0_HE>
+        <_150mm_Common_Type_0_HE_Kai>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	75 75	</piercingPower>
+        </_150mm_Common_Type_0_HE_Kai>
+      </shots>
+    </_150mm_45_41st_Year_Type>
     <_90mm_Gun_Type61_IGR>
       <userString>	#igr_vehicles:_90mm_Gun_Type61_IGR	</userString>
       <tags></tags>

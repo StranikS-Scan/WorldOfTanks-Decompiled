@@ -172,6 +172,13 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         return ''.join(result)
 
 
+class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
+
+    def getComment(self, invite):
+        comment = passCensor(invite.comment)
+        return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': html.escape(comment)})
+
+
 class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
     def getTitle(self, invite):
@@ -210,6 +217,8 @@ class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 def getPrbInviteHtmlFormatter(invite):
     if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
         return PrbFortBattleInviteHtmlTextFormatter()
+    if invite.type == PREBATTLE_TYPE.EXTERNAL:
+        return PrbExternalBattleInviteHtmlTextFormatter()
     return FalloutInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.FALLOUT else PrbInviteHtmlTextFormatter()
 
 

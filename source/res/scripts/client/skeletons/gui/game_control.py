@@ -277,7 +277,7 @@ class IBrowserController(IGameController):
     def removeFilterHandler(self, handler):
         raise NotImplementedError
 
-    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True):
+    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None):
         raise NotImplementedError
 
     def getBrowser(self, browserID):
@@ -408,10 +408,7 @@ class IVehicleComparisonBasket(IGameController):
     onParametersChange = None
     onSwitchChange = None
 
-    def setVehicleCrew(self, index, crewLevel):
-        raise NotImplementedError
-
-    def applyModulesFromVehicle(self, index, vehicle):
+    def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
         raise NotImplementedError
 
     def addVehicle(self, vehicleCompactDesr, initParameters):
@@ -430,6 +427,10 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def isReadyToAdd(self, vehicle):
+        raise NotImplementedError
+
+    @property
+    def isLocked(self):
         raise NotImplementedError
 
     def isAvailable(self):
@@ -455,6 +456,9 @@ class IVehicleComparisonBasket(IGameController):
 
     def writeCache(self):
         raise NotImplementedError
+
+    def revertVehicleByIdx(self, index):
+        raise NotImplemented
 
 
 class IEncyclopediaController(IGameController):
@@ -501,4 +505,28 @@ class ITradeInController(IGameController):
         raise NotImplementedError
 
     def addTradeInPriceIfNeeded(self, vehicle, money):
+        raise NotImplementedError
+
+
+class IQuestsController(IGameController):
+
+    def getInventoryVehicles(self):
+        raise NotImplementedError
+
+    def isNewbiePlayer(self):
+        raise NotImplementedError
+
+    def getQuestForVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def getAllAvailableQuests(self):
+        raise NotImplementedError
+
+    def isAnyQuestAvailable(self):
+        raise NotImplementedError
+
+    def getFirstAvailableQuest(self):
+        raise NotImplementedError
+
+    def getQuestGroups(self):
         raise NotImplementedError

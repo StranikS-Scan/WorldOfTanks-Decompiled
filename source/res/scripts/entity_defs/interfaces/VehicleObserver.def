@@ -16,16 +16,6 @@
       <Type>	REMOTE_CAMERA_STRATEGIC_DATA	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </remoteCameraStrategic>
-    <vehiclesVisibleDirectly>
-      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Type>
-      <Flags>	CELL_PUBLIC	</Flags>
-    </vehiclesVisibleDirectly>
-    <vehiclesVisibleIndirectly>
-      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
-      </Type>
-      <Flags>	CELL_PUBLIC	</Flags>
-    </vehiclesVisibleIndirectly>
   </Properties>
   <CellMethods>
     <switchObserverFPVControlMode>
@@ -44,10 +34,5 @@
       <Exposed></Exposed>
       <Arg>	REMOTE_CAMERA_STRATEGIC_DATA	</Arg>
     </setRemoteCameraStrategic>
-    <receiveVisibilityUpdate>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	BOOL	</Arg>
-    </receiveVisibilityUpdate>
   </CellMethods>
 </VehicleObserver.def>

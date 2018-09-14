@@ -150,6 +150,13 @@ class _ClanProfile(namedtuple('_ClanProfile', ['enabled', 'url', 'type'])):
         return cls(False, '', '')
 
 
+class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
+
+    @classmethod
+    def defaults(cls):
+        return cls('')
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -177,6 +184,11 @@ class ServerSettings(object):
             self.__updateClanProfile(self.__serverSettings)
         else:
             self.__clanProfile = _ClanProfile.defaults()
+        if 'strongholdSettings' in self.__serverSettings:
+            settings = self.__serverSettings['strongholdSettings']
+            self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
+        else:
+            self.__strongholdSettings = _StrongholdSettings.defaults()
 
     def update(self, serverSettingsDiff):
         self.__serverSettings.update(serverSettingsDiff)
@@ -210,6 +222,10 @@ class ServerSettings(object):
     def clanProfile(self):
         return self.__clanProfile
 
+    @property
+    def stronghold(self):
+        return self.__strongholdSettings
+
     def isPotapovQuestEnabled(self):
         return self.isFalloutQuestEnabled() or self.isRegularQuestEnabled()
 
@@ -228,8 +244,8 @@ class ServerSettings(object):
     def isFortsEnabled(self):
         return self.__getGlobalSetting('isFortsEnabled', True)
 
-    def isClubsEnabled(self):
-        return self.__getGlobalSetting('isClubsEnabled', False)
+    def isStrongholdsEnabled(self):
+        return self.__getGlobalSetting('isStrongholdsEnabled', True)
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)

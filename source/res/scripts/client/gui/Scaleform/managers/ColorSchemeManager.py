@@ -31,6 +31,9 @@ class ColorSchemeManager(ColorSchemeManagerMeta):
          'transform': {'mult': transform['mult'].tuple(),
                        'offset': transform['offset'].tuple()}}
 
+    def getIsColorBlind(self):
+        return self.settingsCore.getSetting('isColorBlind')
+
     def update(self):
         self.as_updateS()
 
@@ -98,9 +101,14 @@ class BattleColorSchemeManager(ColorSchemeManager, IArenaVehiclesController):
 
     def __set3DFlagsEmblem(self):
         arenaDP = self.sessionProvider.getArenaDP()
-        teamsOnArena = arenaDP.getTeamsOnArena()
-        for teamIdx in [0] + teamsOnArena:
-            BigWorld.wg_setFlagEmblem(teamIdx, 'system/maps/wg_emblem.dds', Math.Vector4(0.0, 0.1, 0.5, 0.9))
+        if arenaDP is None:
+            return
+        else:
+            teamsOnArena = arenaDP.getTeamsOnArena()
+            for teamIdx in [0] + teamsOnArena:
+                BigWorld.wg_setFlagEmblem(teamIdx, 'system/maps/wg_emblem.dds', Math.Vector4(0.0, 0.1, 0.5, 0.9))
+
+            return
 
     def __onTeamChanged(self, teamID):
         self.__set3DFlagsColors()

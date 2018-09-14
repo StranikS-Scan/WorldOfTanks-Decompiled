@@ -34,6 +34,7 @@
     <_105mm_kan_strv_103_L_51>	34	</_105mm_kan_strv_103_L_51>
     <_105mm_kan_strv_103_L_62>	35	</_105mm_kan_strv_103_L_62>
     <_105mm_kan_strv_103_L_51_1>	37	</_105mm_kan_strv_103_L_51_1>
+    <_84mm_kan_strv_81_1>	38	</_84mm_kan_strv_81_1>
   </ids>
   <shared>
     <_20mm_akan_m_Madsen>
@@ -1153,6 +1154,64 @@
         </_75mm_sgr_m_38>
       </shots>
     </_75mm_kan_strv_74>
+    <_84mm_kan_strv_81_1>
+      <userString>	#sweden_vehicles:_84mm_kan_strv_81_1	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	180000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	3	</reloadTime>
+      <maxAmmo>	65	</maxAmmo>
+      <aimingTime>	2.1	</aimingTime>
+      <weight>	1242	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_84mm_slpprj_m_53>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	226 211	</piercingPower>
+        </_84mm_slpprj_m_53>
+        <_84mm_slpprj_m_54>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1400	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 248	</piercingPower>
+        </_84mm_slpprj_m_54>
+        <_84mm_slsgr_m_53>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	600	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	42 42	</piercingPower>
+        </_84mm_slsgr_m_53>
+      </shots>
+    </_84mm_kan_strv_81_1>
     <_90mm_Bofors_L_43>
       <userString>	#sweden_vehicles:_90mm_Bofors_L_43	</userString>
       <tags></tags>
@@ -1499,7 +1558,7 @@
         <amplitude>	0.26	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
@@ -1556,7 +1615,7 @@
         <amplitude>	0.56	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_mainext_mb	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
@@ -1727,7 +1786,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
@@ -1784,7 +1843,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
@@ -1841,7 +1900,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
@@ -1898,7 +1957,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
@@ -1956,7 +2015,7 @@
         <amplitude>	0.24	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_large	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>

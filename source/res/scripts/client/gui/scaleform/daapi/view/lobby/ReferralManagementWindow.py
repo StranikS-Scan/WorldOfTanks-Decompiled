@@ -2,17 +2,18 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralManagementWindow.py
 import itertools
 import pickle
+from adisp import process
 from operator import methodcaller
 import BigWorld
-from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.meta.ReferralManagementWindowMeta import ReferralManagementWindowMeta
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
@@ -25,6 +26,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from shared_utils import findFirst
 from gui.shared.utils.functions import showSentInviteMessage
 from skeletons.gui.game_control import IRefSystemController
 

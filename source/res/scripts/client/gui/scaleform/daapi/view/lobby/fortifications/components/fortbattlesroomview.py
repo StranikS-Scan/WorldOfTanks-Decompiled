@@ -167,7 +167,10 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper):
 
     def _updateRallyData(self):
         entity = self.prbEntity
-        data = vo_converters.makeSortieVO(entity, unitIdx=entity.getUnitIdx(), app=self.app)
+        unitPermissions = entity.getPermissions()
+        canInvite = unitPermissions.canSendInvite()
+        isPlayerCreator = entity.isCommander()
+        data = vo_converters.makeSortieVO(entity, isPlayerCreator, unitIdx=entity.getUnitIdx(), canInvite=canInvite, app=self.app)
         self.__updateLabels()
         self.as_updateRallyS(data)
 

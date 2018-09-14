@@ -104,8 +104,6 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         import motivation_quests
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
-        import LcdKeyboard
-        LcdKeyboard.enableLcdKeyboardSpecificKeys(True)
         dependency.configure(services_config.getClientServicesConfig)
         gui_personality.init(loadingScreenGUI=loadingScreenGUI)
         EdgeDetectColorController.g_instance.create()
@@ -190,6 +188,9 @@ def start():
                     LOG_DEBUG(sys.argv)
                     from tests.auto.HangarOverride import HangarOverride
                     HangarOverride.setHangar('spaces/' + sys.argv[2])
+                    if len(sys.argv) > 3 and sys.argv[3] is not None:
+                        LOG_DEBUG('Setting default client inactivity timeout: %s' % sys.argv[3])
+                        constants.CLIENT_INACTIVITY_TIMEOUT = int(sys.argv[3])
                 except:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
@@ -277,8 +278,6 @@ def fini():
         gui_personality.fini()
         dependency.clear()
         tutorialLoaderFini()
-        import LcdKeyboard
-        LcdKeyboard.finalize()
         import Vibroeffects
         if Vibroeffects.VibroManager.g_instance is not None:
             Vibroeffects.VibroManager.g_instance.destroy()
@@ -365,8 +364,7 @@ def onDisconnected():
 
 
 def onCameraChange(oldCamera):
-    BigWorld.clearTextureStreamingViewpoints()
-    BigWorld.registerTextureStreamingViewpoint(BigWorld.camera(), BigWorld.projection())
+    pass
 
 
 def handleCharEvent(char, key, mods):

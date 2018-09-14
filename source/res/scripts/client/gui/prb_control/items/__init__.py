@@ -44,14 +44,6 @@ class FunctionalState(object):
             return True
         return False
 
-    def isInClubsPreArena(self):
-        """
-        Are we in clubs pre arena state.
-        Returns:
-            are we in club and it is in prearena state
-        """
-        return self.funcState.isInPreArena() if self.isInUnit(PREBATTLE_TYPE.CLUBS) and self.funcState is not None else False
-
     def isInSpecialPrebattle(self):
         """
         Are we in special battles.

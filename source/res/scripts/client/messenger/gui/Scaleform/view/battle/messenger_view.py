@@ -30,6 +30,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
 from skeletons.gui.battle_session import IBattleSessionProvider
+from ReplayEvents import g_replayEvents
 _UNKNOWN_RECEIVER_LABEL = 'N/A'
 _UNKNOWN_RECEIVER_ORDER = 100
 _CONSUMERS_LOCK_ENTER = (BATTLE_VIEW_ALIASES.RADIAL_MENU,)
@@ -357,6 +358,8 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         return
 
     def addMessage(self, message, fillColor=FILL_COLORS.BLACK, accountDBID=0):
+        if self.__isInTimeWarp:
+            return
         if accountDBID == self._accDbID:
             accountDBID = 0
         if fillColor == FILL_COLORS.BLACK:
@@ -381,6 +384,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
     def _populate(self):
         super(BattleMessengerView, self)._populate()
         self._accDbID = getAvatarDatabaseID()
+        self.__isInTimeWarp = BattleReplay.g_replayCtrl.isTimeWarpInProgress
         self.__receivers = []
         self.fireEvent(ChannelManagementEvent(0, ChannelManagementEvent.REGISTER_BATTLE, {'component': self}), scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(ChannelManagementEvent.MESSAGE_FADING_ENABLED, self.__handleMessageFadingEnabled, EVENT_BUS_SCOPE.GLOBAL)
@@ -392,6 +396,15 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             self.as_enableToxicPanelS()
         if self.__invalidateReceiverIndex():
             self.as_changeReceiverS(self.__receiverIndex)
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
+            g_replayEvents.onTimeWarpFinish += self.__onReplayTimeWarpFinished
+
+    def __onReplayTimeWarpFinished(self):
+        self.__isInTimeWarp = False
+
+    def __onReplayTimeWarpStart(self):
+        self.__isInTimeWarp = True
 
     def _dispose(self):
         self.__receivers = []
@@ -400,6 +413,8 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.fireEvent(ChannelManagementEvent(0, ChannelManagementEvent.UNREGISTER_BATTLE), scope=EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(ChannelManagementEvent.MESSAGE_FADING_ENABLED, self.__handleMessageFadingEnabled, EVENT_BUS_SCOPE.GLOBAL)
         self.sessionProvider.removeArenaCtrl(self)
+        g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
+        g_replayEvents.onTimeWarpFinish -= self.__onReplayTimeWarpFinished
         super(BattleMessengerView, self)._dispose()
         return
 

@@ -16,9 +16,9 @@ class ProfileTechniqueWindow(ProfileTechnique):
         if self.__currentlyRequestingVehicleId == vehicleID:
             self._receiveVehicleDossier(vehicleID, databaseID)
 
-    def requestData(self, data):
+    def requestData(self, vehicleId):
         self.as_responseVehicleDossierS(None)
-        self.__currentlyRequestingVehicleId = data.vehicleId
+        self.__currentlyRequestingVehicleId = int(vehicleId)
         self.__dataReceiver.invoke(self._databaseID, self.__currentlyRequestingVehicleId)
         return
 

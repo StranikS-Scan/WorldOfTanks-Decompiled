@@ -170,7 +170,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -248,7 +247,7 @@
             <gun>	45	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 0 0.569444 0 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>

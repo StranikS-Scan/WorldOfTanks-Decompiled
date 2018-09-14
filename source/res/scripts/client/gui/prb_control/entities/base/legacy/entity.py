@@ -870,10 +870,6 @@ class LegacyEntity(_LegacyEntity):
             if callback:
                 callback(False)
             return
-        elif self._cooldown.validate(REQUEST_TYPE.SET_PLAYER_STATE, REQUEST_COOLDOWN.PREBATTLE_NOT_READY):
-            if callback:
-                callback(False)
-            return
         else:
             if ctx.doVehicleValidation():
                 result = self._limits.isVehicleValid()
@@ -892,7 +888,6 @@ class LegacyEntity(_LegacyEntity):
                 return
             ctx.startProcessing(callback)
             BigWorld.player().prb_ready(ctx.getVehicleInventoryID(), ctx.onResponseReceived)
-            self._cooldown.process(REQUEST_TYPE.SET_PLAYER_STATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_NOT_READY)
             return
 
     def _getPlayersStateStats(self, rosterKey):

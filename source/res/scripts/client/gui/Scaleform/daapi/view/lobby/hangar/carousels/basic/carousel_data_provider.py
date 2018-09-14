@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_data_provider.py
-from gui import GUI_NATIONS_ORDER_INDEX
+import BigWorld
+from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
+from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
@@ -99,6 +101,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._filteredIndices = []
         self._selectedIdx = -1
         self._emptySlotsCount = 0
+        self._showVehicleStats = False
+        self._vehiclesStats = {}
         self._filter.load()
 
     def hasRentedVehicles(self):
@@ -211,6 +215,9 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         if needUpdate:
             self.flashObject.as_setFilter(self._filteredIndices)
 
+    def setShowStats(self, showVehicleStats):
+        self._showVehicleStats = showVehicleStats
+
     def _dispose(self):
         self._filter = None
         self._itemsCache = None
@@ -228,6 +235,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             bonusImage = ''
         label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
         labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
+        statsText = self._getVehicleStats(vehicle.intCD)
         return {'id': vehicle.invID,
          'infoText': largeStatus,
          'smallInfoText': smallStatus,
@@ -242,11 +250,14 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
          'nation': vehicle.nationID,
          'xpImgSource': bonusImage,
          'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-         'rentLeft': rentInfoText}
+         'rentLeft': rentInfoText,
+         'statsText': statsText,
+         'visibleStats': self._showVehicleStats}
 
     def _buildVehicleItems(self):
         self._vehicles = []
         self._vehicleItems = []
+        self._vehiclesStats = self._itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
         vehicleIcons = []
         vehiclesCollection = self._itemsCache.items.getVehicles(self._baseCriteria)
         for intCD, vehicle in vehiclesCollection.iteritems():
@@ -256,6 +267,26 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
         self.app.imageManager.loadImages(vehicleIcons)
 
+    def _getVehicleStats(self, intCD):
+        if intCD in self._vehiclesStats:
+            battlesCount, wins, markOfMastery, xp = self._vehiclesStats.get(intCD)
+            markOfMasteryText = ''
+            if markOfMastery > 0:
+                markOfMasteryText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'markOfMastery', ctx={'markOfMastery': markOfMastery})
+            winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
+            winsEfficiencyStr = BigWorld.wg_getIntegralFormat(round(winsEfficiency)) + '%'
+            winsText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'wins', ctx={'wins': winsEfficiencyStr})
+            vehDossier = self._itemsCache.items.getVehicleDossier(intCD)
+            vehStats = vehDossier.getTotalStats()
+            marksOnGun = vehStats.getAchievement(MARK_ON_GUN_RECORD)
+            marksOnGunText = ''
+            if marksOnGun.getValue() > 0:
+                marksOnGunText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'marksOnGun', ctx={'count': marksOnGun.getValue()})
+            statsText = '{}   {}     {}'.format(markOfMasteryText, winsText, marksOnGunText)
+        else:
+            statsText = '#menu:tankCarousel/statsStatus/unavailable'
+        return text_styles.stats(statsText)
+
     def _updateVehicleItems(self, vehiclesCollection):
         """ Selectively update provided vehicles.
         
@@ -263,6 +294,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         """
         updateIndices = []
         updateVehicles = []
+        self._vehiclesStats = self._itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
         for intCD, newVehicle in vehiclesCollection.iteritems():
             for idx, oldVehicle in enumerate(self._vehicles):
                 if oldVehicle.invID == newVehicle.invID:

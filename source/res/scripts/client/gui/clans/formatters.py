@@ -64,7 +64,7 @@ def getRequestErrorMsg(result, ctx):
     elif msgReqKey in _CUSTOM_ERR_MESSAGES_BY_REQUEST:
         errorMsg = _CUSTOM_ERR_MESSAGES_BY_REQUEST[msgReqKey]
     else:
-        errorMsg = result.errStr
+        errorMsg = result.txtStr
     msg = ''
     if callable(errorMsg):
         msg = errorMsg(result, ctx)

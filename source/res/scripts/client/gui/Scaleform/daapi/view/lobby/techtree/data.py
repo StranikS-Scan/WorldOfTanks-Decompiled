@@ -7,7 +7,7 @@ from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.prb_control import prbDispatcherProperty
 from gui.Scaleform.daapi.view.lobby.techtree.dumpers import _BaseDumper
 from gui.shared.economics import getGUIPrice
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, MAX_PATH_LIMIT
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, MAX_PATH_LIMIT, SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
@@ -16,7 +16,7 @@ from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from items import vehicles, ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD
+from items import vehicles, ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from skeletons.gui.game_control import ITradeInController
 __all__ = ['ResearchItemsData', 'NationTreeData']
 
@@ -288,6 +288,17 @@ class _ItemsData(object):
 
         return False
 
+    def invalidateRestore(self, vehicles):
+        """
+        Updates TechTree if nation vehicles equal selected nation
+        """
+        for intCD in vehicles:
+            _, nationID, _ = vehicles_core.parseIntCompactDescr(intCD)
+            if nationID == SelectedNation.getIndex():
+                return True
+
+        return False
+
     def isHasVehicles(self):
         return bool(len(self.getInventoryVehicles()) > 0)
 
@@ -497,7 +508,7 @@ class ResearchItemsData(_ItemsData):
             lockReason = item.lock
             if lockReason == LOCK_REASON.ON_ARENA:
                 status = 'battle'
-            elif lockReason in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB):
+            elif lockReason in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT):
                 status = 'inPrebattle'
             elif item.repairCost > 0:
                 status = 'destroyed'

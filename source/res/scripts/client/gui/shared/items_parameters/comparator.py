@@ -67,67 +67,108 @@ class ItemsComparator(object):
 
 class VehiclesComparator(ItemsComparator):
 
-    def __init__(self, currentVehicleParams, otherVehicleParams, possibleBonuses=None, bonuses=None, penalties=None):
+    def __init__(self, currentVehicleParams, otherVehicleParams, suitableArtefacts=None, bonuses=None, penalties=None):
         super(VehiclesComparator, self).__init__(currentVehicleParams, otherVehicleParams)
-        self.__possibleBonuses = possibleBonuses or set()
+        self.__suitableArtefacts = suitableArtefacts or set()
         self.__bonuses = bonuses or set()
         self.__penalties = penalties or dict()
 
     def _getPenaltiesAndBonuses(self, paramName):
+        """
+        Gets: set of possible bonuses which may affect on selected param but do not work now,
+        set of actual bonuses which affect now on selected param,
+        set of actual penalties which affect now on param,
+        """
         penalties = self.__penalties.get(paramName, [])
-        compatibleBonuses = params_cache.g_paramsCache.getBonuses().get(paramName, [])
-        allBonuses = []
-        for bonus in compatibleBonuses:
-            bonusName, bonusGroup = bonus
-            if bonus in self.__possibleBonuses or bonusGroup == 'skill' or bonusGroup == 'role' or bonusGroup == 'extra':
-                allBonuses.append(bonus)
+        allPossibleParamBonuses = self.__getPossibleParamBonuses(paramName)
+        currentParamBonuses = self.__getCurrentParamBonuses(paramName, allPossibleParamBonuses)
+        possibleBonuses = allPossibleParamBonuses - currentParamBonuses
+        return (possibleBonuses, currentParamBonuses, penalties)
 
-        bonusCondition = _getConditionsForParamBonuses(paramName, self.__bonuses)
-        currBonuses = set([ bonus for bonus in self.__bonuses if bonus in allBonuses and bonusCondition(bonus) ])
-        return (set(allBonuses) - currBonuses, currBonuses, penalties)
+    def __getPossibleParamBonuses(self, paramName):
+        """
+        Gets set of all possible bonuses (<set((bonusName:str, bonusGroup:str),..)>),
+        which suit for selected paramName
+        """
+        paramBonuses = set(params_cache.g_paramsCache.getBonuses().get(paramName, []))
+        allPossibleParamBonuses = set()
+        for bonusName, bonusGroup in paramBonuses:
+            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra'):
+                allPossibleParamBonuses.add((bonusName, bonusGroup))
+
+        return allPossibleParamBonuses
+
+    def __getCurrentParamBonuses(self, paramName, possibleBonuses):
+        """
+        Gets set of actual bonuses which suit for selected paramName
+        if paramName is a conditional bonus then return set of bonuses which work only together with that bonus
+        """
+        if paramName in CONDITIONAL_BONUSES:
+            return self.__getConditionalBonuses(paramName, possibleBonuses)
+        else:
+            return possibleBonuses.intersection(self.__bonuses)
+
+    def __getConditionalBonuses(self, paramName, possibleBonuses):
+        """
+        Gets set of bonuses which work only together with selected paramName
+        example: on invisibilityMovingFactor affect camouflage skill,
+        but on camouflage skill may affect brotherhood skill,
+        that is why brotherhood skill do not increase invisibilityMovingFactor without camouflage skill
+        """
+        currentBonuses = set()
+        condition, affected = CONDITIONAL_BONUSES[paramName]
+        bonuses = possibleBonuses.intersection(self.__bonuses)
+        for bonus in bonuses:
+            if bonus not in affected or bonus in affected and condition in bonuses:
+                currentBonuses.add(bonus)
+
+        return currentBonuses
 
 
-_ParameterInfo = collections.namedtuple('ParameterInfo', 'name, value, state, possibleBonuses, bonuses, penalties')
-_CONDITIONAL_BONUSES = {'invisibilityMovingFactor': {('camouflage', 'skill'): [('chocolate', 'equipment'),
-                                                        ('cocacola', 'equipment'),
-                                                        ('ration', 'equipment'),
-                                                        ('hotCoffee', 'equipment'),
-                                                        ('ration_china', 'equipment'),
-                                                        ('ration_uk', 'equipment'),
-                                                        ('ration_japan', 'equipment'),
-                                                        ('ration_czech', 'equipment'),
-                                                        ('improvedVentilation_class1', 'optionalDevice'),
-                                                        ('improvedVentilation_class2', 'optionalDevice'),
-                                                        ('improvedVentilation_class3', 'optionalDevice')]},
- 'invisibilityStillFactor': {('camouflage', 'skill'): [('chocolate', 'equipment'),
-                                                       ('cocacola', 'equipment'),
-                                                       ('ration', 'equipment'),
-                                                       ('hotCoffee', 'equipment'),
-                                                       ('ration_china', 'equipment'),
-                                                       ('ration_uk', 'equipment'),
-                                                       ('ration_japan', 'equipment'),
-                                                       ('ration_czech', 'equipment'),
-                                                       ('improvedVentilation_class1', 'optionalDevice'),
-                                                       ('improvedVentilation_class2', 'optionalDevice'),
-                                                       ('improvedVentilation_class3', 'optionalDevice')]}}
+class _ParameterInfo(collections.namedtuple('_ParamInfo', 'name, value, state, possibleBonuses, bonuses, penalties')):
 
-def _getConditionsForParamBonuses(paramName, allBonuses):
-    if paramName in _CONDITIONAL_BONUSES:
-        conditions = {}
-        for condition, affected in _CONDITIONAL_BONUSES[paramName].iteritems():
-            for affectedParam in affected:
-                conditions.setdefault(affectedParam, []).append(condition)
+    def getParamDiff(self):
+        if isinstance(self.value, (tuple, list)):
+            diff = map(lambda (_, diff): diff, self.state)
+            if any(diff):
+                return diff
+        else:
+            _, diff = self.state
+            if bool(diff):
+                return diff
+        return None
 
-        return lambda bonus: bonus not in conditions or all((c in allBonuses for c in conditions[bonus]))
-    else:
-        return lambda _: True
 
+CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),
+                               ('chocolate', 'equipment'),
+                               ('cocacola', 'equipment'),
+                               ('ration', 'equipment'),
+                               ('hotCoffee', 'equipment'),
+                               ('ration_china', 'equipment'),
+                               ('ration_uk', 'equipment'),
+                               ('ration_japan', 'equipment'),
+                               ('ration_czech', 'equipment'),
+                               ('improvedVentilation_class1', 'optionalDevice'),
+                               ('improvedVentilation_class2', 'optionalDevice'),
+                               ('improvedVentilation_class3', 'optionalDevice')]),
+ 'invisibilityStillFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),
+                              ('chocolate', 'equipment'),
+                              ('cocacola', 'equipment'),
+                              ('ration', 'equipment'),
+                              ('hotCoffee', 'equipment'),
+                              ('ration_china', 'equipment'),
+                              ('ration_uk', 'equipment'),
+                              ('ration_japan', 'equipment'),
+                              ('ration_czech', 'equipment'),
+                              ('improvedVentilation_class1', 'optionalDevice'),
+                              ('improvedVentilation_class2', 'optionalDevice'),
+                              ('improvedVentilation_class3', 'optionalDevice')])}
 
 def _getComparableValue(currentValue, comparableList, idx):
     return comparableList[idx] if len(comparableList) > idx else currentValue
 
 
-def _getParamStateInfo(paramName, val1, val2, valueIdx=None):
+def _getParamStateInfo(paramName, val1, val2, customReverted=False):
     if val1 is None or val2 is None:
         hasNoParam = True
         diff = 0
@@ -146,17 +187,26 @@ def _getParamStateInfo(paramName, val1, val2, valueIdx=None):
     if diff == 0:
         return (PARAM_STATE.NORMAL, diff)
     else:
-        if valueIdx is not None and paramName in CUSTOM_QUALITY_PARAMS:
-            isInverted = CUSTOM_QUALITY_PARAMS[paramName][valueIdx]
-        else:
-            isInverted = paramName in BACKWARD_QUALITY_PARAMS
+        isInverted = paramName in BACKWARD_QUALITY_PARAMS or customReverted
         if isInverted and diff > 0 or not isInverted and diff < 0:
             return (PARAM_STATE.WORSE, diff)
         return (PARAM_STATE.BETTER, diff)
         return
 
 
-def rateParameterState(paramName, val1, val2):
+def rateParameterState(paramName, val1, val2, customQualityParams=None):
+    if customQualityParams is None:
+        customQualityParams = CUSTOM_QUALITY_PARAMS.get(paramName)
     if isinstance(val1, collections.Iterable):
-        return tuple([ _getParamStateInfo(paramName, val, _getComparableValue(val, val2, i), i) for i, val in enumerate(val1) ])
-    return _getParamStateInfo(paramName, val1, val2)
+        result = []
+        for i, val in enumerate(val1):
+            val2ToCompare = _getComparableValue(val, val2, i)
+            if customQualityParams is not None:
+                customQuality = _getComparableValue(customQualityParams[-1], customQualityParams, i)
+            else:
+                customQuality = None
+            result.append(rateParameterState(paramName, val, val2ToCompare, customQuality))
+
+        return tuple(result)
+    else:
+        return _getParamStateInfo(paramName, val1, val2, customQualityParams)

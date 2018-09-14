@@ -723,30 +723,3 @@ class IsLongDisconnectedFromCenter(SyncValidator):
 
     def _validate(self):
         return makeError('disconnected_from_center') if isLongDisconnectedFromCenter() else makeSuccess()
-
-
-class ChestsValidator(SyncValidator):
-
-    def __init__(self, chests):
-        super(ChestsValidator, self).__init__()
-        self.__chests = chests
-
-    def _validate(self):
-        if not self.__chests or not sum(self.__chests.values()):
-            return makeError('NO_CHESTS')
-        else:
-            return makeSuccess()
-
-
-class ChristmasAlchemyValidator(SyncValidator):
-
-    def __init__(self, items):
-        super(ChristmasAlchemyValidator, self).__init__()
-        self.__items = items
-
-    def _validate(self):
-        if self.__items is None or len(filter(lambda itemID: itemID > 0, self.__items)) < 5:
-            return makeError('NOT_ENOUGH_SELECTED')
-        else:
-            return makeSuccess()
-            return

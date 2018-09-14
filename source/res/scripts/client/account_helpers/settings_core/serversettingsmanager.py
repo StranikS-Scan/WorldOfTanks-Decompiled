@@ -78,8 +78,9 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_DRAW_RANGE: 8,
                                        GAME.INCREASED_ZOOM: 9,
                                        GAME.SNIPER_MODE_BY_SHIFT: 10,
-                                       GAME.SIMPLIFIED_TTC: 11,
-                                       GAME.CAROUSEL_TYPE: 12}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
+                                       GAME.CAROUSEL_TYPE: 12,
+                                       GAME.DOUBLE_CAROUSEL_TYPE: 13,
+                                       GAME.VEHICLE_CAROUSEL_STATS: 14}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -139,11 +140,11 @@ class ServerSettingsManager(object):
                                            'level_10': 29}, offsets={}),
      SETTINGS_SECTIONS.CAROUSEL_FILTER_2: Section(masks={'premium': 0,
                                            'elite': 1,
-                                           'hideRented': 2,
+                                           'rented': 2,
                                            'igr': 3,
                                            'favorite': 5,
                                            'bonus': 6,
-                                           'hideEvent': 7}, offsets={}),
+                                           'event': 7}, offsets={}),
      SETTINGS_SECTIONS.FALLOUT_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                    'germany': 1,
                                                    'usa': 2,
@@ -170,12 +171,12 @@ class ServerSettingsManager(object):
                                                    'level_10': 29}, offsets={}),
      SETTINGS_SECTIONS.FALLOUT_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
                                                    'elite': 1,
-                                                   'hideRented': 2,
+                                                   'rented': 2,
                                                    'igr': 3,
                                                    'gameMode': 4,
                                                    'favorite': 5,
                                                    'bonus': 6,
-                                                   'hideEvent': 7}, offsets={}),
+                                                   'event': 7}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
@@ -196,8 +197,8 @@ class ServerSettingsManager(object):
                                   TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
                                          'CustomizationSlotsHint': 1,
-                                         'ChristmasDecorationListHint': 2,
-                                         'ShopTradeInHint': 3}, offsets={}),
+                                         'ShopTradeInHint': 2,
+                                         'VehCompareConfigHint': 3}, offsets={}),
      SETTINGS_SECTIONS.FEEDBACK: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                   DAMAGE_INDICATOR.PRESETS: 1,
                                   DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -219,7 +220,13 @@ class ServerSettingsManager(object):
                                   BATTLE_EVENTS.BASE_CAPTURE: 20,
                                   BATTLE_EVENTS.ENEMY_CRITICAL_HIT: 21,
                                   BATTLE_EVENTS.EVENT_NAME: 22,
-                                  BATTLE_EVENTS.VEHICLE_INFO: 23}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768)}),
+                                  BATTLE_EVENTS.VEHICLE_INFO: 23,
+                                  BATTLE_EVENTS.ENEMY_WORLD_COLLISION: 24,
+                                  DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 25,
+                                  BATTLE_EVENTS.RECEIVED_DAMAGE: 26,
+                                  BATTLE_EVENTS.RECEIVED_CRITS: 27}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768),
+                                  DAMAGE_LOG.SHOW_EVENT_TYPES: Offset(28, 805306368),
+                                  DAMAGE_LOG.EVENT_POSITIONS: Offset(30, 3221225472L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
                                                         'item_2': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
@@ -463,6 +470,7 @@ class ServerSettingsManager(object):
          'fallout': {},
          'carousel_filter': {},
          'feedbackData': {},
+         'onceOnlyHints': {},
          'clear': {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
@@ -509,6 +517,10 @@ class ServerSettingsManager(object):
         feedbackData = data.get('feedbackData', {})
         if feedbackData:
             settings[SETTINGS_SECTIONS.FEEDBACK] = self._buildSectionSettings(SETTINGS_SECTIONS.FEEDBACK, feedbackData)
+        onceOnlyHints = data.get('onceOnlyHints', {})
+        clearOnceOnlyHints = clear.get('onceOnlyHints', 0)
+        if onceOnlyHints or clearOnceOnlyHints:
+            settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, onceOnlyHints) ^ clearOnceOnlyHints
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

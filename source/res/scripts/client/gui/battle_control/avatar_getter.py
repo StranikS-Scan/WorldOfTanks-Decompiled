@@ -99,6 +99,18 @@ def isVehicleOverturned(avatar=None):
     return result
 
 
+def isVehicleBarrelUnderWater(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.isOwnBarrelUnderWater
+    except AttributeError:
+        LOG_WARNING('Attribute "isOwnBarrelUnderWater" is not found')
+        result = False
+
+    return result
+
+
 def isVehicleInFire(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()

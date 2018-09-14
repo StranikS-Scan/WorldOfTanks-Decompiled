@@ -27,6 +27,7 @@ class ARENA_LISTENER_SCOPE(object):
     INVITATIONS = 32
     POSITIONS = 64
     CONTACTS = 128
+    VIEW_POINTS = 256
 
 
 class VEHICLE_STATUS(BitmaskHelper):

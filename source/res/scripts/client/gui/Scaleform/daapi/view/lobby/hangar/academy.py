@@ -63,6 +63,14 @@ class Academy(LobbySubView, AcademyViewMeta):
             if browser is not None:
                 self.__prepareUrlFilter(url)
                 browser.addFilter(self.__catchItemView)
+                browser.setAllowAutoLoadingScreen(False)
+                browser.onReadyToShowContent = self.__removeLoadingScreen
+        return
+
+    def __removeLoadingScreen(self, url):
+        browser = self.browserCtrl.getBrowser(self.__browserID)
+        if browser is not None:
+            browser.setLoadingScreenVisible(False)
         return
 
     def __catchItemView(self, url, _):

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/requests.py
+import BigWorld
 from functools import partial
 import types
 import weakref
+from ConnectionManager import connectionManager
+from account_helpers import getAccountDatabaseID
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.clans.contexts import GetFrontsCtx
 from client_request_lib.exceptions import ResponseCodes
 from gui.clans import formatters as clan_fmts, contexts, items
-from gui.clans.settings import DEFAULT_COOLDOWN, CLAN_REQUESTED_DATA_TYPE
-from gui.clubs.settings import REQUEST_TIMEOUT
+from gui.clans.settings import DEFAULT_COOLDOWN, CLAN_REQUESTED_DATA_TYPE, REQUEST_TIMEOUT
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.shared.utils.requesters.abstract import Response, ClientRequestsByIDProcessor
@@ -22,7 +24,7 @@ class ClanRequestResponse(Response):
         return self.code
 
     def clone(self, data=None):
-        return ClanRequestResponse(self.code, self.errStr, data or self.data)
+        return ClanRequestResponse(self.code, self.txtStr, data or self.data)
 
 
 class ClanRequester(ClientRequestsByIDProcessor):
@@ -50,14 +52,8 @@ class ClanRequester(ClientRequestsByIDProcessor):
         def _callback(data, statusCode, responseCode):
             assert requestID in self._requests, 'There is no context has been registered for given request. Probably you call callback at the same frame as request'
             ctx = self._requests[requestID]
-            if responseCode == ResponseCodes.NO_ERRORS:
-                response = self._makeResponse(responseCode, '', data, ctx, extraCode=statusCode)
-            else:
-                errStr = data.pop('description', '')
-                data = None
-                response = self._makeResponse(responseCode, errStr, data, ctx, extraCode=statusCode)
+            response = self._makeResponse(responseCode, '', data, ctx, extraCode=statusCode)
             self._onResponseReceived(requestID, response)
-            return
 
         method(_callback, *args, **kwargs)
         return requestID
@@ -103,7 +99,6 @@ class ClanRequestsController(RequestsController):
          CLAN_REQUESTED_DATA_TYPE.CLAN_INVITATIONS_COUNT: self.__getClanInvitations,
          CLAN_REQUESTED_DATA_TYPE.CLAN_MEMBERS: self.__getClanMembers,
          CLAN_REQUESTED_DATA_TYPE.CLAN_MEMBERS_RATING: self.__getClanMembersRating,
-         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_STATISTICS: self.__getClanFort,
          CLAN_REQUESTED_DATA_TYPE.CLAN_PROVINCES: self.__getProvinces,
          CLAN_REQUESTED_DATA_TYPE.SEARCH_CLANS: self.__searchClans,
          CLAN_REQUESTED_DATA_TYPE.GET_RECOMMENDED_CLANS: self.__getRecommendedClans,
@@ -120,7 +115,23 @@ class ClanRequestsController(RequestsController):
          CLAN_REQUESTED_DATA_TYPE.GET_ACCOUNT_APPLICATIONS: self.__getAccountApplications,
          CLAN_REQUESTED_DATA_TYPE.CLANS_INFO: self.__getClansInfo,
          CLAN_REQUESTED_DATA_TYPE.CLAN_FAVOURITE_ATTRS: self.__getClanFavoriteAttributes,
-         CLAN_REQUESTED_DATA_TYPE.PING: self.__ping}
+         CLAN_REQUESTED_DATA_TYPE.PING: self.__ping,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_LEAVE: self.__leave,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_ASSIGN: self.__assign,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UNASSIGN: self.__unassign,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_CHANGE_OPENED: self.__changeOpened,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_SET_VEHICLE: self.__setVehicle,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_SET_PLAYER_STATE: self.__setPlayerState,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_SEND_INVITE: self.__sendInvite,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_KICK: self.__kick,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_BATTLE_QUEUE: self.__battleQueue,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_GIVE_LEADERSHIP: self.__giveLeadership,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_TAKE_LEADERSHIP: self.__takeLeadership,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_SET_RESERVE: self.__setReserve,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UNSET_RESERVE: self.__unsetReserve,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UPDATE: self.__updateStronghold,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_JOIN_BATTLE: self.__joinBattle}
 
     def fini(self):
         super(ClanRequestsController, self).fini()
@@ -176,9 +187,6 @@ class ClanRequestsController(RequestsController):
 
     def __getClanGlobalMapStats(self, ctx, callback=None):
         return self.__doClanRequest(ctx, callback, ('global_map', 'get_statistics'))
-
-    def __getClanFort(self, ctx, callback=None):
-        return self.__doClanRequest(ctx, callback, ('strongholds', 'get_statistics'))
 
     def __getProvinces(self, ctx, callback=None):
 
@@ -296,3 +304,57 @@ class ClanRequestsController(RequestsController):
 
     def __doFail(self, ctx, reason, callback):
         self._requester._stopProcessing(ctx, reason, callback)
+
+    def __getPeripheryIDStr(self):
+        return str(connectionManager.peripheryID)
+
+    def __getAccountID(self):
+        return getAccountDatabaseID()
+
+    def __assign(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'assign_player'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID(), ctx.getSlotIdx())
+
+    def __unassign(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'unassign_player'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID())
+
+    def __changeOpened(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_open'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.isOpened())
+
+    def __setVehicle(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_vehicle'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getVehTypeCD())
+
+    def __setPlayerState(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_readiness'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.isReady(), False)
+
+    def __sendInvite(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'invite_players'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getDatabaseIDs(), ctx.getComment())
+
+    def __kick(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'kick_player'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID())
+
+    def __battleQueue(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_readiness'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.isRequestToStart(), False)
+
+    def __giveLeadership(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'give_leadership'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID())
+
+    def __takeLeadership(self, ctx, callback):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'take_away_leadership'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __setReserve(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'lock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())
+
+    def __unsetReserve(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'unlock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())
+
+    def __leave(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'leave_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __updateStronghold(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'get_wgsh_unit_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __joinBattle(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'join_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __getStrongholdStatistics(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('wgsh', 'clan_statistics'), clan_id=ctx.getClanID())

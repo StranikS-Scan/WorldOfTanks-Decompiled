@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/quests/__init__.py
-import tutorial.control.functional
 from tutorial.control.lobby.context import LobbyBonusesRequester
 from tutorial.control.quests import queries
 from tutorial.data.effects import EFFECT_TYPE
@@ -32,7 +31,7 @@ class QuestsControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_WINDOW: quests_func.ShowSharedWindowEffect,
          EFFECT_TYPE.SELECT_VEHICLE_IN_HANGAR: quests_func.SelectVehicleInHangar,
          EFFECT_TYPE.SAVE_TUTORIAL_SETTING: quests_func.SaveTutorialSettingEffect,
-         EFFECT_TYPE.SAVE_ACCOUNT_SETTING: core_func.SaveAccountSettingEffect,
+         EFFECT_TYPE.SAVE_ACCOUNT_SETTING: quests_func.SaveAccountSettingEffect,
          EFFECT_TYPE.RUN_TRIGGER: quests_func.QuestsFunctionalRunTriggerEffect,
          EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER: chains_func.FunctionalShowUnlockedChapter,
          EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow,

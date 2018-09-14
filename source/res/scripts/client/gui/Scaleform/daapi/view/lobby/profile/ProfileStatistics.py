@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from debug_utils import LOG_ERROR
-from gui.clubs.club_helpers import ClubListener
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
@@ -27,7 +26,7 @@ def _parseProviderType(value):
     return value.split('/')
 
 
-class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
+class ProfileStatistics(ProfileStatisticsMeta):
 
     def __init__(self, *args):
         try:
@@ -41,28 +40,15 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
     def _populate(self):
         super(ProfileStatistics, self)._populate()
         self._setInitData()
-        self.startClubListening()
 
     def _setInitData(self, accountDossier=None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)]
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
         dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
+        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS))
         seasonItems = [self._dataProviderEntry(PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE.PROFILE_SEASONSDROPDOWN_ALL)]
-        if accountDossier is not None:
-            seasons = accountDossier.getRated7x7Seasons()
-            if len(seasons):
-                seasonItems.append(self._dataProviderEntry(PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON, PROFILE.PROFILE_SEASONSDROPDOWN_CURRENT))
-                completedSeasons = self.clubsCtrl.getCompletedSeasons()
-                for seasonID, _ in accountDossier.getRated7x7Seasons().iteritems():
-                    if seasonID in completedSeasons:
-                        sID = _packProviderType(PROFILE_DROPDOWN_KEYS.STATICTEAM, seasonID)
-                        seasonUserName = self.clubsCtrl.getSeasonUserName(seasonID)
-                        if seasonUserName:
-                            seasonItems.append(self._dataProviderEntry(sID, seasonUserName))
-
         seasonIndex = 0
         for idx, season in enumerate(seasonItems):
             if season['key'] == _packProviderType(self._battlesType, self._seasonID):
@@ -71,10 +57,11 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         self.as_setInitDataS({'dropDownProvider': dropDownProvider,
          'seasonItems': seasonItems,
          'seasonIndex': seasonIndex,
-         'seasonEnabled': len(seasonItems) > 1})
+         'seasonEnabled': False})
         return
 
     def _sendAccountData(self, targetData, accountDossier):
+        super(ProfileStatistics, self)._sendAccountData(targetData, accountDossier)
         self._setInitData(accountDossier)
         vo = getStatisticsVO(battlesType=self._battlesType, targetData=targetData, accountDossier=accountDossier, isCurrentUser=self._userID is None)
         if self._battlesType in (PROFILE_DROPDOWN_KEYS.TEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON):
@@ -95,7 +82,6 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         self.setSeasonID(*_parseProviderType(seasonId))
 
     def _dispose(self):
-        self.stopClubListening()
         super(ProfileStatistics, self)._dispose()
 
     def onCompletedSeasonsInfoChanged(self):

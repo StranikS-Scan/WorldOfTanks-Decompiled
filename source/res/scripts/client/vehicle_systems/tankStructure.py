@@ -105,10 +105,5 @@ def getSkeleton(vehicleDesc, modelStateName):
     return getUndamagedSkeleton(vehicleDesc) if modelStateName == 'undamaged' else getCrashedSkeleton(vehicleDesc)
 
 
-def getExhaustNodesFromDesc(vehicleDesc):
-    vehicleExhaustDescriptor = vehicleDesc.hull['exhaust']
-    return vehicleExhaustDescriptor.nodes
-
-
 def getPartModelsFromDesc(vehicleDesc, modelStateName):
     return VehiclePartsTuple(vehicleDesc.chassis['models'][modelStateName], vehicleDesc.hull['models'][modelStateName], vehicleDesc.turret['models'][modelStateName], vehicleDesc.gun['models'][modelStateName])

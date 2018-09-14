@@ -189,7 +189,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -462,7 +461,7 @@
       <guns>
         <_100mm_D54_TS>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+            <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 5 0.472222 5 0.486111 4 0.513889 4 0.527778 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>

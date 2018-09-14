@@ -85,12 +85,16 @@ class SoundEvent(Notifiable):
         if self.isPlaying():
             SOUND_DEBUG('Stop sound event playing', self._soundEventID)
             _MC.g_musicController.stopEvent(self._soundEventID)
-            if self._checkFinish:
-                self._isStarted = False
-                self.clearNotification()
-                self.onFinished()
+            self._doStop(notify=True)
         else:
+            self._doStop(notify=False)
             SOUND_DEBUG('Skip stopping, sound is already stopped', self._soundEventID)
+
+    def clear(self):
+        """Clears all internal references when client is closed.
+        Note: separated method (instead to use method stop) was added
+        to avoid lag when some musics are switched."""
+        self._doStop(notify=False)
 
     def isPlaying(self):
         return _MC.g_musicController.isPlaying(self._soundEventID)
@@ -121,6 +125,13 @@ class SoundEvent(Notifiable):
             self._isStarted = False
             self.clearNotification()
             self.onFinished(self.isCompleted())
+
+    def _doStop(self, notify=True):
+        if self._checkFinish:
+            self._isStarted = False
+            self.clearNotification()
+            if notify:
+                self.onFinished()
 
     def __repr__(self):
         return '%s(id = %d, params = %s)' % (self.__class__.__name__, self._soundEventID, self._params)
@@ -207,6 +218,8 @@ class SoundEnv(object):
     def stop(self):
         self.onChanged.clear()
         self._soundsCtrl.system.onEnvStop(self.__envID)
+        self._ambient.clear()
+        self._music.clear()
 
     def getMusicEvent(self):
         """:return: SoundEvent object instance
@@ -339,6 +352,28 @@ class ModalWindowEnv(SoundEnv):
         super(ModalWindowEnv, self).__init__(soundsCtrl, 'modal', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
+class StrongholdEnv(SoundEnv):
+    """This environment plays Stronghold specific ambient.
+    """
+
+    def __init__(self, soundsCtrl):
+        super(StrongholdEnv, self).__init__(soundsCtrl, 'stronghold', ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT), filters=(SoundFilters.FORT_FILTER,))
+
+    def start(self):
+        super(StrongholdEnv, self).start()
+        g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.FORT)
+
+    def stop(self):
+        g_eventBus.removeListener(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE, self.__onError, scope=EVENT_BUS_SCOPE.FORT)
+        if self._soundsCtrl is not None:
+            self._soundsCtrl.system.sendGlobalEvent('fa_music_global_unmute')
+        super(StrongholdEnv, self).stop()
+        return
+
+    def __onError(self, event):
+        self.getAmbientEvent().stop()
+
+
 class FortEnv(SoundEnv, FortViewHelper):
     """This environment plays fort specific ambient and changes playing
     parameters on runtime according to the fortification events.
@@ -346,7 +381,7 @@ class FortEnv(SoundEnv, FortViewHelper):
 
     def __init__(self, soundsCtrl):
         self.filter = weakref.proxy(snd_filters.get(SoundFilters.FORT_FILTER))
-        super(FortEnv, self).__init__(soundsCtrl, 'fort', ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT, {self.filter.getDefencePeriodField(): 0,
+        super(FortEnv, self).__init__(soundsCtrl, 'fort', ambient=SoundEvent(_MC.AMBIENT_EVENT_NONE, {self.filter.getDefencePeriodField(): 0,
          self.filter.getBuildNumberField(): 0,
          self.filter.getTransportModeField(): 0}), filters=(SoundFilters.FORT_FILTER, SoundFilters.FILTERED_HANGAR))
 

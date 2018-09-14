@@ -25,6 +25,7 @@ from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
+from gui.battle_control.controllers import view_points_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
@@ -168,6 +169,10 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def battleCacheCtrl(self):
         return self._repository.getController(BATTLE_CTRL_ID.TMP_IGNORE_LIST_CTRL)
 
+    @property
+    def viewPoints(self):
+        return self._repository.getController(BATTLE_CTRL_ID.VIEW_POINTS)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -281,7 +286,8 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(ammo)
         repository.addController(consumables.createEquipmentCtrl(setup))
         repository.addController(consumables.createOptDevicesCtrl())
-        repository.addController(vehicle_state_ctrl.createCtrl(setup))
+        state = vehicle_state_ctrl.createCtrl(setup)
+        repository.addController(state)
         repository.addController(avatar_stats_ctrl.AvatarStatsController())
         feedback = feedback_adaptor.createFeedbackAdaptor(setup)
         messages = msgs_ctrl.createBattleMessagesCtrl(setup)
@@ -289,10 +295,11 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(messages)
         repository.addController(chat_cmd_ctrl.ChatCommandsController(setup, feedback, ammo))
         repository.addController(drr_scale_ctrl.DRRScaleController(messages))
-        repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback))
+        repository.addController(personal_efficiency_ctrl.createEfficiencyCtrl(setup, feedback, state))
         tmpIgnoreListCtrl = tmp_ignore_list_ctrl.createTmpIgnoreListCtrl(setup)
         if tmpIgnoreListCtrl is not None:
             repository.addController(tmpIgnoreListCtrl)
+        repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
         repository.addArenaController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)

@@ -2,18 +2,18 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import BigWorld
 from debug_utils import *
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice, formatGoldPrice
+from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from gui.shared.money import Money
-from helpers import i18n
 
 class TankmanBerthsBuyer(Processor):
 
     def __init__(self, berthsPrice, berthsCount):
-        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': berthsPrice.gold,
-          'count': berthsCount}), plugins.MoneyValidator(berthsPrice)))
+        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': text_styles.concatStylesWithSpace(text_styles.gold(str(berthsPrice.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2)),
+          'count': text_styles.stats(berthsCount)}), plugins.MoneyValidator(berthsPrice)))
         self.berthsPrice = berthsPrice
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -49,12 +49,12 @@ class PremiumAccountBuyer(Processor):
 
     def __getConfirmator(self, withoutBenefits, period, price):
         if withoutBenefits:
-            return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': int(period),
-             'gold': BigWorld.wg_getGoldFormat(price)})
+            return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': text_styles.stats(period),
+             'gold': text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
         else:
             localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
-            return plugins.MessageConfirmator(localKey, ctx={'days': int(period),
-             'gold': BigWorld.wg_getGoldFormat(price)})
+            return plugins.MessageConfirmator(localKey, ctx={'days': text_styles.stats(period),
+             'gold': text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
 
 
 class GoldToCreditsExchanger(Processor):

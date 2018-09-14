@@ -103,10 +103,6 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
         suspensionSoundParams = siegeVehicleDescr.chassis.get('hullAimingSound', None)
         if suspensionSoundParams is None:
             return
-        sounds = suspensionSoundParams['sounds']
-        lodDist = suspensionSoundParams['lodDist']
-        if sounds is None or lodDist is None:
-            return
         model = appearance.compoundModel
         if model is None:
             return
@@ -114,15 +110,15 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
         if hullNode is None:
             return
         suspensionSound = Vehicular.SuspensionSound(appearance.id)
-        for sound in sounds:
+        for sound in suspensionSoundParams.sounds:
             if isPlayer:
-                suspensionSound.setSoundsForState(sound.state, sound.PC)
-            suspensionSound.setSoundsForState(sound.state, sound.NPC)
+                suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.PC, sound.overLimitSounds.PC)
+            suspensionSound.setSoundsForState(sound.state, sound.underLimitSounds.NPC, sound.overLimitSounds.NPC)
 
-        suspensionSound.deactivate()
         suspensionSound.bodyMatrix = None
+        suspensionSound.angleLimitValue = suspensionSoundParams.angleLimitValue
         suspensionSound.lodLink = lodLink
-        suspensionSound.lodSetting = lodDist
+        suspensionSound.lodSetting = suspensionSoundParams.lodDist
         appearance.suspensionSound = suspensionSound
         return
 

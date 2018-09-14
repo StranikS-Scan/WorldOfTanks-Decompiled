@@ -25,9 +25,6 @@ class AccountPopoverMeta(SmartPopOverView):
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')
 
-    def openCrewStatistic(self):
-        self._printOverrideError('openCrewStatistic')
-
     def openReferralManagement(self):
         self._printOverrideError('openReferralManagement')
 
@@ -43,17 +40,8 @@ class AccountPopoverMeta(SmartPopOverView):
         """
         return self.flashObject.as_setClanData(data) if self._isDAAPIInited() else None
 
-    def as_setCrewDataS(self, data):
-        """
-        :param data: Represented by AccountPopoverBlockVO (AS)
-        """
-        return self.flashObject.as_setCrewData(data) if self._isDAAPIInited() else None
-
     def as_setClanEmblemS(self, emblemId):
         return self.flashObject.as_setClanEmblem(emblemId) if self._isDAAPIInited() else None
-
-    def as_setCrewEmblemS(self, emblemId):
-        return self.flashObject.as_setCrewEmblem(emblemId) if self._isDAAPIInited() else None
 
     def as_setReferralDataS(self, data):
         """

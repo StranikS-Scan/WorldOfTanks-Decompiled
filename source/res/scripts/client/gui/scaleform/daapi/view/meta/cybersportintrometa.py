@@ -19,17 +19,8 @@ class CyberSportIntroMeta(BaseRallyIntroView):
     def showSelectorPopup(self):
         self._printOverrideError('showSelectorPopup')
 
-    def showStaticTeamProfile(self):
-        self._printOverrideError('showStaticTeamProfile')
-
-    def cancelWaitingTeamRequest(self):
-        self._printOverrideError('cancelWaitingTeamRequest')
-
     def showStaticTeamStaff(self):
         self._printOverrideError('showStaticTeamStaff')
-
-    def joinClubUnit(self):
-        self._printOverrideError('joinClubUnit')
 
     def as_setSelectedVehicleS(self, data):
         """
@@ -42,12 +33,6 @@ class CyberSportIntroMeta(BaseRallyIntroView):
         :param data: Represented by CSIntroViewTextsVO (AS)
         """
         return self.flashObject.as_setTexts(data) if self._isDAAPIInited() else None
-
-    def as_setStaticTeamDataS(self, data):
-        """
-        :param data: Represented by CSIntroViewStaticTeamVO (AS)
-        """
-        return self.flashObject.as_setStaticTeamData(data) if self._isDAAPIInited() else None
 
     def as_setNoVehiclesS(self, warnTooltip):
         return self.flashObject.as_setNoVehicles(warnTooltip) if self._isDAAPIInited() else None

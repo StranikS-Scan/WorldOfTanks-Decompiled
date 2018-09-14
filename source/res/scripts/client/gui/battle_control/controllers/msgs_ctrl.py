@@ -75,8 +75,9 @@ class BattleMessagesController(IBattleController):
             return
         else:
             if not avatar.isVehicleAlive:
-                observedVehicleID = avatar.observedVehicleID if avatar.isObserver() else avatar.inputHandler.ctrl.curVehicleID
-                if targetID == observedVehicleID:
+                if avatar.isObserver() and targetID == avatar.observedVehicleID:
+                    return
+                if targetID == avatar.inputHandler.ctrl.curVehicleID:
                     return
             code, postfix, sound, soundExt = self.__getKillInfo(avatar, targetID, attackerID, equipmentID, reason)
             if sound is not None:

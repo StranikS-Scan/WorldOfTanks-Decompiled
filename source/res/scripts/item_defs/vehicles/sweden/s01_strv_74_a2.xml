@@ -1,6 +1,7 @@
 <S01_Strv_74_A2.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
@@ -193,7 +194,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -413,7 +413,6 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_medium	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	1.3 1.3 0.000000 0.000000	</tiling>

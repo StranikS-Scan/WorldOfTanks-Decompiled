@@ -19,6 +19,7 @@ CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
 CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
+SEARCH_NAME_VEHICLE = 'searchNameVehicle'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -37,18 +38,14 @@ LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
+PROFILE_TECHNIQUE = 'profileTechnique'
+PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
-MANUAL_BOX_OPEN = 'manualBoxOpen'
-CHRISTMAS_STARTED = 'christmasStarted'
-CHRISTMAS_FINISHED = 'christmasFinished'
-CHRISTMAS_PAUSED = 'christmasPaused'
-CHRISTMAS_STARTED_AGAIN = 'christmasStartedAgain'
-CHRISTMAS_NEW_TOYS = 'christmasNewToys'
-CHRISTMAS_SHOWN_AWARDS = 'christmasShownAwards'
-CHTISTMAS_VIEW_TAB = 'chtistmasViewTab'
 STORE_TAB = 'store_tab'
+STATS_REGULAR_SORTING = 'statsSorting'
+STATS_SORTIE_SORTING = 'statsSortingSortie'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE),
@@ -129,8 +126,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                CAROUSEL_FILTER_2: {'premium': False,
                                    'elite': False,
                                    'igr': False,
-                                   'hideRented': False,
-                                   'hideEvent': False,
+                                   'rented': True,
+                                   'event': True,
                                    'favorite': False,
                                    'bonus': False},
                FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
@@ -160,11 +157,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                FALLOUT_CAROUSEL_FILTER_2: {'premium': False,
                                            'elite': False,
                                            'igr': False,
-                                           'hideRented': False,
-                                           'hideEvent': False,
+                                           'rented': True,
+                                           'event': True,
                                            'gameMode': False,
                                            'favorite': False,
                                            'bonus': False},
+               SEARCH_NAME_VEHICLE: '',
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -206,7 +204,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'battlesCountAward': -1,
                         'pveBattlesCountAward': -1},
                LAST_CLUB_OPENED_FOR_APPS: 0,
-               SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
+               SHOW_INVITE_COMMAND_BTN_ANIMATION: True,
+               PROFILE_TECHNIQUE: {'selectedColumn': 4,
+                                   'selectedColumnSorting': 'descending',
+                                   'isInHangarSelected': False},
+               PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
+                                          'selectedColumnSorting': 'descending'}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
@@ -223,15 +226,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                       _FBT.OFFICE,
                                                       _FBT.MILITARY_SHOP}},
                 'vehicleSellDialog': {'isOpened': False},
-                MANUAL_BOX_OPEN: True,
-                CHRISTMAS_STARTED: False,
-                CHRISTMAS_FINISHED: False,
-                CHRISTMAS_PAUSED: False,
-                CHRISTMAS_STARTED_AGAIN: False,
-                CHRISTMAS_NEW_TOYS: {},
-                CHRISTMAS_SHOWN_AWARDS: set(),
-                'alchemyBtnShown': False,
-                CHTISTMAS_VIEW_TAB: 'ny_tree',
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
                 'cursor': False,
@@ -350,7 +344,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
-                'simplifiedTTC': True,
                 'relativePower': False,
                 'relativeArmor': False,
                 'relativeMobility': False,
@@ -372,6 +365,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'bulbVoices': 'lightbulb',
                 PREVIEW_INFO_PANEL_IDX: 0,
                 'carouselType': 0,
+                'doubleCarouselType': 0,
+                'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
                 NEW_SETTINGS_COUNTER: {'FeedbackSettings0': True,
                                        'FeedbackSettings1': True,

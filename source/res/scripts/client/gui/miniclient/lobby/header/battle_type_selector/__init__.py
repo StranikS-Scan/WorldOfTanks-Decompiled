@@ -10,3 +10,4 @@ def configure_pointcuts():
     _pointcuts.CompanyBattle()
     _pointcuts.FalloutBattle()
     _pointcuts.OnBattleTypeSelectorPopulate()
+    _pointcuts.StrongholdBattle()

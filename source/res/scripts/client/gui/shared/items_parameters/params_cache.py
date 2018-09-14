@@ -27,12 +27,12 @@ MODULES = (ITEM_TYPES.vehicle,
  ITEM_TYPES.vehicleTurret,
  ITEM_TYPES.vehicleGun,
  ITEM_TYPES.shell)
-PrecachedShell = namedtuple('PrecachedShell', 'guns avgParams')
-PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations avgParams')
+PrecachedShell = namedtuple('PrecachedShell', 'guns params')
+PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
 PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic')
 
-class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles avgParams turretsByVehicles')):
+class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles params turretsByVehicles')):
 
     @property
     def clipVehiclesNames(self):
@@ -115,7 +115,7 @@ class _ParamsCache(object):
 
         return result
 
-    def getCompatibleBonuses(self, vehicleDescr):
+    def getCompatibleArtefacts(self, vehicleDescr):
         compatibles = []
         for itemsList in self.__xmlItems[nations.NONE_INDEX].values():
             for item in itemsList:
@@ -168,7 +168,7 @@ class _ParamsCache(object):
                 nation, id = vDescr.type.id
                 equipmentNations.add(nation)
 
-            self.__cache[nations.NONE_INDEX][ITEM_TYPES.equipment][eqpDescr.compactDescr] = PrecachedEquipment(nations=equipmentNations, avgParams=getEquipmentParameters(eqpDescr))
+            self.__cache[nations.NONE_INDEX][ITEM_TYPES.equipment][eqpDescr.compactDescr] = PrecachedEquipment(nations=equipmentNations, params=getEquipmentParameters(eqpDescr))
 
     def __precacheOptionalDevices(self):
         self.__cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.optionalDevice] = {}
@@ -210,7 +210,7 @@ class _ParamsCache(object):
                                     if gun['clip'][0] > 1:
                                         clipVehiclesList.add(vDescr.type.compactDescr)
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, avgParams=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
     def __precacheShells(self):
         for nationIdx in nations.INDICES.values():
@@ -228,7 +228,7 @@ class _ParamsCache(object):
                                     gNames.append(gDescr['userString'])
                                     descriptors.append(shot)
 
-                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), avgParams=calcShellParams(descriptors))
+                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), params=calcShellParams(descriptors))
 
     def __precacheChassis(self):
         for nationIdx in nations.INDICES.itervalues():

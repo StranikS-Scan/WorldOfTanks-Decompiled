@@ -16,7 +16,7 @@ class BattleTypeSelectPopoverMeta(SmartPopOverView):
     def demoClick(self):
         self._printOverrideError('demoClick')
 
-    def getTooltipData(self, itemData):
+    def getTooltipData(self, itemData, itemIsDisabled):
         self._printOverrideError('getTooltipData')
 
     def as_updateS(self, items, isShowDemonstrator, demonstratorEnabled):

@@ -15,7 +15,6 @@ from messenger.gui.Scaleform.view.lobby.ContactsTreeComponent import ContactsTre
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
 from messenger.storage import storage_getter
-from gui.shared.utils.functions import showSentInviteMessage
 
 class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 
@@ -82,7 +81,6 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 
     def sendInvites(self, accountsToInvite, comment):
         self.prbEntity.request(SendInvitesCtx(accountsToInvite, comment))
-        self.__showSentInviteMessages(accountsToInvite)
 
     def onWindowClose(self):
         self.destroy()
@@ -130,9 +128,3 @@ class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
     def __onTreeListStateChanged(self, state, isEmpty):
         if state == ContactsTreeComponent.LIST_EMPTY_STATE:
             self.as_onListStateChangedS(isEmpty)
-
-    def __showSentInviteMessages(self, accountsToInvite):
-        getUser = self.usersStorage.getUser
-        for dbID in accountsToInvite:
-            user = getUser(dbID)
-            showSentInviteMessage(user)

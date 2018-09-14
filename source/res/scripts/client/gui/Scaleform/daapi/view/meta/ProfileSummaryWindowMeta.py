@@ -13,23 +13,11 @@ class ProfileSummaryWindowMeta(ProfileSummary):
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')
 
-    def openClubProfile(self, clubDbID):
-        self._printOverrideError('openClubProfile')
-
     def as_setClanDataS(self, data):
         """
         :param data: Represented by ProfileGroupBlockVO (AS)
         """
         return self.flashObject.as_setClanData(data) if self._isDAAPIInited() else None
 
-    def as_setClubDataS(self, data):
-        """
-        :param data: Represented by ProfileGroupBlockVO (AS)
-        """
-        return self.flashObject.as_setClubData(data) if self._isDAAPIInited() else None
-
     def as_setClanEmblemS(self, source):
         return self.flashObject.as_setClanEmblem(source) if self._isDAAPIInited() else None
-
-    def as_setClubEmblemS(self, source):
-        return self.flashObject.as_setClubEmblem(source) if self._isDAAPIInited() else None

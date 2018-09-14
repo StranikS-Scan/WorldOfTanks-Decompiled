@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
+import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+import unicodedata
 from constants import ARENA_BONUS_TYPE
 import dossiers2
 import nations
 import constants
 from goodies.goodie_constants import GOODIE_STATE
 from account_shared import LayoutIterator
-from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from adisp import async, process
 from debug_utils import LOG_WARNING, LOG_DEBUG
@@ -25,7 +26,6 @@ from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChass
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.Tankman import Tankman
-from skeletons.gui.clubs import IClubsController
 
 def _getDiffID(itemdID):
     if isinstance(itemdID, tuple):
@@ -143,6 +143,7 @@ class REQ_CRITERIA(object):
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
+        NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -187,7 +188,6 @@ class ItemsRequester(object):
      GUI_ITEM_TYPE.RADIO: VehicleRadio,
      GUI_ITEM_TYPE.VEHICLE: Vehicle,
      GUI_ITEM_TYPE.TANKMAN: Tankman}
-    clubsCtrl = dependency.descriptor(IClubsController)
 
     def __init__(self):
         self.inventory = InventoryRequester()
@@ -356,11 +356,21 @@ class ItemsRequester(object):
         return self.__makeVehicle(vehInvData.descriptor.type.compactDescr, vehInvData) if vehInvData is not None else None
 
     def getStockVehicle(self, typeCompDescr, useInventory=False):
+        """
+        Make vehicle copy with stock configuration
+        """
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
             return Vehicle(typeCompDescr=typeCompDescr, proxy=proxy)
         else:
             return
+
+    def getVehicleCopy(self, vehicle):
+        """
+        Gets full vehicle copy with crew, artefacts, shells and other if vehicle is in inventory
+        else return vehicle copy without inventory data
+        """
+        return Vehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
 
     def getTankman(self, tmanInvID):
         tankman = None
@@ -477,15 +487,14 @@ class ItemsRequester(object):
         """
         if databaseID is None:
             dossierDescr = self.__getAccountDossierDescr()
-            seasonDossiers = dict(((s.getSeasonID(), s.getDossierDescr()) for s in self.clubsCtrl.getSeasons()))
-            return AccountDossier(dossierDescr, rated7x7Seasons=seasonDossiers)
+            return AccountDossier(dossierDescr)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _, seasons = container.get(int(databaseID))
+        dossier, _, _ = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return AccountDossier(dossier, databaseID, seasons)
+            return AccountDossier(dossier, databaseID)
 
     def getClanInfo(self, databaseID=None):
         if databaseID is None:

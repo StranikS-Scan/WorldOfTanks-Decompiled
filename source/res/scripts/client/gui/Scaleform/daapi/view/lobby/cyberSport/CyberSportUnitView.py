@@ -78,8 +78,7 @@ class CyberSportUnitView(CyberSportUnitMeta):
             unitStats = entity.getStats()
             result = entity.validateLevels()
             self.as_setTotalLabelS(result.isValid, vo_converters.makeTotalLevelLabel(unitStats, result.restriction), unitStats.curTotalLevel)
-        if pInfo.isCurrentPlayer() or entity.isCommander():
-            self._setActionButtonState()
+        self._setActionButtonState()
         return
 
     def onUnitMembersListChanged(self):

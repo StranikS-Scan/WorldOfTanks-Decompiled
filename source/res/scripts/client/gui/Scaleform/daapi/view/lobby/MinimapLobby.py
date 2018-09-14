@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
+import Math
 import ArenaType
 from gui.Scaleform.daapi.view.meta.MinimapLobbyMeta import MinimapLobbyMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -36,6 +38,9 @@ class MinimapLobby(MinimapLobbyMeta):
         self.__playerTeam = playerTeam
         self.setArena(arenaID)
 
+    def setPlayerTeam(self, playerTeam):
+        self.__playerTeam = playerTeam
+
     def swapTeams(self, team):
         doBuild = False
         if not team:
@@ -50,11 +55,20 @@ class MinimapLobby(MinimapLobbyMeta):
     def setArena(self, arenaTypeID):
         self.__arenaTypeID = int(arenaTypeID)
         arenaType = ArenaType.g_cache[self.__arenaTypeID]
-        self.__cfg['texture'] = '../../gui/maps/icons/map/%s.png' % arenaType.geometryName
-        self.__cfg['size'] = arenaType.boundingBox
-        self.__cfg['teamBasePositions'] = arenaType.teamBasePositions
-        self.__cfg['teamSpawnPoints'] = arenaType.teamSpawnPoints
-        self.__cfg['controlPoints'] = arenaType.controlPoints
+        cfg = {'texture': RES_ICONS.getMapPath(arenaType.geometryName),
+         'size': arenaType.boundingBox,
+         'teamBasePositions': arenaType.teamBasePositions,
+         'teamSpawnPoints': arenaType.teamSpawnPoints,
+         'controlPoints': arenaType.controlPoints}
+        self.setConfig(cfg)
+
+    def setEmpty(self):
+        self.as_clearS()
+        path = RES_ICONS.getMapPath('question')
+        self.as_changeMapS(path)
+
+    def setConfig(self, cfg):
+        self.__cfg = cfg
         self.build()
 
     def build(self):

@@ -4,7 +4,7 @@ import BigWorld
 from constants import TOKEN_TYPE
 from client_request_lib.requester import Requester as WebRequester
 from gui.clans.requests import ClanRequester, ClanRequestsController
-from gui.shared.utils.requesters import TokenRequester
+from gui.shared.utils.requesters import TokenRequester, getTokenRequester
 from helpers.ServerSettings import _ClanProfile
 
 def _webUrlFetcher(url, callback, headers=None, timeout=30.0, method='GET', postData=''):
@@ -38,7 +38,7 @@ class WebClanFactory(_ClanFactory):
         return WebRequester.create_requester(_webUrlFetcher, settings, *args, **kwargs)
 
     def createTokenRequester(self):
-        return TokenRequester(TOKEN_TYPE.WGNI, cache=False)
+        return getTokenRequester(TOKEN_TYPE.WGNI)
 
     def createClanRequester(self, webRequester):
         return ClanRequester(webRequester)

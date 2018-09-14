@@ -17,7 +17,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
 
-    def __init__(self, dbID, unitIdx, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, **kwargs):
+    def __init__(self, dbID, unitIdx, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, **kwargs):
         self.dbID = dbID
         self.unitIdx = unitIdx
         if unit is not None:
@@ -32,7 +32,7 @@ class PlayerUnitInfo(object):
         self.isReady = isReady
         self.isInSlot = isInSlot
         self.slotIdx = slotIdx
-        self.clanDBID = None
+        self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.timeJoin = timeJoin
         self.igrType = igrType
@@ -64,9 +64,6 @@ class PlayerUnitInfo(object):
 
     def isInQueue(self):
         return self.unit.getFlags() & UNIT_FLAGS.IN_QUEUE > 0 if self.unit is not None else False
-
-    def isInPreArena(self):
-        return self.unit.getFlags() & UNIT_FLAGS.IN_PRE_ARENA > 0 if self.unit is not None else False
 
     def isLegionary(self):
         return self.role & UNIT_ROLE.LEGIONARY > 0
@@ -144,7 +141,7 @@ class VehicleInfo(object):
         if self.vehInvID:
             vehicle = g_itemsCache.items.getVehicle(self.vehInvID)
             if vehicle:
-                result = vehicle.isReadyToPrebattle(checkForRent=not state.isInPreArena())
+                result = vehicle.isReadyToPrebattle()
         return result
 
     def getVehicle(self):
@@ -229,17 +226,11 @@ class UnitFlags(object):
     def isInArena(self):
         return self.__flags & UNIT_FLAGS.IN_ARENA > 0
 
-    def isInPreArena(self):
-        return self.__flags & UNIT_FLAGS.IN_PRE_ARENA > 0
-
     def isFreezed(self):
-        return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena() or self.isInPreArena()
+        return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena()
 
     def isChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.CHANGED_STATE_ASQ > 0
-
-    def isPreArenaChanged(self):
-        return self.__flagsDiff & UNIT_FLAGS.IN_PRE_ARENA > 0
 
 
 UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq'))
@@ -284,8 +275,11 @@ class UnitRosterSettings(object):
     def getMaxTotalLevel(self):
         return self._maxTotalLevel
 
-    def getLevelsRange(self):
-        return range(self._minLevel, self._maxLevel + 1)
+    def getLevelsRange(self, minLevel=-1, maxLevel=-1):
+        if minLevel == -1 and maxLevel == -1:
+            return range(self._minLevel, self._maxLevel + 1)
+        else:
+            return range(minLevel, maxLevel + 1)
 
     def getAllSlotsRange(self):
         return xrange(CREATOR_SLOT_INDEX, self._maxSlots)
@@ -366,8 +360,8 @@ class PredefinedRosterSettings(UnitRosterSettings):
 
 _SUPPORTED_ROSTER_SETTINGS = {PREBATTLE_TYPE.UNIT: (ROSTER_TYPE.UNIT_ROSTER,),
  PREBATTLE_TYPE.SORTIE: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
+ PREBATTLE_TYPE.EXTERNAL: (ROSTER_TYPE.SORTIE_ROSTER_6, ROSTER_TYPE.SORTIE_ROSTER_8, ROSTER_TYPE.SORTIE_ROSTER_10),
  PREBATTLE_TYPE.FORT_BATTLE: (ROSTER_TYPE.FORT_ROSTER_10,),
- PREBATTLE_TYPE.CLUBS: (ROSTER_TYPE.CLUB_ROSTER_10,),
  PREBATTLE_TYPE.FORT_COMMON: (ROSTER_TYPE.SORTIE_ROSTER_6,),
  PREBATTLE_TYPE.E_SPORT_COMMON: (ROSTER_TYPE.UNIT_ROSTER,)}
 

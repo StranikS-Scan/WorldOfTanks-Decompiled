@@ -107,3 +107,6 @@ class TutorialQuestsTab(QuestsCurrentTab):
             vehicleDossier = g_itemsCache.items.getVehicleDossier(vehicleCD)
             return (vehicleDossier.getTotalStats().getBattlesCount(), battlesLimit, progressBarType)
         return (NO_PROGRESS_COUNT, NO_PROGRESS_COUNT, PROGRESS_BAR_TYPE.NONE)
+
+    def _updateFilterView(self):
+        pass

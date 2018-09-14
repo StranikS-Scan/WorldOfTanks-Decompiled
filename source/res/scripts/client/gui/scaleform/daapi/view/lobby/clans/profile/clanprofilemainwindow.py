@@ -39,13 +39,13 @@ class ClanProfileMainWindow(ClanProfileMainWindowMeta, ClanListener):
         self.startClanListening()
         self.clansCtrl.getAccountProfile().resync()
         self.__clanDossier = weakref.proxy(self.clansCtrl.getClanDossier(self.__clanDBID))
-        self.as_setDataS({'waitingMsg': WAITING.GETCLUBINFO,
+        self.as_setDataS({'waitingMsg': WAITING.LOADINGDATA,
          'tabDataProvider': [{'label': CLANS.CLANPROFILE_MAINWINDOWTAB_SUMMARY,
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_SUMMARY_VIEW_LINKAGE},
                              {'label': CLANS.CLANPROFILE_MAINWINDOWTAB_PERSONNEL,
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_PERSONNEL_VIEW_LINKAGE},
-                             {'label': CLANS.CLANPROFILE_MAINWINDOWTAB_FORTIFICATION,
-                              'linkage': CLANS_ALIASES.CLAN_PROFILE_FORTIFICATION_VIEW_LINKAGE},
+                             {'label': CLANS.CLANPROFILE_MAINWINDOWTAB_STRONGHOLDS,
+                              'linkage': CLANS_ALIASES.CLAN_PROFILE_STRONGHOLDS_VIEW_LINKAGE},
                              {'label': CLANS.CLANPROFILE_MAINWINDOWTAB_GLOBALMAP,
                               'linkage': CLANS_ALIASES.CLAN_PROFILE_GLOBALMAP_VIEW_LINKAGE}]})
         self.as_setWindowTitleS(''.join((i18n.makeString(CLANS.CLANPROFILE_MAINWINDOW_TITLE),

@@ -38,10 +38,10 @@ def getClientLanguage():
 
 
 def getClientOverride():
-    if constants.IS_KOREA:
-        return 'KR'
+    if constants.IS_CHINA:
+        return 'CN'
     else:
-        return 'CN' if constants.IS_CHINA else None
+        return 'KR' if getClientLanguage() == 'ko' else None
 
 
 def getLocalizedData(dataDict, key, defVal=''):

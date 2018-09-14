@@ -74,9 +74,6 @@ class EventDispatcher(object):
     def loadHangar(self):
         self.__fireLoadEvent(VIEW_ALIAS.LOBBY_HANGAR)
 
-    def loadChristmasView(self):
-        self.__fireLoadEvent(VIEW_ALIAS.LOBBY_CHRISTMAS)
-
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
 
@@ -107,22 +104,13 @@ class EventDispatcher(object):
         self.__addFortToCarousel(prbType)
         self.showFortWindow()
 
+    def loadStrongholds(self, prbType):
+        self.__addStrongholdsToCarousel(prbType)
+        self.showStrongholdsWindow()
+
     def loadSquad(self, prbType, ctx=None, isTeamReady=False):
         self.__addSquadToCarousel(prbType, isTeamReady)
         self.__showSquadWindow(prbType, ctx and ctx.get('showInvitesWindow', False))
-
-    def loadPreArenaUnit(self, prbType, modeFlags=0):
-        utils.showInvitationInWindowsBar()
-        self.app.containerManager.clear()
-        self.showUnitPreArenaWindow(prbType, modeFlags)
-
-    def loadPreArenaUnitFromUnit(self, prbType, modeFlags=0):
-        self.removeUnitFromCarousel(prbType)
-        self.loadPreArenaUnit(prbType, modeFlags)
-
-    def loadUnitFromPreArenaUnit(self, prbType):
-        self.loadHangar()
-        self.loadUnit(prbType)
 
     def loadSandboxQueue(self):
         self.__fireShowEvent(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG)
@@ -220,8 +208,12 @@ class EventDispatcher(object):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         self.__fireShowEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS)
 
-    def showUnitPreArenaWindow(self, prbType, modeFlags=0):
-        self.__fireShowEvent(CYBER_SPORT_ALIASES.CS_RESPAWN_PY)
+    def showStrongholdsWindow(self):
+        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+        self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
+
+    def strongholdsOnTimer(self, data):
+        self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.FORT)
 
     def showSwitchPeripheryWindow(self, ctx):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -412,6 +404,11 @@ class EventDispatcher(object):
         from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         self.__addUnitToCarouselCommon(prbType, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS, self.showFortWindow)
+
+    def __addStrongholdsToCarousel(self, prbType):
+        from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+        self.__addUnitToCarouselCommon(prbType, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS, self.showStrongholdsWindow)
 
     def __addUnitToCarouselCommon(self, prbType, label, viewAlias, openHandler):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

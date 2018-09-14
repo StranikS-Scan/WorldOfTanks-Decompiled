@@ -11,6 +11,7 @@
         <inactivate>	ShowMessageLocked	</inactivate>
         <run-trigger>	BonusesTrigger	</run-trigger>
         <run-trigger>	QueueTrigger	</run-trigger>
+        <run-trigger>	ModeTrigger	</run-trigger>
         <request-all-bonuses>	AllBonuses	  <condition>
             <global-inactive>	_TutorialShowHistory	</global-inactive>
             <inactive>	InQueue	</inactive>
@@ -128,7 +129,12 @@
         <click>	RestartTrainingButton	  <effects>
             <play-music>	MUSIC_EVENT_LOBBY	</play-music>
             <activate>	RestartTraining	</activate>
-            <enter-queue>	EnteringToBattle	</enter-queue>
+            <enter-mode>	EnteringToMode	  <condition>
+                <inactive>	InMode	</inactive>
+                <inactive>	InQueue	</inactive>
+                <global-active>	_TutorialModeIsAvailable	</global-active>
+              </condition>
+            </enter-mode>
           </effects>
         </click>
         <click>	FinalWindowCloseButton	  <effects>
@@ -192,6 +198,14 @@
       </on-effects>
       <off-effects>
         <inactivate>	BonusesReceived	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	ModeTrigger	  <type>	mode	</type>
+      <on-effects>
+        <activate>	InMode	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	InMode	</inactivate>
       </off-effects>
     </trigger>
     <trigger>	QueueTrigger	  <type>	queue	</type>

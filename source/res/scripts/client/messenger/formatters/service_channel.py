@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/service_channel.py
 import time
-from collections import defaultdict
 import types
 import operator
 from Queue import Queue
@@ -13,9 +12,9 @@ import potapov_quests
 from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
 from adisp import async, process
 from chat_shared import decompressSysMessage
-from club_shared import ladderRating
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from helpers import dependency
 from shared_utils import BoundMethodWeakref, findFirst
@@ -23,8 +22,6 @@ from gui.goodies import g_goodiesCache
 from gui.shared.formatters import text_styles
 from gui import GUI_SETTINGS
 from gui.LobbyContext import g_lobbyContext
-from gui.clubs.formatters import getLeagueString, getDivisionString
-from gui.clubs.settings import getLeagueByDivision
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.formatters import getClanAbbrevString, getClanFullName
 from gui.shared import formatters as shared_fmts, g_itemsCache
@@ -35,7 +32,7 @@ from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, MsgCustomEvents
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.utils.transport import z_loads
-from gui.shared.gui_items.Vehicle import getUserName
+from gui.shared.gui_items.Vehicle import getUserName, getShortUserName, getTypeShortUserName
 from gui.shared.money import Money, ZERO_MONEY, Currency
 from gui.shared.formatters.currency import getBWFormatter
 from gui.prb_control.formatters import getPrebattleFullDescription
@@ -57,10 +54,9 @@ from skeletons.gui.server_events import IEventsCache
 
 def _getTimeStamp(message):
     if message.createdAt is not None:
-        result = time.mktime(message.createdAt.timetuple())
+        result = time_utils.getTimestampFromUTC(message.createdAt.timetuple())
     else:
-        LOG_WARNING('Invalid value of created_at = None')
-        result = time.time()
+        result = time_utils.getCurrentTimestamp()
     return result
 
 
@@ -137,25 +133,20 @@ class WaitItemsSyncFormatter(ServiceChannelFormatter):
 
     @async
     def _waitForSyncItems(self, callback):
-        from gui.christmas.christmas_controller import g_christmasCtrl
-        if g_itemsCache.isSynced() and g_christmasCtrl.isKnownToysReceived():
+        if g_itemsCache.isSynced():
             callback(True)
         else:
             self.__registerHandler(callback)
 
     def __registerHandler(self, callback):
-        from gui.christmas.christmas_controller import g_christmasCtrl
         if not self.__callbackQueue:
             self.__callbackQueue = Queue()
         self.__callbackQueue.put(callback)
         g_itemsCache.onSyncCompleted += self.__onSyncCompleted
-        g_christmasCtrl.onToysCacheChanged += self.__onSyncCompleted
 
     def __unregisterHandler(self):
-        from gui.christmas.christmas_controller import g_christmasCtrl
         assert self.__callbackQueue.empty()
         self.__callbackQueue = None
-        g_christmasCtrl.onToysCacheChanged -= self.__onSyncCompleted
         g_itemsCache.onSyncCompleted -= self.__onSyncCompleted
         return
 
@@ -208,6 +199,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     @async
     @process
     def format(self, message, callback):
+        yield lambda callback: callback(True)
         isSynced = yield self._waitForSyncItems()
         if message.data and isSynced:
             battleResults = message.data
@@ -264,7 +256,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                              'clanAbbrev': ''})
                         if battleResKey == 0:
                             battleResKey = 1 if buildTeam == team else -1
-                ctx['club'] = self.__makeClubString(battleResults)
+                if guiType == ARENA_GUI_TYPE.FORT_BATTLE_2 or guiType == ARENA_GUI_TYPE.SORTIE_2:
+                    if battleResKey == 0:
+                        winnerIfDraw = battleResults.get('winnerIfDraw')
+                        if winnerIfDraw:
+                            battleResKey = 1 if winnerIfDraw == team else -1
                 if guiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
                     templateName = self.__eventBattleResultKeys[battleResKey]
                 else:
@@ -295,25 +291,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     def __makeQuestsAchieve(self, message):
         fmtMsg = TokenQuestsFormatter(asBattleFormatter=True)._formatQuestAchieves(message)
         return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg}) if fmtMsg is not None else ''
-
-    def __makeClubString(self, battleResult):
-        result = []
-        club = battleResult.get('club')
-        if club:
-            curDiv, prevDiv = club.get('divisions', (0, 0))
-            curLeague, prevLeague = getLeagueByDivision(curDiv), getLeagueByDivision(prevDiv)
-            curRating, prevRating = map(ladderRating, club.get('ratings', ((0, 0), (0, 0))))
-            if curRating != prevRating:
-                if curRating > prevRating:
-                    tplKey = 'battleResultClubRatingUp'
-                else:
-                    tplKey = 'battleResultClubRatingDown'
-                result.append(g_settings.htmlTemplates.format(tplKey, ctx={'rating': abs(curRating - prevRating)}))
-            if curDiv != prevDiv:
-                result.append(g_settings.htmlTemplates.format('battleResultClubNewDivision', ctx={'division': getDivisionString(curDiv)}))
-            if curLeague != prevLeague:
-                result.append(g_settings.htmlTemplates.format('battleResultClubNewLeague', ctx={'league': getLeagueString(curLeague)}))
-        return ''.join(result)
 
     def __makeVehicleLockString(self, vehicleNames, battleResults):
         locks = []
@@ -767,43 +744,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result.append(g_settings.htmlTemplates.format('discountsInvoiceReceived', ctx={'discounts': ', '.join(discountsStrings)}))
         return '; '.join(result)
 
-    @classmethod
-    def _getChristmasToyString(cls, tokens):
-        accuredToys = defaultdict(lambda : 0)
-        debitedToys = defaultdict(lambda : 0)
-        accruedToysStr = []
-        newToys = {}
-        debitedToysStr = []
-        from gui.christmas.christmas_controller import g_christmasCtrl
-        for tokenID, tInfo in tokens.iteritems():
-            toyID = g_christmasCtrl.getToyID(tokenID)
-            count = tInfo.get('count', 0)
-            christmasItemInfo = g_christmasCtrl.getChristmasItemInfo(toyID, count)
-            if christmasItemInfo is not None:
-                if count > 0:
-                    newToys[toyID] = count
-                    accuredToys[christmasItemInfo.item.guiType] += count
-                else:
-                    debitedToys[christmasItemInfo.item.guiType] += abs(count)
-
-        g_christmasCtrl.addNewToysToAccountSettings(newToys)
-        for guiType, count in accuredToys.iteritems():
-            guiTypeName = i18n.makeString('#christmas:toyType/%s' % guiType)
-            if count > 0:
-                accruedToysStr.append(i18n.makeString('#christmas:bonus/toy', name=guiTypeName, count=count))
-
-        for guiType, count in debitedToys.iteritems():
-            guiTypeName = i18n.makeString('#christmas:toyType/%s' % guiType)
-            if count > 0:
-                debitedToysStr.append(i18n.makeString('#christmas:bonus/toy', name=guiTypeName, count=count))
-
-        result = []
-        if len(accruedToysStr):
-            result.append(g_settings.htmlTemplates.format('toysInvoiceReceived', ctx={'toys': ', '.join(accruedToysStr)}))
-        if len(debitedToysStr):
-            result.append(g_settings.htmlTemplates.format('toysDebitedReceived', ctx={'toys': ', '.join(debitedToysStr)}))
-        return '<br/>'.join(result)
-
     def __getSlotsString(self, slots):
         if slots > 0:
             template = 'slotsAccruedInvoiceReceived'
@@ -841,6 +781,24 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
     def __getDossierString(self):
         return '<br/>'.join(self.__dossierResult)
+
+    def __getTankmenFreeXPString(self, data):
+        freeXP = set()
+        spec = []
+        for tankmenDescr, xp in data.iteritems():
+            freeXP.add(xp)
+            tankman = Tankman(tankmenDescr)
+            spec.append('{} {} {}'.format(tankman.fullUserName, tankman.roleUserName, getShortUserName(tankman.vehicleNativeDescr.type)))
+
+        specStr = ' ({})'.format(', '.join(spec)) if spec else ''
+        assert len(freeXP) == 1, 'Invoice has the same amount of experience to all tankmen'
+        freeXP = freeXP.pop()
+        if freeXP > 0:
+            template = 'tankmenFreeXpAccruedInvoiceReceived'
+        else:
+            template = 'tankmenFreeXpDebitedInvoiceReceived'
+        return g_settings.htmlTemplates.format(template, {'tankmenFreeXp': BigWorld.wg_getIntegralFormat(abs(freeXP)),
+         'spec': specStr})
 
     def __getL10nDescription(self, data):
         descr = ''
@@ -928,12 +886,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             dossier = dataEx.get('dossier', {})
             if dossier:
                 operations.append(self.__getDossierString())
-            tokens = dataEx.get('tokens', {})
-            if tokens is not None and len(tokens) > 0:
-                toysString = self._getChristmasToyString(tokens)
-                if toysString:
-                    operations.append(toysString)
             _extendCustomizationData(dataEx, operations)
+            tankmenFreeXP = dataEx.get('tankmenFreeXP', {})
+            if tankmenFreeXP:
+                operations.append(self.__getTankmenFreeXPString(tankmenFreeXP))
             return operations
 
     def _formatData(self, assetType, data):
@@ -1478,11 +1434,11 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             data = message.data or {}
             completedQuestIDs = data.get('completedQuestIDs', set())
             fmt = self._formatQuestAchieves(message)
-            if fmt:
+            if fmt is not None:
                 settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
                 formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': fmt})
         callback((formatted, settings))
-        return None
+        return
 
     def _getTemplateName(self, completedQuestIDs=set()):
         if len(completedQuestIDs):
@@ -1504,9 +1460,6 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             freeXP = data.get('freeXP', 0)
             if freeXP:
                 result.append(self.__makeQuestsAchieve('battleQuestsFreeXP', freeXP=BigWorld.wg_getIntegralFormat(freeXP)))
-        tokens = data.get('tokens', {})
-        if tokens is not None and len(tokens) > 0:
-            result.append(InvoiceReceivedFormatter._getChristmasToyString(tokens))
         vehiclesList = data.get('vehicles', [])
         for vehiclesData in vehiclesList:
             if vehiclesData is not None and len(vehiclesData) > 0:
@@ -1671,7 +1624,8 @@ class ClanMessageFormatter(ServiceChannelFormatter):
 
 class FortMessageFormatter(ServiceChannelFormatter):
     __templates = {SYS_MESSAGE_FORT_EVENT.DEF_HOUR_SHUTDOWN: 'fortHightPriorityMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.BASE_DESTROYED: 'fortHightPriorityMessageWarning'}
+     SYS_MESSAGE_FORT_EVENT.BASE_DESTROYED: 'fortHightPriorityMessageWarning',
+     SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED: 'fortReserveActivatedMessage'}
     DEFAULT_WARNING = 'fortMessageWarning'
 
     def __init__(self):
@@ -1731,12 +1685,10 @@ class FortMessageFormatter(ServiceChannelFormatter):
     def _reserveActivatedMessage(self, data):
         event = data['event']
         orderTypeID = data['orderTypeID']
-        order = fort_fmts.getOrderUserString(data['orderTypeID'])
-        if event == SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED and FORT_ORDER_TYPE.isOrderPermanent(orderTypeID):
-            return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED, order=order)
-        timeExpiration = shared_fmts.time_formatters.getTimeDurationStr(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(data['timeExpiration'])))
-        return self._buildMessage(event, {'order': order,
-         'time': timeExpiration})
+        expirationTime = data['timeExpiration']
+        order = text_styles.neutral(fort_fmts.getOrderUserString(orderTypeID))
+        return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED, order=order) if event == SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED and FORT_ORDER_TYPE.isOrderPermanent(orderTypeID) else self._buildMessage(event, {'order': order,
+         'timeLeft': time_utils.getTillTimeString(time_utils.getTimeDeltaFromNow(expirationTime), MENU.TIME_TIMEVALUEWITHSECS)})
 
     def _reserveExpiredMessage(self, data):
         return self._buildMessage(data['event'], {'order': fort_fmts.getOrderUserString(data['orderTypeID'])})
@@ -1946,16 +1898,12 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
         if battleData and g_lobbyContext.getServerSettings().isFortsEnabled():
             inviteWrapper = self.__toFakeInvite(battleData)
             formatter = PrbFortBattleInviteHtmlTextFormatter()
-            if message.createdAt is not None:
-                timestamp = time_utils.getTimestampFromUTC(message.createdAt.timetuple())
-            else:
-                timestamp = time_utils.getCurrentTimestamp()
             submitState = NOTIFICATION_BUTTON_STATE.VISIBLE
             if self.prbInvites.canAcceptInvite(inviteWrapper):
                 submitState |= NOTIFICATION_BUTTON_STATE.ENABLED
             msgType = 'fortBattleInvite'
             battleID = battleData.get('battleID')
-            formatted = g_settings.msgTemplates.format(msgType, ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': timestamp,
+            formatted = g_settings.msgTemplates.format(msgType, ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': _getTimeStamp(message),
              'buttonsStates': {'submit': submitState},
              'savedData': {'battleID': battleID,
                            'peripheryID': battleData.get('peripheryID'),

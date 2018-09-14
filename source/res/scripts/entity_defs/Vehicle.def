@@ -164,6 +164,10 @@
       <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
+    <heatmapLoggingFlags>
+      <Type>	UINT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </heatmapLoggingFlags>
     <state>
       <Type>	UINT8	</Type>
       <Flags>	BASE	</Flags>
@@ -177,6 +181,8 @@
     <p></p>
     <_Vehicle__p></_Vehicle__p>
     <_components></_components>
+    <_battleFeedback></_battleFeedback>
+    <_directVisibility></_directVisibility>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -184,7 +190,6 @@
     <bbox></bbox>
     <mover></mover>
     <directVisibility></directVisibility>
-    <_battleFeedback></_battleFeedback>
   </TempProperties>
   <ClientMethods>
     <onHealthChanged>
@@ -376,6 +381,7 @@
     </receiveAttackResults>
     <receiveHitAssistBonus>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	SHOT_ID	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
@@ -479,6 +485,14 @@
     <updateOwnClientRTT>
       <Arg>	FLOAT32	</Arg>
     </updateOwnClientRTT>
+    <receiveVisibilityUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </receiveVisibilityUpdate>
+    <requestVisibilityLists>
+      <Arg>	MAILBOX	</Arg>
+    </requestVisibilityLists>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>

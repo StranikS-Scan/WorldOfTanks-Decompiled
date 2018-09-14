@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_parameters.py
+from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control.veh_comparison_basket import CREW_TYPES
+from gui.game_control.veh_comparison_basket import CONFIGURATION_TYPES, CREW_TYPES
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData
@@ -92,57 +92,88 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
 
 class _VehCompareParametersData(object):
 
-    def __init__(self, cache, vehIntCD, isInInventory, crewInfo, modulesType, vehicleStrCD, showWarning):
+    def __init__(self, cache, vehIntCD, isInInventory, crewData, configurationType, vehData):
         super(_VehCompareParametersData, self).__init__()
         self.__crewLvl = None
-        self.__crewData = None
-        self.__modulesType = None
+        self.__skills = None
+        self.__configurationType = None
         self.__isInInventory = None
         self.__currentVehParams = None
         self.__vehicleStrCD = None
+        self.__equipment = []
+        self.__hasCamouflage = False
         self.__vehicle = None
         self.__isCrewInvalid = False
         self.__isInInvInvalid = False
         self.__isCurrVehParamsInvalid = False
         self.__vehicleIntCD = vehIntCD
         self.setIsInInventory(isInInventory)
-        self.setVehicleStrCD(vehicleStrCD)
-        self.setCrewLvl(*crewInfo)
-        self.setModulesType(modulesType)
+        self.setVehicleData(*vehData)
+        self.setCrewData(*crewData)
+        self.setConfigurationType(configurationType)
         self.__cache = cache
         self.__paramGenerator = _VehParamsValuesGenerator(*_COLOR_SCHEMES)
-        self.__parameters = self.__initParameters(vehIntCD, self.__vehicle, showWarning)
+        self.__parameters = self.__initParameters(vehIntCD, self.__vehicle)
         return
 
-    def setCrewLvl(self, crewLvl, crewData):
+    def setCrewData(self, crewLvl, skills):
         """
         Updates crew information
         :param crewLvl: int, one of gui.game_control.veh_comparison_basket.CREW_TYPES
-        :param crewData: list, [(crewIndex, tankmanStrCD), ...]
+        :param skills: set, [skillName, ...]
         :return: bool, True if new incoming data is not similar as existed, otherwise - False
         """
-        if self.__crewLvl != crewLvl or self.__crewData != crewData:
+        if self.__crewLvl != crewLvl or self.__skills != skills:
             self.__crewLvl = crewLvl
-            self.__crewData = crewData
-            self.__vehicle.crew = map(lambda strCD: (strCD[0], Tankman(strCD[1]) if strCD[1] else None), crewData)
+            self.__skills = skills
+            skillsDict = {}
+            skillsByRoles = cmp_helpers.getVehicleCrewSkills(self.__vehicle)
+            for idx, (role, skillsSet) in enumerate(skillsByRoles):
+                sameSkills = skillsSet.intersection(self.__skills)
+                if sameSkills:
+                    skillsDict[idx] = sameSkills
+
+            if crewLvl == CREW_TYPES.CURRENT:
+                levelsByIndexes, nativeVehiclesByIndexes = cmp_helpers.getVehCrewInfo(self.__vehicle.intCD)
+                defRoleLevel = None
+            else:
+                levelsByIndexes = {}
+                defRoleLevel = self.__crewLvl
+                nativeVehiclesByIndexes = None
+            self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, skillsDict, levelsByIndexes, nativeVehiclesByIndexes)
             self.__isCrewInvalid = True
             self.__isCurrVehParamsInvalid = True
         return self.__isCrewInvalid
 
-    def setVehicleStrCD(self, vehicleStrCD):
-        if self.__vehicleStrCD != vehicleStrCD:
+    def setVehicleData(self, vehicleStrCD, equipment, hasCamouflage):
+        isDifferent = False
+        camouflageInvalid = self.__hasCamouflage != hasCamouflage
+        equipInvalid = equipment != self.__equipment
+        if vehicleStrCD != self.__vehicleStrCD:
             self.__vehicleStrCD = vehicleStrCD
             self.__vehicle = Vehicle(self.__vehicleStrCD)
             self.__isCurrVehParamsInvalid = True
-            return True
-        return False
+            isDifferent = True
+            equipInvalid = True
+            camouflageInvalid = True
+        if equipInvalid:
+            for i, eq in enumerate(equipment):
+                cmp_helpers.installEquipmentOnVehicle(self.__vehicle, eq, i)
 
-    def setModulesType(self, newVal):
-        if self.__modulesType != newVal:
-            self.__modulesType = newVal
-            self.__isModulesTypesInvalid = True
+            self.__equipment = equipment
+            isDifferent = True
+        if camouflageInvalid:
+            cmp_helpers.applyCamouflage(self.__vehicle, hasCamouflage)
+            self.__hasCamouflage = hasCamouflage
+            isDifferent = True
+        return isDifferent
+
+    def setConfigurationType(self, newVal):
+        if self.__configurationType != newVal:
+            self.__configurationType = newVal
+            self.__isConfigurationTypesInvalid = True
             self.__isCurrVehParamsInvalid = True
-        return self.__isModulesTypesInvalid
+        return self.__isConfigurationTypesInvalid
 
     def setIsInInventory(self, newVal):
         if self.__isInInventory != newVal:
@@ -151,7 +182,9 @@ class _VehCompareParametersData(object):
         return self.__isInInvInvalid
 
     def dispose(self):
-        self.__crewData = None
+        self.__skills = None
+        self.__vehicleStrCD = None
+        self.__equipment = None
         self.__cache = None
         self.__paramGenerator = None
         self.__currentVehParams = None
@@ -164,23 +197,13 @@ class _VehCompareParametersData(object):
     def getFormattedParameters(self, vehMaxParams):
         if self.__isCrewInvalid:
             if self.__isCrewInvalid:
-                self.__parameters.update(crewLevelIndx=CREW_TYPES.ALL.index(self.__crewLvl))
                 self.__isCrewInvalid = False
         if self.__isInInvInvalid:
-            crewListParams = [{'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL100,
-              'id': CREW_TYPES.SKILL_100,
-              'showAlert': False,
-              'tooltip': None}, {'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL75,
-              'id': CREW_TYPES.SKILL_75}, {'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_SKILL50,
-              'id': CREW_TYPES.SKILL_50}]
-            if self.__isInInventory:
-                crewListParams.append({'label': VEH_COMPARE.VEHICLECOMPAREVIEW_CREW_CURRENT,
-                 'id': CREW_TYPES.CURRENT})
             self.__isInInvInvalid = False
-            self.__parameters.update(crewLevels=crewListParams, isInHangar=self.__isInInventory)
-        if self.__isModulesTypesInvalid:
-            self.__parameters.update(elite=self.__vehicle.isElite, moduleType=self._getModuleType(self.__modulesType))
-            self.__isModulesTypesInvalid = False
+            self.__parameters.update(isInHangar=self.__isInInventory)
+        if self.__isConfigurationTypesInvalid:
+            self.__parameters.update(elite=self.__vehicle.isElite, moduleType=self._getConfigurationType(self.__configurationType), showRevertBtn=self.__showRevertButton())
+            self.__isConfigurationTypesInvalid = False
         if vehMaxParams:
             currentDataIndex = self.__cache.index(self)
             if currentDataIndex == 0:
@@ -205,29 +228,15 @@ class _VehCompareParametersData(object):
         params = self.getParams()
         if paramName in params:
             pInfo = getParamExtendedData(paramName, params[paramName], paramValue)
-            states = pInfo.state
-            if isinstance(pInfo.value, (tuple, list)):
-                deltaVals = []
-                isTheSame = True
-                for st in states:
-                    diff = st[1]
-                    isTheSame = isTheSame and diff == 0
-                    deltaVals.append(diff)
-
-                if isTheSame:
-                    return None
-            else:
-                deltaVals = states[1]
-            return formatters.formatParameter(pInfo.name, deltaVals, states, _DELTA_PARAM_COLOR_SCHEME, _CMP_FORMAT_SETTINGS, False)
-        else:
-            return None
+            return formatters.formatParameterDelta(pInfo, _DELTA_PARAM_COLOR_SCHEME, _CMP_FORMAT_SETTINGS)
 
     @classmethod
-    def _getModuleType(cls, mType):
-        return '#veh_compare:vehicleCompareView/moduleType/{}'.format(mType)
+    def _getConfigurationType(cls, mType):
+        format_style = text_styles.neutral if mType == CONFIGURATION_TYPES.CUSTOM else text_styles.main
+        return format_style('#veh_compare:vehicleCompareView/configurationType/{}'.format(mType))
 
     @classmethod
-    def __initParameters(cls, vehCD, vehicle, showWarning):
+    def __initParameters(cls, vehCD, vehicle):
         """
         Generates some constant data for vehicle
         :return: vo as dict
@@ -239,14 +248,16 @@ class _VehCompareParametersData(object):
          'level': vehicle.level,
          'premium': vehicle.isPremium,
          'tankType': vehicle.type,
-         'isAttention': showWarning,
+         'isAttention': False,
          'index': -1,
          'isInHangar': False,
-         'moduleType': cls._getModuleType(VEH_COMPARE.VEHICLECOMPAREVIEW_MODULETYPE_BASIC),
-         'crewLevelIndx': -1,
+         'moduleType': cls._getConfigurationType(VEH_COMPARE.VEHICLECOMPAREVIEW_CONFIGURATIONTYPE_BASIC),
          'elite': vehicle.isElite,
          'params': [],
-         'crewLevels': []}
+         'showRevertBtn': False}
+
+    def __showRevertButton(self):
+        return self.__configurationType == CONFIGURATION_TYPES.CUSTOM
 
 
 class IVehCompareView(object):
@@ -303,7 +314,7 @@ class VehCompareBasketParamsCache(object):
 
     def __addParamData(self, index):
         vehCompareData = self.comparisonBasket.getVehicleAt(index)
-        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), (vehCompareData.getCrewLevel(), vehCompareData.getCrewData()), vehCompareData.getModulesType(), vehCompareData.getVehicleStrCD(), not vehCompareData.isActualModules())
+        paramsData = _VehCompareParametersData(self.__cache, vehCompareData.getVehicleCD(), vehCompareData.isInInventory(), vehCompareData.getCrewData(), vehCompareData.getConfigurationType(), (vehCompareData.getVehicleStrCD(), vehCompareData.getEquipment(), vehCompareData.hasCamouflage()))
         self.__cache.insert(index, paramsData)
 
     def __rebuildList(self):
@@ -332,9 +343,9 @@ class VehCompareBasketParamsCache(object):
             basketVehData = self.comparisonBasket.getVehicleAt(index)
             paramsVehData = self.__cache[index]
             paramsVehData.setIsInInventory(basketVehData.isInInventory())
-            paramsVehData.setModulesType(basketVehData.getModulesType())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewLvl(basketVehData.getCrewLevel(), basketVehData.getCrewData())
-            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleStrCD(basketVehData.getVehicleStrCD())
+            paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
+            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setCrewData(*basketVehData.getCrewData())
+            isBestScoreInvalid = isBestScoreInvalid or paramsVehData.setVehicleData(basketVehData.getVehicleStrCD(), basketVehData.getEquipment(), basketVehData.hasCamouflage())
 
         if self.__cache:
             bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None

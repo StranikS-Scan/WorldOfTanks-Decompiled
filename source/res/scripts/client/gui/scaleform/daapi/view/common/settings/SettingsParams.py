@@ -124,11 +124,11 @@ class SettingsParams(object):
 
     def getMonitorSettings(self):
         """
-        Returns monitor related settings.
+        Returns screen/monitor related GRAPHICS settings.
         
-        :return: [dict(settingName->settingValue)] current monitor settings values
+        :return: [dict(settingName->settingValue)] current screen/monitor settings values
         """
-        return self.settingsCore.packSettings(BigWorld.getMonitorSettings())
+        return self.settingsCore.packSettings(settings_constants.GRAPHICS.getScreenConstants())
 
     def preview(self, settingName, value):
         """

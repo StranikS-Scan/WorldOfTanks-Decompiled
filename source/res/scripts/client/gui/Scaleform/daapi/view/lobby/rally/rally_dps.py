@@ -1,33 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
-import weakref
-import operator
 import BigWorld
 from gui.prb_control import prbEntityProperty
-from helpers import html
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO, makeUserVO, makeStaticFormationPlayerVO, makeClanBattlePlayerVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO, makeStaticFormationPlayerVO, makeClanBattlePlayerVO
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.clubs.formatters import getLeagueString, getDivisionString
-from gui.clubs.settings import CLIENT_CLUB_STATE, getLadderChevron16x16, getLadderChevron128x128
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
 from gui.shared.formatters import icons, text_styles
-from gui.shared.view_helpers import UsersInfoHelper
-from shared_utils import findFirst
 from helpers import i18n
 from messenger import g_settings
-from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE
 from messenger.storage import storage_getter
 from messenger.proto import proto_getter
-from gui.shared.gui_items.dossier import dumpDossier
 
 class CandidatesDataProvider(DAAPIDataProvider):
 
@@ -198,10 +188,6 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
                 creatorVO = makePlayerVO(creator, userGetter(dbID), colorGetter)
             else:
                 creatorVO = {}
-            if unitItem.isClub:
-                ladderIcon = getLadderChevron16x16(unitItem.extra.divisionID)
-            else:
-                ladderIcon = None
             cfdUnitID = unitItem.cfdUnitID
             index = len(self.collection)
             if cfdUnitID == selectedID:
@@ -219,9 +205,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
              'isRestricted': unitItem.isRosterSet,
              'description': unitItem.description,
              'peripheryID': unitItem.peripheryID,
-             'server': pNameGetter(unitItem.peripheryID),
-             'ladderIcon': ladderIcon,
-             'isStatic': unitItem.isClub})
+             'server': pNameGetter(unitItem.peripheryID)})
 
         return self._selectedIdx
 
@@ -281,7 +265,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
              'rating': ratingFormatter(unitItem.rating),
              'playersCount': unitItem.playersCount,
              'commandSize': unitItem.commandSize,
-             'inBattle': unitItem.flags.isInArena() or unitItem.flags.isInPreArena(),
+             'inBattle': unitItem.flags.isInArena(),
              'isFreezed': unitItem.flags.isLocked(),
              'isRestricted': unitItem.isRosterSet,
              'description': unitItem.description})
@@ -294,240 +278,3 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
         elif len(diff):
             self.updateItems(diff)
         return self._selectedIdx
-
-
-class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
-
-    class _UserEntityAdapter(object):
-
-        def __init__(self, userID, clubItem, user, proxy):
-            self.__userID = userID
-            self.__proxy = weakref.proxy(proxy)
-            self.__clubName = clubItem.getClubName()
-            self.__userEntity = user
-
-        def getGuiType(self):
-            return self.__userEntity.getGuiType() if self.__userEntity is not None else USER_GUI_TYPE.OTHER
-
-        def getTags(self):
-            return self.__userEntity.getTags() if self.__userEntity is not None else []
-
-        def getID(self):
-            return self.__userID
-
-        def getName(self):
-            if self.__proxy.isUseCreatorName():
-                return self.__proxy.getUserName(self.__userID)
-            else:
-                return self.__clubName
-
-        def getFullName(self):
-            if self.__proxy.isUseCreatorName():
-                return self.__proxy.getUserFullName(self.__userID)
-            else:
-                return self.__clubName
-
-        def getClanAbbrev(self):
-            return self.__proxy.getUserClanAbbrev(self.__userID)
-
-        def isOnline(self):
-            return self.__userEntity.isOnline() if self.__userEntity is not None else False
-
-    def __init__(self):
-        super(ClubsDataProvider, self).__init__()
-        self._lastResult = []
-        self._useCreatorName = True
-
-    def useClubName(self):
-        self._useCreatorName = False
-
-    def useCreatorName(self):
-        self._useCreatorName = True
-
-    def isUseCreatorName(self):
-        return self._useCreatorName
-
-    def getVO(self, club=None, currentState=None, profile=None):
-        if club is None or currentState is None or profile is None:
-            return
-        else:
-            _ms = i18n.makeString
-            ladderInfo = club.getLadderInfo()
-            if ladderInfo.isInLadder():
-                ladderLeagueStr = getLeagueString(ladderInfo.getLeague())
-                ladderDivStr = getDivisionString(ladderInfo.getDivision())
-                ladderInfoStr = text_styles.middleTitle(_ms(CYBERSPORT.WINDOW_STATICRALLYINFO_LADDERINFO, league=ladderLeagueStr, division=ladderDivStr))
-            else:
-                ladderInfoStr = ''
-            dossier = club.getTotalDossier()
-            clubTotalStats = dossier.getTotalStats()
-            isButtonDisabled = False
-            buttonLabel = '#cyberSport:window/staticRallyInfo/joinBtnLabel'
-            buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/join'
-            buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/join'
-            limits = currentState.getLimits()
-            canSendApp, appReason = limits.canSendApplication(profile, club)
-            if currentState.getStateID() == CLIENT_CLUB_STATE.SENT_APP:
-                if currentState.getClubDbID() == club.getClubDbID():
-                    buttonLabel = '#cyberSport:window/staticRallyInfo/cancelBtnLabel'
-                    buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcess'
-                    buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/inProcess'
-                else:
-                    isButtonDisabled = True
-                    buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/inProcessOther'
-                    buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/inProcessOther'
-            elif currentState.getStateID() == CLIENT_CLUB_STATE.HAS_CLUB:
-                isButtonDisabled = True
-                buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/alreadyJoined'
-                buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/alreadyJoined'
-            elif not canSendApp:
-                isButtonDisabled = True
-                buttonTooltip = '#tooltips:cyberSport/staticRallyInfo/joinBtn/applicationCooldown'
-                buttonInfo = '#cyberSport:window/staticRallyInfo/joinInfo/applicationCooldown'
-            return {'battlesCount': self.__getIndicatorData(clubTotalStats.getBattlesCount(), BigWorld.wg_getIntegralFormat, _ms(CYBERSPORT.WINDOW_STATICRALLYINFO_STATSBATTLESCOUNT), RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_BATTLES40X32, TOOLTIPS.CYBERSPORT_STATICRALLYINFO_STATSBATTLESCOUNT),
-             'winsPercent': self.__getIndicatorData(clubTotalStats.getWinsEfficiency(), ProfileUtils.formatFloatPercent, _ms(CYBERSPORT.WINDOW_STATICRALLYINFO_STATICRALLY_STATSWINSPERCENT), RES_ICONS.MAPS_ICONS_LIBRARY_DOSSIER_WINS40X32, TOOLTIPS.CYBERSPORT_STATICRALLYINFO_STATSWINSPERCENT),
-             'ladderIcon': getLadderChevron128x128(ladderInfo.getDivision()),
-             'ladderInfo': ladderInfoStr,
-             'joinInfo': text_styles.main(_ms(buttonInfo)),
-             'joinBtnLabel': _ms(buttonLabel),
-             'joinBtnTooltip': buttonTooltip,
-             'joinBtnDisabled': isButtonDisabled,
-             'noAwardsText': CYBERSPORT.WINDOW_STATICRALLYINFO_NOAWARDS,
-             'achievements': AchievementsUtils.packAchievementList(clubTotalStats.getTopAchievements(3), dossier.getDossierType(), dumpDossier(dossier), False, False),
-             'rallyInfo': {'icon': None,
-                           'name': text_styles.highTitle(club.getUserName()),
-                           'profileBtnLabel': CYBERSPORT.RALLYINFO_PROFILEBTN_LABEL,
-                           'profileBtnTooltip': TOOLTIPS.RALLYINFO_PROFILEBTN,
-                           'description': text_styles.main(html.escape(club.getUserShortDescription())),
-                           'ladderIcon': None,
-                           'id': club.getClubDbID(),
-                           'showLadder': False}}
-
-    def buildList(self, selectedID, result, syncUserInfo=True):
-        self.clear()
-        userGetter = storage_getter('users')().getUser
-        colorGetter = g_settings.getColorScheme('rosters').getColors
-        ratingFormatter = BigWorld.wg_getIntegralFormat
-        self._selectedIdx = -1
-        self._lastResult = result
-        data = []
-        for clubItem in result:
-            cfdUnitID = clubItem.getID()
-            creatorID = clubItem.getCreatorID()
-            rating = self.getUserRating(creatorID)
-            creator = self._UserEntityAdapter(creatorID, clubItem, userGetter(creatorID), self)
-            creatorName = creator.getName()
-            creatorVO = makeUserVO(creator, colorGetter)
-            index = len(self.collection)
-            if cfdUnitID == selectedID:
-                self._selectedIdx = index
-            self.mapping[cfdUnitID] = index
-            data.append((rating, {'cfdUnitID': cfdUnitID,
-              'unitMgrID': cfdUnitID,
-              'creator': creatorVO,
-              'creatorName': creatorName,
-              'rating': self.getGuiUserRating(creatorID),
-              'playersCount': clubItem.getMembersCount(),
-              'commandSize': clubItem.getCommandSize(),
-              'inBattle': False,
-              'isFreezed': False,
-              'isRestricted': False,
-              'description': html.escape(clubItem.getShortDescription()),
-              'peripheryID': -1,
-              'server': None,
-              'ladderIcon': getLadderChevron16x16(clubItem.getDivision()),
-              'isStatic': True}))
-
-        self.collection.extend(map(lambda (r, c): c, sorted(data, reverse=True, key=operator.itemgetter(0))))
-        if syncUserInfo:
-            self.syncUsersInfo()
-        return self._selectedIdx
-
-    def updateListItem(self, userDBID):
-        for item in self.collection:
-            creator = item.get('creator', None)
-            if creator is None:
-                return
-            creatorDBID = creator.get('dbID', None)
-            if userDBID == creatorDBID:
-                userGetter = storage_getter('users')().getUser
-                colorGetter = g_settings.getColorScheme('rosters').getColors
-                colors = colorGetter(userGetter(creatorDBID).getGuiType())
-                creator['colors'] = colors
-                self.refresh()
-                return
-
-        return
-
-    def updateList(self, selectedID, result):
-        isFullUpdate, diff = False, []
-        self._selectedIdx = None
-        result = set(result)
-        for clubItem in result:
-            try:
-                index = self.mapping[clubItem.getID()]
-                item = self.collection[index]
-            except (KeyError, IndexError):
-                LOG_ERROR('Item not found', clubItem)
-                continue
-
-            item.update({'rating': self.getGuiUserRating(clubItem.getCreatorID()),
-             'playersCount': clubItem.getMembersCount(),
-             'commandSize': clubItem.getCommandSize(),
-             'description': clubItem.getDescription(),
-             'ladderIcon': getLadderChevron16x16(clubItem.getDivision())})
-            diff.append(index)
-
-        if self._selectedIdx is None and selectedID in self.mapping:
-            self._selectedIdx = self.mapping[selectedID]
-        if isFullUpdate:
-            self.refresh()
-        elif len(diff):
-            self.updateItems(diff)
-        return self._selectedIdx
-
-    def onUserRatingsReceived(self, ratings):
-        self.buildList(self._selectedIdx, self._lastResult, syncUserInfo=False)
-        self.refresh()
-
-    def onUserNamesReceived(self, names):
-        self.__updateUsersData(names.keys())
-
-    def onUserClanAbbrevsReceived(self, abbrevs):
-        self.__updateUsersData(abbrevs.keys())
-
-    def __updateUsersData(self, userDBIDs):
-        diff = []
-        userGetter = storage_getter('users')().getUser
-        colorGetter = g_settings.getColorScheme('rosters').getColors
-        for userDBID in userDBIDs:
-            data = findFirst(lambda d: d['creator'].get('dbID') == userDBID, self.collection)
-            if data is not None:
-                clubDBID = data['cfdUnitID']
-                try:
-                    index = self.mapping[clubDBID]
-                    item = self.collection[index]
-                except (KeyError, IndexError):
-                    LOG_ERROR('Item not found', clubDBID)
-                    continue
-
-                creator = userGetter(userDBID)
-                creatorVO = makeUserVO(creator, colorGetter)
-                creatorName = creator.getName()
-                item.update({'creatorName': creatorName,
-                 'rating': self.getGuiUserRating(userDBID)})
-                if creator.hasValidName():
-                    item['creator'] = creatorVO
-                diff.append(index)
-
-        if len(diff):
-            self.updateItems(diff)
-        return
-
-    def __getIndicatorData(self, value, formater, description, icon, tooltip):
-        val = ProfileUtils.getValueOrUnavailable(value)
-        return {'value': formater(val),
-         'description': description,
-         'iconSource': icon,
-         'tooltip': tooltip,
-         'enabled': val != ProfileUtils.UNAVAILABLE_VALUE}

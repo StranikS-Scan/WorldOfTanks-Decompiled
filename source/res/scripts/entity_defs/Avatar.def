@@ -119,6 +119,10 @@
       <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
+    <heatmapLoggingFlags>
+      <Type>	UINT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </heatmapLoggingFlags>
     <accountDBIDOnCell>
       <Type>	DB_ID	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -193,7 +197,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
     <onSwitchViewpoint>
@@ -432,6 +435,13 @@
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </receiveVisibilityUpdate>
+    <receiveVisibilityLists>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+    </receiveVisibilityLists>
     <receivePositionsFromArena>
       <Arg>	BOOL	</Arg>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
@@ -504,10 +514,11 @@
       <Arg>	VECTOR2	</Arg>
     </setEquipmentApplicationPoint>
     <sendFinalStats></sendFinalStats>
-    <switchViewpoint>
+    <switchViewPointOrBindToVehicle>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	BOOL	</Arg>
-    </switchViewpoint>
+      <Arg>	OBJECT_ID	</Arg>
+    </switchViewPointOrBindToVehicle>
     <grantRagePoints>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>

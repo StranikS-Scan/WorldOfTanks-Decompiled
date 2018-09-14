@@ -15,8 +15,9 @@ class REQUEST_SCOPE(object):
     FORTIFICATION = 2
     BW_CHAT2 = 3
     XMPP = 4
-    CLUB = 5
+    BATTLE_CONTROL = 5
     CLAN = 6
+    STRONGHOLD = 7
 
 
 _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
@@ -24,8 +25,9 @@ _REQUEST_SCOPE_TO_EVENT = {REQUEST_SCOPE.GLOBAL: events.CoolDownEvent.GLOBAL,
  REQUEST_SCOPE.FORTIFICATION: events.CoolDownEvent.FORTIFICATION,
  REQUEST_SCOPE.BW_CHAT2: events.CoolDownEvent.BW_CHAT2,
  REQUEST_SCOPE.XMPP: events.CoolDownEvent.XMPP,
- REQUEST_SCOPE.CLUB: events.CoolDownEvent.CLUB,
- REQUEST_SCOPE.CLAN: events.CoolDownEvent.CLAN}
+ REQUEST_SCOPE.BATTLE_CONTROL: events.CoolDownEvent.BATTLE,
+ REQUEST_SCOPE.CLAN: events.CoolDownEvent.CLAN,
+ REQUEST_SCOPE.STRONGHOLD: events.CoolDownEvent.STRONGHOLD}
 _g_coolDowns = {}
 
 def isRequestInCoolDown(scopeID, rqTypeID):

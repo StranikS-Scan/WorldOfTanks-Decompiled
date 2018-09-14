@@ -3,7 +3,8 @@
 import cPickle
 from functools import partial
 import BigWorld
-from adisp import async
+import time
+from adisp import async, process
 from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from TokenResponse import TokenResponse
@@ -12,6 +13,30 @@ from ids_generators import SequenceIDGenerator
 def _getAccountRepository():
     import Account
     return Account.g_accountRepository
+
+
+_tokenRqs = {}
+
+def getTokenRequester(tokenType):
+    """
+    Creates and returns TokenRequester instance that has certain type
+    :param tokenType: - TOKEN_TYPE
+    :return: - instance of TokenRequester
+    """
+    global _tokenRqs
+    if tokenType not in _tokenRqs:
+        _tokenRqs[tokenType] = TokenRequester(tokenType, cache=False)
+    return _tokenRqs[tokenType]
+
+
+def fini():
+    """
+    Clears TokenRequester instances that were created
+    """
+    for requester in _tokenRqs.itervalues():
+        requester.clear()
+
+    _tokenRqs.clear()
 
 
 class TokenRequester(object):
@@ -29,7 +54,11 @@ class TokenRequester(object):
         self.__requestID = 0
         self.__cache = cache
         self.__timeoutCbID = None
+        self.__lastRequestTime = 0
         return
+
+    def lastResponseDelta(self):
+        return time.time() - self.__lastRequestTime
 
     def isInProcess(self):
         return self.__callback is not None
@@ -48,7 +77,14 @@ class TokenRequester(object):
         return getattr(REQUEST_COOLDOWN, TOKEN_TYPE.COOLDOWNS[self.__tokenType], 10.0)
 
     @async
-    def request(self, timeout=None, callback=None):
+    @process
+    def request(self, timeout=None, callback=None, allowDelay=False):
+
+        @async
+        def wait(time, callback):
+            BigWorld.callback(time, lambda : callback(None))
+
+        yield lambda callback: callback(True)
         requester = getattr(BigWorld.player(), 'requestToken', None)
         if not requester or not callable(requester):
             if callback:
@@ -59,6 +95,9 @@ class TokenRequester(object):
                 callback(self.__lastResponse)
             return
         else:
+            delta = self.lastResponseDelta()
+            if allowDelay and delta < self.getReqCoolDown():
+                yield wait(self.getReqCoolDown() - delta)
             self.__callback = callback
             self.__requestID = self.__idsGen.next()
             if timeout:
@@ -85,6 +124,7 @@ class TokenRequester(object):
             if self.__callback is not None:
                 self.__callback(self.__lastResponse)
                 self.__callback = None
+            self.__lastRequestTime = time.time()
             return
 
     def __clearTimeoutCb(self):

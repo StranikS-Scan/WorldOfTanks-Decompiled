@@ -13,6 +13,9 @@ class ClanProfileBaseViewMeta(BaseDAAPIComponent):
     def onHeaderButtonClick(self, actionId):
         self._printOverrideError('onHeaderButtonClick')
 
+    def viewSize(self, width, height):
+        self._printOverrideError('viewSize')
+
     def as_setClanInfoS(self, data):
         """
         :param data: Represented by ClanBaseInfoVO (AS)
@@ -42,3 +45,6 @@ class ClanProfileBaseViewMeta(BaseDAAPIComponent):
 
     def as_hideDummyS(self):
         return self.flashObject.as_hideDummy() if self._isDAAPIInited() else None
+
+    def as_loadBrowserS(self):
+        return self.flashObject.as_loadBrowser() if self._isDAAPIInited() else None

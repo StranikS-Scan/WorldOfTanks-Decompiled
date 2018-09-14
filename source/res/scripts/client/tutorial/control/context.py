@@ -109,6 +109,7 @@ class GLOBAL_FLAG(object):
     IS_FLAGS_RESET = '_TutorialIsFlagsReset'
     SHOW_HISTORY = '_TutorialShowHistory'
     HISTORY_NOT_AVAILABLE = '_TutorialHistoryNotAvailable'
+    MODE_IS_AVAILABLE = '_TutorialModeIsAvailable'
     IN_QUEUE = '_InTutorialQueue'
     ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
     ALL = (IS_FLAGS_RESET,

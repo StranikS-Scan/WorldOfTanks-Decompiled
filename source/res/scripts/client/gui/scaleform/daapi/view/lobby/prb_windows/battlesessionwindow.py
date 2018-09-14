@@ -32,6 +32,9 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__timerCallbackID = None
         return
 
+    def requestToLeave(self):
+        self._doLeave(True)
+
     def startListening(self):
         super(BattleSessionWindow, self).startListening()
         self.addListener(events.HideWindowEvent.HIDE_BATTLE_SESSION_WINDOW, self.__handleBSWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -198,12 +201,16 @@ class BattleSessionWindow(BattleSessionWindowMeta):
 
     def __syncStartTime(self):
         self.__clearSyncStartTimeCallback()
-        startTime = self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.START_TIME]
-        startTime = formatters.getStartTimeLeft(startTime)
-        self.__cancelTimerCallback()
-        self.__showTimer(startTime)
-        if startTime > 0:
-            self.__startTimeSyncCallbackID = BigWorld.callback(self.START_TIME_SYNC_PERIOD, self.__syncStartTime)
+        if self.prbEntity is None:
+            return
+        else:
+            startTime = self.prbEntity.getSettings()[PREBATTLE_SETTING_NAME.START_TIME]
+            startTime = formatters.getStartTimeLeft(startTime)
+            self.__cancelTimerCallback()
+            self.__showTimer(startTime)
+            if startTime > 0:
+                self.__startTimeSyncCallbackID = BigWorld.callback(self.START_TIME_SYNC_PERIOD, self.__syncStartTime)
+            return
 
     def __showTimer(self, timeLeft):
         self.__timerCallbackID = None

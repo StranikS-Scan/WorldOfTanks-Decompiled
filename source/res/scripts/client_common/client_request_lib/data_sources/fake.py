@@ -140,12 +140,13 @@ class FakeDataAccessor(base.BaseDataAccessor):
     """
     requests_before_logout = -1
 
-    def __init__(self, url_fetcher=None, config=None, client_lang=None):
+    def __init__(self, url_fetcher=None, config=None, client_lang=None, user_agent=None):
         super(FakeDataAccessor, self).__init__()
         self.client_lang = client_lang
         self._account = None
         self._storage = {}
         self.account = None
+        self.user_agent = user_agent
         return
 
     def login(self, callback, account_id, spa_token):
@@ -642,3 +643,192 @@ class FakeDataAccessor(base.BaseDataAccessor):
         return fake data from `bulk_decline_invites` section
         """
         return self._request_data('bulk_decline_invites', invite_ids)
+
+    @fake_method(example={'permissions': {'manage_reserves': ['commander',
+                                         'combat_officer',
+                                         'executive_officer',
+                                         'personnel_officer']},
+     'time_to_ready': 900,
+     'max_level': 10,
+     'battle_series_duration': 3600,
+     'enemy_clan': None,
+     'industrial_resource_multiplier': 1,
+     'max_players_count': 15,
+     'type': 'FORT_BATTLE',
+     'max_legionaries_count': 0,
+     'available_reserves': {'ARTILLERY_STRIKE': [],
+                            'HIGH_CAPACITY_TRANSPORT': [],
+                            'REQUISITION': [],
+                            'AIRSTRIKE': []},
+     'direction': 'A',
+     'min_players_count': 1,
+     'matchmaker_next_tick': 1475578800,
+     'battle_series_status': [{'battle_reward': 0,
+                               'gameplay_id': 0,
+                               'geometry_id': 6,
+                               'first_resp_clan_id': None,
+                               'second_resp_clan_id': None,
+                               'attacker': None,
+                               'clan_owner_id': 14000012972L,
+                               'current_battle': False,
+                               'map_id': 6}, {'battle_reward': 0,
+                               'gameplay_id': 0,
+                               'geometry_id': 14,
+                               'first_resp_clan_id': None,
+                               'second_resp_clan_id': None,
+                               'attacker': None,
+                               'clan_owner_id': 14000012972L,
+                               'current_battle': False,
+                               'map_id': 14}, {'battle_reward': 0,
+                               'gameplay_id': 0,
+                               'geometry_id': 20,
+                               'first_resp_clan_id': None,
+                               'second_resp_clan_id': None,
+                               'attacker': None,
+                               'clan_owner_id': 14000012972L,
+                               'current_battle': False,
+                               'map_id': 20}],
+     'battle_duration': 600,
+     'requisition_bonus_percent': None,
+     'public': False,
+     'selected_reserves': [None, None, None],
+     'min_level': 1})
+    def get_wgsh_unit_info(self, periphery_id, unit_id, fields=None):
+        """
+        return fake data from `wgsh_unit_info` section
+        """
+        return self._request_data('wgsh_unit_info', unit_id)
+
+    @fake_method(example={})
+    def set_vehicle(self, periphery_id, unit_id, vehicle_cd, fields=None):
+        """
+        return fake data from `set_vehicle` section
+        """
+        return self._request_data('set_vehicle', unit_id)
+
+    @fake_method(example={})
+    def set_readiness(self, periphery_id, unit_id, is_ready, reset_vehicle, fields=None):
+        """
+        return fake data from `set_readiness` section
+        """
+        return self._request_data('set_readiness', unit_id)
+
+    @fake_method(example={})
+    def invite_players(self, periphery_id, unit_id, accounts_to_invite, comment, fields=None):
+        """
+        return fake data from `invite_players` section
+        """
+        return self._request_data('invite_players', unit_id)
+
+    @fake_method(example={})
+    def assign_player(self, periphery_id, unit_id, account_to_assign, fields=None):
+        """
+        return fake data from `assign_player` section
+        """
+        return self._request_data('assign_player', unit_id)
+
+    @fake_method(example={})
+    def unassign_player(self, periphery_id, unit_id, account_to_assign, fields=None):
+        """
+        return fake data from `unassign_player` section
+        """
+        return self._request_data('unassign_player', unit_id)
+
+    @fake_method(example={})
+    def give_leadership(self, periphery_id, unit_id, account_to_assign, fields=None):
+        """
+        return fake data from `give_leadership` section
+        """
+        return self._request_data('give_leadership', unit_id)
+
+    @fake_method(example={})
+    def leave_room(self, periphery_id, unit_id, fields=None):
+        """
+        return fake data from `leave_room` section
+        """
+        return self._request_data('leave_room', unit_id)
+
+    @fake_method(example={})
+    def take_away_leadership(self, periphery_id, unit_id, fields=None):
+        """
+        return fake data from `take_away_leadership` section
+        """
+        return self._request_data('take_away_leadership', unit_id)
+
+    @fake_method(example={})
+    def kick_player(self, periphery_id, unit_id, account_to_assign, fields=None):
+        """
+        return fake data from `kick_player` section
+        """
+        return self._request_data('kick_player', unit_id)
+
+    @fake_method(example={})
+    def set_open(self, periphery_id, unit_id, is_open, fields=None):
+        """
+        return fake data from `set_open` section
+        """
+        return self._request_data('set_open', unit_id)
+
+    @fake_method(example={})
+    def lock_reserve(self, periphery_id, unit_id, reserve_id, fields=None):
+        """
+        return fake data from `lock_reserve` section
+        """
+        return self._request_data('lock_reserve', unit_id)
+
+    @fake_method(example={})
+    def unlock_reserve(self, periphery_id, unit_id, reserve_id, fields=None):
+        """
+        return fake data from `unlock_reserve` section
+        """
+        return self._request_data('unlock_reserve', unit_id)
+
+    @fake_method(example=lambda clan_id: {'skirmishes_statistics': {'last_28_days_battles_count': 1,
+                               'last_28_days_wins_count': 1,
+                               'wins_count': 1,
+                               'loses_count': 1,
+                               'draws_count': 1},
+     'battles_statistics': {'last_28_days_battles_count': 1,
+                            'last_28_days_wins_count': 1,
+                            'wins_count': 1,
+                            'loses_count': 1,
+                            'draws_count': 1},
+     'skirmishes_count_last_28_days': 1,
+     'battles_count_last_28_days': 1,
+     'clear_wins_count': 1,
+     'level_6_statistics': {'wins_count': 1,
+                            'battles_count': 1},
+     'level_8_statistics': {'wins_count': 1,
+                            'battles_count': 1},
+     'level_10_statistics': {'wins_count': 1,
+                             'battles_count': 1}})
+    def clan_statistics(self, clan_id, fields=None):
+        """
+        return fake data from `clan_statistics` section
+        """
+        return self._request_data('clan_statistics', clan_id)
+
+    @fake_method(example=lambda account_id: {'skirmishes_statistics': {'wins_count': 1,
+                               'loses_count': 1,
+                               'draws_count': 1},
+     'battles_statistics': {'wins_count': 1,
+                            'loses_count': 1,
+                            'draws_count': 1},
+     'industrial_resource_total': {'random_battles': 1,
+                                   'skirmishes': 1,
+                                   'battles': 1},
+     'industrial_resource_last_28_days': {'random_battles': 1,
+                                          'skirmishes': 1,
+                                          'battles': 1}})
+    def account_statistics(self, account_id, fields=None):
+        """
+        return fake data from `account_statistics` section
+        """
+        return self._request_data('account_statistics', account_id)
+
+    @fake_method(example={})
+    def join_room(self, periphery_id, unit_id, fields=None):
+        """
+        return fake data from `join_room` section
+        """
+        return self._request_data('join_room', unit_id)

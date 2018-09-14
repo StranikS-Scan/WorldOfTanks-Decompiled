@@ -114,13 +114,19 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
-        ctrl = self.__sharedRepo.feedback
-        if ctrl is not None:
-            ctrl.setPlayerVehicle(vID)
         ctrl = self.__dynamicRepo.respawn
         if ctrl is not None:
             ctrl.spawnVehicle(vID)
         g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaVisitor.type.getVehicleCamouflageKind()
+        return
+
+    def switchVehicle(self, vehicleID):
+        repo = self.shared
+        for ctrl in (repo.ammo, repo.equipments, repo.optionalDevices):
+            if ctrl is not None:
+                ctrl.clear(False)
+
+        repo.vehicleState.switchToOther(vehicleID)
         return
 
     def updateObservedVehicleData(self, vID, extraData):
@@ -298,9 +304,6 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)
-        ctrl = self.__sharedRepo.feedback
-        if ctrl is not None:
-            ctrl.setPlayerVehicle(0L)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.switchToPostmortem()

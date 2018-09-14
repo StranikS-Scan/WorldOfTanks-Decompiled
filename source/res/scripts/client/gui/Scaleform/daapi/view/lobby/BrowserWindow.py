@@ -14,11 +14,14 @@ class BrowserWindow(BrowserWindowMeta):
         self.__showActionBtn = ctx.get('showActionBtn', True)
         self.__showWaiting = ctx.get('showWaiting', False)
         self.__showCloseBtn = ctx.get('showCloseBtn', False)
+        self.__alias = ctx.get('alias', '')
+        self.__handlers = ctx.get('handlers', None)
+        return
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(BrowserWindow, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
-            viewPy.init(self.__browserID)
+            viewPy.init(self.__browserID, self.__handlers, self.__alias)
 
     def onWindowClose(self):
         self.destroy()

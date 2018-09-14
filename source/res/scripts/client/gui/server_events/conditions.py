@@ -9,7 +9,6 @@ import constants
 import nations
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString
-from gui.clubs import formatters as club_fmts, settings as club_settings
 from gui.server_events import formatters
 from gui.shared import g_itemsCache
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -17,7 +16,6 @@ from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, int2roman, dependency
 from items import vehicles
 from shared_utils import CONST_CONTAINER
-from skeletons.gui.clubs import IClubsController
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
@@ -45,7 +43,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'hasClub', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'clubs', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
+_SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -581,6 +579,8 @@ class Token(_Requirement):
     def _format(self, svrEvents, event=None):
         result = []
         eventScope = [event] if event is not None else svrEvents.values()
+        tokensCountNeed = self.getNeededCount()
+        isAvailable = event is None or event.isCompleted() or self.isAvailable()
         for e in eventScope:
             if e.getType() not in _TOKEN_REQUIREMENT_QUESTS:
                 continue
@@ -589,13 +589,13 @@ class Token(_Requirement):
                 continue
             ungroupedResult = []
             groupedResult = {}
+            if e.getType() not in (_ET.TOKEN_QUEST, _ET.PERSONAL_QUEST, _ET.BATTLE_QUEST):
+                counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
+            else:
+                counterDescr = None
             for qID in children[self._id]:
                 quest = svrEvents.get(qID)
                 if quest is not None:
-                    tokensCountNeed = self.getNeededCount()
-                    isAvailable = True
-                    if event is not None and not event.isCompleted():
-                        isAvailable = self.isAvailable()
                     battlesLeft = None
                     if tokensCountNeed > 1:
                         label = i18n.makeString('#quests:details/requirements/token/N', count=BigWorld.wg_getIntegralFormat(tokensCountNeed), questName=quest.getUserName())
@@ -603,12 +603,9 @@ class Token(_Requirement):
                             battlesLeft = tokensCountNeed - self.__getTokensCount()
                     else:
                         label = i18n.makeString('#quests:details/requirements/token', questName=quest.getUserName())
-                    counterDescr = None
-                    if e.getType() not in (_ET.TOKEN_QUEST, _ET.PERSONAL_QUEST, _ET.BATTLE_QUEST):
-                        counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
                     groupID = quest.getGroupID()
                     group = self.__getGroup(groupID)
-                    if group is not None and tokensCountNeed > 1 and self.__getUniqueGroupTokensCount(svrEvents, group) == 1:
+                    if group is not None and tokensCountNeed > 1 and group.withManyTokenSources(svrEvents):
                         groupName = group.getUserName()
                         label = i18n.makeString('#quests:details/requirements/group/token/N', groupName=groupName, count=BigWorld.wg_getIntegralFormat(tokensCountNeed))
                         groupedResult[groupID, group.getPriority()] = formatters.packTextBlock(label, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr)
@@ -625,15 +622,6 @@ class Token(_Requirement):
 
     def __getTokensCount(self):
         return self.eventsCache.questsProgress.getTokenCount(self._id)
-
-    def __getUniqueGroupTokensCount(self, svrEvents, group):
-        uniqueTokens = set()
-        for qID in group.getGroupEvents():
-            quest = svrEvents.get(qID)
-            if quest is not None:
-                uniqueTokens |= set(quest.getChildren().keys())
-
-        return len(uniqueTokens)
 
     def __getGroup(self, groupID):
         return self.eventsCache.getGroups().get(groupID, None)
@@ -1506,58 +1494,3 @@ class RefSystemRalBought10Lvl(_Requirement):
 
     def __repr__(self):
         return 'RefSystemRalBought10Lvl<value=%r>' % self._relation
-
-
-class ClubDivision(_Condition):
-
-    def __init__(self, path, data):
-        super(ClubDivision, self).__init__('clubs', dict(data), path)
-        self._seasonID = _getNodeValue(self._data, 'seasonID')
-        self._division = _getNodeValue(self._data, 'division')
-        self._minBattles = _getNodeValue(self._data, 'minBattles')
-        self._fromLowerDivision = 'fromLowerDivision' in self._data
-
-    def getSeasonID(self):
-        return self._seasonID
-
-    def getDivision(self):
-        return self._division
-
-    def getMinBattlesCount(self):
-        return self._minBattles
-
-    def isFromLowerDivision(self):
-        return self._fromLowerDivision
-
-    def _format(self, svrEvents, event=None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            if self._division:
-                league = club_settings.getLeagueByDivision(self._division)
-                result.append(formatters.packTextBlock(i18n.makeString('#quests:details/conditions/clubs/getDivision', division=club_fmts.getDivisionString(self._division), league=club_fmts.getLeagueString(league))))
-            if self._minBattles:
-                result.append(formatters.packTextBlock(i18n.makeString('#quests:details/conditions/clubs/battles'), value=self._minBattles, relation=_RELATIONS.GTQ))
-        return result
-
-    def __repr__(self):
-        return 'ClubDivision<season = %s, div = %s, battles =%s>' % (self._seasonID, self._division, self._minBattles)
-
-
-class HasClub(_Requirement):
-    clubsCtrl = dependency.descriptor(IClubsController)
-
-    def __init__(self, path):
-        super(HasClub, self).__init__('hasClub', {}, path)
-        self._mustHaveClub = True
-
-    def negate(self):
-        self._mustHaveClub = not self._mustHaveClub
-
-    def _isAvailable(self):
-        return self.clubsCtrl.getProfile().hasClub() is self._mustHaveClub
-
-    def _format(self, svrEvents, event=None):
-        return [formatters.packTextBlock(i18n.makeString('#quests:details/conditions/clubs/hasClub'), isAvailable=self.isAvailable())] if event is None or not event.isGuiDisabled() else []
-
-    def __repr__(self):
-        pass

@@ -13,7 +13,6 @@ from constants import CONTENT_TYPE
 from fortified_regions import configure_pointcuts as _configure_fort_pointcuts
 from gui.miniclient.notifications import configure_pointcuts as _notifications_configure_pointcuts
 from invitations import configure_pointcuts as _configure_invitation_pointcuts
-import christmas as _christmas
 from lobby import configure_pointcuts as _configure_lobby_pointcuts
 from login import configure_pointcuts as _configure_login_pointcuts
 from personal_quests import configure_pointcuts as _configure_personal_quests_pointcuts
@@ -30,7 +29,6 @@ def configure_state():
         _continue_download.PrepareLibrariesListPointcut()
         _continue_download.OnBrowserHyperlinkClickPointcut()
         _continue_download.OnFailLoadingFramePointcut()
-        _continue_download.OnChrismasAwardgHyperLinkPointcut()
         _contacts.CreateSquadPointcut()
         _configure_lobby_pointcuts(config)
         _configure_login_pointcuts()
@@ -47,11 +45,6 @@ def configure_state():
         _event.InitEventPointcut()
         _preview.ChangeVehicleIsPreviewAllowed(config)
         _configure_vehicle_compare_pointcuts()
-        _christmas.initChristmasPointcut()
-        _christmas.initAwardAutoAnimationStartPointcut()
-        _christmas.initAwardgWarningTextsPointcut()
-        _christmas.initAwardgButtonStatesPointcut()
-        _christmas.initAwardgCheckBoxPointcut()
 
 
 def _get_config(content_type):

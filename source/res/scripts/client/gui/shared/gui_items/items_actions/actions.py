@@ -318,8 +318,10 @@ class SetVehicleModuleAction(BuyAction):
                 oldComponentItem = g_itemsCache.items.getItemByCD(int(self.__oldItemCD))
             if not self.__isRemove:
                 if oldComponentItem and oldComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                    Waiting.show('installEquipment')
                     result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True).request()
                     processMsg(result)
+                    Waiting.hide('installEquipment')
                     if not result.success:
                         return
             if not self.__isRemove and not newComponentItem.isInInventory:

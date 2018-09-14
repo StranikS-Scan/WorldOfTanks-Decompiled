@@ -9,23 +9,13 @@ from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
 from gui.shared.gui_items import Vehicle
-from gui.shared.gui_items.Vehicle import getShortUserName, VEHICLE_TAGS, VEHICLE_CLASS_NAME
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from helpers import dependency
-from items.vehicles import VEHICLE_CLASS_TAGS
 from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
-_VEHICLE_CLASS_TAGS = set(VEHICLE_CLASS_NAME.ALL())
-
-def getClassTag(tags):
-    subSet = _VEHICLE_CLASS_TAGS & tags
-    result = None
-    if len(subSet):
-        result = list(subSet).pop()
-    return result
-
 
 def isObserver(tags):
     return VEHICLE_TAGS.OBSERVER in tags
@@ -117,14 +107,14 @@ class VehicleTypeInfoVO(object):
             vehicleType = vehicleDescr.type
             self.compactDescr = vehicleType.compactDescr
             tags = vehicleType.tags
-            self.classTag = getClassTag(tags)
+            self.classTag = Vehicle.getVehicleClassTag(tags)
             self.isObserver = isObserver(tags)
             self.isPremiumIGR = isPremiumIGR(tags)
             self.turretYawLimits = vehicle_getter.getYawLimits(vehicleDescr)
             self.shortName = vehicleType.shortUserString
             self.name = Vehicle.getUserName(vehicleType=vehicleType, textPrefix=True)
             self.shortNameWithPrefix = Vehicle.getShortUserName(vehicleType=vehicleType, textPrefix=True)
-            self.guiName = getShortUserName(vehicleType)
+            self.guiName = Vehicle.getShortUserName(vehicleType)
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
             self.maxHealth = vehicleDescr.maxHealth

@@ -192,5 +192,20 @@
         <Arg>	PYTHON	</Arg>
       </ReturnValues>
     </getInviteExtraData>
+    <changeUnitFlags>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </changeUnitFlags>
+    <changePlayerRole>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </changePlayerRole>
   </BaseMethods>
 </UnitMgr.def>

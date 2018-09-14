@@ -11,8 +11,10 @@ class FORTIFICATION_ALIASES(object):
     FORT_BUILDING_PROCESS_WINDOW_ALIAS = 'FortBuildingProcessWindow'
     FORT_FIXED_PLAYERS_WINDOW_ALIAS = 'FortFixedPlayersWindow'
     FORTIFICATIONS_VIEW_ALIAS = 'FortificationsView'
+    FORTIFICATIONS2_VIEW_ALIAS = 'Fortifications2View'
     FORT_MODERNIZATION_WINDOW_ALIAS = 'FortModernizationWindow'
     FORT_BATTLE_ROOM_WINDOW_ALIAS = 'FortBattleRoomWindow'
+    STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS = 'StrongholdBattleRoomWindow'
     FORT_BUILDING_CARD_POPOVER_ALIAS = 'FortBuildingCardPopover'
     FORT_CLAN_LIST_WINDOW_ALIAS = 'FortClanListWindow'
     FORT_CLAN_STATISTICS_WINDOW_ALIAS = 'FortClanStatisticsWindow'
@@ -47,6 +49,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_ORDER_INFO_WINDOW_ALIAS = 'FortOrderInfoWindow'
     FORT_BATTLEROOM_ORDERS_PANEL_COMPONENT_ALIAS = 'FortBattleRoomOrdersPanelComponent'
     FORT_SORTIE_ORDERS_PANEL_COMPONENT_ALIAS = 'FortSortieOrdersPanelComponent'
+    FORT_RESERVE_SELECT_POPOVER_ALIAS = 'FortReserveSelectPopover'
     FORT_BUILDING_PROCESS_WINDOW_EVENT = 'FortBuildingProcessWindow'
     FORT_FIXED_PLAYERS_WINDOW_EVENT = 'FortFixedPlayersWindow'
     FORTIFICATIONS_VIEW_EVENT = 'FortificationsView'
@@ -84,6 +87,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_BUILDING_PROCESS_WINDOW_UI = 'fortBuildingProcessWindow.swf'
     FORT_FIXED_PLAYERS_WINDOW_UI = 'fortFixedPlayersWindow.swf'
     FORTIFICATIONS_VIEW_UI = 'fortificationsView.swf'
+    FORTIFICATIONS2_VIEW_UI = 'fortificationsView2.swf'
     FORT_MODERNIZATION_WINDOW_UI = 'fortModernizationWindow.swf'
     FORT_BATTLE_ROOM_WINDOW_UI = 'fortBattleRoomWindow.swf'
     FORT_BUILDING_CARD_POPOVER_UI = 'fortBuildingCardPopover.swf'
@@ -117,6 +121,7 @@ class FORTIFICATION_ALIASES(object):
     FORT_ORDER_SELECT_POPOVER_UI = 'fortOrderSelectPopover.swf'
     FORT_COMBAT_RESERVES_INTRO_UI = 'FortCombatReservesIntro.swf'
     FORT_ORDER_INFO_WINDOW_UI = 'fortOrderInfoWindow.swf'
+    FORT_FITTING_SELECT_POPOVER_UI = 'fittingSelectPopover.swf'
     WELCOME_VIEW_LINKAGE = 'FortWelcomeViewUI'
     WELCOME_COMMANDER_VIEW_LINKAGE = 'FortWelcomeCommanderViewUI'
     DISCONNECT_VIEW_LINCKAGE = 'FortDisconnectViewUI'
@@ -132,22 +137,32 @@ class FORTIFICATION_ALIASES(object):
     FORT_BATTLE_ROOM_INTRO_VIEW_PY = 'forttifications/battleRoom/intro'
     FORT_BATTLE_ROOM_LIST_VIEW_UI = 'FortListViewUI'
     FORT_BATTLE_ROOM_LIST_VIEW_PY = 'forttifications/battleRoom/list'
+    STRONGHOLD_BATTLE_ROOM_LIST_VIEW_UI = 'StrongholdListViewUI'
+    STRONGHOLD_BATTLE_ROOM_LIST_VIEW_PY = 'stronghold/battleRoom/list'
     FORT_CLAN_BATTLE_LIST_VIEW_UI = 'FortClanBattleListUI'
     FORT_CLAN_BATTLE_LIST_VIEW_PY = 'forttifications/battleRoom/clanList'
+    STRONGHOLD_BATTLE_ROOM_VIEW_UI = 'FortClanBattleRoomUI'
+    STRONGHOLD_BATTLE_ROOM_VIEW_PY = 'forttifications/battleRoom/strongholdBattleRoom'
     FORT_BATTLE_ROOM_VIEW_UI = 'FortRoomViewUI'
     FORT_BATTLE_ROOM_VIEW_PY = 'forttifications/battleRoom/room'
     FORT_CLAN_BATTLE_ROOM_VIEW_UI = 'FortClanBattleRoomUI'
     FORT_CLAN_BATTLE_ROOM_VIEW_PY = 'forttifications/battleRoom/clanBattleRoom'
+    STRONGHOLD_SEND_INVITES_WINDOW_UI = 'StrongholdSendInvitesWindow'
+    STRONGHOLD_SEND_INVITES_WINDOW_PY = 'forttifications/strongholdSendInvitesWindow'
     FLASH_ALIASES = [FORT_BATTLE_ROOM_INTRO_VIEW_UI,
      FORT_BATTLE_ROOM_LIST_VIEW_UI,
      FORT_BATTLE_ROOM_VIEW_UI,
      FORT_CLAN_BATTLE_LIST_VIEW_UI,
-     FORT_CLAN_BATTLE_ROOM_VIEW_UI]
+     STRONGHOLD_BATTLE_ROOM_VIEW_UI,
+     FORT_CLAN_BATTLE_ROOM_VIEW_UI,
+     STRONGHOLD_BATTLE_ROOM_LIST_VIEW_UI]
     PYTHON_ALIASES = [FORT_BATTLE_ROOM_INTRO_VIEW_PY,
      FORT_BATTLE_ROOM_LIST_VIEW_PY,
      FORT_BATTLE_ROOM_VIEW_PY,
      FORT_CLAN_BATTLE_LIST_VIEW_PY,
-     FORT_CLAN_BATTLE_ROOM_VIEW_PY]
+     STRONGHOLD_BATTLE_ROOM_VIEW_PY,
+     FORT_CLAN_BATTLE_ROOM_VIEW_PY,
+     STRONGHOLD_BATTLE_ROOM_LIST_VIEW_PY]
     MODE_COMMON = 'common'
     MODE_COMMON_TUTORIAL = 'commonTutor'
     MODE_DIRECTIONS = 'directions'

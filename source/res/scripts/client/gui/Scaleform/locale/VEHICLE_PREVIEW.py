@@ -18,6 +18,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_TRADEINLABEL = '#vehicle_preview:buyingPanel/tradeInLabel'
     MODULESPANEL_TITLE = '#vehicle_preview:modulesPanel/title'
     MODULESPANEL_LABEL = '#vehicle_preview:modulesPanel/Label'
+    MODULESPANEL_NOMODULESOPTIONS = '#vehicle_preview:modulesPanel/noModulesOptions'
     MODULESPANEL_STATUS_TEXT = '#vehicle_preview:modulesPanel/status/text'
     BUYINGPANEL_BUYBTN_LABEL_BUY = '#vehicle_preview:buyingPanel/buyBtn/label/buy'
     BUYINGPANEL_BUYBTN_LABEL_RESTORE = '#vehicle_preview:buyingPanel/buyBtn/label/restore'

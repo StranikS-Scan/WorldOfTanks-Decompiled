@@ -1,6 +1,7 @@
 <F16_AMX_13_75.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
@@ -188,7 +189,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <groundNodes>
@@ -512,7 +512,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>

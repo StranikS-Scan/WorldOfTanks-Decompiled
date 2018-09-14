@@ -815,61 +815,6 @@ class MultisamplingSetting(SettingAbstract):
             return
 
 
-class AspectRatioSetting(SettingAbstract):
-    MAGIC_NUMBER = 3.75
-
-    def __init__(self, isPreview=False):
-        super(AspectRatioSetting, self).__init__(isPreview)
-        self.__aspectRatios = ((4, 3),
-         (5, 4),
-         (16, 9),
-         (16, 10),
-         (19, 10))
-        maxWidth, maxHeight = g_monitorSettings.maxParams
-        if maxHeight > 0:
-            aspectRatio3DVision = float(maxWidth) / float(maxHeight)
-            if aspectRatio3DVision > self.MAGIC_NUMBER:
-                gcd = fractions.gcd(maxWidth, maxHeight)
-                self.__aspectRatios += ((maxWidth / gcd, maxHeight / gcd),)
-
-    def __getAspectRatioIndex(self, aspectRatio):
-        for index, size in enumerate(self.__aspectRatios):
-            if round(float(size[0]) / size[1], 6) == aspectRatio:
-                return index
-
-        return len(self.__aspectRatios)
-
-    def __getAspectRatioByIndex(self, apIndex):
-        if len(self.__aspectRatios) > apIndex > -1:
-            ars = self.__aspectRatios[int(apIndex)]
-            return round(float(ars[0]) / ars[1], 6)
-        else:
-            return None
-
-    def __getCurrentAspectRatio(self):
-        return round(BigWorld.getFullScreenAspectRatio(), 6)
-
-    def _get(self):
-        return self.__getAspectRatioIndex(self.__getCurrentAspectRatio())
-
-    def _getOptions(self):
-        currentAP = self.__getCurrentAspectRatio()
-        options = [ '%d:%d' % m for m in self.__aspectRatios ]
-        if self.__getAspectRatioIndex(currentAP) == len(self.__aspectRatios):
-            options.append('%s:1*' % BigWorld.wg_getNiceNumberFormat(currentAP))
-        return options
-
-    def _set(self, apIndex):
-        aspectRatio = self.__getAspectRatioByIndex(apIndex)
-        if aspectRatio is None:
-            LOG_ERROR('There is no aspect ratio by given index', apIndex)
-            return
-        else:
-            BigWorld.changeFullScreenAspectRatio(aspectRatio)
-            FovExtended.instance().refreshFov()
-            return
-
-
 class DynamicRendererSetting(SettingAbstract):
 
     def _get(self):
@@ -998,23 +943,6 @@ class MonitorSetting(SettingAbstract):
         return result
 
 
-class BorderlessSizeSettings(SettingAbstract):
-
-    def _get(self):
-        pass
-
-    def _getOptions(self):
-        result = []
-        for modes in g_monitorSettings.getBorderlessSizes():
-            modeLabels = []
-            for mode in modes:
-                modeLabels.append('%dx%s' % (mode.width, mode.height))
-
-            result.append(modeLabels)
-
-        return result
-
-
 class WindowSizeSetting(SettingAbstract):
 
     def __init__(self, isPreview=False, storage=None):
@@ -1079,14 +1007,14 @@ class ResolutionSetting(PreferencesSetting):
 
     def __init__(self, isPreview=False, storage=None):
         super(PreferencesSetting, self).__init__(isPreview)
-        self.__lastSelectedVideoMode = None
+        self._lastSelectedVideoMode = None
         self._storage = weakref.proxy(storage)
         return
 
-    def __getResolutions(self):
-        return self.__getSuitableResolutions()[self._storage.monitor]
+    def _getResolutions(self):
+        return self._getSuitableResolutions()[self._storage.monitor]
 
-    def __getSuitableResolutions(self):
+    def _getSuitableResolutions(self):
         result = []
         for modes in graphics.getSuitableVideoModes():
             resolutions = set()
@@ -1097,28 +1025,92 @@ class ResolutionSetting(PreferencesSetting):
 
         return result
 
-    def __getResolutionIndex(self, width, height):
-        for idx, (w, h) in enumerate(self.__getResolutions()):
+    def _getResolutionIndex(self, width, height):
+        for idx, (w, h) in enumerate(self._getResolutions()):
             if w == width and h == height:
                 return idx
 
     def _get(self):
         resolution = self._storage.resolution
-        return self.__getResolutionIndex(*resolution) if resolution is not None else None
+        return self._getResolutionIndex(*resolution) if resolution is not None else None
+
+    def _findBestAspect(self, aspect, maxInt):
+        w = 4
+        bestDelta = 100000.0
+        bestW = 1
+        bestH = 1
+        while w < maxInt:
+            h = 3
+            while h < w:
+                delta = abs(float(w) / h - aspect)
+                if delta < bestDelta:
+                    bestDelta = delta
+                    bestW = w
+                    bestH = h
+                h = h + 1
+
+            w = w + 1
+
+        return (bestW, bestH)
 
     def _getOptions(self):
-        return [ [ '%dx%d' % (width, height) for width, height in resolutions ] for resolutions in self.__getSuitableResolutions() ]
+        res = []
+        for resolutions in self._getSuitableResolutions():
+            formatedRes = []
+            for width, height in resolutions:
+                gcd = fractions.gcd(width, height)
+                widthOpt = width / gcd
+                heightOpt = height / gcd
+                if widthOpt > 24:
+                    p = self._findBestAspect(float(widthOpt) / heightOpt, 23)
+                    widthOpt = p[0]
+                    heightOpt = p[1]
+                if widthOpt == 8:
+                    widthOpt *= 2
+                    heightOpt *= 2
+                formatedRes.append('{0}x{1} [{2}:{3}]'.format(width, height, widthOpt, heightOpt))
+
+            res.append(formatedRes)
+
+        return res
+
+    def _setAspectRatio(self):
+        R = self._storage.resolution
+        wd, ht = R
+        aspectRatio = float(wd) / ht
+        BigWorld.changeFullScreenAspectRatio(aspectRatio)
 
     def _set(self, value):
-        resolution = self.__getResolutions()[int(value)]
+        resolution = self._getResolutions()[int(value)]
         self._storage.resolution = resolution
-        self.__lastSelectedVideoMode = resolution
+        self._lastSelectedVideoMode = resolution
+        self._setAspectRatio()
+        FovExtended.instance().refreshFov()
 
     def _savePrefsCallback(self, prefsRoot):
-        if self.__lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
+        if self._lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
             devPref = prefsRoot['devicePreferences']
-            devPref.writeInt('fullscreenWidth', self.__lastSelectedVideoMode[0])
-            devPref.writeInt('fullscreenHeight', self.__lastSelectedVideoMode[1])
+            devPref.writeInt('fullscreenWidth', self._lastSelectedVideoMode[0])
+            devPref.writeInt('fullscreenHeight', self._lastSelectedVideoMode[1])
+        return
+
+
+class BorderlessSizeSetting(ResolutionSetting):
+
+    def _get(self):
+        resolution = self._storage.borderlessSize
+        return self._getResolutionIndex(*resolution) if resolution is not None else None
+
+    def _set(self, value):
+        size = self._getResolutions()[int(value)]
+        self._storage.borderlessSize = size
+        self._lastSelectedVideoMode = size
+
+    def _savePrefsCallback(self, prefsRoot):
+        if self._lastSelectedVideoMode is not None and g_monitorSettings.isMonitorChanged:
+            devPref = prefsRoot['devicePreferences']
+            devPref.writeInt('borderlessWidth', self._lastSelectedVideoMode[0])
+            devPref.writeInt('borderlessHeight', self._lastSelectedVideoMode[1])
         return
 
 
@@ -1176,7 +1168,10 @@ class VideoModeSettings(PreferencesSetting):
 
     def _getOptions(self):
         result = []
-        for data, label in ((BigWorld.WindowModeWindowed, 'windowed'), (BigWorld.WindowModeExclusiveFullscreen, 'fullscreen'), (BigWorld.WindowModeBorderless, 'borderless')):
+        allowScreenModes = ((BigWorld.WindowModeWindowed, 'windowed'), (BigWorld.WindowModeExclusiveFullscreen, 'fullscreen'))
+        if len(graphics.getSuitableVideoModes()):
+            allowScreenModes += ((BigWorld.WindowModeBorderless, 'borderless'),)
+        for data, label in allowScreenModes:
             result.append({'data': data,
              'label': '#settings:screenMode/%s' % label})
 
@@ -1379,6 +1374,37 @@ class CarouselTypeSetting(StorageDumpSetting):
 
     def getRowCount(self):
         return self._get() + 1
+
+
+class DoubleCarouselTypeSetting(StorageDumpSetting):
+
+    class OPTIONS(CONST_CONTAINER):
+        ADAPTIVE = 'adaptive'
+        SMALL = 'small'
+
+    DOUBLE_CAROUSEL_TYPES = (OPTIONS.ADAPTIVE, OPTIONS.SMALL)
+
+    def _getOptions(self):
+        settingsKey = '#settings:game/%s/%s'
+        return [ settingsKey % (self.settingName, type) for type in self.DOUBLE_CAROUSEL_TYPES ]
+
+    def getDefaultValue(self):
+        return self.DOUBLE_CAROUSEL_TYPES.index(self.OPTIONS.ADAPTIVE)
+
+    def enableSmallCarousel(self):
+        return self._get() == self.DOUBLE_CAROUSEL_TYPES.index(self.OPTIONS.SMALL)
+
+
+class VehicleCarouselStatsSetting(StorageDumpSetting):
+
+    def _get(self):
+        return bool(super(VehicleCarouselStatsSetting, self)._get())
+
+    def _set(self, value):
+        return super(VehicleCarouselStatsSetting, self)._set(value)
+
+    def getDefaultValue(self):
+        return True
 
 
 class BattleLoadingTipSetting(AccountDumpSetting):
@@ -1685,7 +1711,6 @@ class KeyboardSettings(SettingsContainer):
        ('camera_left', 'CMD_CM_CAMERA_ROTATE_LEFT'),
        ('camera_right', 'CMD_CM_CAMERA_ROTATE_RIGHT'))),
      ('voicechat', (('pushToTalk', 'CMD_VOICECHAT_MUTE'), ('voicechat_enable', 'CMD_VOICECHAT_ENABLE'))),
-     ('logitech_keyboard', (('switch_view', 'CMD_LOGITECH_SWITCH_VIEW'),)),
      ('minimap', (('sizeUp', 'CMD_MINIMAP_SIZE_UP'), ('sizeDown', 'CMD_MINIMAP_SIZE_DOWN'), ('visible', 'CMD_MINIMAP_VISIBLE'))))
     IMPORTANT_BINDS = ('forward', 'backward', 'left', 'right', 'fire', 'item01', 'item02', 'item03', 'item04', 'item05', 'item06', 'item07', 'item08')
     KEYS_TOOLTIPS = {'my_target/follow_me': 'SettingsKeyFollowMe',
@@ -1693,7 +1718,7 @@ class KeyboardSettings(SettingsContainer):
      'sos/help_me': 'SettingsKeyNeedHelp',
      'reload/stop': 'SettingsKeyReload',
      'auto_rotation': 'SettingKeySwitchMode'}
-    __hiddenGroups = {'logitech_keyboard'}
+    __hiddenGroups = {}
 
     def __init__(self):
         if not GUI_SETTINGS.minimapSize:
@@ -1863,6 +1888,8 @@ class SoundDevicePresetSetting(_BaseSoundPresetSetting):
         selectedID = self.soundsCtrl.system.getUserSpeakersPresetID()
         if selectedID == SPEAKERS_CONFIG.AUTO_DETECTION:
             selectedID = self.soundsCtrl.system.getSystemSpeakersPresetID()
+        else:
+            self.soundsCtrl.system.getSystemSpeakersPresetID()
         mapping = _makeSoundPresetIDToGuiID()
         if selectedID in mapping:
             acousticType = mapping[selectedID]
@@ -2278,7 +2305,7 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
         self.setSystemValue(0)
 
     def _getOptions(self):
-        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(True)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableBorderlessSizes())]
+        return [self.__getScales(graphics.getSuitableWindowSizes(), BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)), self.__getScales(graphics.getSuitableVideoModes()), self.__getScales(graphics.getSuitableVideoModes())]
 
     def _set(self, value):
         super(InterfaceScaleSetting, self)._save(value)
@@ -2409,12 +2436,43 @@ class DamageIndicatorPresetsSetting(GroupSetting):
 
 
 class DamageLogDetailsSetting(GroupSetting):
-    OPTIONS = {0: 'always',
-     1: 'byAlt',
-     2: 'hide'}
+    SHOW_ALWAYS = 0
+    SHOW_BY_ALT_PRESS = 1
+    HIDE = 2
+    _OPTIONS = {SHOW_ALWAYS: 'always',
+     SHOW_BY_ALT_PRESS: 'byAlt',
+     HIDE: 'hide'}
 
     def __init__(self, settingName, storage, isPreview=False):
-        super(DamageLogDetailsSetting, self).__init__(settingName, storage, options=self.OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/details/%s', isPreview=isPreview)
+        super(DamageLogDetailsSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/details/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogEventTypesSetting(GroupSetting):
+    ALL = 0
+    ONLY_POSITIVE = 1
+    ONLY_NEGATIVE = 2
+    _OPTIONS = {ALL: 'both',
+     ONLY_POSITIVE: 'positive',
+     ONLY_NEGATIVE: 'negative'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogEventTypesSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/eventTypes/%s', isPreview=isPreview)
+
+    def getDefaultValue(self):
+        pass
+
+
+class DamageLogEventPositionsSetting(GroupSetting):
+    ALL_BOTTOM = 0
+    NEGATIVE_AT_TOP = 1
+    _OPTIONS = {ALL_BOTTOM: 'bottom',
+     NEGATIVE_AT_TOP: 'topBottom'}
+
+    def __init__(self, settingName, storage, isPreview=False):
+        super(DamageLogEventPositionsSetting, self).__init__(settingName, storage, options=self._OPTIONS, settingsKey='#settings:feedback/tab/damageLogPanel/eventPositions/%s', isPreview=isPreview)
 
     def getDefaultValue(self):
         pass

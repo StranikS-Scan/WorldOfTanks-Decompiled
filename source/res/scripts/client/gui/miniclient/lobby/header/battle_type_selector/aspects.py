@@ -31,8 +31,8 @@ class CommandBattle(_BattleTypeDisable):
 class SortieBattle(_BattleTypeDisable):
 
     def __init__(self):
-        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FORT,
-         PREBATTLE_ACTION_NAME.FORT,
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS,
+         PREBATTLE_ACTION_NAME.FORT2,
          4,
          SELECTOR_BATTLE_TYPES.SORTIE))
 
@@ -59,6 +59,12 @@ class FalloutBattle(_BattleTypeDisable):
 
     def __init__(self):
         _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 2))
+
+
+class StrongholdBattle(_BattleTypeDisable):
+
+    def __init__(self):
+        _BattleTypeDisable.__init__(self, (MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4))
 
 
 class OnBattleTypeSelectorPopulate(aop.Aspect):

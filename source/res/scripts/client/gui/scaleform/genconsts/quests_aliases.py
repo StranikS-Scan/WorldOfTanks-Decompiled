@@ -21,7 +21,6 @@ class QUESTS_ALIASES(object):
     TILE_CHAINS_VIEW_LINKAGE = 'QuestsTileChainsViewUI'
     COMMON_QUESTS_VIEW_ALIAS = 'CommonQuestsView'
     COMMON_QUESTS_VIEW_LINKAGE = 'CurrentTab_UI'
-    LADDER_QUESTS_VIEW_ALIAS = 'LadderQuestsView'
     BEGINNER_QUESTS_VIEW_ALIAS = 'BeginnerQuestsView'
     BEGINNER_QUESTS_VIEW_LINKAGE = 'QuestsBeginnerTabUI'
     SLOTS_COUNT = 5

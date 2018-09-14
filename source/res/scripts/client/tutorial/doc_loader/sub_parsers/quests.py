@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/quests.py
 from tutorial.control.quests import triggers
-from tutorial.data import effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.doc_loader.sub_parsers import chains, readVarValue
 from tutorial.doc_loader.sub_parsers import lobby
+from items import _xml
+from tutorial.data import chapter
+from tutorial.data import effects
 _EFFECT_TYPE = effects.EFFECT_TYPE
 
 def _readAllTurorialBonusesTriggerSection(xmlCtx, section, chapter, triggerID):
@@ -76,6 +78,26 @@ def readSaveTutorialSettingSection(xmlCtx, section, _, conditions):
     return effects.HasTargetEffect(settingID, _EFFECT_TYPE.SAVE_TUTORIAL_SETTING, conditions=conditions)
 
 
+def readSaveAccountSettingSection(xmlCtx, section, _, conditions):
+    settingID = sub_parsers.parseID(xmlCtx, section, 'Specify a setting ID')
+    return effects.HasTargetEffect(settingID, _EFFECT_TYPE.SAVE_ACCOUNT_SETTING, conditions=conditions)
+
+
+def readTutorialSettingSection(xmlCtx, section, flags):
+    settingID = sub_parsers.parseID(xmlCtx, section, 'Specify a setting ID')
+    settingName = None
+    if 'setting-name' in section.keys():
+        settingName = _xml.readString(xmlCtx, section, 'setting-name')
+    else:
+        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a setting name')
+    settingValue = None
+    if 'setting-value' in section.keys():
+        settingValue = _xml.readBool(xmlCtx, section, 'setting-value')
+    else:
+        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a setting value')
+    return chapter.TutorialSetting(settingID, settingName, settingValue)
+
+
 def readQuestConditions(section):
     result = []
     valuesSec = section['quest-conditions']
@@ -102,12 +124,12 @@ def _readSelectVehicleInHangarSection(xmlCtx, section, flags, conditions):
 
 def init():
     sub_parsers.setEffectsParsers({'save-setting': readSaveTutorialSettingSection,
-     'save-account-setting': lobby.readSaveAccountSettingSection,
+     'save-account-setting': readSaveAccountSettingSection,
      'show-unlocked-chapter': chains.readShowUnlockedChapterSection,
      'switch-to-random': lobby.readSwitchToRandomSection,
      'select-in-hangar': _readSelectVehicleInHangarSection})
     sub_parsers.setEntitiesParsers({'hint': chains.readHintSection,
-     'tutorial-setting': lobby.readTutorialSettingSection})
+     'tutorial-setting': readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,
      'premiumDiscount': lobby.readPremiumDiscountsUseTriggerSection,
      'tankmanAcademyDiscount': chains.readTankmanPriceDiscountTriggerSection,

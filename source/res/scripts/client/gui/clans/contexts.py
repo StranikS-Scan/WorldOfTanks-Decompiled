@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/contexts.py
+from account_helpers import getAccountDatabaseID
 from shared_utils import makeTupleByDict
 from gui.clans import items
-from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, SEND_INVITES_COOLDOWN, ACCEPT_INVITES_COOLDOWN, DECLINE_INVITES_COOLDOWN
-from gui.clubs.settings import DEFAULT_COOLDOWN
+from gui.clans.settings import CLAN_REQUESTED_DATA_TYPE, SEND_INVITES_COOLDOWN, ACCEPT_INVITES_COOLDOWN, DECLINE_INVITES_COOLDOWN, DEFAULT_COOLDOWN
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
 from gui.shared import g_itemsCache
@@ -29,6 +29,9 @@ class CommonClanRequestCtx(RequestCtx):
 
     def getFields(self):
         return None
+
+    def isClanSyncRequired(self):
+        return True
 
 
 @ReprInjector.withParent(('getTokenID', 'token'), ('getUserDatabaseID', 'dbID'))
@@ -273,10 +276,13 @@ class StrongholdStatisticsCtx(_ClanRequestBaseCtx):
 
     def getDataObj(self, incomeData):
         incomeData = incomeData or {}
-        return makeTupleByDict(items.ClanStrongholdStatisticsData, incomeData)
+        return makeTupleByDict(items.StrongholdStatisticsData, incomeData)
 
     def getDefDataObj(self):
-        return items.ClanStrongholdStatisticsData()
+        return items.StrongholdStatisticsData()
+
+    def isAuthorizationRequired(self):
+        return True
 
 
 @ReprInjector.withParent()
@@ -826,3 +832,372 @@ class PingCtx(CommonClanRequestCtx):
 
     def isCaching(self):
         return False
+
+
+_STRONGHOLD_REQUEST_TYPE = CLAN_REQUESTED_DATA_TYPE
+
+class StrongholdRequestCtx(CommonClanRequestCtx):
+    """
+    Base context for all unit requests.
+    """
+    __slots__ = '__unitMgrId'
+
+    def __init__(self, unitMgrId=None, **kwargs):
+        super(StrongholdRequestCtx, self).__init__(**kwargs)
+        self.__unitMgrId = unitMgrId
+
+    def getUnitMgrID(self):
+        return self.__unitMgrId
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx):
+        raise NotImplementedError
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+
+class StrongholdLeaveCtx(StrongholdRequestCtx):
+
+    def __init__(self, **kwargs):
+        super(StrongholdLeaveCtx, self).__init__(**kwargs)
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        return cls(unitMgrId=unitMgrId, waitingID=prbCtx.getWaitingID())
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_LEAVE
+
+
+class StrongholdSetVehicleCtx(StrongholdRequestCtx):
+
+    def __init__(self, vehTypeCD, **kwargs):
+        super(StrongholdSetVehicleCtx, self).__init__(**kwargs)
+        self.__vehTypeCD = vehTypeCD
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        vehTypeCD = prbCtx.getVehTypeCD()
+        return cls(vehTypeCD, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_VEHICLE
+
+    def getVehTypeCD(self):
+        """
+        Getter for selecting vehicle's compact descriptor
+        """
+        return self.__vehTypeCD
+
+
+class StrongholdAssignCtx(StrongholdRequestCtx):
+    """
+    Context for assigning player to some slot in unit
+    """
+    __slots__ = ('__isRemove', '__pID', '__slotIdx')
+
+    def __init__(self, pID, isRemove, slotIdx, **kwargs):
+        super(StrongholdAssignCtx, self).__init__(**kwargs)
+        self.__pID = pID
+        self.__slotIdx = slotIdx
+        self.__isRemove = isRemove
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        pID = prbCtx.getPlayerID()
+        isRemove = prbCtx.isRemove()
+        slotIdx = prbCtx.getSlotIdx()
+        return cls(pID, isRemove, slotIdx, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        if not self.__isRemove:
+            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_ASSIGN
+        else:
+            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
+
+    def getPlayerID(self):
+        """
+        Getter for player's ID
+        """
+        return self.__pID
+
+    def getSlotIdx(self):
+        """
+        Assigning slot index
+        """
+        return self.__slotIdx
+
+
+class StrongholdUnassignCtx(StrongholdRequestCtx):
+    """
+    Context for assigning player to some slot in unit
+    """
+    __slots__ = ('__isRemove', '__pID')
+
+    def __init__(self, pID, isRemove, **kwargs):
+        super(StrongholdUnassignCtx, self).__init__(**kwargs)
+        self.__pID = pID
+        self.__isRemove = isRemove
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        pID = prbCtx.getPlayerID()
+        isRemove = prbCtx.isRemove()
+        return cls(pID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
+
+    def getPlayerID(self):
+        """
+        Getter for player's ID
+        """
+        return self.__pID
+
+
+class StrongholdChangeOpenedCtx(StrongholdRequestCtx):
+    """
+    Change opened/closed unit state context.
+    """
+    __slots__ = ('__isOpened',)
+
+    def __init__(self, isOpened, **kwargs):
+        super(StrongholdChangeOpenedCtx, self).__init__(**kwargs)
+        self.__isOpened = isOpened
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        isOpened = prbCtx.isOpened()
+        return cls(isOpened, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_CHANGE_OPENED
+
+    def isOpened(self):
+        """
+        Is it opened or closed.
+        """
+        return self.__isOpened
+
+
+class StrongholdSetReadyCtx(StrongholdRequestCtx):
+    """
+    Context for setting current player's state to ready/not ready.
+    """
+    __slots__ = ('__isReady',)
+
+    def __init__(self, isReady, **kwargs):
+        super(StrongholdSetReadyCtx, self).__init__(**kwargs)
+        self.__isReady = isReady
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        isReady = prbCtx.isReady()
+        return cls(isReady, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_PLAYER_STATE
+
+    def isReady(self):
+        """
+        Is this player should become ready or not ready.
+        """
+        return self.__isReady
+
+
+class StrongholdSetReserveCtx(StrongholdRequestCtx):
+    """
+    Context for join unit request.
+    """
+    __slots__ = ('__reserveID', '__isRemove')
+
+    def __init__(self, reserveID, isRemove, **kwargs):
+        super(StrongholdSetReserveCtx, self).__init__(**kwargs)
+        self.__reserveID = reserveID
+        self.__isRemove = isRemove
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        reserveID = prbCtx.getReserveID()
+        isRemove = prbCtx.getIsRemove()
+        return cls(reserveID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_RESERVE
+
+    def getReserveID(self):
+        return self.__reserveID
+
+    def getIsRemove(self):
+        return self.__isRemove
+
+
+class StrongholdUnsetReserveCtx(StrongholdRequestCtx):
+    """
+    Context for join unit request.
+    """
+    __slots__ = ('__reserveID', '__isRemove')
+
+    def __init__(self, reserveID, isRemove, **kwargs):
+        super(StrongholdUnsetReserveCtx, self).__init__(**kwargs)
+        self.__reserveID = reserveID
+        self.__isRemove = isRemove
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        reserveID = prbCtx.getReserveID()
+        isRemove = prbCtx.getIsRemove()
+        return cls(reserveID, isRemove, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNSET_RESERVE
+
+    def getReserveID(self):
+        return self.__reserveID
+
+    def getIsRemove(self):
+        return self.__isRemove
+
+
+class StrongholdBattleQueueCtx(StrongholdRequestCtx):
+    """
+    Context for enqueue unit request
+    """
+    __slots__ = ('__action',)
+
+    def __init__(self, action, **kwargs):
+        super(StrongholdBattleQueueCtx, self).__init__(**kwargs)
+        self.__action = action
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        action = prbCtx.getAction()
+        return cls(action, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_BATTLE_QUEUE
+
+    def isRequestToStart(self):
+        """
+        Is this requst to start or stop auto-search
+        """
+        return self.__action > 0
+
+
+class StrongholdKickPlayerCtx(StrongholdRequestCtx):
+    """
+    Context for player's kick
+    """
+    __slots__ = '__pID'
+
+    def __init__(self, pID, **kwargs):
+        super(StrongholdKickPlayerCtx, self).__init__(**kwargs)
+        self.__pID = pID
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        pID = prbCtx.getPlayerID()
+        return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_KICK
+
+    def getPlayerID(self):
+        """
+        Getter for player's ID
+        """
+        return self.__pID
+
+
+class StrongholdGiveLeadershipCtx(StrongholdRequestCtx):
+    """
+    Context for giving leadership from commander to other player
+    """
+    __slots__ = ('__databaseID', '__pID')
+
+    def __init__(self, pID, **kwargs):
+        super(StrongholdGiveLeadershipCtx, self).__init__(**kwargs)
+        self.__pID = pID
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        pID = prbCtx.getPlayerID()
+        return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        if self.__pID != getAccountDatabaseID():
+            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_GIVE_LEADERSHIP
+        else:
+            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_TAKE_LEADERSHIP
+
+    def getPlayerID(self):
+        """
+        Getter for player's ID
+        """
+        return self.__pID
+
+
+class StrongholdUpdateCtx(StrongholdRequestCtx):
+    """
+    Context for update data from wgsh
+    """
+    __slots__ = ()
+
+    def __init__(self, **kwargs):
+        super(StrongholdUpdateCtx, self).__init__(**kwargs)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UPDATE
+
+    def getCooldown(self):
+        return DEFAULT_COOLDOWN
+
+
+class StrongholdSendInvitesCtx(StrongholdRequestCtx):
+    """
+    Context for send invitations request.
+    """
+
+    def __init__(self, databaseIDs, comment, **args):
+        super(StrongholdSendInvitesCtx, self).__init__(**args)
+        self.__databaseIDs = databaseIDs
+        self.__comment = comment
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        databaseIDs = prbCtx.getDatabaseIDs()
+        comment = prbCtx.getComment()
+        return cls(databaseIDs, comment, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getDatabaseIDs(self):
+        return self.__databaseIDs
+
+    def getComment(self):
+        return self.__comment
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SEND_INVITE
+
+
+class StrongholdJoinBattleCtx(StrongholdRequestCtx):
+    """
+    Context for joining battle.
+    """
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_JOIN_BATTLE

@@ -13,7 +13,7 @@ class ProfileSectionMeta(BaseDAAPIComponent):
     def setActive(self, value):
         self._printOverrideError('setActive')
 
-    def requestData(self, data):
+    def requestData(self, vehicleId):
         self._printOverrideError('requestData')
 
     def requestDossier(self, type):
@@ -25,5 +25,5 @@ class ProfileSectionMeta(BaseDAAPIComponent):
     def as_setInitDataS(self, data):
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
-    def as_responseDossierS(self, type, data, frameLabel, emptyScreenLabel):
-        return self.flashObject.as_responseDossier(type, data, frameLabel, emptyScreenLabel) if self._isDAAPIInited() else None
+    def as_responseDossierS(self, battlesType, data, frameLabel, emptyScreenLabel):
+        return self.flashObject.as_responseDossier(battlesType, data, frameLabel, emptyScreenLabel) if self._isDAAPIInited() else None

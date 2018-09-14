@@ -24,7 +24,7 @@
   <camouflage>
     <priceFactor>	1.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB63_TOG_II/TOG_II_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -34,7 +34,7 @@
       <armor_4>	50.8	</armor_4>
       <armor_5>	76.2	</armor_5>
       <armor_6>	63.5	</armor_6>
-      <armor_7>	63.5	</armor_7>
+      <armor_7>	76.2	</armor_7>
       <armor_8>	50.8	</armor_8>
       <armor_9>	25.4	</armor_9>
       <armor_10>	25.4	</armor_10>
@@ -67,7 +67,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 1.07333 1.64032	</turret>
+      <turret>	0.000000 0.704143 1.81585	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB63_TOG_II/collision/Hull.model	</collisionModelServer>
@@ -75,21 +75,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	1.76275 0.459177 3.28348	</rayStart>
-        <rayEnd>	1.36275 0.459177 3.28348	</rayEnd>
+        <rayStart>	1.76201 0.351341 3.04088	</rayStart>
+        <rayEnd>	1.36201 0.351327 3.04088	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.762 0.581869 0.307725	</rayStart>
-        <rayEnd>	-1.362 0.581869 0.307725	</rayEnd>
+        <rayStart>	-1.76203 0.407358 0.3066	</rayStart>
+        <rayEnd>	-1.36203 0.407358 0.306605	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.8	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB63_TOG_II/TOG_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	6 6 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB63_TOG_II>
@@ -131,7 +134,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.6	</textureScale>
+        <textureScale>	-1.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -139,55 +142,58 @@
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.38326	</radius>
+          <radius>	0.41	</radius>
+          <syncAngle>	34.2857	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.213861	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	4	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_L5	</name>
-          <radius>	0.456372	</radius>
+          <name>	WD_L1	</name>
+          <radius>	0.468236	</radius>
+          <syncAngle>	34.2857	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.148255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.38326	</radius>
+          <radius>	0.41	</radius>
+          <syncAngle>	34.2857	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.213861	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	4	</count>
-        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.456372	</radius>
+          <name>	WD_R1	</name>
+          <radius>	0.468236	</radius>
+          <syncAngle>	34.2857	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.148255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+        </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.3553 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB63_TOG_II/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB63_TOG_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.03613 2.11467	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.01963 3.31912	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -200,6 +206,71 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB63_TOG_II/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB63_TOG_II/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB63_TOG_II/track/left.track	</left>
+        <right>	vehicles/british/GB63_TOG_II/track/right.track	</right>
+        <segmentLength>	0.28	</segmentLength>
+        <segmentOffset>	0.105	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0351	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_GB63_TOG_II>
   </chassis>
   <turrets0>
@@ -219,7 +290,7 @@
         <armor_7>	19	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	25.4	</armor_9>
-        <armor_10>	63.5	</armor_10>
+        <armor_10>	114.3	</armor_10>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
@@ -265,14 +336,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000017 0.000999833 2.41448	</rayStart>
+              <rayStart>	0.000000 0.000292174 2.41448	</rayStart>
               <rayEnd>	0.184148 -0.0643074 2.41164	</rayEnd>
-              <rayUp>	0.069 0.065 2	</rayUp>
+              <rayUp>	0.061 0.059 4	</rayUp>
               <size>	0.607	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	3.1 1.2 0.000000 0.000000	</tiling>
+          </camouflage>
         </OQF_17pdr_Gun_Mk_VII_A>
       </guns>
       <models>
@@ -284,34 +358,37 @@
         <collisionModelServer>	vehicles/british/GB63_TOG_II/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB63_TOG_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.44573 0.895286	</gunPosition>
+      <gunPosition>	0.000000 0.46479 0.76407	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.903958 0.720684 -0.836972	</rayStart>
-          <rayEnd>	-0.544768 0.720684 -0.660954	</rayEnd>
+          <rayStart>	-0.986722 0.713506 -0.866267	</rayStart>
+          <rayEnd>	-0.621043 0.713506 -0.70416	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
+        <inscription>
+          <rayStart>	1.22503 0.428221 0.101864	</rayStart>
+          <rayEnd>	0.825028 0.428221 0.101864	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
-          <rayStart>	0.903958 0.720684 -0.836972	</rayStart>
-          <rayEnd>	0.544768 0.720684 -0.660954	</rayEnd>
+          <rayStart>	0.986722 0.713506 -0.866267	</rayStart>
+          <rayEnd>	0.621043 0.713506 -0.70416	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <inscription>
-          <rayStart>	1.24353 0.407788 0.320005	</rayStart>
-          <rayEnd>	0.84353 0.407788 0.320005	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.987 -0.008 1.000 0.000 0.809 0.047 0.667 0.664 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.005 -0.008 1.005 0.000 0.775 0.102 0.667 0.664 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	2.5 2.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_GB63_TOG_II>
   </turrets0>
   <engines>

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/rally_dialog_meta.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.dialogs import I18nDialogMeta, I18nInfoDialogMeta, I18nConfirmDialogMeta
+from gui.Scaleform.daapi.view.dialogs import I18nDialogMeta, I18nInfoDialogMeta, I18nConfirmDialogMeta, I18nConfirmDialogButtons
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -40,6 +40,21 @@ class UnitConfirmDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, prbType, prefix, titleCtx=None, messageCtx=None, focusedID=None):
         super(UnitConfirmDialogMeta, self).__init__(makeEntityI18nKey(_C_TYPE.UNIT, prbType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
+
+
+class StrongholdConfirmDialogMeta(I18nDialogMeta):
+    """
+        Class forms localization keys for Stronghold dialog (dialogs.po)
+        Dialog title:  stronghold/{key}{subkey}/title
+        Message body:  stronghold/{key}{subkey}/message
+        Submit button: stronghold/{key}/submit
+        Cancel button: stronghold/{key}/cancel
+    """
+
+    def __init__(self, key, subKey='', titleCtx=None, messageCtx=None, focusedID=None):
+        _key = 'stronghold/{0}{1}'
+        buttons = I18nConfirmDialogButtons(_key.format(key, ''), focusedID)
+        super(StrongholdConfirmDialogMeta, self).__init__(_key.format(key, subKey), buttons, titleCtx, messageCtx, scope=VIEW_SCOPE)
 
 
 class _RallyScopeDialogMeta(I18nDialogMeta):
@@ -90,7 +105,6 @@ _ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnot
  (_C_TYPE.LEGACY, _P_TYPE.CLAN): ('', 'goToAnother'),
  (_C_TYPE.LEGACY, _P_TYPE.TOURNAMENT): ('', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.UNIT): ('goToIntro', 'goToAnother'),
- (_C_TYPE.UNIT, _P_TYPE.CLUBS): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.SORTIE): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.FORT_BATTLE): ('goToIntro', 'goToAnother'),
  (_C_TYPE.UNIT, _P_TYPE.SQUAD): ('goToSquad', 'goToAnother'),

@@ -24,6 +24,7 @@ class OffbattleControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_MESSAGE: functional.FunctionalShowMessage4QueryEffect,
          EFFECT_TYPE.REFUSE_TRAINING: functional.FunctionalRefuseTrainingEffect,
          EFFECT_TYPE.REQUEST_ALL_BONUSES: functional.FunctionalRequestAllBonusesEffect,
+         EFFECT_TYPE.ENTER_MODE: functional.FunctionalEnterModeEffect,
          EFFECT_TYPE.ENTER_QUEUE: functional.FunctionalEnterQueueEffect,
          EFFECT_TYPE.EXIT_QUEUE: functional.FunctionalExitQueueEffect,
          EFFECT_TYPE.PLAY_MUSIC: functional.FunctionalPlayMusicEffect,

@@ -49,27 +49,3 @@ class ChangeLobbyMenuTooltip(aop.Pointcut):
 
     def __init__(self):
         aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby', 'LobbyMenu', '_getVersionMessage', aspects=(aspects.ChangeLobbyMenuTooltip,))
-
-
-class ShowChristmasViewPointcut(aop.Pointcut):
-
-    def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.Hangar', 'Hangar', '_Hangar__showChristmasView', aspects=(aop.DummyAspect,))
-
-
-class On3DObjectSelectedPointcut(aop.Pointcut):
-
-    def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.Hangar', 'Hangar', '_Hangar__on3DObjectSelected', aspects=(aop.DummyAspect,))
-
-
-class On3DObjectUnSelectedPointcut(aop.Pointcut):
-
-    def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.Hangar', 'Hangar', '_Hangar__on3DObjectUnSelected', aspects=(aop.DummyAspect,))
-
-
-class On3DObjectClickedPointcut(aop.Pointcut):
-
-    def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.Hangar', 'Hangar', '_Hangar__on3DObjectClicked', aspects=(aop.DummyAspect,))

@@ -267,11 +267,13 @@ class PersonalInvitationsListener(_Listener):
         invitesManager = self.prbInvites
         invitesManager.onReceivedInviteListModified += self.__im_onReceivedInviteModified
         invitesManager.onSentInviteListModified += self.__im_onSentInviteListModified
+        invitesManager.onInvitesListInited += self.__im_onInvitesListInited
 
     def stop(self):
         invitesManager = self.prbInvites
         invitesManager.onReceivedInviteListModified -= self.__im_onReceivedInviteModified
         invitesManager.onSentInviteListModified -= self.__im_onSentInviteListModified
+        invitesManager.onInvitesListInited -= self.__im_onInvitesListInited
         super(PersonalInvitationsListener, self).stop()
 
     def addController(self, controller):
@@ -319,6 +321,9 @@ class PersonalInvitationsListener(_Listener):
     def __im_onSentInviteListModified(self, added, changed, deleted):
         filtered = self.__filter.filterSentInvites(self.prbInvites.getInvite, added, changed, deleted)
         self.__updateFilteredStatuses(filtered)
+
+    def __im_onInvitesListInited(self):
+        self.__updateInvitationsStatuses()
 
 
 _MAX_PROGRESS_VALUE = 1.0
@@ -557,8 +562,29 @@ class PositionsListener(_Listener):
         return
 
 
+class ViewPointsListener(_Listener):
+    __slots__ = ()
+
+    def start(self, setup):
+        super(ViewPointsListener, self).start(setup)
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onViewPoints += self.__arena_onViewPoints
+        return
+
+    def stop(self):
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onViewPoints -= self.__arena_onViewPoints
+        super(ViewPointsListener, self).stop()
+        return
+
+    def __arena_onViewPoints(self, viewPoints):
+        self._invokeListenersMethod('updateViewPoints', viewPoints)
+
+
 class ListenersCollection(_Listener):
-    __slots__ = ('__vehicles', '__teamsBases', '__loader', '__contacts', '__period', '__respawn', '__invitations', '__positions', '__battleCtx')
+    __slots__ = ('__vehicles', '__teamsBases', '__loader', '__contacts', '__period', '__respawn', '__invitations', '__positions', '__viewPoints', '__battleCtx')
 
     def __init__(self):
         super(ListenersCollection, self).__init__()
@@ -571,6 +597,7 @@ class ListenersCollection(_Listener):
         self.__respawn = ArenaRespawnListener()
         self.__invitations = PersonalInvitationsListener()
         self.__positions = PositionsListener()
+        self.__viewPoints = ViewPointsListener()
         return
 
     def addController(self, controller):
@@ -598,6 +625,8 @@ class ListenersCollection(_Listener):
             result |= self.__invitations.addController(controller)
         if scope & _SCOPE.POSITIONS > 0:
             result |= self.__positions.addController(controller)
+        if scope & _SCOPE.VIEW_POINTS > 0:
+            result |= self.__viewPoints.addController(controller)
         if not result:
             controller.stopControl()
         return result
@@ -611,6 +640,7 @@ class ListenersCollection(_Listener):
         result |= self.__respawn.removeController(controller)
         result |= self.__invitations.removeController(controller)
         result |= self.__positions.removeController(controller)
+        result |= self.__viewPoints.removeController(controller)
         return result
 
     def start(self, setup):
@@ -624,6 +654,7 @@ class ListenersCollection(_Listener):
         self.__respawn.start(setup)
         self.__invitations.start(setup)
         self.__positions.start(setup)
+        self.__viewPoints.start(setup)
 
     def stop(self):
         self.__vehicles.stop()
@@ -634,6 +665,7 @@ class ListenersCollection(_Listener):
         self.__respawn.stop()
         self.__invitations.stop()
         self.__positions.stop()
+        self.__viewPoints.stop()
         self.__battleCtx = None
         super(ListenersCollection, self).stop()
         return
@@ -647,4 +679,5 @@ class ListenersCollection(_Listener):
         self.__respawn.clear()
         self.__invitations.clear()
         self.__positions.clear()
+        self.__viewPoints.clear()
         super(ListenersCollection, self).clear()

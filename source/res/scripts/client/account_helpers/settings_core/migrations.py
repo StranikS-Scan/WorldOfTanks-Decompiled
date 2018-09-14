@@ -12,12 +12,13 @@ from skeletons.gui.game_control import IIGRController
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
     from account_helpers.AccountSettings import AccountSettings
+    options = core.options
     gameData = data['gameData'] = {GAME.DATE_TIME_MESSAGE_INDEX: 2,
-     GAME.ENABLE_OL_FILTER: core.getSetting(GAME.ENABLE_OL_FILTER),
-     GAME.ENABLE_SPAM_FILTER: core.getSetting(GAME.ENABLE_SPAM_FILTER),
-     GAME.INVITES_FROM_FRIENDS: core.getSetting(GAME.INVITES_FROM_FRIENDS),
-     GAME.RECEIVE_FRIENDSHIP_REQUEST: core.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST),
-     GAME.STORE_RECEIVER_IN_BATTLE: core.getSetting(GAME.STORE_RECEIVER_IN_BATTLE),
+     GAME.ENABLE_OL_FILTER: options.getSetting(GAME.ENABLE_OL_FILTER).getDefaultValue(),
+     GAME.ENABLE_SPAM_FILTER: options.getSetting(GAME.ENABLE_SPAM_FILTER).getDefaultValue(),
+     GAME.INVITES_FROM_FRIENDS: options.getSetting(GAME.INVITES_FROM_FRIENDS).getDefaultValue(),
+     GAME.RECEIVE_FRIENDSHIP_REQUEST: core.options.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST).getDefaultValue(),
+     GAME.STORE_RECEIVER_IN_BATTLE: core.options.getSetting(GAME.STORE_RECEIVER_IN_BATTLE).getDefaultValue(),
      GAME.REPLAY_ENABLED: core.getSetting(GAME.REPLAY_ENABLED),
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
@@ -212,7 +213,7 @@ def _migrateTo21(core, data, initialized):
 
 
 def _migrateTo22(core, data, initialized):
-    data['gameExtData'][GAME.SIMPLIFIED_TTC] = True
+    pass
 
 
 def _migrateTo23(core, data, initialized):
@@ -229,7 +230,7 @@ def _migrateTo24(core, data, initialized):
 
 
 def _migrateTo25(core, data, initialized):
-    data['carousel_filter']['hideEvent'] = False
+    data['carousel_filter']['event'] = False
 
 
 def _migrateTo26(core, data, initialized):
@@ -256,11 +257,52 @@ def _migrateTo26(core, data, initialized):
 
 
 def _migrateTo27(core, data, initialized):
-    data['carousel_filter']['hideEvent'] = False
+    data['carousel_filter']['event'] = False
 
 
 def _migrateTo28(core, data, initialized):
     data['gameExtData'][GAME.CAROUSEL_TYPE] = 1
+
+
+def _migrateTo29(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 0)
+    settingOffset = 8
+    if storedValue & settingOffset:
+        data['onceOnlyHints']['ShopTradeInHint'] = 1
+        clear = data['clear']
+        clear['onceOnlyHints'] = clear.get('onceOnlyHints', 0) | settingOffset
+    else:
+        data['onceOnlyHints']['ShopTradeInHint'] = 0
+
+
+def _migrateTo30(core, data, initialized):
+    feedbackData = data.get('feedbackData', {})
+    feedbackData[BATTLE_EVENTS.ENEMY_WORLD_COLLISION] = True
+    feedbackData[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = True
+    data['feedbackData'] = feedbackData
+
+
+def _migrateTo31(core, data, initialized):
+    feedbackData = data.get('feedbackData', {})
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FEEDBACK, 0)
+    maskOffset = 33554432
+    if not currentVal & maskOffset:
+        feedbackData[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = False
+    feedbackData[BATTLE_EVENTS.RECEIVED_DAMAGE] = True
+    feedbackData[BATTLE_EVENTS.RECEIVED_CRITS] = True
+    feedbackData[DAMAGE_LOG.SHOW_EVENT_TYPES] = 0
+    feedbackData[DAMAGE_LOG.EVENT_POSITIONS] = 0
+
+
+def _migrateTo32(core, data, initialized):
+    data['carousel_filter']['rented'] = True
+    data['carousel_filter']['event'] = True
+
+
+def _migrateTo33(core, data, initialized):
+    data['gameExtData'][GAME.VEHICLE_CAROUSEL_STATS] = True
 
 
 _versions = ((1,
@@ -369,6 +411,26 @@ _versions = ((1,
   False),
  (28,
   _migrateTo28,
+  False,
+  False),
+ (29,
+  _migrateTo29,
+  False,
+  False),
+ (30,
+  _migrateTo30,
+  False,
+  False),
+ (31,
+  _migrateTo31,
+  False,
+  False),
+ (32,
+  _migrateTo32,
+  False,
+  False),
+ (33,
+  _migrateTo33,
   False,
   False))
 

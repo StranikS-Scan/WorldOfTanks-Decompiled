@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 import BigWorld
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.LobbyContext import g_lobbyContext
@@ -33,10 +35,29 @@ class ProfileTechnique(ProfileTechniqueMeta):
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
         dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
-        if g_lobbyContext.getServerSettings().isFortsEnabled():
+        if g_lobbyContext.getServerSettings().isStrongholdsEnabled():
             dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
+        storedData = self._getStorageData()
         return {'dropDownProvider': dropDownProvider,
-         'tableHeader': self._getTableHeader(isFallout)}
+         'tableHeader': self._getTableHeader(isFallout),
+         'selectedColumn': storedData['selectedColumn'],
+         'selectedColumnSorting': storedData['selectedColumnSorting']}
+
+    def setSelectedTableColumn(self, index, sortDirection):
+        storedDataId = self._getStorageId()
+        storedData = AccountSettings.getFilter(storedDataId)
+        storedData['selectedColumn'] = index
+        storedData['selectedColumnSorting'] = sortDirection
+        AccountSettings.setFilter(storedDataId, storedData)
+        if self._dossier is not None:
+            self.as_setInitDataS(self._getInitData(self._dossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
+        return
+
+    def _getStorageId(self):
+        return PROFILE_TECHNIQUE_MEMBER
+
+    def _getStorageData(self):
+        return AccountSettings.getFilter(self._getStorageId())
 
     def _getTableHeader(self, isFallout=False):
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
@@ -75,6 +96,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
 
     def _sendAccountData(self, targetData, accountDossier):
+        super(ProfileTechnique, self)._sendAccountData(targetData, accountDossier)
         self.as_setInitDataS(self._getInitData(accountDossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
         self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData), '', self.getEmptyScreenLabel())
 

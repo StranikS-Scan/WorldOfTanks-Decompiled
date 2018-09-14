@@ -15,7 +15,7 @@ from gui.battle_control.requests.settings import AVATAR_REQUEST_TYPE, DEFAULT_CO
 class _AvatarCooldownManager(RequestCooldownManager):
 
     def __init__(self):
-        super(_AvatarCooldownManager, self).__init__(REQUEST_SCOPE.CLUB)
+        super(_AvatarCooldownManager, self).__init__(REQUEST_SCOPE.BATTLE_CONTROL)
 
     def lookupName(self, rqTypeID):
         rqName = AVATAR_REQUEST_TYPE.getKeyByValue(rqTypeID)

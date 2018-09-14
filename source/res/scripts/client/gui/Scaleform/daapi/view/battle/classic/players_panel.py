@@ -4,11 +4,11 @@ from account_helpers.settings_core.settings_constants import GAME
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.PlayersPanelMeta import PlayersPanelMeta
 from gui.Scaleform.genConsts.PLAYERS_PANEL_STATE import PLAYERS_PANEL_STATE
-from gui.battle_control import avatar_getter
 from gui.battle_control.controllers.period_ctrl import IPlayersPanelsSwitcher
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _PLAYERS_PANEL_STATE_RANGE = (PLAYERS_PANEL_STATE.HIDEN,
  PLAYERS_PANEL_STATE.SHORT,
  PLAYERS_PANEL_STATE.MEDIUM,
@@ -37,6 +37,7 @@ class PlayerPanelStateSetting(object):
 
 
 class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
+    guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(PlayersPanel, self).__init__()
@@ -48,7 +49,7 @@ class PlayersPanel(PlayersPanelMeta, IPlayersPanelsSwitcher):
             self.as_setPanelModeS(mode)
 
     def switchToOtherPlayer(self, vehicleID):
-        avatar_getter.switchToOtherPlayer(int(vehicleID))
+        self.guiSessionProvider.shared.viewPoints.selectVehicle(int(vehicleID))
 
     def setInitialMode(self):
         self.__mode = PlayerPanelStateSetting.read()

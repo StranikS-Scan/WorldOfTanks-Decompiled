@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.view.meta.VehicleCompareCartPopoverMeta import VehicleC
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.christmas.christmas_controller import g_christmasCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_dispatcher import showVehicleCompare
@@ -45,20 +44,22 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         self._cartDP.setFlashObject(self.as_getDPS())
         self._cartDP.rebuildList(self.comparisonBasket.getVehiclesCDs())
         self.comparisonBasket.onChange += self.__onBasketChange
-        self.comparisonBasket.onSwitchChange += self.onWindowClose
-        g_christmasCtrl.onOpenChestAnimationStarted += self.__updateButtonsState
-        g_christmasCtrl.onRibbonAnimationFinished += self.__updateButtonsState
+        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
         self.__initControls()
 
     def _dispose(self):
         super(VehicleCompareCartPopover, self)._dispose()
         self.comparisonBasket.onChange -= self.__onBasketChange
-        self.comparisonBasket.onSwitchChange -= self.onWindowClose
-        g_christmasCtrl.onOpenChestAnimationStarted -= self.__updateButtonsState
-        g_christmasCtrl.onRibbonAnimationFinished -= self.__updateButtonsState
+        self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         self._cartDP.fini()
         self._cartDP = None
         return
+
+    def __onVehCmpBasketStateChanged(self):
+        if not self.comparisonBasket.isEnabled():
+            self.onWindowClose()
+        else:
+            self.__updateButtonsState()
 
     def __initControls(self):
         headers = [packHeaderColumnData('nationId', 49, 30, tooltip=VEH_COMPARE.CARTPOPOVER_SORTING_NATION, icon=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL),
@@ -82,14 +83,15 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
         else:
             addBtnTT = VEH_COMPARE.CARTPOPOVER_OPENCMPBTN_TOOLTIP
             addBtnIcon = None
-        isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled() and not g_christmasCtrl.isNavigationDisabled()
+        isNavigationEnabled = not g_prbLoader.getDispatcher().getFunctionalState().isNavigationDisabled()
         self.as_updateToCmpBtnPropsS({'btnLabel': _ms(VEH_COMPARE.CARTPOPOVER_GOTOCOMPAREBTN_LABEL, value=count),
          'btnTooltip': addBtnTT,
          'btnEnabled': buttonsEnabled and isNavigationEnabled,
          'btnIcon': addBtnIcon})
+        isBasketLocked = self.comparisonBasket.isLocked
         self.as_updateClearBtnPropsS({'btnLabel': VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_LABEL,
-         'btnTooltip': VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_TOOLTIP,
-         'btnEnabled': buttonsEnabled})
+         'btnTooltip': VEH_COMPARE.CARTPOPOVER_REMOVEBTNLOCKED_TOOLTIP if isBasketLocked else VEH_COMPARE.CARTPOPOVER_REMOVEALLBTN_TOOLTIP,
+         'btnEnabled': buttonsEnabled and not isBasketLocked})
         return
 
 
@@ -119,7 +121,8 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         return
 
     def fini(self):
-        self.comparisonBasket.onChange -= self.__onComparisonVehsChanged
+        self.comparisonBasket.onChange -= self.__basketChanged
+        self.comparisonBasket.onSwitchChange -= self.__basketChanged
         self.clear()
         self._dispose()
 
@@ -130,7 +133,8 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         self.__selectedID = selId
 
     def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
-        self.comparisonBasket.onChange += self.__onComparisonVehsChanged
+        self.comparisonBasket.onChange += self.__basketChanged
+        self.comparisonBasket.onSwitchChange += self.__basketChanged
         return super(_VehicleCompareCartDataProvider, self).setFlashObject(movieClip, autoPopulate, setScript)
 
     def getVO(self, index):
@@ -163,22 +167,21 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
 
     def _makeVO(self, vehicleCD, index):
         vehicle = g_itemsCache.items.getItemByCD(vehicleCD)
-        if vehicle.isPremium:
-            moduleType = 'premium'
-        else:
-            moduleType = self.comparisonBasket.getVehicleAt(index).getModulesType()
-        complectation = _ms(VEH_COMPARE.cartpopover_moduletype(moduleType))
+        complectation = _ms(VEH_COMPARE.cartpopover_configurationtype(self.comparisonBasket.getVehicleAt(index).getConfigurationType()))
+        iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
+        basketLocked = self.comparisonBasket.isLocked
         return {'id': vehicleCD,
          'index': index,
          'vehicleName': text_styles.main(vehicle.shortUserName),
          'complectation': complectation,
          'nation': getNationsFilterAssetPath(AVAILABLE_NAMES[vehicle.nationID]),
          'level': vehicle.level,
-         'typeStr': vehicle.type,
+         'typeStr': iconFunc(vehicle.type + '.png'),
          'smallIconPath': vehicle.iconSmall,
-         'removeBtnTooltip': VEH_COMPARE.CARTPOPOVER_REMOVEBTN_TOOLTIP}
+         'removeBtnTooltip': VEH_COMPARE.CARTPOPOVER_REMOVELOCKEDBTN_TOOLTIP if basketLocked else VEH_COMPARE.CARTPOPOVER_REMOVEBTN_TOOLTIP,
+         'removeBtnEnabled': not basketLocked}
 
-    def __onComparisonVehsChanged(self, changedData):
+    def __basketChanged(self, *args):
         """
         gui.game_control.VehComparisonBasket.onChange event handler
         :param changedData: instance of gui.game_control.veh_comparison_basket._ChangedData

@@ -44,11 +44,10 @@ class BattleFeedbackAdaptor(IBattleController):
     Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
     response on player actions.
     """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onMinimapFeedbackReceived', '__isPEEnabled', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
-        self.__isPEEnabled = False
         self.__arenaDP = weakref.proxy(setup.arenaDP)
         self.__arenaVisitor = weakref.proxy(setup.arenaVisitor)
         self.__visible = set()
@@ -80,7 +79,6 @@ class BattleFeedbackAdaptor(IBattleController):
             if callbackID is not None:
                 BigWorld.cancelCallback(callbackID)
 
-        self.__isPEEnabled = False
         self.__arenaDP = None
         self.__arenaVisitor = None
         self.__attrs = {}
@@ -94,19 +92,6 @@ class BattleFeedbackAdaptor(IBattleController):
         :param eventID: FEEDBACK_EVENT_ID
         """
         return self.__eventsCache.get(eventID, None)
-
-    def setPlayerVehicle(self, vID):
-        """
-        Sets player's vehicle to adaptor, which determines whether the player's events are
-        available on specified data.
-        
-        :param vID: long containing ID of player's vehicle. If value equals 0L than players events
-                    is disabled.
-        """
-        if vID:
-            self.__isPEEnabled = True
-        else:
-            self.__isPEEnabled = False
 
     def getVehicleProxy(self, vehicleID):
         """ Gets proxy of vehicle's entity if it is visible.
@@ -159,8 +144,6 @@ class BattleFeedbackAdaptor(IBattleController):
         
         :param events: list of event data dicts.
         """
-        if not self.__isPEEnabled:
-            return
         feedbackEvents = []
         for data in events:
             feedbackEvent = feedback_events.PlayerFeedbackEvent.fromDict(data)

@@ -211,4 +211,5 @@ from bwdebug import NOTICE_MSG
 try:
     import BWAutoImport
 except ImportError as e:
-    NOTICE_MSG('bw_site.py failed to import BWAutoImport: %s\n' % (e,))
+    if 'No module named BWAutoImport' not in str(e):
+        NOTICE_MSG('bw_site.py failed to import BWAutoImport: %s\n' % e)

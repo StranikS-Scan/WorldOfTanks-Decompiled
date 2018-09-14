@@ -166,7 +166,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -274,7 +273,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -339,7 +337,7 @@
       <guns>
         <_85mm_S-53>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 4 0.541667 4 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
@@ -389,7 +387,7 @@
         </_85mm_S-53>
         <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 4 0.541667 4 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
@@ -529,7 +527,7 @@
       <guns>
         <_85mm_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 4 0.541667 4 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
@@ -575,7 +573,7 @@
         </_85mm_S-53>
         <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 4 0.541667 4 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
@@ -621,7 +619,7 @@
         </_85mm_Tip_56-85JT>
         <_100mm_44-100JT>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 3 0.541667 3 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
@@ -686,7 +684,7 @@
           <aimingTime>	3.1	</aimingTime>
           <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
           <pitchLimits>
-            <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.430556 3 0.438889 2.5 0.561111 2.5 0.569444 3 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
@@ -717,7 +715,7 @@
         </_122-mm_37-122JT>
         <_100mm_59-100T>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 3 0.541667 3 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>

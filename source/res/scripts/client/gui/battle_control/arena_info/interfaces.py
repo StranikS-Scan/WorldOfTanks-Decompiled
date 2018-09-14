@@ -264,3 +264,16 @@ class IContactsAndPersonalInvitationsController(IContactsController, IPersonalIn
 
     def getCtrlScope(self):
         return _SCOPE.CONTACTS | _SCOPE.INVITATIONS
+
+
+class IViewPointsController(IArenaLoadController):
+    __slots__ = ()
+
+    def getCtrlScope(self):
+        return _SCOPE.LOAD | _SCOPE.VIEW_POINTS
+
+    def updateViewPoints(self, viewPoints):
+        pass
+
+    def updateAttachedVehicle(self, vehicleID):
+        pass

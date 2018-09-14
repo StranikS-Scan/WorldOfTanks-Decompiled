@@ -21,39 +21,16 @@ class ESportActionsHandler(UnitActionsHandler):
         super(ESportActionsHandler, self).__init__(entity)
         g_playerEvents.onKickedFromUnitsQueue += self.__onKickedFromQueue
 
-    def setUnitChanged(self, flags=None):
-        flags = self._entity.getFlags()
-        pInfo = self._entity.getPlayerInfo()
-        if flags.isChanged() and pInfo.isInSlot:
-            prbType = self._entity.getEntityType()
-            if flags.isPreArenaChanged():
-                if flags.isInPreArena():
-                    g_eventDispatcher.loadPreArenaUnitFromUnit(prbType)
-                else:
-                    g_eventDispatcher.loadUnitFromPreArenaUnit(prbType)
-
     def executeInit(self, ctx):
         prbType = self._entity.getEntityType()
-        pInfo = self._entity.getPlayerInfo()
         flags = self._entity.getFlags()
-        if flags.isInPreArena() and pInfo.isInSlot:
-            g_eventDispatcher.loadPreArenaUnit(prbType)
-            return FUNCTIONAL_FLAG.LOAD_PAGE
         g_eventDispatcher.loadUnit(prbType)
         if flags.isInIdle():
             g_eventDispatcher.setUnitProgressInCarousel(prbType, True)
         return FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def executeFini(self):
-        g_eventDispatcher.loadHangar()
         super(ESportActionsHandler, self).executeFini()
-
-    def executeRestore(self):
-        super(UnitActionsHandler, self).executeRestore()
-        flags = self._entity.getFlags()
-        pInfo = self._entity.getPlayerInfo()
-        if flags.isInPreArena() and pInfo.isInSlot:
-            g_eventDispatcher.loadHangar()
 
     @vehicleAmmoCheck
     def execute(self):
@@ -81,9 +58,6 @@ class ESportActionsHandler(UnitActionsHandler):
 
     def showGUI(self):
         g_eventDispatcher.showUnitWindow(self._entity.getEntityType())
-
-    def _canDoAutoSearch(self, unit, stats):
-        return not unit.isRated() and super(ESportActionsHandler, self)._canDoAutoSearch(unit, stats)
 
     def __onKickedFromQueue(self):
         """

@@ -7,16 +7,15 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.battle_results import RequestResultsContext
 from gui.clans import contexts as clan_ctxs
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
-from gui.clubs import contexts as club_ctx, events_dispatcher as club_events
-from gui.clubs.club_helpers import ClubListener
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.prb_control.prb_getters import getBattleID
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events, event_dispatcher
 from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
-from gui.shared.gui_items.processors.common import BattleResultsGetter
 from gui.shared.utils import decorators
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
@@ -25,6 +24,7 @@ from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from predefined_hosts import g_preDefinedHosts
+from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IBrowserController
 
@@ -269,6 +269,7 @@ class _ShowClanProfileHandler(_ActionHandler):
 
 
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
+    battleResults = dependency.descriptor(IBattleResultsService)
 
     def _updateNotification(self, notification):
         super(ShowBattleResultsHandler, self)._updateNotification(notification)
@@ -280,11 +281,9 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
 
     @decorators.process('loadStats')
     def _showWindow(self, notification, arenaUniqueID):
-        arenaUniqueID = long(arenaUniqueID)
-        results = yield BattleResultsGetter(arenaUniqueID).request()
-        if results.success:
-            shared_events.showBattleResultsFromData(results.auxData)
-        else:
+        uniqueID = long(arenaUniqueID)
+        result = yield self.battleResults.requestResults(RequestResultsContext(uniqueID, showImmediately=False, showIfPosted=True, resetCache=False))
+        if not result:
             self._updateNotification(notification)
 
 
@@ -522,78 +521,6 @@ class SecurityLinkHandler(_ActionHandler):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SECURITY_SETTINGS))
 
 
-class AcceptClubInviteHandler(_ActionHandler, ClubListener):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.CLUB_INVITE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    @process
-    def handleAction(self, model, entityID, action):
-        super(AcceptClubInviteHandler, self).handleAction(model, entityID, action)
-        yield lambda callback: callback(None)
-        invite = self.clubsCtrl.getProfile().getInvite(entityID)
-        if invite:
-            success = yield DialogsInterface.showI18nConfirmDialog('clubInvite')
-            if success:
-                yield self.clubsCtrl.sendRequest(club_ctx.AcceptInviteCtx(invite.getClubDbID(), entityID, waitingID='clubs/invite/accept'), allowDelay=True)
-
-
-class DeclineClubInviteHandler(_ActionHandler, ClubListener):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.CLUB_INVITE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    @process
-    def handleAction(self, model, entityID, action):
-        super(DeclineClubInviteHandler, self).handleAction(model, entityID, action)
-        invite = self.clubsCtrl.getProfile().getInvite(entityID)
-        if invite:
-            yield self.clubsCtrl.sendRequest(club_ctx.DeclineInviteCtx(invite.getClubDbID(), entityID, waitingID='clubs/invite/decline'), allowDelay=True)
-        else:
-            yield lambda callback: callback(None)
-
-
-class ShowClubInviteHandler(_ActionHandler, ClubListener):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.CLUB_INVITE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(ShowClubInviteHandler, self).handleAction(model, entityID, action)
-        invite = self.clubsCtrl.getProfile().getInvite(entityID)
-        return club_events.showClubProfile(invite.getClubDbID()) if invite else None
-
-
-class ShowClubAppsHandler(_ActionHandler, ClubListener):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.CLUB_APPS
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(ShowClubAppsHandler, self).handleAction(model, entityID, action)
-        return club_events.showClubProfile(entityID, viewIdx=1)
-
-
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -605,10 +532,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  CancelFriendshipHandler,
  WGNCActionsHandler,
  SecurityLinkHandler,
- AcceptClubInviteHandler,
- DeclineClubInviteHandler,
- ShowClubInviteHandler,
- ShowClubAppsHandler,
  _ShowClanAppsHandler,
  _ShowClanInvitesHandler,
  _AcceptClanAppHandler,

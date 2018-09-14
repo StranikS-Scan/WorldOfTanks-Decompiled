@@ -10,6 +10,7 @@ from debug_utils import LOG_ERROR
 from helpers import html
 from gui.clans.formatters import getClanRoleString
 from gui.shared.fortifications.fort_provider import ClientFortProvider
+from gui.shared.stronghold.stronghold_provider import ClientStrongholdProvider
 from gui.shared.utils import code2str
 from messenger.ext import passCensor
 from messenger.proto.events import g_messengerEvents
@@ -48,6 +49,7 @@ class _ClanCache(object):
 
     def init(self):
         self.__fortProvider = ClientFortProvider()
+        self.__strongholdProvider = ClientStrongholdProvider()
 
     def fini(self):
         self.onSyncStarted.clear()
@@ -56,9 +58,11 @@ class _ClanCache(object):
 
     def onAccountShowGUI(self):
         self.__startFortProvider()
+        self.__startStrongholdProvider()
 
     def onAvatarBecomePlayer(self):
         self.__stopFortProvider()
+        self.__stopStrongholdProvider()
 
     def onDisconnected(self):
         self.__stopFortProvider()
@@ -73,6 +77,7 @@ class _ClanCache(object):
 
     def clear(self):
         self.__fortProvider = None
+        self.__strongholdProvider = None
         return
 
     @storage_getter('users')
@@ -214,11 +219,17 @@ class _ClanCache(object):
         g_messengerEvents.users.onClanMembersListChanged += self.__me_onClanMembersListChanged
         self.__fortProvider.start(self)
 
+    def __startStrongholdProvider(self):
+        self.__strongholdProvider.start()
+
     def __stopFortProvider(self):
         self.__clanMembersLen = None
         g_messengerEvents.users.onClanMembersListChanged -= self.__me_onClanMembersListChanged
         self.__fortProvider.stop()
         return
+
+    def __stopStrongholdProvider(self):
+        self.__strongholdProvider.stop()
 
     def __me_onClanMembersListChanged(self):
         clanMembersLen = len(self.clanMembers)

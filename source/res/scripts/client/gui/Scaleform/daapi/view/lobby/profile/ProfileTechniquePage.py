@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import PROFILE_TECHNIQUE
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared.ItemsCache import g_itemsCache
@@ -7,10 +9,6 @@ from helpers.i18n import makeString
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 
 class ProfileTechniquePage(ProfileTechniquePageMeta):
-
-    def __init__(self, *args):
-        super(ProfileTechniquePage, self).__init__(*args)
-        self.__isInHangarSelected = False
 
     def _populate(self):
         super(ProfileTechniquePage, self)._populate()
@@ -37,16 +35,26 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
     def _getInitData(self, accountDossier=None, isFallout=False):
         initDataResult = super(ProfileTechniquePage, self)._getInitData(accountDossier, isFallout)
         initDataResult['hangarVehiclesLabel'] = makeString(PROFILE.SECTION_TECHNIQUE_WINDOW_HANGARVEHICLESLABEL)
-        initDataResult['isInHangarSelected'] = self.__isInHangarSelected
+        storedData = self._getStorageData()
+        initDataResult['isInHangarSelected'] = storedData['isInHangarSelected']
         return initDataResult
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
-        return super(ProfileTechniquePage, self)._getTechniqueListVehicles(targetData, self.__isInHangarSelected)
+        storedData = self._getStorageData()
+        return super(ProfileTechniquePage, self)._getTechniqueListVehicles(targetData, storedData['isInHangarSelected'])
+
+    def _getStorageId(self):
+        return PROFILE_TECHNIQUE
 
     def setIsInHangarSelected(self, value):
-        self.__isInHangarSelected = value
-        self.invokeUpdate()
+        storageId = self._getStorageId()
+        storedData = AccountSettings.getFilter(storageId)
+        storedData['isInHangarSelected'] = value
+        AccountSettings.setFilter(storageId, storedData)
+        if self._data is not None:
+            self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(self._data), '', self.getEmptyScreenLabel())
+        return
 
-    def requestData(self, data):
-        self._receiveVehicleDossier(data.vehicleId, None)
+    def requestData(self, vehicleId):
+        self._receiveVehicleDossier(int(vehicleId), None)
         return

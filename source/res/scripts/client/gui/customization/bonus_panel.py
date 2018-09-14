@@ -67,7 +67,6 @@ class BonusPanel(object):
     def __update(self, updatedSlotsData):
         for qTypeName in QUALIFIER_TYPE_NAMES.iterkeys():
             self.__bonusData[qTypeName]['bonusAppliedCount'] = 0
-            self.__bonusData[qTypeName]['oldBonusAppliedCount'] = 0
 
         self.__restoreInitialTooltipData()
         forEachSlotIn(updatedSlotsData, self.__initialSlotsData, self.__recalculateBonusData)
@@ -150,6 +149,7 @@ class BonusPanel(object):
             bonusFormatter = text_styles.bonusAppliedText
             color = CUSTOMIZATION_BONUS_ANIMATION_TYPES.COLOR_GREEN
             additionalValue = ''
+            descriptionFlag = ''
             if oldBonusTotalCount != bonusTotalCount:
                 if self.__animationStarted:
                     animationType = CUSTOMIZATION_BONUS_ANIMATION_TYPES.BUY
@@ -157,20 +157,24 @@ class BonusPanel(object):
                     animationType = CUSTOMIZATION_BONUS_ANIMATION_TYPES.NONE
                 bonusFormatter = text_styles.bonusLocalText
                 animationValue = bonusTotalCount
+                if self.__bonusData[qTypeName]['bonusAppliedDescriptionCount'] != 0:
+                    descriptionFlag = '*'
                 if appliedBonusValue > 0:
-                    additionalValue = text_styles.bonusAppliedText('+{0}%'.format(appliedBonusValue))
+                    additionalValue = text_styles.bonusAppliedText('+{0}%{1}'.format(appliedBonusValue, descriptionFlag))
                 elif appliedBonusValue < 0:
-                    additionalValue = text_styles.error('{0}%'.format(appliedBonusValue))
+                    additionalValue = text_styles.error('{0}%{1}'.format(appliedBonusValue, descriptionFlag))
                 if self.__bonusData[qTypeName]['bonusTotalDescriptionCount'] != 0:
                     formattedString += '*'
             elif appliedBonusValue == oldBonusAppliedCount:
                 animationType = CUSTOMIZATION_BONUS_ANIMATION_TYPES.NONE
                 bonusFormatter = text_styles.bonusLocalText
                 animationValue = bonusTotalCount
+                if self.__bonusData[qTypeName]['bonusAppliedDescriptionCount'] != 0:
+                    descriptionFlag = '*'
                 if appliedBonusValue > 0:
-                    additionalValue = text_styles.bonusAppliedText('+{0}%'.format(appliedBonusValue))
+                    additionalValue = text_styles.bonusAppliedText('+{0}%{1}'.format(appliedBonusValue, descriptionFlag))
                 elif appliedBonusValue < 0:
-                    additionalValue = text_styles.error('{0}%'.format(appliedBonusValue))
+                    additionalValue = text_styles.error('{0}%{1}'.format(appliedBonusValue, descriptionFlag))
                 if self.__bonusData[qTypeName]['bonusTotalDescriptionCount'] != 0:
                     formattedString += '*'
             elif appliedBonusValue == 0:

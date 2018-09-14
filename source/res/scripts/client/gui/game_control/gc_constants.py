@@ -7,7 +7,6 @@ class BROWSER(CONST_CONTAINER):
     SIZE = (990, 550)
     BACKGROUND = 'file:///gui/maps/bg.png'
     PROMO_SIZE = (780, 470)
-    CLUB_SIZE = (780, 470)
     VIDEO_SIZE = (864, 486)
     PROMO_BACKGROUND = 'file:///gui/maps/promo_bg.png'
 

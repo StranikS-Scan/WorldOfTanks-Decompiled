@@ -2,16 +2,22 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/filter_popover.py
 import itertools
 import constants
-from gui import makeHtmlString, GUI_NATIONS
-from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, getLevelsAssetPath
+from account_helpers.settings_core import settings_constants
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+from gui import GUI_NATIONS
+from gui.Scaleform import getNationsFilterAssetPath, getVehicleTypeAssetPath, getLevelsAssetPath, getButtonsAssetPath
+from gui.Scaleform.daapi.view.lobby.hangar.filter_contexts import FilterSetupContext, getFilterPopoverSetupContexts
 from gui.Scaleform.daapi.view.meta.TankCarouselFilterPopoverMeta import TankCarouselFilterPopoverMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.settings import VEHICLE_LEVELS
 from gui.shared import g_itemsCache
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCore
 
 class _SECTION(CONST_CONTAINER):
     NATIONS = 0
@@ -19,11 +25,12 @@ class _SECTION(CONST_CONTAINER):
     LEVELS = 2
     SPECIALS = 3
     HIDDEN = 4
+    TEXT_SEARCH = 5
 
 
 _VEHICLE_LEVEL_FILTERS = [ 'level_{}'.format(level) for level in VEHICLE_LEVELS ]
 
-def _getInitialVO(filters, mapping, xpRateMultiplier):
+def _getInitialVO(filters, mapping, xpRateMultiplier, switchCarouselSelected):
     dataVO = {'nationsSectionId': _SECTION.NATIONS,
      'vehicleTypesSectionId': _SECTION.VEHICLE_TYPES,
      'levelsSectionId': _SECTION.LEVELS,
@@ -35,14 +42,19 @@ def _getInitialVO(filters, mapping, xpRateMultiplier):
      'levelsLabel': text_styles.standard('#tank_carousel_filter:popover/label/levels'),
      'specialsLabel': text_styles.standard('#tank_carousel_filter:popover/label/specials'),
      'hiddenLabel': text_styles.standard('#tank_carousel_filter:popover/label/hidden'),
-     'defaultButtonLabel': _ms('#tank_carousel_filter:popover/label/defaultButton'),
+     'searchInputLabel': _ms('#tank_carousel_filter:popover/label/searchNameVehicle'),
+     'searchInputName': filters['searchNameVehicle'],
+     'searchInputTooltip': makeTooltip('#tank_carousel_filter:tooltip/searchInput/header', _ms('#tank_carousel_filter:tooltip/searchInput/body', count=50)),
+     'searchInputMaxChars': 50,
      'nations': [],
      'vehicleTypes': [],
      'levels': [],
      'specials': [],
      'hidden': [],
-     'defaultButtonTooltip': makeTooltip('#tank_carousel_filter:tooltip/defaultButton/header', '#tank_carousel_filter:tooltip/defaultButton/body'),
-     'hiddenSectionVisible': True}
+     'toggleSwitchCarouselTooltip': makeTooltip('#tank_carousel_filter:tooltip/toggleSwitchCarousel/header', '#tank_carousel_filter:tooltip/toggleSwitchCarousel/body'),
+     'hiddenSectionVisible': True,
+     'toggleSwitchCarouselIcon': RES_ICONS.MAPS_ICONS_FILTERS_DOUBLE_CAROUSEL,
+     'toggleSwitchCarouselSelected': switchCarouselSelected}
     for entry in mapping[_SECTION.NATIONS]:
         dataVO['nations'].append({'value': getNationsFilterAssetPath(entry),
          'tooltip': makeTooltip('#nations:{}'.format(entry), '#tank_carousel_filter:tooltip/nations/body'),
@@ -63,12 +75,10 @@ def _getInitialVO(filters, mapping, xpRateMultiplier):
          'selected': filters[entry]})
 
     for entry in mapping[_SECTION.SPECIALS]:
-        if entry == 'bonus':
-            ctx = {'multiplier': xpRateMultiplier}
-        else:
-            ctx = {}
-        dataVO['specials'].append({'label': makeHtmlString('html_templates:lobby/carousel_filter/popover', entry, ctx),
-         'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **ctx)),
+        contexts = getFilterPopoverSetupContexts(xpRateMultiplier)
+        filterCtx = contexts.get(entry, FilterSetupContext())
+        dataVO['specials'].append({'value': getButtonsAssetPath(filterCtx.asset or entry),
+         'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), _ms('#tank_carousel_filter:tooltip/{}/body'.format(entry), **filterCtx.ctx)),
          'selected': filters[entry]})
 
     if not dataVO['hidden']:
@@ -99,12 +109,15 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
     The mapping (belongings of filters to sections) is calculated on runtime
     during popover initialization (because content of sections may vary).
     """
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(FilterPopover, self).__init__()
         self.__tankCarousel = None
         self.__mapping = {}
         self.__usedFilters = ()
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+        self.__settingRowCarousel = setting.get()
         return
 
     def setTankCarousel(self, tankCarousel):
@@ -128,17 +141,21 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
         self.__filter.switch(self.__mapping[sectionId][itemId], save=False)
         self.__update()
 
-    def setDefaultFilter(self):
-        """ Reset popover filters (without touching carousel filters).
-        """
-        self.__filter.reset(self.__usedFilters, save=False)
+    def changeSearchNameVehicle(self, inputText):
+        self.__filter.update({'searchNameVehicle': inputText}, save=False)
         self.__update()
+
+    def switchCarouselType(self, selected):
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+        self.__settingRowCarousel = setting.CAROUSEL_TYPES.index(setting.OPTIONS.DOUBLE if selected else setting.OPTIONS.SINGLE)
+        self.__tankCarousel.as_rowCountS(self.__settingRowCarousel + 1)
 
     def _dispose(self):
         if self.__tankCarousel is not None and self.__tankCarousel.filter is not None:
             self.__filter.save()
             self.__tankCarousel.blinkCounter()
             self.__tankCarousel = None
+        self.settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, {settings_constants.GAME.CAROUSEL_TYPE: self.__settingRowCarousel})
         self.__mapping = {}
         self.__usedFilters = ()
         super(FilterPopover, self)._dispose()
@@ -153,15 +170,16 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
         self.__mapping = {_SECTION.NATIONS: GUI_NATIONS,
          _SECTION.VEHICLE_TYPES: VEHICLE_TYPES_ORDER,
          _SECTION.LEVELS: _VEHICLE_LEVEL_FILTERS,
-         _SECTION.SPECIALS: ['elite',
-                             'premium',
+         _SECTION.SPECIALS: ['bonus',
                              'favorite',
-                             'bonus'],
-         _SECTION.HIDDEN: []}
+                             'premium',
+                             'elite'],
+         _SECTION.HIDDEN: [],
+         _SECTION.TEXT_SEARCH: ['searchNameVehicle']}
         if hasRented:
-            self.__mapping[_SECTION.HIDDEN].append('hideRented')
+            self.__mapping[_SECTION.HIDDEN].append('rented')
         if hasEvent:
-            self.__mapping[_SECTION.HIDDEN].append('hideEvent')
+            self.__mapping[_SECTION.HIDDEN].append('event')
         if constants.IS_KOREA:
             self.__mapping[_SECTION.SPECIALS].append('igr')
         self.__usedFilters = list(itertools.chain.from_iterable(self.__mapping.itervalues()))
@@ -172,15 +190,15 @@ class FilterPopover(TankCarouselFilterPopoverMeta):
         :param isInitial: boolean, specifies whether flash should be initialized or updated
         """
         filters = self.__filter.getFilters(self.__usedFilters)
-        isDefault = self.__filter.isDefault(self.__usedFilters)
         xpRateMultiplier = g_itemsCache.items.shop.dailyXPFactor
+        switchCarouselSelected = bool(self.__settingRowCarousel)
         if isInitial:
-            self.as_setInitDataS(_getInitialVO(filters, self.__mapping, xpRateMultiplier))
+            self.as_setInitDataS(_getInitialVO(filters, self.__mapping, xpRateMultiplier, switchCarouselSelected))
         else:
             self.as_setStateS(_getUpdateVO(filters, self.__mapping))
-        self.as_enableDefBtnS(not isDefault)
         self.__tankCarousel.applyFilter()
         self.__tankCarousel.updateHotFilters()
+        self.as_showCounterS(text_styles.main(_ms('#tank_carousel_filter:popover/counter', count=self.__tankCarousel.formatCountVehicles())))
 
     @property
     def __filter(self):

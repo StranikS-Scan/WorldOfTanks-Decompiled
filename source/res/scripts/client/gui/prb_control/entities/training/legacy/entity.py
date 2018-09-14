@@ -143,6 +143,7 @@ class TrainingEntity(LegacyEntity):
             add(event, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
 
         self.__enterTrainingRoom(True)
+        g_eventDispatcher.addTrainingToCarousel(False)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         return result
@@ -302,17 +303,11 @@ class TrainingEntity(LegacyEntity):
             ctx: observer request context
             callback: operation callback
         """
-        if self._cooldown.validate(REQUEST_TYPE.CHANGE_USER_STATUS):
-            if callback is not None:
-                callback(False)
-            return
+        if ctx.isObserver():
+            self._setPlayerReady(ctx, callback=callback)
         else:
-            if ctx.isObserver():
-                self._setPlayerReady(ctx, callback=callback)
-            else:
-                self._setPlayerReady(SetPlayerStateCtx(ctx.isReadyState(), ctx.isInitial(), waitingID='prebattle/player_ready'), self.__onPlayerReady)
-            self._cooldown.process(REQUEST_TYPE.CHANGE_USER_STATUS)
-            return
+            self._setPlayerReady(SetPlayerStateCtx(ctx.isReadyState(), ctx.isInitial(), waitingID='prebattle/player_ready'), self.__onPlayerReady)
+        self._cooldown.process(REQUEST_TYPE.CHANGE_USER_STATUS)
 
     def changeArenaVoip(self, ctx, callback=None):
         """
@@ -363,7 +358,6 @@ class TrainingEntity(LegacyEntity):
         if result:
             g_eventDispatcher.loadTrainingRoom()
         else:
-            g_eventDispatcher.addTrainingToCarousel(False)
             g_eventDispatcher.loadHangar()
 
     def __onSettingChanged(self, code, record='', callback=None):

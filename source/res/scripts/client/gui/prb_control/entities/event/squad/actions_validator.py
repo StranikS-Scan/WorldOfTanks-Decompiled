@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/actions_validator.py
-from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator
-from gui.prb_control.entities.base.unit.actions_validator import UnitVehiclesValidator
+from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 
-class EventBattleVehiclesValidator(UnitVehiclesValidator):
+class _EventBattleVehiclesValidator(SquadVehiclesValidator):
     """
     Event battle squad vehicles validation
     """
@@ -18,4 +17,4 @@ class EventBattleSquadActionsValidator(SquadActionsValidator):
     """
 
     def _createVehiclesValidator(self, entity):
-        return EventBattleVehiclesValidator(entity)
+        return _EventBattleVehiclesValidator(entity)

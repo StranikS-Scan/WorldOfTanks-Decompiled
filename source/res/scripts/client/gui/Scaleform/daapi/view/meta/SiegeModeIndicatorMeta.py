@@ -10,11 +10,11 @@ class SiegeModeIndicatorMeta(BaseDAAPIComponent):
     @extends BaseDAAPIComponent
     """
 
-    def as_switchSiegeStateS(self, totalTime, leftTime, siegeState, engineState):
-        return self.flashObject.as_switchSiegeState(totalTime, leftTime, siegeState, engineState) if self._isDAAPIInited() else None
+    def as_switchSiegeStateS(self, totalTime, leftTime, siegeState, engineState, isSmooth):
+        return self.flashObject.as_switchSiegeState(totalTime, leftTime, siegeState, engineState, isSmooth) if self._isDAAPIInited() else None
 
-    def as_switchSiegeStateSnapshotS(self, totalTime, leftTime, siegeState, engineState):
-        return self.flashObject.as_switchSiegeStateSnapshot(totalTime, leftTime, siegeState, engineState) if self._isDAAPIInited() else None
+    def as_switchSiegeStateSnapshotS(self, totalTime, leftTime, siegeState, engineState, isSmooth):
+        return self.flashObject.as_switchSiegeStateSnapshot(totalTime, leftTime, siegeState, engineState, isSmooth) if self._isDAAPIInited() else None
 
     def as_updateDeviceStateS(self, deviceName, deviceState):
         return self.flashObject.as_updateDeviceState(deviceName, deviceState) if self._isDAAPIInited() else None

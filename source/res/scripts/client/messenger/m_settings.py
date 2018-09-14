@@ -118,7 +118,7 @@ def _makeDefUserPrefs():
 
 
 class MessengerSettings(object):
-    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', '__isUserPrefsInited', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
+    __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', '__isUserPrefsInited', '__defaultUserPrefsSnapshot', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
@@ -127,6 +127,7 @@ class MessengerSettings(object):
         self.battle = _BattleSettings()
         self.userPrefs = _makeDefUserPrefs()
         self.__isUserPrefsInited = False
+        self.__defaultUserPrefsSnapshot = ()
         self.htmlTemplates = XMLCollection('', '')
         self.msgTemplates = MessageTemplates('', '')
         self.__messageFormatters = {}
@@ -146,6 +147,7 @@ class MessengerSettings(object):
         from messenger.proto import ServerSettings
         self.server = ServerSettings()
         doc_loaders.load(self)
+        self.__defaultUserPrefsSnapshot = self.userPrefs[:]
         self.lobby.onSettingsLoaded(self)
         self.settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
 
@@ -179,7 +181,10 @@ class MessengerSettings(object):
         return None
 
     def resetUserPreferences(self):
-        self.userPrefs = _makeDefUserPrefs()
+        if self.__defaultUserPrefsSnapshot:
+            self.userPrefs = _UserPrefs(*self.__defaultUserPrefsSnapshot)
+        else:
+            self.userPrefs = _makeDefUserPrefs()
         self.__isUserPrefsInited = False
 
     def saveUserPreferences(self, data):

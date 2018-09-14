@@ -7,9 +7,9 @@ from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 import potapov_quests
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
-from helpers import i18n, int2roman
+from helpers import i18n
 from shared_utils import findFirst
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo, MissionAwardAbstract
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
@@ -20,8 +20,6 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
 from gui.shared.utils.decorators import process
 from skeletons.gui.server_events import IEventsCache
-from gui.Scaleform.locale.CHRISTMAS import CHRISTMAS
-MAX_ICON_ITEMS = 3
 
 def _getNextQuestInTileByID(questID):
     eventsCache = dependency.instance(IEventsCache)
@@ -193,7 +191,7 @@ class FormattedAward(AwardAbstract):
 
         def __call__(self, bonus):
             result = []
-            for item, count in sorted(bonus.getItems().items(), key=lambda b: b[0].itemTypeName):
+            for item, count in bonus.getItems().iteritems():
                 if item is not None and count:
                     tooltip = makeTooltip(header=item.userName, body=item.fullDescription)
                     result.append(self._BonusFmt(item.icon, BigWorld.wg_getIntegralFormat(count), tooltip, None))
@@ -247,7 +245,6 @@ class FormattedAward(AwardAbstract):
             if callable(formatter):
                 for bonus in formatter(b):
                     awards.append({'value': bonus.value,
-                     'valueAtLeft': True,
                      'itemSource': bonus.icon,
                      'tooltip': bonus.tooltip,
                      'boosterVO': bonus.bonusVO})

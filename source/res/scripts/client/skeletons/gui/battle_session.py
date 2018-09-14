@@ -65,6 +65,10 @@ class ISharedControllersLocator(object):
     def battleCacheCtrl(self):
         raise NotImplementedError
 
+    @property
+    def viewPoints(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -511,6 +515,9 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def setPlayerVehicle(self, vID, vDesc):
+        raise NotImplementedError
+
+    def switchVehicle(self, vehicleID):
         raise NotImplementedError
 
     def getArenaDP(self):

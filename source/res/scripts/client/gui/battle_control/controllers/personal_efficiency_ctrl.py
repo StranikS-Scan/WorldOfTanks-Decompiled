@@ -9,10 +9,6 @@ from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE as _ETYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 _LOG_MAX_LEN = 100
-_DAMAGE_EFFICIENCY_INFO = (_ETYPE.DAMAGE, _ETYPE.ASSIST_DAMAGE, _ETYPE.BLOCKED_DAMAGE)
-_FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE = {_FET.PLAYER_DAMAGED_HP_ENEMY: _ETYPE.DAMAGE,
- _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _ETYPE.ASSIST_DAMAGE,
- _FET.PLAYER_USED_ARMOR: _ETYPE.BLOCKED_DAMAGE}
 
 class _EfficiencyInfo(object):
     __slots__ = ('__type',)
@@ -31,37 +27,20 @@ class _EfficiencyInfo(object):
         """
         return self.__type
 
-    @classmethod
-    def fromFeedbackEvent(cls, etype, event):
-        """
-        Creates efficiency info object from the given _FeedbackEvent derived event.
-        
-        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        :param event: any _FeedbackEvent derived event
-        :return: _EfficiencyInfo child
-        """
-        return _EfficiencyInfo(etype)
 
+class _FeedbackEventEfficiencyInfo(_EfficiencyInfo):
+    __slots__ = ('__battleEventType', '__arenaVehID')
 
-class _DamageEfficiencyInfo(_EfficiencyInfo):
-    __slots__ = ('__damage', '__battleEventType', '__arenaVehID')
-
-    def __init__(self, etype, battleEventType, arenaVehID, damage):
+    def __init__(self, etype, event):
         """
         Constructor
         
         :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
-        :param damage: An instance of _DamageExtra (see feedback_events.py)
-        :param battleEventType: Battle event type (see BATTLE_EVENT_TYPE)
-        :param arenaVehID: Attacker/Target arena vehicle ID
+        :param event: any _FeedbackEvent derived event
         """
-        super(_DamageEfficiencyInfo, self).__init__(etype)
-        self.__damage = damage
-        self.__battleEventType = battleEventType
-        self.__arenaVehID = arenaVehID
-
-    def getDamage(self):
-        return self.__damage.getDamage()
+        super(_FeedbackEventEfficiencyInfo, self).__init__(etype)
+        self.__battleEventType = event.getBattleEventType()
+        self.__arenaVehID = event.getTargetID()
 
     def getBattleEventType(self):
         """
@@ -72,6 +51,23 @@ class _DamageEfficiencyInfo(_EfficiencyInfo):
     def getArenaVehicleID(self):
         return self.__arenaVehID
 
+
+class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
+    __slots__ = ('__damage',)
+
+    def __init__(self, etype, event):
+        """
+        Constructor
+        
+        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
+        :param event: any _FeedbackEvent derived event
+        """
+        super(_DamageEfficiencyInfo, self).__init__(etype, event)
+        self.__damage = event.getExtra()
+
+    def getDamage(self):
+        return self.__damage.getDamage()
+
     def isFire(self):
         return self.__damage.isFire()
 
@@ -81,14 +77,63 @@ class _DamageEfficiencyInfo(_EfficiencyInfo):
     def isShot(self):
         return self.__damage.isShot()
 
-    @classmethod
-    def fromFeedbackEvent(self, etype, event):
-        return _DamageEfficiencyInfo(etype, event.getBattleEventType(), event.getTargetID(), event.getExtra())
+    def isWorldCollision(self):
+        return self.__damage.isWorldCollision()
+
+    def isShellGold(self):
+        return self.__damage.isShellGold()
+
+    def getShellType(self):
+        """
+        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
+        """
+        return self.__damage.getShellType()
 
 
-_PERSONAL_EFFICIENCY_TYPE_TO_INFO_CLS = {_ETYPE.DAMAGE: _DamageEfficiencyInfo,
- _ETYPE.ASSIST_DAMAGE: _DamageEfficiencyInfo,
- _ETYPE.BLOCKED_DAMAGE: _DamageEfficiencyInfo}
+class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
+    __slots__ = ('__critsExtra',)
+
+    def __init__(self, etype, event):
+        """
+        Constructor
+        
+        :param etype: Efficiency type (see PERSONAL_EFFICIENCY_TYPE)
+        :param event: any _FeedbackEvent derived event
+        """
+        super(_CriticalHitsEfficiencyInfo, self).__init__(etype, event)
+        self.__critsExtra = event.getExtra()
+
+    def getCritsCount(self):
+        return self.__critsExtra.getCritsCount()
+
+    def isFire(self):
+        return self.__critsExtra.isFire()
+
+    def isRam(self):
+        return self.__critsExtra.isRam()
+
+    def isShot(self):
+        return self.__critsExtra.isShot()
+
+    def isWorldCollision(self):
+        return self.__critsExtra.isWorldCollision()
+
+    def isShellGold(self):
+        return self.__critsExtra.isShellGold()
+
+    def getShellType(self):
+        """
+        Returns shell type (see SHELL_TYPES enum) or None, if shell type is not defined.
+        """
+        return self.__critsExtra.getShellType()
+
+
+_AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE, _ETYPE.ASSIST_DAMAGE, _ETYPE.BLOCKED_DAMAGE)
+_FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE = {_FET.PLAYER_DAMAGED_HP_ENEMY: (_ETYPE.DAMAGE, _DamageEfficiencyInfo),
+ _FET.PLAYER_ASSIST_TO_KILL_ENEMY: (_ETYPE.ASSIST_DAMAGE, _DamageEfficiencyInfo),
+ _FET.PLAYER_USED_ARMOR: (_ETYPE.BLOCKED_DAMAGE, _DamageEfficiencyInfo),
+ _FET.ENEMY_DAMAGED_HP_PLAYER: (_ETYPE.RECEIVED_DAMAGE, _DamageEfficiencyInfo),
+ _FET.ENEMY_DAMAGED_DEVICE_PLAYER: (_ETYPE.RECEIVED_CRITICAL_HITS, _CriticalHitsEfficiencyInfo)}
 
 def _createEfficiencyInfoFromFeedbackEvent(event):
     """
@@ -98,21 +143,23 @@ def _createEfficiencyInfoFromFeedbackEvent(event):
     :return: _EfficiencyInfo child based on the feedback type or None.
     """
     if event.getType() in _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE:
-        etype = _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE[event.getType()]
-        cls = _PERSONAL_EFFICIENCY_TYPE_TO_INFO_CLS[etype]
-        return cls.fromFeedbackEvent(etype, event)
+        etype, cls = _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE[event.getType()]
+        return cls(etype, event)
     else:
         return None
 
 
 class PersonalEfficiencyController(IBattleController):
 
-    def __init__(self, feedback):
+    def __init__(self, arenaDP, feedback, vehStateCtrl):
         super(PersonalEfficiencyController, self).__init__()
+        self.__arenaDP = weakref.proxy(arenaDP)
         self.__feedback = weakref.proxy(feedback)
+        self.__vehStateCtrl = weakref.proxy(vehStateCtrl)
         self.__eManager = Event.EventManager()
         self.onTotalEfficiencyUpdated = Event.Event(self.__eManager)
         self.onPersonalEfficiencyReceived = Event.Event(self.__eManager)
+        self.onPersonalEfficiencyLogSynced = Event.Event(self.__eManager)
         self.__totalEfficiency = defaultdict(int)
         self.__efficiencyLog = deque(maxlen=_LOG_MAX_LEN)
 
@@ -122,9 +169,12 @@ class PersonalEfficiencyController(IBattleController):
     def startControl(self):
         self.__feedback.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
         self.__feedback.onPlayerSummaryFeedbackReceived += self._onPlayerSummaryFeedbackReceived
+        self.__vehStateCtrl.onVehicleControlling += self._onVehicleChanged
 
     def stopControl(self):
+        self.__arenaDP = None
         self.__feedback = None
+        self.__vehStateCtrl = None
         self.__eManager.clear()
         self.__eManager = None
         return
@@ -149,23 +199,25 @@ class PersonalEfficiencyController(IBattleController):
         Handler of player's feedback events (see FEEDBACK_EVENT_ID).
         :param events: List of PlayerFeedbackEvent objects
         """
-        damageEventsCount = 0
-        damageTotals = defaultdict(int)
+        eventsCount = 0
+        totals = defaultdict(int)
         for event in events:
             info = _createEfficiencyInfoFromFeedbackEvent(event)
-            if info is not None and info.getType() in _DAMAGE_EFFICIENCY_INFO:
-                damageEventsCount += 1
-                damageTotals[info.getType()] = damageTotals[info.getType()] + info.getDamage()
+            if info is not None:
+                eventsCount += 1
+                if info.getType() in _AGGREGATED_DAMAGE_EFFICIENCY_TYPES:
+                    totals[info.getType()] = totals[info.getType()] + info.getDamage()
                 self.__efficiencyLog.appendleft(info)
 
-        if damageEventsCount > 0:
-            damageEventsCount = min(damageEventsCount, _LOG_MAX_LEN)
-            for key in damageTotals.iterkeys():
-                self.__totalEfficiency[key] = self.__totalEfficiency[key] + damageTotals[key]
-                damageTotals[key] = self.__totalEfficiency[key]
+        if eventsCount > 0:
+            eventsCount = min(eventsCount, _LOG_MAX_LEN)
+            if totals:
+                for key in totals.iterkeys():
+                    self.__totalEfficiency[key] = self.__totalEfficiency[key] + totals[key]
+                    totals[key] = self.__totalEfficiency[key]
 
-            self.onTotalEfficiencyUpdated(damageTotals)
-            self.onPersonalEfficiencyReceived([ self.__efficiencyLog[i] for i in range(damageEventsCount - 1, -1, -1) ])
+                self.onTotalEfficiencyUpdated(totals)
+            self.onPersonalEfficiencyReceived([ self.__efficiencyLog[i] for i in range(eventsCount - 1, -1, -1) ])
         return
 
     def _onPlayerSummaryFeedbackReceived(self, event):
@@ -178,6 +230,11 @@ class PersonalEfficiencyController(IBattleController):
         self.__totalEfficiency[_ETYPE.ASSIST_DAMAGE] = event.getTotalAssistDamage()
         self.onTotalEfficiencyUpdated(dict(self.__totalEfficiency))
 
+    def _onVehicleChanged(self, *args, **kwargs):
+        if self.__arenaDP.isPlayerObserver():
+            self.__efficiencyLog.clear()
+            self.onPersonalEfficiencyLogSynced()
 
-def createEfficiencyCtrl(setup, feedback):
-    return PersonalEfficiencyController(feedback)
+
+def createEfficiencyCtrl(setup, feedback, vehStateCtrl):
+    return PersonalEfficiencyController(setup.arenaDP, feedback, vehStateCtrl)

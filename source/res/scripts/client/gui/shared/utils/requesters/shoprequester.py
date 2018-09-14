@@ -174,7 +174,7 @@ class ShopCommonStats(object):
 
     @property
     def slotsPrices(self):
-        return self.getValue('slotsPrices', (0, 1, [300]))
+        return self.getValue('slotsPrices', (0, [300]))
 
     def getVehicleSlotsPrice(self, currentSlotsCount):
         """
@@ -182,11 +182,7 @@ class ShopCommonStats(object):
         @return: new vehicle slot price
         """
         player = BigWorld.player()
-        if player is not None:
-            return player.shop.getNextSlotPrice(currentSlotsCount, self.slotsPrices)
-        else:
-            return 10000000000.0
-            return
+        return player.shop.getNextSlotPrice(currentSlotsCount, self.slotsPrices)
 
     @property
     def dropSkillsCost(self):

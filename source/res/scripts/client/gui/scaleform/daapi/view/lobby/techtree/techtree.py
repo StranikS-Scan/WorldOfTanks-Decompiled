@@ -114,6 +114,10 @@ class TechTree(TechTreeMeta):
     def invalidateRent(self, vehicles):
         pass
 
+    def invalidateRestore(self, vehicles):
+        if self._data.invalidateRestore(vehicles):
+            self.redraw()
+
     def _resolveLoadCtx(self, ctx=None):
         nation = ctx['nation'] if ctx is not None and 'nation' in ctx else None
         if nation is not None and nation in nations.INDICES:

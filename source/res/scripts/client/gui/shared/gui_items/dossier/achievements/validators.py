@@ -18,7 +18,7 @@ def alreadyAchieved(achievementClass, name, block, dossier):
 
 def requiresFortification():
     from gui.LobbyContext import g_lobbyContext
-    return g_lobbyContext.getServerSettings().isFortsEnabled()
+    return g_lobbyContext.getServerSettings() is not None and g_lobbyContext.getServerSettings().isStrongholdsEnabled()
 
 
 def accountIsRoaming(dossier):

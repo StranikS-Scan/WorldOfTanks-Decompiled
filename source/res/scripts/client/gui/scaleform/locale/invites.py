@@ -36,6 +36,7 @@ class INVITES(object):
     INVITES_TEXT_UNIT = '#invites:invites/text/UNIT'
     INVITES_TEXT_SORTIE = '#invites:invites/text/SORTIE'
     INVITES_TEXT_FORT_BATTLE = '#invites:invites/text/FORT_BATTLE'
+    INVITES_TEXT_EXTERNAL = '#invites:invites/text/EXTERNAL'
     INVITES_TEXT_CLUBS = '#invites:invites/text/CLUBS'
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
@@ -126,6 +127,7 @@ class INVITES(object):
     CLANS_STATE_INVITE_ACCEPTED = '#invites:clans/state/invite/accepted'
     CLANS_STATE_INVITE_DECLINED = '#invites:clans/state/invite/declined'
     CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/invite/error/inClanEnterCooldown'
+    STRONGHOLD_INVITE_SENDINVITETOUSERNAME = '#invites:stronghold/invite/sendInviteToUsername'
     INVITES_TEXT_ENUM = (INVITES_TEXT_CREATORNAME,
      INVITES_TEXT_SQUAD,
      INVITES_TEXT_EVENT,
@@ -137,6 +139,7 @@ class INVITES(object):
      INVITES_TEXT_UNIT,
      INVITES_TEXT_SORTIE,
      INVITES_TEXT_FORT_BATTLE,
+     INVITES_TEXT_EXTERNAL,
      INVITES_TEXT_CLUBS,
      INVITES_TEXT_FORT_OFFENCE,
      INVITES_TEXT_FORT_DEFENCE,

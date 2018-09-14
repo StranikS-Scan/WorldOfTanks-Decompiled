@@ -6,9 +6,10 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from collections import namedtuple
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared.items_parameters import params_helper
-from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_FORMATTERS
+from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from helpers import dependency
 from shared_utils import findFirst
 from gui.shared import g_itemsCache
@@ -23,6 +24,14 @@ from helpers.i18n import makeString
 from items import vehicles
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from skeletons.gui.server_events import IEventsCache
+
+def _getCmpVehicle():
+    return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
+
+
+def _getCmpInitialVehicle():
+    return cmp_helpers.getCmpConfiguratorMainView().getInitialVehicleData()
+
 
 class StatsConfiguration(object):
     __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals')
@@ -269,22 +278,38 @@ class BaseHangarParamContext(ToolTipContext):
     def getComparator(self):
         return params_helper.idealCrewComparator(g_currentVehicle.item)
 
+    def buildItem(self, *args, **kwargs):
+        return g_currentVehicle.item
+
 
 class HangarParamContext(BaseHangarParamContext):
 
     def __init__(self):
         super(HangarParamContext, self).__init__(True)
-        self.formatters = NO_BONUS_SIMPLIFIED_FORMATTERS
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
 
 class PreviewParamContext(HangarParamContext):
 
     def __init__(self):
         super(PreviewParamContext, self).__init__()
-        self.formatters = NO_BONUS_SIMPLIFIED_FORMATTERS
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
     def getComparator(self):
         return params_helper.vehiclesComparator(g_currentPreviewVehicle.item, g_currentPreviewVehicle.defaultItem)
+
+    def buildItem(self, *args, **kwargs):
+        return g_currentPreviewVehicle.item
+
+
+class CmpParamContext(HangarParamContext):
+
+    def __init__(self):
+        super(CmpParamContext, self).__init__()
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def getComparator(self):
+        return params_helper.vehiclesComparator(_getCmpVehicle(), _getCmpInitialVehicle()[0])
 
 
 class HangarContext(ToolTipContext):
@@ -341,6 +366,12 @@ class PreviewContext(HangarContext):
         return g_currentPreviewVehicle.item
 
 
+class VehCmpConfigurationContext(HangarContext):
+
+    def getVehicle(self):
+        return _getCmpVehicle()
+
+
 class TankmanHangarContext(HangarContext):
 
     def buildItem(self, invID):
@@ -380,6 +411,21 @@ class TechTreeContext(ShopContext):
     def getParamsConfiguration(self, item):
         value = super(TechTreeContext, self).getParamsConfiguration(item)
         value.vehicle = self._vehicle
+        return value
+
+
+class VehCmpModulesContext(TechTreeContext):
+
+    def buildItem(self, node, parentCD):
+        self._vehicle = _getCmpVehicle()
+        self._node = node
+        return g_itemsCache.items.getItemByCD(int(node.id))
+
+    def getStatusConfiguration(self, item):
+        value = super(TechTreeContext, self).getStatusConfiguration(item)
+        value.isResearchPage = False
+        value.showCustomStates = False
+        value.checkBuying = False
         return value
 
 
@@ -531,6 +577,14 @@ class FortificationContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
         super(FortificationContext, self).__init__(TOOLTIP_COMPONENT.FORTIFICATIONS, fieldsToExclude)
+
+
+class ReserveContext(ToolTipContext):
+    """ Reserve class for tool tip context
+    """
+
+    def __init__(self, fieldsToExclude=None):
+        super(ReserveContext, self).__init__(TOOLTIP_COMPONENT.RESERVE, fieldsToExclude)
 
 
 class ClanProfileFortBuildingContext(ToolTipContext):

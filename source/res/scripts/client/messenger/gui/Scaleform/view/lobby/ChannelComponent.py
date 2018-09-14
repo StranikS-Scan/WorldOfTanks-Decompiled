@@ -1,10 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ChannelComponent.py
 import weakref
-import pickle
 import constants
 from debug_utils import LOG_DEBUG
-from gui.shared import event_dispatcher as shared_events
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.meta.ChannelComponentMeta import ChannelComponentMeta
 from messenger.proto.bw_chat2.wrappers import UnitDataFactory
@@ -44,8 +42,7 @@ class ChannelComponent(ChannelComponentMeta):
         return round(constants.CHAT_MESSAGE_MAX_LENGTH / 2, 0)
 
     def onLinkClick(self, data):
-        arenaUniqueID, svrPackedData = pickle.loads(data)
-        shared_events.showUserBattleResults(arenaUniqueID, str(svrPackedData))
+        raise NotImplementedError('Shared battle results is not longer supported')
 
     def isJoined(self):
         isJoined = False

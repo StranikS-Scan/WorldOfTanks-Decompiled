@@ -167,16 +167,19 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener):
             return
 
     def __makeDetailsData(self, clientIdx):
-        result = self._searchDP.getUnitVO(clientIdx)
+        result = {}
         cache = self.prbEntity.getBrowser()
         maxVehicleLevel = FORT_BATTLE_DIVISIONS.ABSOLUTE.maxVehicleLevel
         if cache is not None:
             item, battleItem = cache.getItem(cache.getSelectedID())
             if battleItem is not None:
                 maxVehicleLevel = battleItem.additionalData.division
-            isCreated = bool(result)
+            isCreated = False
             isInBattle = False
             isBegin = False
+            if self._searchDP.hasUnit(clientIdx):
+                isCreated = True
+                result = self._searchDP.getUnitVO(clientIdx)
             if battleItem:
                 startTimeLeft = battleItem.getRoundStartTimeLeft()
             else:

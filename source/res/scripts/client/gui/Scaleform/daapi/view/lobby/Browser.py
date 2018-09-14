@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/Browser.py
+from Event import Event
+from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BrowserMeta import BrowserMeta
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_eventBus
 from gui.shared.events import BrowserEvent
 from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
+from web_client_api.WebCommandHandler import WebCommandHandler
 
 class Browser(BrowserMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -17,14 +19,21 @@ class Browser(BrowserMeta):
         self.__browser = None
         self.__size = None
         self.__isLoaded = True
+        self.__httpStatusCode = None
+        self.__webCommandHandler = None
+        self.onError = Event()
         return
 
-    def init(self, browserID):
+    def init(self, browserID, webHandlersMap=None, alias=''):
         self.__browserID = browserID
         self.__browser = self.browserCtrl.getBrowser(self.__browserID)
         assert self.__browser is not None, 'Cannot find browser'
+        self.__webCommandHandler = WebCommandHandler(self.__browserID, alias)
+        if webHandlersMap is not None:
+            self.__webCommandHandler.addHandlers(webHandlersMap)
+        self.__webCommandHandler.onCallback += self.__onWebCommandCallback
         if not self.__browser.hasBrowser:
-            g_eventBus.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+            self.addListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         else:
             self.__prepareBrowser()
         return
@@ -71,33 +80,45 @@ class Browser(BrowserMeta):
             self.__browser.updateSize(self.__size)
         return
 
-    def _dispose(self):
-        self.__browser.onLoadStart -= self.__onLoadStart
-        self.__browser.onLoadingStateChange -= self.__onLoadingStateChange
-        self.__browser.onLoadEnd -= self.__onLoadEnd
-        self.__browser.onNavigate -= self.__onNavigate
-        self.__browser = None
-        self.browserCtrl.delBrowser(self.__browserID)
-        g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
-        super(Browser, self)._dispose()
-        return
-
-    def __showDataUnavailableView(self):
+    def showDataUnavailableView(self):
         header = icons.alert() + i18n.makeString(MENU.BROWSER_DATAUNAVAILABLE_HEADER)
         description = i18n.makeString(MENU.BROWSER_DATAUNAVAILABLE_DESCRIPTION)
+        self.as_loadingStopS()
         self.as_showServiceViewS(header, description)
+        self.onError()
+
+    def _dispose(self):
+        if self.__browser:
+            self.__browser.onLoadStart -= self.__onLoadStart
+            self.__browser.onLoadingStateChange -= self.__onLoadingStateChange
+            self.__browser.onLoadEnd -= self.__onLoadEnd
+            self.__browser.onNavigate -= self.__onNavigate
+            self.__browser.onJsHostQuery -= self.__onJsHostQuery
+            self.__browser.onTitleChange -= self.__onTitleChange
+            self.__browser = None
+        if self.__webCommandHandler:
+            self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
+            self.__webCommandHandler = None
+        self.browserCtrl.delBrowser(self.__browserID)
+        self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+        super(Browser, self)._dispose()
+        return
 
     def __onLoadStart(self, url):
         pass
 
-    def __onLoadEnd(self, _, isLoaded=True):
+    def __onLoadEnd(self, _, isLoaded=True, httpStatusCode=None):
         self.__isLoaded = self.__isLoaded and isLoaded
-        if not self.__isLoaded:
-            self.__showDataUnavailableView()
+        self.__httpStatusCode = httpStatusCode
 
-    def __onLoadingStateChange(self, isLoading):
+    def __onLoadingStateChange(self, isLoading, showLoading):
         if isLoading:
-            self.as_loadingStartS()
+            if showLoading:
+                self.as_loadingStartS()
+        elif not self.__isLoaded:
+            self.showDataUnavailableView()
+        elif self.__httpStatusCode and self.__httpStatusCode >= 400:
+            self.showDataUnavailableView()
         else:
             self.as_loadingStopS()
 
@@ -105,9 +126,24 @@ class Browser(BrowserMeta):
         self.as_hideServiceViewS()
         self.__isLoaded = True
 
+    def __onJsHostQuery(self, command):
+        try:
+            if self.__webCommandHandler is not None:
+                self.__webCommandHandler.handleCommand(command)
+        except:
+            LOG_CURRENT_EXCEPTION()
+
+        return
+
+    def __onWebCommandCallback(self, callbackData):
+        self.__browser.sendMessage(callbackData)
+
+    def __onTitleChange(self, title):
+        self.as_changeTitleS(title)
+
     def __handleBrowserCreated(self, event):
         if event.ctx['browserID'] == self.__browserID:
-            g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
+            self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
             self.__browser = self.browserCtrl.getBrowser(self.__browserID)
             assert self.__browser is not None, 'Cannot find browser'
             self.__prepareBrowser()
@@ -118,6 +154,8 @@ class Browser(BrowserMeta):
         self.__browser.onLoadingStateChange += self.__onLoadingStateChange
         self.__browser.onLoadEnd += self.__onLoadEnd
         self.__browser.onNavigate += self.__onNavigate
+        self.__browser.onJsHostQuery += self.__onJsHostQuery
+        self.__browser.onTitleChange += self.__onTitleChange
         if self.__size is not None:
             self.__browser.updateSize(self.__size)
         if self.__browser.isNavigationComplete:

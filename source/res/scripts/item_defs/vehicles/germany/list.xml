@@ -150,7 +150,7 @@
     <shortUserString>	#germany_vehicles:VK3002DB_short	</shortUserString>
     <description>	#germany_vehicles:VK3002DB_descr	</description>
     <price>	1369000	</price>
-    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	7	</level>
   </G24_VK3002DB>
   <G10_PzIII_AusfJ>
@@ -301,7 +301,7 @@
     <shortUserString>	#germany_vehicles:Panther_II_short	</shortUserString>
     <description>	#germany_vehicles:Panther_II_descr	</description>
     <price>	2390000	</price>
-    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G64_Panther_II>
   <G45_G_Tiger>
@@ -364,7 +364,7 @@
     <shortUserString>	#germany_vehicles:E-50_short	</shortUserString>
     <description>	#germany_vehicles:E-50_descr	</description>
     <price>	3450000	</price>
-    <tags>	mediumTank enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	mediumTank enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	9	</level>
   </G54_E-50>
   <G67_VK4502A>
@@ -373,7 +373,7 @@
     <shortUserString>	#germany_vehicles:VK4502A_short	</shortUserString>
     <description>	#germany_vehicles:VK4502A_descr	</description>
     <price>	2435000	</price>
-    <tags>	heavyTank enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <tags>	heavyTank enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	8	</level>
   </G67_VK4502A>
   <G57_PzVI_Tiger_P>
@@ -436,7 +436,7 @@
     <shortUserString>	#germany_vehicles:E50_Ausf_M_short	</shortUserString>
     <description>	#germany_vehicles:E50_Ausf_M_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	mediumTank enhancedBelwillWashers_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </G73_E50_Ausf_M>
   <G63_PzI_ausf_C>
@@ -490,7 +490,7 @@
     <shortUserString>	#germany_vehicles:Indien_Panzer_short	</shortUserString>
     <description>	#germany_vehicles:Indien_Panzer_descr	</description>
     <price>	2420000	</price>
-    <tags>	mediumTank enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	mediumTank enhancedSprings_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G88_Indien_Panzer>
   <G87_VK3002DB_V1>
@@ -648,6 +648,15 @@
     <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G103_RU_251>
+  <G110_Typ_205>
+    <id>	73	</id>
+    <userString>	#germany_vehicles:G110_Typ_205	</userString>
+    <shortUserString>	#germany_vehicles:G110_Typ_205_short	</shortUserString>
+    <description>	#germany_vehicles:G110_Typ_205_descr	</description>
+    <price>	3580000	</price>
+    <tags>	heavyTank antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD enhancedLongitudinalTorsions_user	</tags>
+    <level>	9	</level>
+  </G110_Typ_205>
   <G113_SP_I_C>
     <id>	74	</id>
     <userString>	#germany_vehicles:G113_SP_I_C	</userString>
@@ -666,6 +675,45 @@
     <tags>	AT-SPG mediumAT-SPG noImprovedVentilation enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	10	</level>
   </G121_Grille_15_L63>
+  <G92_VK7201P>
+    <id>	76	</id>
+    <userString>	#germany_vehicles:VK7201P	</userString>
+    <shortUserString>	#germany_vehicles:VK7201P_short	</shortUserString>
+    <description>	#germany_vehicles:VK7201P_descr	</description>
+    <price>	6100000	</price>
+    <tags>	heavyTank antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <level>	10	</level>
+  </G92_VK7201P>
+  <G115_Typ_205B>
+    <id>	77	</id>
+    <userString>	#germany_vehicles:G115_Typ_205B	</userString>
+    <shortUserString>	#germany_vehicles:G115_Typ_205B_short	</shortUserString>
+    <description>	#germany_vehicles:G115_Typ_205B_descr	</description>
+    <price>	2540000	</price>
+    <tags>	heavyTank antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD enhancedLongitudinalTorsions_user	</tags>
+    <level>	8	</level>
+  </G115_Typ_205B>
+  <G44_JagdTigerH>
+    <id>	193	</id>
+    <userString>	#germany_vehicles:JagdTigerH	</userString>
+    <description>	#germany_vehicles:JagdTigerH_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG heavyAT-SPG antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </G44_JagdTigerH>
+  <G16_PzVIB_Tiger_II_F>
+    <id>	194	</id>
+    <userString>	#germany_vehicles:PzVIB_Tiger_II_F	</userString>
+    <shortUserString>	#germany_vehicles:PzVIB_Tiger_II_F_short	</shortUserString>
+    <description>	#germany_vehicles:PzVIB_Tiger_II_F_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret testTank	</tags>
+    <level>	7	</level>
+  </G16_PzVIB_Tiger_II_F>
   <G119_Panzer58_BF>
     <id>	195	</id>
     <userString>	#germany_vehicles:G119_Panzer58_BF	</userString>
@@ -812,7 +860,7 @@
     <description>	#germany_vehicles:T-15_descr	</description>
     <price>	900	  <gold></gold>
     </price>
-    <tags>	lightTank enhancedSprings_user wetCombatPack_class1_user	</tags>
+    <tags>	lightTank enhancedSprings_user wetCombatPack_class1_user HD	</tags>
     <level>	3	</level>
   </G50_T-15>
   <G70_PzIV_Hydro>
@@ -865,7 +913,7 @@
     <price>	3750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedLevers_user grousers_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </G77_PzIV_Schmalturm>
   <G78_Panther_M10>
@@ -1047,7 +1095,7 @@
     <price>	5	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank secret antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD inGame	</tags>
+    <tags>	heavyTank secret special antifragmentationLining_superheavy_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD inGame enhancedLongitudinalTorsions_user	</tags>
     <level>	8	</level>
   </G115_Typ_205_4_Jun>
   <G118_VK4503>
@@ -1151,7 +1199,7 @@
     <shortUserString>	#igr_vehicles:Panther_II_IGR_short	</shortUserString>
     <description>	#igr_vehicles:Panther_II_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret	</tags>
+    <tags>	mediumTank beast enhancedTorsions5t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret HD	</tags>
     <level>	8	</level>
   </G64_Panther_II_IGR>
   <G16_PzVIB_Tiger_II_IGR>

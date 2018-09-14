@@ -33,6 +33,7 @@ from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.server_events import IEventsCache
 _AWARDS_PER_PAGE = 3
+_AWARDS_PER_SINGLE_PAGE = 4
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
@@ -59,8 +60,7 @@ RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
  5006: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_RANDOM_6,
  DEFAULTS_GROUPS.UNGROUPED_QUESTS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_OTHER_QUESTS,
  DEFAULTS_GROUPS.UNGROUPED_ACTIONS: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_SALES,
- DEFAULTS_GROUPS.CURRENTLY_AVAILABLE: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_CURRENTLY_AVAILABLE,
- 5: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_NY2016}
+ DEFAULTS_GROUPS.CURRENTLY_AVAILABLE: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_CURRENTLY_AVAILABLE}
 
 class EVENT_STATUS(CONST_CONTAINER):
     COMPLETED = 'done'
@@ -218,7 +218,7 @@ class _EventInfo(object):
 
     def _getUnlockedTokens(self):
         childQuestsNames = self.event.getParentsName()
-        if len(childQuestsNames) == 1:
+        if len(childQuestsNames) == 1 and len(childQuestsNames.values()[0]) == 1:
             questTokenName = childQuestsNames.values()[0][0]
             parentTokenName = self.event.getParents().values()[0][0]
             return {'label': formatters.formatGold(TOOLTIPS.AWARDITEM_BATTLETOKEN_ONE_BODY, name=questTokenName),
@@ -227,7 +227,7 @@ class _EventInfo(object):
         else:
             return {'label': formatters.formatGold(TOOLTIPS.AWARDITEM_BATTLETOKEN_DESCRIPTION),
              'linkID': None,
-             'isNotAvailable': False} if len(childQuestsNames) > 1 else {}
+             'isNotAvailable': False} if len(childQuestsNames) > 0 else {}
 
     def _getStatus(self, pCur=None):
         return (EVENT_STATUS.NONE, '')
@@ -319,7 +319,7 @@ class _EventInfo(object):
                     i18nKey += 'Times'
                     times = ', '.join(times)
                     args['times'] = times
-            return i18n.makeString(i18nKey, **args)
+            return None if i18nKey is None else i18n.makeString(i18nKey, **args)
 
 
 class _QuestInfo(_EventInfo):
@@ -345,7 +345,7 @@ class _QuestInfo(_EventInfo):
                     flist = b.formattedList()
                     if flist:
                         vehiclesList.extend(flist)
-                elif b.hasIconFormat() and useIconFormat or b.isVisualOnly():
+                elif b.hasIconFormat() and useIconFormat:
                     iconBonusesList.extend(b.getList())
                 else:
                     flist = b.formattedList()
@@ -673,17 +673,9 @@ class _MotiveQuestInfo(_QuestInfo):
         return result
 
 
-class _ClubsQuestInfo(_QuestInfo):
-
-    def _getBonuses(self, svrEvents, bonuses=None, useIconFormat=False):
-        return super(_QuestInfo, self)._getBonuses(svrEvents, bonuses, useIconFormat)
-
-
 def getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.POTAPOV_QUEST:
         return _PotapovQuestInfo(event)
-    if event.getType() == constants.EVENT_TYPE.CLUBS_QUEST:
-        return _ClubsQuestInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
         return _MotiveQuestInfo(event)
     if event.getType() in constants.EVENT_TYPE.QUEST_RANGE:
@@ -832,18 +824,8 @@ def getCarouselAwardVO(bonuses, isReceived=False):
             continue
         result.extend(bonus.getCarouselList(isReceived))
 
-    while len(result) % _AWARDS_PER_PAGE != 0 and len(result) > _AWARDS_PER_PAGE:
+    while len(result) % _AWARDS_PER_PAGE != 0 and len(result) > _AWARDS_PER_SINGLE_PAGE:
         result.append({})
-
-    return result
-
-
-def getChristmasCarouselAwardVO(bonuses, isReceived=False):
-    result = []
-    for bonus in bonuses:
-        if not bonus.isShowInGUI():
-            continue
-        result.extend(bonus.getCarouselList(isReceived, True))
 
     return result
 
@@ -869,7 +851,7 @@ def getPotapovQuestAward(quest, callback):
 
 
 def questsSortFunc(a, b):
-    """ Sort function for common quests (all except potapov, club and motive).
+    """ Sort function for common quests (all except potapov and motive).
     """
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:

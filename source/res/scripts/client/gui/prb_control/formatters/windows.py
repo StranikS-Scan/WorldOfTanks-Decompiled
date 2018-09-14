@@ -3,6 +3,7 @@
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.shared import actions
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import dependency
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.server_events import IEventsCache
@@ -44,7 +45,12 @@ class SwitchPeripheryCompanyCtx(SwitchPeripheryCtx):
         return PREBATTLE.SWITCHPERIPHERYWINDOW_COMPANY_APPLYSWITCHLABEL
 
     def getExtraChainSteps(self):
-        return [actions.ShowCompanyWindow()]
+
+        def onLobbyInit():
+            from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
+            battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.COMPANIES_LIST)
+
+        return [actions.OnLobbyInitedAction(onInited=onLobbyInit)]
 
     def getForbiddenPeripherieIDs(self):
         validPeripheryIDs = set((host.peripheryID for host in g_preDefinedHosts.hosts() if host.peripheryID != 0))

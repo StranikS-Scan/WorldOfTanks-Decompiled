@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/carousel_filter.py
 import constants
 import nations
-from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2
+from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, SEARCH_NAME_VEHICLE
 from gui.prb_control.settings import VEHICLE_LEVELS
+from gui.shared.utils import makeSearchableString
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -24,7 +25,8 @@ class _CarouselFilter(object):
 
     def __init__(self):
         self._filters = {}
-        self._sections = ()
+        self._serverSections = ()
+        self._clientSections = ()
         self._criteriesGroups = ()
 
     def apply(self, vehicle):
@@ -62,7 +64,10 @@ class _CarouselFilter(object):
         :param keys: if specified, check only the filters listed in this parameter.
         :return: True if filters are in default state, False otherwise.
         """
-        defaultFilters = AccountSettings.getFilterDefaults(self._sections)
+        defaultFilters = AccountSettings.getFilterDefaults(self._serverSections)
+        for section in self._clientSections:
+            defaultFilters[section] = AccountSettings.getFilterDefault(section)
+
         if keys is None:
             keys = defaultFilters.keys()
         for key in keys:
@@ -77,7 +82,10 @@ class _CarouselFilter(object):
         :param keys: if specified, resets only the filters listed in this parameter.
         :param save: flag that determines whether filters should be saved immediately.
         """
-        defaultFilters = AccountSettings.getFilterDefaults(self._sections)
+        defaultFilters = AccountSettings.getFilterDefaults(self._serverSections)
+        for section in self._clientSections:
+            defaultFilters[section] = AccountSettings.getFilterDefault(section)
+
         if keys is not None:
             defaultFilters = _filterDict(defaultFilters, keys)
         self.update(defaultFilters, save)
@@ -123,15 +131,22 @@ class CarouselFilter(_CarouselFilter):
 
     def __init__(self):
         super(CarouselFilter, self).__init__()
-        self._sections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2)
+        self._serverSections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2)
+        self._clientSections = (SEARCH_NAME_VEHICLE,)
         self._criteriesGroups = (EventCriteriesGroup(), BasicCriteriesGroup())
 
     def save(self):
-        self.settingsCore.serverSettings.setSections(self._sections, self._filters)
+        self.settingsCore.serverSettings.setSections(self._serverSections, self._filters)
+        for section in self._clientSections:
+            AccountSettings.setFilter(section, self._filters[section])
 
     def load(self):
-        defaultFilters = AccountSettings.getFilterDefaults(self._sections)
-        savedFilters = self.settingsCore.serverSettings.getSections(self._sections, defaultFilters)
+        defaultFilters = AccountSettings.getFilterDefaults(self._serverSections)
+        savedFilters = self.settingsCore.serverSettings.getSections(self._serverSections, defaultFilters)
+        for section in self._clientSections:
+            defaultFilters[section] = AccountSettings.getFilterDefault(section)
+            savedFilters[section] = AccountSettings.getFilter(section)
+
         self._filters = defaultFilters
         for key, value in defaultFilters.iteritems():
             savedFilters[key] = type(value)(savedFilters[key])
@@ -212,12 +227,14 @@ class BasicCriteriesGroup(CriteriesGroup):
             self._criteria |= REQ_CRITERIA.VEHICLE.PREMIUM
         if filters['igr'] and constants.IS_KOREA:
             self._criteria |= REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
-        if filters['hideRented']:
+        if not filters['rented']:
             self._criteria |= ~REQ_CRITERIA.VEHICLE.RENT
         if filters['bonus']:
             self._criteria |= REQ_CRITERIA.VEHICLE.HAS_XP_FACTOR
         if filters['favorite']:
             self._criteria |= REQ_CRITERIA.VEHICLE.FAVORITE
+        if filters['searchNameVehicle']:
+            self._criteria |= REQ_CRITERIA.VEHICLE.NAME_VEHICLE(makeSearchableString(filters['searchNameVehicle']))
 
 
 class EventCriteriesGroup(CriteriesGroup):
@@ -226,7 +243,7 @@ class EventCriteriesGroup(CriteriesGroup):
 
     def update(self, filters):
         super(EventCriteriesGroup, self).update(filters)
-        if filters['hideEvent']:
+        if not filters['event']:
             self._criteria |= ~REQ_CRITERIA.VEHICLE.EVENT
 
     @staticmethod

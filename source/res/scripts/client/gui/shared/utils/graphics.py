@@ -4,13 +4,14 @@ import BigWorld
 import math
 from collections import namedtuple
 from debug_utils import LOG_WARNING
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, findFirst
 import GUI
 MIN_SCREEN_WIDTH = 1024
 MIN_SCREEN_HEIGHT = 768
 MIN_COLOR_DEPTH = 23
 VideoMode = namedtuple('VideoMode', 'index width height colorDepth label refreshRate')
 WindowSize = namedtuple('WindowSize', 'width height refreshRate')
+BorderlessSize = namedtuple('BorderlessSize', 'behaviour posX posY width height monitor')
 SCALE_PREFIX = ('auto', 'x%d')
 
 class GRAPHICS_SETTINGS(CONST_CONTAINER):
@@ -49,11 +50,12 @@ def isVideoModeSuitable(mode):
 
 def getSuitableVideoModes():
     result = []
+    currentVideoMode = BigWorld.videoModeIndex()
     for monitorModes in BigWorld.listVideoModesAllMonitors():
         modes = []
         for mode in monitorModes:
             m = VideoMode(*mode)
-            if isVideoModeSuitable(m):
+            if isVideoModeSuitable(m) or m.index == currentVideoMode:
                 modes.append(m)
 
         result.append(modes)
@@ -75,13 +77,6 @@ def getSuitableWindowSizes():
         result.append(modes)
 
     return tuple(result)
-
-
-def getSuitableBorderlessSizes():
-    """ In the borderless mode we only take the last resolution
-    of each connected monitor
-    """
-    return [ [modes[-1]] for modes in getSuitableVideoModes() ]
 
 
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
@@ -141,7 +136,6 @@ class MonitorSettings(object):
     def __init__(self):
         self.__suitableVideoModes = getSuitableVideoModes()
         self.__suitableWindowSizes = getSuitableWindowSizes()
-        self.__suitableBorderlessSizes = getSuitableBorderlessSizes()
         self.__monitorChanged = False
         self.__currentMonitorIdx = self.activeMonitor
 
@@ -151,13 +145,18 @@ class MonitorSettings(object):
 
     @property
     def currentWindowSize(self):
-        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(True)))
+        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)))
 
-    def getBorderlessSizes(self):
-        return self.__suitableBorderlessSizes
+    @property
+    def borderlessSizes(self):
+        return self.__suitableVideoModes[self.activeMonitor]
 
-    def getCurrentBorderlessSize(self):
-        return self.__suitableBorderlessSizes[self.activeMonitor][0]
+    @property
+    def currentBorderlessSize(self):
+        if self.windowMode == BigWorld.WindowModeBorderless:
+            return BorderlessSize(*map(int, BigWorld.getBorderlessParameters()))
+        else:
+            return VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
 
     @property
     def videoModes(self):
@@ -169,19 +168,23 @@ class MonitorSettings(object):
             if videoMode.index == BigWorld.videoModeIndex():
                 return videoMode
 
-        return self.videoModes[0]
+        return findFirst(None, self.videoModes)
 
     def changeMonitor(self, monitorIdx):
         if self.__currentMonitorIdx != monitorIdx:
             self.__monitorChanged = True
         self.__currentMonitorIdx = monitorIdx
-        BigWorld.wg_setActiveMonitorIndex(monitorIdx)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeWindowed)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeBorderless)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeExclusiveFullscreen)
 
     def setWindowed(self):
-        vm = self.currentVideoMode
-        if vm is not None and self.windowMode != BigWorld.WindowModeWindowed:
-            BigWorld.changeVideoMode(vm.index, BigWorld.WindowModeWindowed)
-        return
+        if self.windowMode != BigWorld.WindowModeWindowed:
+            BigWorld.changeVideoMode(-1, BigWorld.WindowModeWindowed)
+
+    def setBorderless(self):
+        if self.windowMode != BigWorld.WindowModeBorderless:
+            BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
 
     def changeWindowSize(self, width, height):
         if not self.isMonitorChanged and self.windowMode != BigWorld.WindowModeWindowed:
@@ -190,6 +193,12 @@ class MonitorSettings(object):
         if curWindowSize.width != width or curWindowSize.height != height:
             BigWorld.resizeWindow(width, height)
 
+    def changeBorderlessSize(self, width, height):
+        curBorderlessSize = self.currentBorderlessSize
+        if curBorderlessSize.width != width or curBorderlessSize.height != height:
+            BigWorld.setBorderlessFixedSize(width, height)
+        BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
+
     def setGlyphCache(self, scale=1):
         textureSize = 1024 * math.ceil(scale)
         assert hasattr(GUI, 'wg_setGlyphCacheParams'), 'GUI.wg_setGlyphCacheParams() is not defined'
@@ -197,7 +206,7 @@ class MonitorSettings(object):
 
     @property
     def activeMonitor(self):
-        return BigWorld.wg_getActiveMonitorIndex()
+        return BigWorld.getActiveMonitorIndex(BigWorld.getWindowMode())
 
     @property
     def currentMonitor(self):
@@ -213,17 +222,18 @@ class MonitorSettings(object):
 
     @property
     def noRestartExclusiveFullscreenMonitorIndex(self):
-        return BigWorld.wg_getExclusiveFullscreenMonitorIndex()
+        return BigWorld.getExclusiveFullscreenMonitorIndex()
 
-    @property
     def maxParams(self):
-        maxWidth = maxHeight = 0
-        for monitorModes in self.__suitableVideoModes:
+        maxWdth = 640
+        maxHght = 480
+        vmodes = getSuitableVideoModes()
+        for monitorModes in vmodes:
             for mode in monitorModes:
-                maxWidth = max(maxWidth, mode.width)
-                maxHeight = max(maxHeight, mode.height)
+                maxWdth = max(maxWdth, mode.width)
+                maxHght = max(maxHght, mode.height)
 
-        return (maxWidth, maxHeight)
+        return (maxWdth, maxHght)
 
     def isFullscreen(self):
         return BigWorld.getWindowMode() == BigWorld.WindowModeExclusiveFullscreen

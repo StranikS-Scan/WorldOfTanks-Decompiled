@@ -59,13 +59,11 @@ class FortBattleRoomOrdersPanelComponent(SlotsPanelMeta, FortViewHelper, IUnitLi
 
     def _populate(self):
         super(FortBattleRoomOrdersPanelComponent, self)._populate()
-        self.startFortListening()
         self.startPrbListening()
         self.__updateSlots()
 
     def _dispose(self):
         self.stopPrbListening()
-        self.stopFortListening()
         super(FortBattleRoomOrdersPanelComponent, self)._dispose()
 
     def _isConsumablesAvailable(self):

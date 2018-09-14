@@ -32,7 +32,7 @@ _DAMAGE_INDICATOR_SWF = 'damageIndicator.swf'
 _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
 _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
 _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
-_DAMAGE_INDICATOR_TOTAL_FRAMES = 140
+_DAMAGE_INDICATOR_TOTAL_FRAMES = 160
 _BEGIN_ANIMATION_FRAMES = 11
 _DAMAGE_INDICATOR_FRAME_RATE = 24
 _BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
@@ -41,6 +41,8 @@ _DIRECT_INDICATOR_SWF = 'directionIndicator.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
 _DIRECT_INDICATOR_SWF_SIZE = (680, 680)
+_MARKER_SMALL_SIZE_THRESHOLD = 0.1
+_MARKER_LARGE_SIZE_THRESHOLD = 0.3
 
 class _MARKER_TYPE(CONST_CONTAINER):
     """
@@ -182,6 +184,10 @@ class _StandardMarkerVOBuilder(_MarkerVOBuilder):
 
 class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
 
+    def __init__(self, dynamicIndicatorSize):
+        super(_ExtendedMarkerVOBuilder, self).__init__()
+        self.__dynamicIndicatorSize = dynamicIndicatorSize
+
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
         vo.update({'circleStr': self._getCircleBackground(markerData),
@@ -204,14 +210,13 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
     def _getDamageLabel(self, markerData):
         return str(markerData.hitData.getDamage())
 
-    @staticmethod
-    def _getSizeType(hp, damage):
+    def _getSizeType(self, hp, damage):
         sizeType = _MARKER_SIZE_TYPE.SMALL
-        if hp > 0:
+        if self.__dynamicIndicatorSize and hp > 0:
             ratio = float(damage) / hp
-            if ratio <= 0.1:
+            if ratio <= _MARKER_SMALL_SIZE_THRESHOLD:
                 sizeType = _MARKER_SIZE_TYPE.SMALL
-            elif ratio <= 0.3:
+            elif ratio <= _MARKER_LARGE_SIZE_THRESHOLD:
                 sizeType = _MARKER_SIZE_TYPE.MEDIUM
             else:
                 sizeType = _MARKER_SIZE_TYPE.LARGE
@@ -265,12 +270,30 @@ class _ExtendedCriticalMarkerVOBuilder(_ExtendedMarkerVOBuilder):
         return critType
 
 
-def _getExtendedMarkerVOBuilderClass(markerData):
-    return _ExtendedCriticalMarkerVOBuilder if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder
+class _AbstractMarkerVOBuilderFactory(object):
+
+    def getVOBuilder(self, markerData):
+        raise NotImplementedError
+
+    def buildMarkerVO(self, markerData):
+        builder = self.getVOBuilder(markerData)
+        return builder.buildVO(markerData)
 
 
-def _getStandardMarkerVOBuilderClass(markerData):
-    return _StandardMarkerVOBuilder
+class _ExtendedMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+
+    def __init__(self, isIndicatorSizeDynamic):
+        super(_ExtendedMarkerVOBuilderFactory, self).__init__()
+        self.__isIndicatorSizeDynamic = isIndicatorSizeDynamic
+
+    def getVOBuilder(self, markerData):
+        return _ExtendedCriticalMarkerVOBuilder(self.__isIndicatorSizeDynamic) if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder(self.__isIndicatorSizeDynamic)
+
+
+class _StandardMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+
+    def getVOBuilder(self, markerData):
+        return _StandardMarkerVOBuilder()
 
 
 _DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
@@ -327,7 +350,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def __init__(self, hitsCount):
         names = tuple(map(lambda i: _DAMAGE_INDICATOR_MC_NAME.format(i), xrange(hitsCount)))
         super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,), SCALEFORM_SWF_PATH_V3)
-        self.__voBuilderFactoryMethod = None
+        self.__voBuilderFactory = None
         self.__updateMethod = None
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
@@ -346,6 +369,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
             self.__onCrosshairPositionChanged(*ctrl.getPosition())
         self.__setMarkersScale()
         self.active(True)
+        self.component.offsetRotationElementsInDegree(10.0, 10.0)
         return
 
     def __del__(self):
@@ -380,9 +404,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def showHitDirection(self, idx, hitData, timeLeft):
         self.as_setYawS(idx, hitData.getYaw())
         markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self.__isBlind)
-        voBuilderClass = self.__voBuilderFactoryMethod(markerData)
-        builder = voBuilderClass()
-        vo = builder.buildVO(markerData)
+        vo = self.__voBuilderFactory.buildMarkerVO(markerData)
         LOG_DEBUG_DEV('showHitDirection hit={}, vo={}'.format(hitData, vo))
         self.__updateMethod(**vo)
 
@@ -394,10 +416,11 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def __setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
         if indicatorType == DAMAGE_INDICATOR_TYPE.EXTENDED:
-            self.__voBuilderFactoryMethod = _getExtendedMarkerVOBuilderClass
+            isIndicatorSizeDynamic = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR))
+            self.__voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
             self.__updateMethod = self.as_showExtendedS
         else:
-            self.__voBuilderFactoryMethod = _getStandardMarkerVOBuilderClass
+            self.__voBuilderFactory = _StandardMarkerVOBuilderFactory()
             self.__updateMethod = self.as_showStandardS
 
     def __setMarkersScale(self, scale=None):
@@ -521,8 +544,11 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._siegeComponent = siege_component.createSiegeComponent(self, isReplayPlaying)
         keyboardSetting.onKeyBindingsChanged += self.__onKeyBindingsChanged
         self._hintsLeft = AccountSettings.getSettings('siegeModeHintCounter')
-        vInfo = arenaDP.getVehicleInfo()
-        self._isObserver = vInfo.isObserver()
+        if arenaDP is not None:
+            vInfo = arenaDP.getVehicleInfo()
+            self._isObserver = vInfo.isObserver()
+        else:
+            self._isObserver = False
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
@@ -554,13 +580,15 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         AccountSettings.setSettings('siegeModeHintCounter', self._hintsLeft)
         return
 
-    def __updateIndicatorView(self):
+    def __updateIndicatorView(self, isSmooth=False):
         """ Update indicator according to current siege state (enabled, disabled or switching).
+        
+        :param isSmooth: flag indication whether animation should be smooth.
         """
         LOG_DEBUG('Updating siege mode: indicator')
         engineState = self._devices['engine']
         totalTime = self._switchTimeTable[self._siegeState][engineState]
-        self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState)
+        self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
         self.__updateHintView()
 
     def __updateHintView(self):
@@ -597,7 +625,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
-        crosshairCtrl = self.sessionProvider.shared.crosshair
         vTypeDesc = vehicle.typeDescriptor
         vType = vTypeDesc.type
         if vehicle.isAlive() and vTypeDesc.hasSiegeMode:
@@ -619,8 +646,12 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
             self.__onCrosshairPositionChanged()
             self.__updateIndicatorView()
+            self.__updateDevicesView()
         else:
             self._isEnabled = False
+            for deviceName in self._devices:
+                self._devices[deviceName] = 'normal'
+
         self.as_setVisibleS(self._isEnabled)
         return
 
@@ -655,10 +686,14 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if siegeState == _SIEGE_STATE.SWITCHING_OFF:
             if not self._isObserver and not self._isInPostmortem:
                 self._hintsLeft = max(0, self._hintsLeft - 1)
+        if self._siegeState in _SIEGE_STATE.SWITCHING:
+            isSmooth = siegeState not in _SIEGE_STATE.SWITCHING
+        else:
+            isSmooth = siegeState in _SIEGE_STATE.SWITCHING
         self._startTime = BigWorld.serverTime()
         self._siegeState = siegeState
         self._switchTime = switchTime
-        self.__updateIndicatorView()
+        self.__updateIndicatorView(isSmooth)
 
     def __updateDevicesState(self, deviceName, _, realState):
         if deviceName in ('engine', 'leftTrack', 'rightTrack'):

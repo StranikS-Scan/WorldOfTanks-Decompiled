@@ -12,15 +12,13 @@ import ArenaType
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.goodies.goodies_cache import g_goodiesCache
 from helpers import dependency
-from shared_utils import findFirst, first
+from shared_utils import findFirst
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
-from gui.clubs import formatters as club_fmts
-from gui.clubs.settings import getLadderChevron256x256, getPointsToNextDivision
 from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
@@ -28,20 +26,21 @@ from gui.shared.view_helpers import UsersInfoHelper
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.tooltips import efficiency
 from gui.shared.money import Money, Currency
-from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName, makeContactStatusDescription
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from ConnectionManager import connectionManager
 from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from UnitBase import SORTIE_DIVISION
 from gui import g_htmlTemplates, makeHtmlString
-from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.items.unit_items import SupportedRosterSettings
+from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
@@ -51,7 +50,7 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.daapi.view.lobby.fortifications.components.FortBattlesSortieListView import formatGuiTimeLimitStr
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from items import vehicles
 from messenger.storage import storage_getter
 from messenger.m_constants import USER_TAG
@@ -59,11 +58,8 @@ from gui.shared.tooltips import formatters
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.clans import IClanController
-from skeletons.gui.clubs import IClubsController
 from skeletons.gui.game_control import IRefSystemController, IIGRController, IServerStatsController
 from skeletons.gui.server_events import IEventsCache
-from gui.christmas.christmas_controller import g_christmasCtrl
-from gui.Scaleform.locale.CHRISTMAS import CHRISTMAS
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 
 class FortOrderParamField(ToolTipParameterField):
@@ -284,11 +280,6 @@ class ContactTooltipData(ToolTipBaseData):
             if clanAbbrev and USER_TAG.CLAN_MEMBER in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeClanFullName(clanAbbrev)
-            if USER_TAG.CLUB_MEMBER in tags:
-                clubName = self.playerCtx.getMyClubName()
-                if clubName:
-                    groupsStr += self.__addComma(groupsStr)
-                    groupsStr += makeClubFullName(clubName)
             if USER_TAG.IGNORED in tags or USER_TAG.IGNORED_TMP in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
@@ -318,26 +309,67 @@ class ContactTooltipData(ToolTipBaseData):
         return ', ' if currStr != '' else ''
 
 
-class SortieDivisionTooltipData(ToolTipBaseData):
+class StrongholdTooltipData(ToolTipBaseData):
+
+    def _getEntity(self):
+        from gui.prb_control.dispatcher import g_prbLoader
+        dispatcher = g_prbLoader.getDispatcher()
+        return dispatcher.getEntity()
+
+    def _getData(self):
+        data = self._getEntity().getStrongholdData()
+        return data
+
+
+class SortieDivisionTooltipData(StrongholdTooltipData):
 
     def __init__(self, context):
         super(SortieDivisionTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
     def getDisplayableData(self):
-        divisionsData = []
-        divisions = makeDivisionData()
-        for division in divisions:
-            minLvl, maxLvl = division['vehLvls']
-            if maxLvl == minLvl:
-                divisLevels = fort_formatters.getTextLevel(maxLvl)
+        data = self._getEntity().getStrongholdData()
+        if data is None:
+            return
+        else:
+            isSortie = data.isSortie()
+            minLvl, maxLvl = data.getMinLevel(), data.getMaxLevel()
+            divisLevel = fort_formatters.getTextLevel(minLvl)
+            if maxLvl != minLvl:
+                divisLevel += ' - ' + fort_formatters.getTextLevel(maxLvl)
+            minPlayers, maxPlayers = data.getMinPlayerCount(), data.getMaxPlayerCount()
+            divisPlayers = str(minPlayers)
+            if minPlayers != maxPlayers:
+                divisPlayers += '-' + str(maxPlayers)
+            battleDuration = data.getBattleDurationMinuts()
+            minuts = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_MINUTS)
+            hours = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_HOURS)
+            battleDurationTime = '%d%s' % (battleDuration, minuts)
+            divisionData = {}
+            level = fort_formatters.getTextLevel(maxLvl)
+            if data.isSortie():
+                divisTime = battleDurationTime
+                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_SORTIETITLE, level=level)
             else:
-                divisLevels = fort_formatters.getTextLevel(minLvl) + ' - ' + fort_formatters.getTextLevel(maxLvl)
-            divisionsData.append({'divisName': division['label'],
-             'divisLevels': text_styles.main(divisLevels),
-             'divisBonus': self.__getBonusStr(division['profit']),
-             'divisPlayers': self.__getPlayerLimitsStr(*self.__getPlayerLimits(division['level']))})
-
-        return {'divisions': divisionsData}
+                battleSeriesDurationMinuts = data.getBattleSeriesDurationMinuts()
+                battleSeriesDurationHours = data.getBattleSeriesDurationHours()
+                if battleSeriesDurationHours >= 1:
+                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationHours, hours)
+                else:
+                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationMinuts, minuts)
+                divisTime = '%s (%s)' % (battleDurationTime, battleSeriesDurationTime)
+                direction = getDirection(data.getDirection())
+                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_FORTTITLE, direction=direction)
+            resourceMultiplier = data.getResourceMultiplier()
+            if resourceMultiplier > 1:
+                dailyBonus = 'x%d' % resourceMultiplier
+                divisionData['dailyBonus'] = dailyBonus
+            divisionData['isSortie'] = isSortie
+            divisionData['divisName'] = divisName
+            divisionData['divisLevels'] = divisLevel
+            divisionData['divisLegionnaires'] = str(data.getMaxLegCount())
+            divisionData['divisPlayers'] = divisPlayers
+            divisionData['divisTime'] = divisTime
+            return {'divisions': [divisionData]}
 
     def __getPlayerLimits(self, divisionType):
         divisionIndex = SORTIE_DIVISION._ORDER.index(divisionType)
@@ -349,6 +381,58 @@ class SortieDivisionTooltipData(ToolTipBaseData):
 
     def __getBonusStr(self, bonus):
         return ''.join((text_styles.defRes(BigWorld.wg_getIntegralFormat(bonus) + ' '), icons.nut()))
+
+
+class ReserveTooltipData(StrongholdTooltipData):
+
+    def __init__(self, context):
+        super(ReserveTooltipData, self).__init__(context, TOOLTIP_TYPE.RESERVE)
+
+    def __getSelectReason(self, data, reserve, selected):
+        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SUPPORTACTIVATION,
+         REQUISITION_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_REQUISITIONACTIVATION,
+         HEAVYTRUCKS_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
+        if selected:
+            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SELECTED)
+        else:
+            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_READYTOSELECT)
+        groupType = reserve.getGroupType()
+        reason = i18n.makeString(reasonMap[groupType])
+        return (title, reason)
+
+    def getDisplayableData(self, *args, **kwargs):
+        data = self._getData()
+        if data is None:
+            return
+        else:
+            isLegionary = self._getEntity().getPlayerInfo().isLegionary()
+            toolTipData = {}
+            reserveId = args[0]
+            reserve = data.getReserveById(reserveId)
+            moduleLabel = getReserveNameVO(reserve.getType())
+            infoLevel = '%s %s' % (fort_formatters.getTextLevel(reserve.getLevel()), i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_LEVEL))
+            selected = reserve in data.getSelectedReserves()
+            reserveCount = data.getReserveCount(reserve.getType(), reserve.getLevel())
+            if selected:
+                reserveCount -= 1
+            infoCount = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_INSTORAGE, count=reserveCount)
+            infoDescription1 = '+%s%%' % reserve.getBonusPercent()
+            infoDescription2 = '%s' % reserve.getDescription()
+            infoDescription3 = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITION)
+            selected = reserve in data.getSelectedReserves()
+            infoStatus, infoDescription = self.__getSelectReason(data, reserve, selected)
+            toolTipData['moduleLabel'] = moduleLabel
+            toolTipData['infoTitle'] = reserve.getTitle()
+            toolTipData['infoDescription'] = infoDescription
+            toolTipData['level'] = reserve.getLevel()
+            toolTipData['infoLevel'] = infoLevel
+            if not isLegionary:
+                toolTipData['infoCount'] = infoCount
+            toolTipData['infoDescription1'] = infoDescription1
+            toolTipData['infoDescription2'] = infoDescription2
+            toolTipData['infoDescription3'] = infoDescription3
+            toolTipData['infoStatus'] = infoStatus
+            return toolTipData
 
 
 class MapTooltipData(ToolTipBaseData):
@@ -403,21 +487,11 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_SERVER), padding=formatters.packPadding(0, 0, 4)))
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
         isColorBlind = self.settingsCore.getSetting('isColorBlind')
-
-        def __getPingData(url):
-            pingData = g_preDefinedHosts.getHostPingData(url)
-            if pingData.status == PING_STATUSES.REQUESTED:
-                return PingData(pingData.value, PING_STATUSES.UNDEFINED)
-            else:
-                return pingData
-
         if connectionManager.peripheryID == 0:
-            serverBlocks.append(self.__packServerBlock(self.__wrapServerName(connectionManager.serverUserName), __getPingData(connectionManager.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
+            serverBlocks.append(self.__packServerBlock(self.__wrapServerName(connectionManager.serverUserName), self.__getPingData(connectionManager.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
         if len(simpleHostList):
             currServUrl = connectionManager.url
-            for key, name, csisStatus, peripheryID in simpleHostList:
-                serverBlocks.append(self.__packServerBlock(name, __getPingData(key), csisStatus, currServUrl == key, isColorBlind))
-
+            serverBlocks.append(self.__packServerListBlock(simpleHostList, currServUrl, isColorBlind))
         items.append(formatters.packBuildUpBlockData(serverBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         serversStats = None
         if constants.IS_SHOW_SERVER_STATS:
@@ -437,8 +511,28 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         :param isColorBlind: bool
         :return:
         """
-        separator = '  '
         pingValue, pingStatus = pingData
+        formattedPing, pingStatusIcon = cls.__formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), text_styles.concatStylesToSingleLine(formattedPing, '  ', pingStatusIcon), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
+    def __packServerListBlock(cls, simpleHostList, currServUrl, isColorBlind=False):
+        """
+        Collect all server names and statuses for one textBlock
+        """
+        serverNames = []
+        pingTexts = []
+        for key, name, csisStatus, peripheryID in simpleHostList:
+            pingValue, pingStatus = cls.__getPingData(key)
+            isSelected = currServUrl == key
+            formattedPing, pingStatusIcon = cls.__formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+            serverNames.append(cls.__formatServerName(name, isSelected))
+            pingTexts.append(text_styles.concatStylesToSingleLine(formattedPing, '  ', pingStatusIcon))
+
+        return formatters.packTextParameterBlockData(concatStylesToMultiLine(*serverNames), concatStylesToMultiLine(*pingTexts), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
+    def __formatPingStatus(cls, csisStatus, isColorBlind, isSelected, pingStatus, pingValue):
         if csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE and pingStatus != PING_STATUSES.UNDEFINED:
             if pingStatus == PING_STATUSES.LOW:
                 formattedPing = text_styles.success(pingValue)
@@ -452,7 +546,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         if isColorBlind and pingStatus == PING_STATUSES.HIGH:
             colorBlindName = '_color_blind'
         pingStatusIcon = cls.__formatPingStatusIcon(RES_ICONS.maps_icons_pingstatus_stairs_indicator(str(pingStatus) + colorBlindName + '.png'))
-        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), text_styles.concatStylesToSingleLine(formattedPing, separator, pingStatusIcon), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+        return (formattedPing, pingStatusIcon)
 
     @classmethod
     def __formatServerName(cls, name, isSelected=False):
@@ -464,7 +558,15 @@ class SettingsButtonTooltipData(BlocksTooltipData):
 
     @classmethod
     def __formatPingStatusIcon(cls, icon):
-        return icons.makeImageTag(icon, 16, 16, -4)
+        return icons.makeImageTag(icon, 14, 14, -3)
+
+    @classmethod
+    def __getPingData(cls, url):
+        pingData = g_preDefinedHosts.getHostPingData(url)
+        if pingData.status == PING_STATUSES.REQUESTED:
+            return PingData(pingData.value, PING_STATUSES.UNDEFINED)
+        else:
+            return pingData
 
     @staticmethod
     def __wrapServerName(name):
@@ -1080,52 +1182,6 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
          'columns': columns}
 
 
-class LadderTooltipData(ToolTipBaseData):
-    clubsCtrl = dependency.descriptor(IClubsController)
-
-    def __init__(self, context):
-        super(LadderTooltipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
-
-    def getDisplayableData(self, clubDbID):
-        club = self.clubsCtrl.getClub(clubDbID)
-        if club is None:
-            return
-        else:
-            seasonState = self.clubsCtrl.getSeasonState()
-            ladderInfo = club.getLadderInfo()
-            if ladderInfo.isInLadder():
-                icon = getLadderChevron256x256(ladderInfo.getDivision())
-                league = club_fmts.getLeagueString(ladderInfo.getLeague())
-                division = club_fmts.getDivisionString(ladderInfo.getDivision())
-                ladderPlace = text_styles.promoSubTitle(i18n.makeString(TOOLTIPS.LADDER_PLACE, num=ladderInfo.position))
-                state = text_styles.middleTitle(i18n.makeString(TOOLTIPS.LADDER_STATE, league=text_styles.highTitle(league), division=text_styles.highTitle(division)))
-                if seasonState.isActive():
-                    points = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_POINTS, num=text_styles.stats(str(ladderInfo.getRatingPoints()))))
-                else:
-                    points = None
-                if not ladderInfo.isTop():
-                    valueStr = str(getPointsToNextDivision(ladderInfo.getRatingPoints()))
-                    ladderStatus = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_LEVELUP, num=text_styles.stats(valueStr)))
-                else:
-                    ladderStatus = None
-            else:
-                state, points = (None, None)
-                icon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_NO_LADDER
-                ladderPlace = text_styles.middleTitle(TOOLTIPS.LADDER_INACTIVE_HEADER)
-                ladderStatus = text_styles.main(TOOLTIPS.LADDER_INACTIVE_DESCR)
-            if not seasonState.isActive():
-                seasonStateString = '\n'.join([text_styles.middleTitle(club_fmts.getSeasonStateUserString(seasonState)), text_styles.main('#tooltips:ladder/season/%s' % seasonState.getStateString())])
-            else:
-                seasonStateString = None
-            return {'state': state,
-             'points': points,
-             'status': ladderStatus,
-             'season': seasonStateString,
-             'icon': icon,
-             'name': text_styles.highTitle(TOOLTIPS.LADDER_HEADER),
-             'place': ladderPlace}
-
-
 class FortDivisionTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1219,58 +1275,6 @@ class SquadRestrictionsInfo(BlocksTooltipData):
         tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1), RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLEDBIG, imgPadding=formatters.packPadding(left=-21, right=12), padding=formatters.packPadding(-22, 20, 1)))
         tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2), RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_32X32, imgPadding=formatters.packPadding(left=-21, right=10), padding=formatters.packPadding(-22, 20, 11)))
         return tooltipBlocks
-
-
-class LadderRegulations(ToolTipBaseData):
-    clubsCtrl = dependency.descriptor(IClubsController)
-
-    def __init__(self, context):
-        super(LadderRegulations, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
-
-    def getTextForPeriphery(self, serverID, serverName, availabilityCtrl, isHeader=False):
-        _ms = i18n.makeString
-        forbiddenPeriods = availabilityCtrl.getForbiddenPeriods(serverID)
-        if not availabilityCtrl.isServerAvailable(serverID):
-            if isHeader:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_BAN, server=text_styles.alert(serverName))
-            else:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_BAN, server=text_styles.stats(serverName))
-        elif forbiddenPeriods:
-            if isHeader:
-                text = text_styles.main(_ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_LIMITATION, server=text_styles.alert(serverName), time=text_styles.alert(self.getForbiddenHoursText(forbiddenPeriods))))
-            else:
-                text = text_styles.main(_ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_LIMITATION, server=text_styles.stats(serverName), time=self.getForbiddenHoursText(forbiddenPeriods)))
-        else:
-            text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_FREE, server=text_styles.stats(serverName))
-            if isHeader:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_FREE, server=text_styles.alert(serverName))
-        return text_styles.main(text)
-
-    def getForbiddenHoursText(self, forbiddenPeriods):
-        forbiddenHours = []
-        for forbiddenPeriod in forbiddenPeriods:
-            guiTimeLimit = formatGuiTimeLimitStr(*forbiddenPeriod)
-            forbiddenHours.append(i18n.makeString(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_DATE, startTime=guiTimeLimit['startTime'], endTime=guiTimeLimit['endTime']))
-
-        return ', '.join(forbiddenHours)
-
-    def getDisplayableData(self):
-        from ConnectionManager import connectionManager
-        availabilityCtrl = self.clubsCtrl.getAvailabilityCtrl()
-        allRules = []
-        currServerName = connectionManager.serverUserName
-        currPeripheryID = connectionManager.peripheryID
-        for url, name, status, peripheryID in g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming()):
-            allRules.append(self.getTextForPeriphery(peripheryID, name, availabilityCtrl))
-
-        data = {'name': text_styles.highTitle(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_NAME),
-         'thisRules': self.getTextForPeriphery(currPeripheryID, currServerName, availabilityCtrl, True),
-         'info': text_styles.main(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_INFO)}
-        if not connectionManager.isStandalone():
-            data.update({'rulesName': text_styles.middleTitle(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_NAME),
-             'allRules': '\n'.join(allRules),
-             'hasRules': len(allRules) != 0})
-        return data
 
 
 _CurrencySetting = namedtuple('_CurrencySetting', 'text, icon, textStyle, frame')
@@ -1429,91 +1433,3 @@ class SettingKeySwitchMode(BlocksTooltipData):
         tooltipBlocks = super(SettingKeySwitchMode, self)._packBlocks(*args, **kwargs)
         tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYMOVEMENT_TITLE), text_styles.main(TOOLTIPS.SETTINGS_SWITCHMODE_BODY)))
         return tooltipBlocks
-
-
-class XMasTreeTooltipData(BlocksTooltipData):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def __init__(self, context):
-        super(XMasTreeTooltipData, self).__init__(context, TOOLTIP_TYPE.CHRISTMAS)
-        self._setContentMargin(top=16, bottom=17)
-        self._setWidth(364)
-
-    def _packBlocks(self, forceShowLevelInfo=False):
-        items = super(XMasTreeTooltipData, self)._packBlocks(forceShowLevelInfo)
-        ratingInfo = g_christmasCtrl.getTempStorage().getTreeLevelInfo()
-        lvl = int2roman(ratingInfo['level'])
-        hasToysOnTree = ratingInfo['rating'] > 0
-        titleBlock = formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.XMAS_XMASTREE_TITLE))
-        if not forceShowLevelInfo and not hasToysOnTree:
-            descBlock = formatters.packTextBlockData(text_styles.main(TOOLTIPS.XMAS_XMASTREE_DESCRIPTION_NOTOYS))
-        else:
-            rating = ratingInfo['rating']
-            maxRating = ratingInfo['maxRating'] + 1
-            descBlock = formatters.packBlockDataItem(BLOCKS_TOOLTIP_TYPES.TOOLTIP_XMAS_EVENT_PROGRESS_BLOCK_LINKAGE, {'levelText': text_styles.main(ms(TOOLTIPS.XMAS_XMASTREE_DESCRIPTION, lvl=text_styles.stats(lvl))),
-             'progressText': text_styles.main(ms(TOOLTIPS.XMAS_XMASTREE_PROGRESS, current=text_styles.stats(rating), total=maxRating)),
-             'progress': rating / float(maxRating)})
-        items.append(formatters.packBuildUpBlockData([titleBlock, descBlock], gap=-2, padding={'bottom': 4}))
-        if forceShowLevelInfo or hasToysOnTree:
-            intLvl = ratingInfo['level']
-            qPattern = 'christmas_%s' % (intLvl + 1)
-            quest = first(self.eventsCache.getHiddenQuests(filterFunc=lambda q: q.getID().startswith(qPattern)).values())
-            simpleBonusesList = []
-            if quest is not None:
-                bonuses = quest.getBonuses()
-                for b in bonuses:
-                    if b is not None:
-                        if b.isShowInGUI():
-                            simpleBonusesList.extend(b.formattedList())
-
-            nextLvlAward = ', '.join(simpleBonusesList)
-            title = TOOLTIPS.XMAS_XMASTREE_AWARD
-            if intLvl == 10:
-                title = '#tooltips:xmas/award/allReceived'
-            elif quest is not None and quest.isCompleted():
-                nextLvlAward = text_styles.main('#tooltips:xmas/award/alreadyReceived')
-            items.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(title=text_styles.middleTitle(title), desc=text_styles.main(nextLvlAward), gap=-1)], gap=4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding={'top': -2,
-             'bottom': 6}))
-            items.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.XMAS_XMASTREE_NOTE), padding={'top': -1}))
-        return items
-
-
-class XMasInstructionTooltipData(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(XMasInstructionTooltipData, self).__init__(context, TOOLTIP_TYPE.CHRISTMAS)
-        self._setContentMargin(top=14, left=20, bottom=19)
-        self._setWidth(362)
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(XMasInstructionTooltipData, self)._packBlocks(*args, **kwargs)
-        title = text_styles.highTitle(TOOLTIPS.XMAS_INSTRUCTION_TITLE)
-        description = text_styles.main(TOOLTIPS.XMAS_INSTRUCTION_DESCRIPTION)
-        items.append(formatters.packBuildUpBlockData([formatters.packTitleDescBlock(title=title, gap=-2, padding={'bottom': 4}), formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_CHRISTMAS_INSTRUCTIONIMG)]))
-        items.append(formatters.packTextBlockData(text=description))
-        return items
-
-
-class XMasSlotTooltipData(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(XMasSlotTooltipData, self).__init__(context, TOOLTIP_TYPE.CHRISTMAS)
-        self._setContentMargin(top=13, left=18, bottom=16)
-        self._setWidth(330)
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(XMasSlotTooltipData, self)._packBlocks(*args, **kwargs)
-        itemID = args[0]
-        item = g_christmasCtrl.getChristmasItemByID(itemID)
-        toyType = ms(CHRISTMAS.TOYTYPE + '/%s' % item.guiType)
-        toyName = ms(CHRISTMAS.TOYNAME + '/%s' % item.id)
-        title = text_styles.highTitle(ms(TOOLTIPS.XMAS_SLOT_TITLE, type=toyType, name=toyName))
-        description = text_styles.main(ms(TOOLTIPS.XMAS_SLOT_DESCRIPTION, lvl=text_styles.stats(int2roman(item.rank))))
-        value = text_styles.bonusLocalText(str(item.ratingValue))
-        items.append(formatters.packTitleDescBlock(title=title, desc=description, gap=-2, padding={'bottom': 4}))
-        items.append(formatters.packBuildUpBlockData([formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.XMAS_SLOT_POINTS), value=value, valueWidth=63, gap=7, vertCentred=True)], gap=4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding={'top': -2,
-         'bottom': 2}))
-        descriptionKey = '/'.join((CHRISTMAS.TOPTOYDESCRIPTION, str(itemID)))
-        if i18n.doesTextExist(descriptionKey):
-            items.append(formatters.packTextBlockData(text=text_styles.standard(ms(descriptionKey)), padding={'top': -1}))
-        return items

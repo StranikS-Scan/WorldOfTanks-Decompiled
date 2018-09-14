@@ -13,6 +13,13 @@ def _readRequestAllBonusesEffectSection(xmlCtx, section, _, conditions):
     return effects.SimpleEffect(_EFFECT_TYPE.REQUEST_ALL_BONUSES, conditions=conditions)
 
 
+def _readEnterModeEffectSection(xmlCtx, section, flags, conditions):
+    flagID = sub_parsers.parseID(xmlCtx, section, 'Specify a flag ID')
+    if flagID not in flags:
+        flags.append(flagID)
+    return effects.HasTargetEffect(flagID, _EFFECT_TYPE.ENTER_MODE, conditions=conditions)
+
+
 def _readEnterQueueEffectSection(xmlCtx, section, flags, conditions):
     flagID = sub_parsers.parseID(xmlCtx, section, 'Specify a flag ID')
     if flagID not in flags:
@@ -32,6 +39,10 @@ def _readInternalBrowserSection(xmlCtx, section, flags, conditions):
     if flagID not in flags:
         flags.append(flagID)
     return effects.HasTargetEffect(flagID, _EFFECT_TYPE.OPEN_INTERNAL_BROWSER, conditions=conditions)
+
+
+def _readModeTriggerSection(xmlCtx, section, _, triggerID):
+    return triggers.TutorialModeTrigger(triggerID)
 
 
 def _readQueueTriggerSection(xmlCtx, section, _, triggerID):
@@ -98,11 +109,13 @@ def _readNoResultsWindowSection(xmlCtx, section, _, windowID, windowType, conten
 
 def init():
     sub_parsers.setEffectsParsers({'request-all-bonuses': _readRequestAllBonusesEffectSection,
+     'enter-mode': _readEnterModeEffectSection,
      'enter-queue': _readEnterQueueEffectSection,
      'exit-queue': _readExitQueueEffectSection,
      'open-internal-browser': _readInternalBrowserSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,
      'allBonuses': _readAllBonusesTriggerSection,
+     'mode': _readModeTriggerSection,
      'queue': _readQueueTriggerSection})
     sub_parsers.setDialogsParsers({'greeting': _readGreetingDialogSection,
      'queue': _readQueueDialogSection,

@@ -7,19 +7,18 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import IVehCo
 from gui.Scaleform.daapi.view.meta.VehicleCompareViewMeta import VehicleCompareViewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
-from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
-from gui.shared import g_eventBus, events
 from gui.shared import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
-from gui.shared.items_parameters.params_helper import getAllParametersTitles
+from gui.shared.items_parameters.formatters import getAllParametersTitles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from tutorial.loader import g_loader
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -40,8 +39,9 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.onBackClick()
 
     def onSelectModulesClick(self, vehicleID, index):
-        g_eventBus.handleEvent(events.LoadViewEvent(VEHICLE_COMPARE_CONSTANTS.VEHICLE_MODULES_WINDOW, ctx={'vehCD': int(vehicleID),
-         'index': int(index)}), EVENT_BUS_SCOPE.LOBBY)
+        g_loader.stopOnceOnlyHint('VehCompareConfig')
+        event = g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ctx={'index': int(index)})
+        self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onRemoveAllVehicles(self):
         self.comparisonBasket.removeAllVehicles()
@@ -49,9 +49,8 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def onRemoveVehicle(self, index):
         self.comparisonBasket.removeVehicleByIdx(int(index))
 
-    def onCrewLevelChanged(self, index, crewLevelID):
-        self.comparisonBasket.setVehicleCrew(int(index), int(crewLevelID))
-        self.__updateDifferenceAttention()
+    def onRevertVehicle(self, index):
+        self.comparisonBasket.revertVehicleByIdx(int(index))
 
     def onGoToPreviewClick(self, vehicleID):
         intVehicleID = int(vehicleID)
@@ -83,13 +82,13 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.__paramsCache = VehCompareBasketParamsCache(self.__vehDP)
         self.__updateUI()
         self.comparisonBasket.onChange += self.__updateUI
-        self.comparisonBasket.onSwitchChange += self.__onComparingDisabled
+        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange += self.__onVehicleParamsChanged
 
     def _dispose(self):
         super(VehicleCompareView, self)._dispose()
         self.comparisonBasket.onChange -= self.__updateUI
-        self.comparisonBasket.onSwitchChange -= self.__onComparingDisabled
+        self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         self.comparisonBasket.onParametersChange -= self.__onVehicleParamsChanged
         self.__paramsCache.dispose()
         self.__paramsCache = None
@@ -102,11 +101,12 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         self.as_setVehiclesCountTextS(text_styles.main(_ms(VEH_COMPARE.VEHICLECOMPAREVIEW_TOPPANEL_VEHICLESCOUNT, count=text_styles.stats(self.comparisonBasket.getVehiclesCount()))))
         self.__updateDifferenceAttention()
 
-    def __onComparingDisabled(self):
+    def __onVehCmpBasketStateChanged(self):
         """
         gui.game_control.VehComparisonBasket.onSwitchChange event handler
         """
-        self.destroy()
+        if not self.comparisonBasket.isEnabled():
+            self.destroy()
 
     def __getHeaderData(self):
         key = _BACK_BTN_LABELS.get(self.__backAlias, 'hangar')
@@ -114,7 +114,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         return {'closeBtnLabel': VEH_COMPARE.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEH_COMPARE.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': backBtnDescrLabel,
-         'titleText': text_styles.promoTitle(VEH_COMPARE.VEHICLECOMPAREVIEW_HEADER)}
+         'titleText': text_styles.promoSubTitle(VEH_COMPARE.VEHICLECOMPAREVIEW_HEADER)}
 
     def __updateDifferenceAttention(self):
         """
@@ -122,19 +122,13 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         Two or more different tanks have difference crew or modules -> show icon, otherwise - hide
         """
         vehiclesCount = self.comparisonBasket.getVehiclesCount()
-        show = False
         if vehiclesCount > 1 and len(set(self.comparisonBasket.getVehiclesCDs())) > 1:
-            show = True
-            comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getModulesType(), vehCmpData.getCrewLevel()))
-            prevModuleType, prevCrewLevel = next(comparisonDataIter)
-            for moduleType, crewLevel in comparisonDataIter:
-                if prevModuleType != moduleType or prevCrewLevel != crewLevel:
+            comparisonDataIter = self.comparisonBasket.getVehiclesPropertiesIter(lambda vehCmpData: (vehCmpData.getConfigurationType(), vehCmpData.getCrewData()))
+            prevModuleType, prevCrewData = next(comparisonDataIter)
+            for moduleType, crewData in comparisonDataIter:
+                if prevModuleType != moduleType or prevCrewData != crewData:
                     break
-                prevModuleType, prevCrewLevel = moduleType, crewLevel
-            else:
-                show = False
-
-        self.as_setAttentionVisibleS(show)
+                prevModuleType, prevCrewData = moduleType, crewData
 
     def __onVehicleParamsChanged(self, _):
         self.__updateDifferenceAttention()

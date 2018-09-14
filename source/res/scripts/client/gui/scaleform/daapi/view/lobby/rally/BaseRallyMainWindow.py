@@ -30,9 +30,9 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, IGlobalListener):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.getClientID()}))
 
     def onSourceLoaded(self):
-        state = self.prbDispatcher.getFunctionalState()
-        if not state.isInUnit():
+        if self.prbDispatcher is not None and not self.prbDispatcher.getFunctionalState().isInUnit():
             self.destroy()
+        return
 
     def isPlayerInSlot(self, databaseID=None):
         pInfo = self.prbEntity.getPlayerInfo(dbID=databaseID)

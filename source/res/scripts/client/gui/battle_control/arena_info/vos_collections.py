@@ -1,36 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/vos_collections.py
 from collections import defaultdict
+from gui.shared.sort_key import SortKey
 
-class _SortKey(object):
-    __slots__ = ()
-
-    def __lt__(self, other):
-        return self._cmp(other) < 0
-
-    def __gt__(self, other):
-        return self._cmp(other) > 0
-
-    def __eq__(self, other):
-        return self._cmp(other) == 0
-
-    def __le__(self, other):
-        return self._cmp(other) <= 0
-
-    def __ge__(self, other):
-        return self._cmp(other) >= 0
-
-    def __ne__(self, other):
-        return self._cmp(other) != 0
-
-    def __hash__(self):
-        raise TypeError('hash not implemented')
-
-    def _cmp(self, other):
-        raise NotImplementedError
-
-
-class VehicleInfoSortKey(_SortKey):
+class VehicleInfoSortKey(SortKey):
     __slots__ = ('vInfoVO', 'vStatsVO')
 
     def __init__(self, item):
@@ -54,6 +27,18 @@ class VehicleInfoSortKey(_SortKey):
             return result
         result = cmp(xvInfoVO.vehicleType, yvInfoVO.vehicleType)
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
+
+
+class SquadmanVehicleInfoSortKey(VehicleInfoSortKey):
+    __slots__ = ('prebattleID',)
+
+    def __init__(self, prebattleID, item):
+        super(SquadmanVehicleInfoSortKey, self).__init__(item)
+        self.prebattleID = prebattleID
+
+    def _cmp(self, other):
+        result = cmp(other.vInfoVO.isSquadMan(self.prebattleID), self.vInfoVO.isSquadMan(self.prebattleID))
+        return result if result else super(SquadmanVehicleInfoSortKey, self)._cmp(other)
 
 
 class FragCorrelationSortKey(VehicleInfoSortKey):
@@ -84,7 +69,7 @@ class RespawnSortKey(VehicleInfoSortKey):
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
 
 
-class _WinPointsSortKey(_SortKey):
+class _WinPointsSortKey(SortKey):
     __slots__ = ('teamWinPoints', 'internal')
 
     def __init__(self, item, *args):
@@ -190,6 +175,18 @@ class EnemyItemsCollection(VehiclesItemsCollection):
         seq = super(EnemyItemsCollection, self)._buildSeq(arenaDP)
         teams = arenaDP.getEnemyTeams()
         return filter(lambda (vInfo, _): vInfo.team in teams, seq)
+
+
+class AliveItemsCollection(VehiclesItemsCollection):
+    __slots__ = ('_collection',)
+
+    def __init__(self, collection):
+        super(AliveItemsCollection, self).__init__()
+        self._collection = collection
+
+    def _buildSeq(self, arenaDP):
+        seq = self._collection.iterator(arenaDP)
+        return filter(lambda (vInfo, _): vInfo.isAlive(), seq)
 
 
 class FalloutMultiTeamItemsCollection(VehiclesItemsCollection):

@@ -9,7 +9,7 @@ from gui.Scaleform.Flash import Flash
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils import graphics
-from helpers import getFullClientVersion, getClientOverride
+from helpers import getFullClientVersion, getClientOverride, getClientLanguage
 
 class GameLoading(Flash):
 
@@ -20,7 +20,7 @@ class GameLoading(Flash):
             self._displayRoot.resync()
             self._displayRoot.setLocale(getClientOverride())
             self._displayRoot.setVersion(getFullClientVersion())
-            if constants.IS_KOREA:
+            if getClientLanguage() == 'ko':
                 self._displayRoot.setInfo(MENU.LOADING_GAMEINFO)
             g_guiResetters.add(self.onUpdateStage)
             self.onUpdateStage()

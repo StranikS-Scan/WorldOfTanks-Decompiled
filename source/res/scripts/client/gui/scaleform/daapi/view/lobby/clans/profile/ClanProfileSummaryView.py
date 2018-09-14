@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
 import BigWorld
-from adisp import process, async
-from gui.Scaleform.daapi.view.lobby.fortifications import FortClanStatisticsData
-from gui.clans import formatters as clan_fmts
+from adisp import process
 from helpers import i18n
 from gui.clans.settings import CLIENT_CLAN_RESTRICTIONS as _RES
-from gui.clans.items import formatField, isValueAvailable
+from gui.clans.items import formatField, isValueAvailable, StrongholdStatisticsData
+from gui.clans.clan_helpers import isStrongholdsEnabled
+from gui.clans.formatters import DUMMY_UNAVAILABLE_DATA
 from gui.shared.formatters import icons, text_styles
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.events import OpenLinkEvent
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES as _STYLE
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
 
 def _stateVO(showRequestBtn, mainStatus=None, tooltip='', enabledRequestBtn=False, addStatus=None, showPersonalBtn=False):
@@ -46,110 +45,65 @@ _STATES = {_RES.NO_RESTRICTIONS: _stateVO(True, enabledRequestBtn=True),
  _RES.RESYNCHRONIZE: _stateVO(False, addStatus=_status('resynchronize', text_styles.main)),
  _RES.DEFAULT: _stateVO(False)}
 
-class _FortBaseDataReceiver(object):
+class StrongholdDataReceiver(object):
 
-    def __init__(self, ratings, clanDossier, updateCallback):
-        self.__fortLevel = None
-        self.__fortStats = None
-        self.__fortLevelStr = clan_fmts.DUMMY_UNAVAILABLE_DATA
-        self._clanDossier = clanDossier
-        self.__ratings = ratings
+    def __init__(self, clanDossier, updateCallback):
+        self.__clanDossier = clanDossier
         self.__updateCallback = updateCallback
-        super(_FortBaseDataReceiver, self).__init__()
-        self.__updateCallback(*self.__getStatsVO())
+        self.__strongholdStats = None
+        if self.__updateCallback:
+            self.__updateCallback(self.getStatsVO())
         return
 
-    def __getStatsVO(self):
-        notActual = self.__fortStats and self.__fortStats.getFbBattlesCount28d() <= 0
-        hasFortRating = self.__ratings.hasFortRating()
-        if self.__fortLevel is None:
-            self.__getFortLevel()
-        if self.__fortStats is None:
-            self.__getFortStatistics()
-        if not hasFortRating and not self.__has28dFortStatistics():
-            if self.__fortLevel is None:
-                fortInfo = (False, CLANS.CLANPROFILE_SUMMARYVIEW_BLOCKLBL_HASNOBATTLES)
-            elif self.__fortLevel > 0:
-                fortInfo = (True, 0)
-            else:
-                fortInfo = (False, CLANS.CLANPROFILE_SUMMARYVIEW_BLOCKLBL_EMPTYFORT)
+    def getStatsVO(self):
+        if self.__strongholdStats:
+            stats = self.__strongholdStats
         else:
-            fortInfo = (True, '')
-        if self.__fortStats:
-            fsBattleCount28d = formatField(getter=self.__fortStats.getFsBattlesCount28d, formatter=BigWorld.wg_getIntegralFormat)
-            fbBattleCount28d = formatField(getter=self.__fortStats.getFbBattlesCount28d, formatter=BigWorld.wg_getIntegralFormat)
-        else:
-            fsBattleCount28d, fbBattleCount28d = clan_fmts.DUMMY_UNAVAILABLE_DATA, clan_fmts.DUMMY_UNAVAILABLE_DATA
-        return ([{'local': 'rageLevel10',
-           'value': formatField(getter=self.__ratings.getEloRating10, formatter=BigWorld.wg_getIntegralFormat),
-           'timeExpired': notActual,
-           'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_10_BODY},
-          {'local': 'rageLevel8',
-           'value': formatField(getter=self.__ratings.getEloRating8, formatter=BigWorld.wg_getIntegralFormat),
-           'timeExpired': notActual,
-           'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_8_BODY},
-          {'local': 'sortiesPerDay',
-           'value': fsBattleCount28d,
-           'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_SORTIE_COUNT_28_BODY},
-          {'local': 'battlesPerDay',
-           'value': fbBattleCount28d,
-           'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_BATTLES_COUNT_28_BODY},
-          {'local': 'fortLevel',
-           'value': self.__fortLevelStr,
-           'tooltip': CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_LEVEL_BODY}], fortInfo)
+            stats = StrongholdStatisticsData()
+        isActual = stats.hasSorties() or stats.hasFortBattles()
+        rows = (('rageLevel10',
+          stats.getElo10(),
+          isActual,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_10_BODY),
+         ('rageLevel8',
+          stats.getElo8(),
+          isActual,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_8_BODY),
+         ('rageLevel6',
+          stats.getElo6(),
+          isActual,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_ELO_RAGE_6_BODY),
+         ('sortiesPerDay',
+          stats.getSortiesIn28Days(),
+          True,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_SORTIE_COUNT_28_BODY),
+         ('battlesPerDay',
+          stats.getFortBattlesIn28Days(),
+          True,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_BATTLES_COUNT_28_BODY),
+         ('fortLevel',
+          stats.getStrongholdLevel(),
+          True,
+          CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_LEVEL_BODY))
+        return [ {'local': row[0],
+         'value': DUMMY_UNAVAILABLE_DATA if row[1] is None else row[1],
+         'timeExpired': True if row[1] is None else not row[2],
+         'tooltip': row[3]} for row in rows ]
 
     def dispose(self):
+        self.__clanDossier = None
         self.__updateCallback = None
-        self.__ratings = None
-        self._clanDossier = None
-        self.__fortStats = None
+        self.__strongholdStats = None
         return
 
-    @async
-    def _requestFortLevel(self, callback):
-        raise NotImplementedError
-
     @process
-    def __getFortLevel(self):
-        self.__fortLevel, self.__fortLevelStr = yield self._requestFortLevel()
+    def updateStrongholdStatistics(self):
+        if not isStrongholdsEnabled():
+            yield lambda callback: callback(True)
+            return
+        self.__strongholdStats = yield self.__clanDossier.requestStrongholdStatistics()
         if self.__updateCallback:
-            self.__updateCallback(*self.__getStatsVO())
-
-    @process
-    def __getFortStatistics(self):
-        self.__fortStats = yield self._clanDossier.requestStrongholdStatistics()
-        if self.__updateCallback:
-            self.__updateCallback(*self.__getStatsVO())
-
-    def __has28dFortStatistics(self):
-        return self.__fortStats and (self.__fortStats.getFsBattlesCount28d() > 0 or self.__fortStats.getFbBattlesCount28d() > 0)
-
-
-class _MyFortDataReceiver(_FortBaseDataReceiver):
-
-    @async
-    @process
-    def _requestFortLevel(self, callback):
-        fortData = yield FortClanStatisticsData.getDataObject()
-        if fortData is not None:
-            fortLevel = fortData.fortCtrl.getFort().level
-            fortLevelStr = fort_formatters.getTextLevel(fortLevel)
-        else:
-            fortLevel = 0
-            fortLevelStr = clan_fmts.DUMMY_UNAVAILABLE_DATA
-        callback((fortLevel, fortLevelStr))
-        return
-
-
-class _FortDataReceiver(_FortBaseDataReceiver):
-
-    @async
-    @process
-    def _requestFortLevel(self, callback):
-        strongholdInfo = yield self._clanDossier.requestStrongholdInfo()
-        fortLevel = strongholdInfo.getLevel()
-        fortLevelStr = formatField(getter=strongholdInfo.getLevel, formatter=fort_formatters.getTextLevel)
-        callback((fortLevel, fortLevelStr))
+            self.__updateCallback(self.getStatsVO())
 
 
 class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
@@ -158,7 +112,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         ClanProfileSummaryViewMeta.__init__(self)
         UsersInfoHelper.__init__(self)
         self.__stateMask = 0
-        self.__fortStatsVOReceiver = None
+        self.__strongholdStatsVOReceiver = None
         return
 
     @process
@@ -192,10 +146,8 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
          'isShowClanNavBtn': hasGlobalMap,
          'isShowUrlString': not hasGlobalMap})
         self.as_updateGeneralBlockS(self.__makeGeneralBlock(clanInfo, syncUserInfo=True))
-        if clanDossier.isMyClan():
-            self.__fortStatsVOReceiver = _MyFortDataReceiver(ratings, clanDossier, self.__updateFortBlock)
-        else:
-            self.__fortStatsVOReceiver = _FortDataReceiver(ratings, clanDossier, self.__updateFortBlock)
+        self.__strongholdStatsVOReceiver = StrongholdDataReceiver(clanDossier, self.__updateStrongholdBlock)
+        self.__strongholdStatsVOReceiver.updateStrongholdStatistics()
         self.as_updateGlobalMapBlockS(self.__makeGlobalMapBlock(globalMapStats, ratings))
         self.__updateStatus()
         self._hideWaiting()
@@ -245,18 +197,18 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         pass
 
     def _dispose(self):
-        if self.__fortStatsVOReceiver:
-            self.__fortStatsVOReceiver.dispose()
-            self.__fortStatsVOReceiver = None
+        if self.__strongholdStatsVOReceiver:
+            self.__strongholdStatsVOReceiver.dispose()
+            self.__strongholdStatsVOReceiver = None
         super(ClanProfileSummaryView, self)._dispose()
         return
 
-    def __updateFortBlock(self, stats, fortInfo):
+    def __updateStrongholdBlock(self, stats):
         self.as_updateFortBlockS({'isShowHeader': True,
          'header': text_styles.highTitle(CLANS.CLANPROFILE_MAINWINDOWTAB_FORTIFICATION),
          'statBlocks': self.__makeStatsBlock(stats),
-         'emptyLbl': text_styles.standard(fortInfo[1]),
-         'isActivated': fortInfo[0]})
+         'emptyLbl': '',
+         'isActivated': True})
 
     def __makeGeneralBlock(self, clanInfo, syncUserInfo=False):
         stats = [{'local': 'commander',

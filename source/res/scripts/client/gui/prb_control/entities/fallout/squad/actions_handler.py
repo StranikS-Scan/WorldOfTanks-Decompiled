@@ -25,7 +25,7 @@ class FalloutSquadActionsHandler(SquadActionsHandler):
             for slot in fullData.slotsIterator:
                 slotPlayer = slot.player
                 if slotPlayer:
-                    if slotPlayer.isInArena() or slotPlayer.isInPreArena() or fullData.playerInfo.isInSearch() or fullData.playerInfo.isInQueue():
+                    if slotPlayer.isInArena() or fullData.playerInfo.isInSearch() or fullData.playerInfo.isInQueue():
                         DialogsInterface.showI18nInfoDialog('squadHavePlayersInBattle', lambda result: None)
                         return True
                     if not slotPlayer.isReady:

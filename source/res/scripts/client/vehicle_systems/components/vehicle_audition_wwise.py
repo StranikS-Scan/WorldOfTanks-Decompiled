@@ -7,7 +7,7 @@ import BigWorld
 import WWISE
 import Math
 from AvatarInputHandler.mathUtils import clamp
-from constants import VEHICLE_PHYSICS_MODE, VEHICLE_SIEGE_STATE
+from constants import VEHICLE_SIEGE_STATE
 from debug_utils import LOG_ERROR
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from helpers.ValueTracker import ValueTracker
@@ -18,6 +18,7 @@ from vehicle_systems.components.engine_state import DetailedEngineStateWWISE
 from vehicle_systems.components.engine_state import EngineLoad
 from items.vehicles import HP_TO_WATTS
 from engine_state import EngineState
+import BattleReplay
 from vehicle_systems.tankStructure import TankPartNames
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 
@@ -483,10 +484,14 @@ class TrackCrashAuditionWWISE(TrackCrashAudition):
         return
 
     def playCrashSound(self, isLeft=True, restore=False):
-        if self.__trackCenterMProvs is not None:
-            positionMatrix = Math.Matrix(self.__trackCenterMProvs[0 if isLeft else 1])
-            if restore:
-                SoundGroups.g_instance.playSoundPos('repair_treads', positionMatrix.translation)
-            else:
-                SoundGroups.g_instance.playSoundPos('brakedown_treads', positionMatrix.translation)
-        return
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            return
+        else:
+            if self.__trackCenterMProvs is not None:
+                positionMatrix = Math.Matrix(self.__trackCenterMProvs[0 if isLeft else 1])
+                if restore:
+                    SoundGroups.g_instance.playSoundPos('repair_treads', positionMatrix.translation)
+                else:
+                    SoundGroups.g_instance.playSoundPos('brakedown_treads', positionMatrix.translation)
+            return

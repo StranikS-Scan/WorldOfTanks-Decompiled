@@ -14,21 +14,17 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
-from gui.clubs import contexts as club_ctx, formatters as club_fmts
-from gui.clubs.club_helpers import ClubListener
-from gui.clubs.settings import CLIENT_CLUB_STATE
 from gui.prb_control import settings, prbPeripheriesHandlerProperty
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base.unit.ctx import AutoSearchUnitCtx, JoinUnitCtx, AcceptSearchUnitCtx, DeclineSearchUnitCtx, BattleQueueUnitCtx, CreateUnitCtx
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, CREATOR_ROSTER_SLOT_INDEXES, PREBATTLE_ACTION_NAME
-from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.events import OpenLinkEvent
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n
 
 @stored_window(DATA_TYPE.UNIQUE_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)
-class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
+class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     def __init__(self, _=None):
         super(CyberSportMainWindow, self).__init__()
@@ -42,16 +38,13 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         return CYBER_SPORT_ALIASES.UNITS_LIST_VIEW_UI
 
     def getRoomViewAlias(self, prbType):
-        if prbType == PREBATTLE_TYPE.CLUBS:
-            return CYBER_SPORT_ALIASES.STATIC_FORMATION_UNIT_VIEW_UI
-        else:
-            return CYBER_SPORT_ALIASES.UNIT_VIEW_UI
+        return CYBER_SPORT_ALIASES.UNIT_VIEW_UI
 
     def getFlashAliases(self):
         return CYBER_SPORT_ALIASES.FLASH_ALIASES
 
     def getPythonAliases(self):
-        return CYBER_SPORT_ALIASES.PYTHON_STATICS_ALIASES if self.prbEntity.getEntityType() == PREBATTLE_TYPE.CLUBS else CYBER_SPORT_ALIASES.PYTHON_ALIASES
+        return CYBER_SPORT_ALIASES.PYTHON_ALIASES
 
     def getPrbType(self):
         return PREBATTLE_TYPE.E_SPORT_COMMON
@@ -146,31 +139,18 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
     def onBrowseRallies(self):
         self._doSelect(PREBATTLE_ACTION_NAME.PUBLICS_LIST)
 
-    def onBrowseStaticsRallies(self):
-        self._doSelect(PREBATTLE_ACTION_NAME.CLUBS_LIST)
-
     def onCreateRally(self):
-        if self.prbEntity.getEntityType() == PREBATTLE_TYPE.CLUBS:
-            self.__requestToCreateClub()
-        else:
-            self.__requestToCreate()
+        self.__requestToCreate()
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
-        if self.prbEntity.getEntityType() == PREBATTLE_TYPE.CLUBS:
-            if self.clubsState.getStateID() == CLIENT_CLUB_STATE.SENT_APP:
-                if self.clubsState.getClubDbID() == rallyId:
-                    self.__requestToCancelClub(rallyId)
-            elif self.clubsState.getStateID() == CLIENT_CLUB_STATE.NO_CLUB:
-                self.__requestToJoinClub(rallyId)
-        else:
-            ctx = JoinUnitCtx(rallyId, self.prbEntity.getEntityType(), slotIndex, waitingID='prebattle/join')
-            if g_lobbyContext.isAnotherPeriphery(peripheryID):
-                if g_lobbyContext.isPeripheryAvailable(peripheryID):
-                    self.__requestToReloginAndJoin(peripheryID, ctx)
-                else:
-                    SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
+        ctx = JoinUnitCtx(rallyId, self.prbEntity.getEntityType(), slotIndex, waitingID='prebattle/join')
+        if g_lobbyContext.isAnotherPeriphery(peripheryID):
+            if g_lobbyContext.isPeripheryAvailable(peripheryID):
+                self.__requestToReloginAndJoin(peripheryID, ctx)
             else:
-                self.__requestToJoin(ctx)
+                SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
+        else:
+            self.__requestToJoin(ctx)
 
     def autoSearchApply(self, value):
         if value == CYBER_SPORT_ALIASES.AUTO_SEARCH_CONFIRMATION_STATE:
@@ -188,21 +168,15 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         elif value == CYBER_SPORT_ALIASES.AUTO_SEARCH_ENEMY_STATE:
             self.prbEntity.request(BattleQueueUnitCtx(action=0))
 
-    def showHelp(self, helpId):
-        title = i18n.makeString(CYBERSPORT.WINDOW_TITLE)
-        g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.CLUB_HELP, title=title))
-
     def _populate(self):
         super(CyberSportMainWindow, self)._populate()
         self.addListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.startClubListening()
         self.prbEntity.initEvents(self)
         g_eventDispatcher.hideUnitProgressInCarousel(self.getPrbType())
 
     def _dispose(self):
         self._itemIdMap = None
         super(CyberSportMainWindow, self)._dispose()
-        self.stopClubListening()
         self.removeListener(events.HideWindowEvent.HIDE_UNIT_WINDOW, self.__handleUnitWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
@@ -211,26 +185,8 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         yield self.prbDispatcher.create(CreateUnitCtx(PREBATTLE_TYPE.UNIT, waitingID='prebattle/create'))
 
     @process
-    def __requestToCreateClub(self):
-        result = yield self.clubsCtrl.sendRequest(club_ctx.CreateClubCtx(waitingID='clubs/club/create', confirmID='clubs/app/create'))
-        if result.isSuccess():
-            SystemMessages.pushMessage(club_fmts.getCreateClubSysMsg())
-
-    @process
     def __requestToJoin(self, ctx):
         yield self.prbDispatcher.join(ctx)
-
-    @process
-    def __requestToCancelClub(self, clubDBID):
-        result = yield self.clubsCtrl.sendRequest(club_ctx.RevokeApplicationCtx(clubDBID, waitingID='clubs/app/revoke'))
-        if result.isSuccess():
-            SystemMessages.pushMessage(club_fmts.getAppRevokeSysMsg(self.clubsCtrl.getClub(clubDBID)))
-
-    @process
-    def __requestToJoinClub(self, clubDBID):
-        result = yield self.clubsCtrl.sendRequest(club_ctx.SendApplicationCtx(clubDBID, '', waitingID='clubs/app/send', confirmID='clubs/app/send'))
-        if result.isSuccess():
-            SystemMessages.pushMessage(club_fmts.getAppSentSysMsg(self.clubsCtrl.getClub(clubDBID)))
 
     @process
     def __requestToReloginAndJoin(self, peripheryID, ctx):
@@ -290,7 +246,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
     def __updateChatAvailability(self):
         state = self.prbEntity.getFlags()
         pInfo = self.prbEntity.getPlayerInfo()
-        isJoined = not state.isInPreArena() or pInfo.isInSlot
+        isJoined = pInfo.isInSlot
         if self.chat is not None and self.chat.isJoined() is not isJoined:
             self.chat.as_setJoinedS(isJoined)
         return

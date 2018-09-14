@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_aggregator.py
 import Event
 import BattleReplay
+from ids_generators import SequenceIDGenerator
 from debug_utils import LOG_UNEXPECTED
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
@@ -11,15 +12,20 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class _Ribbon(object):
-    __slots__ = ()
+    __slots__ = ('_id',)
 
-    def __init__(self, event):
+    def __init__(self, ribbonID):
         """
         Constructor. Creates a new ribbon from the given event feedback.
         
-        :param event: _FeedbackEvent derived instance
+        :param ribbonID: Ribbon ID.
         """
         super(_Ribbon, self).__init__()
+        self._id = ribbonID
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        raise NotImplementedError
 
     def getType(self):
         """
@@ -27,23 +33,39 @@ class _Ribbon(object):
         """
         raise NotImplementedError
 
-    def canAggregate(self, ribbon):
+    def getID(self):
+        """
+        Returns ribbon's ID.
+        """
+        return self._id
+
+    def aggregate(self, ribbon):
+        if self._canAggregate(ribbon):
+            self._aggregate(ribbon)
+            return True
+        return False
+
+    def _aggregate(self, ribbon):
+        pass
+
+    def _canAggregate(self, ribbon):
         """
         Returns True if ribbon can aggregated data from the given one. False - otherwise.
         :param ribbon: An instance of _Ribbon derived class
         """
         return self.getType() == ribbon.getType()
 
-    def aggregate(self, ribbon):
-        assert self.getType() == ribbon.getType()
-
 
 class _BasePointsRibbon(_Ribbon):
     __slots__ = ('_points',)
 
-    def __init__(self, event):
-        super(_BasePointsRibbon, self).__init__(event)
-        self._points = event.getExtra()
+    def __init__(self, ribbonID, points):
+        super(_BasePointsRibbon, self).__init__(ribbonID)
+        self._points = points
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getExtra())
 
     def getType(self):
         raise NotImplementedError
@@ -54,16 +76,20 @@ class _BasePointsRibbon(_Ribbon):
         """
         return self._points
 
-    def canAggregate(self, ribbon):
-        return False
+    def _aggregate(self, ribbon):
+        self._points += ribbon.getPoints()
 
 
 class _BaseCaptureRibbon(_BasePointsRibbon):
     __slots__ = ('_sessionID',)
 
-    def __init__(self, event):
-        super(_BaseCaptureRibbon, self).__init__(event)
-        self._sessionID = event.getTargetID()
+    def __init__(self, ribbonID, points, sessionID):
+        super(_BaseCaptureRibbon, self).__init__(ribbonID, points)
+        self._sessionID = sessionID
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getExtra(), event.getTargetID())
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.CAPTURE
@@ -71,12 +97,8 @@ class _BaseCaptureRibbon(_BasePointsRibbon):
     def getSessionID(self):
         return self._sessionID
 
-    def canAggregate(self, ribbon):
-        return self.getType() == ribbon.getType() and self._sessionID == ribbon.getSessionID()
-
-    def aggregate(self, ribbon):
-        super(_BaseCaptureRibbon, self).aggregate(ribbon)
-        self._points += ribbon.getPoints()
+    def _canAggregate(self, ribbon):
+        return super(_BaseCaptureRibbon, self)._canAggregate(ribbon) and self._sessionID == ribbon.getSessionID()
 
 
 class _BaseDefenceRibbon(_BasePointsRibbon):
@@ -86,71 +108,93 @@ class _BaseDefenceRibbon(_BasePointsRibbon):
         return BATTLE_EFFICIENCY_TYPES.DEFENCE
 
 
-class _VehicleCounterRibbon(_Ribbon):
-    __slots__ = ('_vehIDs',)
+class _SingleVehicleRibbon(_Ribbon):
+    __slots__ = ('_extraValue', '_targetVehID')
 
-    def __init__(self, event):
-        super(_VehicleCounterRibbon, self).__init__(event)
-        self._vehIDs = [event.getTargetID()]
+    def __init__(self, ribbonID, vehID, extraValue):
+        super(_SingleVehicleRibbon, self).__init__(ribbonID)
+        self._extraValue = extraValue
+        self._targetVehID = vehID
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event))
 
     def getType(self):
         raise NotImplementedError
 
-    def getVehIDs(self):
-        return self._vehIDs[:]
+    def getExtraValue(self):
+        return self._extraValue
 
-    def getCount(self):
-        return len(self._vehIDs)
+    def setExtraValue(self, value):
+        self._extraValue = value
 
-    def aggregate(self, ribbon):
-        super(_VehicleCounterRibbon, self).aggregate(ribbon)
-        self._vehIDs.extend(ribbon.getVehIDs())
+    def getVehicleID(self):
+        return self._targetVehID
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        """
+        Extracts extra data from the given event. Note that the type of returned value
+        should support operation +. Otherwise required to override _aggregate method.
+        
+        :param event:
+        :return: An object supporting + operation.
+        """
+        raise NotImplementedError
+
+    def _canAggregate(self, ribbon):
+        return super(_SingleVehicleRibbon, self)._canAggregate(ribbon) and self.getVehicleID() == ribbon.getVehicleID()
+
+    def _aggregate(self, ribbon):
+        self._extraValue += ribbon.getExtraValue()
 
 
-class _EnemyKillRibbon(_VehicleCounterRibbon):
+class _SingleVehicleDamageRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        raise NotImplementedError
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra().getDamage()
+
+
+class _CriticalHitRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.CRITS
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra().getCritsCount()
+
+
+class _TrackAssistRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.ASSIST_TRACK
+
+
+class _RadioAssistRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.ASSIST_SPOT
+
+
+class _EnemyKillRibbon(_SingleVehicleDamageRibbon):
     __slots__ = ()
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.DESTRUCTION
 
-
-class _EnemyDetectionRibbon(_VehicleCounterRibbon):
-    __slots__ = ()
-
-    def getType(self):
-        return BATTLE_EFFICIENCY_TYPES.DETECTION
-
-
-class _SingleVehicleDamageRibbon(_Ribbon):
-    __slots__ = ('_damage', '_targetVehID')
-
-    def __init__(self, event):
-        super(_SingleVehicleDamageRibbon, self).__init__(event)
-        self._damage = event.getExtra().getDamage()
-        self._targetVehID = event.getTargetID()
-
-    def getType(self):
-        raise NotImplementedError
-
-    def getDamage(self):
-        return self._damage
-
-    def getVehicleID(self):
-        return self._targetVehID
-
-    def canAggregate(self, ribbon):
-        return super(_SingleVehicleDamageRibbon, self).canAggregate(ribbon) and self._targetVehID == ribbon.getVehicleID()
-
-    def aggregate(self, ribbon):
-        super(_SingleVehicleDamageRibbon, self).aggregate(ribbon)
-        self._damage += ribbon.getDamage()
-
-
-class _CausedDamageRibbon(_SingleVehicleDamageRibbon):
-    __slots__ = ()
-
-    def getType(self):
-        return BATTLE_EFFICIENCY_TYPES.DAMAGE
+    @classmethod
+    def _extractExtraValue(cls, event):
+        pass
 
 
 class _BlockedDamageRibbon(_SingleVehicleDamageRibbon):
@@ -160,85 +204,206 @@ class _BlockedDamageRibbon(_SingleVehicleDamageRibbon):
         return BATTLE_EFFICIENCY_TYPES.ARMOR
 
 
-class _MultiVehicleHitRibbon(_Ribbon):
-    __slots__ = ('_hits',)
-
-    def __init__(self, event):
-        super(_MultiVehicleHitRibbon, self).__init__(event)
-        self._hits = defaultdict(int)
-        self._hits[event.getTargetID()] = self._parseExtra(event)
-
-    def getType(self):
-        raise NotImplementedError
-
-    def getVehIDs(self):
-        return self._hits.keys()
-
-    def getExtraSum(self):
-        return sum(self._hits.itervalues())
-
-    def aggregate(self, ribbon):
-        super(_MultiVehicleHitRibbon, self).aggregate(ribbon)
-        for targetID, extra in ribbon._hits.iteritems():
-            self._hits[targetID] += extra
-
-    @classmethod
-    def _parseExtra(cls, event):
-        return event.getExtra()
-
-
-class _CriticalHitRibbon(_MultiVehicleHitRibbon):
+class _CausedDamageRibbon(_SingleVehicleDamageRibbon):
     __slots__ = ()
 
     def getType(self):
-        return BATTLE_EFFICIENCY_TYPES.CRITS
+        return BATTLE_EFFICIENCY_TYPES.DAMAGE
 
 
-class _MultiVehicleDamageRibbon(_MultiVehicleHitRibbon):
-    __slots__ = ()
-
-    def getType(self):
-        raise NotImplementedError
-
-    @classmethod
-    def _parseExtra(cls, event):
-        return event.getExtra().getDamage()
-
-
-class _TrackAssistRibbon(_MultiVehicleDamageRibbon):
-    __slots__ = ()
-
-    def getType(self):
-        return BATTLE_EFFICIENCY_TYPES.ASSIST_TRACK
-
-
-class _RadioAssistRibbon(_MultiVehicleDamageRibbon):
-    __slots__ = ()
-
-    def getType(self):
-        return BATTLE_EFFICIENCY_TYPES.ASSIST_SPOT
-
-
-class _FireHitRibbon(_MultiVehicleDamageRibbon):
+class _FireHitRibbon(_SingleVehicleDamageRibbon):
     __slots__ = ()
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.BURN
 
 
-class _RamHitRibbon(_MultiVehicleDamageRibbon):
+class _RamHitRibbon(_SingleVehicleDamageRibbon):
     __slots__ = ()
 
     def getType(self):
         return BATTLE_EFFICIENCY_TYPES.RAM
 
 
-_FEEDBACK_EVENT_TO_RIBBON_CLS = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE: _BaseCaptureRibbon,
- FEEDBACK_EVENT_ID.PLAYER_DROPPED_CAPTURE: _BaseDefenceRibbon,
- FEEDBACK_EVENT_ID.PLAYER_SPOTTED_ENEMY: _EnemyDetectionRibbon,
- FEEDBACK_EVENT_ID.PLAYER_USED_ARMOR: _BlockedDamageRibbon,
- FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY: _CriticalHitRibbon,
- FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY: _EnemyKillRibbon}
+class _WorldCollisionHitRibbon(_SingleVehicleDamageRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.WORLD_COLLISION
+
+
+class _ReceivedCriticalHitRibbon(_CriticalHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_CRITS
+
+
+class _SingleVehicleReceivedHitRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        raise NotImplementedError
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra().getDamage()
+
+
+class _ReceivedDamageHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_DAMAGE
+
+
+class _ReceivedFireHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_BURN
+
+
+class _ReceivedRamHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_RAM
+
+
+class _ReceivedWorldCollisionHitRibbon(_SingleVehicleReceivedHitRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.RECEIVED_WORLD_COLLISION
+
+
+class _MultiVehicleRibbon(_Ribbon):
+    __slots__ = ('_hits',)
+
+    def __init__(self, ribbonID, vehID, extraValue):
+        super(_MultiVehicleRibbon, self).__init__(ribbonID)
+        self._hits = defaultdict(int)
+        self._hits[vehID] = extraValue
+
+    @classmethod
+    def createFromFeedbackEvent(cls, ribbonID, event):
+        return cls(ribbonID, event.getTargetID(), cls._extractExtraValue(event))
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        raise NotImplementedError
+
+    def getVehIDs(self):
+        return self._hits.keys()
+
+    def getCount(self):
+        return len(self._hits)
+
+    def getExtraValue(self):
+        return sum(self._hits.itervalues())
+
+    def _aggregate(self, ribbon):
+        for targetID, extra in ribbon._hits.iteritems():
+            self._hits[targetID] += extra
+
+
+class _EnemyDetectionRibbon(_MultiVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.DETECTION
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        pass
+
+
+class _RibbonClassFactory(object):
+    __slots__ = ()
+
+    def getRibbonClass(self, event):
+        return None
+
+
+class _RibbonSingleClassFactory(_RibbonClassFactory):
+    __slots__ = ('__cls',)
+
+    def __init__(self, ribbonCls):
+        super(_RibbonSingleClassFactory, self).__init__()
+        self.__cls = ribbonCls
+
+    def getRibbonClass(self, event):
+        return self.__cls
+
+
+class _DamageRibbonClassFactory(_RibbonClassFactory):
+    __slots__ = ('__damageCls', '__fireCls', '__ramCls', '__wcCls')
+
+    def __init__(self, damageCls, fireCls, ramCls, wcCls):
+        super(_DamageRibbonClassFactory, self).__init__()
+        self.__damageCls = damageCls
+        self.__fireCls = fireCls
+        self.__ramCls = ramCls
+        self.__wcCls = wcCls
+
+    def getRibbonClass(self, event):
+        damageExtra = event.getExtra()
+        if damageExtra.isShot():
+            ribbonCls = self.__damageCls
+        elif damageExtra.isFire():
+            ribbonCls = self.__fireCls
+        elif damageExtra.isWorldCollision():
+            ribbonCls = self.__wcCls
+        else:
+            ribbonCls = self.__ramCls
+        return ribbonCls
+
+
+class _AssistRibbonClassFactory(_RibbonClassFactory):
+    __slots__ = ('__trackAssistCls', '__radioAssistCls')
+
+    def __init__(self, trackAssistCls, radioAssistCls):
+        super(_AssistRibbonClassFactory, self).__init__()
+        self.__trackAssistCls = trackAssistCls
+        self.__radioAssistCls = radioAssistCls
+
+    def getRibbonClass(self, event):
+        if event.getBattleEventType() == _BET.TRACK_ASSIST:
+            return self.__trackAssistCls
+        else:
+            return self.__radioAssistCls if event.getBattleEventType() == _BET.RADIO_ASSIST else None
+
+
+_RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.DAMAGE,
+ BATTLE_EFFICIENCY_TYPES.BURN,
+ BATTLE_EFFICIENCY_TYPES.RAM,
+ BATTLE_EFFICIENCY_TYPES.WORLD_COLLISION)
+_RIBBON_TYPES_EXCLUDED_IF_KILL_RIBBON = (BATTLE_EFFICIENCY_TYPES.CRITS,)
+_RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM = (BATTLE_EFFICIENCY_TYPES.RECEIVED_CRITS,)
+_NOT_CACHED_RIBBON_TYPES = (BATTLE_EFFICIENCY_TYPES.DETECTION, BATTLE_EFFICIENCY_TYPES.DEFENCE)
+_ACCUMULATED_RIBBON_TYPES = (BATTLE_EFFICIENCY_TYPES.CAPTURE,)
+_FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE: _RibbonSingleClassFactory(_BaseCaptureRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_DROPPED_CAPTURE: _RibbonSingleClassFactory(_BaseDefenceRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_SPOTTED_ENEMY: _RibbonSingleClassFactory(_EnemyDetectionRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_USED_ARMOR: _RibbonSingleClassFactory(_BlockedDamageRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_DAMAGED_DEVICE_ENEMY: _RibbonSingleClassFactory(_CriticalHitRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_KILLED_ENEMY: _RibbonSingleClassFactory(_EnemyKillRibbon),
+ FEEDBACK_EVENT_ID.ENEMY_DAMAGED_DEVICE_PLAYER: _RibbonSingleClassFactory(_ReceivedCriticalHitRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon),
+ FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon),
+ FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon)}
+
+def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
+    etype = event.getType()
+    if etype in _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY:
+        factory = _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY[etype]
+        ribbonCls = factory.getRibbonClass(event)
+        if ribbonCls is not None:
+            return ribbonCls.createFromFeedbackEvent(ribbonID, event)
+    LOG_UNEXPECTED('Could not find a proper ribbon class associated with the given feedback event', event)
+    return
+
 
 class ATTACK_REASON(object):
     SHOT = 'shot'
@@ -251,86 +416,51 @@ class ATTACK_REASON(object):
     OVERTURN = 'overturn'
 
 
-def _createRibbonFromPlayerFeedbackEvent(event):
-    ribbonCls = None
-    etype = event.getType()
-    if etype in _FEEDBACK_EVENT_TO_RIBBON_CLS:
-        ribbonCls = _FEEDBACK_EVENT_TO_RIBBON_CLS[etype]
-    elif etype == FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY:
-        if event.getBattleEventType() == _BET.TRACK_ASSIST:
-            ribbonCls = _TrackAssistRibbon
-        elif event.getBattleEventType() == _BET.RADIO_ASSIST:
-            ribbonCls = _RadioAssistRibbon
-    elif etype == FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY:
-        damageExtra = event.getExtra()
-        if damageExtra.isShot():
-            ribbonCls = _CausedDamageRibbon
-        elif damageExtra.isFire():
-            ribbonCls = _FireHitRibbon
+class _RibbonsCache(object):
+    __slots__ = ('__ribbons', '__typeToIDs')
+
+    def __init__(self):
+        super(_RibbonsCache, self).__init__()
+        self.__ribbons = {}
+        self.__typeToIDs = defaultdict(set)
+
+    def clear(self):
+        self.__ribbons.clear()
+        self.__typeToIDs.clear()
+
+    def get(self, ribbonID, default):
+        return self.__ribbons.get(ribbonID, default)
+
+    def pop(self, ribbonID):
+        if ribbonID in self:
+            ribbon = self.__ribbons.pop(ribbonID)
+            self.__typeToIDs[ribbon.getType()].remove(ribbonID)
+            return ribbon
         else:
-            ribbonCls = _RamHitRibbon
-    if ribbonCls is not None:
-        return ribbonCls(event)
-    else:
-        LOG_UNEXPECTED('Could not find a proper ribbon class associated with the given feedback event', event)
-        return
+            return None
 
+    def add(self, ribbon):
+        self[ribbon.getID()] = ribbon
+        self.__typeToIDs[ribbon.getType()].add(ribbon.getID())
 
-class _Rule(object):
-    __slots__ = ('__type',)
+    def iterByType(self, ribbonType):
+        for ribbonID in self.__typeToIDs[ribbonType]:
+            yield self[ribbonID]
 
-    def __init__(self, ribbon):
-        super(_Rule, self).__init__()
-        self.__type = ribbon.getType()
+    def __contains__(self, ribbonID):
+        return self.__ribbons.__contains__(ribbonID)
 
-    def getType(self):
-        return self.__type
+    def __iter__(self):
+        return self.__ribbons.__iter__()
 
-    def isValid(self, ribbon):
-        """
-        Checks whether the given ribbon corresponds to the rule.
-        
-        :param ribbon: An instance of _Ribbon class
-        :return: True if rule is satisfied, False - otherwise.
-        """
-        raise NotImplementedError
+    def __len__(self):
+        return self.__ribbons.__len__()
 
-    def update(self, rule):
-        """
-        Update rule by the given rule.
-        
-        :param rule: An instance of _Rule class
-        :return: True if rule has been updated.
-        """
-        return False
+    def __getitem__(self, index):
+        return self.__ribbons.__getitem__(index)
 
-
-class _IgnoreRuleByKill(_Rule):
-    __slots__ = ('_vehIDs',)
-
-    def __init__(self, ribbon):
-        super(_IgnoreRuleByKill, self).__init__(ribbon)
-        self._vehIDs = set()
-        self.update(ribbon)
-
-    def isValid(self, ribbon):
-        """
-        Checks the following rule: ignore damage-related ribbons after kill ribbon for the targets
-        stored in rule.
-        
-        :param ribbon: An instance of _Ribbon class
-        :return: True if rule is satisfied, False - otherwise.
-        """
-        etype = ribbon.getType()
-        if etype == BATTLE_EFFICIENCY_TYPES.DAMAGE:
-            return ribbon.getVehicleID() not in self._vehIDs
-        return not self._vehIDs.issuperset(set(ribbon.getVehIDs())) if etype in (BATTLE_EFFICIENCY_TYPES.BURN, BATTLE_EFFICIENCY_TYPES.RAM) else True
-
-    def update(self, rule):
-        if rule.getType() == self.getType():
-            self._vehIDs.update(rule._vehIDs)
-            return True
-        return False
+    def __setitem__(self, ribbonID, ribbon):
+        return self.__ribbons.__setitem__(ribbonID, ribbon)
 
 
 class RibbonsAggregator(object):
@@ -339,34 +469,64 @@ class RibbonsAggregator(object):
     def __init__(self):
         super(RibbonsAggregator, self).__init__()
         self.__feedbackProvider = None
-        self.__cache = {}
+        self.__vehicleStateCtrl = None
+        self.__cache = _RibbonsCache()
+        self.__accumulatedRibbons = _RibbonsCache()
         self.__rules = {}
+        self.__idGenerator = SequenceIDGenerator()
         self.onRibbonAdded = Event.Event()
         self.onRibbonUpdated = Event.Event()
+        self.__isStarted = False
+        self.__isSuspended = False
+        self.__isInPostmortemMode = False
         return
 
     def start(self):
+        self.__isStarted = True
         if self.__feedbackProvider is None:
             self.__feedbackProvider = self.sessionProvider.shared.feedback
             self.__feedbackProvider.onPlayerFeedbackReceived += self._onPlayerFeedbackReceived
+        if self.__vehicleStateCtrl is None:
+            self.__vehicleStateCtrl = self.sessionProvider.shared.vehicleState
+            self.__vehicleStateCtrl.onPostMortemSwitched += self._onPostMortemSwitched
         return
 
+    def suspend(self):
+        if self.__isStarted:
+            self.__isSuspended = True
+
+    def resume(self):
+        if self.__isSuspended:
+            self.__isSuspended = False
+
     def stop(self):
+        self.__isStarted = False
+        self.__isSuspended = False
         self.clearRibbonsData()
-        self.clearRules()
-        self.onRibbonAdded.clear()
-        self.onRibbonUpdated.clear()
         if self.__feedbackProvider is not None:
             self.__feedbackProvider.onPlayerFeedbackReceived -= self._onPlayerFeedbackReceived
             self.__feedbackProvider = None
+        if self.__vehicleStateCtrl is None:
+            self.__vehicleStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
+            self.__vehicleStateCtrl = None
         return
 
-    def clearRibbonData(self, etype):
+    def getRibbon(self, ribbonID):
         """
-        Clears ribbon of the given type from the inner cache.
-        :param etype: ribbon type (see BATTLE_EFFICIENCY_TYPES)
+        Gets ribbon by the given ID.
+        :param ribbonID: Ribbon ID.
+        :return: ribbon or None.
         """
-        self.__cache.pop(etype, None)
+        return self.__cache.get(ribbonID, None)
+
+    def resetRibbonData(self, ribbonID):
+        """
+        Reset ribbon's data by the given ID.
+        :param ribbonID: ribbon ID
+        """
+        ribbon = self.__cache.pop(ribbonID)
+        if ribbon is not None and ribbon.getType() in _ACCUMULATED_RIBBON_TYPES:
+            self.__accumulatedRibbons.add(ribbon)
         return
 
     def clearRibbonsData(self):
@@ -374,92 +534,114 @@ class RibbonsAggregator(object):
         Clears all cached ribbons.
         """
         self.__cache.clear()
+        self.__accumulatedRibbons.clear()
 
-    def clearRules(self):
+    def _onPostMortemSwitched(self):
         """
-        Clears all rules.
+        Callback on switching to the postmortem mode  (see VehicleStateController).
         """
-        self.__rules.clear()
-
-    def _checkRules(self, ribbon):
-        for rule in self.__rules.itervalues():
-            if not rule.isValid(ribbon):
-                return False
-
-        return True
-
-    def _updateRules(self, ribbons):
-        for ribbon in ribbons:
-            etype = ribbon.getType()
-            if etype == BATTLE_EFFICIENCY_TYPES.DESTRUCTION:
-                newRule = _IgnoreRuleByKill(ribbon)
-                if etype in self.__rules:
-                    rule = self.__rules[etype]
-                    rule.update(newRule)
-                else:
-                    self.__rules[etype] = newRule
+        self.__isInPostmortemMode = True
 
     def _onPlayerFeedbackReceived(self, events):
         """
-        Callback on player feedback event (see BattleFeedbackAdaptor). Aggregates player feedback
-        events according to some rules and converts them to appropriate battle efficiency events
-        (see _FEEDBACK_EVENT_TO_RIBBON_CLS). Puts ribbons to the inner cache and triggers
-        appropriate RibbonsAggregator events.
-        
-        There are 3 aggregation rules of ribbons:
-        1. Ribbons are not aggregated (base capture and base defence)
-        2. Ribbons are aggregated by vehicle ID (all damage types and blocked damage)
-        3. All other ribbons are aggregated.
-        Note that knowledge about aggregation is kept in each ribbon type/class (see canAggregate
-        method).
+        Callback on player feedback event (see BattleFeedbackAdaptor).
         
         :param events: list of PlayerFeedbackEvent
         """
-        ribbons = OrderedDict()
-        for event in events:
-            ribbon = _createRibbonFromPlayerFeedbackEvent(event)
-            if ribbon is not None and self._checkRules(ribbon):
-                if ribbon.getType() in ribbons:
-                    temporaryRibbons = ribbons.pop(ribbon.getType())
-                    if len(temporaryRibbons) > 1:
-                        for index, temporaryRibbon in enumerate(temporaryRibbons):
-                            if temporaryRibbon.canAggregate(ribbon):
-                                item = temporaryRibbons.pop(index)
-                                item.aggregate(ribbon)
-                                temporaryRibbons.append(item)
-                                break
-                        else:
-                            temporaryRibbons.append(ribbon)
 
-                    else:
-                        tmpRibbon = temporaryRibbons[0]
-                        if tmpRibbon.canAggregate(ribbon):
-                            tmpRibbon.aggregate(ribbon)
-                        else:
-                            temporaryRibbons.append(ribbon)
-                    ribbons[ribbon.getType()] = temporaryRibbons
+        def _ribbonsGenerator(events):
+            for e in events:
+                r = _createRibbonFromPlayerFeedbackEvent(self.__idGenerator.next(), e)
+                if r is not None:
+                    yield r
+
+            return
+
+        self._aggregateRibbons(_ribbonsGenerator(events))
+
+    def _aggregateRibbons(self, ribbons):
+        """
+        Aggregates ribbons according to some rules and converts them to appropriate battle
+        efficiency events (see _FEEDBACK_EVENT_TO_RIBBON_CLS). Puts ribbons to the inner cache
+        and triggers appropriate RibbonsAggregator events.
+        
+        Note that knowledge about aggregation is kept in each ribbon type/class (see canAggregate
+        method).
+        
+        :param ribbons: list of Ribbon derived instances
+        """
+        aggregatedRibbons = {}
+        for ribbon in ribbons:
+            if self.__isSuspended and ribbon.getType() not in _ACCUMULATED_RIBBON_TYPES:
+                continue
+            if ribbon.getType() in aggregatedRibbons:
+                temporaryRibbons = aggregatedRibbons[ribbon.getType()]
+                for temporaryRibbon in temporaryRibbons:
+                    if temporaryRibbon.aggregate(ribbon):
+                        break
                 else:
-                    ribbons[ribbon.getType()] = [ribbon]
+                    temporaryRibbons.append(ribbon)
 
-        sortedRibbons = self.__getSortedList(ribbons)
+            aggregatedRibbons[ribbon.getType()] = [ribbon]
+
+        filteredRibbons = self.__filterRibbons(aggregatedRibbons)
+        sortedRibbons = self.__getSortedList(filteredRibbons)
         for ribbon in sortedRibbons:
             etype = ribbon.getType()
-            if etype in self.__cache:
-                cachedRibbon = self.__cache[etype]
-                if cachedRibbon.canAggregate(ribbon):
-                    cachedRibbon.aggregate(ribbon)
-                    ribbon = cachedRibbon
-                else:
-                    self.__cache[etype] = ribbon
-                self.onRibbonUpdated(ribbon)
-            self.__cache[etype] = ribbon
-            self.onRibbonAdded(ribbon)
+            if etype in _NOT_CACHED_RIBBON_TYPES:
+                self.__cache.add(ribbon)
+                self.onRibbonAdded(ribbon)
+            for cachedRibbon in self.__cache.iterByType(etype):
+                if cachedRibbon.aggregate(ribbon):
+                    if not self.__isSuspended:
+                        self.onRibbonUpdated(cachedRibbon)
+                    break
+            else:
+                if etype in _ACCUMULATED_RIBBON_TYPES:
+                    for accumulatedRibbon in self.__accumulatedRibbons.iterByType(etype):
+                        if accumulatedRibbon.aggregate(ribbon):
+                            if not self.__isSuspended:
+                                self.__accumulatedRibbons.pop(accumulatedRibbon.getID())
+                                self.__cache.add(accumulatedRibbon)
+                                self.onRibbonAdded(accumulatedRibbon)
+                            break
+                    else:
+                        if self.__isSuspended:
+                            self.__accumulatedRibbons.add(ribbon)
+                        else:
+                            self.__cache.add(ribbon)
+                            self.onRibbonAdded(ribbon)
+                if not self.__isSuspended:
+                    self.__cache.add(ribbon)
+                    self.onRibbonAdded(ribbon)
 
-        self._updateRules(sortedRibbons)
-        return
+    def __filterRibbons(self, ribbons):
+        if self.__isInPostmortemMode:
+            for rType in _RIBBON_TYPES_EXCLUDED_IN_POSTMORTEM:
+                if rType in ribbons:
+                    del ribbons[rType]
 
-    @staticmethod
-    def __getSortedList(ribbons):
+        if BATTLE_EFFICIENCY_TYPES.DESTRUCTION in ribbons:
+            killRibbons = dict(((r.getVehicleID(), r) for r in ribbons[BATTLE_EFFICIENCY_TYPES.DESTRUCTION]))
+            damageRibbons = dict(((t, ribbons[t]) for t in _RIBBON_TYPES_AGGREGATED_WITH_KILL_RIBBON if t in ribbons))
+            for rType, tmpRibbons in damageRibbons.iteritems():
+                filteredRibbons = []
+                for tmpRibbon in tmpRibbons:
+                    if tmpRibbon.getVehicleID() in killRibbons:
+                        killRibbon = killRibbons[tmpRibbon.getVehicleID()]
+                        killRibbon.setExtraValue(killRibbon.getExtraValue() + tmpRibbon.getExtraValue())
+                    filteredRibbons.append(tmpRibbon)
+
+                ribbons[rType] = filteredRibbons
+
+            excludedRibbons = dict(((t, ribbons[t]) for t in _RIBBON_TYPES_EXCLUDED_IF_KILL_RIBBON if t in ribbons))
+            for rType, tmpRibbons in excludedRibbons.iteritems():
+                filteredRibbons = [ r for r in tmpRibbons if r.getVehicleID() not in killRibbons ]
+                ribbons[rType] = filteredRibbons
+
+        return ribbons
+
+    def __getSortedList(self, ribbons):
         """
         Sort events according to the following rules:
         1. Enemy kill ribbon should appear at the end of the list.
@@ -469,22 +651,33 @@ class RibbonsAggregator(object):
         ribbons with the same type). If there are a few ribbons with the same type in the
         server response, use the last one.
         
-        :param ribbons: OrderedDict of ribbons to be resorted according to rules described above
+        :param ribbons: dict of ribbons to be resorted according to rules described above
                         and converted to the list without duplicates.
         
         :return: Sorted ribbons list.
         """
+
+        def _sortKey(ribbon):
+            """
+            Routine to be used for sorting ribbons by time. Ribbon ID is used for comparing because
+            it grows with time.
+            :param ribbon: _Ribbon derived instance.
+            """
+            return ribbon.getID()
+
         sortedRibons = []
         if ribbons:
             killRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DESTRUCTION, None)
             detectionRibbons = ribbons.pop(BATTLE_EFFICIENCY_TYPES.DETECTION, None)
             if detectionRibbons is not None:
-                sortedRibons.append(detectionRibbons[-1])
+                sortedRibons.extend(sorted(detectionRibbons, key=_sortKey))
+            remaningRibbons = []
             for newRibbons in ribbons.itervalues():
-                sortedRibons.append(newRibbons[-1])
+                remaningRibbons.extend(newRibbons)
 
+            sortedRibons.extend(sorted(remaningRibbons, key=_sortKey))
             if killRibbons is not None:
-                sortedRibons.append(killRibbons[-1])
+                sortedRibons.extend(sorted(killRibbons, key=_sortKey))
         return sortedRibons
 
 

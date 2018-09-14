@@ -23,6 +23,7 @@ from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IFalloutController
 from skeletons.gui.server_events import IEventsCache
+from gui.clans.clan_helpers import isStrongholdsEnabled
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
@@ -171,7 +172,7 @@ class _CommandItem(_SelectorItem):
         return False
 
     def _update(self, state):
-        self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT) or state.isInUnit(PREBATTLE_TYPE.CLUBS) or state.isInUnit(PREBATTLE_TYPE.E_SPORT_COMMON)
+        self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT) or state.isInUnit(PREBATTLE_TYPE.E_SPORT_COMMON)
         self._isDisabled = state.hasLockedState
 
 
@@ -238,6 +239,22 @@ class _FortItem(_SelectorItem):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.SORTIE) or state.isInUnit(PREBATTLE_TYPE.FORT_BATTLE) or state.isInUnit(PREBATTLE_TYPE.FORT_COMMON)
         if g_lobbyContext.getServerSettings().isFortsEnabled() or self._isSelected:
             self._isDisabled = not isSortieEnabled() or state.hasLockedState
+        else:
+            self._isDisabled = True
+
+
+class _StrongholdsItem(_SelectorItem):
+
+    def isRandomBattle(self):
+        return True
+
+    def isInSquad(self, state):
+        return False
+
+    def _update(self, state):
+        self._isSelected = state.isInUnit(PREBATTLE_TYPE.EXTERNAL)
+        if isStrongholdsEnabled() or self._isSelected:
+            self._isDisabled = state.hasLockedState
         else:
             self._isDisabled = True
 
@@ -395,7 +412,7 @@ def _createItems():
     items = []
     _addRandomBattleType(items)
     _addCommandBattleType(items)
-    _addSortieBattleType(items, isInRoaming)
+    _addStrongholdsBattleType(items, isInRoaming)
     _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
@@ -428,6 +445,10 @@ def _addCommandBattleType(items):
 
 def _addSortieBattleType(items, isInRoaming):
     items.append((_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE))
+
+
+def _addStrongholdsBattleType(items, isInRoaming):
+    items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.UNIT))
 
 
 def _addTrainingBattleType(items):

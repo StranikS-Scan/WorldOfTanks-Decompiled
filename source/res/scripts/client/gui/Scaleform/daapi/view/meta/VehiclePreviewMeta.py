@@ -46,5 +46,8 @@ class VehiclePreviewMeta(View):
         """
         return self.flashObject.as_updatePrice(data) if self._isDAAPIInited() else None
 
-    def as_updateBuyButtonS(self, enable, label):
-        return self.flashObject.as_updateBuyButton(enable, label) if self._isDAAPIInited() else None
+    def as_updateBuyButtonS(self, data):
+        """
+        :param data: Represented by VehPreviewBuyButtonVO (AS)
+        """
+        return self.flashObject.as_updateBuyButton(data) if self._isDAAPIInited() else None

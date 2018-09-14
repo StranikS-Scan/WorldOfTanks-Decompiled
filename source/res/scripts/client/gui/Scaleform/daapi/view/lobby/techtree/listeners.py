@@ -8,7 +8,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.ItemsCache import CACHE_SYNC_REASON, g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
-from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController
+from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController
 INV_ITEM_VCDESC_KEY = 'compDescr'
 CACHE_VEHS_LOCK_KEY = 'vehsLock'
 STAT_DIFF_KEY = 'stats'
@@ -205,6 +205,21 @@ class _RentChangeListener(_Listener):
         self._page.invalidateRent(vehicles)
 
 
+class _RestoreListener(_Listener):
+    restores = dependency.descriptor(IRestoreController)
+
+    def startListen(self, page):
+        self.restores.onRestoreChangeNotify += self.__onRestoreChanged
+        super(_RestoreListener, self).startListen(page)
+
+    def stopListen(self):
+        self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
+        super(_RestoreListener, self).stopListen()
+
+    def __onRestoreChanged(self, vehicles):
+        self._page.invalidateRestore(vehicles)
+
+
 class _PrbGlobalListener(_Listener, IGlobalListener):
 
     def startListen(self, page):
@@ -240,6 +255,7 @@ class TTListenerDecorator(_Listener):
         self._wallet = _WalletStatusListener()
         self._prbListener = _PrbGlobalListener()
         self._rent = _RentChangeListener()
+        self._restore = _RestoreListener()
 
     def startListen(self, page):
         proxy = weakref.proxy(page)
@@ -248,6 +264,7 @@ class TTListenerDecorator(_Listener):
         self._wallet.startListen(proxy)
         self._prbListener.startListen(proxy)
         self._rent.startListen(proxy)
+        self._restore.startListen(proxy)
 
     def stopListen(self):
         self._stats.stopListen()
@@ -255,3 +272,4 @@ class TTListenerDecorator(_Listener):
         self._wallet.stopListen()
         self._prbListener.stopListen()
         self._rent.stopListen()
+        self._restore.stopListen()

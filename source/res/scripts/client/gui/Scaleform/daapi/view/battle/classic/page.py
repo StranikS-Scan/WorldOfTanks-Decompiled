@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/page.py
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
+from constants import ARENA_PERIOD
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared import SharedPage
 from gui.Scaleform.framework import ViewTypes
@@ -76,6 +77,13 @@ class ClassicPage(SharedPage):
     def _onBattleLoadingStart(self):
         self._toggleFullStats(False)
         super(ClassicPage, self)._onBattleLoadingStart()
+
+    def _onBattleLoadingFinish(self):
+        super(ClassicPage, self)._onBattleLoadingFinish()
+        battleCtx = self.sessionProvider.getCtx()
+        periodCtrl = self.sessionProvider.shared.arenaPeriod
+        if battleCtx.isPlayerObserver() and periodCtrl.getPeriod() in (ARENA_PERIOD.WAITING, ARENA_PERIOD.PREBATTLE):
+            self._setComponentsVisibility(hidden={BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
 
     def _handleGUIToggled(self, event):
         if self._fullStatsAlias and not self.as_isComponentVisibleS(self._fullStatsAlias):

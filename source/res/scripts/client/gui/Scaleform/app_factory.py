@@ -10,7 +10,6 @@ from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.daapi.settings import config as sf_config
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.package_layout import PackageImporter
-from gui.Scaleform.logitech_monitor import LogitechMonitorEntry
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
 from gui.app_loader.interfaces import IAppFactory
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
@@ -69,7 +68,6 @@ class AS3_AppFactory(IAppFactory):
 
     def createLobby(self):
         LOG_DEBUG('Creating app', _SPACE.SF_LOBBY)
-        self.createLogitech()
         lobby = self.__apps[_SPACE.SF_LOBBY]
         if lobby is None:
             lobby = LobbyEntry(_SPACE.SF_LOBBY)
@@ -117,7 +115,6 @@ class AS3_AppFactory(IAppFactory):
 
     def createBattle(self, arenaGuiType):
         LOG_DEBUG('Creating app', _SPACE.SF_BATTLE)
-        self.createLogitech()
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
             battle = BattleEntry(_SPACE.SF_BATTLE)
@@ -142,14 +139,6 @@ class AS3_AppFactory(IAppFactory):
                 battle.close()
             self.__importer.unload(self.__packages[_SPACE.SF_BATTLE])
             self.__apps[_SPACE.SF_BATTLE] = None
-        return
-
-    def createLogitech(self):
-        logitech = self.__apps[_SPACE.SF_LOGITECH]
-        if logitech is None:
-            logitech = LogitechMonitorEntry()
-            self.__apps[_SPACE.SF_LOGITECH] = logitech
-        logitech.activate()
         return
 
     def attachCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):

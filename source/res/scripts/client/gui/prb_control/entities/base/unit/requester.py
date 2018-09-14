@@ -3,8 +3,9 @@
 from UnitBase import UNIT_ERROR
 from debug_utils import LOG_ERROR
 from gui.prb_control import prb_getters
+from gui.prb_control.entities.base.requester import IUnitRequestProcessor
 
-class UnitRequestProcessor(object):
+class UnitRequestProcessor(IUnitRequestProcessor):
     """
     Unit requests processor
     """
@@ -47,8 +48,10 @@ class UnitRequestProcessor(object):
             *args: method args
             **kwargs: method kwargs
         """
+        callback = kwargs.pop('callback', None)
         if self._sendRequest(ctx, methodName, [], *args, **kwargs):
             ctx.startProcessing()
+        return
 
     def doRequestChain(self, ctx, chain):
         """

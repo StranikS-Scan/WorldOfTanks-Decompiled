@@ -436,7 +436,7 @@ class ContactsManager(ClientEventsHandler):
         else:
             jid = makeContactJID(dbID)
         tasks.append(block_tasks.AddBlockItemTask(jid, name))
-        if itemType == XMPP_ITEM_TYPE.ROSTER_ITEMS:
+        if itemType in XMPP_ITEM_TYPE.ROSTER_ITEMS:
             groups = contact.getGroups()
             if groups:
                 tasks.append(roster_tasks.EmptyGroupsTask(jid, groups=groups))
@@ -476,7 +476,7 @@ class ContactsManager(ClientEventsHandler):
         jid = contact.getJID()
         tasks = [block_tasks.RemoveBlockItemTask(jid, contact.getName())]
         if itemType == XMPP_ITEM_TYPE.ROSTER_BLOCK_ITEM:
-            tasks.append(roster_tasks.RemoveRosterItemTask(jid, contact.getName()))
+            tasks.append(roster_tasks.RemoveRosterItemTask(jid, contact.getName(), groups=contact.getItem().getRosterGroups()))
         if note_tasks.canNoteAutoDelete(contact):
             tasks.append(note_tasks.RemoveNoteTask(jid))
         self.__cooldown.process(CLIENT_ACTION_ID.REMOVE_IGNORED)

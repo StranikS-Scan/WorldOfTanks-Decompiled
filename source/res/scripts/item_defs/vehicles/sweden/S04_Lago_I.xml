@@ -238,7 +238,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -505,7 +504,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -695,7 +693,6 @@
             <collisionModelServer>	vehicles/sweden/S04_Lago_I/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S04_Lago_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_small	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_47mm_kan_m_38_strv>
         <_57mm_pvkan_m_43>	shared	  <maxAmmo>	70	</maxAmmo>
@@ -725,7 +722,6 @@
             <collisionModelServer>	vehicles/sweden/S04_Lago_I/collision/Gun_02.model	</collisionModelServer>
             <collisionModelClient>	vehicles/sweden/S04_Lago_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_medium	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_57mm_pvkan_m_43>
       </guns>

@@ -19,17 +19,8 @@ class BattleResultsMeta(AbstractWindowView):
     def getClanEmblem(self, uid, clanID):
         self._printOverrideError('getClanEmblem')
 
-    def getTeamEmblem(self, uid, teamID, isUseHtmlWrap):
-        self._printOverrideError('getTeamEmblem')
-
-    def startCSAnimationSound(self):
-        self._printOverrideError('startCSAnimationSound')
-
     def onResultsSharingBtnPress(self):
         self._printOverrideError('onResultsSharingBtnPress')
-
-    def onTeamCardClick(self, teamDBID):
-        self._printOverrideError('onTeamCardClick')
 
     def showUnlockWindow(self, itemId, unlockType):
         self._printOverrideError('showUnlockWindow')
@@ -45,9 +36,3 @@ class BattleResultsMeta(AbstractWindowView):
 
     def as_setTeamInfoS(self, uid, iconTag, teamName):
         return self.flashObject.as_setTeamInfo(uid, iconTag, teamName) if self._isDAAPIInited() else None
-
-    def as_setAnimationS(self, data):
-        """
-        :param data: Represented by CSAnimationVO (AS)
-        """
-        return self.flashObject.as_setAnimation(data) if self._isDAAPIInited() else None

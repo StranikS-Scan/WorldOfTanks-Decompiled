@@ -92,12 +92,6 @@ class AccountRequirements(ConditionsParser):
         self._hasIgrCondition = False
         self._questType = questType
 
-    def getConditions(self):
-        rootNode = super(AccountRequirements, self).getConditions()
-        if self._questType == EVENT_TYPE.CLUBS_QUEST and not rootNode.find('hasClub'):
-            rootNode.add(conditions.HasClub(formatters.makeUniquePath('root', 'hasClub')))
-        return rootNode
-
     def clearItemsCache(self):
         self.forEachNodeInTree(lambda node: node.clearItemsCache())
 
@@ -248,9 +242,7 @@ class PostBattleConditions(ConditionsParser):
             return conditions.ClanKills(uniqueName, data)
         if name == 'results':
             return conditions.BattleResults(uniqueName, data)
-        if name == 'unit':
-            return conditions.UnitResults(uniqueName, data, self.__preBattleCond)
-        return conditions.ClubDivision(uniqueName, data) if name == 'clubs' else None
+        return conditions.UnitResults(uniqueName, data, self.__preBattleCond) if name == 'unit' else None
 
     def format(self, svrEvents, event=None):
         conds = self.getConditions()

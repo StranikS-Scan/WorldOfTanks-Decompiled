@@ -178,7 +178,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
           'linkage': QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE}]
         advisableQuests = self.eventsCache.getAdvisableQuests()
         for idx, alias in enumerate((QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)):
-            if self.__currentTabAlias == alias:
+            if self.__currentTabAlias == alias and self.currentTab is not None:
                 newEvents = settings.getNewCommonEvents(self.currentTab.getSuitableEvents())
             else:
                 events = self.__builders[alias].getBlocksAdvisableEvents(advisableQuests)
@@ -186,6 +186,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             data[idx].update(value=len(newEvents))
 
         self.as_setTabsCounterDataS(data)
+        return
 
     def __filterApplied(self):
         for attr in self.__filterData:

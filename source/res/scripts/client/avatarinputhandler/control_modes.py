@@ -506,9 +506,12 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
-            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-            if isDown:
+        isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
+        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
+        if isFiredFreeCamera or isFiredLockTarget:
+            if isFiredFreeCamera:
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()
@@ -901,9 +904,12 @@ class SniperControlMode(_GunControlMode):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         assert self._isEnabled
         cmdMap = CommandMapping.g_instance
-        if cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
-            self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
-            if isDown:
+        isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
+        isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
+        if isFiredFreeCamera or isFiredLockTarget:
+            if isFiredFreeCamera:
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
+            if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             BigWorld.player().shoot()

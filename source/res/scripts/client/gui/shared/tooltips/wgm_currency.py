@@ -67,7 +67,7 @@ class WGMGoldCurrencyTooltip(_WGMCurrencyTooltip):
     def _packBlocks(self, *args, **kwargs):
         tooltipBlocks = super(WGMGoldCurrencyTooltip, self)._packBlocks(*args, **kwargs)
         currencyBlocks = list()
-        currencyBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_REFILL_HEADER), text_styles.main(TOOLTIPS.HEADER_REFILL_BODY), padding=formatters.packPadding(bottom=21)))
+        currencyBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_GOLD_HEADER), text_styles.main(TOOLTIPS.HEADER_BUTTONS_GOLD_BODY), padding=formatters.packPadding(bottom=21)))
         currencyBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME), padding=formatters.packPadding(bottom=6)))
         currencyBlocks.append(formatters.packDashLineItemPriceBlockData(text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), self.__getGoldString(wgm_balance_info_requester.GOLD_PURCHASED), RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2, padding=formatters.packPadding(bottom=-1)))
         currencyBlocks.append(formatters.packDashLineItemPriceBlockData(text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), self.__getGoldString(wgm_balance_info_requester.GOLD_EARNED), RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2, padding=formatters.packPadding(bottom=16)))
@@ -88,7 +88,7 @@ class WGMCreditsCurrencyTooltip(_WGMCurrencyTooltip):
     def _packBlocks(self, *args, **kwargs):
         tooltipBlocks = super(WGMCreditsCurrencyTooltip, self)._packBlocks(*args, **kwargs)
         currencyBlocks = list()
-        currencyBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_GOLD_EXCHANGE_HEADER), text_styles.main(TOOLTIPS.HEADER_GOLD_EXCHANGE_BODY), padding=formatters.packPadding(bottom=21)))
+        currencyBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_CREDITS_HEADER), text_styles.main(TOOLTIPS.HEADER_BUTTONS_CREDITS_BODY), padding=formatters.packPadding(bottom=21)))
         currencyBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME), padding=formatters.packPadding(bottom=6)))
         currencyBlocks.append(formatters.packDashLineItemPriceBlockData(text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE), self.__getCreditsString(wgm_balance_info_requester.CREDITS_PURCHASED), RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, padding=formatters.packPadding(bottom=-1)))
         currencyBlocks.append(formatters.packDashLineItemPriceBlockData(text_styles.main(TOOLTIPS.HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE), self.__getCreditsString(wgm_balance_info_requester.CREDITS_EARNED), RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2, padding=formatters.packPadding(bottom=16)))

@@ -15,6 +15,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
     BUYINGPANEL_LABEL = '#vehicle_preview:buyingPanel/Label'
     BUYINGPANEL_ALERTLABEL = '#vehicle_preview:buyingPanel/alertLabel'
+    BUYINGPANEL_TRADEINLABEL = '#vehicle_preview:buyingPanel/tradeInLabel'
     MODULESPANEL_TITLE = '#vehicle_preview:modulesPanel/title'
     MODULESPANEL_LABEL = '#vehicle_preview:modulesPanel/Label'
     MODULESPANEL_STATUS_TEXT = '#vehicle_preview:modulesPanel/status/text'

@@ -498,6 +498,9 @@ class Vehicle(BigWorld.Entity, VehicleObserver):
         self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
         self.appearance.setVehicle(self)
         self.appearance.activate()
+        suspensionSound = self.appearance.suspensionSound
+        if suspensionSound is not None:
+            suspensionSound.deactivate()
         self.appearance.changeEngineMode(self.engineMode)
         self.appearance.onVehicleHealthChanged()
         if self.isPlayerVehicle:

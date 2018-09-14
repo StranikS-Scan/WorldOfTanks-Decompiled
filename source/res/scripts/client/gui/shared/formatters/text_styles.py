@@ -121,8 +121,16 @@ def gold(text):
     return _formatText('goldText', text)
 
 
+def goldSmall(text):
+    return _formatText('goldTextSmall', text)
+
+
 def credits(text):
     return _formatText('creditsText', text)
+
+
+def creditsSmall(text):
+    return _formatText('creditsTextSmall', text)
 
 
 def defRes(text):
@@ -131,10 +139,6 @@ def defRes(text):
 
 def counter(text):
     return _formatText('counterText', text)
-
-
-def counterLabelText(text):
-    return _formatText('counterLabelText', text)
 
 
 def counterLabelText(text):

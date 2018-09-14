@@ -14,6 +14,7 @@ class CONDITION_TYPE(object):
     VAR_COMPARE = 7
     EFFECT_TRIGGERED = 8
     BONUS_RECEIVED = 9
+    SERVICE = 10
     RANGE = (FLAG,
      GLOBAL_FLAG,
      WINDOW_ON_SCENE,
@@ -22,7 +23,8 @@ class CONDITION_TYPE(object):
      VAR_DEFINED,
      VAR_COMPARE,
      EFFECT_TRIGGERED,
-     BONUS_RECEIVED)
+     BONUS_RECEIVED,
+     SERVICE)
 
 
 @functools.total_ordering
@@ -186,6 +188,16 @@ class BonusReceivedCondition(_ActiveCondition):
 
     def __init__(self, entityID, state=CONDITION_STATE.ACTIVE):
         super(BonusReceivedCondition, self).__init__(entityID, CONDITION_TYPE.BONUS_RECEIVED, state)
+
+
+class ServiceCondition(_ActiveCondition):
+
+    def __init__(self, entityID, serviceClass, state=CONDITION_STATE.ACTIVE):
+        super(ServiceCondition, self).__init__(entityID, CONDITION_TYPE.SERVICE, state)
+        self.__serviceClass = serviceClass
+
+    def getServiceClass(self):
+        return self.__serviceClass
 
 
 class Conditions(list):

@@ -36,3 +36,4 @@ class ICON_TEXT_FRAMES(object):
     RENTALS = 'rentals'
     REWARD_SHEET = 'sheets'
     ALERT = 'alert'
+    TRADE = 'trade'

@@ -138,6 +138,8 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
             if not vehicle.isPremiumIGR and (not vehicle.isInInventory or vehicle.isRented):
                 if vehicle.isRestoreAvailable():
                     label = MENU.CONTEXTMENU_RESTORE
+                elif vehicle.canTradeIn:
+                    label = MENU.CONTEXTMENU_BUYORTRADEIN
                 else:
                     label = MENU.CONTEXTMENU_BUY
                 options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}))

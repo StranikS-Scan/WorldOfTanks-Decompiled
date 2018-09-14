@@ -11,6 +11,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.formatters import formatPrice, formatGoldPrice
+from gui.shared.formatters.text_styles import neutral
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 from gui.shared.money import Money, ZERO_MONEY, Currency
@@ -255,6 +256,75 @@ class VehicleRestoreProcessor(VehicleBuyer):
         """
         LOG_DEBUG('Make request to restore vehicle', self.item, self.crewType, self.buyShell, self.price)
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
+
+
+class VehicleTradeInProcessor(VehicleBuyer):
+
+    def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
+        """
+        Processor for vehicle buying
+        :param vehicle: <Vehicle>
+        :param vehicleToTradeOff: <Vehicle>
+        :param buySlot: <bool> flag if need to buy slot
+        :param buyShell: <bool> flag if need to buy shells
+        :param crewType: <int> int flag, mean crew skill type
+        """
+        self.itemToTradeOff = vehicleToTradeOff
+        super(VehicleTradeInProcessor, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
+
+    def _getPluginsList(self):
+        """
+        Gets plugins collection
+        :return: <tuple(ProcessorPlugin, ...)>
+        """
+        barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, self.itemToTradeOff.crew))
+        return (plugins.VehicleValidator(self.itemToTradeOff, setAll=True),
+         plugins.VehicleTradeInValidator(self.item, self.itemToTradeOff),
+         plugins.VehicleSellValidator(self.itemToTradeOff),
+         plugins.MoneyValidator(self.price),
+         plugins.BarracksSlotsValidator(barracksBerthsNeeded))
+
+    def _getPrice(self):
+        """
+        Gets common buy price with shells, slot, crew
+        :return: <Money>
+        """
+        return super(VehicleTradeInProcessor, self)._getPrice() - self.itemToTradeOff.tradeOffPrice
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        """
+        :param code: <int> server response code
+        :param errStr: <str> string error reason
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> error message
+        """
+        if not errStr:
+            msg = 'vehicle_trade_in/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_trade_in/server_error_centerDown'
+        else:
+            msg = 'vehicle_trade_in/%s' % errStr
+        return makeI18nError(msg, vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName)
+
+    def _successHandler(self, code, ctx=None):
+        """
+        :param code: <int> server response code
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> success message
+        """
+        return makeI18nSuccess('vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+
+    def _getSysMsgType(self):
+        """
+        :return: <str> system message type
+        """
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+
+    def _request(self, callback):
+        """
+        Sends trade-in vehicle request to server
+        :param callback: <function>
+        """
+        LOG_DEBUG('Make request to trade-in vehicle', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
+        BigWorld.player().shop.tradeInVehicle(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
 
 
 class VehicleSlotBuyer(Processor):

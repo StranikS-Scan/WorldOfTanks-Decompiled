@@ -4,12 +4,17 @@ import BigWorld
 from gui.Scaleform.daapi.view.lobby.store.tabs import StoreItemsTab, StoreModuleTab, StoreVehicleTab, StoreShellTab, StoreArtefactTab, StoreOptionalDeviceTab, StoreEquipmentTab
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
+from gui.shared.formatters import moneyWithIcon
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency, i18n
+from skeletons.gui.game_control import ITradeInController
 
 class ShopItemsTab(StoreItemsTab):
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def _getItemPrice(self, item):
         return item.altPrice or item.buyPrice
@@ -76,9 +81,9 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
         return item.restorePrice if item.isRestorePossible() else super(ShopVehicleTab, self)._getItemPrice(item)
 
     def _isPurchaseEnabled(self, item, money):
+        money = self.tradeIn.addTradeInPriceIfNeeded(item, money)
         mayObtainForMoney, _ = item.mayObtainForMoney(money)
-        mayObtainForMoneyWithExchange = item.mayObtainWithMoneyExchange(money, self._items.shop.exchangeRate)
-        return mayObtainForMoney or mayObtainForMoneyWithExchange
+        return True if mayObtainForMoney else item.mayObtainWithMoneyExchange(money, self._items.shop.exchangeRate)
 
     def _getRequestCriteria(self, invVehicles):
         requestCriteria = REQ_CRITERIA.EMPTY | ~REQ_CRITERIA.CUSTOM(lambda item: item.isHidden and not item.isRestorePossible()) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
@@ -146,6 +151,29 @@ class ShopRestoreVehicleTab(ShopVehicleTab):
             vehicleType = vehicleType.lower()
             requestCriteria |= REQ_CRITERIA.CUSTOM(lambda item: item.type.lower() == vehicleType)
         return requestCriteria
+
+
+class ShopTradeInVehicleTab(ShopVehicleTab):
+
+    @classmethod
+    def getFilterInitData(cls):
+        return (STORE_CONSTANTS.SHOP_VEHICLES_FILTERS_VO_CLASS, False)
+
+    def itemWrapper(self, packedItem):
+        item, _, _ = packedItem
+        vo = super(ShopTradeInVehicleTab, self).itemWrapper(packedItem)
+        tradeInPrice = ''
+        tradeInInfo = self.tradeIn.getTradeInInfo(item)
+        if tradeInInfo is not None:
+            tradeInPrice = moneyWithIcon(tradeInInfo.maxDiscountPrice, currType=Currency.GOLD)
+            if tradeInInfo.hasMultipleTradeOffs:
+                tradeInPrice = i18n.makeString(MENU.SHOP_MENU_VEHICLE_TRADEINVEHICLE_PRICE, discountValue=tradeInPrice)
+        vo['tradeInPrice'] = tradeInPrice
+        vo['isInTradeIn'] = True
+        return vo
+
+    def _getRequestCriteria(self, invVehicles):
+        return REQ_CRITERIA.VEHICLE.CAN_TRADE_IN
 
 
 class ShopShellTab(ShopItemsTab, StoreShellTab):

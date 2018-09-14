@@ -8,7 +8,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
 
-def packHeaderColumnData(columnID, btnWidth, btnHeight, label='', icon='', tooltip='', direction='descending', showSeparator=True, textAlign='center', enabled=False):
+def packHeaderColumnData(columnID, btnWidth, btnHeight, label='', icon='', tooltip='', direction='descending', showSeparator=True, textAlign='center', enabled=False, verticalTextAlign='bottom'):
     return {'id': columnID,
      'label': _ms(label),
      'iconSource': icon,
@@ -18,7 +18,8 @@ def packHeaderColumnData(columnID, btnWidth, btnHeight, label='', icon='', toolt
      'buttonHeight': btnHeight,
      'showSeparator': showSeparator,
      'enabled': enabled,
-     'textAlign': textAlign}
+     'textAlign': textAlign,
+     'verticalTextAlign': verticalTextAlign}
 
 
 def getTreeNodeCompareData(vehicle):

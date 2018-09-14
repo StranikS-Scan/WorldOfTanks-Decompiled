@@ -18,13 +18,14 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
-from skeletons.gui.game_control import IVehicleComparisonBasket, IRentalsController, IRestoreController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IRentalsController, IRestoreController, ITradeInController
 
 class StoreComponent(LobbySubView, StoreComponentMeta):
     _DATA_PROVIDER = 'dataProvider'
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     rentals = dependency.descriptor(IRentalsController)
     restore = dependency.descriptor(IRestoreController)
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, _=None):
         super(StoreComponent, self).__init__()
@@ -186,6 +187,9 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
     def _isVehicleRestoreEnabled(self):
         return g_lobbyContext.getServerSettings().isVehicleRestoreEnabled()
 
+    def _isTradeInEnabled(self):
+        return self.tradeIn.isEnabled()
+
     def __populateFilters(self):
         """
         Set filters and subfilters init data into Flash,
@@ -198,19 +202,23 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         nation, itemType = self.__getCurrentFilter()
         if not self._isVehicleRestoreEnabled() and itemType == STORE_CONSTANTS.RESTORE_VEHICLE:
             itemType = STORE_CONSTANTS.VEHICLE
+        if not self._isTradeInEnabled() and itemType == STORE_CONSTANTS.TRADE_IN_VEHICLE:
+            itemType = STORE_CONSTANTS.VEHICLE
         tabType = itemType
         if tabType == STORE_CONSTANTS.RESTORE_VEHICLE:
             tabType = STORE_CONSTANTS.VEHICLE
+        elif tabType == STORE_CONSTANTS.TRADE_IN_VEHICLE:
+            tabType = STORE_CONSTANTS.VEHICLE
         self.__filterHash = {'language': nation,
-         'type': tabType}
+         'tabType': tabType,
+         'fittingType': itemType}
         if itemType in (STORE_CONSTANTS.MODULE, STORE_CONSTANTS.SHELL):
             preservedFilters = AccountSettings.getFilter('%s_%s' % (self.getName(), itemType))
             vehicleCD = preservedFilters['vehicleCD']
             if vehicleCD > 0 or filterVehicle is None:
                 filterVehicle = vehicleCD
         self.__subFilter = {'current': filterVehicle,
-         self._DATA_PROVIDER: [],
-         'vehicleObtainingTypes': self._getObtainingVehicleSubFilterData()}
+         self._DATA_PROVIDER: []}
         vehicles.sort(reverse=True)
         for v in vehicles:
             filterElement = {'id': str(v.intCD),
@@ -223,9 +231,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.__updateFilterOptions(itemType)
         self.as_completeInitS()
         return
-
-    def _getObtainingVehicleSubFilterData(self):
-        return None
 
     def __onInventoryUpdate(self, *args):
         """

@@ -12,7 +12,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, moneyWithIcon
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
@@ -22,12 +22,12 @@ from gui.shared.items_parameters import RELATIVE_PARAMS, formatters as param_for
 from gui.shared.items_parameters.formatters import MEASURE_UNITS
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Money, Currency
-from gui.shared.tooltips import formatters
+from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.game_control import IFalloutController, ITradeInController
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
@@ -220,6 +220,55 @@ class VehiclePreviewCrewMemberTooltipData(BlocksTooltipData):
         return blocks
 
 
+class VehicleTradeInTooltipData(ToolTipBaseData):
+    tradeIn = dependency.descriptor(ITradeInController)
+
+    def __init__(self, context):
+        super(VehicleTradeInTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
+
+    def getDisplayableData(self, *args, **kwargs):
+        vehicle = self.context.buildItem(*args, **kwargs)
+        tradeInInfo = self.tradeIn.getTradeInInfo(vehicle)
+        if tradeInInfo is None:
+            discount = i18n.makeString(TOOLTIPS.TRADE_NODISCOUNT)
+        else:
+            discountValue = moneyWithIcon(tradeInInfo.maxDiscountPrice, currType=Currency.GOLD)
+            if tradeInInfo.hasMultipleTradeOffs:
+                discountValue = i18n.makeString(TOOLTIPS.TRADE_SEVERALDISCOUNTS, discountValue=discountValue)
+            discount = i18n.makeString(TOOLTIPS.TRADE_DISCOUNT, discountValue=discountValue)
+        return {'header': i18n.makeString(TOOLTIPS.TRADE_HEADER),
+         'body': i18n.makeString(TOOLTIPS.TRADE_BODY, discount=discount)}
+
+
+class VehicleTradeInPriceTooltipData(ToolTipBaseData):
+    tradeIn = dependency.descriptor(ITradeInController)
+
+    def __init__(self, context):
+        super(VehicleTradeInPriceTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
+
+    def getDisplayableData(self, tradeInVehicleCD, tradeOffVehicleCD):
+        if tradeInVehicleCD < 0:
+            return {}
+        tradeInVehicle = self.context.buildItem(tradeInVehicleCD)
+        bodyParts = []
+        if tradeInVehicle.buyPrice != tradeInVehicle.defaultPrice:
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(tradeInVehicle.defaultPrice, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(tradeInVehicle.buyPrice, currType=Currency.GOLD)))
+        else:
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(tradeInVehicle.buyPrice, currType=Currency.GOLD)))
+        if tradeOffVehicleCD < 0:
+            tradeOffVehicleName = i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NOVEHICLE)
+            resultPrice = tradeInVehicle.buyPrice
+        else:
+            tradeOffVehicle = self.context.buildItem(tradeOffVehicleCD)
+            tradeOffVehicleName = tradeOffVehicle.userName
+            resultPrice = tradeInVehicle.buyPrice - tradeOffVehicle.tradeOffPrice
+        bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_TOCHANGE, vehicleName=text_styles.playerOnline(tradeOffVehicleName)))
+        return {'header': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_HEADER, vehicleName=tradeInVehicle.userName),
+         'body': '\n'.join(bodyParts),
+         'result': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_RESULT, gold=moneyWithIcon(resultPrice, currType=Currency.GOLD))}
+
+
 class VehicleTooltipBlockConstructor(object):
 
     def __init__(self, vehicle, configuration, leftPadding=20, rightPadding=20):
@@ -380,6 +429,8 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                  'descr': i18n.makeString(key % countType)})
                 if rentLeftInfo:
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(rentLeftInfo['descr']), value=text_styles.main(rentLeftInfo['left']), icon=ICON_TEXT_FRAMES.RENTALS, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5, bottom=-16)))
+            if self.vehicle.canTradeIn:
+                block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_TRADE), value='', icon=ICON_TEXT_FRAMES.TRADE, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5, bottom=-10)))
             notEnoughMoney = neededValue > 0
             hasAction = actionPrc > 0
             return (block, notEnoughMoney or hasAction)

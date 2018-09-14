@@ -300,6 +300,7 @@ class WarplaneActivity(IMapActivity):
             self.__sound = None
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
+            self.__particle[1].destroy()
         self.__particle = (None, None)
         self.__firstLaunch = True
         return

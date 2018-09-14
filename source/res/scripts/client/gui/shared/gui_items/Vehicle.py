@@ -3,6 +3,7 @@
 from itertools import izip
 from operator import itemgetter
 import BigWorld
+import math
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator, getCustomizedVehCompDescr
@@ -17,7 +18,7 @@ from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
-from gui.shared.money import ZERO_MONEY, Currency
+from gui.shared.money import ZERO_MONEY, Currency, Money
 from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, getTypeInfoByName
 from shared_utils import findFirst, CONST_CONTAINER
@@ -159,11 +160,17 @@ class Vehicle(FittingItem, HasStrCD):
         self.isSelected = False
         self.igrCustomizationsLayout = {}
         self.restorePrice = None
+        self.canTradeIn = False
+        self.canTradeOff = False
+        self.tradeOffPriceFactor = 0
+        self.tradeOffPrice = ZERO_MONEY
         invData = dict()
+        tradeInData = None
         if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced() and proxy.recycleBin.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
+            tradeInData = proxy.shop.tradeIn
             self.xp = proxy.stats.vehiclesXPs.get(self.intCD, self.xp)
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
@@ -195,6 +202,13 @@ class Vehicle(FittingItem, HasStrCD):
         self.fuelTank = VehicleFuelTank(vehDescr.fuelTank['compactDescr'], proxy, vehDescr.fuelTank)
         self.sellPrice = self._calcSellPrice(proxy)
         self.defaultSellPrice = self._calcDefaultSellPrice(proxy)
+        if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
+            self.tradeOffPriceFactor = tradeInData.sellPriceFactor
+            tradeInLevels = tradeInData.allowedVehicleLevels
+            self.canTradeIn = not self.isPurchased and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels
+            self.canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
+            if self.canTradeOff:
+                self.tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrice.gold)))
         self.optDevices = self._parserOptDevs(vehDescr.optionalDevices, proxy)
         gunAmmoLayout = []
         for shell in self.gun.defaultAmmo:
@@ -474,6 +488,14 @@ class Vehicle(FittingItem, HasStrCD):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
 
     @property
+    def hasEquipments(self):
+        return findFirst(None, self.eqs) is not None
+
+    @property
+    def hasOptionalDevices(self):
+        return findFirst(None, self.optDevices) is not None
+
+    @property
     def modelState(self):
         if self.health < 0:
             return Vehicle.VEHICLE_STATE.EXPLODED
@@ -619,6 +641,7 @@ class Vehicle(FittingItem, HasStrCD):
         from gui.LobbyContext import g_lobbyContext
         return _checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and g_lobbyContext.getServerSettings().roaming.isInRoaming()
 
+    @property
     def canNotBeSold(self):
         return _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 

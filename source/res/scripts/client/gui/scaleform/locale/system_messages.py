@@ -439,6 +439,20 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_sell/wallet_not_available'
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
+    VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
+    VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_trade_in/server_error_centerDown'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_trade_in/not_enough_credits'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_GOLD = '#system_messages:vehicle_trade_in/not_enough_gold'
+    VEHICLE_TRADE_IN_INVALID_VEHICLE = '#system_messages:vehicle_trade_in/invalid_vehicle'
+    VEHICLE_TRADE_IN_VEHICLE_NOT_FOUND_IN_INVENTORY = '#system_messages:vehicle_trade_in/vehicle_not_found_in_inventory'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_BE_SOLD = '#system_messages:vehicle_trade_in/vehicle_cannot_be_sold'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_IN = '#system_messages:vehicle_trade_in/vehicle_cannot_trade_in'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_OFF = '#system_messages:vehicle_trade_in/vehicle_cannot_trade_off'
+    VEHICLE_TRADE_IN_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_trade_in/vehicle_need_repair'
+    VEHICLE_TRADE_IN_VEHICLE_LOCKED = '#system_messages:vehicle_trade_in/vehicle_locked'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE = '#system_messages:vehicle_trade_in/not_enough_space'
+    VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_trade_in/wallet_not_available'
+    VEHICLE_TRADE_IN_SUCCESS = '#system_messages:vehicle_trade_in/success'
     VEHICLE_REMOVE_SUCCESS = '#system_messages:vehicle_remove/success'
     VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success_dismantling'
     VEHICLE_REMOVE_SERVER_ERROR = '#system_messages:vehicle_remove/server_error'
@@ -1767,6 +1781,20 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_WALLET_NOT_AVAILABLE,
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
+     VEHICLE_TRADE_IN_SERVER_ERROR,
+     VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_GOLD,
+     VEHICLE_TRADE_IN_INVALID_VEHICLE,
+     VEHICLE_TRADE_IN_VEHICLE_NOT_FOUND_IN_INVENTORY,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_BE_SOLD,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_IN,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_OFF,
+     VEHICLE_TRADE_IN_VEHICLE_NEED_REPAIR,
+     VEHICLE_TRADE_IN_VEHICLE_LOCKED,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE,
+     VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE,
+     VEHICLE_TRADE_IN_SUCCESS,
      VEHICLE_REMOVE_SUCCESS,
      VEHICLE_REMOVE_SUCCESS_DISMANTLING,
      VEHICLE_REMOVE_SERVER_ERROR,

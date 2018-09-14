@@ -119,6 +119,7 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
                 suspensionSound.setSoundsForState(sound.state, sound.PC)
             suspensionSound.setSoundsForState(sound.state, sound.NPC)
 
+        suspensionSound.deactivate()
         suspensionSound.bodyMatrix = None
         suspensionSound.lodLink = lodLink
         suspensionSound.lodSetting = lodDist

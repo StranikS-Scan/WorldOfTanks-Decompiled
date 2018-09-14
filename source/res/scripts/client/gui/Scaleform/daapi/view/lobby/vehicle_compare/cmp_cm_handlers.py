@@ -54,7 +54,12 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
             options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
         elif vehicle.isUnlocked:
             items = g_itemsCache.items
-            label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
+            if vehicle.isRestoreAvailable():
+                label = MENU.CONTEXTMENU_RESTORE
+            elif vehicle.canTradeIn:
+                label = MENU.CONTEXTMENU_BUYORTRADEIN
+            else:
+                label = MENU.CONTEXTMENU_BUY
             options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)}))
         else:
             isAvailableToUnlock, _, _ = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)

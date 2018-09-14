@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/__init__.py
+import importlib
 from collections import namedtuple
 from items import _xml, vehicles
 from helpers.html import translation
@@ -77,13 +78,16 @@ def _readVarCondition(xmlCtx, section, _):
     tags = section.keys()
     if 'is-none' in tags:
         return conditions.VarDefinedCondition(varID, ~_COND_STATE.ACTIVE)
-    if 'is-not-none' in tags:
+    elif 'is-not-none' in tags:
         return conditions.VarDefinedCondition(varID, _COND_STATE.ACTIVE)
-    if 'equals' in tags:
+    elif 'equals' in tags:
         return conditions.VarCompareCondition(varID, _xml.readString(xmlCtx, section, 'equals'), _COND_STATE.EQUALS)
-    if 'not-equals' in tags:
+    elif 'not-equals' in tags:
         return conditions.VarCompareCondition(varID, _xml.readString(xmlCtx, section, 'not-equals'), ~_COND_STATE.EQUALS)
-    _xml.raiseWrongXml(xmlCtx, 'var', 'State of var condition is not found')
+    else:
+        _xml.raiseWrongXml(xmlCtx, 'var', 'State of var condition is not found')
+        return None
+        return None
 
 
 def _parseEffectTriggeredCondition(xmlCtx, section, state):
@@ -112,6 +116,25 @@ def _readBonusNotReceivedCondition(xmlCtx, section, _):
     return _parseBonusReceivedCondition(xmlCtx, section, ~_COND_STATE.ACTIVE)
 
 
+def _readServiceCondition(xmlCtx, section, _):
+    entityID = parseID(xmlCtx, section, 'Specify a entity ID')
+    tags = section.keys()
+    if 'path' in tags:
+        path = parseID(xmlCtx, section['path'], 'Specify a path.')
+    else:
+        path = None
+    try:
+        if path is not None:
+            serviceClass = getattr(importlib.import_module(path), entityID)
+        else:
+            serviceClass = importlib.import_module(entityID)
+    except (ImportError, NameError):
+        _xml.raiseWrongXml(xmlCtx, section, 'Service %s not found!' % entityID)
+        return
+
+    return conditions.ServiceCondition(entityID, serviceClass)
+
+
 CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondition(xmlCtx, section, _COND_STATE.ACTIVE, flags),
  'inactive': lambda xmlCtx, section, flags: _readFlagCondition(xmlCtx, section, ~_COND_STATE.ACTIVE, flags),
  'global-active': lambda xmlCtx, section, flags: _readGlobalFlagCondition(xmlCtx, section, _COND_STATE.ACTIVE),
@@ -123,7 +146,8 @@ CONDITION_TAGS = {'active': lambda xmlCtx, section, flags: _readFlagCondition(xm
  'effect-triggered': _readEffectTriggeredCondition,
  'effect-not-triggered': _readEffectNotTriggeredCondition,
  'bonus-received': _readBonusReceivedCondition,
- 'bonus-not-received': _readBonusNotReceivedCondition}
+ 'bonus-not-received': _readBonusNotReceivedCondition,
+ 'service': _readServiceCondition}
 
 def readConditions(xmlCtx, section, flags):
     result = conditions.Conditions()
@@ -755,4 +779,5 @@ def parseHint(xmlCtx, section):
     else:
         sectionInfo['padding'] = None
     sectionInfo['hasBox'] = section.readBool('has-box', True)
+    sectionInfo['conditions'] = _parseConditions(xmlCtx, section, [])
     return sectionInfo

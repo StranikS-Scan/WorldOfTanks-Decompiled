@@ -364,20 +364,25 @@ class _PixieEffectDesc(_EffectDesc):
             self._callbackCreate(elem)
         else:
             elem['file'] = file
-            elem['pixie'] = PixieBG(file, partial(self._callbackAfterLoading, elem))
+            elem['pixie'] = PixieBG(file, self._callbackAfterLoading, None, elem)
         list.append(elem)
         return
 
     def delete(self, elem, reason):
-        if elem['pixie'].pixie is not None:
-            elem['node'].detach(elem['pixie'].pixie)
+        pixieDef = elem.get('pixie', None)
+        if pixieDef is not None:
+            if pixieDef.pixie is not None:
+                elem['node'].detach(elem['pixie'].pixie)
+            pixieDef.destroy()
         elem['pixie'] = None
         elem['node'] = None
         return True
 
-    def _callbackAfterLoading(self, elem, pixieBG):
-        self.__prototypePixies[elem['file']] = pixieBG.pixie.clone()
-        self._callbackCreate(elem)
+    def _callbackAfterLoading(self, pixieBG, elem):
+        if elem is not None:
+            self.__prototypePixies[elem['file']] = pixieBG.pixie.clone()
+            self._callbackCreate(elem)
+        return
 
     def _callbackCreate(self, elem):
         scale = elem.get('scale')

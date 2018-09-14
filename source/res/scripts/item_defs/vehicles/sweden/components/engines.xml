@@ -33,6 +33,7 @@
     <Motoraggregat_3>	33	</Motoraggregat_3>
     <Saab_Scania_DS14>	35	</Saab_Scania_DS14>
     <Leyland_L60>	36	</Leyland_L60>
+    <Motoraggregat_1S_A>	38	</Motoraggregat_1S_A>
     <Development_Engine>	65535	</Development_Engine>
   </ids>
   <shared>
@@ -536,6 +537,23 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Motoraggregat_1S>
+    <Motoraggregat_1S_A>
+      <userString>	#sweden_vehicles:Motoraggregat_1S_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	70000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	700	</weight>
+      <maxHealth>	400	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.10	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </Motoraggregat_1S_A>
     <Motoraggregat_3>
       <userString>	#sweden_vehicles:Motoraggregat_3	</userString>
       <tags>	diesel	</tags>

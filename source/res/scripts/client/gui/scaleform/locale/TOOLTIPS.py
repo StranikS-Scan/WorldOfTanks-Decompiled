@@ -1183,6 +1183,7 @@ class TOOLTIPS(object):
     VEHICLEIGR_DAYS = '#tooltips:vehicleIgr/days'
     VEHICLEIGR_HOURS = '#tooltips:vehicleIgr/hours'
     VEHICLE_DEAL_TELECOM_MAIN = '#tooltips:vehicle/deal/telecom/main'
+    VEHICLE_TRADE = '#tooltips:vehicle/trade'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
     BUYSKILL_PARTLY = '#tooltips:buySkill/partly'
     BUYSKILL_HEADER = '#tooltips:buySkill/header'
@@ -1243,6 +1244,18 @@ class TOOLTIPS(object):
     VEHICLESTATUS_FALLOUT_ONLY_HEADER = '#tooltips:vehicleStatus/fallout_only/header'
     VEHICLESTATUS_NOT_SUITABLE_HEADER = '#tooltips:vehicleStatus/not_suitable/header'
     VEHICLESTATUS_UNSUITABLETOQUEUE_HEADER = '#tooltips:vehicleStatus/unsuitableToQueue/header'
+    TRADEINVEHICLESTATUS_BATTLE_HEADER = '#tooltips:tradeInVehicleStatus/battle/header'
+    TRADEINVEHICLESTATUS_BATTLE_BODY = '#tooltips:tradeInVehicleStatus/battle/body'
+    TRADEINVEHICLESTATUS_DAMAGED_HEADER = '#tooltips:tradeInVehicleStatus/damaged/header'
+    TRADEINVEHICLESTATUS_DAMAGED_BODY = '#tooltips:tradeInVehicleStatus/damaged/body'
+    TRADEINVEHICLESTATUS_EXPLODED_HEADER = '#tooltips:tradeInVehicleStatus/exploded/header'
+    TRADEINVEHICLESTATUS_EXPLODED_BODY = '#tooltips:tradeInVehicleStatus/exploded/body'
+    TRADEINVEHICLESTATUS_DESTROYED_HEADER = '#tooltips:tradeInVehicleStatus/destroyed/header'
+    TRADEINVEHICLESTATUS_DESTROYED_BODY = '#tooltips:tradeInVehicleStatus/destroyed/body'
+    TRADEINVEHICLESTATUS_INPREBATTLE_HEADER = '#tooltips:tradeInVehicleStatus/inPrebattle/header'
+    TRADEINVEHICLESTATUS_INPREBATTLE_BODY = '#tooltips:tradeInVehicleStatus/inPrebattle/body'
+    TRADEINVEHICLESTATUS_LOCKED_HEADER = '#tooltips:tradeInVehicleStatus/locked/header'
+    TRADEINVEHICLESTATUS_LOCKED_BODY = '#tooltips:tradeInVehicleStatus/locked/body'
     ITEMSTATUS_NOTENOUGH = '#tooltips:itemStatus/notEnough'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK = '#tooltips:tankCaruselTooltip/vehicleType/normal/lightTank'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK = '#tooltips:tankCaruselTooltip/vehicleType/normal/mediumTank'
@@ -2349,6 +2362,20 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALQUESTS_INPROGRESS_BODY = '#tooltips:hangar/header/personalQuests/inprogress/body'
     HANGAR_HEADER_PERSONALQUESTS_AWARD_HEADER = '#tooltips:hangar/header/personalQuests/award/header'
     HANGAR_HEADER_PERSONALQUESTS_AWARD_BODY = '#tooltips:hangar/header/personalQuests/award/body'
+    TRADE_HEADER = '#tooltips:trade/header'
+    TRADE_BODY = '#tooltips:trade/body'
+    TRADE_NODISCOUNT = '#tooltips:trade/noDiscount'
+    TRADEIN_NODISCOUNT_HEADER = '#tooltips:tradeIn/noDiscount/header'
+    TRADEIN_NODISCOUNT_BODY = '#tooltips:tradeIn/noDiscount/body'
+    TRADE_DISCOUNT = '#tooltips:trade/discount'
+    TRADE_SEVERALDISCOUNTS = '#tooltips:trade/severalDiscounts'
+    TRADE_VEHICLE_HEADER = '#tooltips:trade/vehicle/header'
+    TRADE_VEHICLE_PRICE = '#tooltips:trade/vehicle/price'
+    TRADE_VEHICLE_OLDPRICE = '#tooltips:trade/vehicle/oldPrice'
+    TRADE_VEHICLE_NEWPRICE = '#tooltips:trade/vehicle/newPrice'
+    TRADE_VEHICLE_TOCHANGE = '#tooltips:trade/vehicle/toChange'
+    TRADE_VEHICLE_NOVEHICLE = '#tooltips:trade/vehicle/noVehicle'
+    TRADE_VEHICLE_RESULT = '#tooltips:trade/vehicle/result'
     SETTINGS_KEY_ENEMY_BODY = '#tooltips:settings/key/enemy/body'
     SETTINGS_KEY_ALLY_BODY = '#tooltips:settings/key/ally/body'
     SETTINGS_KEY_TARGET_ENEMY = '#tooltips:settings/key/target/enemy'
@@ -2457,7 +2484,8 @@ class TOOLTIPS(object):
      VEHICLE_RESTORELEFT_DAYS,
      VEHICLE_RESTORELEFT_HOURS,
      VEHICLE_RENTLEFT_BATTLES,
-     VEHICLE_DEAL_TELECOM_MAIN)
+     VEHICLE_DEAL_TELECOM_MAIN,
+     VEHICLE_TRADE)
     TANKCARUSEL_LOCK_ENUM = (TANKCARUSEL_LOCK_HEADER,
      TANKCARUSEL_LOCK_TO,
      TANKCARUSEL_LOCK_CLAN,

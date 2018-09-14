@@ -8,7 +8,6 @@ from gui.Scaleform.daapi.view.lobby.store.tabs import shop
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
-from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -17,16 +16,17 @@ _SHOP_TABS = {STORE_CONSTANTS.SHELL: shop.ShopShellTab,
  STORE_CONSTANTS.MODULE: shop.ShopModuleTab,
  STORE_CONSTANTS.VEHICLE: shop.ShopVehicleTab,
  STORE_CONSTANTS.RESTORE_VEHICLE: shop.ShopRestoreVehicleTab,
+ STORE_CONSTANTS.TRADE_IN_VEHICLE: shop.ShopTradeInVehicleTab,
  STORE_CONSTANTS.OPTIONAL_DEVICE: shop.ShopOptionalDeviceTab,
  STORE_CONSTANTS.EQUIPMENT: shop.ShopEquipmentTab}
 
 class Shop(ShopMeta):
 
-    def buyItem(self, itemCD):
+    def buyItem(self, itemCD, allowTradeIn):
         dataCompactId = int(itemCD)
         item = g_itemsCache.items.getItemByCD(dataCompactId)
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, dataCompactId)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, dataCompactId, allowTradeIn)
         else:
             ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_MODULE, dataCompactId)
 
@@ -78,11 +78,3 @@ class Shop(ShopMeta):
         :return:<ShopItemsTab>
         """
         return _SHOP_TABS[type]
-
-    def _getObtainingVehicleSubFilterData(self):
-        result = [{'id': STORE_CONSTANTS.BUY_VEHICLE_OBTAINING_TYPE,
-          'label': MENU.BARRACKS_OBTAININGVEHICLETYPE_DROPDOWNITEM_BUYINGVEHICLE}]
-        if self._isVehicleRestoreEnabled():
-            result.append({'id': STORE_CONSTANTS.RESTORE_VEHICLE_OBTAINING_TYPE,
-             'label': MENU.BARRACKS_OBTAININGVEHICLETYPE_DROPDOWNITEM_RESTOREVEHICLE})
-        return result

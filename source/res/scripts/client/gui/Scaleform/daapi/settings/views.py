@@ -80,6 +80,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BATTLE_TYPE_SELECT_POPOVER = 'battleTypeSelectPopover'
     SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
+    TRADEIN_POPOVER = 'TradeInPopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'

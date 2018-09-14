@@ -487,3 +487,18 @@ class IChinaController(IGameController):
 
     def showBrowser(self):
         raise NotImplementedError
+
+
+class ITradeInController(IGameController):
+
+    def getTradeInInfo(self, item):
+        raise NotImplementedError
+
+    def getTradeOffVehicles(self, level):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def addTradeInPriceIfNeeded(self, vehicle, money):
+        raise NotImplementedError

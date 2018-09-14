@@ -31,7 +31,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
@@ -47,6 +47,7 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
 class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, ctx=None):
         super(VehiclePreview, self).__init__(ctx)
@@ -177,6 +178,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         vehicle = g_currentPreviewVehicle.item
         if vehicle.isUnlocked:
             money = g_itemsCache.items.stats.money
+            money = self.tradeIn.addTradeInPriceIfNeeded(vehicle, money)
             exchangeRate = g_itemsCache.items.shop.exchangeRate
             price = getGUIPrice(vehicle, money, exchangeRate)
             currency = price.getCurrency(byWeight=True)
@@ -221,12 +223,17 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         item = g_currentPreviewVehicle.item
         isBuyingAvailable = not item.isHidden or item.isRentable or item.isRestorePossible()
         if isBuyingAvailable:
-            buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_LABEL)
+            if item.canTradeIn:
+                buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_TRADEINLABEL)
+            else:
+                buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_LABEL)
         else:
             buyingLabel = text_styles.alert(VEHICLE_PREVIEW.BUYINGPANEL_ALERTLABEL)
         return {'buyingLabel': buyingLabel,
          'modulesLabel': text_styles.middleTitle(VEHICLE_PREVIEW.MODULESPANEL_TITLE),
-         'isBuyingAvailable': isBuyingAvailable}
+         'isBuyingAvailable': isBuyingAvailable,
+         'isCanTrade': item.canTradeIn,
+         'vehicleId': item.intCD}
 
     def __getInfoData(self, selectedTabInd):
         return {'selectedTab': selectedTabInd,

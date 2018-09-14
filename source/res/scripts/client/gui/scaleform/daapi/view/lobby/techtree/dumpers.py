@@ -35,7 +35,7 @@ class _BaseDumper(object):
         return {}
 
     @staticmethod
-    def _getRentStatus(item):
+    def _getVehicleStatus(item):
         status = ''
         statusLevel = ''
         if item.isRented and not item.isTelecom:
@@ -51,6 +51,9 @@ class _BaseDumper(object):
         elif item.isRentable and item.isRentAvailable:
             status = i18n.makeString(MENU.CURRENTVEHICLESTATUS_ISRENTABLE)
             statusLevel = Vehicle.VEHICLE_STATE_LEVEL.RENTED
+        elif item.canTradeIn:
+            status = i18n.makeString(MENU.TRADE_IN)
+            statusLevel = Vehicle.VEHICLE_STATE_LEVEL.INFO
         return (status, statusLevel)
 
 
@@ -181,7 +184,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
         status = statusLevel = ''
         vehicleBtnLabel = ''
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            status, statusLevel = self._getRentStatus(item)
+            status, statusLevel = self._getVehicleStatus(item)
             if item.isInInventory:
                 vehicleBtnLabel = MENU.RESEARCH_LABELS_BUTTON_SHOWINHANGAR
             else:
@@ -284,7 +287,7 @@ class NationObjDumper(_BaseDumper):
         nodeCD = node['id']
         tags = item.tags
         credits, gold = node['GUIPrice']
-        status, statusLevel = self._getRentStatus(item)
+        status, statusLevel = self._getVehicleStatus(item)
         return {'id': nodeCD,
          'state': node['state'],
          'type': item.itemTypeName,

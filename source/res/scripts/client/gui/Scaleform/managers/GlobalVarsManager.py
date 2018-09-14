@@ -6,11 +6,12 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 from gui.shared import g_itemsCache
 from helpers import getClientOverride, dependency
-from skeletons.gui.game_control import IWalletController
+from skeletons.gui.game_control import IWalletController, ITradeInController
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
     wallet = dependency.descriptor(IWalletController)
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self):
         super(GlobalVarsManager, self).__init__()
@@ -79,3 +80,9 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         else:
             GlobalVarsManager._isLoginLoadInfoRequested = True
             return True
+
+    def isVehicleRestoreEnabled(self):
+        return g_lobbyContext.getServerSettings().isVehicleRestoreEnabled()
+
+    def isTradeInEnabled(self):
+        return self.tradeIn.isEnabled()

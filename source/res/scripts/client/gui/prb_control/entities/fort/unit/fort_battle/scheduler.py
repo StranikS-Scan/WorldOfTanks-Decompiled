@@ -47,4 +47,4 @@ class FortBattleScheduler(UnitScheduler, FortListener):
         """
         pInfo = self._entity.getPlayerInfo()
         if pInfo.isInSlot and not pInfo.isReady:
-            g_eventDispatcher.showUnitWindow(self._entity.getEntityType())
+            g_eventDispatcher.showFortWindow()

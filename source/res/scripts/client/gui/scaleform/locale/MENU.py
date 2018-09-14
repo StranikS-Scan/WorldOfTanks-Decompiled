@@ -210,6 +210,7 @@ class MENU(object):
     TANKMANTRAININGWINDOW_ACADEMY = '#menu:tankmanTrainingWindow/academy'
     TANKMANTRAININGWINDOW_SCOOL = '#menu:tankmanTrainingWindow/scool'
     TANKMANTRAININGWINDOW_FREE = '#menu:tankmanTrainingWindow/free'
+    TANKMANTRAININGWINDOW_FREE_PRICE = '#menu:tankmanTrainingWindow/free/price'
     TANKMANTRAININGWINDOW_TRAININGTO = '#menu:tankmanTrainingWindow/trainingTo'
     TANKMANTRAININGBUTTON2_TRAININGTO = '#menu:tankmanTrainingButton2/trainingTo'
     TANKMANTRAININGBUTTON2_RETRAININGTO = '#menu:tankmanTrainingButton2/retrainingTo'
@@ -914,6 +915,7 @@ class MENU(object):
     RESEARCH_LABELS_TOTALXP = '#menu:research/labels/totalXP'
     RESEARCH_STATUS_HISTORICALMODULES = '#menu:research/status/historicalModules'
     RESEARCH_LABELS_BUTTON_RESTORE = '#menu:research/labels/button/restore'
+    TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
     BARRACKS_BTNBUYTANKMAN = '#menu:barracks/btnBuyTankman'
     BARRACKS_BTNBUYBERTH = '#menu:barracks/btnBuyBerth'
@@ -943,8 +945,6 @@ class MENU(object):
     BARRACKS_NORECOVERYTANKMEN_TITLE = '#menu:barracks/noRecoveryTankmen/title'
     BARRACKS_NORECOVERYTANKMEN_MESSAGE = '#menu:barracks/noRecoveryTankmen/message'
     BARRACKS_NOFILTEREDRECOVERYTANKMEN_MESSAGE = '#menu:barracks/noFilteredRecoveryTankmen/message'
-    BARRACKS_OBTAININGVEHICLETYPE_DROPDOWNITEM_BUYINGVEHICLE = '#menu:barracks/obtainingVehicleType/dropDownItem/buyingVehicle'
-    BARRACKS_OBTAININGVEHICLETYPE_DROPDOWNITEM_RESTOREVEHICLE = '#menu:barracks/obtainingVehicleType/dropDownItem/restoreVehicle'
     STORE_MENU_NOITEMS = '#menu:store/menu/noItems'
     INVENTORY_MENU_VEHICLE_NAME = '#menu:inventory/menu/vehicle/name'
     INVENTORY_MENU_VEHICLE_TAGS_NAME = '#menu:inventory/menu/vehicle/tags/name'
@@ -1003,6 +1003,13 @@ class MENU(object):
     INVENTORY_TABLE_HEADER_PRICE = '#menu:inventory/table/header/price'
     INVENTORY_TABLE_BUTTONSELL = '#menu:inventory/table/buttonSell'
     SHOP_MENU_VEHICLE_NAME = '#menu:shop/menu/vehicle/name'
+    SHOP_MENU_VEHICLE_OBTAININGTYPE_NAME = '#menu:shop/menu/vehicle/obtainingType/name'
+    SHOP_MENU_VEHICLE_OBTAININGTYPE_VEHICLE_NAME = '#menu:shop/menu/vehicle/obtainingType/vehicle/name'
+    SHOP_MENU_VEHICLE_OBTAININGTYPE_RESTOREVEHICLE_NAME = '#menu:shop/menu/vehicle/obtainingType/restoreVehicle/name'
+    SHOP_MENU_VEHICLE_OBTAININGTYPE_TRADEINVEHICLE_NAME = '#menu:shop/menu/vehicle/obtainingType/tradeInVehicle/name'
+    SHOP_MENU_VEHICLE_TRADEINVEHICLE_VEHFORTRADE = '#menu:shop/menu/vehicle/tradeInVehicle/vehForTrade'
+    SHOP_MENU_VEHICLE_TRADEINVEHICLE_SAVING = '#menu:shop/menu/vehicle/tradeInVehicle/saving'
+    SHOP_MENU_VEHICLE_TRADEINVEHICLE_PRICE = '#menu:shop/menu/vehicle/tradeInVehicle/price'
     SHOP_MENU_VEHICLE_TAGS_NAME = '#menu:shop/menu/vehicle/tags/name'
     SHOP_MENU_VEHICLE_TAGS_ALL_NAME = '#menu:shop/menu/vehicle/tags/all/name'
     SHOP_MENU_VEHICLE_TAGS_LIGHTTANK_NAME = '#menu:shop/menu/vehicle/tags/lightTank/name'
@@ -1275,6 +1282,7 @@ class MENU(object):
     CONTEXTMENU_SHOWVEHICLEPREVIEW = '#menu:contextMenu/showVehiclePreview'
     CONTEXTMENU_VEHICLEPREVIEW = '#menu:contextMenu/vehiclePreview'
     CONTEXTMENU_BUY = '#menu:contextMenu/buy'
+    CONTEXTMENU_BUYORTRADEIN = '#menu:contextMenu/buyOrTradeIn'
     CONTEXTMENU_RESTORE = '#menu:contextMenu/restore'
     CONTEXTMENU_UNLOAD = '#menu:contextMenu/unload'
     CONTEXTMENU_CANCELBUY = '#menu:contextMenu/cancelBuy'
@@ -1704,6 +1712,7 @@ class MENU(object):
      CONTEXTMENU_SHOWVEHICLEPREVIEW,
      CONTEXTMENU_VEHICLEPREVIEW,
      CONTEXTMENU_BUY,
+     CONTEXTMENU_BUYORTRADEIN,
      CONTEXTMENU_RESTORE,
      CONTEXTMENU_UNLOAD,
      CONTEXTMENU_CANCELBUY,
@@ -1990,6 +1999,13 @@ class MENU(object):
      PROFILE_STATS_ITEMS_SCOUT,
      PROFILE_STATS_ITEMS_MEDALKAY)
     SHOP_MENU_VEHICLE_ENUM = (SHOP_MENU_VEHICLE_NAME,
+     SHOP_MENU_VEHICLE_OBTAININGTYPE_NAME,
+     SHOP_MENU_VEHICLE_OBTAININGTYPE_VEHICLE_NAME,
+     SHOP_MENU_VEHICLE_OBTAININGTYPE_RESTOREVEHICLE_NAME,
+     SHOP_MENU_VEHICLE_OBTAININGTYPE_TRADEINVEHICLE_NAME,
+     SHOP_MENU_VEHICLE_TRADEINVEHICLE_VEHFORTRADE,
+     SHOP_MENU_VEHICLE_TRADEINVEHICLE_SAVING,
+     SHOP_MENU_VEHICLE_TRADEINVEHICLE_PRICE,
      SHOP_MENU_VEHICLE_TAGS_NAME,
      SHOP_MENU_VEHICLE_TAGS_ALL_NAME,
      SHOP_MENU_VEHICLE_TAGS_LIGHTTANK_NAME,
@@ -2061,6 +2077,7 @@ class MENU(object):
      TANKMANTRAININGWINDOW_ACADEMY,
      TANKMANTRAININGWINDOW_SCOOL,
      TANKMANTRAININGWINDOW_FREE,
+     TANKMANTRAININGWINDOW_FREE_PRICE,
      TANKMANTRAININGWINDOW_TRAININGTO,
      TANKMANTRAININGWINDOW_CLOSEBTN)
     VEHICLEINFO_PARAMS_ENUM = (VEHICLEINFO_PARAMS_MAXHEALTH,

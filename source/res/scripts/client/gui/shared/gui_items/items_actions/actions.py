@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import BigWorld
 from gui.shared.economics import getGUIPrice
+from helpers import dependency
 from items import vehicles
 from adisp import process
 from gui.shared.utils import decorators
@@ -16,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta, RestoreExchangeCreditsMeta
+from skeletons.gui.game_control import ITradeInController
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -70,14 +72,17 @@ class IGUIItemAction(object):
 
 
 class BuyAction(IGUIItemAction):
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def _mayObtainForMoney(self, item):
-        canBuy, _ = item.mayObtainForMoney(g_itemsCache.items.stats.money)
+        money = g_itemsCache.items.stats.money
+        canBuy, _ = item.mayObtainForMoney(money)
         return canBuy
 
     def _mayObtainWithMoneyExchange(self, item):
         items = g_itemsCache.items
-        return item.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+        money = items.stats.money
+        return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
 
 
 class SellItemAction(IGUIItemAction):
@@ -122,9 +127,10 @@ class ModuleBuyAction(BuyAction):
 
 class VehicleBuyAction(BuyAction):
 
-    def __init__(self, vehCD):
+    def __init__(self, vehCD, isTradeIn=False):
         super(VehicleBuyAction, self).__init__()
         self.__vehCD = vehCD
+        self.__isTradeIn = isTradeIn
 
     @process
     def doAction(self):
@@ -152,9 +158,19 @@ class VehicleBuyAction(BuyAction):
                     else:
                         showShopMsg('common_rent_or_buy_error', item)
                 if self._mayObtainForMoney(item):
-                    shared_events.showVehicleBuyDialog(item)
+                    shared_events.showVehicleBuyDialog(item, self.__isTradeIn)
                 yield lambda callback=None: callback
             return
+
+    def _mayObtainForMoney(self, item):
+        money = self.tradeIn.addTradeInPriceIfNeeded(item, g_itemsCache.items.stats.money)
+        canBuy, _ = item.mayObtainForMoney(money)
+        return canBuy
+
+    def _mayObtainWithMoneyExchange(self, item):
+        items = g_itemsCache.items
+        money = self.tradeIn.addTradeInPriceIfNeeded(item, items.stats.money)
+        return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
 
 
 class UnlockItemAction(IGUIItemAction):

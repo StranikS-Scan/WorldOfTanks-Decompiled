@@ -151,3 +151,4 @@ class TUTORIAL(object):
     CUSTOMIZATION_SLOTS = '#tutorial:customization/slots'
     ALCHEMY_BTN = '#tutorial:alchemy/btn'
     CHRISTMAS_DECORATIONLIST = '#tutorial:christmas/decorationList'
+    TRADEIN_SHOP = '#tutorial:tradeIn/shop'

@@ -21,7 +21,6 @@ FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
-VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
@@ -53,10 +52,12 @@ STORE_TAB = 'store_tab'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE),
-               'shop_vehicle': {'obtainingType': STORE_CONSTANTS.BUY_VEHICLE_OBTAINING_TYPE,
+               'shop_vehicle': {'obtainingType': STORE_CONSTANTS.VEHICLE,
                                 'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
                                 'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
-               'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE_OBTAINING_TYPE,
+               'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE,
+                                       'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
+               'shop_tradeInVehicle': {'obtainingType': STORE_CONSTANTS.TRADE_IN_VEHICLE,
                                        'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
                'shop_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
                                'vehicleCD': -1,
@@ -312,7 +313,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltHp': 1,
                                      'markerAltVehicleName': True,
                                      'markerAltPlayerName': False}},
-                VEHICLE_BUY_WINDOW_SETTINGS: True,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,

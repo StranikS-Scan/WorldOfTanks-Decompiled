@@ -67,10 +67,11 @@ def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleBuyDialog(vehicle):
+def showVehicleBuyDialog(vehicle, isTradeIn=False):
     alias = VIEW_ALIAS.VEHICLE_RESTORE_WINDOW if vehicle.isRestoreAvailable() else VIEW_ALIAS.VEHICLE_BUY_WINDOW
     g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'nationID': vehicle.nationID,
-     'itemID': vehicle.innationID}), EVENT_BUS_SCOPE.LOBBY)
+     'itemID': vehicle.innationID,
+     'isTradeIn': isTradeIn}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showResearchView(vehTypeCompDescr):

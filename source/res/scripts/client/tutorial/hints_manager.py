@@ -3,6 +3,7 @@
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial import settings
+from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
 from tutorial.doc_loader.parsers import HintsParser
 from debug_utils import LOG_DEBUG
@@ -74,10 +75,14 @@ class HintsManager(object):
 
     def __onItemFound(self, itemID):
         hint = self._data.hintForItem(itemID)
-        if hint is not None and itemID not in self.__activeHints:
+        if hint is not None and itemID not in self.__activeHints and self.__checkConditions(hint):
             self.__showHint(hint)
         return
 
     def __onItemLost(self, itemID):
         if itemID in self.__activeHints:
             self.__hideHint(itemID)
+
+    def __checkConditions(self, hint):
+        conditions = hint['conditions']
+        return True if conditions is None else FunctionalConditions(conditions).allConditionsOk()

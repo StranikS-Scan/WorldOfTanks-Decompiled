@@ -107,6 +107,14 @@ class NODE_STATE:
         return state & NODE_STATE_FLAGS.VEHICLE_RENTAL_IS_OVER
 
     @classmethod
+    def canTradeIn(cls, state):
+        return state & NODE_STATE_FLAGS.CAN_TRADE_IN
+
+    @classmethod
+    def canTradeOff(cls, state):
+        return state & NODE_STATE_FLAGS.CAN_TRADE_OFF
+
+    @classmethod
     def printStates(cls, state):
         states = []
         for k, v in NODE_STATE_FLAGS.__dict__.iteritems():

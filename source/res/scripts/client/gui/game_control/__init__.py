@@ -26,6 +26,7 @@ from gui.game_control.screencast_controller import ScreenCastController as _Scre
 from gui.game_control.state_tracker import GameStateTracker
 from gui.game_control.veh_comparison_basket import VehComparisonBasket as _VehComparison
 from gui.game_control.wallet import WalletController as _Wallet
+from gui.game_control.trade_in import TradeInController as _TradeIn
 from skeletons.gui import game_control as _interface
 
 def getGameControllersConfig(manager):
@@ -65,5 +66,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IClanLockController, _ClanLocks())
     _config(_interface.IVehicleComparisonBasket, _VehComparison())
     _config(_interface.IEncyclopediaController, _Exncyclopedia())
+    _config(_interface.ITradeInController, _TradeIn())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())

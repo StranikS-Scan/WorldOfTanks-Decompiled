@@ -258,7 +258,8 @@ class StoreVehicleTab(StoreItemsTab):
          'isPremium': item.isPremium,
          'isElite': item.isElite,
          'rentLeft': self.__getItemRentInfo(item),
-         'restoreInfo': self.__getItemRestoreInfo(item)})
+         'restoreInfo': self.__getItemRestoreInfo(item),
+         'canTradeIn': item.canTradeIn})
         return vo
 
     def _getItemTypeID(self):

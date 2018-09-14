@@ -16,6 +16,8 @@ _TankmenRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'freeDuration credi
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
 _ResourceData = namedtuple('_ResourceData', 'resourceType, value, isPercentage')
 _ConditionData = namedtuple('_ConditionData', 'conditionType, value')
+_TradeInData = namedtuple('_TradeInData', ['sellPriceFactor', 'allowedVehicleLevels', 'forbiddenVehicles'])
+_TradeInData.__new__.__defaults__ = (0, (), ())
 
 class _NamedGoodieData(GoodieData):
     """
@@ -55,6 +57,22 @@ class _NamedGoodieData(GoodieData):
             return int(self.target.targetValue.split('_')[1])
         else:
             return self.target.targetValue
+
+
+class TradeInData(_TradeInData):
+    """
+    Trade in config data:
+        sellPriceFactor - multiplier for buy price, that player will receive during trade off
+        allowedVehicleLevels - vehicle levels that allowed to trade
+        forbiddenVehicles - vehicle int CDs that are forbidden to trade
+    """
+
+    @property
+    def isEnabled(self):
+        """
+        Trade in price factor greater then zero means that all trade in feature is enabled.
+        """
+        return self.sellPriceFactor > 0
 
 
 class ShopCommonStats(object):
@@ -355,6 +373,11 @@ class ShopCommonStats(object):
     @property
     def refSystem(self):
         return self.getValue('refSystem', {})
+
+    @property
+    def tradeIn(self):
+        tradeInData = self.getValue('tradeIn')
+        return TradeInData(**tradeInData) if tradeInData is not None else TradeInData()
 
     def __getRestoreConfig(self):
         return self.getValue('restore_config', {})

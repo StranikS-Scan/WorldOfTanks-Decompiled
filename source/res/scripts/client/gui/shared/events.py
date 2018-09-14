@@ -491,3 +491,10 @@ class MarkersManagerEvent(SharedEvent):
 
     def getMarkersManager(self):
         return self.__markersManager
+
+
+class VehicleBuyEvent(HasCtxEvent):
+    VEHICLE_SELECTED = 'vehicleSelected'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(VehicleBuyEvent, self).__init__(eventType, ctx)

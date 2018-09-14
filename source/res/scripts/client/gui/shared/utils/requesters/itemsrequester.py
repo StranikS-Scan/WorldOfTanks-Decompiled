@@ -141,6 +141,8 @@ class REQ_CRITERIA(object):
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
+        CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
+        CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -323,9 +325,10 @@ class ItemsRequester(object):
                             if shellIntCD == intCD:
                                 vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
                                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                                vehicelData = self.inventory.getItemData(vehicleIntCD)
-                                gunIntCD = vehicelData.descriptor.gun['compactDescr']
-                                invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
+                                vehicleData = self.inventory.getItemData(vehicleIntCD)
+                                if vehicleData is not None:
+                                    gunIntCD = vehicleData.descriptor.gun['compactDescr']
+                                    invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 

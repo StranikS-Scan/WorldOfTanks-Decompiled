@@ -11,6 +11,7 @@ from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.server_events import formatters
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
 from gui.server_events.conditions import GROUP_TYPE
+from gui.server_events.formatters import RELATIONS_SCHEME
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from shared_utils import CONST_CONTAINER
@@ -240,11 +241,18 @@ class MissionsVehicleListFormatter(MissionFormatter):
         pass
 
     @classmethod
+    def _getTitleKey(cls, condition=None):
+        return QUESTS.DETAILS_CONDITIONS_TARGET_TITLE
+
+    @classmethod
     def _getTitle(cls, condition):
         if condition.isAnyVehicleAcceptable():
-            return FormattableField(FORMATTER_IDS.RELATION, (condition.relationValue, condition.relation))
+            return FormattableField(FORMATTER_IDS.RELATION, (condition.relationValue,
+             condition.relation,
+             RELATIONS_SCHEME.DEFAULT,
+             cls._getTitleKey(condition)))
         else:
-            return FormattableField(FORMATTER_IDS.COMPLEX_RELATION, (condition.relationValue, condition.relation, cls._getIconKey(condition)))
+            return FormattableField(FORMATTER_IDS.COMPLEX_RELATION, (condition.relationValue, condition.relation, cls._getTitleKey(condition)))
 
     @classmethod
     def _getDescription(cls, condition):

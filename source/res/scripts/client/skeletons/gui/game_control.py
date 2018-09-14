@@ -290,9 +290,6 @@ class IBrowserController(IGameController):
 
 class IPromoController(IGameController):
 
-    def showCurrentVersionPatchPromo(self, isAsync=False):
-        raise NotImplementedError
-
     def showVersionsPatchPromo(self):
         raise NotImplementedError
 
@@ -302,7 +299,7 @@ class IPromoController(IGameController):
     def isPatchChanged(self):
         raise NotImplementedError
 
-    def showPromo(self, url, title, handlers=None):
+    def showPromo(self, url, title, forced=False, handlers=None):
         raise NotImplementedError
 
 

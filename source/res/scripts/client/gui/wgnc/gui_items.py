@@ -243,7 +243,7 @@ class BrowserItem(_GUIItem):
                 handlersData[gui_event] = partial(self.__handleActions, notID, actions)
             LOG_WARNING('Unsupported browser gui event="{}"'.format(gui_event))
 
-        self.promoCtrl.showPromo(url, self.getTopic(), handlersData)
+        self.promoCtrl.showPromo(url, self.getTopic(), False, handlersData)
 
     def __handleActions(self, notID, actionNames):
         g_wgncEvents.onItemActionFired(notID, actionNames, self.getName())

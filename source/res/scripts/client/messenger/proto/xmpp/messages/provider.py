@@ -26,7 +26,7 @@ class ChatProvider(ClientHolder):
     def clear(self):
         pass
 
-    def release(self):
+    def release(self, **kwargs):
         pass
 
     def suspend(self):

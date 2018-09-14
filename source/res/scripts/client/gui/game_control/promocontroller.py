@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/PromoController.py
+from collections import namedtuple
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings, PROMO, LAST_PROMO_PATCH_VERSION
 from account_shared import getClientMainVersion
@@ -16,6 +17,7 @@ from helpers import i18n, isPlayerAccount, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
+_PromoData = namedtuple('_PromoData', ['url', 'title', 'guiActionHandlers'])
 
 class PromoController(IPromoController):
     PROMO_AUTO_VIEWS_TEST_VALUE = 5
@@ -33,22 +35,26 @@ class PromoController(IPromoController):
         self.__currentVersionBrowserShown = False
         self.__promoShown = set()
         self.__availablePromo = set()
-        self.__actionsHandlers = None
         self.__urlMacros = URLMarcos()
+        self.__guiActionsHandlers = None
+        self.__isLobbyInited = False
+        self.__pendingPromo = None
         self._isPromoShown = False
         return
 
     def fini(self):
         self._stop()
+        self.__pendingPromo = None
         self.__urlMacros.clear()
         self.__urlMacros = None
-        self.__actionsHandlers = None
+        self.__guiActionsHandlers = None
         super(PromoController, self).fini()
         return
 
     def onLobbyInited(self, event):
         if not isPlayerAccount():
             return
+        self.__isLobbyInited = True
         self._updatePromo(self._getPromoEventNotifications())
         self.eventsNotification.onEventNotificationsChanged += self.__onEventNotification
         self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
@@ -64,31 +70,30 @@ class PromoController(IPromoController):
         self._isPromoShown = False
 
     @process
-    def showCurrentVersionPatchPromo(self, isAsync=False):
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE), browserID=self.__currentVersionBrowserID, isAsync=isAsync, showWaiting=not isAsync)
-
-    @process
     def showVersionsPatchPromo(self):
         promoUrl = yield self.__urlMacros.parse(GUI_SETTINGS.promoscreens)
         promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
         self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
-    @process
-    def showPromo(self, url, title, handlers=None):
-        promoUrl = yield self.__urlMacros.parse(url)
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
-        self.__actionsHandlers = handlers
-        if handlers:
-            webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
-            if webBrowser is not None:
-                for evtName in handlers.iterkeys():
-                    if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
-                        webBrowser.onUserRequestToClose += self.__onUserRequestToClose
-                    LOG_WARNING('Unsupported gui event = "{}"'.format(evtName))
-
-            else:
-                LOG_WARNING('Browser with id = "{}" has not been found'.format(self.__currentVersionBrowserID))
-        return
+    def showPromo(self, url, title, forced=False, handlers=None):
+        """
+        :param url: url that should be opened in the browser:
+        :param title: the title of browser window:
+        :param forced: True - promowindow with new URL will be shown in any case,
+                       False - new promowindow will be shown
+                       if there has not been already shown promowindow during the session:
+        :param handlers: Dict:
+                key - gui action self.GUI_EVENTS.*
+                value - functions that should to be invoked when particular gui action has happened
+        """
+        if forced:
+            self.__registerAndShowPromoBrowser(url, title, handlers)
+        elif self.__isLobbyInited:
+            if not self._isPromoShown:
+                self.__registerAndShowPromoBrowser(url, title, handlers)
+                self._isPromoShown = True
+        else:
+            self.__pendingPromo = _PromoData(url, title, handlers)
 
     def getCurrentVersionBrowserID(self):
         return self.__currentVersionBrowserID
@@ -101,15 +106,18 @@ class PromoController(IPromoController):
         return mainVersion is not None and AccountSettings.getSettings(LAST_PROMO_PATCH_VERSION) != mainVersion
 
     def _stop(self):
+        self.__isLobbyInited = False
         self.__currentVersionPromoUrl = None
         self.__currentVersionBrowserID = None
         self.__currentVersionBrowserShown = False
         self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
-        webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
-        if webBrowser is not None:
-            webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
+        self.__cleanupGuiActionHandlers()
         self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
         return
+
+    @process
+    def _showCurrentVersionPatchPromo(self, isAsync=False):
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(self.__currentVersionPromoUrl, i18n.makeString(MENU.PROMO_PATCH_TITLE), browserID=self.__currentVersionBrowserID, isAsync=isAsync, showWaiting=not isAsync)
 
     @process
     def _processPromo(self, promo):
@@ -119,19 +127,26 @@ class PromoController(IPromoController):
             AccountSettings.setSettings(LAST_PROMO_PATCH_VERSION, getClientMainVersion())
             self.__currentVersionBrowserShown = True
             self._isPromoShown = True
-            self.showCurrentVersionPatchPromo(isAsync=True)
+            self._showCurrentVersionPatchPromo(isAsync=True)
             return
-        actionsPromo = [ item for item in promo if item.eventType.startswith(gc_constants.PROMO.TEMPLATE.ACTION) ]
-        for actionPromo in actionsPromo:
-            promoUrl = yield self.__urlMacros.parse(actionPromo.data)
-            promoTitle = actionPromo.text
-            if promoUrl not in self.__promoShown and not self._isPromoShown and promoUrl != self.__currentVersionPromoUrl:
-                LOG_DEBUG('Showing action promo:', promoUrl)
-                self.__promoShown.add(promoUrl)
-                self.__savePromoShown()
-                self._isPromoShown = True
-                yield self.__showPromoBrowser(promoUrl, promoTitle)
-                return
+        elif not self._isPromoShown and self.__pendingPromo is not None:
+            self.__registerAndShowPromoBrowser(*self.__pendingPromo)
+            self.__pendingPromo = None
+            return
+        else:
+            actionsPromo = [ item for item in promo if item.eventType.startswith(gc_constants.PROMO.TEMPLATE.ACTION) ]
+            for actionPromo in actionsPromo:
+                promoUrl = yield self.__urlMacros.parse(actionPromo.data)
+                promoTitle = actionPromo.text
+                if promoUrl not in self.__promoShown and not self._isPromoShown and promoUrl != self.__currentVersionPromoUrl:
+                    LOG_DEBUG('Showing action promo:', promoUrl)
+                    self.__promoShown.add(promoUrl)
+                    self.__savePromoShown()
+                    self._isPromoShown = True
+                    yield self.__showPromoBrowser(promoUrl, promoTitle)
+                    return
+
+            return
 
     @process
     def _updatePromo(self, promosData):
@@ -155,7 +170,7 @@ class PromoController(IPromoController):
         return self.eventsNotification.getEventsNotifications(filterFunc)
 
     def __onUserRequestToClose(self):
-        self.__actionsHandlers[self.GUI_EVENTS.CLOSE_GUI_EVENT]()
+        self.__guiActionsHandlers[self.GUI_EVENTS.CLOSE_GUI_EVENT]()
 
     def __savePromoShown(self):
         AccountSettings.setFilter(PROMO, self.__promoShown)
@@ -171,6 +186,39 @@ class PromoController(IPromoController):
                 self.__currentVersionBrowserShown = False
                 g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT)), scope=EVENT_BUS_SCOPE.LOBBY)
         return
+
+    def __registerGuiActionHandlers(self, handlers):
+        self.__guiActionsHandlers = handlers
+        if handlers:
+            webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+            if webBrowser is not None:
+                for evtName in handlers.iterkeys():
+                    if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
+                        webBrowser.onUserRequestToClose += self.__onUserRequestToClose
+                    LOG_WARNING('Attempt to register Unsupported gui event = "{}"'.format(evtName))
+
+            else:
+                LOG_WARNING('Browser with id = "{}" has not been found'.format(self.__currentVersionBrowserID))
+        return
+
+    def __cleanupGuiActionHandlers(self):
+        webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+        if self.__guiActionsHandlers is not None and webBrowser:
+            for evtName in self.__guiActionsHandlers.iterkeys():
+                if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
+                    webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
+                LOG_WARNING('Attempt to clear Unsupported gui event = "{}"'.format(evtName))
+
+            self.__guiActionsHandlers = None
+        return
+
+    @process
+    def __registerAndShowPromoBrowser(self, url, title, handlers):
+        self.__cleanupGuiActionHandlers()
+        promoUrl = yield self.__urlMacros.parse(url)
+        LOG_DEBUG('Showing promo:', promoUrl)
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
+        self.__registerGuiActionHandlers(handlers)
 
     @async
     @process

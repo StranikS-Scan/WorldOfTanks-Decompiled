@@ -18,7 +18,7 @@ else:
     IS_BASEAPP = BigWorld.component in ('base', 'service')
     IS_WEB = False
 
-CURRENT_REALM = 'CT'
+CURRENT_REALM = 'RU'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -1805,6 +1805,7 @@ class BOOTCAMP_BATTLE_RESULT_MESSAGE:
     DRAW = 0
     VICTORY = 1
     DEFEAT = 2
+    FAILURE = 3
 
 
 BOOTCAMP_MESSAGES_NAMES = ('msgTankGarageI', 'msgTankGarageII', 'msgTankGarageIII', 'msgTankGarageIV', 'msgTankGarageV', 'msgTank1', 'msgCredits', 'msgTankExperience', 'msgUnlockModule', 'msgTankCrew', 'msgSkillsPerks', 'msgUnlockNewVehicle', 'msgTank2', 'msgConsumables', 'msgEquipment', 'msgGold', 'msgPremium', 'msgMissionAccomplished', 'msgBootcampGraduate')

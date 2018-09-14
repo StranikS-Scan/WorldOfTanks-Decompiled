@@ -42,12 +42,12 @@ class PlayerBootcampAccount(PlayerAccount):
         self.databaseID = bootcampCtx['databaseID']
         currentLesson = bootcampCtx['lessonNum']
         isBattleLesson = bootcampCtx['isBattleLesson']
+        g_bootcamp.setAccount(self)
         g_bootcamp.setContext(bootcampCtx)
         events.isPlayerEntityChanging = False
         firstRun = currentLesson == 0 and not g_bootcamp.isRunning()
         events.onBootcampShowGUI(firstRun)
         if g_bootcamp.isRunning():
-            g_bootcamp.setAccount(self)
             g_bootcamp.onBattleLessonFinished(currentLesson, bootcampCtx['lessonResults'])
         elif not g_bootcamp.isManualStart():
             g_bootcamp.start(currentLesson, isBattleLesson)

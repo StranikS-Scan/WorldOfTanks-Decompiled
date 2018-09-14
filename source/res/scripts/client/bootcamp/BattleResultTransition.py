@@ -19,7 +19,7 @@ class BattleResultTransition(ExternalFlashComponent, BCBattleResultTransitionMet
         super(BattleResultTransition, self)._populate()
         self.__onUpdateStage()
         g_guiResetters.add(self.__onUpdateStage)
-        resultType, resultReason, resultTypeStr, resultReasonStr, resultReusableInfo = g_bootcamp.getBattleResults()
+        _, _, resultTypeStr, _, _ = g_bootcamp.getBattleResults()
         self.as_msgTypeHandlerS(resultTypeStr)
 
     def _dispose(self):

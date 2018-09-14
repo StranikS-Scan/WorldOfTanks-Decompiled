@@ -660,7 +660,7 @@ def _titleRelationFormat(value, relation, relationI18nType=RELATIONS_SCHEME.DEFA
         relation = i18n.makeString('#quests:details/relations%s/%s' % (relationI18nType, relation))
         return '%s %s' % (relation, value)
     elif titleKey:
-        return i18n.makeString('#quests:details/conditions/%s/title' % titleKey)
+        return i18n.makeString(titleKey)
     else:
         return i18n.makeString(QUESTS.DETAILS_CONDITIONS_TARGET_TITLE)
         return

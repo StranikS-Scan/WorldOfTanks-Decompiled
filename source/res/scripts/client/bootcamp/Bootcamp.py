@@ -362,14 +362,8 @@ class Bootcamp(EventSystemEntity):
         if self.requestBootcampFinishFromBattle:
             self.onRequestBootcampFinish()
             return
-        else:
-            if lessonResults:
-                self.__currentState = StateResultScreen(lessonResults)
-                self.__currentState.activate()
-            else:
-                self.__resultType = constants.BOOTCAMP_BATTLE_RESULT_MESSAGE.DRAW
-                self.onResultScreenFinished(None)
-            return
+        self.__currentState = StateResultScreen(lessonResults)
+        self.__currentState.activate()
 
     def __onAvatarBecomeNonPlayer(self):
         if self.__currentState is not None:
@@ -415,13 +409,6 @@ class Bootcamp(EventSystemEntity):
     def enqueueBattleLesson(self):
         if self.prbEntity is not None:
             self.prbEntity.doAction()
-        return
-
-    def returnToGarageFromQueue(self):
-        if self.__currentState is not None:
-            self.__currentState.deactivate()
-        self.__currentState = StateInGarage(self.__lessonId, self.__account, self.__checkpoint)
-        self.__currentState.activate()
         return
 
     def showFinalVideo(self):

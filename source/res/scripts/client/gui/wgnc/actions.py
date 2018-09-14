@@ -96,7 +96,7 @@ class OpenPromoBrowser(OpenInternalBrowser):
     promoCtrl = dependency.descriptor(IPromoController)
 
     def _doInvoke(self, title):
-        self.promoCtrl.showPromo(self._url, title)
+        self.promoCtrl.showPromo(self._url, title, True)
 
 
 @ReprInjector.withParent()

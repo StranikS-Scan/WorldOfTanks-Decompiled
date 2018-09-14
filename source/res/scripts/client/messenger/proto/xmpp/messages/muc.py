@@ -365,10 +365,18 @@ class MUCProvider(ChatProvider):
         self.__isAccountInited = False
         super(MUCProvider, self).clear()
 
-    def release(self):
+    def release(self, excludeLazy=False):
+        """ (Re)joins to channels when client is (re)connected to XMPP and
+            initial presence is received from server.
+        :param excludeLazy: if flag is True than don't join to lazy channels. For example,
+            player logs in to the game server, so client mustn't to join to lazy channels,
+            client joins to lazy channels by player's action only.
+        """
         if not g_settings.server.XMPP.isMucServiceAllowed():
             return
         for channel in self._getChannelsIterator(MESSAGE_TYPE.GROUPCHAT):
+            if excludeLazy and channel.isLazy():
+                continue
             self.joinToRoom(channel.getID(), channel.getPassword(), initResult=ACTION_RESULT.DO_NOTHING)
 
         super(MUCProvider, self).release()
@@ -463,7 +471,7 @@ class MUCProvider(ChatProvider):
         result = False
         presence = resource.presence
         if not self.__isAccountInited and utils.getPlayerDatabaseID() == resource.getWgDatabaseID() and presence == PRESENCE.AVAILABLE:
-            self.release()
+            self.release(excludeLazy=True)
             self.__isAccountInited = True
         if g_settings.server.XMPP.isMucServiceAllowed(hostname=jid.getDomain()):
             mucInfo = resource.getMucInfo()

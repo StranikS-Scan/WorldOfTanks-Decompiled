@@ -31,6 +31,10 @@
     <setParent>
       <Arg>	MAILBOX	</Arg>
     </setParent>
+    <setToken>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </setToken>
   </BaseMethods>
   <ClientMethods>
     <finishBootcamp></finishBootcamp>

@@ -2,9 +2,12 @@
 # Embedded file name: scripts/client/bootcamp/states/StateResultScreen.py
 from adisp import process
 from copy import deepcopy
+from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.states import STATE
 from bootcamp.states.AbstractState import AbstractState
+from constants import BOOTCAMP_BATTLE_RESULT_MESSAGE
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from bootcamp.BootcampTransition import BootcampTransition
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.battle_results import IBattleResultsService
@@ -27,17 +30,23 @@ class StateResultScreen(AbstractState):
         sessionProvider = dependency.instance(IBattleSessionProvider)
         battleResultProvider = dependency.instance(IBattleResultsService)
         battleCtx = sessionProvider.getCtx()
-        if battleCtx.lastArenaUniqueID:
-            if g_bootcamp.transitionFlash is not None:
-                g_bootcamp.transitionFlash.close()
-            g_bootcamp.transitionFlash = BattleResultTransition()
-            g_bootcamp.transitionFlash.active(True)
-            g_bootcamp.showActionWaitWindow()
-            yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
-            g_bootcamp.hideActionWaitWindow()
-            yield battleResultProvider.requestResults(RequestResultsContext(battleCtx.lastArenaUniqueID))
-            battleCtx.lastArenaUniqueID = None
-        return
+        g_bootcamp.showActionWaitWindow()
+        yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
+        g_bootcamp.hideActionWaitWindow()
+        resultType, _, _, _, _ = g_bootcamp.getBattleResults()
+        if resultType == BOOTCAMP_BATTLE_RESULT_MESSAGE.FAILURE:
+            BootcampTransition.stop()
+            g_bootcampEvents.onResultScreenFinished(0)
+            return
+        else:
+            if battleCtx.lastArenaUniqueID:
+                if g_bootcamp.transitionFlash is not None:
+                    g_bootcamp.transitionFlash.close()
+                g_bootcamp.transitionFlash = BattleResultTransition()
+                g_bootcamp.transitionFlash.active(True)
+                yield battleResultProvider.requestResults(RequestResultsContext(battleCtx.lastArenaUniqueID))
+                battleCtx.lastArenaUniqueID = None
+            return
 
     def _doDeactivate(self):
         pass

@@ -33,6 +33,12 @@ def _packAchievementsList(achivementsIDs):
     return result
 
 
+def _makeKeyNegativeIf(key, cond):
+    if cond:
+        key = '%s/not' % key
+    return key
+
+
 class MissionsPostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
     """
     Conditions formatter for 'postbattle' conditions section.
@@ -153,6 +159,10 @@ class _VehiclesKillFormatter(MissionsVehicleListFormatter):
         return CONDITION_ICON.KILL_VEHICLES
 
     @classmethod
+    def _getTitleKey(cls, condition=None):
+        return _makeKeyNegativeIf(QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS_TITLE, condition.isNegative())
+
+    @classmethod
     def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
 
@@ -167,6 +177,10 @@ class _VehiclesDamageFormatter(MissionsVehicleListFormatter):
         return CONDITION_ICON.DAMAGE
 
     @classmethod
+    def _getTitleKey(cls, condition=None):
+        return _makeKeyNegativeIf(QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE_TITLE, condition.isNegative())
+
+    @classmethod
     def _getLabelKey(cls, condition=None):
         return QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE
 
@@ -179,6 +193,10 @@ class _VehiclesStunFormatter(MissionsVehicleListFormatter):
     @classmethod
     def _getIconKey(cls, condition=None):
         return CONDITION_ICON.ASSIST_STUN if condition.getEventCount() else CONDITION_ICON.ASSIST_STUN_DURATION
+
+    @classmethod
+    def _getTitleKey(cls, condition=None):
+        return _makeKeyNegativeIf(QUESTS.DETAILS_CONDITIONS_VEHICLESTUN_TITLE, condition.isNegative())
 
     @classmethod
     def _getLabelKey(cls, condition=None):

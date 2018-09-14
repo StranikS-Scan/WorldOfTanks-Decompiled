@@ -14,7 +14,7 @@ class BCOverlayFinalWindow(BCOverlayFinalWindowMeta):
         from gui.app_loader import g_appLoader
         g_appLoader.detachCursor(APP_NAME_SPACE.SF_BATTLE)
         from bootcamp.Bootcamp import g_bootcamp
-        resultType, resultReason, resultTypeStr, resultReasonStr, resultReusableInfo = g_bootcamp.getBattleResults()
+        resultType, _, resultTypeStr, _, _ = g_bootcamp.getBattleResults()
         from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
         LOG_DEBUG_DEV_BOOTCAMP('BCOverlayFinalWindow', resultType)
         self.as_msgTypeHandlerS(resultType, resultTypeStr)

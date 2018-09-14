@@ -1,11 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/TutorialHangarQuestDetails.py
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.TutorialHangarQuestDetailsMeta import TutorialHangarQuestDetailsMeta
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.bonuses import getTutorialBonusObj
 from gui.server_events import formatters
+from gui.shared import event_dispatcher
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-from gui.shared.events import TutorialEvent, OpenLinkEvent
+from gui.shared.events import OpenLinkEvent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import i18n
 
@@ -31,8 +35,11 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
         self.__questsDescriptor = descriptor
 
     def showTip(self, id, type):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
         if type == CONDITION_TYPE.CHAIN:
-            self.fireEvent(TutorialEvent(TutorialEvent.START_TRAINING, settingsID='TRIGGERS_CHAINS', initialChapter=id, restoreIfRun=True))
+            event_dispatcher.runTutorialChain(id)
         elif type == CONDITION_TYPE.TUTORIAL:
             battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL)
         elif not (type == CONDITION_TYPE.VIDEO and id in (OpenLinkEvent.REPAIRKITHELP_HELP, OpenLinkEvent.MEDKIT_HELP, OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP)):
@@ -52,19 +59,31 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
              'description': self.__getDescription(description, chapter)})
             return
 
-    def __getBonuses(self, chapter):
-        result = []
-        bonus = chapter.getBonus()
-        if bonus is not None:
-            for n, v in bonus.getValues().iteritems():
-                b = getTutorialBonusObj(n, v)
-                if b is not None:
-                    result.append(b.format())
+    def __getBonuses(self, chapter, useIconFormat = False):
+        if not chapter.isBonusReceived(g_itemsCache.items.stats.tutorialsCompleted):
+            result = []
+            iconResult = []
+            output = []
+            bonus = chapter.getBonus()
+            if bonus is not None:
+                for n, v in bonus.getValues().iteritems():
+                    b = getTutorialBonusObj(n, v)
+                    if b is not None:
+                        if b.hasIconFormat() and useIconFormat:
+                            iconResult.extend(b.getList())
+                        else:
+                            flist = b.formattedList()
+                            if flist:
+                                result.extend(flist)
 
-        if len(result):
-            return formatters.todict([formatters.packTextBlock(', '.join(result))])
+            if len(result):
+                output.append(formatters.packSimpleBonusesBlock(result))
+            if len(iconResult):
+                output.append(formatters.packIconAwardBonusBlock(iconResult))
+            return formatters.todict(output)
         else:
-            return []
+            return formatters.todict([formatters.packTextBlock('#quests:beginnerQuests/details/noAward')])
+            return
 
     def __getDescription(self, description, chapter):
         return {'descTitle': text_styles.middleTitle(QUESTS.BEGINNERQUESTS_DETAILS_DESCRIPTIONTITLE),

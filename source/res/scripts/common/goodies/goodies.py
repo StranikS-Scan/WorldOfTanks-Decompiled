@@ -154,7 +154,7 @@ class Goodies(object):
         allResourcesByType.add(affectedResource.__class__)
         return False
 
-    def __show(self, target, resources, returnDeltas):
+    def __show(self, target, resources, returnDeltas, applyToZero):
         allResourcesByType = set()
         toUpdate = {}
         for goodie in self.actualGoodies.itervalues():
@@ -163,9 +163,9 @@ class Goodies(object):
                 continue
             if goodieDefinition.target == target:
                 if returnDeltas:
-                    affectedResource = goodieDefinition.apply_delta(resources)
+                    affectedResource = goodieDefinition.apply_delta(resources, applyToZero)
                 else:
-                    affectedResource = goodieDefinition.apply(resources)
+                    affectedResource = goodieDefinition.apply(resources, applyToZero)
                 if affectedResource is not None and not self.__checkDuplicateResources(allResourcesByType, affectedResource):
                     toUpdate[goodie.uid] = affectedResource
 
@@ -192,11 +192,11 @@ class Goodies(object):
         self.__append(goodieDefinition, state, expiration, counter)
         return
 
-    def test(self, target, resource, returnDeltas = False):
-        return self.__show(target, resource, returnDeltas)
+    def test(self, target, resources, returnDeltas = False, applyToZero = False):
+        return self.__show(target, resources, returnDeltas, applyToZero)
 
-    def apply(self, target, resources, returnDeltas = False):
-        toUpdate = self.__show(target, resources, returnDeltas)
+    def apply(self, target, resources, returnDeltas = False, applyToZero = False):
+        toUpdate = self.__show(target, resources, returnDeltas, applyToZero)
         for goodieID in toUpdate:
             self.__update(goodieID)
 

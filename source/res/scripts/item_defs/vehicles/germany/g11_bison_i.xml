@@ -1,0 +1,731 @@
+<g11_bison_i.xml>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	13	</armor_1>
+      <armor_2>	8	</armor_2>
+      <armor_3>	13	</armor_3>
+      <armor_4>	13	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	13	</armor_6>
+      <armor_7>	4	</armor_7>
+      <armor_8>	5	</armor_8>
+      <armor_9>	8	</armor_9>
+      <armor_10>	5	</armor_10>
+      <armor_11>	0	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	2690	</weight>
+    <maxHealth>	104	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G11_Bison_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 36.00 0.36 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.28 36.00 0.36 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.92	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 1.44961 0.436	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G11_Bison_I/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.812499 1.64408 1.41221	</rayStart>
+        <rayEnd>	0.812499 1.4772 1.04869	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.30459 1.24831 0.282793	</rayStart>
+        <rayEnd>	-0.904587 1.24831 0.282793	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	1.30458 1.18051 0.614519	</rayStart>
+        <rayEnd>	0.904588 1.18051 0.614519	</rayEnd>
+        <rayUp>	0.000000 0.961262 -0.275637	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Sturmpanzerketten_I>
+      <userString>	#germany_vehicles:Sturmpanzerketten_I	</userString>
+      <shortUserString>	#germany_vehicles:Sturmpanzerketten_I_short	</shortUserString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	560	</price>
+      <unlocks>
+        <chassis>	Sturmpanzerketten_II	  <cost>	350	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	2750	</weight>
+      <maxLoad>	7000	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	6000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	14	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.46	</vehicleMovement>
+        <vehicleRotation>	0.46	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G11_Bison_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.3 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.291191	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.291191	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.340816	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.111005	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.336859	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.340816	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.111005	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.336859	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.69369 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G11_Bison_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.834702 1.22971	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.566690 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.749240	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G11_Bison_I/track/pz_kpfw_i_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G11_Bison_I/track/pz_kpfw_i_track.model	</segmentModelRight>
+        <left>	vehicles/german/G11_Bison_I/track/left.track	</left>
+        <right>	vehicles/german/G11_Bison_I/track/right.track	</right>
+        <segmentLength>	0.083	</segmentLength>
+        <segmentOffset>	0.124	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	-9.9	</gravity>
+        <elasticity>	900	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	3	</forwardElastK>
+        <backwardElastK>	1.3	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.045	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.045	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.0051	</trackThickness>
+    </Sturmpanzerketten_I>
+    <Sturmpanzerketten_II>
+      <userString>	#germany_vehicles:Sturmpanzerketten_II	</userString>
+      <shortUserString>	#germany_vehicles:Sturmpanzerketten_II_short	</shortUserString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1160	</price>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	2750	</weight>
+      <maxLoad>	9200	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	7000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	16	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G11_Bison_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.3 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.291191	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.291191	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.340816	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.111005	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.336859	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.340816	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.111005	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.336859	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.69369 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G11_Bison_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.834702 1.22971	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.555350 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.749240	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G11_Bison_I/track/pz_kpfw_i_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G11_Bison_I/track/pz_kpfw_i_track.model	</segmentModelRight>
+        <left>	vehicles/german/G11_Bison_I/track/left.track	</left>
+        <right>	vehicles/german/G11_Bison_I/track/right.track	</right>
+        <segmentLength>	0.083	</segmentLength>
+        <segmentOffset>	0.124	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	-9.9	</gravity>
+        <elasticity>	900	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	3	</forwardElastK>
+        <backwardElastK>	1.3	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.064	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.045	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.045	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.0051	</trackThickness>
+    </Sturmpanzerketten_II>
+  </chassis>
+  <turrets0>
+    <T_Bison>
+      <guns>
+        <_150mm_sIG33L11>	shared	  <maxAmmo>	12	</maxAmmo>
+          <reloadTime>	22.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.5	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.86	</shotDispersionRadius>
+          <aimingTime>	6.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -75 1 -75	</minPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-5.5 5.5	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G11_Bison_I/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G11_Bison_I/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.445 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_150mm_sIG33L11>
+      </guns>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:T_Bison	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	3	</level>
+      <price>	50	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	26	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	290	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <models>
+        <undamaged>	vehicles/german/G11_Bison_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G11_Bison_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G11_Bison_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G11_Bison_I/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.000006 0.000029	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.056 0.000 1.000 0.000 0.073 -0.285 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </T_Bison>
+  </turrets0>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	6.12	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <engines>
+    <Krupp_M305>	shared	  <unlocks>
+        <engine>	Krupp_M311	  <cost>	50	</cost>
+        </engine>
+      </unlocks>
+    </Krupp_M305>
+    <Krupp_M311>	shared	  <unlocks>
+        <engine>	Maybach_NL38TR	  <cost>	80	</cost>
+        </engine>
+      </unlocks>
+    </Krupp_M311>
+    <Maybach_NL38TR>	shared	</Maybach_NL38TR>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <FuG2>	shared	  <unlocks>
+        <radio>	FuG5	  <cost>	105	</cost>
+        </radio>
+      </unlocks>
+    </FuG2>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
+        </radio>
+        <vehicle>	G22_Sturmpanzer_II	  <cost>	5120	</cost>
+        </vehicle>
+      </unlocks>
+    </FuG5>
+    <FuG_Spr.A>	shared	</FuG_Spr.A>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g11_bison_i.xml>

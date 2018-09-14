@@ -1,0 +1,53 @@
+<regular_4_2_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_2_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	5000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isAnyOurCrittedInnerModules	</key>
+              <equal>	0	</equal>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_2_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	5000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isAnyOurCrittedInnerModules	</key>
+              <equal>	0	</equal>
+            </results>
+            <isAlive></isAlive>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	2	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_2_11.xml>

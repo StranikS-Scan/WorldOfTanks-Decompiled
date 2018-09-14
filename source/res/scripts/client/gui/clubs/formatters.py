@@ -54,7 +54,7 @@ class ClubInviteHtmlTextFormatter(object):
         return makeHtmlString('html_templates:lobby/clubs', 'inviteTitle', ctx={'sender': creatorFullName})
 
     def getComment(self, invite):
-        return makeHtmlString('html_templates:lobby/clubs', 'inviteComment', {'eventType': 'showClubProfile'})
+        return makeHtmlString('html_templates:lobby/clubs', 'inviteComment') % {'eventType': 'showClubProfile'}
 
     def getNote(self, invite):
         note = ''
@@ -198,13 +198,13 @@ def getInviteRevokeSysMsg():
 class InvitesSysMsgFormatter(object):
 
     def __init__(self, accountsIDs, response, usersCache = None):
+        self._successNames = []
+        self._errorNames = []
+        self._accountsIDs = accountsIDs
         if len(accountsIDs) > 1:
             errors = map(lambda (c, dbID): dbID, response.data.get('errors', []))
         else:
             errors = []
-        self._successNames = []
-        self._errorNames = []
-        self._accountsIDs = accountsIDs
         if usersCache is None:
             usersGetter = storage_getter('users')()
         else:
@@ -222,15 +222,15 @@ class InvitesSysMsgFormatter(object):
 
     def getSuccessSysMsg(self):
         if len(self._accountsIDs) > 1:
-            if not len(self._errorNames):
-                return _sysMsg('clubs/request/success/invites/sent')
-            else:
+            if self._errorNames:
                 return _sysMsg('clubs/request/success/invites/sent/names/success', names=', '.join(self._successNames))
+            else:
+                return _sysMsg('clubs/request/success/invites/sent')
         else:
             return _sysMsg('clubs/request/success/invite/sent')
 
     def getErrorSysMsg(self):
-        if len(self._errorNames) > 1:
+        if self._errorNames:
             return _sysMsg('clubs/request/success/invites/sent/names/error', names=', '.join(self._errorNames))
 
 

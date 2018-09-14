@@ -3,7 +3,6 @@ import weakref
 from collections import defaultdict
 from constants import EVENT_TYPE
 from helpers import i18n
-from debug_utils import LOG_DEBUG
 from gui import makeHtmlString, GUI_NATIONS_ORDER_INDEX
 from gui.server_events import formatters, conditions
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
@@ -236,8 +235,6 @@ class PreBattleConditions(ConditionsParser):
                 return conditions.BattleCamouflage(uniqueName, data)
             if name == 'geometryNames':
                 return conditions.BattleMap(uniqueName, data)
-            if name == 'historicalBattleIDs':
-                return conditions.HistoricalBattles(uniqueName, data)
 
     def format(self, svrEvents, event = None):
         conds = self.getConditions()

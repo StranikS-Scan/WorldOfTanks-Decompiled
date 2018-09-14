@@ -6,6 +6,9 @@ class SwitchModePanelMeta(BaseDAAPIComponent):
     def switchMode(self):
         self._printOverrideError('switchMode')
 
+    def onSelectCheckBoxAutoSquad(self, isSelected):
+        self._printOverrideError('onSelectCheckBoxAutoSquad')
+
     def as_setDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)

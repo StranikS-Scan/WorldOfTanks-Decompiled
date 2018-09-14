@@ -4,6 +4,8 @@ import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 _ASSAULT2_GP_NAME = constants.ARENA_GAMEPLAY_NAMES[6]
 ENABLED_ARENA_GAMEPLAY_NAMES = constants.ARENA_GAMEPLAY_NAMES[:3] + (_ASSAULT2_GP_NAME,)
+if constants.IS_DEVELOPMENT:
+    ENABLED_ARENA_GAMEPLAY_NAMES += (constants.ARENA_GAMEPLAY_NAMES[13],)
 
 def getDefaultMask():
 

@@ -1,0 +1,1154 @@
+<gb50_sherman_iii.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <repairCost>	5.35	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50.8	</armor_1>
+      <armor_2>	50.8	</armor_2>
+      <armor_3>	38.1	</armor_3>
+      <armor_4>	38.1	</armor_4>
+      <armor_5>	38.1	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	12.7	</armor_7>
+      <armor_8>	63.5	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	25.4	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_14>	19.1	</armor_14>
+      <armor_15>	9.5	</armor_15>
+      <armor_16>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	16029	</weight>
+    <maxHealth>	328	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.48 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 1.02954 -0.155	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.000688553 0.379235 2.3121	</rayStart>
+        <rayEnd>	-0.000688553 0.211829 2.20266	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.42388 0.658082 0.752317	</rayStart>
+        <rayEnd>	-1.22389 0.658082 0.752317	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.42389 0.661042 0.73822	</rayStart>
+        <rayEnd>	1.22389 0.661042 0.73822	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB50_Sherman_III>
+      <userString>	#gb_vehicles:Chassis_GB50_Sherman_III	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4450	</price>
+      <unlocks>
+        <chassis>	Chassis_GB50_Sherman_III_2	  <cost>	2100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	30200	</maxLoad>
+      <terrainResistance>	1 1.5 2.3	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.5 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.319188	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.283379	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.319188	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.283379	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116794	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116794	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.950464 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.06832 1.93353	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <trackThickness>	-0.0208	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB50_Sherman_III/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB50_Sherman_III/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB50_Sherman_III/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB50_Sherman_III/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB50_Sherman_III/track/left.track	</left>
+        <right>	vehicles/british/GB50_Sherman_III/track/right.track	</right>
+        <segmentLength>	0.138	</segmentLength>
+        <segmentOffset>	0.183	</segmentOffset>
+        <segment2Offset>	0.069	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1031	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.031	</offset>
+        </node>
+      </trackNodes>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.618020 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.425700 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.347410	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB50_Sherman_III>
+    <Chassis_GB50_Sherman_III_2>
+      <userString>	#gb_vehicles:Chassis_GB50_Sherman_III_2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8450	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	34000	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.7	</terrainResistance>
+      <brakeForce>	34000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	37	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.5 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.319188	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.283379	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.319188	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.283379	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116794	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116794	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.950464 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.06832 1.93353	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <trackThickness>	-0.0208	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB50_Sherman_III/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB50_Sherman_III/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB50_Sherman_III/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB50_Sherman_III/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB50_Sherman_III/track/left.track	</left>
+        <right>	vehicles/british/GB50_Sherman_III/track/right.track	</right>
+        <segmentLength>	0.138	</segmentLength>
+        <segmentOffset>	0.183	</segmentOffset>
+        <segment2Offset>	0.069	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1031	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.031	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.031	</offset>
+        </node>
+      </trackNodes>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.632290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.425700 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.347410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB50_Sherman_III_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB50_Sherman_III>
+      <userString>	#gb_vehicles:Turret_1_GB50_Sherman_III	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4800	</price>
+      <armor>
+        <armor_1>	76.2	</armor_1>
+        <armor_2>	76.2	</armor_2>
+        <armor_3>	50.8	</armor_3>
+        <armor_4>	50.8	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_8>	25.4	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	50.8	</armor_10>
+        <armor_11>	25.4	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4800	</weight>
+      <maxHealth>	82	</maxHealth>
+      <rotationSpeed>	39	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	97	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
+            </gun>
+            <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
+            </gun>
+            <turret>	Turret_2_GB50_Sherman_III	  <cost>	2700	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.0305786 1.40945	</rayStart>
+              <rayEnd>	-0.0310822 -0.0478134 1.40634	</rayEnd>
+              <rayUp>	0.07 0.065 3	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_M3_L37>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	128	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.0305786 1.05338	</rayStart>
+              <rayEnd>	-0.0249696 -0.0246837 1.05336	</rayEnd>
+              <rayUp>	0.045 0.045 4	</rayUp>
+              <size>	0.23	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	66	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <reloadTime>	9	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.0305788 1.08673	</rayStart>
+              <rayEnd>	-0.0162083 -0.122977 1.08696	</rayEnd>
+              <rayUp>	0.08 0.081 4	</rayUp>
+              <size>	0.329	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_SPH_M4_L23>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.293013 0.841699	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.10877 0.253829 0.0610888	</rayStart>
+          <rayEnd>	-0.910771 0.230337 0.045506	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.10877 0.253829 0.0610888	</rayStart>
+          <rayEnd>	0.910771 0.230337 0.045506	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_04	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
+      <physicsShape>	1.000 0.059 0.941 -0.029 0.559 0.088 0.566 0.463 0.515 0.544 0.022 0.419 0.250 0.074 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB50_Sherman_III>
+    <Turret_2_GB50_Sherman_III>
+      <userString>	#gb_vehicles:Turret_2_GB50_Sherman_III	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	11500	</price>
+      <unlocks>
+        <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+        </gun>
+        <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
+        </gun>
+        <vehicle>	GB19_Sherman_Firefly	  <cost>	28850	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	63.5	</armor_1>
+        <armor_2>	63.5	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	63.5	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_9>	63.5	</armor_9>
+        <armor_10>	25.4	</armor_10>
+        <armor_11>	44.5	</armor_11>
+        <armor_12>	25.4	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5000	</weight>
+      <maxHealth>	137	</maxHealth>
+      <rotationSpeed>	37	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.963	</invisibilityFactor>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	97	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00338735 1.68225	</rayStart>
+              <rayEnd>	-0.0328087 -0.0122558 1.67935	</rayEnd>
+              <rayUp>	0.068 0.064 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_M3_L37>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	128	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	2.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00338735 1.37126	</rayStart>
+              <rayEnd>	0.0251821 0.000214839 1.37124	</rayEnd>
+              <rayUp>	0.045 0.045 4	</rayUp>
+              <size>	0.258	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III>
+        <_105mm_SPH_M4_L23>	shared	  <maxAmmo>	66	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <reloadTime>	9	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00338656 1.31606	</rayStart>
+              <rayEnd>	0.0209345 -0.0811287 1.31629	</rayEnd>
+              <rayUp>	0.08 0.08 4	</rayUp>
+              <size>	0.32	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_SPH_M4_L23>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	128	</maxAmmo>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00338785 1.41484	</rayStart>
+              <rayEnd>	-0.0275966 0.00994359 1.41485	</rayEnd>
+              <rayUp>	0.049 0.049 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_V>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	71	</maxAmmo>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00338785 2.1872	</rayStart>
+              <rayEnd>	-0.0388544 0.00371218 2.18598	</rayEnd>
+              <rayUp>	0.064 0.062 4	</rayUp>
+              <size>	0.32	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB50_Sherman_III/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB50_Sherman_III/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB50_Sherman_III/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB50_Sherman_III/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.336553 0.849479	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.07334 0.392135 0.012121	</rayStart>
+          <rayEnd>	-0.87645 0.361784 -0.00562216	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.17097 0.410465 -0.0313847	</rayStart>
+          <rayEnd>	0.775967 0.347621 -0.0263597	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_04	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
+      <physicsShape>	0.956 0.029 0.941 0.000 0.559 0.029 0.676 0.654 0.493 0.485 0.059 0.515 0.096 0.066 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB50_Sherman_III>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	GMC_6046	  <cost>	1400	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <GMC_6046>	shared	  <unlocks>
+        <engine>	Crysler_A57	  <cost>	1480	</cost>
+        </engine>
+      </unlocks>
+    </GMC_6046>
+    <Crysler_A57>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Crysler_A57>
+    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb50_sherman_iii.xml>

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/common/scripts.py
+import weakref
 from functools import partial
 from debug_utils import *
 
@@ -69,7 +70,7 @@ class Script(object):
         pass
 
     def continueAfterInterrupt(self):
-        pass
+        return None
 
     def callback(self, callback, *args, **kwargs):
         pass
@@ -112,14 +113,17 @@ class RemoteScript(Script):
         self.status = SCRIPT_STATUS.IDLE
 
     def continueAfterInterrupt(self):
-        if not self.__waitTaskIDs and self.__interruptLevel == self.__requiredInterruptLevel:
-            self.__executeTasks()
+        if self.__interruptLevel == self.__requiredInterruptLevel:
+            return self.__executeTasks()
+        else:
+            return None
+            return None
 
     def callback(self, callback, *args, **kwargs):
         self.__interrupt(self.__invokeCallback, callback, *args, **kwargs)
 
     def completeTask(self, task, cancel):
-        taskID = task.taskID
+        taskID = getattr(task, 'taskID', -1)
         if taskID != -1:
             del self.__tasks[task.taskID]
 
@@ -148,6 +152,7 @@ class RemoteScript(Script):
         raise NotImplementedError
 
     def _receiveTasks(self, interruptLevel, tasks, waitTasks, cancelTasks):
+        raise self.__pendingTasks is None or AssertionError
         self.__pendingTasks = tasks
         self.__waitTaskIDs = waitTasks
         self.__cancelTaskIDs = cancelTasks
@@ -238,7 +243,7 @@ class RemoteScriptController(object):
             raise AssertionError
             self.__script.endInterrupt()
             self.__interruptLevel -= 1
-            self.__script.continueAfterInterrupt()
+            waitTasks = self.__script.continueAfterInterrupt()
         self.__sendTasks(self.__interruptLevel, waitTasks)
 
     def _sendTasks(self, interruptLevel, tasks, waitTasks, cancelTasks):
@@ -365,7 +370,7 @@ class ScriptDriver(object):
             if task.predecessors or task in cancelledTasks:
                 continue
             status = task.process()
-            if status == TASK_STATUS.SUCCESS or status == TASK_STATUS.FAIL:
+            if status == TASK_STATUS.SUCCESS:
                 self.__removeTask(task, False)
 
         cancelledTasks.clear()
@@ -384,7 +389,9 @@ class ScriptDriver(object):
         self.__interruptDriver = None
         script.driver = self
         self.resume()
-        script.continueAfterInterrupt()
+        waitTasks = script.continueAfterInterrupt()
+        if waitTasks:
+            self.waitTasks(waitTasks)
         return
 
     def run(self):
@@ -423,31 +430,34 @@ class ScriptDriver(object):
             self.__beginInterrupt(e)
             self.__interruptDriver.restore(backup)
 
-    def addTask(self, task, name = None, predecessors = None):
+    def addTask(self, task, name = None, parent = None, predecessors = None):
         if self.__interruptDriver:
-            return self.__interruptDriver.addTask(task, name)
+            return self.__interruptDriver.addTask(task, name=name, parent=parent, predecessors=predecessors)
         else:
-            task.name = name
-            task.waitOrder = None
-            taskPredecessors = set()
-            task.predecessors = taskPredecessors
             tasks = self.__tasks
-            if predecessors:
-                for predecessor in predecessors:
-                    if predecessor in tasks:
-                        taskPredecessors.add(predecessor)
+            if not (parent is None or parent in tasks):
+                raise AssertionError
+                task.name = name
+                task.waitOrder = None
+                if parent is not None:
+                    parent.addSubtask(task)
+                taskPredecessors = set()
+                task.predecessors = taskPredecessors
+                if predecessors:
+                    for predecessor in predecessors:
+                        if predecessor in tasks:
+                            taskPredecessors.add(predecessor)
 
-            if len(tasks) >= _MAX_TASKS:
-                LOG_WARNING('[SCRIPT] task dropped because of exceeded limit', task, tasks)
-                return
-            if taskPredecessors:
-                blockedTasks = self.__blockedTasks
-                for predecessor in taskPredecessors:
-                    blockedTasks.setdefault(predecessor, []).append(task)
+                if len(tasks) >= _MAX_TASKS:
+                    LOG_WARNING('[SCRIPT] task dropped because of exceeded limit', task, tasks)
+                    return
+                if taskPredecessors:
+                    blockedTasks = self.__blockedTasks
+                    for predecessor in taskPredecessors:
+                        blockedTasks.setdefault(predecessor, []).append(task)
 
-            tasks.append(task)
-            if not taskPredecessors:
-                self.__registerActiveTask(task)
+                tasks.append(task)
+                taskPredecessors or self.__registerActiveTask(task)
             return task
 
     def waitTasks(self, tasks):
@@ -503,6 +513,13 @@ class ScriptDriver(object):
         if task not in self.__tasks:
             return False
         else:
+            while task.subtasks:
+                subtask = task.subtasks[0]
+                self.cancelTask(subtask)
+
+            if task.parent:
+                task.parent.removeSubtask(task)
+                task.parent = None
             waitOrder = task.waitOrder
             if waitOrder is not None:
                 self.__waitResults[waitOrder] = task.result
@@ -530,7 +547,7 @@ class ScriptDriver(object):
                         self.__registerActiveTask(blockedTask)
 
                 del blockedTasks[task]
-            task.suspend()
+            task.suspend(cancel)
             task.destroy()
             return True
 
@@ -547,7 +564,7 @@ class ScriptDriver(object):
             return
         raise not self.__suspended or AssertionError
         for task in self.__tasks:
-            task.suspend()
+            task.suspend(False)
 
         self.__suspended = True
 
@@ -562,20 +579,31 @@ class ScriptDriver(object):
         self.__suspended = False
 
 
-class ScriptTask():
+class ScriptTask(object):
 
     def __init__(self, tags = None):
         self.result = None
         self.tags = tags
+        self.subtasks = []
+        self.parent = None
         return
 
     def destroy(self):
-        pass
+        self.parent = None
+        self.subtasks = None
+        return
+
+    def addSubtask(self, task):
+        task.parent = weakref.proxy(self)
+        self.subtasks.append(task)
+
+    def removeSubtask(self, task):
+        self.subtasks.remove(task)
 
     def process(self):
         raise Exception, 'Task must implement process method'
 
-    def suspend(self):
+    def suspend(self, cancel):
         pass
 
     def resume(self):

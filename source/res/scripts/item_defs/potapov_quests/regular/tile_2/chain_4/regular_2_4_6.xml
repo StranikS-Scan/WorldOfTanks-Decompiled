@@ -1,0 +1,51 @@
+<regular_2_4_6.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_6_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <distance>	250	</distance>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+              <whileEnemyMoving>	1	</whileEnemyMoving>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	2	</count>
+        </item>
+        <item>	1019	  <count>	2	</count>
+        </item>
+        <item>	507	  <count>	2	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_6_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <distance>	250	</distance>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+              <whileEnemyMoving>	1	</whileEnemyMoving>
+            </vehicleDamage>
+            <vehicleKills>
+              <greaterOrEqual>	2	</greaterOrEqual>
+              <whileEnemyMoving>	1	</whileEnemyMoving>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_4_6.xml>

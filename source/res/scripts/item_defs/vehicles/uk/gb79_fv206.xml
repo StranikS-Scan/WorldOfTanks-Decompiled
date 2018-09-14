@@ -1,0 +1,617 @@
+<gb79_fv206.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	29	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	22.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB79_FV206/FV206_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	38.1	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	50.8	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	17	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	50.8	</armor_7>
+      <armor_8>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_8>
+      <armor_9>	50.8	</armor_9>
+      <armor_10>	50.8	</armor_10>
+      <armor_11>	17	</armor_11>
+      <armor_12>	38.1	</armor_12>
+      <armor_13>	17	</armor_13>
+      <armor_14>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+    </armor>
+    <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
+    <weight>	31906	</weight>
+    <maxHealth>	344	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	134	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB79_FV206/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.549666 -0.409566	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB79_FV206/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	2.21346 -0.168387 2.34172	</rayStart>
+        <rayEnd>	1.81346 -0.168388 2.34172	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.77554 1.50303 -3.2912	</rayStart>
+        <rayEnd>	-1.44216 1.282 -3.2912	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.77554 1.50303 -3.2912	</rayStart>
+        <rayEnd>	1.44216 1.282 -3.2912	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	-1.86936 1.36153 -1.4115	</rayStart>
+        <rayEnd>	-1.53598 1.14049 -1.4115	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1.2	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.86936 1.36153 -1.4115	</rayStart>
+        <rayEnd>	1.53598 1.14049 -1.4115	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1.2	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB79_FV206>
+      <userString>	#gb_vehicles:Chassis_GB79_FV206	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <unlocks>
+        <chassis>	Chassis_GB79_FV206_2	  <cost>	15500	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	20000	</weight>
+      <maxLoad>	56000	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	54000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB79_FV206/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.76	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.433761	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.394924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.268965	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L2	</name>
+          <radius>	0.252596	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.268959	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.435332	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.394924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.267306	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R2	</name>
+          <radius>	0.250939	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.257557	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.254145	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.268857	</radius>
+          <startIndex>	5	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.14959 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB79_FV206/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.57858 2.35486	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.322400 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.724380 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.948470	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB79_FV206>
+    <Chassis_GB79_FV206_2>
+      <userString>	#gb_vehicles:Chassis_GB79_FV206_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	35000	</price>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	20000	</weight>
+      <maxLoad>	63000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	60000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB79_FV206/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.76	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.433761	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.394924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.268965	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L2	</name>
+          <radius>	0.252596	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.268959	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.435332	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.394924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.267306	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R2	</name>
+          <radius>	0.250939	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.257557	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.254145	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.268857	</radius>
+          <startIndex>	5	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.14959 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB79_FV206/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.57858 2.35486	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.307200 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.724380 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.948470	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB79_FV206_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB79_FV206>
+      <userString>	#gb_vehicles:Turret_1_GB79_FV206	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	8	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	50.8	</armor_1>
+        <armor_2>	50.8	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	17	</armor_4>
+        <armor_5>	17	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	86	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_5.5inch_SPG_Gun>	shared	  <maxAmmo>	48	</maxAmmo>
+          <unlocks>
+            <gun>	_6inch_SPG_Gun	  <cost>	20800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	25	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -70 1 -70	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	25	</reloadTime>
+          <aimingTime>	6.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.44	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-22 22	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB79_FV206/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB79_FV206/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 -0.0304467 1.87541	</rayStart>
+              <rayEnd>	0.00239164 -0.195646 1.87393	</rayEnd>
+              <rayUp>	0.106 0.099 2	</rayUp>
+              <size>	0.591	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_5.5inch_SPG_Gun>
+        <_6inch_SPG_Gun>	shared	  <maxAmmo>	48	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB30_FV3805	  <cost>	202000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	25	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -50 1 -50	</minPitch>
+            <maxPitch>	0 1 1 1	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	33	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.48	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	6.5	</aimingTime>
+          <turretYawLimits>	-22 22	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB79_FV206/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB79_FV206/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 0.143227 2.33055	</rayStart>
+              <rayEnd>	-0.0473085 0.139753 2.32744	</rayEnd>
+              <rayUp>	0.127 0.111 2	</rayUp>
+              <size>	0.727	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_6inch_SPG_Gun>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB79_FV206/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB79_FV206/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB79_FV206/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB79_FV206/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000001 0.454067 0.684712	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.896 -0.044 0.951 0.000 0.765 -0.077 0.500 0.456 0.623 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_GB79_FV206>
+  </turrets0>
+  <engines>
+    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
+        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
+        </engine>
+      </unlocks>
+    </Rolls_Royse_Meteor_MkIV>
+    <Rolls_Royse_Meteor_MkIVC>	shared	</Rolls_Royse_Meteor_MkIVC>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N19Mk3>	shared	  <unlocks>
+        <radio>	N22	  <cost>	4500	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk3>
+    <N22>	shared	  <unlocks>
+        <radio>	C42	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </N22>
+    <C42>	shared	</C42>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.96	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb79_fv206.xml>

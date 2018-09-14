@@ -1,0 +1,46 @@
+<06_ensk.xml>
+  <name>	#arenas:06_ensk/name	</name>
+  <description>	#arenas:06_ensk/description	</description>
+  <geometry>	spaces/06_ensk	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	300.0 300.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/06_ensk/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/rus_city	</loadingMusic>
+  <wwloadingMusic>	music_rus_city	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	20.299999 249.699997	</position1>
+        </team1>
+        <team2>
+          <position1>	19.099998 -248.700012	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	210.894 253.723	</position>
+        </team1>
+        <team2>
+          <position>	203.359 -248.108	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-82.768829 2.876255	</controlPoint>
+    </domination>
+  </gameplayTypes>
+</06_ensk.xml>

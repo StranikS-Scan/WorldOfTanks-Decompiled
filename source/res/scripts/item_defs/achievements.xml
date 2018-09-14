@@ -1,0 +1,2879 @@
+<achievements.xml>
+  <battleAchievesWithRibbon>
+    <value>
+      <item>	medalOrlik	</item>
+      <item>	medalOskin	</item>
+      <item>	medalHalonen	</item>
+      <item>	medalBurda	</item>
+      <item>	medalBillotte	</item>
+      <item>	medalKolobanov	</item>
+      <item>	medalFadin	</item>
+      <item>	medalRadleyWalters	</item>
+      <item>	medalLafayettePool	</item>
+      <item>	medalLehvaslaiho	</item>
+      <item>	medalNikolas	</item>
+      <item>	medalPascucci	</item>
+      <item>	medalDumitru	</item>
+      <item>	medalBrunoPietro	</item>
+      <item>	medalTarczay	</item>
+      <item>	heroesOfRassenay	</item>
+      <item>	medalDeLanglade	</item>
+      <item>	medalTamadaYoshio	</item>
+      <item>	medalWittmann	</item>
+      <item>	forTacticalOperations	</item>
+    </value>
+  </battleAchievesWithRibbon>
+  <battleResultsRight>
+    <value>
+      <item>	warrior	</item>
+      <item>	invader	</item>
+      <item>	sniper	</item>
+      <item>	sniper2	</item>
+      <item>	mainGun	</item>
+      <item>	defender	</item>
+      <item>	steelwall	</item>
+      <item>	supporter	</item>
+      <item>	scout	</item>
+      <item>	evileye	</item>
+      <item>	medalWittmann	</item>
+      <item>	medalOrlik	</item>
+      <item>	medalOskin	</item>
+      <item>	medalHalonen	</item>
+      <item>	medalBurda	</item>
+      <item>	medalBillotte	</item>
+      <item>	medalKolobanov	</item>
+      <item>	medalFadin	</item>
+      <item>	medalRadleyWalters	</item>
+      <item>	medalLafayettePool	</item>
+      <item>	medalLehvaslaiho	</item>
+      <item>	medalNikolas	</item>
+      <item>	medalPascucci	</item>
+      <item>	medalDumitru	</item>
+      <item>	medalBrunoPietro	</item>
+      <item>	medalTarczay	</item>
+      <item>	heroesOfRassenay	</item>
+      <item>	medalDeLanglade	</item>
+      <item>	medalTamadaYoshio	</item>
+      <item>	raider	</item>
+      <item>	kamikaze	</item>
+      <item>	huntsman	</item>
+      <item>	bombardier	</item>
+      <item>	luckyDevil	</item>
+      <item>	ironMan	</item>
+      <item>	sturdy	</item>
+      <item>	alaric	</item>
+      <item>	lumberjack	</item>
+      <item>	medalMonolith	</item>
+      <item>	medalAntiSpgFire	</item>
+      <item>	medalGore	</item>
+      <item>	medalCoolBlood	</item>
+      <item>	medalStark	</item>
+      <item>	medalBrothersInArms	</item>
+      <item>	medalCrucialContribution	</item>
+      <item>	tacticalAdvantage	</item>
+      <item>	tacticalSkill	</item>
+      <item>	secretOperations	</item>
+      <item>	armoredFist	</item>
+      <item>	kingOfTheHill	</item>
+      <item>	willToWinSpirit	</item>
+    </value>
+  </battleResultsRight>
+  <fortBattleResultsRight>
+    <value>
+      <item>	crusher	</item>
+      <item>	counterblow	</item>
+    </value>
+  </fortBattleResultsRight>
+  <approachableAchieves>
+    <value>
+      <item>	impenetrable	</item>
+      <item>	reliableComrade	</item>
+      <item>	aimer	</item>
+      <item>	shootToKill	</item>
+      <item>	fighter	</item>
+      <item>	duelist	</item>
+      <item>	demolition	</item>
+      <item>	arsonist	</item>
+      <item>	bonecrusher	</item>
+      <item>	charmed	</item>
+      <item>	even	</item>
+    </value>
+  </approachableAchieves>
+  <achievements>
+    <achievement>
+      <name>	achievements:warrior	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	3.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mainGun	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	4.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:supporter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	5.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:sniper2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	6.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:evileye	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:steelwall	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	201.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:defender	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	202.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:invader	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:scout	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	204.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:geniusForWarMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:wolfAmongSheepMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	2.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalKay	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1400.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalCarius	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1401.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalEkins	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1402.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalKnispel	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1403.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalPoppel	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1404.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalAbrams	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1404.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalLeClerc	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1406.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalLavrinenko	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1407.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	historicalAchievements:makerOfHistory	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	historicalAchievements:guardsman	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:forTacticalOperations	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1408.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:battleTested	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1408.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:fireAndSword	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:soldierOfFortune	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:conqueror	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:kampfer	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleLT	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.91	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleMT	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.92	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleHT	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.93	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleATSPG	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.94	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleSPG	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1409.95	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievementsRated7x7:strategicOperations	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1407.9	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	rated7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:counterblow	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1015.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	fortAchievements:crusher	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1015.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:heroesOfRassenay	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	100.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalLafayettePool	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	101.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalRadleyWalters	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	102.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:huntsman	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	300.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalKolobanov	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	600.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalGore	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	601.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalNikolas	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	602.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalOskin	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	603.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalLehvaslaiho	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	604.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalOrlik	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	605.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalHalonen	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	606.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalTamadaYoshio	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	607.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalBurda	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	608.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalDumitru	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	609.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalPascucci	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	610.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalDeLanglade	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	611.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalTarczay	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	800.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalBrunoPietro	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	801.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalBillotte	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	802.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalStark	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	803.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalFadin	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	804.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle2_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	805.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle1_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	806.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle3_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	807.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle4_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	808.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle5_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	809.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle6_battlefield	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	epic	  <name>	section	</name>
+        </item>
+        <item>	810.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalMonolith	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1006.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:ironMan	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1007.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:sturdy	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1008.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:luckyDevil	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1009.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:demolition	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1003.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:arsonist	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1003.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:bonecrusher	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1003	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:charmed	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	702.6	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:even	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	105.93	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:battleCitizen	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1411.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:kingOfTheHill	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1004.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:godOfWar	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1005.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:noMansLand	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	105.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle2_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	806.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle1_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	805.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle3_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	807.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle4_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	808.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle5_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	809.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	uniqueAchievements:histBattle6_historyLessons	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	810.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	historical	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:kamikaze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	703.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:raider	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1000.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:bombardier	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1001.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mousebane	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1010.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:pattonValley	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1011.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:beasthunter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1012.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:sinai	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1013.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalAntiSpgFire	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	700.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalCoolBlood	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	701.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:impenetrable	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	702.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:shootToKill	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1001.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:fighter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	105.91	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:duelist	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	105.92	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:crucialShotMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.55	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:promisingFighterMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	103.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:heavyFireMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	103.6	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:rangerMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.6	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:fireAndSteelMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:pyromaniacMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.7	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:fightingReconnaissanceMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:willToWinSpirit	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	103.4	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:guerrillaMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.65	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:infiltratorMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.73	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:sentinelMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.72	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:prematureDetonationMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.66	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:bruteForceMedal	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	104.67	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1111.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert0	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert3	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert4	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert5	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert6	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert7	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert8	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert9	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert10	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert11	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert12	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert13	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:tankExpert14	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1203.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1110.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer0	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer3	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer4	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer5	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer6	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer7	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer8	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer9	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer10	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer11	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer12	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer13	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:mechanicEngineer14	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	custom	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1200.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:tacticalBreakthrough	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	103.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:diehard	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	106.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:invincible	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	702	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:reliableComrade	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	105.9	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:handOfDeath	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1002.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:armorPiercer	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1014.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:titleSniper	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1015.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:aimer	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	1000.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:victoryMarch	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	102.9	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	rated7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievementsRated7x7:victoryMarch	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	102.9	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	rated7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievementsRated7x7:tacticalAdvantage	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	102.95	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	rated7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:tankwomen	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1009.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:firstMerit	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1009.51	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalCrucialContribution	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	400.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalBrothersInArms	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	401.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements7x7:armoredFist	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	402.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievementsRated7x7:tacticalSkill	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	390.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievementsRated7x7:secretOperations	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	391.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	7x7	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	clanAchievements:medalRotmistrov	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1408.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:sniper	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	205.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:medalWittmann	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	900.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:WFC2014	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1412.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:deathTrack	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1413.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	rareAchievements:	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	-1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:markOfMastery	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	-1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:marksOnGun	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	0.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	client:whiteTiger	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	-1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:fallout	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1416.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:fallout2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1416.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:falloutSingleWolf	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1416.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:falloutPackOfWolfs	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1416.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:falloutSteelHunter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1416.4	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:falloutAlwaysInLine	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1417	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:operationWinter	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1418	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:testartilleryman	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1419	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:shoulderToShoulder	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	group	  <name>	section	</name>
+        </item>
+        <item>	402.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:aloneInTheField	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	605.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:fallenFlags	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1013.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:stormLord	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1407.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:effectiveSupport	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	801.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:falloutDieHard	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	200.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:winnerLaurels	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1407.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:predator	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	900.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:unreachable	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	special	  <name>	section	</name>
+        </item>
+        <item>	900.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:champion	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	605.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	falloutAchievements:bannerman	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	battle	  <name>	section	</name>
+        </item>
+        <item>	605.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+  </achievements>
+</achievements.xml>

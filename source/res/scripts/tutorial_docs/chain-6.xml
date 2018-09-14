@@ -1,0 +1,126 @@
+<chain-6.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <gui-items>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	SimpleDialogSecondButton	  <on-scene-effects>
+            <activate>	SimpleDialogSecondButtonOnScene	</activate>
+            <remove-action>	TankCarouselClickOutSide	</remove-action>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	SimpleDialogSecondButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+      <post-effects>
+        <clear-scene></clear-scene>
+        <inactivate>	FreeSlotBought	</inactivate>
+        <inactivate>	ShowCongratulation	</inactivate>
+        <run-trigger>	FreeSlotTrigger	</run-trigger>
+        <run-trigger>	SimpleDialogTrigger	</run-trigger>
+        <run-trigger>	BonusTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	TankCarouselHint	  <condition>
+            <effect-not-triggered>	TankCarouselHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <activate>	ShowCongratulation	  <condition>
+            <active>	FreeSlotBought	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </activate>
+        <request-bonus>
+          <condition>
+            <active>	FreeSlotBought	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <active>	FreeSlotBought	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </show-award-window>
+        <refuse-training>
+          <condition>
+            <active>	FreeSlotBought	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <click-outside-action>	TankCarouselClickOutSide	  <item-id>	TankCarousel	</item-id>
+      <effects>
+        <refuse-training></refuse-training>
+      </effects>
+    </click-outside-action>
+    <hint>	TankCarouselHint	  <item-id>	TankCarousel	</item-id>
+      <text>	_(#tutorial:chain6/hint/buyFreeSlot)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <close-hint>	TankCarouselHint	</close-hint>
+            <set-action>	TankCarouselClickOutSide	</set-action>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <simple-window>	CongratulationWindow	  <type>	awardWindow	</type>
+      <var-ref>	ChapterVar	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest5)	</description>
+    </simple-window>
+  </has-id>
+  <triggers>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BonusReceived	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	FreeSlotTrigger	  <type>	freeSlot	</type>
+      <on-effects>
+        <activate>	FreeSlotBought	</activate>
+      </on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
+      <on-effects></on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</chain-6.xml>

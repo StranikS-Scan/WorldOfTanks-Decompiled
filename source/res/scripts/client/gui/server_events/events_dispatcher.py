@@ -1,12 +1,11 @@
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
-from gui.shared import g_eventBus, events, event_dispatcher as shared_events
-from gui.shared.utils.functions import getViewName
+from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.server_events import awards
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 
-def showPQSeasonAwardsWindow(seasonID):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, getViewName(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, int(seasonID)), ctx={'seasonID': seasonID}))
+def showPQSeasonAwardsWindow(questsType):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showTankwomanRecruitWindow(questID, isPremium, fnGroup, lnGroup, iGroup):
@@ -14,16 +13,16 @@ def showTankwomanRecruitWindow(questID, isPremium, fnGroup, lnGroup, iGroup):
      'isPremium': isPremium,
      'fnGroup': fnGroup,
      'lnGroup': lnGroup,
-     'iGroupID': iGroup}))
+     'iGroupID': iGroup}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showEventsWindow(eventID, eventType):
+def showEventsWindow(eventID = None, eventType = None):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EVENTS_WINDOW, ctx={'eventID': eventID,
-     'eventType': eventType}))
+     'eventType': eventType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showTutorialTabInEventsWindow():
-    showEventsWindow('', constants.EVENT_TYPE.TUTORIAL)
+def showTutorialTabInEventsWindow(eventID = ''):
+    showEventsWindow(eventID, constants.EVENT_TYPE.TUTORIAL)
 
 
 def showAchievementsAward(achievements):

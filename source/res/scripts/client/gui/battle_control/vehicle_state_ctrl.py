@@ -128,9 +128,11 @@ class VehicleStateController(object):
             vehicle = BigWorld.entity(self.__vehicleID)
         return vehicle
 
-    def invalidate(self, state, value):
+    def invalidate(self, state, value, vehicleID = 0):
         if state == VEHICLE_VIEW_STATE.DESTROYED:
             self.__updateTI.stop()
+        if vehicleID != 0 and vehicleID != self.__vehicleID:
+            return
         self.onVehicleStateUpdated(state, value)
 
     def switchToPostmortem(self):
@@ -192,11 +194,11 @@ class VehicleStateController(object):
 
 class VehicleStateReplayRecorder(VehicleStateController):
 
-    def invalidate(self, state, value):
+    def invalidate(self, state, value, vehicleID = 0):
         if state == VEHICLE_VIEW_STATE.CRUISE_MODE:
             import BattleReplay
             BattleReplay.g_replayCtrl.onSetCruiseMode(value)
-        super(VehicleStateReplayRecorder, self).invalidate(state, value)
+        super(VehicleStateReplayRecorder, self).invalidate(state, value, vehicleID)
 
 
 def createCtrl(isReplayRecording):

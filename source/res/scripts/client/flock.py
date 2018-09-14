@@ -11,12 +11,13 @@ import Settings
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
+import FMOD
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo:
 
-    def __init__(self, spaceID):
-        self.model = BigWorld.Model('helpers/models/position_gizmo.model')
+    def __init__(self, spaceID, modelName = 'helpers/models/position_gizmo.model'):
+        self.model = BigWorld.Model(modelName)
         BigWorld.addModel(self.model, spaceID)
         self.motor = BigWorld.Servo(Math.Matrix())
         self.model.addMotor(self.motor)
@@ -86,7 +87,8 @@ class FlockLike:
             flockDataSect = ResMgr.openSection(ENVIRONMENT_EFFECTS_CONFIG_FILE + '/birds')
             for value in flockDataSect.values():
                 modelName = value.readString('modelName', '')
-                soundName = value.readString('sound', '')
+                if FMOD.enabled:
+                    soundName = value.readString('sound', '')
                 if modelName != '' and soundName != '':
                     FlockLike.__SoundNames[modelName] = soundName
 
@@ -119,7 +121,7 @@ class FlockLike:
                 model.moveAttachments = True
                 self.addModel(model)
                 if firstModel:
-                    self.__addSound(model)
+                    self._addSound(model)
                     firstModel = False
                 animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
                 model.actionScale = animSpeed
@@ -128,7 +130,7 @@ class FlockLike:
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-    def __addSound(self, model):
+    def _addSound(self, model):
         if not model.sources:
             return
         else:
@@ -137,20 +139,19 @@ class FlockLike:
             if soundName is None or soundName == '':
                 return
             try:
-                self.__sound = SoundGroups.g_instance.getSound3D(model, soundName)
-                self.__sound.play()
+                self.__sound = SoundGroups.g_instance.getSound3D(model.root, soundName)
+                if self.__sound is not None:
+                    self.__sound.play()
             except Exception:
                 LOG_CURRENT_EXCEPTION()
                 return
 
             return
 
-    def _switchSounds(self, enable):
+    def _delSound(self):
         if self.__sound is not None:
-            if enable:
-                self.__sound.play()
-            else:
-                self.__sound.stop()
+            self.__sound.stop()
+            self.__sound = None
         return
 
 
@@ -179,6 +180,8 @@ class Flock(BigWorld.Entity, FlockLike):
         if BattleReplay.g_replayCtrl.isPlaying:
             return
         self._loadModels(prereqs)
+        if len(self.models) > 0:
+            self._addSound(self.models[0])
         self.__decisionStrategy = self.__doUsualFly
         if self.flyAroundCenter != Flock.STRATEGY_USUAL_FLY:
             self.__setupFlyAroundCenter()

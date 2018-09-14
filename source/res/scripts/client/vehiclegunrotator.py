@@ -3,7 +3,7 @@ import BigWorld, Math
 import weakref
 import math
 from AvatarInputHandler import AimingSystems, mathUtils
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT, AIMING_MODE
 import ProjectileMover
 from projectile_trajectory import getShotAngles
@@ -14,6 +14,7 @@ import BattleReplay
 from gun_rotation_shared import calcPitchLimitsFromDesc
 import SoundGroups
 _ENABLE_TURRET_ROTATOR_SOUND = True
+_ENABLE_RELATIVE_SHOT_POINT = True
 g__attachToCam = False
 
 class VehicleGunRotator(object):
@@ -46,12 +47,8 @@ class VehicleGunRotator(object):
         self.__isLocked = False
         self.estimatedTurretRotationTime = 0
         self.__turretRotationSoundEffect = _PlayerTurretRotationSoundEffect()
-        BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
         g__attachToCam = False
         return
-
-    def init_sound(self):
-        self.__turretRotationSoundEffect.init_sound()
 
     def destroy(self):
         self.stop()
@@ -62,7 +59,6 @@ class VehicleGunRotator(object):
         if self.__turretRotationSoundEffect is not None:
             self.__turretRotationSoundEffect.destroy()
             self.__turretRotationSoundEffect = None
-        BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
         return
 
     def start(self):
@@ -83,25 +79,29 @@ class VehicleGunRotator(object):
                 self.__time = BigWorld.time()
                 if self.__showServerMarker:
                     self.__avatar.inputHandler.showGunMarker2(True)
+            if self.__turretRotationSoundEffect is None:
+                self.__turretRotationSoundEffect = _PlayerTurretRotationSoundEffect()
+            BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
             return
 
     def stop(self):
+        BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
+        if self.__timerID is not None:
+            BigWorld.cancelCallback(self.__timerID)
+            self.__timerID = None
+        if self.__turretRotationSoundEffect is not None:
+            self.__turretRotationSoundEffect.destroy()
+            self.__turretRotationSoundEffect = None
         if not self.__isStarted:
             return
         else:
             from account_helpers.settings_core.SettingsCore import g_settingsCore
             g_settingsCore.onSettingsChanged -= self.applySettings
-            if self.__timerID is not None:
-                BigWorld.cancelCallback(self.__timerID)
-                self.__timerID = None
             if self.__avatar.inputHandler is None:
                 return
             if self.__clientMode and self.__showServerMarker:
                 self.__avatar.inputHandler.showGunMarker2(False)
             self.__isStarted = False
-            if self.__turretRotationSoundEffect is not None:
-                self.__turretRotationSoundEffect.destroy()
-                self.__turretRotationSoundEffect = None
             return
 
     def applySettings(self, diff):
@@ -301,9 +301,13 @@ class VehicleGunRotator(object):
             else:
                 vehicle = BigWorld.entity(avatar.playerVehicleID)
                 if vehicle is not None and vehicle is avatar.vehicle:
-                    vehicle.cell.trackPointWithGun(shotPoint)
+                    if _ENABLE_RELATIVE_SHOT_POINT:
+                        shotPoint = shotPoint - Math.Matrix(avatar.getOwnVehicleMatrix()).translation
+                        vehicle.cell.trackRelativePointWithGun(shotPoint)
+                    else:
+                        vehicle.cell.trackWorldPointWithGun(shotPoint)
                 else:
-                    avatar.base.vehicle_trackPointWithGun(shotPoint)
+                    avatar.base.vehicle_trackWorldPointWithGun(shotPoint)
             return
 
     def __rotate(self, shotPoint, timeDiff):
@@ -440,7 +444,7 @@ class VehicleGunRotator(object):
             speedLimit = descr.gun['rotationSpeed'] * timeDiff
         else:
             if math.fabs(curAngle - shotAngle) < VehicleGunRotator.__ANGLE_EPS:
-                if angleLimits is None:
+                if angleLimits is not None:
                     return mathUtils.clamp(angleLimits[0], angleLimits[1], shotAngle)
                 else:
                     return shotAngle
@@ -617,9 +621,10 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
           self.__startManualSoundFromFast,
           None,
           self.__checkGearSound))
+        self.__init_sound()
         return
 
-    def init_sound(self):
+    def __init_sound(self):
         if _ENABLE_TURRET_ROTATOR_SOUND:
             self.__manualSound = self.__getTurretSound(BigWorld.player().vehicleTypeDescriptor, 'turretRotatorSoundManual')
             if self.__manualSound is not None:

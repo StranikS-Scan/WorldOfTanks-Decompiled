@@ -1,14 +1,16 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_vos.py
 import operator
+from debug_utils import LOG_ERROR
 from gui.shared import fo_precache
 from gui.shared.gui_items.Vehicle import getShortUserName
 import nations
 from collections import defaultdict
-from constants import IGR_TYPE, ARENA_GUI_TYPE, FLAG_ACTION
+from constants import IGR_TYPE, FLAG_ACTION
 from gui import makeHtmlString
 from gui.server_events import g_eventsCache
-from gui.battle_control.arena_info import getArenaGuiType, settings, getPlayerVehicleID, isPlayerTeamKillSuspected
-from items.vehicles import VEHICLE_CLASS_TAGS, getVehicleType, PREMIUM_IGR_TAGS
+from gui.battle_control.arena_info import settings, getPlayerVehicleID
+from gui.battle_control.arena_info import isPlayerTeamKillSuspected
+from items.vehicles import VEHICLE_CLASS_TAGS, PREMIUM_IGR_TAGS
 from gui.shared.gui_items import Vehicle
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
@@ -45,8 +47,6 @@ class PlayerInfoVO(object):
         self.tags = frozenset()
         if vehicleType is not None:
             vehicleType = vehicleType.type
-            if getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL and getattr(vehicleType, 'historicalModelOf', None):
-                vehicleType = getVehicleType(vehicleType.historicalModelOf)
             self.tags = vehicleType.tags.copy()
         return
 
@@ -82,9 +82,20 @@ class PlayerInfoVO(object):
             igrLabel = ''
         return igrLabel
 
-    def getPotapovQuests(self):
-        pQuests = g_eventsCache.potapov.getQuests()
-        return map(lambda qID: pQuests[qID], self.potapovQuestIDs)
+    def getRandomPotapovQuests(self):
+        pQuests = g_eventsCache.random.getQuests()
+        return self.__getPotapovQuests(pQuests)
+
+    def getFalloutPotapovQuests(self):
+        pQuests = g_eventsCache.fallout.getQuests()
+        return self.__getPotapovQuests(pQuests)
+
+    def __getPotapovQuests(self, pQuests):
+        try:
+            return map(lambda qID: pQuests[qID], self.potapovQuestIDs)
+        except KeyError as e:
+            LOG_ERROR('Key error trying to get potapov quests: no key in cache', e)
+            return []
 
 
 class VehicleTypeInfoVO(object):
@@ -115,8 +126,6 @@ class VehicleTypeInfoVO(object):
     def __setVehicleData(self, vehicleDescr = None):
         if vehicleDescr is not None:
             vehicleType = vehicleDescr.type
-            if getArenaGuiType() == ARENA_GUI_TYPE.HISTORICAL and getattr(vehicleType, 'historicalModelOf', None):
-                vehicleType = getVehicleType(vehicleType.historicalModelOf)
             self.compactDescr = vehicleType.compactDescr
             tags = vehicleType.tags
             self.classTag = _getClassTag(tags)
@@ -258,6 +267,9 @@ class VehicleArenaInfoVO(object):
 
     def isObserver(self):
         return self.vehicleType.isObserver
+
+    def isActionsDisabled(self):
+        return not self.player.accountDBID
 
     def getTypeInfo(self):
         return (self.vehicleType.classTag, self.vehicleType.level, nations.NAMES[self.vehicleType.nationID])

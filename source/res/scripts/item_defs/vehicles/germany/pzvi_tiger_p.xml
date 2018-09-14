@@ -1,0 +1,1387 @@
+<pzvi_tiger_p.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	6.545	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	200	</armor_1>
+      <armor_2>	80	</armor_2>
+      <armor_3>	80	</armor_3>
+      <armor_4>	80	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	25	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	200	</armor_10>
+      <armor_11>	0	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	25	</armor_13>
+      <armor_14>	80	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	30100	</weight>
+    <maxHealth>	1080	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.22	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.007 0.679745 0.859892	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.268625 0.483156 2.67631	</rayStart>
+        <rayEnd>	-0.268625 0.446635 2.4391	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_PzVI_Tiger_P>
+      <userString>	#germany_vehicles:Chassis_PzVI_Tiger_P	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_PzVI_Tiger_P_short	</shortUserString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15100.0	</price>
+      <unlocks>
+        <chassis>	Chassis_PzVI_Tiger_P_2	  <cost>	7970	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	18000	</weight>
+      <maxLoad>	60500	</maxLoad>
+      <terrainResistance>	1.4 1.7 3.4	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.495	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.44981	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.451438	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.36	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.44981	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.451438	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.36	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <hullPosition>	0.000000 1.12692 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.34036 2.11385	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.733490 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.423590	</row2>
+            <row3>	0.000000 0.000000 -0.000002	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G57_PzVI_Tiger_P/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G57_PzVI_Tiger_P/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G57_PzVI_Tiger_P/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G57_PzVI_Tiger_P/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/german/G57_PzVI_Tiger_P/track/left.track	</left>
+        <right>	vehicles/german/G57_PzVI_Tiger_P/track/right.track	</right>
+        <segmentLength>	0.258	</segmentLength>
+        <segmentOffset>	0.093	</segmentOffset>
+        <segment2Offset>	0.133	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0288	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-7.4	</gravity>
+        <elasticity>	1094	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1.01	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.58	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.075	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <offset>	-0.158	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.84	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.197	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.162	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.169	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.58	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.075	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <offset>	-0.158	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.84	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.197	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.162	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.169	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.01	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.01	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.051	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_PzVI_Tiger_P>
+    <Chassis_PzVI_Tiger_P_2>
+      <userString>	#germany_vehicles:Chassis_PzVI_Tiger_P_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_PzVI_Tiger_P_2_short	</shortUserString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	17750.0	</price>
+      <unlocks>
+        <vehicle>	Ferdinand	  <cost>	150000	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	18000	</weight>
+      <maxLoad>	65200	</maxLoad>
+      <terrainResistance>	1.3 1.5 3	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.67	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.495	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.44981	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.451438	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.36	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.44981	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.451438	</radius>
+          <syncAngle>	37.8947	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.36	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <hullPosition>	0.000000 1.12692 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.34036 2.11385	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.747900 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.423600	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G57_PzVI_Tiger_P/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G57_PzVI_Tiger_P/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G57_PzVI_Tiger_P/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G57_PzVI_Tiger_P/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/german/G57_PzVI_Tiger_P/track/left.track	</left>
+        <right>	vehicles/german/G57_PzVI_Tiger_P/track/right.track	</right>
+        <segmentLength>	0.248	</segmentLength>
+        <segmentOffset>	0.112	</segmentOffset>
+        <segment2Offset>	0.133	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-7.4	</gravity>
+        <elasticity>	1094	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1.01	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.01	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.01	</backwardElastK>
+          <offset>	-0.059	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.58	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.075	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <offset>	-0.158	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.84	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.197	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.162	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.169	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.58	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.075	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <offset>	-0.158	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.84	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.197	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.18	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.162	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.169	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0288	</trackThickness>
+    </Chassis_PzVI_Tiger_P_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_PzVI_Tiger_P>
+      <userString>	#germany_vehicles:Turret_1_PzVI_Tiger_P	</userString>
+      <shortUserString>	#germany_vehicles:Turret_1_PzVI_Tiger_P_short	</shortUserString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	20440	</price>
+      <unlocks>
+        <turret>	Turret_2_PzVI_Tiger_P	  <cost>	12520	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	100	</armor_1>
+        <armor_2>	95	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	95	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	25	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	95	</armor_10>
+        <armor_11>	50	</armor_11>
+        <armor_12>	100	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8900	</weight>
+      <maxHealth>	270	</maxHealth>
+      <rotationSpeed>	23	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	106	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
+            </gun>
+            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
+            </gun>
+            <vehicle>	PzVI	  <cost>	25120	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 5 0.569444 5 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.059588 0.018003 3.60341	</rayStart>
+              <rayEnd>	0.346064 -0.275707 3.59395	</rayEnd>
+              <rayUp>	0.07 0.066 4	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_KwK_L70>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	58	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0589303 -0.00104221 1.32769	</rayStart>
+              <rayEnd>	0.0386288 -0.0187945 1.32314	</rayEnd>
+              <rayUp>	0.095 0.08 4	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_105mm_StuH42_L28Pz>
+        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
+          <unlocks>
+            <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
+            </gun>
+            <vehicle>	VK4502A	  <cost>	90000	</cost>
+            </vehicle>
+          </unlocks>
+          <reloadTime>	7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.056337 0.00133532 3.18418	</rayStart>
+              <rayEnd>	0.0932836 -0.421612 3.17799	</rayEnd>
+              <rayUp>	0.067 0.064 3	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_36_L56>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	68	</maxAmmo>
+          <reloadTime>	9.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <effects>	shot_main_mb	</effects>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0575965 -0.000041 4.55423	</rayStart>
+              <rayEnd>	0.107101 -0.415104 4.54539	</rayEnd>
+              <rayUp>	0.069 0.065 3	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_43_L71>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.06205 0.408023 1.19637	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.12877 0.406835 0.980333	</rayStart>
+          <rayEnd>	-0.751237 0.404896 0.848198	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.31413 0.491231 -0.0551112	</rayStart>
+          <rayEnd>	-1.07464 0.491223 -0.0394432	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.2949 0.478201 -0.116075	</rayStart>
+          <rayEnd>	1.0559 0.478198 -0.0941237	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.12877 0.406835 0.980333	</rayStart>
+          <rayEnd>	0.751237 0.404896 0.848198	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.964 0.000 1.000 0.000 0.602 0.075 0.812 0.421 0.301 0.500 0.000 0.500 0.000 0.000 0.180	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_06	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.88 0.88 0.56 0.26	</tiling>
+      </camouflage>
+    </Turret_1_PzVI_Tiger_P>
+    <Turret_2_PzVI_Tiger_P>
+      <userString>	#germany_vehicles:Turret_2_PzVI_Tiger_P	</userString>
+      <shortUserString>	#germany_vehicles:Turret_2_PzVI_Tiger_P_short	</shortUserString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	30150.0	</price>
+      <armor>
+        <armor_1>	100	</armor_1>
+        <armor_2>	95	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	95	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	15	</armor_7>
+        <armor_8>	25	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	95	</armor_10>
+        <armor_11>	50	</armor_11>
+        <armor_12>	100	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	9500	</weight>
+      <maxHealth>	370	</maxHealth>
+      <rotationSpeed>	23	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	106	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 5 0.569444 5 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.059588 0.017903 3.61106	</rayStart>
+              <rayEnd>	0.440554 0.00891399 3.60161	</rayEnd>
+              <rayUp>	0.071 0.067 3	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_L70>
+        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	58	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0584126 -0.00104221 1.32867	</rayStart>
+              <rayEnd>	0.0670592 0.00283564 1.32196	</rayEnd>
+              <rayUp>	0.096 0.079 4	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_105mm_StuH42_L28Pz>
+        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
+          <reloadTime>	6.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.056337 0.00133532 3.184	</rayStart>
+              <rayEnd>	-0.130918 -0.417951 3.18911	</rayEnd>
+              <rayUp>	0.067 0.064 3	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_88mm_KwK_36_L56>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	68	</maxAmmo>
+          <reloadTime>	8.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	85	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <effects>	shot_main_mb	</effects>
+          <models>
+            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0557893 -0.000041 4.554	</rayStart>
+              <rayEnd>	0.295193 -0.303726 4.5411	</rayEnd>
+              <rayUp>	0.069 0.065 3	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_43_L71>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G57_PzVI_Tiger_P/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.06205 0.408023 1.19637	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.36251 0.503005 0.355164	</rayStart>
+          <rayEnd>	-0.97144 0.502874 0.271048	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.27318 0.508729 -0.311803	</rayStart>
+          <rayEnd>	-1.03869 0.508725 -0.26062	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.37295 0.507105 0.199093	</rayStart>
+          <rayEnd>	0.973898 0.507096 0.171383	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.24131 0.513546 -0.374484	</rayStart>
+          <rayEnd>	1.01151 0.513542 -0.305215	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.906 -0.014 0.992 0.000 0.547 0.075 0.755 0.460 0.367 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_06	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
+    </Turret_2_PzVI_Tiger_P>
+  </turrets0>
+  <engines>
+    <Porsche_Typ_100_1A>	shared	  <unlocks>
+        <engine>	Porsche_Typ_100_1	  <cost>	6200	</cost>
+        </engine>
+      </unlocks>
+    </Porsche_Typ_100_1A>
+    <Porsche_Typ_100_1>	shared	  <unlocks>
+        <engine>	Porsche_Typ_100_3	  <cost>	12000	</cost>
+        </engine>
+      </unlocks>
+    </Porsche_Typ_100_1>
+    <Porsche_Typ_100_3>	shared	</Porsche_Typ_100_3>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG12>	shared	</FuG12>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</pzvi_tiger_p.xml>

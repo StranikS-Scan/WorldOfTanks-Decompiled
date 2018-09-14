@@ -1,27 +1,30 @@
 # Embedded file name: scripts/client/ResourcePoint.py
 import BigWorld
 from debug_utils import LOG_DEBUG
-from CTFManager import _CTFCheckPoint, _CTFResourcePointModel
+from CTFManager import _CTFCheckPoint, _CTFResourcePointModel, _UDOAttributeChecker
 
-class ResourcePoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFResourcePointModel):
-    _MODEL_NAME = 'resource_point'
-    _EFFECT_NAME = 'resourcePointEffect'
-    _RADIUS_MODEL_NAME = 'resourcePointRadiusModel'
+class ResourcePoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFResourcePointModel, _UDOAttributeChecker):
     _COLOR = 4294967295L
     _OVER_TERRAIN_HEIGHT = 0.5
 
     def __init__(self):
         BigWorld.UserDataObject.__init__(self)
-        LOG_DEBUG('ResourcePoint ', self.guid, self.position, self.radius, self.team)
+        _UDOAttributeChecker.__init__(self)
         self.__isVisible = self.__isVisibleForCurrentArena()
         if not self.__isVisible:
             return
-        _CTFCheckPoint.__init__(self, self._RADIUS_MODEL_NAME)
-        _CTFResourcePointModel.__init__(self, self._MODEL_NAME, self._EFFECT_NAME)
+        self.checkAttribute('radiusModel')
+        self.checkAttribute('pointModel')
+        self.checkAttribute('pointEffect')
+        LOG_DEBUG('ResourcePoint ', self.guid, self.position, self.radius, self.team)
+        _CTFCheckPoint.__init__(self, self.radiusModel)
+        _CTFResourcePointModel.__init__(self, self.pointModel, self.pointEffect)
         self._createTerrainSelectedArea(self.position, self.radius * 2.0, self._OVER_TERRAIN_HEIGHT, self._COLOR)
         self._createPoint()
 
     def __del__(self):
+        if self.isAttrCheckFailed:
+            return
         if not self.__isVisible:
             return
         _CTFResourcePointModel.__del__(self)

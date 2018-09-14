@@ -16,7 +16,7 @@ from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
-from gui.prb_control.settings import FUNCTIONAL_EXIT
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import int2roman, i18n
@@ -41,7 +41,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
     def _populate(self):
         super(TrainingRoom, self)._populate()
         functional = self.prbFunctional
-        if functional and functional.getPrbType():
+        if functional and functional.getEntityType():
             self.__showSettings(functional)
             self.__showRosters(functional, functional.getRosters())
             self.__swapTeamsInMinimap(functional.getPlayerTeam())
@@ -152,7 +152,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
 
     @process
     def closeTrainingRoom(self):
-        result = yield self.prbDispatcher.leave(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.INTRO_PREBATTLE))
+        result = yield self.prbDispatcher.leave(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.SWITCH))
         if not result:
             self.__showActionErrorMessage()
 

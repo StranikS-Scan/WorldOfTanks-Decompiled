@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/BombersWing.py
 from collections import namedtuple
 import math
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles
 import BigWorld
@@ -71,7 +71,7 @@ class Bomber(object):
     def __playSound(self):
         if self.__desc and self.__desc.soundEvent:
             try:
-                self.__sound = SoundGroups.g_instance.getSound3D(self.__model, self.__desc.soundEvent)
+                self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__desc.soundEvent)
                 self.__sound.play()
             except:
                 self.__sound = None
@@ -83,7 +83,8 @@ class Bomber(object):
         if self.__sound is None:
             return
         else:
-            self.__sound.setParameterByName('bombing', 1 if isAttacking else 0)
+            if FMOD.enabled:
+                self.__sound.setParameterByName('bombing', 1 if isAttacking else 0)
             return
 
     def addControlPoint(self, position, velocity, time, attackEnded = False):

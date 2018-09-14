@@ -10,7 +10,6 @@ from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipParameterField, ToolTipAttrField, ToolTipData, getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils import ItemsParameters, ParametersCache
-from gui.shared.utils.gui_items import InventoryVehicle
 from gui.prb_control.dispatcher import g_prbLoader
 
 class VehicleStatusField(ToolTipDataField):
@@ -25,7 +24,7 @@ class VehicleStatusField(ToolTipDataField):
 
     def __getTechTreeVehicleStatus(self, config, vehicle):
         nodeState = int(config.node.state)
-        tooltip, level = None, InventoryVehicle.STATE_LEVEL.WARNING
+        tooltip, level = None, Vehicle.VEHICLE_STATE_LEVEL.WARNING
         parentCD = None
         if config.node is not None:
             parentCD = config.node.unlockProps.parentID
@@ -35,13 +34,13 @@ class VehicleStatusField(ToolTipDataField):
                 tooltip = '#tooltips:researchPage/vehicle/status/parentModuleIsLocked'
             elif need2Unlock > 0:
                 tooltip = '#tooltips:researchPage/module/status/notEnoughXP'
-                level = InventoryVehicle.STATE_LEVEL.CRITICAL
+                level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         else:
             if nodeState & NODE_STATE.IN_INVENTORY:
                 return self.__getVehicleStatus(False, vehicle)
             canRentOrBuy, reason = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
             if not canRentOrBuy:
-                level = InventoryVehicle.STATE_LEVEL.CRITICAL
+                level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
                 if reason == 'gold_error':
                     tooltip = '#tooltips:moduleFits/gold_error'
                 elif reason == 'credit_error':
@@ -63,17 +62,17 @@ class VehicleStatusField(ToolTipDataField):
             credits, gold = g_itemsCache.items.stats.money
             price = vehicle.minRentPrice or vehicle.buyPrice
             msg = None
-            level = InventoryVehicle.STATE_LEVEL.WARNING
+            level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
             if not isUnlocked:
                 msg = 'notUnlocked'
             elif isInInventory:
                 msg = 'inHangar'
             elif credits < price[0]:
                 msg = 'notEnoughCredits'
-                level = InventoryVehicle.STATE_LEVEL.CRITICAL
+                level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             elif gold < price[1]:
                 msg = 'notEnoughGold'
-                level = InventoryVehicle.STATE_LEVEL.CRITICAL
+                level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             if msg is not None:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % msg)
                 return {'header': header,
@@ -95,11 +94,6 @@ class VehicleStatusField(ToolTipDataField):
     def __preprocessState(self, state, level):
         config = self._tooltip.context.getStatusConfiguration(self._tooltip.item)
         preQueue = g_prbLoader.getDispatcher().getPreQueueFunctional()
-        if config.checkNotSuitable and state != Vehicle.VEHICLE_STATE.BATTLE and preQueue.getQueueType() == constants.QUEUE_TYPE.HISTORICAL:
-            battle = preQueue.getItemData()
-            if battle is not None:
-                if not battle.canParticipateWith(self._tooltip.item.intCD):
-                    return ('notSuitable', Vehicle.VEHICLE_STATE_LEVEL.WARNING)
         return (state, level)
 
 

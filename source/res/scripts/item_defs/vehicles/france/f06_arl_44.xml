@@ -1,0 +1,1147 @@
+<f06_arl_44.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	37	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	5.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	120	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	40	</armor_11>
+      <armor_12>	50	</armor_12>
+      <armor_13>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_13>
+      <armor_14>	20	</armor_14>
+      <armor_15>	20	</armor_15>
+      <armor_16>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	22650	</weight>
+    <maxHealth>	624	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.36	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.388594 0.006983	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/french/F06_ARL_44/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.695851 0.321754 2.04356	</rayStart>
+        <rayEnd>	0.695851 0.186801 1.89595	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_ARL_44>
+      <userString>	#france_vehicles:Chassis_ARL_44	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8600	</price>
+      <unlocks>
+        <chassis>	Chassis_ARL_44_2	  <cost>	4930	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	14200	</weight>
+      <maxLoad>	46960	</maxLoad>
+      <terrainResistance>	1.5 1.7 3	</terrainResistance>
+      <brakeForce>	40500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.38 0.58	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.4237	</radius>
+          <syncAngle>	31.35	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.115295	</radius>
+          <syncAngle>	31.35	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.475489	</radius>
+          <syncAngle>	31.35	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	13	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	11	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.4237	</radius>
+          <syncAngle>	31.35	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.115295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.475489	</radius>
+          <syncAngle>	31.35	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.42532 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.33982 1.75494	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.589730 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.748430 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.273770	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0392562	</minOffset>
+          <maxOffset>	0.0867769	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.039	</minOffset>
+          <maxOffset>	0.087	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F06_ARL_44/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F06_ARL_44/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F06_ARL_44/track/left.track	</left>
+        <right>	vehicles/french/F06_ARL_44/track/right.track	</right>
+        <segmentLength>	0.227	</segmentLength>
+        <segmentOffset>	0.059	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1311	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.022	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0264	</trackThickness>
+    </Chassis_ARL_44>
+    <Chassis_ARL_44_2>
+      <userString>	#france_vehicles:Chassis_ARL_44_2	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15420	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	14200	</weight>
+      <maxLoad>	50500	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	40500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.38 0.58	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.4237	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.115295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.475489	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	13	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	11	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.4237	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.115295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.475489	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.42532 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.33982 1.75494	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.568360 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.748430 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.273760	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0392562	</minOffset>
+          <maxOffset>	0.0867769	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	16	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.039	</minOffset>
+          <maxOffset>	0.087	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F06_ARL_44/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F06_ARL_44/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F06_ARL_44/track/left.track	</left>
+        <right>	vehicles/french/F06_ARL_44/track/right.track	</right>
+        <segmentLength>	0.227	</segmentLength>
+        <segmentOffset>	0.059	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1311	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.022	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0264	</trackThickness>
+    </Chassis_ARL_44_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_ARL_44>
+      <userString>	#france_vehicles:Turret_1_ARL_44	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8350	</price>
+      <armor>
+        <armor_1>	110	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	50	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	50	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_10>	80	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	20	</armor_12>
+        <armor_13>	60	</armor_13>
+        <armor_14>	30	</armor_14>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	156	</maxHealth>
+      <rotationSpeed>	20	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
+          <unlocks>
+            <gun>	_90mm_canon_DCA_30	  <cost>	9300	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	3.8	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000029 -0.00785017 1.71372	</rayStart>
+              <rayEnd>	0.0244511 -0.0341238 1.71083	</rayEnd>
+              <rayUp>	0.081 0.072 3	</rayUp>
+              <size>	0.432	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_ARL_44	  <cost>	6100	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	8.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000029 -0.00784996 2.02173	</rayStart>
+              <rayEnd>	0.00391578 -0.0108876 2.01914	</rayEnd>
+              <rayUp>	0.076 0.071 3	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_canon_DCA_30>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F06_ARL_44/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000000 0.506083 1.24583	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.965587 0.525821 0.671887	</rayStart>
+          <rayEnd>	-0.788114 0.47475 0.595108	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.04786 0.579643 -1.23921	</rayStart>
+          <rayEnd>	0.854929 0.528469 -1.22665	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.8	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.965587 0.525821 0.671887	</rayStart>
+          <rayEnd>	0.788114 0.47475 0.595108	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.05034 0.56975 -1.24147	</rayStart>
+          <rayEnd>	-0.857407 0.518575 -1.22891	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.8	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.931 -0.119 0.967 0.000 0.754 -0.017 0.321 0.000 0.481 0.500 0.198 0.500 0.000 0.013 0.069	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1 1 0.07 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_ARL_44>
+    <Turret_2_ARL_44>
+      <userString>	#france_vehicles:Turret_2_ARL_44	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	20430	</price>
+      <unlocks>
+        <gun>	_90mm_F3	  <cost>	15000	</cost>
+        </gun>
+        <vehicle>	F07_AMX_M4_1945	  <cost>	47590	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	110	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	50	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	10	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	</armor_9>
+        <armor_10>	80	</armor_10>
+        <armor_11>	50	</armor_11>
+        <armor_12>	30	</armor_12>
+        <armor_13>	50	</armor_13>
+        <armor_14>	40	</armor_14>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	6500	</weight>
+      <maxHealth>	196	</maxHealth>
+      <rotationSpeed>	22	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	2.421	</invisibilityFactor>
+      <guns>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 -0.0111655 1.90928	</rayStart>
+              <rayEnd>	-0.0524422 -0.0316123 1.90887	</rayEnd>
+              <rayUp>	0.069 0.062 4	</rayUp>
+              <size>	0.55	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+        <_90mm_canon_DCA_30>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	8.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 -0.0112031 1.99565	</rayStart>
+              <rayEnd>	0.0290476 -0.00643358 1.99468	</rayEnd>
+              <rayUp>	0.076 0.07 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_canon_DCA_30>
+        <_105mm_canon_13TR>	shared	  <maxAmmo>	40	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	10.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	3.4	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 -0.0111655 2.59212	</rayStart>
+              <rayEnd>	0.0553198 0.0279188 2.59187	</rayEnd>
+              <rayUp>	0.088 0.08 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.79 0.79 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_canon_13TR>
+        <_90mm_F3>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <gun>	_105mm_canon_13TR	  <cost>	16350	</cost>
+            </gun>
+            <gun>	_90mm_canon_DCA_45	  <cost>	18500	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	8.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.011206 2.1626	</rayStart>
+              <rayEnd>	-0.0453558 -0.0291165 2.16222	</rayEnd>
+              <rayUp>	0.07 0.065 4	</rayUp>
+              <size>	0.52	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_F3>
+        <_90mm_canon_DCA_45>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	10	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.4	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.0112067 3.61308	</rayStart>
+              <rayEnd>	-0.0480641 -0.0131668 3.61255	</rayEnd>
+              <rayUp>	0.087 0.082 4	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_canon_DCA_45>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F06_ARL_44/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/french/F06_ARL_44/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F06_ARL_44/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000000 0.516084 1.22583	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.864279 0.751877 -1.69107	</rayStart>
+          <rayEnd>	0.825914 0.740868 -1.68843	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.04461 0.639615 -0.748729	</rayStart>
+          <rayEnd>	-0.852781 0.584578 -0.735578	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-0.885807 0.748793 -1.69438	</rayStart>
+          <rayEnd>	-0.809071 0.726797 -1.68911	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.3071 0.619122 -0.403951	</rayStart>
+          <rayEnd>	1.11465 0.565637 -0.393771	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.936 -0.169 1.047 0.000 0.720 -0.017 0.280 0.000 0.367 0.500 0.283 0.500 0.040 1.000 0.123	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_ARL_44>
+  </turrets0>
+  <engines>
+    <Maybach_HL_230>	shared	  <unlocks>
+        <engine>	Maybach_HL_230P45	  <cost>	18800	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_230>
+    <Maybach_HL_230P45>	shared	</Maybach_HL_230P45>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f06_arl_44.xml>

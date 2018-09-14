@@ -1,0 +1,30 @@
+<gasattack.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <attackLength>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	180	</Default>
+    </attackLength>
+    <preparationPeriod>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	10	</Default>
+    </preparationPeriod>
+    <compressionTime>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	120	</Default>
+    </compressionTime>
+    <startRadius>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	500	</Default>
+    </startRadius>
+    <endRadius>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	50	</Default>
+    </endRadius>
+  </Properties>
+</gasattack.def>

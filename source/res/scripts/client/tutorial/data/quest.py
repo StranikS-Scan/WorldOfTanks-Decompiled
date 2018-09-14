@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/tutorial/data/quest.py
+from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EVENT_STATUS
 from tutorial.data.has_id import HasID
 from tutorial.data.chapter import Chapter
 
@@ -38,6 +39,20 @@ class QuestChapter(Chapter):
 
     def isHidden(self):
         return self.__isHidden
+
+    def getChapterStatus(self, descriptor, completed):
+        unlockChapter = descriptor.getChapter(self.getUnlockChapter())
+        if self.isHidden():
+            return EVENT_STATUS.NOT_AVAILABLE
+        elif self.isBonusReceived(completed):
+            return EVENT_STATUS.COMPLETED
+        elif unlockChapter is None:
+            return EVENT_STATUS.NONE
+        elif unlockChapter is not None and unlockChapter.isBonusReceived(completed):
+            return EVENT_STATUS.NONE
+        else:
+            return EVENT_STATUS.NOT_AVAILABLE
+            return
 
 
 class ProgressCondition(HasID):

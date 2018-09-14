@@ -165,6 +165,14 @@ def _migrateTo15(core, data, initialized):
     data['gameExtData'][GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS] = True
 
 
+def _migrateTo16(core, data, initialized):
+    data['gameExtData'][GAME.RECEIVE_INVITES_IN_BATTLE] = True
+
+
+def _migrateTo17(core, data, initialized):
+    data['gameExtData'][GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -219,6 +227,14 @@ _versions = ((1,
   False),
  (15,
   _migrateTo15,
+  False,
+  False),
+ (16,
+  _migrateTo16,
+  False,
+  False),
+ (17,
+  _migrateTo17,
   False,
   False))
 

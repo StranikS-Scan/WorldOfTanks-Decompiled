@@ -1,20 +1,28 @@
 # Embedded file name: scripts/client/gui/prb_control/restrictions/permissions.py
 from UnitBase import UNIT_ROLE, UNIT_FLAGS
 import account_helpers
-from constants import PREBATTLE_ROLE, PREBATTLE_TEAM_STATE
+from constants import PREBATTLE_ROLE, PREBATTLE_TEAM_STATE, QUEUE_TYPE, FALLOUT_BATTLE_TYPE
 from constants import PREBATTLE_ACCOUNT_STATE
-from gui import prb_control
+from gui.prb_control import prb_getters
 from gui.prb_control.items.prb_items import TeamStateInfo
 from gui.prb_control.items.unit_items import UnitFlags
-from gui.prb_control.restrictions.interfaces import IPrbPermissions, IUnitPermissions
-from gui.prb_control.restrictions.limits import MaxCount, TotalMaxCount, TeamNoPlayersInBattle
+from gui.prb_control.restrictions import interfaces
+from gui.prb_control.restrictions import limits
+from gui.prb_control.storage import prequeue_storage_getter
 
-class DefaultPrbPermissions(IPrbPermissions):
+class IntroPrbPermissions(interfaces.IPrbPermissions):
 
-    def __init__(self, roles = 0, pState = PREBATTLE_ACCOUNT_STATE.UNKNOWN, teamState = None):
+    def canCreateSquad(self):
+        return True
+
+
+class DefaultPrbPermissions(interfaces.IPrbPermissions):
+
+    def __init__(self, roles = 0, pState = PREBATTLE_ACCOUNT_STATE.UNKNOWN, teamState = None, hasLockedState = False):
         super(DefaultPrbPermissions, self).__init__()
         self._roles = roles
         self._pState = pState
+        self._hasLockedState = hasLockedState
         if teamState is None:
             self._teamState = TeamStateInfo(PREBATTLE_TEAM_STATE.NOT_READY)
         else:
@@ -23,6 +31,9 @@ class DefaultPrbPermissions(IPrbPermissions):
 
     def __repr__(self):
         return '{0:>s}(roles = {1:n}, pState = {2:n}, teamState = {2!r:s})'.format(self.__class__.__name__, self._roles, self._pState, self._teamState)
+
+    def canCreateSquad(self):
+        return not self._hasLockedState
 
     def canSendInvite(self):
         return self._roles & PREBATTLE_ROLE.INVITE != 0 and self._teamState.isNotReady()
@@ -111,12 +122,12 @@ class CompanyPrbPermissions(DefaultPrbPermissions):
         return roles == PREBATTLE_ROLE.COMPANY_CREATOR
 
     def _canAddPlayers(self):
-        clientPrb = prb_control.getClientPrebattle()
+        clientPrb = prb_getters.getClientPrebattle()
         result = False
         if clientPrb is not None:
-            settings = prb_control.getPrebattleSettings(prebattle=clientPrb)
-            rosters = prb_control.getPrebattleRosters(prebattle=clientPrb)
-            result, _ = TotalMaxCount().check(rosters, 1, settings.getTeamLimits(1))
+            settings = prb_getters.getPrebattleSettings(prebattle=clientPrb)
+            rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
+            result, _ = limits.TotalMaxCount().check(rosters, 1, settings.getTeamLimits(1))
         return result
 
 
@@ -137,36 +148,46 @@ class BattleSessionPrbPermissions(DefaultPrbPermissions):
         if not result:
             return False
         else:
-            clientPrb = prb_control.getClientPrebattle()
+            clientPrb = prb_getters.getClientPrebattle()
             result = False
             if clientPrb is not None:
-                settings = prb_control.getPrebattleSettings(prebattle=clientPrb)
-                rosters = prb_control.getPrebattleRosters(prebattle=clientPrb)
-                prbType = prb_control.getPrebattleType(clientPrb, settings)
-                result, _ = TeamNoPlayersInBattle(prbType).check(rosters, team, settings.getTeamLimits(team))
+                settings = prb_getters.getPrebattleSettings(prebattle=clientPrb)
+                rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
+                prbType = prb_getters.getPrebattleType(clientPrb, settings)
+                result, _ = limits.TeamNoPlayersInBattle(prbType).check(rosters, team, settings.getTeamLimits(team))
             return result
 
     def _canAddPlayers(self):
-        clientPrb = prb_control.getClientPrebattle()
+        clientPrb = prb_getters.getClientPrebattle()
         result = False
         if clientPrb is not None:
-            settings = prb_control.getPrebattleSettings(prebattle=clientPrb)
-            rosters = prb_control.getPrebattleRosters(prebattle=clientPrb)
-            result, _ = MaxCount().check(rosters, 1, settings.getTeamLimits(1))
+            settings = prb_getters.getPrebattleSettings(prebattle=clientPrb)
+            rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
+            result, _ = limits.MaxCount().check(rosters, 1, settings.getTeamLimits(1))
         return result
 
 
-class UnitPermissions(IUnitPermissions):
+class IntroUnitPermissions(interfaces.IUnitPermissions):
 
-    def __init__(self, roles = 0, flags = UNIT_FLAGS.DEFAULT, isCurrentPlayer = False, isPlayerReady = False):
+    def canCreateSquad(self):
+        return True
+
+
+class UnitPermissions(interfaces.IUnitPermissions):
+
+    def __init__(self, roles = 0, flags = UNIT_FLAGS.DEFAULT, isCurrentPlayer = False, isPlayerReady = False, hasLockedState = False):
         super(UnitPermissions, self).__init__()
         self._roles = roles
         self._flags = UnitFlags(flags)
         self._isCurrentPlayer = isCurrentPlayer
         self._isPlayerReady = isPlayerReady
+        self._hasLockedState = hasLockedState
 
     def __repr__(self):
         return '{0:>s}(roles = {1:n}, state = {2!r:s}, isCurrentPlayer = {3!r:s})'.format(self.__class__.__name__, self._roles, self._flags, self._isCurrentPlayer)
+
+    def canCreateSquad(self):
+        return not self._hasLockedState
 
     def canSendInvite(self):
         return self._roles & UNIT_ROLE.INVITE_KICK_PLAYERS > 0
@@ -240,3 +261,29 @@ class SquadPermissions(UnitPermissions):
 
     def canExitFromQueue(self):
         return self.isCreator(self._roles)
+
+
+class PreQueuePermissions(interfaces.IGUIPermissions):
+
+    def __init__(self, isInQueue):
+        super(PreQueuePermissions, self).__init__()
+        self.__isInQueue = isInQueue
+
+    def canChangeVehicle(self):
+        return not self.__isInQueue
+
+    def canCreateSquad(self):
+        return not self.__isInQueue
+
+
+class FalloutQueuePermissions(PreQueuePermissions):
+
+    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
+    def storage(self):
+        return None
+
+    def canCreateSquad(self):
+        canDo = super(FalloutQueuePermissions, self).canCreateSquad()
+        if canDo:
+            canDo = self.storage.getBattleType() != FALLOUT_BATTLE_TYPE.UNDEFINED
+        return canDo

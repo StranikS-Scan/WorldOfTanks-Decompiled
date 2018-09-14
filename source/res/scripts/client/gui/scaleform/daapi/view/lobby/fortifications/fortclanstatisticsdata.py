@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanStatisticsData.py
-from Event import Event
 import BigWorld
+from Event import Event
+from adisp import async
+from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -8,8 +10,6 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import icons, text_styles
 from gui.shared.fortifications.fort_helpers import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
-from helpers import i18n
-from adisp import async
 
 @async
 def getDataObject(callback):

@@ -23,6 +23,7 @@ class PlayersPanelsSwitcher(IPlayersPanelsSwitcher):
     def setInitialMode(self):
         if not self.__isChanged:
             self.__call('setState', [g_settingsCore.getSetting('ppState')])
+            self.__ui.invalidateGUI()
 
     def setLargeMode(self):
         self.__call('setState', ['large'])

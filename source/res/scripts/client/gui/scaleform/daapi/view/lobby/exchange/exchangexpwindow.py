@@ -75,8 +75,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
          'vehicleList': values,
          'tableHeader': self._getTableHeader(),
          'xpForFree': self.__xpForFree,
-         'rateLabel': labelBuilder.render(),
-         'xpAction': g_itemsCache.items.shop.isXPConversionActionActive}
+         'rateLabel': labelBuilder.render()}
         self.as_vehiclesDataChangedS(vehicleData)
         return
 
@@ -132,7 +131,9 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
     def __setRates(self):
         rate = g_itemsCache.items.shop.freeXPConversionWithDiscount
         defaultRate = g_itemsCache.items.shop.defaults.freeXPConversion
-        self.as_exchangeRateS(defaultRate[0], rate[0])
+        self.as_exchangeRateS({'value': defaultRate[0],
+         'actionValue': rate[0],
+         'actionMode': g_itemsCache.items.shop.isXPConversionActionActive})
 
     def __getActionStyle(self):
         rate = g_itemsCache.items.shop.defaults.freeXPConversion

@@ -8,8 +8,7 @@ from helpers import i18n
 from ids_generators import SequenceIDGenerator
 from helpers.i18n import makeString
 from gui import GUI_SETTINGS
-from gui.shared.utils.gui_items import ShopItem, VehicleItem
-from items import ITEM_TYPE_NAMES, ITEM_TYPE_INDICES, vehicles
+from items import ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
 
 def rnd_choice(*args):
@@ -135,63 +134,6 @@ def checkAmmoLevel(vehicles, callback):
         yield lambda callback: callback(None)
         callback(True)
     return
-
-
-def isModuleFitVehicle(module, vehicle, price, money, unlocks, positionIndex = 0, isRemove = False):
-    """
-    Check module fits vehicle, return localized error string in falure
-    @param module: FittingItem - module
-    @param vehicle: FittiingItem - vehicle
-    @param price: tuple (credits, gold)
-    @param money: tuple (credits, gold)
-    @param unlocks: list of compactDescr
-    @param positionIndex: index of module, used in artefacts
-    @param isRemove: boolean - specify if module will install or remove
-    @return: tuple (succesBooleanFlag, localizedStringReason, localizedStringTooltipReason)
-    """
-    reason = ''
-    installPosible = True
-    prefix = 'deviceFits/' if module.itemTypeName == ITEM_TYPE_NAMES[9] else 'moduleFits/'
-    if isinstance(module, ShopItem) or isRemove:
-        if module.itemTypeName not in (ITEM_TYPE_NAMES[9], ITEM_TYPE_NAMES[11]) and module.compactDescr not in unlocks:
-            return (False, '#menu:moduleFits/unlock_error', '#tooltips:moduleFits/unlock_error')
-        couldBeBought, menu, tooltip = getModuleGoldStatus(price, money)
-        if not couldBeBought:
-            return (couldBeBought, menu, tooltip)
-    if vehicle is None:
-        if isinstance(module, VehicleItem):
-            tooltip = '#tooltips:deviceFits/already_installed' if module.itemTypeName == ITEM_TYPE_NAMES[9] else '#tooltips:moduleFits/already_installed'
-            return (True, '', tooltip)
-        return (True, '', '')
-    else:
-        if module.itemTypeName == ITEM_TYPE_NAMES[3]:
-            installPosible, reason = vehicle.descriptor.mayInstallTurret(module.compactDescr, 0)
-        elif module.itemTypeName in ITEM_TYPE_NAMES[9]:
-            installPosible, reason = vehicle.descriptor.mayInstallOptionalDevice(module.compactDescr, positionIndex)
-            if not installPosible and reason == 'already installed' and positionIndex == module.index:
-                installPosible, reason = vehicle.descriptor.mayRemoveOptionalDevice(positionIndex)
-                if not installPosible:
-                    reason = 'remove ' + reason
-        elif module.itemTypeName in ITEM_TYPE_NAMES[11]:
-            for m in unlocks:
-                if m.index != positionIndex and m is not module:
-                    installPosible = m.descriptor.checkCompatibilityWithActiveEquipment(module.descriptor)
-                    if installPosible:
-                        installPosible = module.descriptor.checkCompatibilityWithEquipment(m.descriptor)
-                    if not installPosible:
-                        reason = 'not with installed equipment'
-                        break
-
-        else:
-            installPosible, reason = vehicle.descriptor.mayInstallComponent(module.compactDescr)
-        if not installPosible:
-            reason = reason.replace(' ', '_')
-            if module.itemTypeName == ITEM_TYPE_NAMES[4] and reason == 'not_for_current_vehicle':
-                return (installPosible, '#menu:moduleFits/need_turret', '#tooltips:moduleFits/need_turret')
-            if module.itemTypeName == ITEM_TYPE_NAMES[2] and reason == 'too_heavy':
-                return (installPosible, '#menu:moduleFits/too_heavy_chassi', '#tooltips:moduleFits/too_heavy_chassi')
-            return (installPosible, '#menu:moduleFits/' + reason, '#tooltips:' + prefix + reason)
-        return (True, '', '')
 
 
 def getModuleGoldStatus(price, money):
@@ -370,24 +312,6 @@ def getUniqueViewName(viewAlias):
     if _viewIdsGen is None:
         _viewIdsGen = SequenceIDGenerator()
     return getViewName(viewAlias, _viewIdsGen.nextSequenceID)
-
-
-CLAN_MEMBERS = {CLAN_MEMBER_FLAGS.LEADER: 'leader',
- CLAN_MEMBER_FLAGS.VICE_LEADER: 'vice_leader',
- CLAN_MEMBER_FLAGS.RECRUITER: 'recruiter',
- CLAN_MEMBER_FLAGS.TREASURER: 'treasurer',
- CLAN_MEMBER_FLAGS.DIPLOMAT: 'diplomat',
- CLAN_MEMBER_FLAGS.COMMANDER: 'commander',
- CLAN_MEMBER_FLAGS.PRIVATE: 'private',
- CLAN_MEMBER_FLAGS.RECRUIT: 'recruit',
- CLAN_MEMBER_FLAGS.STAFF: 'staff',
- CLAN_MEMBER_FLAGS.JUNIOR: 'junior',
- CLAN_MEMBER_FLAGS.RESERVIST: 'reservist'}
-
-def getClanRoleString(position = CLAN_MEMBER_FLAGS.LEADER):
-    if position in CLAN_MEMBERS:
-        return i18n.makeString('#menu:profile/header/clan/position/%s' % CLAN_MEMBERS[position])
-    return ''
 
 
 def getPostBattleUniqueSubUrl(svrPackedData, clientPackedData):

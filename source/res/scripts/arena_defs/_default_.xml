@@ -1,0 +1,83 @@
+<_default_.xml>
+  <minPlayersInTeam>	0	</minPlayersInTeam>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <maxTeamsInArena>	2	</maxTeamsInArena>
+  <minTeamsInArena>	2	</minTeamsInArena>
+  <runDelay>	30	</runDelay>
+  <roundLength>	900	</roundLength>
+  <winnerIfTimeout>	0	</winnerIfTimeout>
+  <winnerIfExtermination>	0	</winnerIfExtermination>
+  <artilleryPreparationChance>	0.0	</artilleryPreparationChance>
+  <music>	/music/combat/combat	</music>
+  <wwmusic>	music_combat	</wwmusic>
+  <loadingMusic>	/music/main_menu/main_menu	</loadingMusic>
+  <wwloadingMusic>	music_main_menu	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultReverbPreset></defaultReverbPreset>
+  <explicitRequestOnly>	false	</explicitRequestOnly>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <battleCountdownTimerSound>	/GUI/notifications_FX/timer	</battleCountdownTimerSound>
+  <wwbattleCountdownTimerSound>	timer	</wwbattleCountdownTimerSound>
+  <waypoints></waypoints>
+  <battleScenarios></battleScenarios>
+  <gameplayTypes>
+    <ctf></ctf>
+    <domination></domination>
+    <assault>
+      <roundLength>	600	</roundLength>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+    </assault>
+    <ctf2></ctf2>
+    <domination2></domination2>
+    <assault2>
+      <roundLength>	420	</roundLength>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+    </assault2>
+    <fallout>
+      <roundLength>	420	</roundLength>
+    </fallout>
+    <fallout2>
+      <roundLength>	420	</roundLength>
+    </fallout2>
+    <fallout3>
+      <roundLength>	420	</roundLength>
+    </fallout3>
+    <fallout4>
+      <roundLength>	600	</roundLength>
+    </fallout4>
+    <fallout5>
+      <roundLength>	600	</roundLength>
+    </fallout5>
+    <fallout6>
+      <roundLength>	600	</roundLength>
+    </fallout6>
+    <sandbox></sandbox>
+  </gameplayTypes>
+  <preloadSoundGroups>
+    <groupName>	/explosions/explosions	</groupName>
+    <groupName>	/explosions/flame	</groupName>
+    <groupName>	/GUI/notifications_FX	</groupName>
+    <groupName>	/guns/tracers	</groupName>
+    <groupName>	/guns/npc	</groupName>
+    <groupName>	/hits/surface_hits	</groupName>
+    <groupName>	/hits/hits_tank	</groupName>
+    <groupName>	/ingame_voice/notifications_VO	</groupName>
+    <groupName>	/music/combat	</groupName>
+    <groupName>	/objects/treefall	</groupName>
+    <groupName>	/objects/telegraph_pole	</groupName>
+    <groupName>	/objects/buildings	</groupName>
+    <groupName>	/tanks/tanks_physics	</groupName>
+    <groupName>	/tanks/tank_breakdown	</groupName>
+    <groupName>	/tanks/tank_repair	</groupName>
+    <groupName>	/tanks/tank_burning	</groupName>
+    <groupName>	/tanks/turret_drop	</groupName>
+    <groupName>	/tanks/pc	</groupName>
+    <groupName>	/tanks/npc	</groupName>
+    <groupName>	/explosive_objects/expls_obj	</groupName>
+    <groupName>	/burn/expls_obj_burn	</groupName>
+  </preloadSoundGroups>
+</_default_.xml>

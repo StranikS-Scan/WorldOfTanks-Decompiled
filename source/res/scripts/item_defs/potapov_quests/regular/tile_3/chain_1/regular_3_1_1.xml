@@ -1,0 +1,43 @@
+<regular_3_1_1.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_1_1_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_1_1_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <win></win>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_1_1.xml>

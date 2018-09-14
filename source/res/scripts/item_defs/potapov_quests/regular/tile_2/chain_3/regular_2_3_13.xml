@@ -1,0 +1,65 @@
+<regular_2_3_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_3_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleDamage>
+                    <greaterOrEqual>	4000	</greaterOrEqual>
+                  </unitVehicleDamage>
+                </and>
+              </unit>
+              <and>
+                <vehicleDamage>
+                  <greaterOrEqual>	4000	</greaterOrEqual>
+                </vehicleDamage>
+              </and>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_3_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleDamage>
+                    <greaterOrEqual>	4000	</greaterOrEqual>
+                  </unitVehicleDamage>
+                </and>
+              </unit>
+              <and>
+                <vehicleDamage>
+                  <greaterOrEqual>	4000	</greaterOrEqual>
+                </vehicleDamage>
+              </and>
+            </or>
+            <results>
+              <key>	xp	</key>
+              <max>	5	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_3_13.xml>

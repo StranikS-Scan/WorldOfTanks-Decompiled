@@ -80,7 +80,8 @@ class VOIPHandler:
 
     @noexcept
     def __call__(self, message, data = {}):
-        LOG_VOIP_INT('Message: %d [%s], Data: %s' % (message, MESSAGE_IDS[message], data))
+        if message is not MSG_PARTICIPANT_UPDATED:
+            LOG_VOIP_INT('Message: %d [%s], Data: %s' % (message, MESSAGE_IDS[message], data))
         if message == MSG_VOIP_INITED:
             self.onVoipInited(data)
         elif message == MSG_VOIP_DESTROYED:

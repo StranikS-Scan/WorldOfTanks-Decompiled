@@ -1,0 +1,503 @@
+<a102_t28_concept.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	29	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	7.0	</repairCost>
+  <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	203.2	</armor_1>
+      <armor_2>	177.8	</armor_2>
+      <armor_3>	101.6	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	50.8	</armor_5>
+      <armor_6>	63.5	</armor_6>
+      <armor_7>	0	</armor_7>
+      <armor_8>	101.6	</armor_8>
+      <armor_9>	25.4	</armor_9>
+      <armor_10>	63.5	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_12>
+      <armor_13>	25.4	</armor_13>
+      <armor_14>	25.4	</armor_14>
+      <armor_15>	101.6	</armor_15>
+      <armor_16>	101.6	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	43981	</weight>
+    <maxHealth>	704	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A102_T28_concept/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A102_T28_concept/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A102_T28_concept/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.566384 0.883766	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A102_T28_concept/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.000102252 0.410658 3.37179	</rayStart>
+        <rayEnd>	-0.000102252 0.212834 3.34238	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.92228 0.535632 -0.977752	</rayStart>
+        <rayEnd>	-1.72367 0.5355 -0.954201	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.92228 0.535632 -0.977752	</rayStart>
+        <rayEnd>	1.72367 0.5355 -0.954201	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	-1.18576 0.724866 -2.21041	</rayStart>
+        <rayEnd>	-0.986048 0.714841 -2.20651	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.18576 0.724866 -2.21041	</rayStart>
+        <rayEnd>	0.986048 0.714841 -2.20651	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.54 1.54 0.17 0.23	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A102_T28_concept>
+      <userString>	#usa_vehicles:Chassis_A102_T28_concept	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	73000	</maxLoad>
+      <terrainResistance>	1.5 2.1 2.6	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	145	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A102_T28_concept/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A102_T28_concept/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A102_T28_concept/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.5 0.75	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	254	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	25.71428571428571	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.366868	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.288618	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.381118	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.340862	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.160117	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.228741	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.160117	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.228741	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.04	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	248	</gravity>
+        <elasticity>	1016	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1.6	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A102_T28_concept/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A102_T28_concept/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A102_T28_concept/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A102_T28_concept/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A102_T28_concept/track/left.track	</left>
+        <right>	vehicles/american/A102_T28_concept/track/right.track	</right>
+        <segmentLength>	0.14	</segmentLength>
+        <segmentOffset>	0.066	</segmentOffset>
+        <segment2Offset>	0.072	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <hullPosition>	0.000000 1.0812 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A102_T28_concept/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.47929 2.32576	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.096650 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.621800 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.837890	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.000000	</trackThickness>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+    </Chassis_A102_T28_concept>
+  </chassis>
+  <turrets0>
+    <Turret_1_A102_T28_concept>
+      <userString>	#usa_vehicles:Turret_1_A102_T28_concept	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	203.2	</armor_2>
+        <armor_3>	101.6	</armor_3>
+        <armor_4>	101.6	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_7>
+        <armor_10>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_10>
+        <armor_11>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_11>
+        <armor_12>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_12>
+        <armor_13>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_13>
+        <armor_14>	203.2	</armor_14>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_5	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	176	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_AT_Gun_T5A>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-30 30	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 4.4 1 4.4	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	10	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/american/A102_T28_concept/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A102_T28_concept/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A102_T28_concept/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A102_T28_concept/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 0.0131011 2.12867	</rayStart>
+              <rayEnd>	-0.0477694 0.00414737 2.12226	</rayEnd>
+              <rayUp>	0.165 0.14 4	</rayUp>
+              <size>	0.711	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.85 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_AT_Gun_T5A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A102_T28_concept/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A102_T28_concept/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A102_T28_concept/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A102_T28_concept/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000001 0.257568 0.933283	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <physicsShape>	0.918 -0.043 1.000 0.000 0.429 0.327 0.684 0.306 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.745 0.445 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A102_T28_concept>
+  </turrets0>
+  <engines>
+    <Wright_G200_m_781C9GC5>	shared	</Wright_G200_m_781C9GC5>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_508_1>	shared	</SCR_508_1>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a102_t28_concept.xml>

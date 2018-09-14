@@ -79,7 +79,7 @@ class CaptchaController(Controller):
         return errorMsg
 
     def isCaptchaRequired(self):
-        return self.__battlesTillCaptcha <= 0
+        return False
 
     def getTriesLeft(self):
         return self.__triesLeft

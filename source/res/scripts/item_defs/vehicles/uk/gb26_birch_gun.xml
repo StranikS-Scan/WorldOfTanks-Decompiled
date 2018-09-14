@@ -1,0 +1,672 @@
+<gb26_birch_gun.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	45	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	8.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB26_Birch_Gun/Birch_Gun_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	6	</armor_1>
+      <armor_2>	4	</armor_2>
+      <armor_3>	6	</armor_3>
+      <armor_4>	6	</armor_4>
+      <armor_5>	4	</armor_5>
+      <armor_6>	4	</armor_6>
+      <armor_7>	4	</armor_7>
+      <armor_8>	4	</armor_8>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	5103	</weight>
+    <maxHealth>	152	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 36.00 0.38 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.30 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.83	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.464501 -0.062123	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.435563 -0.160355 2.71157	</rayStart>
+        <rayEnd>	0.435563 -0.160356 2.31157	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.37806 0.364265 -1.05925	</rayStart>
+        <rayEnd>	-0.978064 0.364265 -1.05925	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	0.0225692 0.384215 -2.09701	</rayStart>
+        <rayEnd>	0.0225063 0.0368315 -1.89871	</rayEnd>
+        <rayUp>	-0.0150007 0.86103 0.508333	</rayUp>
+        <size>	0.92	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB26_Birch_Gun>
+      <userString>	#gb_vehicles:Chassis_GB26_Birch_Gun	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <unlocks>
+        <chassis>	Chassis_GB26_Birch_Gun_2	  <cost>	1100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	6000	</weight>
+      <maxLoad>	12200	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	11000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	16	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.56 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.26	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R9	</name>
+          <radius>	0.119641	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R10	</name>
+          <radius>	0.377735	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.273106	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.119616	</radius>
+          <startIndex>	7	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L9	</name>
+          <radius>	0.119641	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L10	</name>
+          <radius>	0.377735	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.273106	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.119616	</radius>
+          <startIndex>	7	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L10	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.930132 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.971899 1.7904	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.264500 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.395200 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.803520	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB26_Birch_Gun>
+    <Chassis_GB26_Birch_Gun_2>
+      <userString>	#gb_vehicles:Chassis_GB26_Birch_Gun_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4650	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	6000	</weight>
+      <maxLoad>	14200	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	12000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.56 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.26	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R9	</name>
+          <radius>	0.119641	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R10	</name>
+          <radius>	0.377735	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.273106	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.119616	</radius>
+          <startIndex>	7	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L9	</name>
+          <radius>	0.119641	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L10	</name>
+          <radius>	0.377735	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.273106	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.120638	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.119616	</radius>
+          <startIndex>	7	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.11964	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L10	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.930132 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.971899 1.7904	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.259570 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.395200 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.803520	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB26_Birch_Gun_2>
+  </chassis>
+  <turrets0>
+    <Turret_2_GB26_Birch_Gun>
+      <ceilless>	true	</ceilless>
+      <userString>	#gb_vehicles:Turret_2_GB26_Birch_Gun	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	6	</armor_1>
+        <armor_2>	6	</armor_2>
+        <armor_3>	0	</armor_3>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	38	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_18_pdr_SPG_Gun>	shared	  <maxAmmo>	150	</maxAmmo>
+          <unlocks>
+            <gun>	OQF_25pdr_Gun_Mk_II	  <cost>	2250	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	6	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -37.5 1 -37.5	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.74	</shotDispersionRadius>
+          <reloadTime>	8.8	</reloadTime>
+          <aimingTime>	5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.44	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+        </_18_pdr_SPG_Gun>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000191 0.317036 0.416655	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.524731 0.769454 1.3944	</rayStart>
+          <rayEnd>	0.524731 0.597666 1.03317	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB26_Birch_Gun>
+    <Turret_1_GB26_Birch_Gun>
+      <ceilless>	true	</ceilless>
+      <userString>	#gb_vehicles:Turret_1_GB26_Birch_Gun	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	6	</armor_1>
+        <armor_2>	6	</armor_2>
+        <armor_3>	0	</armor_3>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	38	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <OQF_25pdr_Gun_Mk_II>	shared	  <maxAmmo>	150	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB28_Bishop	  <cost>	14750	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	6	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -70 1 -70	</minPitch>
+            <maxPitch>	0 2 0.086111 2 0.1 5 0.352778 5 0.366667 0.5 0.633333 0.5 0.647222 5 0.9 5 0.913889 2 1 2	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	9.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.4	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	5	</aimingTime>
+          <effects>	shot_large	</effects>
+          <models>
+            <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </OQF_25pdr_Gun_Mk_II>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB26_Birch_Gun/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB26_Birch_Gun/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB26_Birch_Gun/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB26_Birch_Gun/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000191 0.317036 0.416655	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.524731 0.769454 1.3944	</rayStart>
+          <rayEnd>	0.524731 0.597666 1.03317	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.623 0.407 1.000 0.000 0.737 0.255 0.000 0.100 0.500 0.500 0.000 0.500 0.718 1.000 0.393	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1.42 1.42 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB26_Birch_Gun>
+  </turrets0>
+  <engines>
+    <Vickers-Armstrong>	shared	  <unlocks>
+        <engine>	Vickers-Armstrong_MkII	  <cost>	35	</cost>
+        </engine>
+      </unlocks>
+    </Vickers-Armstrong>
+    <Vickers-Armstrong_MkII>	shared	</Vickers-Armstrong_MkII>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb26_birch_gun.xml>

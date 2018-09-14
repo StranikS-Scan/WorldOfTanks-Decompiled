@@ -1,0 +1,43 @@
+<audioplugins.xml>
+  <plugin>
+    <name>	FMOD Compressor	</name>
+    <parameters>
+      <parameter>
+        <index>	0	</index>
+        <value>	-4.5	</value>
+      </parameter>
+      <parameter>
+        <index>	1	</index>
+        <value>	70	</value>
+      </parameter>
+      <parameter>
+        <index>	2	</index>
+        <value>	1000	</value>
+      </parameter>
+      <parameter>
+        <index>	3	</index>
+        <value>	1	</value>
+      </parameter>
+    </parameters>
+  </plugin>
+  <plugin>
+    <name>	FMOD Lowpass Simple	</name>
+    <category>	inside	</category>
+    <parameters>
+      <parameter>
+        <index>	0	</index>
+        <value>	22000	</value>
+      </parameter>
+    </parameters>
+  </plugin>
+  <plugin>
+    <name>	FMOD Lowpass Simple	</name>
+    <category>	outside	</category>
+    <parameters>
+      <parameter>
+        <index>	0	</index>
+        <value>	22000	</value>
+      </parameter>
+    </parameters>
+  </plugin>
+</audioplugins.xml>

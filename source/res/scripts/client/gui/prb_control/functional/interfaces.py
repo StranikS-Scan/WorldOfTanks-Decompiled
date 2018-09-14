@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/interfaces.py
 from debug_utils import LOG_DEBUG
-from gui.prb_control.items import prb_items, unit_items
-from gui.prb_control.restrictions.interfaces import IPrbPermissions, IPreQueuePermissions
+from gui.prb_control.items import prb_items, unit_items, SelectResult
+from gui.prb_control.restrictions.interfaces import IPrbPermissions
 from gui.prb_control.restrictions.interfaces import IUnitPermissions
 from gui.prb_control.settings import PREBATTLE_ROSTER, makePrebattleSettings
-from gui.prb_control.settings import FUNCTIONAL_EXIT, FUNCTIONAL_INIT_RESULT, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 
 class IPrbEntry(object):
 
@@ -36,27 +36,18 @@ class IPrbListRequester(IPrbListUpdater):
         pass
 
 
-class IStatefulFunctional(object):
-
-    def getStates(self):
-        return ({}, None)
-
-    def applyStates(self, states):
-        pass
-
-
 class IClientFunctional(object):
 
     def init(self, **kwargs):
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, **kwargs):
         pass
 
-    def getExit(self):
-        return FUNCTIONAL_EXIT.NO_FUNC
+    def getFunctionalFlags(self):
+        return FUNCTIONAL_FLAG.UNDEFINED
 
-    def setExit(self, exit):
+    def setFunctionalFlags(self, flag):
         pass
 
     def isPlayerJoined(self, ctx):
@@ -65,28 +56,28 @@ class IClientFunctional(object):
     def canPlayerDoAction(self):
         return (True, '')
 
-    def doAction(self, action = None, dispatcher = None):
+    def doAction(self, action = None):
         return False
 
     def doSelectAction(self, action):
-        pass
+        return SelectResult()
 
-    def doLeaveAction(self, dispatcher, ctx = None):
-        pass
-
-    def showGUI(self):
+    def showGUI(self, ctx = None):
         return False
 
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+    def getConfirmDialogMeta(self, ctx):
         return None
 
     def getID(self):
         return 0
 
-    def getPrbType(self):
+    def getCtrlType(self):
+        return CTRL_ENTITY_TYPE.UNKNOWN
+
+    def getEntityType(self):
         return 0
 
-    def getPrbTypeName(self):
+    def getEntityTypeName(self):
         return 'N/A'
 
     def hasEntity(self):
@@ -97,6 +88,9 @@ class IClientFunctional(object):
 
     def getUnitFullData(self, unitIdx = None):
         return None
+
+    def getPermissions(self, pID = None, **kwargs):
+        return IPrbPermissions()
 
     def isCreator(self, dbID = None):
         return False
@@ -129,12 +123,12 @@ class IPrbFunctional(IClientFunctional, IListenersCollection):
         LOG_DEBUG('Prebattle functional deleted:', self)
 
     def init(self, clientPrb = None, ctx = None):
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, clientPrb = None, woEvents = False):
-        pass
+        return FUNCTIONAL_FLAG.UNDEFINED
 
-    def getEntityType(self):
+    def getCtrlType(self):
         return CTRL_ENTITY_TYPE.PREBATTLE
 
     def getSettings(self):
@@ -228,7 +222,7 @@ class IPrbListener(IIntoPrbListener):
         pass
 
 
-class IPreQueueFunctional(IListenersCollection):
+class IPreQueueFunctional(IListenersCollection, IClientFunctional):
 
     def __init__(self):
         LOG_DEBUG('Queue functional inited:', self)
@@ -236,35 +230,8 @@ class IPreQueueFunctional(IListenersCollection):
     def __del__(self):
         LOG_DEBUG('Queue functional deleted:', self)
 
-    def init(self, ctx = None):
-        return FUNCTIONAL_INIT_RESULT.INITED
-
-    def fini(self, woEvents = False):
-        pass
-
-    def getEntityType(self):
+    def getCtrlType(self):
         return CTRL_ENTITY_TYPE.PREQUEUE
-
-    def isPlayerJoined(self, ctx):
-        return False
-
-    def getQueueType(self):
-        return 0
-
-    def hasEntity(self):
-        return False
-
-    def canPlayerDoAction(self):
-        pass
-
-    def showGUI(self):
-        return False
-
-    def doAction(self, action = None, dispatcher = None):
-        return False
-
-    def doSelectAction(self, action):
-        return False
 
     def isInQueue(self):
         return False
@@ -272,17 +239,8 @@ class IPreQueueFunctional(IListenersCollection):
     def hasGUIPage(self):
         return False
 
-    def hasLockedState(self):
-        return False
-
     def exitFromQueue(self):
         return False
-
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
-        return None
-
-    def getPermissions(self, pID = None):
-        return IPreQueuePermissions()
 
 
 class IPreQueueListener(object):
@@ -293,19 +251,19 @@ class IPreQueueListener(object):
     def onPreQueueFunctionalFinished(self):
         pass
 
-    def onEnqueued(self):
+    def onEnqueued(self, queueType, *args):
         pass
 
-    def onDequeued(self):
+    def onDequeued(self, queueType, *args):
         pass
 
-    def onEnqueueError(self, *args):
+    def onEnqueueError(self, queueType, *args):
         pass
 
-    def onKickedFromQueue(self, *args):
+    def onKickedFromQueue(self, queueType, *args):
         pass
 
-    def onKickedFromArena(self, *args):
+    def onKickedFromArena(self, queueType, *args):
         pass
 
     def onPreQueueSettingsChanged(self, diff):
@@ -322,12 +280,12 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
         LOG_DEBUG('Unit functional deleted:', self)
 
     def init(self, ctx = None):
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, woEvents = False):
-        pass
+        return FUNCTIONAL_FLAG.UNDEFINED
 
-    def getEntityType(self):
+    def getCtrlType(self):
         return CTRL_ENTITY_TYPE.UNIT
 
     def rejoin(self):
@@ -343,6 +301,9 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
         pass
 
     def isKicked(self):
+        return False
+
+    def canSwitchToIntro(self):
         return False
 
     def getPermissions(self, dbID = None, unitIdx = None):
@@ -386,9 +347,6 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
 
     def getCensoredComment(self, unitIdx = None):
         return ''
-
-    def isGUIProcessed(self):
-        return False
 
     def getShowLeadershipNotification(self):
         return False

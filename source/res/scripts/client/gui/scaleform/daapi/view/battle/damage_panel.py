@@ -2,10 +2,14 @@
 import math
 import BigWorld
 import GUI, Math
+from constants import ATTACK_REASON_INDICES
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle import DAMAGE_PANEL_PATH, TANK_INDICATOR_PANEL_PATH
 from gui.Scaleform.daapi.view.battle.meta.DamagePanelMeta import DamagePanelMeta
+from gui.Scaleform.locale.FALLOUT import FALLOUT
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control import g_sessionProvider, vehicle_getter
+from gui.battle_control.arena_info import hasGasAttack
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 
 class _TankIndicatorCtrl(object):
@@ -43,8 +47,8 @@ class DamagePanel(DamagePanelMeta):
      VEHICLE_VIEW_STATE.CRUISE_MODE: 'as_setCruiseModeS',
      VEHICLE_VIEW_STATE.FIRE: 'as_setFireInVehicleS',
      VEHICLE_VIEW_STATE.AUTO_ROTATION: 'as_setAutoRotationS',
-     VEHICLE_VIEW_STATE.DESTROYED: 'as_setVehicleDestroyedS',
-     VEHICLE_VIEW_STATE.CREW_DEACTIVATED: 'as_setCrewDeactivatedS',
+     VEHICLE_VIEW_STATE.DESTROYED: '_updateDestroyed',
+     VEHICLE_VIEW_STATE.CREW_DEACTIVATED: '_updateCrewDeactivated',
      VEHICLE_VIEW_STATE.PLAYER_INFO: '_updatePlayerInfo',
      VEHICLE_VIEW_STATE.DEVICES: '_updateDeviceState',
      VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice',
@@ -55,12 +59,14 @@ class DamagePanel(DamagePanelMeta):
         self.__ui = parentUI
         self.__tankIndicator = None
         self.__isShow = True
+        self.__isHasGasAttack = False
         return
 
     def __del__(self):
         LOG_DEBUG('DamagePanel deleted')
 
     def start(self):
+        self.__isHasGasAttack = hasGasAttack()
         if self._populate(self.__ui.getMember(DAMAGE_PANEL_PATH)):
             self.__tankIndicator = _TankIndicatorCtrl(self.__ui)
             ctrl = g_sessionProvider.getVehicleStateCtrl()
@@ -83,6 +89,7 @@ class DamagePanel(DamagePanelMeta):
             self.__tankIndicator = None
         self.__ui = None
         self.__isShow = False
+        self.__isHasGasAttack = False
         return
 
     def showAll(self, isShow):
@@ -111,8 +118,30 @@ class DamagePanel(DamagePanelMeta):
     def _updateRepairingDevice(self, value):
         self.as_updateRepairingDeviceS(*value)
 
+    def _updateCrewDeactivated(self, deathZoneID):
+        if self.__isHasGasAttack:
+            if deathZoneID == ATTACK_REASON_INDICES['gas_attack']:
+                self.as_showGasCrewDestroyedS({'imgPath': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,
+                 'infoStr': FALLOUT.GASATTACK_DAMAGEPANEL_CREWDESTROYED})
+                self.__ui.movie.falloutItems.as_setPostmortemGasAtackInfo({'imgPath': RES_ICONS.MAPS_ICONS_BATTLE_SKULL,
+                 'infoStr': FALLOUT.GASATTACK_POSTMORTEM_CREWDESTROYED,
+                 'respawnInfo': FALLOUT.GASATTACK_POSTMORTEM_RESPAWNINFO})
+            else:
+                self.__ui.movie.falloutItems.as_setPostmortemGasAtackInfo({'infoStr': FALLOUT.GASATTACK_POSTMORTEM_CREWDESTROYED,
+                 'respawnInfo': FALLOUT.GASATTACK_POSTMORTEM_RESPAWNINFO})
+        self.as_setCrewDeactivatedS()
+
+    def _updateDestroyed(self, value = None):
+        if self.__isHasGasAttack:
+            self.__ui.movie.falloutItems.as_setPostmortemGasAtackInfo({'infoStr': FALLOUT.GASATTACK_POSTMORTEM_VEHICLEDESTROYED,
+             'respawnInfo': FALLOUT.GASATTACK_POSTMORTEM_RESPAWNINFO})
+        self.as_setVehicleDestroyedS()
+
     def _switching(self, _):
         self.as_resetS()
+        if self.__isHasGasAttack:
+            self.as_hideGasAtackInfoS()
+            self.__ui.movie.falloutItems.as_hidePostmortemGasAtackInfoS()
 
     def __changeVehicleSetting(self, tag, entityName):
         result, error = g_sessionProvider.getEquipmentsCtrl().changeSettingByTag(tag, entityName=entityName, avatar=BigWorld.player())

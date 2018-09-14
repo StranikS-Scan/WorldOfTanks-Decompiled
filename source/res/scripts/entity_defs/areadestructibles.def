@@ -1,0 +1,229 @@
+<areadestructibles.def>
+  <Properties>
+    <chunkID>
+      <Type>	UINT16	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </chunkID>
+    <destroyedModules>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </destroyedModules>
+    <destroyedFragiles>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </destroyedFragiles>
+    <fallenColumns>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </fallenColumns>
+    <fallenTrees>
+      <Type>	ARRAY	  <of>	UINT32	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </fallenTrees>
+    <destructibles>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </destructibles>
+    <waters>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	FLOAT32	</of>
+          <size>	6	</size>
+        </of>
+      </Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </waters>
+    <resetCount>
+      <Type>	UINT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </resetCount>
+    <arenaBase>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaBase>
+    <arenaTypeID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaTypeID>
+    <cp>
+      <Type>	PYTHON	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </cp>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	BASE	</Flags>
+    </arena>
+  </Properties>
+  <TempProperties>
+    <_AreaDestructibles__projectileMover></_AreaDestructibles__projectileMover>
+    <_AreaDestructibles__projectilesLauncher></_AreaDestructibles__projectilesLauncher>
+    <_AreaDestructibles__bomberMover></_AreaDestructibles__bomberMover>
+  </TempProperties>
+  <ClientMethods></ClientMethods>
+  <CellMethods>
+    <reset></reset>
+    <addArtilleryPreparation>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	TUPLE	  <of>	UINT16	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT64	</Arg>
+    </addArtilleryPreparation>
+    <addArtillery>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT64	</Arg>
+    </addArtillery>
+    <addBomber>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR2	</Arg>
+      <Arg>	TUPLE	  <of>	VECTOR2	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	BOOL	</of>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </addBomber>
+    <takeOverProjectile>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	SHOT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </takeOverProjectile>
+    <damageDestructibleAndTakeOverProjectile>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	SHOT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	TUPLE	  <of>	FLOAT32	</of>
+        <size>	2	</size>
+      </Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT64	</Arg>
+    </damageDestructibleAndTakeOverProjectile>
+    <damageDestructible>
+      <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	DESTRUCTIBLE_ATTACK_INFO	</Arg>
+    </damageDestructible>
+    <receiveMiss>
+      <Arg>	SHOT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+    </receiveMiss>
+    <receiveAttackResults>
+      <Arg>	ATTACK_RESULTS	</Arg>
+    </receiveAttackResults>
+    <receiveTaggedDestructibleKill>
+      <Arg>	UINT8	</Arg>
+    </receiveTaggedDestructibleKill>
+    <setupVehicleDetector>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </setupVehicleDetector>
+    <removeVehicleDetector>
+      <Arg>	UINT16	</Arg>
+    </removeVehicleDetector>
+  </CellMethods>
+  <BaseMethods>
+    <createCellNearHere>
+      <Arg>	MAILBOX	</Arg>
+    </createCellNearHere>
+    <reset></reset>
+    <smartDestroy></smartDestroy>
+  </BaseMethods>
+</areadestructibles.def>

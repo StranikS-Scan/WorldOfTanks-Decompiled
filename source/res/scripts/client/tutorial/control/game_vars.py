@@ -69,9 +69,26 @@ def getCurrentVehicleLevel():
         return None
 
 
+def getCurrentVehicleState():
+    if g_currentVehicle.isPresent():
+        state, _ = g_currentVehicle.item.getState()
+        return state
+    else:
+        return None
+        return None
+
+
 def isCurrentVehiclePremium():
     if g_currentVehicle.isPresent():
         return g_currentVehicle.item.isPremium
+    else:
+        return None
+        return None
+
+
+def isCurrentVehicleRented():
+    if g_currentVehicle.isPresent():
+        return g_currentVehicle.item.isRented
     else:
         return None
         return None
@@ -91,7 +108,7 @@ def _getTankmanPrice(index, prices):
 
 
 def getTankmanCurrentPrice(index):
-    return _getTankmanPrice(index, g_itemsCache.items.shop.tankmanCost)
+    return _getTankmanPrice(index, g_itemsCache.items.shop.tankmanCostWithGoodyDiscount)
 
 
 def getTankmanDefaultPrice(index):

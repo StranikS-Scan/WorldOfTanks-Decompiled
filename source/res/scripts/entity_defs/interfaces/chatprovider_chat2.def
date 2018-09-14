@@ -1,0 +1,17 @@
+<chatprovider_chat2.def>
+  <BaseMethods>
+    <messenger_onActionByClient_chat2>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	GENERIC_MESSENGER_ARGS_chat2	</Arg>
+    </messenger_onActionByClient_chat2>
+    <messenger_onActionByServer_chat2>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT16	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	GENERIC_MESSENGER_ARGS_chat2	</Arg>
+    </messenger_onActionByServer_chat2>
+  </BaseMethods>
+</chatprovider_chat2.def>

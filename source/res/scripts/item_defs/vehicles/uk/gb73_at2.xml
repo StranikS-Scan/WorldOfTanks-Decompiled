@@ -1,0 +1,591 @@
+<gb73_at2.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	20	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	7	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB73_AT2/AT2_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	203.2	</armor_1>
+      <armor_2>	139.7	</armor_2>
+      <armor_3>	25.4	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	76.2	</armor_5>
+      <armor_6>	101.6	</armor_6>
+      <armor_7>	152.4	</armor_7>
+      <armor_8>	101.6	</armor_8>
+      <armor_9>	50.8	</armor_9>
+      <armor_10>	19.1	</armor_10>
+      <armor_11>	38.1	</armor_11>
+      <armor_12>	76.2	</armor_12>
+      <armor_13>	0	</armor_13>
+      <armor_14>	19.1	</armor_14>
+      <armor_15>	101.6	</armor_15>
+      <armor_16>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_6 armor_6	</primaryArmor>
+    <weight>	28777	</weight>
+    <maxHealth>	360	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	185	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB73_AT2/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.22	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.890065 0.708008	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB73_AT2/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.77922 0.11313 2.63761	</rayStart>
+        <rayEnd>	1.37922 0.113108 2.63761	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.06887 1.11067 0.0953159	</rayStart>
+        <rayEnd>	-0.668875 1.11067 0.0953159	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.06887 1.11067 0.0953159	</rayStart>
+        <rayEnd>	0.668875 1.11067 0.0953159	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	0.000753086 0.258828 2.18772	</rayStart>
+        <rayEnd>	0.000753079 -0.115455 2.04661	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-1.77921 0.0413441 0.440894	</rayStart>
+        <rayEnd>	-1.37922 0.041323 0.440894	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB73_AT2>
+      <userString>	#gb_vehicles:Chassis_GB73_AT2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4050	</price>
+      <unlocks>
+        <chassis>	Chassis_GB73_AT2_2	  <cost>	2000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	41000	</maxLoad>
+      <terrainResistance>	1.6 1.8 3	</terrainResistance>
+      <brakeForce>	37000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB73_AT2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.313734	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.159752	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.355498	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.27531	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.313734	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.159752	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.355498	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.27531	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB73_AT2/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.19724 1.9151	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.308360 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.277380	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB73_AT2>
+    <Chassis_GB73_AT2_2>
+      <userString>	#gb_vehicles:Chassis_GB73_AT2_2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	44000	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.8	</terrainResistance>
+      <brakeForce>	41000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB73_AT2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.313734	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.159752	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.355498	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.27531	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.313734	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.159752	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.355498	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.27531	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB73_AT2/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.19724 1.9151	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.307610 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.277380	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB73_AT2_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB73_AT2>
+      <userString>	#gb_vehicles:Turret_1_GB73_AT2	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	5	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	18	</armor_1>
+        <armor_2>	16	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	16	</armor_5>
+        <armor_6>	16	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	90	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <QF_6_pounder_Mk_III_AT>	shared	  <maxAmmo>	96	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -13 1 -13	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_3.7inch_AT_Howitzer	  <cost>	2300	</cost>
+            </gun>
+            <gun>	QF_6_pounder_Mk_V_AT	  <cost>	3700	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-13 13	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB73_AT2/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB73_AT2/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00136526 0.0123273 0.845435	</rayStart>
+              <rayEnd>	0.0435422 -0.00637427 0.845435	</rayEnd>
+              <rayUp>	0.04 0.04 2	</rayUp>
+              <size>	0.23	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III_AT>
+        <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -13 1 -13	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.49	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-13 13	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB73_AT2/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB73_AT2/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000860787 -0.0406428 0.78381	</rayStart>
+              <rayEnd>	-0.0420927 -0.0550582 0.78381	</rayEnd>
+              <rayUp>	0.068 0.068 2	</rayUp>
+              <size>	0.23	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_3.7inch_AT_Howitzer>
+        <QF_6_pounder_Mk_V_AT>	shared	  <maxAmmo>	96	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -13 1 -13	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	GB74_AT8	  <cost>	29000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-13 13	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB73_AT2/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB73_AT2/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000961323 -0.0435274 1.01375	</rayStart>
+              <rayEnd>	-0.00987776 -0.0379587 1.01375	</rayEnd>
+              <rayUp>	0.037 0.037 2	</rayUp>
+              <size>	0.279	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_V_AT>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB73_AT2/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB73_AT2/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB73_AT2/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB73_AT2/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_GB73_AT2>
+  </turrets0>
+  <engines>
+    <Nuffield_liberty_MKII>	shared	  <unlocks>
+        <engine>	Nuffield_liberty_MKIV	  <cost>	1100	</cost>
+        </engine>
+      </unlocks>
+    </Nuffield_liberty_MKII>
+    <Nuffield_liberty_MKIV>	shared	</Nuffield_liberty_MKIV>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb73_at2.xml>

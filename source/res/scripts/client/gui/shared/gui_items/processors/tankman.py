@@ -2,14 +2,13 @@
 import BigWorld
 from constants import EQUIP_TMAN_CODE
 from debug_utils import LOG_DEBUG
-from helpers.i18n import convert
 from items import tankmen
 from items.tankmen import SKILL_INDICES, getSkillsConfig, SKILL_NAMES
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
-from gui.shared.utils.gui_items import formatPrice
+from gui.shared.formatters import formatPrice
 
 class TankmanDismiss(ItemProcessor):
 

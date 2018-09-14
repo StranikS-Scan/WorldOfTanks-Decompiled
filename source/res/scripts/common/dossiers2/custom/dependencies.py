@@ -228,6 +228,14 @@ def _set_GLOBAL_MAP_STATS_DEPENDENCIES():
      'droppedCapturePoints': [_updateMedalLavrinenko]})
 
 
+FALLOUT_STATS_DEPENDENCIES = {}
+
+def _set_FALLOUT_STATS_DEPENDENCIES():
+    global FALLOUT_STATS_DEPENDENCIES
+    FALLOUT_STATS_DEPENDENCIES.update({'avatarKills': [_updateStormLord],
+     'winPoints': [_updateWinnerLaurels]})
+
+
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
@@ -803,6 +811,24 @@ def _updateClubVictoryMarch(dossierDescr, dossierBlockDescr, key, value, prevVal
         dossierDescr.addPopUp('singleAchievementsRated7x7', 'victoryMarch', 1)
 
 
+def _updateStormLord(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'stormLord'
+    medalClass = dossierDescr['falloutAchievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['falloutAchievements'][medalName] = newMedalClass
+    return
+
+
+def _updateWinnerLaurels(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    medalName = 'winnerLaurels'
+    medalClass = dossierDescr['falloutAchievements'][medalName]
+    newMedalClass = __getNewMedalClass(medalName, value, medalClass)
+    if newMedalClass is not None:
+        dossierDescr['falloutAchievements'][medalName] = newMedalClass
+    return
+
+
 def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
     medalCfg = RECORD_CONFIGS[medalConfigName]
     maxMedalClass = len(medalCfg)
@@ -832,3 +858,4 @@ def init():
     _set_CLUB_BATTLES_STAT_DEPENDENCIES()
     _set_CLUB_ACHIEVEMENTS_DEPENDENCIES()
     _set_GLOBAL_MAP_STATS_DEPENDENCIES()
+    _set_FALLOUT_STATS_DEPENDENCIES()

@@ -1,0 +1,33 @@
+<flagabsorptionpoint.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+    </radius>
+    <applyOverlay>
+      <Type>	BOOL	</Type>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </applyOverlay>
+    <radiusModel>
+      <Type>	STRING	</Type>
+      <Default>	absorptionPointRadiusModel	</Default>
+      <Editable>	true	</Editable>
+    </radiusModel>
+    <greenFlagModel>
+      <Type>	STRING	</Type>
+      <Default>	absorption_point_flag_green	</Default>
+      <Editable>	true	</Editable>
+    </greenFlagModel>
+    <redFlagModel>
+      <Type>	STRING	</Type>
+      <Default>	absorption_point_flag_red	</Default>
+      <Editable>	true	</Editable>
+    </redFlagModel>
+  </Properties>
+</flagabsorptionpoint.def>

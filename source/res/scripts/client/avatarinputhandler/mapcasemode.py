@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler.ArtyHitMarker import ArtyHitMarker
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.DynamicCameras import StrategicCamera
 import BattleReplay
 import BigWorld
@@ -70,12 +70,12 @@ class _VehiclesSelector():
     def __onVehicleLeaveWorld(self, vehicle):
         if vehicle in self.__edgedVehicles:
             self.__edgedVehicles.remove(vehicle)
-            BigWorld.wgDelEdgeDetectEntity(vehicle)
+            vehicle.removeEdge()
 
     def __clearEdgedVehicles(self):
         for v in self.__edgedVehicles:
             if v is not None:
-                BigWorld.wgDelEdgeDetectEntity(v)
+                v.removeEdge()
 
         self.__edgedVehicles = []
         return
@@ -91,7 +91,7 @@ class _VehiclesSelector():
                 edgeType = 2
             else:
                 edgeType = 1
-            BigWorld.wgAddEdgeDetectEntity(v, edgeType, 0)
+            v.drawEdge(edgeType, 0)
             self.__edgedVehicles.append(v)
 
 

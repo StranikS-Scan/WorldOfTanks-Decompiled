@@ -1,0 +1,40 @@
+<circularflyer.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <radius>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+      <Default>	10.0	</Default>
+    </radius>
+    <rotationPeriod>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+      <Default>	1.0	</Default>
+    </rotationPeriod>
+    <rotateClockwise>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	1.0	</Default>
+    </rotateClockwise>
+    <modelName>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </modelName>
+    <actionName>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </actionName>
+    <pixieName>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </pixieName>
+    <pixieHardPoint>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </pixieHardPoint>
+    <soundName>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </soundName>
+  </Properties>
+</circularflyer.def>

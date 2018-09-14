@@ -8,7 +8,7 @@ from gui.battle_control import event_dispatcher, arena_info
 from gui.battle_control.arena_info import isEventBattle
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
-from gui.shared.utils.sound import Sound
+import SoundGroups
 _CRITICAL_TIME_LEVEL = 60.0
 _COUNTDOWN_HIDE_SPEED = 1.5
 _START_NOTIFICATION_TIME = 5.0
@@ -97,7 +97,7 @@ class ArenaPeriodController(IArenaPeriodController):
         self._endTime = endTime
         self._length = length
         if soundID:
-            self._sound = Sound(soundID)
+            self._sound = SoundGroups.g_instance.getSound2D(soundID)
         self.__setCallback()
 
     def invalidatePeriodInfo(self, period, endTime, length):

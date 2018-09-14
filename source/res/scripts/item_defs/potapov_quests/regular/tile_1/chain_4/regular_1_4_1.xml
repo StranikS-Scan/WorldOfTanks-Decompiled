@@ -1,0 +1,41 @@
+<regular_1_4_1.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_4_1_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	7	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_4_1_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	xp	</key>
+              <max>	7	</max>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_4_1.xml>

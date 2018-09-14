@@ -21,7 +21,7 @@ from gui.prb_control.context.unit_ctx import JoinUnitCtx, LeaveUnitCtx
 from gui.prb_control.formatters.windows import SwitchPeripheryFortCtx
 from gui.prb_control.formatters import messages
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty
-from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, UNIT_MODE_FLAGS, FUNCTIONAL_EXIT
+from gui.prb_control.settings import SELECTOR_BATTLE_TYPES, FUNCTIONAL_FLAG
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared import events
@@ -39,7 +39,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
     def __init__(self, ctx = None):
         self.__isMinimize = False
         super(FortBattleRoomWindow, self).__init__()
-        self.__modeFlags = ctx.get('modeFlags', UNIT_MODE_FLAGS.UNDEFINED)
+        self.__flags = ctx.get('flags', FUNCTIONAL_FLAG.UNDEFINED)
 
     @fortProviderProperty
     def fortProvider(self):
@@ -51,7 +51,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     def onWindowClose(self):
         self.__clearCache()
-        self.prbDispatcher.doLeaveAction(LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.NO_FUNC))
+        self.prbDispatcher.doLeaveAction(LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.UNDEFINED))
 
     def onWindowMinimize(self):
         self.__isMinimize = True
@@ -124,7 +124,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
         self.__loadRoomView()
 
     def onUnitFunctionalFinished(self):
-        if self.unitFunctional.getExit() == settings.FUNCTIONAL_EXIT.INTRO_UNIT:
+        flags = self.unitFunctional.getFunctionalFlags()
+        if flags & settings.FUNCTIONAL_FLAG.UNIT_INTRO > 0:
             if self.unitFunctional.isKicked():
                 self._goToNextView(closeForced=True)
         else:
@@ -195,7 +196,8 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
                 chat.addNotification(txt)
 
     def onIntroUnitFunctionalFinished(self):
-        if self.unitFunctional.getExit() != settings.FUNCTIONAL_EXIT.UNIT:
+        flags = self.unitFunctional.getFunctionalFlags()
+        if flags & settings.FUNCTIONAL_FLAG.UNIT == 0:
             NavigationStack.clear(self.getNavigationKey())
 
     def onUnitSettingChanged(self, opCode, value):
@@ -233,7 +235,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
         return
 
     def __initIntroView(self):
-        isListShow = self.__modeFlags & UNIT_MODE_FLAGS.SHOW_LIST > 0
+        isListShow = self.__flags & FUNCTIONAL_FLAG.SHOW_ENTITIES_BROWSER > 0
         navKey = self.getNavigationKey()
         if isListShow:
             NavigationStack.clear(navKey)
@@ -273,7 +275,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
 
     @process
     def __requestToCreateOrJoinFortBattle(self, battleID, slotIndex = -1):
-        yield self.prbDispatcher.join(CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
+        yield self.prbDispatcher.join(CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin', flags=FUNCTIONAL_FLAG.SWITCH))
 
     @process
     def __requestToReloginAndCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex = -1):

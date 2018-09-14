@@ -1,0 +1,347 @@
+<gb31_conqueror_gun.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	34.3	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	60.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB31_Conqueror_Gun/Conqueror_Gun_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	177.8	</armor_1>
+      <armor_2>	152.4	</armor_2>
+      <armor_3>	50.8	</armor_3>
+      <armor_4>	76.2	</armor_4>
+      <armor_5>	31.8	</armor_5>
+      <armor_6>	36	</armor_6>
+      <armor_7>	76.2	</armor_7>
+      <armor_8>	152.4	</armor_8>
+      <armor_9>	31.8	</armor_9>
+      <armor_10>	50.8	</armor_10>
+      <armor_11>	50.8	</armor_11>
+      <armor_12>	20	</armor_12>
+      <armor_13>	38.1	</armor_13>
+      <armor_14>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+      <armor_15>	31.8	</armor_15>
+      <armor_16>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	28922	</weight>
+    <maxHealth>	424	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.22 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.64	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.8903 -0.7554	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB31_Conqueror_Gun/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	2.19489 0.283628 3.12755	</rayStart>
+        <rayEnd>	1.79489 0.283628 3.12755	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.54543 1.9655 -3.58295	</rayStart>
+        <rayEnd>	-1.21169 1.74502 -3.58295	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.54543 1.9655 -3.58295	</rayStart>
+        <rayEnd>	1.21169 1.74502 -3.58295	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	-1.65758 1.79575 -2.12399	</rayStart>
+        <rayEnd>	-1.32384 1.57526 -2.12399	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1.2	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.65758 1.79575 -2.12399	</rayStart>
+        <rayEnd>	1.32384 1.57526 -2.12399	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	1.2	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB31_Conqueror_Gun>
+      <userString>	#gb_vehicles:Chassis_GB31_Conqueror_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	22000	</weight>
+      <maxLoad>	60000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	60000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	24	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.66	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.433761	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.449316	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.240187	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.433761	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.153605	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.449316	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.240187	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB31_Conqueror_Gun/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.56966 2.4583	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.450200 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.341540	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB31_Conqueror_Gun>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB31_Conqueror_Gun>
+      <userString>	#gb_vehicles:Turret_1_GB31_Conqueror_Gun	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	10	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	50.8	</armor_1>
+        <armor_2>	50.8	</armor_2>
+        <armor_3>	31.8	</armor_3>
+        <armor_4>	31.8	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	31.8	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	106	</maxHealth>
+      <rotationSpeed>	8	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_9.2inch_SPG_Howitzer>	shared	  <maxAmmo>	24	</maxAmmo>
+          <armor>
+            <gun>	30	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	1.2	</shotDispersionRadius>
+          <reloadTime>	58.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.72	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	8.8	</aimingTime>
+          <turretYawLimits>	-30 30	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 0 1 0	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB31_Conqueror_Gun/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000041 0.00177882 1.30081	</rayStart>
+              <rayEnd>	-0.0397274 0.0754545 1.2977	</rayEnd>
+              <rayUp>	0.166 0.155 2	</rayUp>
+              <size>	0.596	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_9.2inch_SPG_Howitzer>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB31_Conqueror_Gun/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB31_Conqueror_Gun/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB31_Conqueror_Gun/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.491224 0.738969	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.878 -0.093 0.927 0.000 0.813 -0.125 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_GB31_Conqueror_Gun>
+  </turrets0>
+  <engines>
+    <Rolls_Royse_Meteor_M120>	shared	</Rolls_Royse_Meteor_M120>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <C45>	shared	</C45>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb31_conqueror_gun.xml>

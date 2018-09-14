@@ -49,11 +49,11 @@ class GoodieDefinition(object):
             return False
             return
 
-    def apply(self, resources):
+    def apply(self, resources, applyToZero):
         if not isinstance(resources, set):
             resources = {resources}
         for resource in resources:
-            if resource.value == 0:
+            if resource.value == 0 and not applyToZero:
                 continue
             if resource.__class__ == self.resource:
                 if self.variety == GOODIE_VARIETY.DISCOUNT:
@@ -69,11 +69,11 @@ class GoodieDefinition(object):
 
         return
 
-    def apply_delta(self, resources):
+    def apply_delta(self, resources, applyToZero):
         if not isinstance(resources, set):
             resources = {resources}
         for resource in resources:
-            if resource.value == 0:
+            if resource.value == 0 and not applyToZero:
                 continue
             if resource.__class__ == self.resource:
                 return resource.__class__(self.value.delta(resource.value))

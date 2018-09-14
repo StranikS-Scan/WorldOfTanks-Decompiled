@@ -1,0 +1,602 @@
+<112_eiffel_tower.xml>
+  <name>	#arenas:112_eiffel_tower/name	</name>
+  <description>	#arenas:112_eiffel_tower/description	</description>
+  <geometry>	spaces/112_eiffel_tower	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/112_eiffel_tower/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <loadingMusic>	/music/intro/euro_city	</loadingMusic>
+  <wwloadingMusic>	music_euro_city	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <fallout>
+      <winPoints>	MULTI_TEAM_2	</winPoints>
+      <maxTeamsInArena>	8	</maxTeamsInArena>
+      <squadTeamNumbers>	1 2 3 4	</squadTeamNumbers>
+      <soloTeamNumbers>	5 6 7 8	</soloTeamNumbers>
+      <flagSpawnPoint>
+        <position>	5.844485 11.120213 38.925163	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-20.478050 11.344254 38.158371	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-7.601662 11.262242 38.331665	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-368.260864 9.000035 -81.060349	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	A90EB9DD.43F8FE17.DA858ABA.434D958F	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	342.017029 9.000036 -54.617882	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	63A7C0D4.41992727.A987A0B6.B53DB145	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	3	</team>
+        <position>	-273.190674 1.000051 265.312866	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	371BF19C.428035D5.CAA89E8F.4A5D27D2	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	4	</team>
+        <position>	243.987900 0.960985 307.115387	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	EB8ECBAC.42C71FF9.5FF5C5AE.0B8458D4	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-5.255295 1.201999 205.580597	</position>
+        <guid>	CA061300.4EC9C364.6F62469D.0440AE13	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-11.592247 12.001058 -72.820366	</position>
+        <guid>	7F4223DD.47145EBC.298927AD.DA73548B	</guid>
+      </repairPoint>
+    </fallout>
+    <fallout2>
+      <winPoints>	MULTI_TEAM_TDM	</winPoints>
+      <maxPlayersInTeam>	3	</maxPlayersInTeam>
+      <maxTeamsInArena>	4	</maxTeamsInArena>
+      <squadTeamNumbers>	1 2 3 4	</squadTeamNumbers>
+      <flagSpawnPoint>
+        <position>	5.844485 11.120213 38.925163	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-20.478050 11.344254 38.158371	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-7.601662 11.262242 38.331665	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-368.260864 9.000035 -81.060349	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	A90EB9DD.43F8FE17.DA858ABA.434D958F	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	342.017029 9.000036 -54.617882	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	63A7C0D4.41992727.A987A0B6.B53DB145	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	3	</team>
+        <position>	-273.190674 1.000051 265.312866	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	371BF19C.428035D5.CAA89E8F.4A5D27D2	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	4	</team>
+        <position>	243.987900 0.960985 307.115387	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	EB8ECBAC.42C71FF9.5FF5C5AE.0B8458D4	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-5.255295 1.201999 205.580597	</position>
+        <guid>	CA061300.4EC9C364.6F62469D.0440AE13	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-11.592247 12.001058 -72.820366	</position>
+        <guid>	7F4223DD.47145EBC.298927AD.DA73548B	</guid>
+      </repairPoint>
+    </fallout2>
+    <fallout3>
+      <winPoints>	MULTI_TEAM_FFA	</winPoints>
+      <maxPlayersInTeam>	1	</maxPlayersInTeam>
+      <maxTeamsInArena>	12	</maxTeamsInArena>
+      <soloTeamNumbers>	1 2 3 4 5 6 7 8 9 10 11 12	</soloTeamNumbers>
+      <repairPoint>
+        <cooldown>	180.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-6.659760 11.295899 27.962883	</position>
+        <guid>	73631263.4D56FDC7.19F90B87.9BEE715E	</guid>
+      </repairPoint>
+    </fallout3>
+    <fallout5>
+      <winPoints>	ONE_FLAG_15x15	</winPoints>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-353 -50	</position>
+        </team1>
+        <team2>
+          <position>	329 -9	</position>
+        </team2>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	-5.512535 11.335775 31.980766	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	211.198273 0.960108 354.780273	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	D618521A.47FA8419.4A96D4AC.1BCFB7C1	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	303.564178 9.000049 -339.438019	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	5A35C630.4DF31F84.CC898C96.C9F9C6C9	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-232.606308 0.960047 342.776886	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	83DBBACC.47BE440A.5C79FCBC.DF4BF9EB	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-279.521759 8.999986 -339.151611	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	1C3B1B1E.47601B96.573761AF.BCAAA47A	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-4.652695 0.844580 210.786041	</position>
+        <guid>	15266A1D.4534E1A4.17ACD0AF.F4CB04F4	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-10.319237 9.175064 -118.331642	</position>
+        <guid>	00A7A91E.41893417.249EEA8A.F313CDA1	</guid>
+      </repairPoint>
+    </fallout5>
+    <fallout6>
+      <winPoints>	MANY_FLAGS_15x15	</winPoints>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-353 -50	</position>
+        </team1>
+        <team2>
+          <position>	329 -9	</position>
+        </team2>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	246.418747 8.045587 75.843353	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	236.442276 9.000053 -90.600311	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-257.143311 9.000051 47.005341	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-254.249146 8.994067 -137.994293	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	211.198273 0.960108 354.780273	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	D618521A.47FA8419.4A96D4AC.1BCFB7C1	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	243.501724 8.999998 -352.779266	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	504CCEA5.4C4FBAC6.68A0719B.B7AFDDBF	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-232.606308 0.960047 342.776886	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	83DBBACC.47BE440A.5C79FCBC.DF4BF9EB	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-220.221558 8.999994 -356.771912	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	9654CE98.4E98BC63.4EEFA6AC.67EB0C7B	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-4.652695 0.844580 210.786041	</position>
+        <guid>	15266A1D.4534E1A4.17ACD0AF.F4CB04F4	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	10.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-10.319237 9.175064 -118.331642	</position>
+        <guid>	00A7A91E.41893417.249EEA8A.F313CDA1	</guid>
+      </repairPoint>
+    </fallout6>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <gasAttack>
+    <gameplaySettings>
+      <attackLength>	180	</attackLength>
+      <preparationPeriod>	10.000000	</preparationPeriod>
+      <compressionTime>	110.000000	</compressionTime>
+      <position>	-9.356003 18.000027 -59.720955	</position>
+      <startRadius>	580.000000	</startRadius>
+      <endRadius>	85.000000	</endRadius>
+    </gameplaySettings>
+    <visualSettings>
+      <cloudModel>	particles/mesh_particles/funnel_death/gas_ring_dark.model	</cloudModel>
+      <cloudClimbTime>	15	</cloudClimbTime>
+      <cloudStartHeight>	206	</cloudStartHeight>
+      <cloudEndHeight>	65	</cloudEndHeight>
+      <cameraProximityDist>	30	</cameraProximityDist>
+      <windSpeed>	0 -1	</windSpeed>
+      <windGustiness>	2	</windGustiness>
+      <mapActivities>	gasAttackScenario	</mapActivities>
+      <centerFogSettings>
+        <Fog>
+          <version>	1.000000	</version>
+          <innerBB>	-50.000000 -50.000000 50.000000 50.000000	</innerBB>
+          <outerBB>	-500.000000 -500.000000 500.000000 727.000000	</outerBB>
+          <deferred>
+            <heightFog>	true	</heightFog>
+            <nearLow>	200.000000	</nearLow>
+            <farLow>	500.000000	</farLow>
+            <nearHigh>	500.000000	</nearHigh>
+            <farHigh>	1000.000000	</farHigh>
+            <altitudeLow>	-6.000000	</altitudeLow>
+            <altitudeMid>	30.000000	</altitudeMid>
+            <altitudeHigh>	1000.000000	</altitudeHigh>
+            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	2000.000000	</skyAltitudeHigh>
+            <exponent>	0.650000	</exponent>
+            <sunAngle>	35.000000	</sunAngle>
+            <sunExponent>	0.200000	</sunExponent>
+            <colorLow>	0.991500 1.000000 0.490000 0.350000	</colorLow>
+            <colorHigh>	0.991501 1.000000 0.490000 0.300000	</colorHigh>
+            <colorSunLow>	0.991500 1.000000 0.490000 0.350000	</colorSunLow>
+            <colorSunHigh>	0.991501 1.000000 0.490000 0.300000	</colorSunHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </deferred>
+          <forward>
+            <heightFog>	true	</heightFog>
+            <nearLow>	200.000000	</nearLow>
+            <farLow>	500.000000	</farLow>
+            <nearHigh>	500.000000	</nearHigh>
+            <farHigh>	1000.000000	</farHigh>
+            <altitudeLow>	-6.000000	</altitudeLow>
+            <altitudeMid>	40.000000	</altitudeMid>
+            <altitudeHigh>	1000.000000	</altitudeHigh>
+            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	60.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	2000.000000	</skyAltitudeHigh>
+            <colorLow>	0.703000 0.698492 0.494912 0.000000	</colorLow>
+            <colorHigh>	0.680000 0.675700 0.481439 0.000000	</colorHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </forward>
+          <enable>	true	</enable>
+        </Fog>
+      </centerFogSettings>
+      <edgeFogSettings>
+        <Fog>
+          <version>	1.000000	</version>
+          <innerBB>	-50.000000 -50.000000 50.000000 50.000000	</innerBB>
+          <outerBB>	-500.000000 -500.000000 500.000000 727.000000	</outerBB>
+          <deferred>
+            <heightFog>	true	</heightFog>
+            <nearLow>	-150.000000	</nearLow>
+            <farLow>	50.000000	</farLow>
+            <nearHigh>	-50.000000	</nearHigh>
+            <farHigh>	350.000000	</farHigh>
+            <altitudeLow>	-6.000000	</altitudeLow>
+            <altitudeMid>	30.000000	</altitudeMid>
+            <altitudeHigh>	1500.000000	</altitudeHigh>
+            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	10000.000000	</skyAltitudeHigh>
+            <exponent>	0.650000	</exponent>
+            <sunAngle>	35.000000	</sunAngle>
+            <sunExponent>	0.200000	</sunExponent>
+            <colorLow>	0.991500 1.000000 0.490000 0.350000	</colorLow>
+            <colorHigh>	0.991501 1.000000 0.490000 0.300000	</colorHigh>
+            <colorSunLow>	0.991500 1.000000 0.490000 0.350000	</colorSunLow>
+            <colorSunHigh>	0.991501 1.000000 0.490000 0.300000	</colorSunHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </deferred>
+          <forward>
+            <heightFog>	true	</heightFog>
+            <nearLow>	-150.000000	</nearLow>
+            <farLow>	50.000000	</farLow>
+            <nearHigh>	-50.000000	</nearHigh>
+            <farHigh>	290.000000	</farHigh>
+            <altitudeLow>	2.000000	</altitudeLow>
+            <altitudeMid>	35.000000	</altitudeMid>
+            <altitudeHigh>	1500.000000	</altitudeHigh>
+            <skyAltitudeLow>	-10.000000	</skyAltitudeLow>
+            <skyAltitudeMid>	50.000000	</skyAltitudeMid>
+            <skyAltitudeHigh>	10000.000000	</skyAltitudeHigh>
+            <colorLow>	0.703000 0.698492 0.494912 0.000000	</colorLow>
+            <colorHigh>	0.680000 0.675700 0.481439 0.000000	</colorHigh>
+            <useEdgeFog>	true	</useEdgeFog>
+          </forward>
+          <enable>	true	</enable>
+        </Fog>
+      </edgeFogSettings>
+      <soundSettings>
+        <wwalarm>	fallout_gaz_alarm	</wwalarm>
+        <alarm>	/GUI/fallout/fallout_gaz_alarm	</alarm>
+        <wwproximity>	fallout_gaz_sphere_warning	</wwproximity>
+        <proximity>	/GUI/fallout/fallout_gaz_sphere_warning	</proximity>
+      </soundSettings>
+    </visualSettings>
+  </gasAttack>
+  <mapActivities>
+    <scenario>
+      <possibility>	1.000000	</possibility>
+      <period>	0.000000	</period>
+      <visibilityMask>	6144	</visibilityMask>
+      <trajectories>
+        <warplane>
+          <preset>	eiffel_tower_FAU_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	9.000000 9.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	4.000000 4.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_explosion_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_explosion_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.100000 6.100000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_explosion_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eiffel_tower_FAU_explosion_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.900000 0.900000	</startTime>
+        </warplane>
+        <explosion>
+          <preset>	eiffel_tower_FAU_explosion_sound_1	</preset>
+          <position>	47.038902 1.279982 307.607086	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eiffel_tower_FAU_explosion_sound_2	</preset>
+          <position>	-124.361656 0.509002 596.711304	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.100000 6.100000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eiffel_tower_FAU_explosion_sound_3	</preset>
+          <position>	9.979972 2.957673 218.622375	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eiffel_tower_FAU_explosion_sound_4	</preset>
+          <position>	34.951160 7.099438 -345.613586	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.900000 0.900000	</startTime>
+        </explosion>
+      </trajectories>
+      <startTime>	-30.000000 -30.000000	</startTime>
+    </scenario>
+    <scenario>
+      <possibility>	0.000000	</possibility>
+      <period>	255	</period>
+      <name>	gasAttackScenario	</name>
+      <trajectories>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_flight_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	9.000000 9.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_flight_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_flight_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	4.000000 4.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_flight_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_explosion_1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_explosion_2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.100000 6.100000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_explosion_3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	eifeltower_gas_attack_rocket_explosion_4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.900000 0.900000	</startTime>
+        </warplane>
+        <explosion>
+          <preset>	eifeltower_gas_attack_rocket_explosion_sound_1	</preset>
+          <position>	397 0 579	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	10.000000 10.000000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eifeltower_gas_attack_rocket_explosion_sound_2	</preset>
+          <position>	-410 0 -389	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.100000 6.100000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eifeltower_gas_attack_rocket_explosion_sound_3	</preset>
+          <position>	-409 0 579	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	5.000000 5.000000	</startTime>
+        </explosion>
+        <explosion>
+          <preset>	eifeltower_gas_attack_rocket_explosion_sound_4	</preset>
+          <position>	412 0 -369	</position>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.900000 0.900000	</startTime>
+        </explosion>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+</112_eiffel_tower.xml>

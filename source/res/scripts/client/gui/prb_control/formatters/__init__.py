@@ -4,13 +4,12 @@ import BigWorld
 from datetime import datetime
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
-from gui.prb_control import getPrebattleLocalizedData, getPrebattleTypeName
-from gui.prb_control import getCreatorFullName
+from gui.prb_control import prb_getters
 from helpers import html, i18n
 from helpers.time_utils import makeLocalServerTime
 
 def makePrebattleWaitingID(requestName):
-    return '{0:>s}/{1:>s}'.format(getPrebattleTypeName().lower(), requestName)
+    return '{0:>s}/{1:>s}'.format(prb_getters.getPrebattleTypeName().lower(), requestName)
 
 
 def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
@@ -23,28 +22,28 @@ def getPrebattleLocalizedString(string, led = None, escapeHtml = False):
 
 
 def getPrebattleEventName(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
+    led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('event_name', led, escapeHtml)
     return ''
 
 
 def getPrebattleSessionName(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
+    led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('session_name', led, escapeHtml)
     return ''
 
 
 def getPrebattleDescription(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
+    led = prb_getters.getPrebattleLocalizedData(extraData)
     if led:
         return getPrebattleLocalizedString('desc', led, escapeHtml)
     return ''
 
 
 def getPrebattleFullDescription(extraData = None, escapeHtml = False):
-    led = getPrebattleLocalizedData(extraData)
+    led = prb_getters.getPrebattleLocalizedData(extraData)
     description = ''
     if led:
         eventName = getPrebattleLocalizedString('event_name', led, escapeHtml)
@@ -93,7 +92,7 @@ def getCompanyDivisionString(divisionName):
 
 
 def getCompanyName():
-    return '{0:>s} {1:>s}'.format(i18n.makeString(CHAT.CHANNELS_TEAM), getCreatorFullName())
+    return '{0:>s} {1:>s}'.format(i18n.makeString(CHAT.CHANNELS_TEAM), prb_getters.getCreatorFullName())
 
 
 def getStartTimeLeft(startTime):

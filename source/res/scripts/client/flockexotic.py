@@ -3,9 +3,10 @@ import BigWorld
 import math
 import random
 import Math
-from Flock import FlockLike
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
 import FlockManager
+from Flock import FlockLike
+from helpers.CallbackDelayer import CallbackDelayer
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 
 class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
@@ -20,6 +21,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         elif self.flightAngleMin > math.pi * 2:
             self.flightAngleMin -= math.floor(self.flightAngleMin / (math.pi * 2)) * math.pi * 2
         self.__isTriggered = False
+        self.__models = []
 
     def prerequisites(self):
         return self._getModelsToLoad()
@@ -36,20 +38,34 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         return motor
 
     def onEnterWorld(self, prereqs):
-        self._loadModels(prereqs)
-        for model in self.models:
-            model.visible = False
-
-        self._switchSounds(False)
+        self.__loadModels(prereqs)
         FlockManager.getManager().addFlock(self.position, self.triggerRadius, self.explosionRadius, self.respawnTime, self)
 
     def onLeaveWorld(self):
+        self.__models = []
         self.models = []
         FlockLike.destroy(self)
         CallbackDelayer.destroy(self)
 
     def name(self):
         return 'FlockExotic'
+
+    def __loadModels(self, prereqs):
+        try:
+            for modelId in prereqs.keys():
+                if modelId in prereqs.failedIDs:
+                    LOG_ERROR('Failed to load flock model: %s' % modelId)
+                    continue
+                model = prereqs[modelId]
+                model.outsideOnly = 1
+                model.moveAttachments = True
+                model.visible = False
+                self.__models.append(model)
+                animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
+                model.actionScale = animSpeed
+
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
 
     def __getRandomSpawnPos(self):
         randHeight = random.uniform(0, self.spawnHeight)
@@ -71,8 +87,10 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def onTrigger(self):
         flightTime = None
-        for model in self.models:
+        for model in self.__models:
             model.visible = True
+            self.addModel(model)
+            model.action('FlockAnimAction')()
             model.position = self.__getRandomSpawnPos()
             targetPos = self.__getRandomTargetPos(model.position)
             dir = targetPos - model.position
@@ -86,14 +104,15 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
             motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
             model.addMotor(motor)
 
-        if flightTime is not None:
+        if flightTime is not None and len(self.__models) > 0:
             self.delayCallback(flightTime, self.__onFlightEnd)
-            self._switchSounds(True)
+            self._addSound(self.__models[0])
         return
 
     def __onFlightEnd(self):
-        self._switchSounds(False)
+        self._delSound()
         for model in self.models:
             model.motors = ()
             model.position = self.position
             model.visible = False
+            self.delModel(model)

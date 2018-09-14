@@ -1,0 +1,485 @@
+<f73_m4a1_revalorise.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	16	</backward>
+  </speedLimits>
+  <repairCost>	6.0	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0.000000 0.000000	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50.8	</armor_1>
+      <armor_2>	50.8	</armor_2>
+      <armor_3>	38.1	</armor_3>
+      <armor_4>	38.1	</armor_4>
+      <armor_5>	12.7	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	19.1	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	34.9	</armor_9>
+      <armor_10>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	9.5	</armor_12>
+      <armor_13>	34.9	</armor_13>
+      <armor_14>	63.5	</armor_14>
+      <armor_15>	63.5	</armor_15>
+      <armor_16>	31.8	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	16489	</weight>
+    <maxHealth>	1120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F73_M4A1_Revalorise/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 36.00 0.42 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.42 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.36	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000776 0.906344 -0.183747	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/french/F73_M4A1_Revalorise/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.447739 0.789826 1.7375	</rayStart>
+        <rayEnd>	-0.447739 0.662742 1.58307	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0752983 0.290084 2.28889	</rayStart>
+        <rayEnd>	-0.0752983 0.114231 2.19363	</rayEnd>
+        <rayUp>	0.0766339 -0.00159369 -0.997058	</rayUp>
+        <size>	0.52	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.42 1.42 0.000000 0.75	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_M4A1_Revalorise>
+      <userString>	#france_vehicles:Chassis_M4A1_Revalorise	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	40200	</maxLoad>
+      <terrainResistance>	1 1.1 2.1	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F73_M4A1_Revalorise/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.25	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.117334	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.2995	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.254	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.117334	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.2995	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.254	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 0.967067 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F73_M4A1_Revalorise/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.06037 1.89415	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.711330 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.137730 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.258980	</row2>
+            <row3>	0.000000 0.000000 -0.000002	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F73_M4A1_Revalorise/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F73_M4A1_Revalorise/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/french/F73_M4A1_Revalorise/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/french/F73_M4A1_Revalorise/track/segment_2.model	</segment2ModelRight>
+        <left>	vehicles/french/F73_M4A1_Revalorise/track/left.track	</left>
+        <right>	vehicles/french/F73_M4A1_Revalorise/track/right.track	</right>
+        <segmentLength>	0.16	</segmentLength>
+        <segmentOffset>	0.074	</segmentOffset>
+        <segment2Offset>	0.09	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0221	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_M4A1_Revalorise>
+  </chassis>
+  <turrets0>
+    <Turret_1_M4A1_Revalorise>
+      <userString>	#france_vehicles:Turret_1_M4A1_Revalorise	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	63.5	</armor_1>
+        <armor_2>	63.5	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	63.5	</armor_4>
+        <armor_5>	25.4	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	44.5	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	38.1	</armor_9>
+        <armor_10>	19.1	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	6000	</weight>
+      <maxHealth>	280	</maxHealth>
+      <rotationSpeed>	42	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_D1504_L51>	shared	  <maxAmmo>	51	</maxAmmo>
+          <armor>
+            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	35	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	12.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.8	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F73_M4A1_Revalorise/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F73_M4A1_Revalorise/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.00112254 2.94652	</rayStart>
+              <rayEnd>	-0.00724433 0.00585356 2.94478	</rayEnd>
+              <rayUp>	0.098 0.093 4	</rayUp>
+              <size>	0.55	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main_mb	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.835 0.61 0.41 0.21	</tiling>
+          </camouflage>
+        </_105mm_D1504_L51>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F73_M4A1_Revalorise/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F73_M4A1_Revalorise/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F73_M4A1_Revalorise/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000776 0.393723 0.907329	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.870482 0.491509 0.543707	</rayStart>
+          <rayEnd>	-0.698965 0.436808 0.456592	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.875658 0.492482 0.546292	</rayStart>
+          <rayEnd>	0.701918 0.439809 0.462392	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.06862 0.591934 -0.439505	</rayStart>
+          <rayEnd>	0.875683 0.583418 -0.387521	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.55	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
+      <physicsShape>	0.937 -0.051 0.943 0.000 0.392 0.392 0.823 0.500 0.418 0.500 0.000 0.500 0.000 0.500 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	0.88 0.88 0.34 0.76	</tiling>
+      </camouflage>
+    </Turret_1_M4A1_Revalorise>
+  </turrets0>
+  <engines>
+    <Cummins_VT8-460>	shared	</Cummins_VT8-460>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_528A>	shared	</SCR_528A>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f73_m4a1_revalorise.xml>

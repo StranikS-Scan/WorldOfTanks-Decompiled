@@ -28,6 +28,14 @@ class TankCarouselMeta(BaseDAAPIComponent):
         if self._isDAAPIInited():
             return self.flashObject.as_setMultiselectionMode(enabled, formattedMessage, showSlots, slots)
 
+    def as_setMultiselectionButtonLabelsS(self, activateLabel, deactivateLabel, disabledTooltip):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setMultiselectionButtonLabels(activateLabel, deactivateLabel, disabledTooltip)
+
+    def as_updateMultiselectionDataS(self, multiselectData):
+        if self._isDAAPIInited():
+            return self.flashObject.as_updateMultiselectionData(multiselectData)
+
     def as_setCarouselFilterS(self, filter):
         if self._isDAAPIInited():
             return self.flashObject.as_setCarouselFilter(filter)

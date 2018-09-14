@@ -191,7 +191,7 @@ class _Member(_User):
         return club_fmts.getRoleUserName(self.__roleMask)
 
 
-@ReprInjector.simple(('getID', 'id'), ('getClubDbID', 'club'), ('getUserDbID', 'user'), ('getTimestamp', 'send'), ('isActive', 'active'))
+@ReprInjector.simple(('getID', 'id'), ('getClubDbID', 'club'), ('getUserDbID', 'user'), ('getTimestamp', 'send'), ('isActive', 'active'), ('getUpdatingTime', 'updated'), ('getStatus', 'status'))
 
 class _ClubInvitation(object):
 

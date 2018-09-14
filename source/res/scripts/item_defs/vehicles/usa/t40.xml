@@ -1,0 +1,610 @@
+<t40.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	38	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <repairCost>	4	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A29_T40/T40_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	51	</armor_1>
+      <armor_2>	19	</armor_2>
+      <armor_3>	38	</armor_3>
+      <armor_4>	38	</armor_4>
+      <armor_5>	38	</armor_5>
+      <armor_6>	13	</armor_6>
+      <armor_7>	19	</armor_7>
+      <armor_8>	0	</armor_8>
+      <commander>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      </commander>
+      <gunner_1>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      </gunner_1>
+      <driver>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      </driver>
+      <loader_1>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      </loader_1>
+      <loader_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+      </loader_2>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	13000	</weight>
+    <maxHealth>	220	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A29_T40/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A29_T40/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A29_T40/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.200058 0.572523 0.47579	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A29_T40/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0131808 0.613745 1.94559	</rayStart>
+        <rayEnd>	0.0131808 0.301567 1.6955	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.54279 0.460939 -1.35248	</rayStart>
+        <rayEnd>	-1.14279 0.460939 -1.35248	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	1.54304 0.487279 -0.596242	</rayStart>
+        <rayEnd>	1.14304 0.48701 -0.59634	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-1.54304 0.487279 -0.596242	</rayStart>
+        <rayEnd>	-1.14304 0.48701 -0.59634	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	1.54279 0.460939 -1.35248	</rayStart>
+        <rayEnd>	1.14279 0.460939 -1.35248	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_T40>
+      <userString>	#usa_vehicles:Chassis_T40	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <unlocks>
+        <chassis>	Chassis_T40_2	  <cost>	1100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	6200	</weight>
+      <maxLoad>	22500	</maxLoad>
+      <terrainResistance>	1.3 1.7 2.5	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A29_T40/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A29_T40/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A29_T40/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	255	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.366212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.124468	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.292028	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.261322	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.366212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.124468	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.292028	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.261322	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A29_T40/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.0886 1.88261	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.709900 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.153920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T40>
+    <Chassis_T40_2>
+      <userString>	#usa_vehicles:Chassis_T40_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4500	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	6200	</weight>
+      <maxLoad>	24000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A29_T40/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A29_T40/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A29_T40/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	255	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.366212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.124468	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.292028	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.261322	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.366212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.124468	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.292028	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.261322	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A29_T40/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.0886 1.88261	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.719310 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.153920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T40_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_T40>
+      <ceilless>	true	</ceilless>
+      <userString>	#usa_vehicles:Turret_1_T40	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	120.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	19	</armor_1>
+        <armor_2>	13	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	170	</weight>
+      <maxHealth>	55	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Howitzer_M1A1>	shared	  <maxAmmo>	98	</maxAmmo>
+          <reloadTime>	3.7	</reloadTime>
+          <unlocks>
+            <gun>	_76mm_AT_Gun_M1918	  <cost>	1500	</cost>
+            </gun>
+            <gun>	_105mm_AT_Howitzer_M3	  <cost>	3850	</cost>
+            </gun>
+            <gun>	_57mm_Gun_M1_L50	  <cost>	2350	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	19	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-22 35	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A29_T40/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A29_T40/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A29_T40/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A29_T40/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Howitzer_M1A1>
+        <_76mm_AT_Gun_M1918>	shared	  <maxAmmo>	98	</maxAmmo>
+          <reloadTime>	3.7	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	A30_M10_Wolverine	  <cost>	14430	</cost>
+            </vehicle>
+            <gun>	_76mm_AT_Gun_M1A1	  <cost>	4600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	19	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-22 35	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A29_T40/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A29_T40/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A29_T40/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A29_T40/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <exclusionMask>	vehicles/american/A29_T40/T40_CM.dds	</exclusionMask>
+            <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1918>
+        <_105mm_AT_Howitzer_M3>	shared	  <maxAmmo>	50	</maxAmmo>
+          <reloadTime>	8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	19	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	55	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-22 35	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A29_T40/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A29_T40/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A29_T40/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A29_T40/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+        </_105mm_AT_Howitzer_M3>
+        <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	126	</maxAmmo>
+          <reloadTime>	2.3	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-22 35	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A29_T40/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A29_T40/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A29_T40/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A29_T40/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_Gun_M1_L50>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	68	</maxAmmo>
+          <reloadTime>	3.7	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	19	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	55	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <turretYawLimits>	-22 35	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -30 1 -30	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/american/A29_T40/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A29_T40/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A29_T40/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A29_T40/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <exclusionMask>	vehicles/american/A29_T40/T40_2_CM.dds	</exclusionMask>
+            <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A29_T40/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A29_T40/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A29_T40/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A29_T40/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.017395 0.537495 -0.449589	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.304 0.100 0.466 0.500 0.239 0.500 0.244 0.491 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_T40>
+  </turrets0>
+  <engines>
+    <Wright_R-975EC2>	shared	  <unlocks>
+        <engine>	Crysler_A57	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Wright_R-975EC2>
+    <Crysler_A57>	shared	</Crysler_A57>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_200>	shared	  <unlocks>
+        <radio>	SCR_210	  <cost>	330	</cost>
+        </radio>
+      </unlocks>
+    </SCR_200>
+    <SCR_210>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_210>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</t40.xml>

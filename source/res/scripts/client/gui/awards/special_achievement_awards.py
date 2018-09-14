@@ -1,9 +1,10 @@
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
-import BigWorld
-from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
+import constants
+from debug_utils import LOG_ERROR
 from gui.goodies.Booster import _BOOSTER_DESCRIPTION_LOCALE
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.ranges import toRomanRangeString
 from helpers import i18n, int2roman
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -73,6 +74,21 @@ class BattleAward(AwardAbstract):
 
     def getDescription(self):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/battle/description%d' % self.messageNumber, battlesCount=self.battlesCount))
+
+
+class PvEBattleAward(BattleAward):
+
+    def getWindowTitle(self):
+        return i18n.makeString('#menu:awardWindow/title/info')
+
+    def getDescription(self):
+        return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/pveBattle/description', battlesCount=self.battlesCount))
+
+    def handleOkButton(self):
+        event_dispatcher.runTutorialChain('PvE_Chain')
+
+    def handleCloseButton(self):
+        event_dispatcher.runTutorialChain('PvE_Chain')
 
 
 class PremiumDiscountAward(AwardAbstract):
@@ -153,4 +169,74 @@ class BoosterAward(AwardAbstract):
 
     def clear(self):
         self._booster = None
+        return
+
+
+class FalloutAwardWindow(AwardAbstract):
+    TITLE_KEY = '#fallout:awardWindow/title/'
+    HEADER_KEY = '#fallout:awardWindow/header/'
+    MAIN_TEXT_KEY = '#fallout:awardWindow/mainText/'
+    ADDITIONAL_TEXT_KEY = '#fallout:awardWindow/additionalText/'
+    BTN_ACTION_KEY = '#fallout:awardWindow/btnAction/'
+    BTN_CLOSE_KEY = '#fallout:awardWindow/btnClose/'
+
+    def __init__(self, lvls, isRequiredVehicle = False):
+        self._lvls = lvls
+        self._isMaxLvl = isRequiredVehicle
+        if self._isMaxLvl:
+            self._typeID = '1'
+        else:
+            self._typeID = '2'
+
+    def getWindowTitle(self):
+        return i18n.makeString(self.TITLE_KEY + self._typeID)
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_WINDOWS_FALLOUT_CONGRATULATIONS_BG
+
+    def getHeader(self):
+        localeStr = i18n.makeString(self.HEADER_KEY + self._typeID)
+        return text_styles.highTitle(localeStr % toRomanRangeString(list(self._lvls), 1))
+
+    def getDescription(self):
+        localeStr = i18n.makeString(self.MAIN_TEXT_KEY + self._typeID)
+        return text_styles.main(localeStr % toRomanRangeString(list(self._lvls), 1))
+
+    def getAdditionalText(self):
+        if not self._isMaxLvl:
+            return text_styles.main(self.ADDITIONAL_TEXT_KEY + self._typeID)
+        else:
+            return super(FalloutAwardWindow, self).getAdditionalText()
+
+    def getHasDashedLine(self):
+        if not self._isMaxLvl:
+            return True
+        else:
+            return False
+
+    def getBodyButtonText(self):
+        return i18n.makeString(self.BTN_ACTION_KEY + self._typeID)
+
+    def getButtonStates(self):
+        return (False, True, True)
+
+    def getTextAreaIconIsShow(self):
+        return True
+
+    def getTextAreaIconPath(self):
+        return RES_ICONS.MAPS_ICONS_BATTLETYPES_64X64_FALLOUT
+
+    def handleBodyButton(self):
+        if self._isMaxLvl:
+            from gui.prb_control.context import PrebattleAction
+            from gui.prb_control.dispatcher import g_prbLoader
+            from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+            dispatcher = g_prbLoader.getDispatcher()
+            if dispatcher is not None:
+                dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.FALLOUT))
+            else:
+                LOG_ERROR('Prebattle dispatcher is not defined')
+        else:
+            from gui.server_events.events_dispatcher import showEventsWindow
+            showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
         return

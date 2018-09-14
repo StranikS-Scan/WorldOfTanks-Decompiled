@@ -216,6 +216,19 @@ class ShowChainHint(GUIEffect):
             self.stop()
 
 
+class ShowOnceOnlyHint(ShowChainHint):
+
+    def stop(self, effectID = None):
+        if effectID is not None:
+            super(ShowOnceOnlyHint, self).stop(effectID)
+        return
+
+    def cancel(self, *criteria):
+        if criteria is not None and self._itemID == criteria[0]:
+            self.stop(self._hintID)
+        return
+
+
 class UpdateContentEffect(GUIEffect):
 
     def play(self, effectData):

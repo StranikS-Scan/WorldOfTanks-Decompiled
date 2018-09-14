@@ -46,11 +46,8 @@ class AppBase(Flash):
 
 class App(ApplicationMeta, AppBase):
 
-    def __init__(self, appNS, businessHandler):
+    def __init__(self, appNS):
         super(App, self).__init__()
-        if businessHandler is None:
-            raise Exception, 'Business handler can not be None'
-        self._businessHandler = businessHandler
         self._contextMgr = None
         self._popoverManager = None
         self._soundMgr = None
@@ -227,9 +224,6 @@ class App(ApplicationMeta, AppBase):
         if self._tutorialMgr is not None:
             self._tutorialMgr.destroy()
             self._tutorialMgr = None
-        if self._businessHandler is not None:
-            self._businessHandler.destroy()
-            self._businessHandler = None
         self._dispose()
         super(App, self).beforeDelete()
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))

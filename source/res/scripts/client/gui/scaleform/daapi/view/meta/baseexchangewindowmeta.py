@@ -10,6 +10,6 @@ class BaseExchangeWindowMeta(AbstractWindowView):
         if self._isDAAPIInited():
             return self.flashObject.as_setPrimaryCurrency(value)
 
-    def as_exchangeRateS(self, value, actionValue):
+    def as_exchangeRateS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_exchangeRate(value, actionValue)
+            return self.flashObject.as_exchangeRate(data)

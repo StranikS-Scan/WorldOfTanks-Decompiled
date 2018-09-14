@@ -1,0 +1,726 @@
+<gb32_tortoise.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	20	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	8.550	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	228.6	</armor_1>
+      <armor_2>	406.4	</armor_2>
+      <armor_3>	152.4	</armor_3>
+      <armor_4>	101.6	</armor_4>
+      <armor_5>	101.6	</armor_5>
+      <armor_6>	171.5	</armor_6>
+      <armor_7>	228.6	</armor_7>
+      <armor_8>	101.6	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	57.2	</armor_10>
+      <armor_11>	34.9	</armor_11>
+      <armor_12>	25.4	</armor_12>
+      <armor_13>	38.1	</armor_13>
+      <armor_14>	152.4	</armor_14>
+      <armor_15>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+      <armor_16>	25.4	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	52744	</weight>
+    <maxHealth>	1600	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.35	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.74584 1.9489	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB32_Tortoise/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-1.21399 0.573784 1.9347	</rayStart>
+        <rayEnd>	-1.21392 0.268828 1.67588	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.19138 0.849682 1.71156	</rayStart>
+        <rayEnd>	1.19102 0.576687 1.41921	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.853	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	2.00301 1.02737 0.770991	</rayStart>
+        <rayEnd>	1.60301 1.02737 0.770991	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <player>
+        <rayStart>	-2.00542 1.00591 1.04198	</rayStart>
+        <rayEnd>	-1.60542 1.00591 1.04198	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB32_Tortoise>
+      <userString>	#gb_vehicles:Chassis_GB32_Tortoise	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	32234.0	</price>
+      <unlocks>
+        <chassis>	Chassis_GB32_Tortoise_2	  <cost>	21300	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	35	</leftTrack>
+        <rightTrack>	35	</rightTrack>
+      </armor>
+      <weight>	20000	</weight>
+      <maxLoad>	77000	</maxLoad>
+      <terrainResistance>	1.4 1.7 2.9	</terrainResistance>
+      <brakeForce>	70000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB32_Tortoise/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB32_Tortoise/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB32_Tortoise/track/left.track	</left>
+        <right>	vehicles/british/GB32_Tortoise/track/right.track	</right>
+        <segmentLength>	0.25	</segmentLength>
+        <segmentOffset>	0.09	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	1.1 1	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.967	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	37.89	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.38	</radius>
+          <syncAngle>	37.89	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.38	</radius>
+          <syncAngle>	37.89	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <trackThickness>	0.0141	</trackThickness>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.0775 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB32_Tortoise/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.43124 2.4055	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.226230 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.616250 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.140900	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.000000	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	0.000000	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+      </trackNodes>
+    </Chassis_GB32_Tortoise>
+    <Chassis_GB32_Tortoise_2>
+      <userString>	#gb_vehicles:Chassis_GB32_Tortoise_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	63000	</price>
+      <armor>
+        <leftTrack>	35	</leftTrack>
+        <rightTrack>	35	</rightTrack>
+      </armor>
+      <weight>	20000	</weight>
+      <maxLoad>	81000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.6	</terrainResistance>
+      <brakeForce>	77000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB32_Tortoise/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB32_Tortoise/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB32_Tortoise/track/left.track	</left>
+        <right>	vehicles/british/GB32_Tortoise/track/right.track	</right>
+        <segmentLength>	0.25	</segmentLength>
+        <segmentOffset>	0.09	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	1.1 1	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.967	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	37.89	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.38	</radius>
+          <syncAngle>	37.89	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.38	</radius>
+          <syncAngle>	37.89	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.34	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.110874	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.234868	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <trackThickness>	0.0141	</trackThickness>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+      </groundNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.0775 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB32_Tortoise/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.43124 2.4055	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.242990 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.616250 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.140890	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.000000	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	0.000000	</gravity>
+        <elasticity>	1500	</elasticity>
+        <damping>	20	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+      </trackNodes>
+    </Chassis_GB32_Tortoise_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB32_Tortoise>
+      <userString>	#gb_vehicles:Turret_1_GB32_Tortoise	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	9	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <weight>	200	</weight>
+      <maxHealth>	400	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_32-pounder_AT_Gun_OQF>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_20pdr_AT_Gun_Type_B	  <cost>	45000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-20 20	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB32_Tortoise/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000002 0.000876326 2.98464	</rayStart>
+              <rayEnd>	-0.00252724 0.00149236 2.98464	</rayEnd>
+              <rayUp>	0.075 0.075 4	</rayUp>
+              <size>	0.612	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_32-pounder_AT_Gun_OQF>
+        <_20pdr_AT_Gun_Type_B>	shared	  <maxAmmo>	70	</maxAmmo>
+          <unlocks>
+            <gun>	_120mm_AT_Gun_L1A1	  <cost>	60000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-20 20	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB32_Tortoise/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000006 0.000000 2.8492	</rayStart>
+              <rayEnd>	-0.0105533 -0.00138446 2.84818	</rayEnd>
+              <rayUp>	0.083 0.078 4	</rayUp>
+              <size>	0.667	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.295 0.295 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_AT_Gun_Type_B>
+        <_120mm_AT_Gun_L1A1>	shared	  <maxAmmo>	50	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB48_FV215b_183	  <cost>	235000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.31	</shotDispersionRadius>
+          <reloadTime>	7.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-20 20	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB32_Tortoise/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 0.000001 4.11626	</rayStart>
+              <rayEnd>	-0.0193615 0.00743312 4.11626	</rayEnd>
+              <rayUp>	0.093 0.093 4	</rayUp>
+              <size>	0.798	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_AT_Gun_L1A1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB32_Tortoise/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_GB32_Tortoise>
+  </turrets0>
+  <engines>
+    <Rolls_Royse_Meteor_MkV>	shared	  <unlocks>
+        <engine>	Rolls_Royse_Meteor_M120	  <cost>	27000	</cost>
+        </engine>
+      </unlocks>
+    </Rolls_Royse_Meteor_MkV>
+    <Rolls_Royse_Meteor_M120>	shared	</Rolls_Royse_Meteor_M120>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <N19Mk3>	shared	  <unlocks>
+        <radio>	N22	  <cost>	4500	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk3>
+    <N22>	shared	  <unlocks>
+        <radio>	C42	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </N22>
+    <C42>	shared	</C42>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb32_tortoise.xml>

@@ -2,22 +2,20 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 import account_helpers
-from adisp import process
 from constants import PREBATTLE_ACCOUNT_STATE, REQUEST_COOLDOWN
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from gui import prb_control, SystemMessages, DialogsInterface
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
-from gui.prb_control import restrictions
-from gui.prb_control.context import prb_ctx, pre_queue_ctx
+from gui.prb_control import restrictions, prb_cooldown, prb_getters
+from gui.prb_control.context import prb_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.formatters import messages
 from gui.prb_control.functional import interfaces
-from gui.prb_control import isParentControlActivated
 from gui.prb_control.items import prb_items, prb_seqs
-from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.restrictions.limits import DefaultLimits
 from gui.prb_control.restrictions.permissions import DefaultPrbPermissions
-from gui.prb_control.settings import *
+from gui.prb_control.restrictions.permissions import IntroPrbPermissions
+from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_INIT_STEP
 from gui.shared.utils.ListenersCollection import ListenersCollection
 from prebattle_shared import decodeRoster
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -32,11 +30,11 @@ class PrbIntro(interfaces.IPrbEntry):
         return prb_ctx.JoinModeCtx(self._prbType)
 
     def create(self, ctx, callback = None):
-        raise Exception, 'PrbIntro is not create entity'
+        raise Exception('PrbIntro is not create entity')
 
     def join(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
-            g_prbCtrlEvents.onPrebattleIntroModeJoined(ctx.getPrbType(), prb_control.hasModalEntity())
+        if not prb_getters.hasModalEntity() or ctx.isForced():
+            g_prbCtrlEvents.onPrebattleIntroModeJoined(ctx.getEntityType(), prb_getters.hasModalEntity())
             if callback:
                 callback(True)
         else:
@@ -54,11 +52,11 @@ class PrbEntry(interfaces.IPrbEntry):
         LOG_ERROR('Routine "create" must be implemented in subclass')
 
     def join(self, ctx, callback = None):
-        if prb_control.getClientPrebattle() is None or ctx.isForced():
+        if prb_getters.getClientPrebattle() is None or ctx.isForced():
             ctx.startProcessing(callback=callback)
             BigWorld.player().prb_join(ctx.getID())
         else:
-            LOG_ERROR('First, player has to confirm exit from the current prebattle', prb_control.getPrebattleType())
+            LOG_ERROR('First, player has to confirm exit from the current prebattle', prb_getters.getPrebattleType())
             if callback:
                 callback(False)
         return
@@ -69,25 +67,24 @@ class PrbEntry(interfaces.IPrbEntry):
 
 class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
 
-    def __init__(self, listenerClass, requestHandlers = None):
+    def __init__(self, listenerClass, requestHandlers = None, flags = FUNCTIONAL_FLAG.UNDEFINED):
         super(_PrbFunctional, self).__init__()
         self._setListenerClass(listenerClass)
         self._requestHandlers = requestHandlers or {}
-        self._exit = FUNCTIONAL_EXIT.NO_FUNC
+        self._flags = flags
         self._deferredReset = False
 
-    def getExit(self):
-        return self._exit
+    def getFunctionalFlags(self):
+        return self._flags
 
-    def setExit(self, exit):
-        if exit in FUNCTIONAL_EXIT.PREBATTLE_RANGE:
-            self._exit = exit
+    def setFunctionalFlags(self, flags):
+        self._flags = flags
 
     def fini(self, clientPrb = None, woEvents = False):
         self._setListenerClass(None)
         self._requestHandlers.clear()
         self._deferredReset = False
-        return
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def request(self, ctx, callback = None):
         requestType = ctx.getRequestType()
@@ -103,29 +100,27 @@ class _PrbFunctional(ListenersCollection, interfaces.IPrbFunctional):
                 callback(False)
         return
 
-    @process
-    def doLeaveAction(self, dispatcher, ctx = None):
-        if ctx is not None:
-            funcExit = ctx.getFuncExit()
-        else:
-            funcExit = FUNCTIONAL_EXIT.NO_FUNC
-        meta = self.getConfirmDialogMeta(funcExit)
-        if meta is not None:
-            isConfirmed = yield DialogsInterface.showDialog(meta)
-        else:
-            isConfirmed = yield lambda callback: callback(True)
-        if isConfirmed:
-            if ctx is None:
-                ctx = prb_ctx.LeavePrbCtx(waitingID='prebattle/leave')
-            if dispatcher._setRequestCtx(ctx):
-                self.leave(ctx)
-        return
+
+class NoPrbFunctional(interfaces.IPrbFunctional):
+
+    def getFunctionalFlags(self):
+        return FUNCTIONAL_FLAG.NO_PREBATTLE
+
+    def leave(self, ctx, callback = None):
+        LOG_ERROR('NoPrbFunctional.leave was invoke', ctx)
+        if callback:
+            callback(False)
+
+    def request(self, ctx, callback = None):
+        LOG_ERROR('NoPrbFunctional.request was invoke', ctx)
+        if callback:
+            callback(False)
 
 
 class IntroPrbFunctional(_PrbFunctional):
 
     def __init__(self, prbType, listReq, requestHandlers = None):
-        super(IntroPrbFunctional, self).__init__(interfaces.IIntoPrbListener, requestHandlers)
+        super(IntroPrbFunctional, self).__init__(interfaces.IIntoPrbListener, requestHandlers, FUNCTIONAL_FLAG.PREBATTLE_INTRO)
         self._prbType = prbType
         self._listReq = listReq
         self._hasEntity = False
@@ -137,7 +132,7 @@ class IntroPrbFunctional(_PrbFunctional):
 
         if self._listReq:
             self._listReq.start(self._onPrbListReceived)
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, clientPrb = None, woEvents = False):
         self._hasEntity = False
@@ -152,25 +147,28 @@ class IntroPrbFunctional(_PrbFunctional):
         except:
             LOG_CURRENT_EXCEPTION()
 
-        return
+        return FUNCTIONAL_FLAG.UNDEFINED
 
-    def getPrbType(self):
+    def getEntityType(self):
         return self._prbType
 
-    def getPrbTypeName(self):
-        return prb_control.getPrebattleTypeName(self.getPrbType())
+    def getEntityTypeName(self):
+        return prb_getters.getPrebattleTypeName(self.getEntityType())
 
     def hasEntity(self):
         return self._hasEntity
 
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
-        return rally_dialog_meta.createPrbIntroLeaveMeta(funcExit, self._prbType)
+    def getPermissions(self, pID = None):
+        return IntroPrbPermissions()
+
+    def getConfirmDialogMeta(self, ctx):
+        return rally_dialog_meta.createPrbIntroLeaveMeta(ctx, self.getEntityType())
 
     def leave(self, ctx, callback = None):
-        self._exit = ctx.getFuncExit()
         g_prbCtrlEvents.onPrebattleIntroModeLeft()
-        if callback:
+        if callback is not None:
             callback(True)
+        return
 
     def _onPrbListReceived(self, prebattles):
         self._invokeListeners('onPrbListReceived', prebattles)
@@ -179,28 +177,32 @@ class IntroPrbFunctional(_PrbFunctional):
 class PrbInitFunctional(interfaces.IPrbFunctional):
 
     def __init__(self):
+        super(PrbInitFunctional, self).__init__()
         self.__prbInitSteps = 0
 
     def init(self, clientPrb = None, ctx = None):
         if clientPrb is None:
-            clientPrb = prb_control.getClientPrebattle()
+            clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingsReceived += self.prb_onSettingsReceived
             clientPrb.onRosterReceived += self.prb_onRosterReceived
-            if prb_control.isPrebattleSettingsReceived(prebattle=clientPrb):
+            if prb_getters.isPrebattleSettingsReceived(prebattle=clientPrb):
                 self.prb_onSettingsReceived()
-            if len(prb_control.getPrebattleRosters(prebattle=clientPrb)):
+            if prb_getters.getPrebattleRosters(prebattle=clientPrb):
                 self.prb_onRosterReceived()
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, clientPrb = None, woEvents = False):
         self.__dispatcher = None
         if clientPrb is None:
-            clientPrb = prb_control.getClientPrebattle()
+            clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingsReceived -= self.prb_onSettingsReceived
             clientPrb.onRosterReceived -= self.prb_onRosterReceived
-        return
+        return FUNCTIONAL_FLAG.UNDEFINED
+
+    def getFunctionalFlags(self):
+        return FUNCTIONAL_FLAG.PREBATTLE_INIT
 
     def prb_onSettingsReceived(self):
         LOG_DEBUG('prb_onSettingsReceived')
@@ -261,17 +263,17 @@ class PrbRosterRequester(interfaces.IPrbListRequester):
 class PrbDispatcher(_PrbFunctional):
 
     def __init__(self, settings, permClass = None, limits = None, requestHandlers = None):
-        super(PrbDispatcher, self).__init__(interfaces.IPrbListener, requestHandlers)
+        super(PrbDispatcher, self).__init__(interfaces.IPrbListener, requestHandlers, FUNCTIONAL_FLAG.PREBATTLE)
         self._settings = settings
         self._permClass = permClass or DefaultPrbPermissions
         self._limits = limits or DefaultLimits(self)
         self._hasEntity = False
-        self._cooldown = PrbCooldownManager()
+        self._cooldown = prb_cooldown.PrbCooldownManager()
 
     def init(self, clientPrb = None, ctx = None):
         self._hasEntity = True
         if clientPrb is None:
-            clientPrb = prb_control.getClientPrebattle()
+            clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingUpdated += self.prb_onSettingUpdated
             clientPrb.onRosterReceived += self.prb_onRosterReceived
@@ -286,7 +288,7 @@ class PrbDispatcher(_PrbFunctional):
 
         else:
             LOG_ERROR('ClientPrebattle is not defined')
-        return FUNCTIONAL_INIT_RESULT.INITED
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def fini(self, clientPrb = None, woEvents = False):
         self._hasEntity = False
@@ -304,7 +306,7 @@ class PrbDispatcher(_PrbFunctional):
                 LOG_CURRENT_EXCEPTION()
 
         if clientPrb is None:
-            clientPrb = prb_control.getClientPrebattle()
+            clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onSettingUpdated -= self.prb_onSettingUpdated
             clientPrb.onTeamStatesReceived -= self.prb_onTeamStatesReceived
@@ -313,21 +315,21 @@ class PrbDispatcher(_PrbFunctional):
             clientPrb.onPlayerAdded -= self.prb_onPlayerAdded
             clientPrb.onPlayerRemoved -= self.prb_onPlayerRemoved
             clientPrb.onKickedFromQueue -= self.prb_onKickedFromQueue
-        return
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def isPlayerJoined(self, ctx):
         return ctx.getCtrlType() is CTRL_ENTITY_TYPE.PREBATTLE and ctx.getID() == self.getID()
 
     def getID(self):
-        return prb_control.getPrebattleID()
+        return prb_getters.getPrebattleID()
 
-    def getPrbType(self):
+    def getEntityType(self):
         if self._settings:
             return self._settings['type']
         return 0
 
-    def getPrbTypeName(self):
-        return prb_control.getPrebattleTypeName(self.getPrbType())
+    def getEntityTypeName(self):
+        return prb_getters.getPrebattleTypeName(self.getEntityType())
 
     def getSettings(self):
         return self._settings
@@ -348,15 +350,15 @@ class PrbDispatcher(_PrbFunctional):
         team, assigned = decodeRoster(self.getRosterKey())
         return self.getTeamState().isInQueue() and self.getPlayerInfo().isReady() and assigned
 
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+    def getConfirmDialogMeta(self, ctx):
         if not self._settings:
             return None
         else:
-            prbType = self.getPrbType()
+            prbType = self.getEntityType()
             if self.hasLockedState():
                 meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.PREBATTLE, prbType)
             else:
-                meta = rally_dialog_meta.createPrbLeaveMeta(funcExit, prbType)
+                meta = rally_dialog_meta.createPrbLeaveMeta(ctx, prbType)
             return meta
 
     def prb_onSettingUpdated(self, settingName):
@@ -426,7 +428,7 @@ class PrbDispatcher(_PrbFunctional):
 
     def prb_onKickedFromQueue(self, *args):
         LOG_DEBUG('prb_onKickedFromQueue', args)
-        message = messages.getPrbKickedFromQueueMessage(self.getPrbTypeName())
+        message = messages.getPrbKickedFromQueueMessage(self.getEntityTypeName())
         if len(message):
             SystemMessages.pushMessage(message, type=SystemMessages.SM_TYPE.Warning)
 
@@ -434,8 +436,8 @@ class PrbDispatcher(_PrbFunctional):
 class PrbFunctional(PrbDispatcher):
 
     def getRosterKey(self, pID = None):
-        rosters = prb_control.getPrebattleRosters()
-        rosterRange = PREBATTLE_ROSTER.getRange(self.getPrbType())
+        rosters = prb_getters.getPrebattleRosters()
+        rosterRange = PREBATTLE_ROSTER.getRange(self.getEntityType())
         if pID is None:
             pID = account_helpers.getPlayerID()
         for roster in rosterRange:
@@ -445,14 +447,14 @@ class PrbFunctional(PrbDispatcher):
         return PREBATTLE_ROSTER.UNKNOWN
 
     def getPlayerInfo(self, pID = None, rosterKey = None):
-        rosters = prb_control.getPrebattleRosters()
+        rosters = prb_getters.getPrebattleRosters()
         if pID is None:
             pID = account_helpers.getPlayerID()
         if rosterKey is not None:
             if rosterKey in rosters and pID in rosters[rosterKey].keys():
                 return prb_items.PlayerPrbInfo(pID, functional=self, roster=rosterKey, **rosters[rosterKey][pID])
         else:
-            rosterRange = PREBATTLE_ROSTER.getRange(self.getPrbType())
+            rosterRange = PREBATTLE_ROSTER.getRange(self.getEntityType())
             for roster in rosterRange:
                 if roster in rosters and pID in rosters[roster].keys():
                     return prb_items.PlayerPrbInfo(pID, functional=self, roster=roster, **rosters[roster][pID])
@@ -460,8 +462,8 @@ class PrbFunctional(PrbDispatcher):
         return prb_items.PlayerPrbInfo(-1L)
 
     def getPlayerInfoByDbID(self, dbID):
-        rosters = prb_control.getPrebattleRosters()
-        rosterRange = PREBATTLE_ROSTER.getRange(self.getPrbType())
+        rosters = prb_getters.getPrebattleRosters()
+        rosterRange = PREBATTLE_ROSTER.getRange(self.getEntityType())
         for roster in rosterRange:
             if roster in rosters:
                 for pID, data in rosters[roster].iteritems():
@@ -483,7 +485,7 @@ class PrbFunctional(PrbDispatcher):
             roster = self.getRosterKey()
             if roster is not PREBATTLE_ROSTER.UNKNOWN:
                 team, _ = decodeRoster(self.getRosterKey())
-        teamStates = prb_control.getPrebattleTeamStates()
+        teamStates = prb_getters.getPrebattleTeamStates()
         if team is not None and team < len(teamStates):
             result = prb_items.TeamStateInfo(teamStates[team])
         return result
@@ -509,11 +511,10 @@ class PrbFunctional(PrbDispatcher):
             return result
 
     def getProps(self):
-        return prb_items.PrbPropsInfo(**prb_control.getPrebattleProps())
+        return prb_items.PrbPropsInfo(**prb_getters.getPrebattleProps())
 
     def leave(self, ctx, callback = None):
         ctx.startProcessing(callback)
-        self._exit = ctx.getFuncExit()
         BigWorld.player().prb_leave(ctx.onResponseReceived)
 
     def reset(self):
@@ -652,7 +653,7 @@ class PrbFunctional(PrbDispatcher):
         self._cooldown.process(REQUEST_TYPE.SET_TEAM_STATE, coolDown=REQUEST_COOLDOWN.PREBATTLE_TEAM_NOT_READY)
 
     def _setTeamReady(self, ctx, callback = None):
-        if isParentControlActivated():
+        if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
@@ -692,7 +693,7 @@ class PrbFunctional(PrbDispatcher):
         self._cooldown.process(REQUEST_TYPE.SET_PLAYER_STATE, REQUEST_COOLDOWN.PREBATTLE_NOT_READY)
 
     def _setPlayerReady(self, ctx, callback = None):
-        if isParentControlActivated():
+        if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
@@ -715,7 +716,7 @@ class PrbFunctional(PrbDispatcher):
         BigWorld.player().prb_ready(ctx.getVehicleInventoryID(), ctx.onResponseReceived)
 
     def _getPlayersStateStats(self, rosterKey):
-        clientPrb = prb_control.getClientPrebattle()
+        clientPrb = prb_getters.getClientPrebattle()
         notReadyCount = 0
         playersCount = 0
         limitMaxCount = 0
@@ -734,132 +735,3 @@ class PrbFunctional(PrbDispatcher):
                         haveInBattle = True
 
         return prb_items.PlayersStateStats(notReadyCount, haveInBattle, playersCount, limitMaxCount)
-
-
-class PreQueueFunctional(ListenersCollection, interfaces.IPreQueueFunctional):
-
-    def __init__(self, queueType, eventsMap, settings = None):
-        super(PreQueueFunctional, self).__init__()
-        self._queueType = queueType
-        self._eventsMap = eventsMap
-        self._setListenerClass(interfaces.IPreQueueListener)
-        self._settings = settings or {}
-        self._hasEntity = False
-
-    def init(self, ctx = None):
-        self._hasEntity = True
-        if QUEUE_EVENT_TYPE.ENQUEUED in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.ENQUEUED] += self.onEnqueued
-        if QUEUE_EVENT_TYPE.DEQUEUED in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.DEQUEUED] += self.onDequeued
-        if QUEUE_EVENT_TYPE.ENQUEUE_ERROR in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.ENQUEUE_ERROR] += self.onEnqueueError
-        if QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE] += self.onKickedFromQueue
-        if QUEUE_EVENT_TYPE.KICKED_FROM_ARENA in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_ARENA] += self.onKickedFromArena
-        for l in self._listeners:
-            l.onPreQueueFunctionalInited()
-
-        return FUNCTIONAL_INIT_RESULT.INITED
-
-    def fini(self, woEvents = False):
-        self._settings.clear()
-        self._hasEntity = False
-        for l in self._listeners:
-            l.onPreQueueFunctionalFinished()
-
-        self._setListenerClass(None)
-        if QUEUE_EVENT_TYPE.KICKED_FROM_ARENA in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_ARENA] -= self.onKickedFromArena
-        if QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE] -= self.onKickedFromQueue
-        if QUEUE_EVENT_TYPE.ENQUEUE_ERROR in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.ENQUEUE_ERROR] -= self.onEnqueueError
-        if QUEUE_EVENT_TYPE.DEQUEUED in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.DEQUEUED] -= self.onDequeued
-        if QUEUE_EVENT_TYPE.ENQUEUED in self._eventsMap:
-            self._eventsMap[QUEUE_EVENT_TYPE.ENQUEUED] -= self.onEnqueued
-        return
-
-    def hasLockedState(self):
-        return self.isInQueue()
-
-    def getQueueType(self):
-        return self._queueType
-
-    def onEnqueued(self, *args):
-        for listener in self._listeners:
-            listener.onEnqueued(*args)
-
-    def onDequeued(self, *args):
-        for listener in self._listeners:
-            listener.onDequeued(*args)
-
-    def onEnqueueError(self, *args):
-        for listener in self._listeners:
-            listener.onEnqueueError(*args)
-
-    def onKickedFromQueue(self, *args):
-        for listener in self._listeners:
-            listener.onKickedFromQueue(*args)
-
-    def onKickedFromArena(self, *args):
-        for listener in self._listeners:
-            listener.onKickedFromArena(*args)
-
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
-        if self.hasLockedState():
-            meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.PREBATTLE, self._queueType)
-        else:
-            meta = rally_dialog_meta.createLeavePreQueueMeta(funcExit, self._queueType)
-        return meta
-
-    def canPlayerDoAction(self):
-        return (not self.isInQueue(), '')
-
-    def exitFromQueue(self):
-        self.doAction()
-
-    def hasEntity(self):
-        return self._hasEntity
-
-    def doLeaveAction(self, dispatcher, ctx = None, showConfirmation = True):
-        if ctx is None:
-            ctx = pre_queue_ctx.LeavePreQueueCtx(waitingID='prebattle/leave')
-        if dispatcher._setRequestCtx(ctx):
-            self.leave(ctx)
-        return
-
-    def leave(self, ctx, callback = None):
-        if callback:
-            callback(True)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-
-    def changeSetting(self, settingName, settingValue):
-        LOG_DEBUG('Changing setting for PreQueueFunctional: ', settingName, settingValue)
-        self.changeSettings({settingName: settingValue})
-
-    def changeSettings(self, settings):
-        unsuportedSettings = set(settings.keys()) - set(PREQUEUE_SETTING_NAME.ALL())
-        if unsuportedSettings:
-            LOG_ERROR('Trying to set unsupported settings: ', unsuportedSettings)
-            return
-        self._settings.update(settings)
-        for l in self._listeners:
-            l.onPreQueueSettingsChanged(settings)
-
-        self._applySettings(settings)
-
-    def getSettings(self):
-        return self._settings
-
-    def getSetting(self, settingName, defaultValue = None):
-        if settingName not in PREQUEUE_SETTING_NAME.ALL():
-            LOG_ERROR('Trying to get unsupported settings: ', settingName)
-            return None
-        else:
-            return self._settings.get(settingName, defaultValue)
-
-    def _applySettings(self, settings):
-        pass

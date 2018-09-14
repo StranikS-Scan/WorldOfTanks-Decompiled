@@ -1,0 +1,61 @@
+<63_tundra.xml>
+  <name>	#arenas:63_tundra/name	</name>
+  <description>	#arenas:63_tundra/description	</description>
+  <geometry>	spaces/63_tundra	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/63_tundra/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <loadingMusic>	/music/intro/euro_village	</loadingMusic>
+  <wwloadingMusic>	music_euro_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	85.432190 -167.152176	</position1>
+        </team1>
+        <team2>
+          <position1>	-72.202568 141.256195	</position1>
+        </team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	13.326 -306.419	</position>
+        </team1>
+        <team2>
+          <position>	-3.164 282.311	</position>
+        </team2>
+      </teamSpawnPoints>
+    </ctf>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-325.562 96.459	</position>
+        </team1>
+        <team2>
+          <position>	316.803 0.031	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-40.259 221.838	</position1>
+          <position2>	-214.197 -237.596	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</63_tundra.xml>

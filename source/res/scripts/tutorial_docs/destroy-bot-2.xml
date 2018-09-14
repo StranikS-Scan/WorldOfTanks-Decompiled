@@ -1,0 +1,514 @@
+<destroy-bot-2.xml>
+  <scenes>
+    <scene>	Battle	  <gui-items></gui-items>
+      <post-effects>
+        <activate>	Task7Continue	</activate>
+        <activate>	Task8Continue	</activate>
+        <activate>	Task9Continue	</activate>
+        <run-trigger>	Bot1OnArenaTrigger	</run-trigger>
+        <run-trigger>	Bot2OnArenaTrigger	</run-trigger>
+        <run-trigger>	Bot3OnArenaTrigger	</run-trigger>
+        <run-trigger>	GlobalEventsDispatcher	</run-trigger>
+        <run-trigger>	VehicleNoAmmoTrigger	</run-trigger>
+        <teleport>	TeleportMarker	  <condition>
+            <active>	TeleportToPoint5	</active>
+          </condition>
+        </teleport>
+      </post-effects>
+      <runtime-effects>
+        <show-marker>	MarkerForPoint5	  <condition>
+            <inactive>	InPoint5	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	ShotNoDamage	</inactive>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-marker>
+        <next-task>	MoveToPoint5Task	  <condition>
+            <inactive>	InPoint5	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	ShotNoDamage	</inactive>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	MoveToPoint5Hint	  <condition>
+            <inactive>	InPoint5	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	ShotNoDamage	</inactive>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <next-task>	TryToDestroyBot2Task	  <condition>
+            <active>	InPoint5	</active>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	ShotNoDamage	</inactive>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	TryToDestroyBot2Hint	  <condition>
+            <active>	InPoint5	</active>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	ShotNoDamage	</inactive>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <show-marker>	MarkerForPoint6	  <condition>
+            <active>	ShotNoDamage	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-marker>
+        <next-task>	MoveToPoint6Task	  <condition>
+            <active>	ShotNoDamage	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	MoveToPoint6Hint	  <condition>
+            <active>	ShotNoDamage	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	InPoint6	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <next-task>	ShotDamageTask	  <condition>
+            <active>	ShotNoDamage	</active>
+            <active>	InPoint6	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	ShotDamageHint	  <condition>
+            <active>	ShotNoDamage	</active>
+            <active>	InPoint6	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <next-task>	AutoAimAtBot2Task	  <condition>
+            <active>	ShotDamage	</active>
+            <inactive>	AutoAimAtBot2	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	AutoAimAtBot2Hint	  <condition>
+            <active>	ShotDamage	</active>
+            <inactive>	AutoAimAtBot2	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <next-task>	DestroyBot2Task	  <condition>
+            <active>	ShotDamage	</active>
+            <active>	AutoAimAtBot2	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </next-task>
+        <show-hint>	DestroyBot2Hint	  <condition>
+            <active>	ShotDamage	</active>
+            <active>	AutoAimAtBot2	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-hint>
+        <show-hint>	DestroyBot2DoneHint	  <condition>
+            <active>	Bot2Destroyed	</active>
+          </condition>
+        </show-hint>
+        <show-dialog>	ReplenishAmmoDialog	  <condition>
+            <active>	VehicleNoAmmo	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+            <inactive>	ReplenishAmmoDialogClosed	</inactive>
+          </condition>
+        </show-dialog>
+        <request-bonus>
+          <condition>
+            <active>	Bot2Destroyed	</active>
+          </condition>
+        </request-bonus>
+        <request-bonus>	DestroyBot1	  <condition>
+            <active>	Bot1Destroyed	</active>
+          </condition>
+        </request-bonus>
+        <request-bonus>	DestroyBot3	  <condition>
+            <active>	Bot3Destroyed	</active>
+          </condition>
+        </request-bonus>
+        <next-chapter>	DestroyBot2Done	  <condition>
+            <active>	Bot2Destroyed	</active>
+          </condition>
+        </next-chapter>
+      </runtime-effects>
+    </scene>
+  </scenes>
+  <has-id>
+    <exit>	DestroyBot2Done	  <is-speak-over>	True	</is-speak-over>
+      <next-delay>	3	</next-delay>
+      <finish-delay>	2	</finish-delay>
+      <chapter-id></chapter-id>
+    </exit>
+    <progress>	DestroyBot2	  <steps>
+        <condition>	Step7InProgress	  <either>
+            <active>	ShotNoDamage	</active>
+            <active>	ShotDamage	</active>
+            <active>	Bot2Destroyed	</active>
+          </either>
+        </condition>
+        <condition>	Step8InProgress	  <either>
+            <active>	ShotDamage	</active>
+            <active>	Bot2Destroyed	</active>
+          </either>
+        </condition>
+        <condition>	Step9InProgress	  <active>	Bot2Destroyed	</active>
+        </condition>
+      </steps>
+    </progress>
+    <task>	MoveToPoint5Task	  <flag>	Task7Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/move-to-point-5/text)	</text>
+    </task>
+    <task>	MoveToPoint6Task	  <flag>	Task8Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/move-to-point-6/text)	</text>
+    </task>
+    <task>	TryToDestroyBot2Task	  <flag>	Task7Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/try-to-destroy-bot-2/text)	</text>
+    </task>
+    <task>	ShotDamageTask	  <flag>	Task8Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/shot-damage/text)	</text>
+    </task>
+    <task>	AutoAimAtBot2Task	  <flag>	Task9Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/auto-aim-at-bot-2/text)	</text>
+    </task>
+    <task>	DestroyBot2Task	  <flag>	Task9Continue	</flag>
+      <text>	_(#battle_tutorial:tasks-panel/destroy-bot-2/text)	</text>
+    </task>
+    <hint>	MoveToPoint5Hint	  <text>	_(#battle_tutorial:hints/move-to-point-5/text)	</text>
+      <image-ref>	BattleHintImage08	</image-ref>
+      <speak>	/tutorial_voice/tutorial_voice/position	</speak>
+      <wwspeak>	position	</wwspeak>
+    </hint>
+    <hint>	MoveToPoint6Hint	  <text>	_(#battle_tutorial:hints/move-to-point-6/text)	</text>
+      <image></image>
+      <speak>	/tutorial_voice/tutorial_voice/attack	</speak>
+      <wwspeak>	attack	</wwspeak>
+    </hint>
+    <hint>	TryToDestroyBot2Hint	  <text>	_(#battle_tutorial:hints/try-to-destroy-bot-2/text)	</text>
+      <image>	../maps/tutorial/battle-hint-09.png	</image>
+      <speak>	/tutorial_voice/tutorial_voice/dispersion	</speak>
+      <wwspeak>	dispersion	</wwspeak>
+    </hint>
+    <hint>	ShotDamageHint	  <text>	_(#battle_tutorial:hints/shot-damage/text)	</text>
+      <image-ref>	BattleHintImage11	</image-ref>
+      <speak>	/tutorial_voice/tutorial_voice/forehead	</speak>
+      <wwspeak>	forehead	</wwspeak>
+    </hint>
+    <hint>	AutoAimAtBot2Hint	  <text>	_(#battle_tutorial:hints/auto-aim-at-bot-2/text)	</text>
+      <image-ref>	BattleHintImage12	</image-ref>
+      <speak>	/tutorial_voice/tutorial_voice/movement	</speak>
+      <wwspeak>	movement	</wwspeak>
+    </hint>
+    <hint>	DestroyBot2Hint	  <text>	_(#battle_tutorial:hints/destroy-bot-2/text)	</text>
+      <image-ref>	BattleHintImage13	</image-ref>
+      <speak>	/tutorial_voice/tutorial_voice/auto	</speak>
+      <wwspeak>	auto	</wwspeak>
+    </hint>
+    <hint>	DestroyBot2DoneHint	  <text>	_(#battle_tutorial:hints/destroy-bot-2-done/text)	</text>
+      <image></image>
+      <speak>	/tutorial_voice/tutorial_voice/congratulations	</speak>
+      <wwspeak>	congratulations	</wwspeak>
+    </hint>
+    <dialog>	ReplenishAmmoDialog	  <type>	replenishAmmo	</type>
+      <title>	_(#battle_tutorial:dialogs/replenish-ammo/title)	</title>
+      <text>	_(#battle_tutorial:dialogs/replenish-ammo/text)	</text>
+      <submit-label>	_(#battle_tutorial:dialogs/replenish-ammo/submit)	</submit-label>
+      <align>	BC	</align>
+      <offset>	0 70	</offset>
+      <buttons>
+        <submit>	RequestToReplenishAmmo	</submit>
+      </buttons>
+      <actions>
+        <click>	RequestToReplenishAmmo	  <effects>
+            <activate>	ReplenishAmmoDialogClosed	</activate>
+            <invoke-player-cmd>	ReplenishAmmoCmd	</invoke-player-cmd>
+          </effects>
+        </click>
+      </actions>
+    </dialog>
+    <marker>	MarkerForPoint5	  <type>	area	</type>
+      <var-ref>	Point5Name	</var-ref>
+      <model>
+        <path>	content/Interface/Arrow/normal/lod0/arrow.model	</path>
+        <action>	ArrowAnimAction	</action>
+        <offset>	1 4.5 0	</offset>
+      </model>
+      <ground>
+        <path>	content/Interface/CheckPoint/CheckPoint_green.model	</path>
+        <action></action>
+        <offset>	0 0.6 0	</offset>
+      </ground>
+      <world>
+        <shape>	arrow	</shape>
+        <min-distance>	50	</min-distance>
+        <max-distance>	60	</max-distance>
+        <offset>	0 9 0	</offset>
+      </world>
+      <minimap>
+        <entry-name>	tutorialTarget	</entry-name>
+        <entry-type>	blue	</entry-type>
+      </minimap>
+    </marker>
+    <marker>	TeleportMarker	  <type>	teleport	</type>
+      <var-ref>	Point5Name	</var-ref>
+      <world>
+        <offset>	0 0 0	</offset>
+        <yaw>	1.8	</yaw>
+      </world>
+    </marker>
+    <marker>	MarkerForPoint6	  <type>	area	</type>
+      <var-ref>	Point6Name	</var-ref>
+      <model>
+        <path>	content/Interface/Arrow/normal/lod0/arrow.model	</path>
+        <action>	ArrowAnimAction	</action>
+        <offset>	1 4.5 0	</offset>
+      </model>
+      <ground>
+        <path>	content/Interface/CheckPoint/CheckPoint_green.model	</path>
+        <action></action>
+        <offset>	0 0.2 0	</offset>
+      </ground>
+      <world>
+        <shape>	arrow	</shape>
+        <min-distance>	50	</min-distance>
+        <max-distance>	60	</max-distance>
+        <offset>	0 9 0	</offset>
+      </world>
+      <minimap>
+        <entry-name>	tutorialTarget	</entry-name>
+        <entry-type>	blue	</entry-type>
+      </minimap>
+    </marker>
+    <marker>	AttackBot2Marker	  <type>	vehicle	</type>
+      <var-ref>	Bot2VehicleID	</var-ref>
+      <period>	5	</period>
+    </marker>
+    <player-cmd>	ReplenishAmmoCmd	  <name>	replenishAmmo	</name>
+      <args></args>
+      <kwargs></kwargs>
+    </player-cmd>
+    <image>	BattleHintImage08	  <type>	vehicle	</type>
+      <value>	battle-hint-08.png	</value>
+      <path-ref>	ImagePath	</path-ref>
+      <default-ref>	DefaultVehicleInImages	</default-ref>
+    </image>
+    <image>	BattleHintImage11	  <type>	vehicle	</type>
+      <value>	battle-hint-11.png	</value>
+      <path-ref>	ImagePath	</path-ref>
+      <default-ref>	DefaultVehicleInImages	</default-ref>
+    </image>
+    <image>	BattleHintImage12	  <type>	vehicle	</type>
+      <value>	battle-hint-12.png	</value>
+      <path-ref>	ImagePath	</path-ref>
+      <default-ref>	DefaultVehicleInImages	</default-ref>
+    </image>
+    <image>	BattleHintImage13	  <type>	vehicle	</type>
+      <value>	battle-hint-13.png	</value>
+      <path-ref>	ImagePath	</path-ref>
+      <default-ref>	DefaultVehicleInImages	</default-ref>
+    </image>
+  </has-id>
+  <triggers>
+    <trigger>	Bot1OnArenaTrigger	  <type>	vehOnArena	</type>
+      <validate-var>	Bot1Name	</validate-var>
+      <set-var>	Bot1VehicleID	</set-var>
+      <on-effects>
+        <activate>	Bot1OnArena	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot1OnArena	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	Bot2OnArenaTrigger	  <type>	vehOnArena	</type>
+      <validate-var>	Bot2Name	</validate-var>
+      <set-var>	Bot2VehicleID	</set-var>
+      <on-effects>
+        <activate>	Bot2OnArena	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot2OnArena	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	Bot3OnArenaTrigger	  <type>	vehOnArena	</type>
+      <validate-var>	Bot3Name	</validate-var>
+      <set-var>	Bot3VehicleID	</set-var>
+      <on-effects>
+        <activate>	Bot3OnArena	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot3OnArena	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	VehicleNoAmmoTrigger	  <type>	noAmmo	</type>
+      <init-state-flag>	VehicleNoAmmo	</init-state-flag>
+      <on-effects>
+        <activate>	VehicleNoAmmo	</activate>
+        <inactivate>	ReplenishAmmoDialogClosed	</inactivate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	VehicleNoAmmo	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	Point5Trigger	  <type>	area	</type>
+      <validate-var>	Point5Name	</validate-var>
+      <on-effects>
+        <activate>	Task7Continue	</activate>
+        <activate>	InPoint5	</activate>
+        <remove-marker>	MarkerForPoint5	</remove-marker>
+        <show-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Task7Continue	</inactivate>
+        <inactivate>	InPoint5	</inactivate>
+        <remove-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </remove-marker>
+      </off-effects>
+    </trigger>
+    <trigger>	Point6Trigger	  <type>	area	</type>
+      <validate-var>	Point6Name	</validate-var>
+      <on-effects>
+        <activate>	Task8Continue	</activate>
+        <activate>	InPoint6	</activate>
+        <remove-marker>	MarkerForPoint6	</remove-marker>
+        <show-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Task8Continue	</inactivate>
+        <inactivate>	InPoint6	</inactivate>
+        <remove-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	ShotDamage	</inactive>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </remove-marker>
+      </off-effects>
+    </trigger>
+    <trigger>	Bot1DestroyedTrigger	  <type>	vehDestroyed	</type>
+      <validate-var>	Bot1VehicleID	</validate-var>
+      <on-effects>
+        <activate>	Bot1Destroyed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot1Destroyed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	Bot2DestroyedTrigger	  <type>	vehDestroyed	</type>
+      <validate-var>	Bot2VehicleID	</validate-var>
+      <on-effects>
+        <activate>	Bot2Destroyed	</activate>
+        <remove-marker>	AttackBot2Marker	</remove-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot2Destroyed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	Bot3DestroyedTrigger	  <type>	vehDestroyed	</type>
+      <validate-var>	Bot3VehicleID	</validate-var>
+      <on-effects>
+        <activate>	Bot3Destroyed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Bot3Destroyed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	ShotNoDamageTrigger	  <type>	shotNoDmg	</type>
+      <validate-var>	Bot2VehicleID	</validate-var>
+      <max-count>	2	</max-count>
+      <on-effects>
+        <activate>	ShotNoDamage	</activate>
+        <remove-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </remove-marker>
+        <remove-marker>	MarkerForPoint5	</remove-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	ShotNoDamage	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	ShotDamageTrigger	  <type>	shotDmg	</type>
+      <validate-var>	Bot2VehicleID	</validate-var>
+      <max-count>	2	</max-count>
+      <on-effects>
+        <activate>	ShotDamage	</activate>
+        <remove-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </remove-marker>
+        <remove-marker>	MarkerForPoint6	</remove-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	ShotDamage	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	AutoAimAtBot2Trigger	  <type>	autoAim	</type>
+      <validate-var>	Bot2VehicleID	</validate-var>
+      <init-state-flag>	AutoAimAtBot2	</init-state-flag>
+      <on-effects>
+        <activate>	Task9Continue	</activate>
+        <activate>	AutoAimAtBot2	</activate>
+        <show-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <active>	ShotDamage	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </show-marker>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Task9Continue	</inactivate>
+        <inactivate>	AutoAimAtBot2	</inactivate>
+        <remove-marker>	AttackBot2Marker	  <condition>
+            <active>	Bot2OnArena	</active>
+            <inactive>	Bot2Destroyed	</inactive>
+          </condition>
+        </remove-marker>
+      </off-effects>
+    </trigger>
+    <trigger>	GlobalEventsDispatcher	  <type>	dispatcher	</type>
+      <includes>
+        <trigger>	Point5Trigger	</trigger>
+        <trigger>	Point6Trigger	</trigger>
+        <trigger>	ShotNoDamageTrigger	</trigger>
+        <trigger>	ShotDamageTrigger	</trigger>
+        <trigger>	AutoAimAtBot2Trigger	</trigger>
+        <trigger>	Bot1DestroyedTrigger	</trigger>
+        <trigger>	Bot2DestroyedTrigger	</trigger>
+        <trigger>	Bot3DestroyedTrigger	</trigger>
+      </includes>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set-ref>	Point5Name	</var-set-ref>
+    <var-set-ref>	Point6Name	</var-set-ref>
+    <var-set-ref>	Point7Name	</var-set-ref>
+    <var-set-ref>	Bot1Name	</var-set-ref>
+    <var-set-ref>	Bot2Name	</var-set-ref>
+    <var-set-ref>	Bot3Name	</var-set-ref>
+    <var-set-ref>	ImagePath	</var-set-ref>
+    <var-set-ref>	DefaultVehicleInImages	</var-set-ref>
+  </vars>
+</destroy-bot-2.xml>

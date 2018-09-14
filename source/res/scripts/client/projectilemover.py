@@ -20,11 +20,12 @@ import AvatarInputHandler
 import FlockManager
 
 def ownVehicleGunPositionGetter():
-    ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
-    if ownVehicle:
-        return ownVehicle.appearance.modelsDesc['gun']['model'].position
-    else:
-        return Math.Vector3(0.0, 0.0, 0.0)
+    ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
+    if ownVehicle is not None:
+        model = ownVehicle.appearance.modelsDesc['gun']['model']
+        if model is not None:
+            return model.position
+    return Math.Vector3(0.0, 0.0, 0.0)
 
 
 class ProjectileMover(object):
@@ -37,7 +38,8 @@ class ProjectileMover(object):
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
         self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end), self.__killProjectile, self.__deleteProjectile)
         if self.__ballistics is not None:
-            self.__ballistics.setBallisticsConstants(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
+            self.__ballistics.setFixedBallisticsParams(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
+            self.__ballistics.setVariableBallisticsParams(BigWorld.player().spaceID)
         BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
         return
 
@@ -74,7 +76,7 @@ class ProjectileMover(object):
             model.addMotor(projectileMotor)
             model.visible = False
             model.visibleAttachments = True
-            projEffects.attachTo(proj['model'], proj['effectsData'], 'flying')
+            projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayer=isOwnShoot, isArtillery=False)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return

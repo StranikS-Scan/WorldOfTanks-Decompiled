@@ -1,0 +1,970 @@
+<gb15_stuart_i.xml>
+  <crew>
+    <commander>	loader	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	58	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	4.0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	38.1	</armor_1>
+      <armor_2>	44.5	</armor_2>
+      <armor_3>	25.4	</armor_3>
+      <armor_4>	25.4	</armor_4>
+      <armor_5>	25.4	</armor_5>
+      <armor_6>	15.9	</armor_6>
+      <armor_7>	38.1	</armor_7>
+      <armor_8>	9.5	</armor_8>
+      <armor_9>	9.5	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	19.1	</armor_12>
+      <armor_13>	38.1	</armor_13>
+      <armor_14>	46	</armor_14>
+      <armor_15>	12.7	</armor_15>
+      <armor_16>	6.4	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7827	</weight>
+    <maxHealth>	184	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 37.00 0.34 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.28 37.00 0.34 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.76	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.005 0.800621 0.186229	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00969733 0.360565 1.79512	</rayStart>
+        <rayEnd>	0.00969659 -0.199566 1.58008	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.41994 0.522886 -0.300732	</rayStart>
+        <rayEnd>	-0.819947 0.522886 -0.300732	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.65	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.42005 0.523817 0.107323	</rayStart>
+        <rayEnd>	0.820062 0.523817 0.107323	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.65	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.54 1.54 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB15_Stuart_I>
+      <userString>	#gb_vehicles:Chassis_GB15_Stuart_I	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	660	</price>
+      <unlocks>
+        <chassis>	Chassis_GB15_Stuart_I_2	  <cost>	360	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	12900	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
+      <brakeForce>	13000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.36 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.18	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352639	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.105042	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.105042	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.262247	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.417108	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352639	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.105042	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.105042	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.262247	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L4	</name>
+          <radius>	0.417108	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <trackThickness>	0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-9.9	</gravity>
+        <elasticity>	1073	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	0.9	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.59	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.59	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB15_Stuart_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB15_Stuart_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB15_Stuart_I/track/left.track	</left>
+        <right>	vehicles/british/GB15_Stuart_I/track/right.track	</right>
+        <segmentLength>	0.131	</segmentLength>
+        <segmentOffset>	0.154	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.94171 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.93109 1.50774	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <trackThickness>	0.000000	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.104701	</minOffset>
+          <maxOffset>	0.026	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.105	</minOffset>
+          <maxOffset>	0.026	</maxOffset>
+        </group>
+      </groundNodes>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.067470 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.412560 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.729410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <group>
+        <template>	Track_R	</template>
+        <startIndex>	0	</startIndex>
+        <count>	4	</count>
+        <isLeft>	false	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.00396824	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_R	</template>
+        <startIndex>	4	</startIndex>
+        <count>	1	</count>
+        <isLeft>	false	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.065	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_L	</template>
+        <startIndex>	0	</startIndex>
+        <count>	4	</count>
+        <isLeft>	true	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.00396824	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_L	</template>
+        <startIndex>	4	</startIndex>
+        <count>	1	</count>
+        <isLeft>	true	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.0654677	</maxOffset>
+      </group>
+    </Chassis_GB15_Stuart_I>
+    <Chassis_GB15_Stuart_I_2>
+      <userString>	#gb_vehicles:Chassis_GB15_Stuart_I_2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	14500	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.2	</terrainResistance>
+      <brakeForce>	14000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	45	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.36 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.18	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352639	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.105042	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.105042	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.262247	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.417108	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352639	</radius>
+          <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.105042	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.105042	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.262247	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L4	</name>
+          <radius>	0.417108	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <trackThickness>	0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-9.9	</gravity>
+        <elasticity>	1073	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	0.9	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.59	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.59	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.81	</backwardElastK>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB15_Stuart_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB15_Stuart_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB15_Stuart_I/track/left.track	</left>
+        <right>	vehicles/british/GB15_Stuart_I/track/right.track	</right>
+        <segmentLength>	0.131	</segmentLength>
+        <segmentOffset>	0.154	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.94171 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.93109 1.50774	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <trackThickness>	0.000000	</trackThickness>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.104701	</minOffset>
+          <maxOffset>	0.026	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.105	</minOffset>
+          <maxOffset>	0.026	</maxOffset>
+        </group>
+      </groundNodes>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.055620 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.412560 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.729410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <group>
+        <template>	Track_R	</template>
+        <startIndex>	0	</startIndex>
+        <count>	4	</count>
+        <isLeft>	false	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.00396824	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_R	</template>
+        <startIndex>	4	</startIndex>
+        <count>	1	</count>
+        <isLeft>	false	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.065	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_L	</template>
+        <startIndex>	0	</startIndex>
+        <count>	4	</count>
+        <isLeft>	true	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.00396824	</maxOffset>
+      </group>
+      <group>
+        <template>	Track_L	</template>
+        <startIndex>	4	</startIndex>
+        <count>	1	</count>
+        <isLeft>	true	</isLeft>
+        <minOffset>	-0.11	</minOffset>
+        <maxOffset>	0.0654677	</maxOffset>
+      </group>
+    </Chassis_GB15_Stuart_I_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB15_Stuart_I>
+      <userString>	#gb_vehicles:Turret_1_GB15_Stuart_I	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	800	</price>
+      <armor>
+        <armor_1>	38.1	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	25.4	</armor_3>
+        <armor_4>	25.4	</armor_4>
+        <armor_5>	12.7	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	12.7	</armor_8>
+        <armor_10>	25.4	</armor_10>
+        <armor_11>	25.4	</armor_11>
+        <armor_12>	38.1	</armor_12>
+        <armor_15>	19.1	</armor_15>
+        <armor_16>	25.4	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1250	</weight>
+      <maxHealth>	46	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_M-5>	shared	  <maxAmmo>	103	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.388889 10 0.402778 5 0.597222 5 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_GB15_Stuart_I	  <cost>	380	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_M-5>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.00183 0.25256 0.79734	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.650332 0.225152 -0.654151	</rayStart>
+          <rayEnd>	-0.181348 0.223006 -0.279931	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.940119 0.331736 -0.0195209	</rayStart>
+          <rayEnd>	0.340198 0.329004 -0.0283307	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.903 -0.025 0.950 0.011 0.437 0.230 0.709 0.436 0.464 0.480 0.039 0.570 0.066 0.017 0.034	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_02	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_800-1999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.745 0.745 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB15_Stuart_I>
+    <Turret_2_GB15_Stuart_I>
+      <userString>	#gb_vehicles:Turret_2_GB15_Stuart_I	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <unlocks>
+        <gun>	_37mm_M-6_L53	  <cost>	350	</cost>
+        </gun>
+        <gun>	_2pdr_Gun_Mk_IX	  <cost>	300	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_2>	38.1	</armor_2>
+        <armor_3>	31.8	</armor_3>
+        <armor_4>	31.8	</armor_4>
+        <armor_5>	12.7	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	12.7	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	12.7	</armor_9>
+        <armor_10>	31.8	</armor_10>
+        <armor_11>	31.8	</armor_11>
+        <armor_15>	19.1	</armor_15>
+      </armor>
+      <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+      <weight>	1472	</weight>
+      <maxHealth>	66	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.047	</invisibilityFactor>
+      <guns>
+        <_37mm_M-5>	shared	  <maxAmmo>	106	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.388889 10 0.402778 5 0.597222 5 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_M-5>
+        <_37mm_M-6_L53>	shared	  <maxAmmo>	106	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB17_Grant_I	  <cost>	3720	</cost>
+            </vehicle>
+          </unlocks>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.388889 10 0.402778 4 0.597222 4 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_M-6_L53>
+        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	98	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.388889 10 0.402778 4 0.597222 4 0.611111 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2.6	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_2pdr_Gun_Mk_IX>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB15_Stuart_I/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB15_Stuart_I/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB15_Stuart_I/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB15_Stuart_I/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.00183 0.25256 0.79734	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.709311 0.248162 -0.451189	</rayStart>
+          <rayEnd>	-0.367383 0.246093 -0.243635	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.705642 0.328266 0.416282	</rayStart>
+          <rayEnd>	0.349541 0.328142 0.234108	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.949 -0.013 1.000 0.000 0.465 0.290 0.692 0.424 0.547 0.492 0.086 0.500 0.088 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_02	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_800-1999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.625 0.46 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB15_Stuart_I>
+  </turrets0>
+  <engines>
+    <Guiberson_T-1020-4>	shared	  <unlocks>
+        <engine>	Continental_W-670-9A	  <cost>	190	</cost>
+        </engine>
+      </unlocks>
+    </Guiberson_T-1020-4>
+    <Continental_W-670-9A>	shared	</Continental_W-670-9A>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <N11>	shared	  <unlocks>
+        <radio>	N9	  <cost>	610	</cost>
+        </radio>
+      </unlocks>
+    </N11>
+    <N9>	shared	  <unlocks>
+        <radio>	N19Mk1	  <cost>	1480	</cost>
+        </radio>
+      </unlocks>
+    </N9>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	</N19Mk2>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb15_stuart_i.xml>

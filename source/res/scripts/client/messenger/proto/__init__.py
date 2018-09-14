@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/__init__.py
 import weakref
-from messenger.ext.ROPropertyMeta import ROPropertyMeta
+from helpers.ro_property import ROPropertyMeta
 from messenger.m_constants import PROTO_TYPE, PROTO_TYPE_NAMES
 from messenger.proto.bw import BWProtoPlugin
 from messenger.proto.bw_chat2 import BWProtoPlugin as BWProtoPlugin_chat2

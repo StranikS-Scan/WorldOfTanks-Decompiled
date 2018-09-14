@@ -9,17 +9,14 @@ class IGUIPermissions(object):
     def canChangeVehicle(self):
         return True
 
-
-class IPreQueuePermissions(IGUIPermissions):
-
     def canSendInvite(self):
+        return False
+
+    def canCreateSquad(self):
         return False
 
 
 class IPrbPermissions(IGUIPermissions):
-
-    def canSendInvite(self):
-        return False
 
     def canKick(self, team = 1):
         return False
@@ -63,9 +60,6 @@ class IPrbPermissions(IGUIPermissions):
 
 
 class IUnitPermissions(IGUIPermissions):
-
-    def canSendInvite(self):
-        return False
 
     def canKick(self):
         return False

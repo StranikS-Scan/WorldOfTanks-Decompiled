@@ -50,6 +50,8 @@ def init(preloadEverything, pricesToCollect = None):
     vehicles.init(preloadEverything, pricesToCollect)
     from items import tankmen
     tankmen.init(preloadEverything)
+    from . import qualifiers
+    qualifiers.init()
 
 
 def getTypeInfoByName(typeName):

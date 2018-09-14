@@ -1,0 +1,63 @@
+<fallout_5_2_12.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_12_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <vehicleKills>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <goodie>
+          <count>	4	</count>
+          <id>	5022	</id>
+        </goodie>
+        <goodie>
+          <count>	4	</count>
+          <id>	5038	</id>
+        </goodie>
+        <goodie>
+          <count>	4	</count>
+          <id>	5031	</id>
+        </goodie>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_12_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <vehicleKills>
+              <greaterOrEqual>	10	</greaterOrEqual>
+            </vehicleKills>
+            <results>
+              <key>	flagCapture	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_2_12.xml>

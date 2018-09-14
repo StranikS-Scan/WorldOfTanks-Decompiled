@@ -1,141 +1,54 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/event_battles.py
 import BigWorld
 from constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_DEBUG
 from PlayerEvents import g_playerEvents
-from gui import SystemMessages
-from gui.game_control import g_instance as g_gameCtrl, getFalloutCtrl
-from gui.prb_control import isParentControlActivated, isInEventBattlesQueue
+from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.context import pre_queue_ctx
-from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.functional.decorators import groupAmmoCheck
-from gui.prb_control.functional.default import PreQueueFunctional
-from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control.formatters import messages
-from gui.prb_control.settings import QUEUE_EVENT_TYPE, FUNCTIONAL_INIT_RESULT
+from gui.prb_control.functional import prequeue
+from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.prb_control.storage import prequeue_storage_getter
 
-class EventBattlesQueueFunctional(PreQueueFunctional):
+class _EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
 
-    def __init__(self, settings = None):
-        super(EventBattlesQueueFunctional, self).__init__(QUEUE_TYPE.EVENT_BATTLES, {QUEUE_EVENT_TYPE.ENQUEUED: g_playerEvents.onEnqueuedEventBattles,
-         QUEUE_EVENT_TYPE.DEQUEUED: g_playerEvents.onDequeuedEventBattles,
-         QUEUE_EVENT_TYPE.ENQUEUE_ERROR: g_playerEvents.onEnqueueEventBattlesFailure,
-         QUEUE_EVENT_TYPE.KICKED_FROM_QUEUE: g_playerEvents.onKickedFromEventBattles,
-         QUEUE_EVENT_TYPE.KICKED_FROM_ARENA: g_playerEvents.onKickedFromArena}, settings=settings)
-        self.__requestCtx = PrbCtrlRequestCtx()
+    def subscribe(self, functional):
+        g_playerEvents.onEnqueuedEventBattles += functional.onEnqueued
+        g_playerEvents.onDequeuedEventBattles += functional.onDequeued
+        g_playerEvents.onEnqueueEventBattlesFailure += functional.onEnqueueError
+        g_playerEvents.onKickedFromEventBattles += functional.onKickedFromQueue
+        g_playerEvents.onKickedFromArena += functional.onKickedFromArena
 
-    def init(self, ctx = None):
-        result = super(EventBattlesQueueFunctional, self).init(ctx)
-        g_gameCtrl.captcha.onCaptchaInputCanceled += self.onCaptchaInputCanceled
-        if self.isInQueue():
-            g_eventDispatcher.loadBattleQueue()
-            result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
-        return result
+    def unsubscribe(self, functional):
+        g_playerEvents.onEnqueuedEventBattles -= functional.onEnqueued
+        g_playerEvents.onDequeuedEventBattles -= functional.onDequeued
+        g_playerEvents.onEnqueueEventBattlesFailure -= functional.onEnqueueError
+        g_playerEvents.onKickedFromEventBattles -= functional.onKickedFromQueue
+        g_playerEvents.onKickedFromArena -= functional.onKickedFromArena
 
-    def fini(self, woEvents = False):
-        self.__requestCtx = None
-        g_gameCtrl.captcha.onCaptchaInputCanceled -= self.onCaptchaInputCanceled
-        super(EventBattlesQueueFunctional, self).fini(woEvents)
-        return
 
-    @groupAmmoCheck
-    def join(self, ctx, callback = None):
-        if self.__requestCtx.isProcessing():
-            LOG_ERROR('Request is processing', self.__requestCtx)
-            if callback:
-                callback(False)
-            return
-        if isParentControlActivated():
-            g_eventDispatcher.showParentControlNotification()
-            if callback:
-                callback(False)
-            return
-        if not hasattr(BigWorld.player(), 'enqueueEventBattles'):
-            if callback:
-                callback(False)
-            LOG_ERROR('Player can not join to event battles queue')
-            return
-        self.__requestCtx = ctx
-        self.__requestCtx.startProcessing(callback)
-        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs(), ctx.getBattleType())
-        LOG_DEBUG('Player is joining to event battles queue', ctx)
+class EventBattlesQueueFunctional(prequeue.AccountQueueFunctional):
 
-    def leave(self, ctx, callback = None):
-        if self.__requestCtx.isProcessing():
-            LOG_ERROR('Request is processing', self.__requestCtx)
-            if callback:
-                callback(False)
-            return
-        if hasattr(BigWorld.player(), 'dequeueEventBattles'):
-            if self.isInQueue():
-                self.__requestCtx = ctx
-                self.__requestCtx.startProcessing(callback)
-                BigWorld.player().dequeueEventBattles()
-            else:
-                super(EventBattlesQueueFunctional, self).leave(ctx, callback)
-        else:
-            if callback:
-                callback(False)
-            LOG_ERROR('Player can not exit from event battles queue')
+    def __init__(self, flags = FUNCTIONAL_FLAG.EVENT_BATTLES):
+        super(EventBattlesQueueFunctional, self).__init__(QUEUE_TYPE.EVENT_BATTLES, _EventBattlesEventsSubscriber(), flags)
+
+    @prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)
+    def storage(self):
+        return None
 
     def isInQueue(self):
         return isInEventBattlesQueue()
 
-    def hasGUIPage(self):
-        return True
+    def _doQueue(self, ctx):
+        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs(), ctx.getBattleType(), canAddToSquad=ctx.canAddToSquad())
+        LOG_DEBUG('Sends request on queuing to the event battles', ctx)
 
-    def doAction(self, action = None, dispatcher = None):
-        result = False
+    def _doDequeue(self, ctx):
+        BigWorld.player().dequeueEventBattles()
+        LOG_DEBUG('Sends request on dequeuing from the event battles')
 
-        def _leavePreQueue():
-            self.leave(pre_queue_ctx.LeavePreQueueCtx(waitingID='prebattle/leave'))
-
-        if not self.isInQueue():
-
-            def _joinResponse(success):
-                if not success:
-                    _leavePreQueue()
-
-            falloutCtrl = getFalloutCtrl()
-            self.join(pre_queue_ctx.JoinEventBattlesQueueCtx(map(lambda v: v.invID, falloutCtrl.getSelectedVehicles()), falloutCtrl.getBattleType(), waitingID='prebattle/join'), callback=_joinResponse)
-        else:
-            _leavePreQueue()
-        return result
-
-    def onEnqueued(self):
-        super(EventBattlesQueueFunctional, self).onEnqueued()
-        self.__requestCtx.stopProcessing(True)
+    def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()
-        g_eventDispatcher.updateUI()
+        return FUNCTIONAL_FLAG.LOAD_PAGE
 
-    def onDequeued(self):
-        super(EventBattlesQueueFunctional, self).onDequeued()
-        self.__requestCtx.stopProcessing(True)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
+    def _exitFromQueueUI(self):
         g_eventDispatcher.loadHangar()
-
-    def onEnqueueError(self, errorCode, _):
-        super(EventBattlesQueueFunctional, self).onEnqueueError(errorCode, _)
-        self.__requestCtx.stopProcessing(False)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
-
-    def onKickedFromQueue(self):
-        super(EventBattlesQueueFunctional, self).onKickedFromQueue()
-        self.__requestCtx.stopProcessing(True)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        g_eventDispatcher.loadHangar()
-        g_eventDispatcher.updateUI()
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
-
-    def onKickedFromArena(self, errorCode):
-        super(EventBattlesQueueFunctional, self).onKickedFromArena(errorCode)
-        self.__requestCtx.stopProcessing(True)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()
-        g_eventDispatcher.loadHangar()
-        g_eventDispatcher.updateUI()
-
-    def onCaptchaInputCanceled(self):
-        self.__requestCtx.stopProcessing(True)
-        g_prbCtrlEvents.onPreQueueFunctionalDestroyed()

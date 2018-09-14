@@ -271,7 +271,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         else:
             currentDefResLabel = str(BigWorld.wg_getIntegralFormat(defResVal))
             currentDefResValue = defResVal
-        defResValueFormatter = text_styles.defRes(FORMAT_PATTERN)
+        defResValueFormatter = text_styles.alert(FORMAT_PATTERN) if defResVal > maxDerResVal else text_styles.defRes(FORMAT_PATTERN)
         formattedDefResTotal = formatter(str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
         formattedDefResTotal += ' ' + icons.nut()
         result = {}

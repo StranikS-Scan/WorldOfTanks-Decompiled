@@ -1,0 +1,52 @@
+<02_malinovka.xml>
+  <name>	#arenas:02_malinovka/name	</name>
+  <description>	#arenas:02_malinovka/description	</description>
+  <geometry>	spaces/02_malinovka	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/02_malinovka/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/Intro_Malinovka	</loadingMusic>
+  <wwloadingMusic>	music_malinovka	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	75.599899 -391.945526	</position1>
+        </team1>
+        <team2>
+          <position2>	-372.699860 108.119644	</position2>
+        </team2>
+      </teamBasePositions>
+      <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	430.100 1.500	</position>
+        </team1>
+        <team2>
+          <position>	46.100 449.000	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-43.884850 -85.558708	</controlPoint>
+    </domination>
+  </gameplayTypes>
+  <useAdvancedPhysics>	true	</useAdvancedPhysics>
+</02_malinovka.xml>

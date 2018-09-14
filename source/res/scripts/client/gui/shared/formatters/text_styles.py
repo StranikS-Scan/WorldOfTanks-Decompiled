@@ -44,12 +44,36 @@ def highTitle(text):
     return _formatText('highTitle', text)
 
 
+def goldTextBig(text):
+    return _formatText('goldTextBig', text)
+
+
+def creditsTextBig(text):
+    return _formatText('creditsTextBig', text)
+
+
+def errCurrencyTextBig(text):
+    return _formatText('errCurrencyTextBig', text)
+
+
 def disabled(text):
     return _formatText('disabledText', text)
 
 
 def promoTitle(text):
     return _formatText('promoTitle', text)
+
+
+def bonusLocalText(text):
+    return _formatText('bonusLocalText', text)
+
+
+def bonusAppliedText(text):
+    return _formatText('bonusAppliedText', text)
+
+
+def bonusPreviewText(text):
+    return _formatText('bonusPreviewText', text)
 
 
 def promoSubTitle(text):
@@ -149,9 +173,15 @@ class _StylesBuilder(object):
         return self
 
     def render(self):
-        formattedStyles = map(lambda style: _formatText(*style), self.__chunks)
-        return self.__delimiter.join(formattedStyles)
+        result = []
+        for style, text in self.__chunks:
+            if isinstance(style, types.FunctionType):
+                result.append(style(text))
+            else:
+                result.append(_formatText(style, text))
+
+        return self.__delimiter.join(result)
 
 
-def builder(*args):
-    return _StylesBuilder(*args)
+def builder(delimiter = ''):
+    return _StylesBuilder(delimiter)

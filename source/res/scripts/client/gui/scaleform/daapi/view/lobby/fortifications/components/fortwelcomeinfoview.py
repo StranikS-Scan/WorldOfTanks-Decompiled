@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortWelcomeInfoView.py
+import Event
 from adisp import process
 from gui import makeHtmlString
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.FortWelcomeInfoViewMeta import FortWelcomeInfoViewMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -15,13 +17,15 @@ from gui.shared.formatters import text_styles
 from gui.shared.fortifications.context import CreateFortCtx
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_RESTRICTION
 from helpers import i18n
-from debug_utils import LOG_DEBUG
-__author__ = 'p_kosushko'
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 
 class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper):
 
     def __init__(self):
         super(FortWelcomeInfoView, self).__init__()
+        self._isMyClan = False
+        self.onFortCreationRequested = Event.Event()
+        self.onFortCreationDone = Event.Event()
 
     def onNavigate(self, code):
         LOG_DEBUG('navigate: %s' % code)
@@ -35,31 +39,40 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper):
         if not self.isDisposed():
             self.__updateData()
 
+    def setMyClan(self, isMyClan):
+        self._isMyClan = isMyClan
+        if not self.isDisposed():
+            self.__updateData()
+
     def _populate(self):
         super(FortWelcomeInfoView, self)._populate()
         self.startFortListening()
         self.__updateData()
-        clanSearch = self.__makeHyperLink('clanSearch', FORTIFICATIONS.FORTWELCOMEVIEW_CLANSEARCH)
-        clanCreate = self.__makeHyperLink('clanCreate', FORTIFICATIONS.FORTWELCOMEVIEW_CLANCREATE)
-        detail = self.__makeHyperLink('fortDescription', FORTIFICATIONS.FORTWELCOMEVIEW_HYPERLINK_MORE)
-        self.as_setHyperLinksS(clanSearch, clanCreate, detail)
+        self.as_setHyperLinksS(self.__makeHyperLink('clanSearch', FORTIFICATIONS.FORTWELCOMEVIEW_CLANSEARCH), self.__makeHyperLink('clanCreate', FORTIFICATIONS.FORTWELCOMEVIEW_CLANCREATE), self.__makeHyperLink('fortDescription', FORTIFICATIONS.FORTWELCOMEVIEW_HYPERLINK_MORE))
 
     @staticmethod
     def __makeHyperLink(linkType, textId):
-        text = i18n.makeString(textId)
-        attrs = {'linkType': linkType,
-         'text': text}
-        linkHtml = makeHtmlString('html_templates:lobby/fortifications', 'link', attrs)
-        return linkHtml
+        return makeHtmlString('html_templates:lobby/fortifications', 'link', {'linkType': linkType,
+         'text': i18n.makeString(textId)})
 
     def _dispose(self):
         self.stopFortListening()
+        try:
+            self.onFortCreationRequested.clear()
+            self.onFortCreationRequested = None
+            self.onFortCreationDone.clear()
+            self.onFortCreationDone = None
+        except:
+            LOG_CURRENT_EXCEPTION()
+
         super(FortWelcomeInfoView, self)._dispose()
+        return
 
     def _getCustomData(self):
         return {'isOnClan': g_clanCache.isInClan,
-         'canRoleCreateFortRest': self.fortCtrl.getPermissions().canCreate(),
-         'canCreateFortLim': self.fortCtrl.getLimits().isCreationValid()[0]}
+         'canRoleCreateFortRest': self.fortCtrl.getPermissions().canCreate() and self._isMyClan,
+         'canCreateFortLim': self.fortCtrl.getLimits().isCreationValid()[0] and self._isMyClan,
+         'isMyClan': self._isMyClan}
 
     def __updateData(self):
         data = self.getData()
@@ -86,12 +99,14 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper):
         text = text_styles.alert(i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_WARNING, minClanSize=minClanSize))
         header = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_HEADER)
         body = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_BODY, minClanSize=minClanSize)
-        return (text, header, body)
+        tooltip = makeTooltip(header, body)
+        return (text, tooltip)
 
     def __getClanMemberWelcomeText(self, data):
         return ''.join((text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCOMMANDER)), text_styles.neutral(data.get('clanCommanderName', ''))))
 
     def onCreateBtnClick(self):
+        self.onFortCreationRequested()
         g_fortSoundController.playCreateFort()
         self.requestFortCreation()
 
@@ -100,3 +115,4 @@ class FortWelcomeInfoView(FortWelcomeInfoViewMeta, FortViewHelper):
         result = yield self.fortProvider.sendRequest(CreateFortCtx('fort/create'))
         if result:
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_CREATED, type=SystemMessages.SM_TYPE.Warning)
+        self.onFortCreationDone()

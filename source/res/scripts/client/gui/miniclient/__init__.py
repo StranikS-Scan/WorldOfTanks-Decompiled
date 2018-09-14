@@ -5,20 +5,14 @@ import continue_download as _continue_download
 import contacts as _contacts
 import dynamic_squads as _dynamic_squads
 import promo_controller as _promo_controller
+import fallout_controller as _fallout_controller
+from gui.miniclient.notifications import configure_pointcuts as _notifications_configure_pointcuts
 from lobby import configure_pointcuts as _configure_lobby_pointcuts
 from tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
 from invitations import configure_pointcuts as _configure_invitation_pointcuts
 from fortified_regions import configure_pointcuts as _configure_fort_pointcuts
 from personal_quests import configure_pointcuts as _configure_personal_quests_pointcuts
-
-class CONTENT_TYPE:
-    DEFAULT = 0
-    SD_TEXTURES = 1
-    HD_TEXTURES = 2
-    INCOMPLETE = 3
-    TUTORIAL = 4
-    SANDBOX = 5
-
+from constants import CONTENT_TYPE
 
 def configure_state():
     content_type = ResMgr.activeContentType()
@@ -32,6 +26,7 @@ def configure_state():
         _continue_download.OnFailLoadingFramePointcut()
         _contacts.CreateSquadPointcut()
         _configure_lobby_pointcuts(config)
+        _notifications_configure_pointcuts()
         _configure_fort_pointcuts()
         _configure_tech_tree_pointcuts(config)
         _configure_invitation_pointcuts()
@@ -40,6 +35,7 @@ def configure_state():
         _dynamic_squads.DisableGameSettingPointcut()
         _dynamic_squads.InviteReceivedMessagePointcut()
         _promo_controller.ShowPromoBrowserPointcut()
+        _fallout_controller.InitFalloutPointcut()
 
 
 def _get_config(content_type):

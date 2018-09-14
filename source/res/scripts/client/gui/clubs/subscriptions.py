@@ -8,6 +8,7 @@ from shared_utils import forEach
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.ListenersCollection import ListenersCollection
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
+from shared_utils import BoundMethodWeakref
 from gui.clubs import contexts as club_ctx
 from gui.clubs.club_helpers import getClientClubsMgr
 from gui.clubs.items import Club
@@ -51,7 +52,7 @@ class _Subscription(Notifiable, ClubsListeners):
             self.__clubsCtrl = weakref.proxy(clubsCtrl)
         else:
             self.__clubsCtrl = None
-        self.addNotificator(PeriodicNotifier(lambda : _SET - 10.0, self.__onSubscriptionUpdate, (_SET,)))
+        self.addNotificator(PeriodicNotifier(lambda : _SET - 10.0, BoundMethodWeakref(self.__onSubscriptionUpdate), (_SET,)))
         self.__comparators = [SimpleTypeComparator('name', 'onClubNameChanged', 'getUserName'),
          SimpleTypeComparator('description', 'onClubDescriptionChanged', 'getUserDescription'),
          SimpleTypeComparator('owner', 'onClubOwnerChanged', 'getOwnerDbID'),
@@ -78,12 +79,16 @@ class _Subscription(Notifiable, ClubsListeners):
         if self.isSubscribed():
             self.__doUnsubscribe()
 
+    def clear(self):
+        super(_Subscription, self).clear()
+
     def fini(self):
         self.stop()
         self.__lastRequestTime = -1
         self.__club = None
         self.__clubsCtrl = None
         self.__comparators = []
+        self.clearNotification()
         self.clear()
         return
 

@@ -70,7 +70,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
 
     def _canInstallItems(self):
         rootItem = g_itemsCache.items.getItemByCD(self._rootCD)
-        return rootItem.isInInventory and not rootItem.lock and not rootItem.repairCost
+        return rootItem.isInInventory and not rootItem.isLocked and not rootItem.repairCost
 
 
 class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
@@ -124,5 +124,5 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
             options.extend([self._makeItem(VEHICLE.BUY, MENU.CONTEXTMENU_BUY, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}),
              self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': NODE_STATE.isAvailable2Sell(self._nodeState)}),
              self._makeSeparator(),
-             self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': NODE_STATE.inInventory(self._nodeState) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
+             self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': (NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
         return options

@@ -1,7 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TutorialManager.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.abstract.TutorialManagerMeta import TutorialManagerMeta
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -19,29 +21,27 @@ except ImportError:
 
 _Event = events.TutorialEvent
 _TRIGGER_TYPES = TUTORIAL_TRIGGER_TYPES
-_CUSTOM_COMPONENTS = ('TankCarousel', 'PremiumButton', 'FreeXpButton', 'ResearchRootNode')
+_CUSTOM_COMPONENTS = ('TankCarousel', 'PremiumButton', 'FreeXpButton', 'ResearchRootNode', 'BattleSelectorBar', 'FalloutQuestsTabButton')
 
 class TutorialManager(TutorialManagerMeta):
 
-    def __init__(self, isEnabled = False, path = ''):
+    def __init__(self, app, isEnabled = False, path = ''):
         super(TutorialManager, self).__init__()
         self._isEnabled = isEnabled
         self._aliases = {}
         self._components = set()
+        self.seEnvironment(app)
         if isEnabled:
             self._config = gui_config.readConfig(path)
         else:
             self._config = None
         return
 
-    def getViewTutorialID(self, alias):
+    def getViewTutorialID(self, name):
         if not self._isEnabled:
             return None
-        elif alias in self._aliases.values():
-            return alias
         else:
-            return None
-            return None
+            return name
 
     def getFoundComponentsIDs(self):
         return self._components
@@ -67,7 +67,8 @@ class TutorialManager(TutorialManagerMeta):
             if 'padding' not in content:
                 content['padding'] = self._config.getItem(componentID).padding
             isCustomCmp = True if componentID in _CUSTOM_COMPONENTS else False
-            self.as_showHintS(self._aliases[componentID], componentID, content, isCustomCmp)
+            viewTutorialID = self.__getViewTutorialID(componentID)
+            self.as_showHintS(viewTutorialID, componentID, content, isCustomCmp)
             if triggers is not None:
                 self.as_setTriggersS(componentID, triggers)
             return
@@ -75,8 +76,9 @@ class TutorialManager(TutorialManagerMeta):
     def closeInteractiveHint(self, componentID):
         if not self._validate(componentID):
             return
+        viewTutorialID = self.__getViewTutorialID(componentID)
         self.as_setTriggersS(componentID, ())
-        self.as_hideHintS(self._aliases[componentID], componentID)
+        self.as_hideHintS(viewTutorialID, componentID)
 
     def onComponentFound(self, componentID):
         self._components.add(componentID)
@@ -120,3 +122,11 @@ class TutorialManager(TutorialManagerMeta):
         self._components.clear()
         super(TutorialManager, self)._dispose()
         return
+
+    def __getViewTutorialID(self, componentID):
+        viewTutorialID = self._aliases[componentID]
+        if self.app is not None:
+            view = self.app.containerManager.getView(ViewTypes.WINDOW, {POP_UP_CRITERIA.VIEW_ALIAS: viewTutorialID})
+            if view is not None:
+                viewTutorialID = view.uniqueName
+        return viewTutorialID

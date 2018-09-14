@@ -1,0 +1,45 @@
+<weather.xml>
+  <Clear></Clear>
+  <Cloudy>
+    <windSpeed>	1.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <default>	spaces/highlands	</default>
+  </Cloudy>
+  <Cloudy2>
+    <windSpeed>	1.5 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Cloudy2>
+  <Urban>
+    <rain>	0.25	</rain>
+    <sun>	1.2 1.5 1.9 1.0	</sun>
+    <ambient>	1.1 1.1 1.2 1.0	</ambient>
+    <fog>	0.5 0.5 0.5 2.0	</fog>
+    <windSpeed>	6.0 0	</windSpeed>
+    <windGustiness>	2.0	</windGustiness>
+    <default>	spaces/urban	</default>
+  </Urban>
+  <Cloudy3>
+    <windSpeed>	2.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+    <default>	spaces/desert	</default>
+  </Cloudy3>
+  <Cloudy4>
+    <windSpeed>	1.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Cloudy4>
+  <Stormy>
+    <sun>	1.101961 1.113726 1.011765 1.000000	</sun>
+    <ambient>	0.9 0.9 0.95 1.0	</ambient>
+    <fog>	0.7 0.7 0.75 2.0	</fog>
+    <windSpeed>	7.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Stormy>
+  <Hail>
+    <rain>	1	</rain>
+    <sun>	1.000000 1.078431 1.000000 1.000000	</sun>
+    <ambient>	1.000000 0.890196 0.666667 1.000000	</ambient>
+    <fog>	0.803922 0.992157 0.921569 3.000000	</fog>
+    <windSpeed>	4.0 0	</windSpeed>
+    <windGustiness>	1.0	</windGustiness>
+  </Hail>
+</weather.xml>

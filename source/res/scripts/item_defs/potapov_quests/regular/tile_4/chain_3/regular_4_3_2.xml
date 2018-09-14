@@ -1,0 +1,45 @@
+<regular_4_3_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	15	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	300000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	15	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_3_2.xml>

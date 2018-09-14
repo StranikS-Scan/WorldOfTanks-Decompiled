@@ -1,0 +1,60 @@
+<regular_2_1_4.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_1_4_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	250	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_1_4_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <results>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	250	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	killsAssistedTrack	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_1_4.xml>

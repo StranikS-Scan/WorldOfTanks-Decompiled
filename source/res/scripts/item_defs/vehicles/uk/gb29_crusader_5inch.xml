@@ -1,0 +1,553 @@
+<gb29_crusader_5inch.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	14	</forward>
+    <backward>	43.5	</backward>
+  </speedLimits>
+  <repairCost>	10.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB29_Crusader_5inch/Crusader_5inch_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	14	</armor_1>
+      <armor_2>	12	</armor_2>
+      <armor_3>	28.3	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	7	</armor_5>
+      <armor_6>	10.4	</armor_6>
+      <armor_7>	28.3	</armor_7>
+      <armor_8>	4	</armor_8>
+      <armor_9>	28.3	</armor_9>
+      <armor_10>	9	</armor_10>
+      <armor_11>	6.4	</armor_11>
+      <armor_12>	7	</armor_12>
+      <armor_13>	20	</armor_13>
+      <armor_14>	28.3	</armor_14>
+    </armor>
+    <primaryArmor>	armor_14 armor_3 armor_4	</primaryArmor>
+    <weight>	7358	</weight>
+    <maxHealth>	280	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.38 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.38 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.79	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.2273 -1.822	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.56191 -0.043424 1.87604	</rayStart>
+        <rayEnd>	1.16191 -0.043424 1.87604	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-0.644077 0.752104 0.615399	</rayStart>
+        <rayEnd>	-0.629348 0.352376 0.615398	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	-0.00657613 0.662493 2.41378	</rayStart>
+        <rayEnd>	-0.00657605 0.262495 2.41378	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.72	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.55305 0.0530112 -2.72069	</rayStart>
+        <rayEnd>	-1.15305 0.0530111 -2.72069	</rayEnd>
+        <rayUp>	0.000000 0.994522 -0.104528	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB29_Crusader_5inch>
+      <userString>	#gb_vehicles:Chassis_GB29_Crusader_5inch	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <unlocks>
+        <chassis>	Chassis_GB29_Crusader_5inch_2	  <cost>	9000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	9000	</weight>
+      <maxLoad>	19000	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	17000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	1.04	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.346404	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.246978	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.346404	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.251131	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41006	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41006	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.16381 1.71809	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.818110 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.528740	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB29_Crusader_5inch>
+    <Chassis_GB29_Crusader_5inch_2>
+      <userString>	#gb_vehicles:Chassis_GB29_Crusader_5inch_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	9000	</weight>
+      <maxLoad>	21000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	19000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.44 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	1.04	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.346404	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.246978	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.346404	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.251131	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41006	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41006	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.16381 1.71809	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.818350 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.528740	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB29_Crusader_5inch_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB29_Crusader_5inch>
+      <ceilless>	true	</ceilless>
+      <userString>	#gb_vehicles:Turret_1_GB29_Crusader_5inch	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	70	</maxHealth>
+      <rotationSpeed>	14	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_4.5inch_SPG_Howitzer>	shared	  <maxAmmo>	64	</maxAmmo>
+          <unlocks>
+            <gun>	_5.5inch_SPG_Gun	  <cost>	14000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.38	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	4.5	</aimingTime>
+          <turretYawLimits>	-17 23	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00229827 0.568825	</rayStart>
+              <rayEnd>	0.0206342 -0.0149691 0.563829	</rayEnd>
+              <rayUp>	0.09 0.081 4	</rayUp>
+              <size>	0.356	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_4.5inch_SPG_Howitzer>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000000 0.672481 0.29739	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 0.602 0.000 1.000 0.000 0.114 0.100 0.500 0.500 0.000 0.500 0.600 0.306 1.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_GB29_Crusader_5inch>
+    <Turret_2_GB29_Crusader_5inch>
+      <ceilless>	true	</ceilless>
+      <userString>	#gb_vehicles:Turret_2_GB29_Crusader_5inch	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	70	</maxHealth>
+      <rotationSpeed>	14	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_5.5inch_SPG_Gun>	shared	  <maxAmmo>	32	</maxAmmo>
+          <unlocks>
+            <vehicle>	GB79_FV206	  <cost>	118200	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	28	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.46	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	6.5	</aimingTime>
+          <turretYawLimits>	-19 20	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 0.140985 2.27667	</rayStart>
+              <rayEnd>	-0.00485389 0.161217 2.2733	</rayEnd>
+              <rayUp>	0.126 0.115 4	</rayUp>
+              <size>	0.667	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_5.5inch_SPG_Gun>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB29_Crusader_5inch/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB29_Crusader_5inch/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB29_Crusader_5inch/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.6142 0.2649	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 0.824 0.000 1.000 0.000 0.089 0.100 0.500 0.500 0.320 0.500 0.447 0.114 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB29_Crusader_5inch>
+  </turrets0>
+  <engines>
+    <Nuffield_liberty_MKIV>	shared	  <unlocks>
+        <engine>	Nuffield_liberty_MKV	  <cost>	1000	</cost>
+        </engine>
+      </unlocks>
+    </Nuffield_liberty_MKIV>
+    <Nuffield_liberty_MKV>	shared	</Nuffield_liberty_MKV>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N9>	shared	  <unlocks>
+        <radio>	N19Mk1	  <cost>	1480	</cost>
+        </radio>
+      </unlocks>
+    </N9>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb29_crusader_5inch.xml>

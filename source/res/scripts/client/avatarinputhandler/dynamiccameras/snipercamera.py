@@ -8,7 +8,7 @@ import weakref
 from AvatarInputHandler import mathUtils, DynamicCameras, AimingSystems, cameras
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.Oscillator import Oscillator
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, readBool, ImpulseReason, FovExtended
 import BattleReplay
@@ -160,7 +160,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         impulse.normalise()
         if reason == ImpulseReason.OTHER_SHOT and distance <= self.__dynamicCfg['maxShotImpulseDistance']:
             impulse *= impulseValue / distance
-        elif reason == ImpulseReason.SPLASH:
+        elif reason == ImpulseReason.SPLASH or reason == ImpulseReason.HE_EXPLOSION:
             impulse *= impulseValue / distance
         elif reason == ImpulseReason.VEHICLE_EXPLOSION and distance <= self.__dynamicCfg['maxExplosionImpulseDistance']:
             impulse *= impulseValue / distance
@@ -273,7 +273,7 @@ class SniperCamera(ICamera, CallbackDelayer):
 
     def __calcCurOscillatorAcceleration(self, deltaTime):
         vehicle = BigWorld.player().vehicle
-        if vehicle is None:
+        if vehicle is None or not vehicle.isAlive():
             return Vector3(0, 0, 0)
         else:
             curVelocity = vehicle.filter.velocity

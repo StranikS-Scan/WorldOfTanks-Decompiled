@@ -28,6 +28,7 @@ from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 import TankHangarShadowProxy
 import weakref
 import FMOD
+import json
 if FMOD.enabled:
     import VehicleAppearance
 from VehicleEffects import RepaintParams
@@ -41,6 +42,7 @@ _CFG = {}
 _DEFAULT_CFG = {}
 _HANGAR_CFGS = {}
 _EVENT_HANGAR_PATHS = {}
+_EVENT_HANGAR_VISIBILITY_MASK = {}
 
 class HangarCameraYawFilter():
 
@@ -165,15 +167,20 @@ class ClientHangarSpace():
         _CFG = copy.copy(_DEFAULT_CFG[type])
         spacePath = _DEFAULT_CFG[type]['path']
         LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(type, spacePath))
+        visibilityMask = 4294967295L
         if game_control.g_instance.igr.getRoomType() == constants.IGR_TYPE.PREMIUM:
             if _CFG.get(self.__igrHangarPathKey) is not None:
                 spacePath = _CFG[self.__igrHangarPathKey]
         if _EVENT_HANGAR_PATHS.has_key(isPremium):
             spacePath = _EVENT_HANGAR_PATHS[isPremium]
+        if _EVENT_HANGAR_VISIBILITY_MASK.has_key(isPremium):
+            visibilityMask = _EVENT_HANGAR_VISIBILITY_MASK[isPremium]
         safeSpacePath = _DEFAULT_CFG[type]['path']
         if ResMgr.openSection(spacePath) is None:
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
+            visibilityMask = 4294967295L
+        BigWorld.wg_setSpaceItemsVisibilityMask(self.__spaceId, visibilityMask)
         try:
             self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath)
         except:
@@ -212,6 +219,11 @@ class ClientHangarSpace():
         g_postProcessing.enable('hangar')
         BigWorld.pauseDRRAutoscaling(True)
         return
+
+    def playHangarMusic(self, restart = False):
+        MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes, restart)
+        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
+        MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback = None):
         if self.__vAppearance is None:
@@ -1095,17 +1107,29 @@ class _ClientHangarSpacePathOverride():
         for notification in diff['added']:
             if not notification['data']:
                 continue
+            visibilityMask = 4294967295L
+            path = None
+            try:
+                data = json.loads(notification['data'])
+                path = data['hangar']
+                visibilityMask = int(data.get('visibilityMask', visibilityMask), base=16)
+            except:
+                path = notification['data']
+
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR:
-                _EVENT_HANGAR_PATHS[False] = notification['data']
+                _EVENT_HANGAR_PATHS[False] = path
+                _EVENT_HANGAR_VISIBILITY_MASK[False] = visibilityMask
                 if not isPremium:
                     hasChanged = True
             elif notification['type'] == _SERVER_CMD_CHANGE_HANGAR_PREM:
-                _EVENT_HANGAR_PATHS[True] = notification['data']
+                _EVENT_HANGAR_PATHS[True] = path
+                _EVENT_HANGAR_VISIBILITY_MASK[True] = visibilityMask
                 if isPremium:
                     hasChanged = True
 
         if hasChanged and g_hangarSpace.inited:
             g_hangarSpace.refreshSpace(isPremium, True)
+        return
 
 
 g_clientHangarSpaceOverride = _ClientHangarSpacePathOverride()

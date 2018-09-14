@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/prb_control/restrictions/__init__.py
 from constants import PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
-from gui.server_events import g_eventsCache
 from prebattle_shared import decodeRoster
 
 def createPermissions(functional, pID = None):
@@ -10,7 +9,7 @@ def createPermissions(functional, pID = None):
         team, _ = decodeRoster(rosterKey)
         pInfo = functional.getPlayerInfo(pID=pID, rosterKey=rosterKey)
         if pInfo is not None:
-            return clazz(roles=functional.getRoles(pDatabaseID=pInfo.dbID, clanDBID=pInfo.clanDBID, team=team), pState=pInfo.state, teamState=functional.getTeamState(team=team))
+            return clazz(roles=functional.getRoles(pDatabaseID=pInfo.dbID, clanDBID=pInfo.clanDBID, team=team), pState=pInfo.state, teamState=functional.getTeamState(team=team), hasLockedState=functional.hasLockedState())
     return clazz()
 
 

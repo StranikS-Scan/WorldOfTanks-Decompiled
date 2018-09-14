@@ -1,0 +1,340 @@
+<gb70_fv4202_105.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	12.3	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB70_FV4202_105/FV4202_105_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	121	</armor_1>
+      <armor_2>	76	</armor_2>
+      <armor_3>	51	</armor_3>
+      <armor_4>	32	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	16	</armor_6>
+      <armor_7>	32	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	13	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_11>
+      <armor_12>	197	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	20634	</weight>
+    <maxHealth>	1560	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB70_FV4202_105/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB70_FV4202_105/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB70_FV4202_105/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 32.00 0.38 1.00 0.05 0.28	</pitchParams>
+      <rollParams>	1.00 0.22 32.00 0.38 1.00 0.05 0.28	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.372629 0.191183	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB70_FV4202_105/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.995 0.000549048 2.92079	</rayStart>
+        <rayEnd>	1.595 0.000549048 2.92079	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.995 -0.0365621 2.40785	</rayStart>
+        <rayEnd>	-1.595 -0.0365621 2.40785	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB70_FV4202_105>
+      <userString>	#gb_vehicles:Chassis_GB70_FV4202_105	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	82500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	8500	</weight>
+      <maxLoad>	42500	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
+      <brakeForce>	50000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB70_FV4202_105/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB70_FV4202_105/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB70_FV4202_105/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.58	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.72	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.3398	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.136053	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.421728	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.433345	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.3398	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.136053	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.421728	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.433345	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 1.05737 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB70_FV4202_105/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.44043 2.1615	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.961210 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.586050 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.213700	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB70_FV4202_105>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB70_FV4202_105>
+      <userString>	#gb_vehicles:Turret_1_GB70_FV4202_105	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	66000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	125	</armor_1>
+        <armor_2>	196	</armor_2>
+        <armor_3>	120	</armor_3>
+        <armor_4>	35	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	196	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	45	</armor_9>
+        <armor_10>	25	</armor_10>
+        <armor_11>	170	</armor_11>
+        <armor_12>	140	</armor_12>
+      </armor>
+      <primaryArmor>	armor_2 armor_7 armor_4	</primaryArmor>
+      <weight>	8500	</weight>
+      <maxHealth>	390	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	410	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Gun_FV4202>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.297449 10 0.361111 0 0.638889 0 0.702551 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	8.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB70_FV4202_105/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB70_FV4202_105/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB70_FV4202_105/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB70_FV4202_105/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 -0.00209996 2.84651	</rayStart>
+              <rayEnd>	-0.0270928 0.000708699 2.84587	</rayEnd>
+              <rayUp>	0.092 0.089 4	</rayUp>
+              <size>	0.667	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </Gun_FV4202>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB70_FV4202_105/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB70_FV4202_105/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB70_FV4202_105/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB70_FV4202_105/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000000 0.432051 1.02	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	0.010553 0.641244 -1.69184	</rayStart>
+          <rayEnd>	0.010553 0.641244 -1.29184	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-1.54344 0.512023 -0.86285	</rayStart>
+          <rayEnd>	-1.16619 0.512023 -0.729881	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.54344 0.512023 -0.86285	</rayStart>
+          <rayEnd>	1.16619 0.512023 -0.729881	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.104 -0.022 1.071 -0.000 1.000 0.000 0.500 0.448 0.631 0.500 0.000 0.500 0.270 0.100 0.347	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
+    </Turret_1_GB70_FV4202_105>
+  </turrets0>
+  <engines>
+    <Engine_FV4202>	shared	</Engine_FV4202>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Radio_FV4202>	shared	</Radio_FV4202>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb70_fv4202_105.xml>

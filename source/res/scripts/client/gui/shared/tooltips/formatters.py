@@ -41,9 +41,14 @@ def packTotalItemsBlockData(counter, text, counterVisible):
      'counterVisible': counterVisible})
 
 
-def packTextParameterBlockData(name, value, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, padding = None):
-    return packBlockDataItem(linkage, {'name': name,
-     'value': value}, padding)
+def packTextParameterBlockData(name, value, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth = -1, gap = 5, padding = None):
+    data = {'name': name,
+     'value': value}
+    if valueWidth != -1:
+        data['valueWidth'] = valueWidth
+    if gap != -1:
+        data['gap'] = gap
+    return packBlockDataItem(linkage, data, padding)
 
 
 def packBuildUpBlockData(blocks, gap = 0, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding = None):
@@ -83,3 +88,19 @@ def packImageTextBlockData(title = None, desc = None, img = None, imgPadding = N
     if txtOffset != 0:
         data['textsOffset'] = txtOffset
     return packBlockDataItem(linkage, data, padding)
+
+
+def packImageBlockData(img = None, align = BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_LINKAGE, width = -1, height = -1, padding = None):
+    data = {'align': align}
+    if img is not None:
+        data['imagePath'] = img
+    if width != -1:
+        data['width'] = width
+    if height != -1:
+        data['height'] = height
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packSaleTextParameterBlockData(name, saleData, linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding = None):
+    return packBlockDataItem(linkage, {'name': name,
+     'saleData': saleData}, padding)

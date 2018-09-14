@@ -53,6 +53,10 @@ def checkmark():
     return _getIcon('checkmark')
 
 
+def envelop():
+    return _getIcon('envelope')
+
+
 def info():
     return _getIcon('info')
 
@@ -83,6 +87,10 @@ def nutStat():
 
 def clock():
     return _getIcon('clock')
+
+
+def quest():
+    return _getIcon('quest')
 
 
 def makeImageTag(source, width = 16, height = 16, vSpace = -4, hSpace = 0):

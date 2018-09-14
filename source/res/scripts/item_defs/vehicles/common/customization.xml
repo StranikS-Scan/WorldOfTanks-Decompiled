@@ -1,0 +1,238 @@
+<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan">
+	<!-- The namespaces enable tags like <ussr:T-43> -->
+	<!-- RGB of typical armor color. Is used for showing of previews. -->
+	<armorColor> 15 36 36 0 </armorColor>
+	<inscriptionColors>
+		<!-- RGBA in [0, 255]-->
+		<!-- Note: indices of items are saved into DB, and therefore should not change. -->
+		<c0> 0 0 0 4 </c0>
+		<c1> 0 0 0 5 </c1>
+		<c2> 0 0 0 6 </c2>
+		<c3> 0 0 0 0 </c3>
+		<c4> 0 0 0 0 </c4>
+		<c5> 0 0 0 0 </c5>
+		<c6> 0 0 0 0 </c6>
+		<c7> 0 0 0 0 </c7>
+		<c8> 0 0 0 0 </c8>
+		<c9> 0 0 0 0 </c9>
+		<c10> 0 0 0 0 </c10>
+		<c11> 0 0 0 0 </c11>
+		<c12> 0 0 0 0 </c12>
+		<c13> 0 0 0 0 </c13>
+		<c14> 0 0 0 0 </c14>
+		<c15> 0 0 0 0 </c15>
+	</inscriptionColors>
+	<inscriptions>
+		<!-- Properties of inscription group:
+			userString : key to a user-visible name.
+			igrType : optional IGR type (optional, 0 is default).
+			priceFactor : group price factor.
+			notInShop : not in shop (optional, False is default.)
+			allow (optional): space-delimited list of names of vehicles (within nation) that are allowed
+				to use this inscription. If the list is empty, all vehicles are allowed to.
+			deny (optional): space-delimited list of names of vehicles (within nation) that are disallowed
+				to use this inscription. If the list is empty, no vehicles are disallowed to.
+			inscriptions : list of inscriptions.
+		-->
+		<!-- Properties of each inscription:
+			id : identifier unique among all inscriptions in all groups, integer in [5001, 16383].
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+			userString (optional) : key to a user-visible name.
+			isFeatured (optional) : true or false. If true, the iscription is marked as "featured" in GUI.
+		-->
+		<IGR>
+			<userString> #vehicle_customization:inscription/IGR</userString>
+			<priceFactor>0.0 </priceFactor>
+			<igrType>2</igrType>
+			<inscriptions>
+				<!--//BLOCK_BEGIN:NONCN_INSCRIPTIONS//-->
+				<!-- -->
+				<inscription>
+					<id>5001</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_01.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/victory</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5002</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_02.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/life</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5003</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_03.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/kill</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5004</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_04.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/marine </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5005 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_05.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/win </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5006</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_06.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/charge</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5007</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_07.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/loyalty </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5008</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_08.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/forward</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 5009</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_09.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/unity</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 5010</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_10.dds </texName>
+					<userString> #vehicle_customization:inscription/IGR/tanks</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<!-- -->
+				<!--//BLOCK_END:NONCN_INSCRIPTIONS//-->
+				<!--//BLOCK_BEGIN:CN_INSCRIPTIONS//-->
+				<!--
+				<inscription>
+					<id>5101</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5101.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/noodle</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5102</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5102.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/free</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5103</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5103.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/hour</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5104</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5104.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/night</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5105 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5105.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/administrator</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5106</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5106.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/team</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5107</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5107.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/form </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5108</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5108.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/lame</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>5109</id>
+					<texName> gui/maps/vehicles/decals/inscriptions/IGR/inscription_5109.dds </texName>
+					<userString> #vehicle_customization_cn:inscription/IGR/seat</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				-->
+				<!--//BLOCK_END:CN_INSCRIPTIONS//-->
+			</inscriptions>
+		</IGR>
+	</inscriptions>
+	<insigniaOnGun>
+		<!-- Properties for each insignia:
+			'id': int > 0 - rank of the insignia
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+		-->
+		<insignia>
+			<id>1</id>
+			<texName>gui/maps/vehicles/decals/insignia/gun_ussr_1.dds</texName>
+		</insignia>
+	</insigniaOnGun>
+	<camouflageGroups>
+		<!-- Properties of camouflage group:
+			userString : key to a user-visible name.
+			igrType : optional IGR type (optional, 0 is default).
+		-->
+		<!--exampleCamouflageGroup>
+			<igrType>1</igrType>
+			<userString> #vehicle_customization:camouflage/exampleCamouflageGroup </userString>
+		</exampleCamouflageGroup-->
+	</camouflageGroups>
+	<camouflages>
+		<!-- Fields of each camouflage section:
+			id: int in [5001, 65535] unique among all camouflages.
+				Warning: IDs are saved into DB, and therefore should not change.
+			igrType : inscription IGR type.
+			kind: winter, summer or desert.
+			group: one of names from <camouflageGroups>.
+			priceFactor: factor to apply to base price of camouflages.
+			invisibilityFactor: factor to apply to <invisibility/camouflageBonus> of the vehicle.
+			description: optional, key to localized (user-friendly) description of the camouflage.
+			texture: name of texture file.
+			colors: 4 subsections of ints in [0, 255]: <> R G B A </>.
+			allow (optional): space-delimited list of names of vehicles (within nation) that are allowed
+				to use this camouflage. If the list is empty, all vehicles are allowed to.
+			deny (optional): space-delimited list of names of vehicles (within nation) that are disallowed
+				to use this camouflage. If the list is empty, no vehicles are disallowed to.
+			tiling (optional): sequence of <[nation_name:]vehicle_name> x y offs_x offs_z </[nation_name:]vehicle_name>.
+				The nation_name part may be omitted if the vehicle_name is within the default nation for this file.
+			isNew (optional): bool, if true, the camouflage is marked as "new" in GUI.
+			notInShop (optional): bool, if true, the camouflage is not shown in the shop.
+		-->
+		<!--exampleCamouflage>
+			<texture>vehicles/any/Camouflage/exampleCamouflageGroup.dds</texture>
+			<priceFactor>0.000000</priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description/>
+			<id> 5001 </id>
+			<kind> desert </kind>
+			<group> exampleCamouflageGroup </group>
+			<deny> usa:T32 </deny>
+			<allow> usa:T32 </allow>
+			<colors>
+				<c0>138 90 68 219</c0>
+				<c1>203 135 67 223</c1>
+				<c2>202 169 123 223</c2>
+				<c3>112 67 46 0</c3>
+			</colors>
+			<tiling>
+				<germany:Hummel>5 5 0.000000 0.000000</germany:Hummel>
+			</tiling>
+			<notInShop> true </notInShop>
+		</exampleCamouflage-->
+	</camouflages>
+</root>

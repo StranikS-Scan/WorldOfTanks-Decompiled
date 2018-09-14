@@ -1,0 +1,344 @@
+<ch22_113.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	50	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <repairCost>	11.172	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/chinese/Ch22_113/113_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	120	</armor_1>
+      <armor_2>	100	</armor_2>
+      <armor_3>	90	</armor_3>
+      <armor_4>	70	</armor_4>
+      <armor_5>	90	</armor_5>
+      <armor_6>	90	</armor_6>
+      <armor_7>	50	</armor_7>
+      <armor_8>	70	</armor_8>
+      <armor_9>	50	</armor_9>
+      <armor_10>	40	</armor_10>
+      <armor_11>	25	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	30	</armor_13>
+      <armor_14>	0	</armor_14>
+      <armor_15>	120	</armor_15>
+      <armor_16>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	18858	</weight>
+    <maxHealth>	1840	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/chinese/Ch22_113/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/chinese/Ch22_113/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 36.00 0.48 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.48 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.28	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.001626 0.451953 0.078986	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/chinese/Ch22_113/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.558104 0.54509 2.46867	</rayStart>
+        <rayEnd>	-0.558104 0.172954 2.32199	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_Ch22_113>
+      <userString>	#china_vehicles:Chassis_Ch22_113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	61350.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	48000	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.7	</terrainResistance>
+      <brakeForce>	48000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch22_113/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch22_113/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.72	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.52	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.294181	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.41512	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.412063	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.294181	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.41512	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.412063	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <hullPosition>	0.000000 1.08788 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch22_113/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.323 2.37015	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.631520 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.631820 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.006570	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch22_113>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ch22_113>
+      <userString>	#china_vehicles:Turret_1_Ch22_113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	61100.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	240	</armor_1>
+        <armor_2>	200	</armor_2>
+        <armor_3>	160	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	120	</armor_5>
+        <armor_6>	100	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	160	</armor_8>
+        <armor_9>	40	</armor_9>
+        <armor_10>	200	</armor_10>
+        <armor_11>	40	</armor_11>
+        <armor_12>	0	</armor_12>
+        <armor_13>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_13>
+        <armor_14>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_14>
+        <armor_15>	200	</armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	12000	</weight>
+      <maxHealth>	460	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_122-mm_60-122T>	shared	  <maxAmmo>	34	</maxAmmo>
+          <armor>
+            <armor_1>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	10.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.7	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 4 0.366894 4 0.430556 1 0.569444 1 0.633106 4 1 4	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch22_113/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch22_113/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch22_113/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00732233 0.00177907 2.20316	</rayStart>
+              <rayEnd>	-0.360519 -0.142349 2.19892	</rayEnd>
+              <rayUp>	0.122 0.119 2	</rayUp>
+              <size>	0.7	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122-mm_60-122T>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch22_113/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch22_113/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch22_113/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch22_113/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.001268 0.268682 1.17555	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.23214 0.375233 0.645432	</rayStart>
+          <rayEnd>	-0.915135 0.169762 0.513946	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.23214 0.375233 0.645432	</rayStart>
+          <rayEnd>	0.915135 0.169762 0.513946	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.4192 0.326169 -0.232725	</rayStart>
+          <rayEnd>	-1.04332 0.190449 -0.249913	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.4192 0.326169 -0.232725	</rayStart>
+          <rayEnd>	1.04332 0.190449 -0.249913	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.936 0.000 1.000 0.000 0.600 0.156 0.853 0.331 0.358 0.500 0.239 0.500 0.234 0.457 0.269	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
+    </Turret_1_Ch22_113>
+  </turrets0>
+  <engines>
+    <_V-2-54SC>	shared	</_V-2-54SC>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <A-220B_1>	shared	</A-220B_1>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	china_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</ch22_113.xml>

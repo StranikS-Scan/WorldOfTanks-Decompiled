@@ -32,6 +32,8 @@ class VEHICLE_VIEW_STATE(object):
     OBSERVED_BY_ENEMY = 4096
     RESPAWNING = 8192
     SWITCHING = 16384
+    SHOW_DEATHZONE_TIMER = 32768
+    HIDE_DEATHZONE_TIMER = 65536
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')

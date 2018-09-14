@@ -1,0 +1,73 @@
+<regular_3_3_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <unit>
+              <and>
+                <unitVehicleKills>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </unitVehicleKills>
+              </and>
+            </unit>
+            <and>
+              <vehicleKills>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </vehicleKills>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	1	</premium>
+        <freeXP>	2000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleKills>
+                    <greaterOrEqual>	6	</greaterOrEqual>
+                  </unitVehicleKills>
+                </and>
+              </unit>
+              <and>
+                <vehicleKills>
+                  <greaterOrEqual>	6	</greaterOrEqual>
+                </vehicleKills>
+              </and>
+            </or>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleDamage>
+                    <greaterOrEqual>	3000	</greaterOrEqual>
+                  </unitVehicleDamage>
+                </and>
+              </unit>
+              <and>
+                <vehicleDamage>
+                  <greaterOrEqual>	3000	</greaterOrEqual>
+                </vehicleDamage>
+              </and>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	1	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_3_14.xml>

@@ -1,0 +1,14 @@
+<interclusterreceiver.def>
+  <BaseMethods>
+    <processInterclusterRequest>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
+    </processInterclusterRequest>
+  </BaseMethods>
+</interclusterreceiver.def>

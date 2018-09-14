@@ -1,0 +1,391 @@
+<g100_gtraktor_krupp.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	44	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	2.50	</repairCost>
+  <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G100_Gtraktor_Krupp/Gtraktor_Krupp_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	14	</armor_1>
+      <armor_2>	14	</armor_2>
+      <armor_3>	8	</armor_3>
+      <armor_4>	8	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	6	</armor_6>
+      <armor_7>	14	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7850	</weight>
+    <maxHealth>	256	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G100_Gtraktor_Krupp/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.403735 0.794652	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.553919 0.321839 2.40941	</rayStart>
+        <rayEnd>	-0.553919 -0.070399 2.331	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_G100_Gtraktor_Krupp>
+      <userString>	#germany_vehicles:Chassis_G100_Gtraktor_Krupp	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5000	</weight>
+      <maxLoad>	18000	</maxLoad>
+      <terrainResistance>	1.03 1.14 1.71	</terrainResistance>
+      <brakeForce>	38000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G100_Gtraktor_Krupp/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.3 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.02	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.134088	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.385104	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.137887	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R12	</name>
+          <radius>	0.154222	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.134088	</radius>
+          <startIndex>	4	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.385104	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.137887	</radius>
+          <startIndex>	6	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L12	</name>
+          <radius>	0.154222	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.36	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.109833	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.133468	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.154222	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.137887	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.36	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.109833	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.133468	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.154221	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.137887	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 1.34408 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.04367 2.09184	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.541940 0.000000 0.000000	</row0>
+            <row1>	0.000000 2.016120 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.948990	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_G100_Gtraktor_Krupp>
+  </chassis>
+  <turrets0>
+    <Turret_1_G100_Gtraktor_Krupp>
+      <userString>	#germany_vehicles:Turret_1_G100_Gtraktor_Krupp	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	14	</armor_1>
+        <armor_2>	6	</armor_2>
+        <armor_3>	8	</armor_3>
+        <armor_4>	8	</armor_4>
+        <armor_5>	6	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	6	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	64	</maxHealth>
+      <rotationSpeed>	41	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_37_L24A>	shared	  <maxAmmo>	102	</maxAmmo>
+          <armor>
+            <armor_1>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -60 1 -60	</minPitch>
+            <maxPitch>	0 12 0.347222 12 0.375 0 0.625 0 0.652778 12 1 12	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2.2	</aimingTime>
+          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G100_Gtraktor_Krupp/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_75mm_KwK_37_L24A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G100_Gtraktor_Krupp/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.00128 0.271287 0.586905	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.733157 0.329128 0.535009	</rayStart>
+          <rayEnd>	-0.388142 0.246913 0.350063	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.883302 0.344653 -0.0895008	</rayStart>
+          <rayEnd>	0.495586 0.259398 -0.0404189	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.64	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.733157 0.329128 0.535009	</rayStart>
+          <rayEnd>	0.388142 0.246913 0.350063	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 0.979 0.000 0.371 0.427 0.500 0.517 0.353 0.500 0.170 0.500 0.234 0.426 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_G100_Gtraktor_Krupp>
+  </turrets0>
+  <engines>
+    <BMW>	shared	</BMW>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG6>	shared	</FuG6>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g100_gtraktor_krupp.xml>

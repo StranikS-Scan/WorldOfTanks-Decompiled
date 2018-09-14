@@ -1,0 +1,48 @@
+<regular_1_3_9.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_9_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	1	</count>
+        </item>
+        <item>	1019	  <count>	1	</count>
+        </item>
+        <item>	507	  <count>	1	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_9_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </vehicleDamage>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	35000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_3_9.xml>

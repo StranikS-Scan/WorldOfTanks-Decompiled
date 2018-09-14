@@ -19,7 +19,11 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.CLAN_SEARCH: '_handleClanSearch',
  OpenLinkEvent.CLAN_CREATE: '_handleClanCreate',
  OpenLinkEvent.CLUB_SETTINGS: '_handleClubSettings',
- OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL'}
+ OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL',
+ OpenLinkEvent.GLOBAL_MAP_SUMMARY: '_handleGmSummaryURL',
+ OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
+ OpenLinkEvent.GLOBAL_MAP_CAP: '_handleGmCapURL',
+ OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL'}
 
 class ExternalLinksHandler(Controller):
 
@@ -116,3 +120,15 @@ class ExternalLinksHandler(Controller):
 
     def _handleInvitesManagementURL(self, _):
         self.__openParsedUrl('invitesManagementURL')
+
+    def _handleGmSummaryURL(self, _):
+        self.__openParsedUrl('globalMapSummary')
+
+    def _handleGmPromoSummaryURL(self, _):
+        self.__openParsedUrl('globalMapPromoSummary')
+
+    def _handleGmCapURL(self, _):
+        self.__openParsedUrl('globalMapCap')
+
+    def _handleGmPromoURL(self, _):
+        self.__openParsedUrl('globalMapPromo')

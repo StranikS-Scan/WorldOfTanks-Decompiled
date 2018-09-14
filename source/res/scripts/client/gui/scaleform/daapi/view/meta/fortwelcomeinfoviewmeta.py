@@ -9,9 +9,9 @@ class FortWelcomeInfoViewMeta(BaseDAAPIComponent):
     def onNavigate(self, code):
         self._printOverrideError('onNavigate')
 
-    def as_setWarningTextS(self, text, disabledBtnTooltipHeader, disabledBtnTooltipBody):
+    def as_setWarningTextS(self, text, disabledBtnTooltip):
         if self._isDAAPIInited():
-            return self.flashObject.as_setWarningText(text, disabledBtnTooltipHeader, disabledBtnTooltipBody)
+            return self.flashObject.as_setWarningText(text, disabledBtnTooltip)
 
     def as_setHyperLinksS(self, searchClanLink, createClanLink, detailLink):
         if self._isDAAPIInited():

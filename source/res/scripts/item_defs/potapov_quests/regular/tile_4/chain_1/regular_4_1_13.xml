@@ -1,0 +1,82 @@
+<regular_4_1_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <and>
+              <results>
+                <key>	damageAssistedRadio	</key>
+                <greaterOrEqual>	3000	</greaterOrEqual>
+              </results>
+              <results>
+                <key>	damageDealt	</key>
+                <greaterOrEqual>	2500	</greaterOrEqual>
+              </results>
+            </and>
+            <unit>
+              <and>
+                <results>
+                  <key>	damageAssistedRadio	</key>
+                  <greaterOrEqual>	3000	</greaterOrEqual>
+                </results>
+                <results>
+                  <key>	damageDealt	</key>
+                  <greaterOrEqual>	2500	</greaterOrEqual>
+                </results>
+              </and>
+            </unit>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+        <item>	1529	  <count>	1	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <and>
+                <results>
+                  <key>	damageAssistedRadio	</key>
+                  <greaterOrEqual>	3000	</greaterOrEqual>
+                </results>
+                <results>
+                  <key>	damageDealt	</key>
+                  <greaterOrEqual>	2500	</greaterOrEqual>
+                </results>
+              </and>
+              <unit>
+                <and>
+                  <results>
+                    <key>	damageAssistedRadio	</key>
+                    <greaterOrEqual>	3000	</greaterOrEqual>
+                  </results>
+                  <results>
+                    <key>	damageDealt	</key>
+                    <greaterOrEqual>	2500	</greaterOrEqual>
+                  </results>
+                </and>
+              </unit>
+            </or>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	2	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_1_13.xml>

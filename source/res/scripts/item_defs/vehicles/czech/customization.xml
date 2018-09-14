@@ -1,0 +1,619 @@
+<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan">
+	<!-- The namespaces enable tags like <ussr:T-43> -->
+	<!-- RGB of typical armor color. Is used for showing of previews. -->
+	<armorColor> 15 36 36 0 </armorColor>
+	<!-- TODO: put valid color -->
+	<inscriptions>
+		<!-- Properties of each inscription:
+			id : identifier unique among all inscriptions in all groups, integer in [1, 5000].
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+			userString (optional) : key to a user-visible name.
+			isFeatured (optional) : true or false. If true, the iscription is marked as "featured" in GUI.
+		-->
+		<!-- Warning: inscription IDs are saved into DB and therefore should not change. -->
+		<czech>
+			<userString> #vehicle_customization:inscription/historical </userString>
+			<priceFactor> 1.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 1 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_01.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/lidice </userString>
+					<qualifier> map_kind_summer_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 2 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_02.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/prazacka </userString>
+					<qualifier> player_health_less_20_percent_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 3 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_03.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/sotek </userString>
+					<qualifier> map_kind_desert_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 4 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_04.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/zizkov </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 5 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_05.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/brumovice </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 6 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_06.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/janosik </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 7 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_07.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/lezaky </userString>
+					<qualifier> alive_allies_count_less_6_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 8 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_08.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/radhost </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 9 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_09.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/zanasepadle </userString>
+					<qualifier> alive_allies_count_less_6_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 10 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_10.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/chachar </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 11 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_11.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/csrozhlas </userString>
+					<qualifier> main_skill_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 12 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_12.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/kapitanotakarjaros </userString>
+					<qualifier> alive_allies_count_less_6_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 13 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_13.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/zizka </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 14 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_14.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/rusalka </userString>
+					<qualifier> alive_squad_members_count_greater_or_equal_2_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 15 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_15.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/csr </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 16 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_16.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/strasnice </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 17 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/czech/inscription_17.dds </texName>
+					<userString> #vehicle_customization:inscription/czech/pravdavitezi </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_all_crew </qualifier>
+				</inscription>
+				<!--//BLOCK_BEGIN:CN_INSCRIPTIONS//-->
+				<!--
+				-->
+				<!--//BLOCK_END:CN_INSCRIPTIONS//-->
+			</inscriptions>
+		</czech>
+	</inscriptions>
+	<insigniaOnGun>
+		<!-- Properties for each insignia:
+			'id': int > 0 - rank of the insignia
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+		-->
+		<insignia>
+			<id> 1 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_czech_1.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 2 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_czech_2.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 3 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_czech_3.dds </texName>
+		</insignia>
+	</insigniaOnGun>
+	<camouflageGroups>
+		<winter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+		</winter>
+		<summer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+		</summer>
+		<desert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+		</desert>
+		<IGRwinter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+			<igrType> 2 </igrType>
+		</IGRwinter>
+		<IGRsummer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+			<igrType> 2 </igrType>
+		</IGRsummer>
+		<IGRdesert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+			<igrType> 2 </igrType>
+		</IGRdesert>
+	</camouflageGroups>
+	<camouflages>
+		<!-- Fields of each camouflage section:
+			id: int in [1, 5000] unique among all camouflages.
+				Warning: IDs are saved into DB, and therefore should not change.
+			kind: winter, summer or desert.
+			group: one of names from <camouflagegroup>.
+			priceFactor: factor to apply to base price of camouflages.
+			invisibilityFactor: factor to apply to <invisibility/camouflageBonus> of the vehicle.
+			description: optional, key to localized (user-friendly) description of the camouflage.
+			texture: name of texture file.
+			colors: 4 subsections of ints in [0, 255]: <> R G B A </>.
+			allow (optional): space-delimited list of names of vehicles (within nation) that are allowed
+				to use this camouflage. If the list is empty, all vehicles are allowed to.
+			deny (optional): space-delimited list of names of vehicles (within nation) that are disallowed
+				to use this camouflage. If the list is empty, no vehicles are disallowed to.
+			tiling (optional): sequence of <[nation_name:]vehicle_name> x y offs_x offs_z </[nation_name:]vehicle_name>.
+				The nation_name part may be omitted if the vehicle_name is within the default nation for this file.
+			isNew (optional): bool, if true, the camouflage is marked as "new" in GUI.
+			notInShop (optional): bool, if true, the camouflage is not shown in the shop.
+		-->
+		<!-- Warning: IDs are saved into DB, and therefore should not change. -->
+		<!--franch_1>
+			<texture> vehicles/french/Camouflage/Cfran_1_franch_1.DDS </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/france/bicolor/franch_1 </description>
+			<id> 3 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 218 159 37 142 </c0>
+				<c1> 0 64 64 18 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<ARL_44> 3.5 3.6 0.000000 0.5 </ARL_44>
+				<AMX40> 4.7 4.2 0.01 0.2 </AMX40>
+				<Hotchkiss_H35> 4.5 2.5 0.11 0.18 </Hotchkiss_H35>
+				<D2> 2.9 2.9 0.000000 0.26 </D2>
+				<Bat_Chatillon25t> 3.3 3.4 0.19 0.000000 </Bat_Chatillon25t>
+				<AMX_13F3AM> 6.2 3.4 0.000000 0.000000 </AMX_13F3AM>
+				<Lorraine39_L_AM> 4 2.4 0.71 0.52 </Lorraine39_L_AM>
+				<RenaultFT> 2.2 1.3 0.47 0.000000 </RenaultFT>
+				<AMX_50_100> 4.7 4.7 0.15 0.000000 </AMX_50_100>
+				<AMX_13_75> 4.5 4.7 0.17 0.000000 </AMX_13_75>
+				<AMX_13_90> 5.1 5.1 0.37 0.33 </AMX_13_90>
+				<D1> 2.7 2.7 0.1 0.18 </D1>
+				<_105_leFH18B2> 4.7 4.7 0.000000 0.000000 </_105_leFH18B2>
+				<F11_Renault_G1R> 5.2 5.2 0.45 0.11 </F11_Renault_G1R>
+				<Lorraine40t> 3 3 0.21 0.000000 </Lorraine40t>
+				<FCM_36Pak40> 3.5 3.5 0.48 0.88 </FCM_36Pak40>
+				<AMX38> 4.5 4.5 0.23 0.2 </AMX38>
+				<F10_AMX_50B> 2.2 2.2 0.14 0.21 </F10_AMX_50B>
+				<AMX_12t> 4 3.9 0.34 0.000000 </AMX_12t>
+				<BDR_G1B> 3.4 3.5 0.7 0.34 </BDR_G1B>
+				<F07_AMX_M4_1945> 6 6 0.28 0.2 </F07_AMX_M4_1945>
+				<B1> 3.5 3.5 0.14 0.26 </B1>
+				<RenaultBS> 4.7 2.4 0.21 0.000000 </RenaultBS>
+				<Lorraine155_50> 5 5 0.6 0.000000 </Lorraine155_50>
+				<Lorraine155_51> 4.2 4.2 0.000000 0.000000 </Lorraine155_51>
+				<RenaultFT_AC> 3.6 3.5 0.84 0.66 </RenaultFT_AC>
+				<RenaultUE57> 4.4 4.5 0.15 0.000000 </RenaultUE57>
+				<Somua_Sau_40> 3.3 3.4 0.08 0.000000 </Somua_Sau_40>
+				<S_35CA> 4.8 4.9 0.28 0.34 </S_35CA>
+				<AMX50_Foch> 3.3 3.3 0.000000 0.000000 </AMX50_Foch>
+				<ARL_V39> 3.7 3.8 0.000000 0.000000 </ARL_V39>
+				<F09_AMX_50_120> 4.9 5 0.000000 0.000000 </F09_AMX_50_120>
+				<Bat_Chatillon155_58> 5.7 5.7 0.2 0.86 </Bat_Chatillon155_58>
+				<AMX_AC_Mle1948> 3 3.1 0.000000 0.000000 </AMX_AC_Mle1948>
+				<F44_Somua_S35> 7.8 7.8 0.000000 0.8 </F44_Somua_S35>
+				<AMX_AC_Mle1946> 3 2.8 0.000000 0.000000 </AMX_AC_Mle1946>
+				<AMX_50Fosh_155> 2.5 2.7 0.000000 0.000000 </AMX_50Fosh_155>
+				<ELC_AMX> 5 5 0.04 0.000000 </ELC_AMX>
+				<AMX_105AM> 4.7 4.7 0.3 0.1 </AMX_105AM>
+				<FCM_50t> 4.4 4.4 0.34 0.22 </FCM_50t>
+				<Bat_Chatillon155_55> 5.9 5.9 0.000000 0.000000 </Bat_Chatillon155_55>
+				<AMX_Ob_Am105> 6.6 6.5 0.000000 0.000000 </AMX_Ob_Am105>
+				<AMX_50_100_IGR> 4.7 4.7 0.15 0.000000 </AMX_50_100_IGR>
+				<AMX_13_90_IGR> 5.1 5.1 0.37 0.33 </AMX_13_90_IGR>
+				<AMX_AC_Mle1948_IGR> 3 3.1 0.000000 0.000000 </AMX_AC_Mle1948_IGR>
+				<Bat_Chatillon25t_IGR> 3.3 3.4 0.19 0.000000 </Bat_Chatillon25t_IGR>
+				<_105_leFH18B2_IGR> 4.7 4.7 0.000000 0.000000 </_105_leFH18B2_IGR>
+				<S_35CA_IGR> 4.8 4.9 0.28 0.34 </S_35CA_IGR>
+				<ELC_AMX_IGR> 3.3 3.2 0.19 0.000000 </ELC_AMX_IGR>
+				<F68_AMX_Chasseur_de_char_46> 1.8 1.8 0.14 0.18 </F68_AMX_Chasseur_de_char_46>
+				<F69_AMX13_57_100> 4.3 4.3 0.62 0.41 </F69_AMX13_57_100>
+				<F69_AMX13_57_100_GrandFinal> 4.3 4.3 0.62 0.41 </F69_AMX13_57_100_GrandFinal>
+				<F50_FCM36_20t> 4.6 4.6 0.000000 0.000000 </F50_FCM36_20t>
+				<F70_SARL42> 6 6 0.000000 0.000000 </F70_SARL42>
+				<F49_RenaultR35> 7 7 0.48 0.000000 </F49_RenaultR35>
+				<F71_AMX_30_prototype> 2.6 2.6 0.52 0.000000 </F71_AMX_30_prototype>
+				<F72_AMX_30> 6.1 6.1 0.6 0.36 </F72_AMX_30>
+				<F73_M4A1_Revalorise> 3.3 3.3 0.000000 0.000000 </F73_M4A1_Revalorise>
+			</tiling>
+			<deny> F69_AMX13_57_100_GrandFinal </deny>
+		</franch_1-->
+		<!-- -->
+		<!--//BLOCK_END:KR_IGR_CAMOUFLAGES//-->
+		<!--//BLOCK_BEGIN:CN_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<!-- -->
+		<!--//BLOCK_END:CN_IGR_CAMOUFLAGES//-->
+		<Cz_winter>
+			<texture> vehicles/czech/Camouflage/Cz_winter.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/czech/Cz_winter </description>
+			<id> 124 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 255 255 255 178 </c0>
+				<c1> 161 148 69 0 </c1>
+				<c2> 85 21 22 0 </c2>
+				<c3> 239 208 33 0 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 3.9 3.9 0.1 0.16 </Cz01_Skoda_T40>
+			</tiling>
+		</Cz_winter>
+		<Cz_summer>
+			<texture> vehicles/czech/Camouflage/Cz_summer.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/czech/Cz_summer </description>
+			<id> 127 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 183 155 98 142 </c0>
+				<c1> 51 35 19 160 </c1>
+				<c2> 66 81 45 209 </c2>
+				<c3> 239 208 33 0 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.9 1.9 0.16 0.07 </Cz01_Skoda_T40>
+			</tiling>
+		</Cz_summer>
+		<Cz_dust>
+			<texture> vehicles/czech/Camouflage/Cz_dust.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/czech/Cz_dust </description>
+			<id> 128 </id>
+			<group> desert </group>
+			<kind> desert </kind>
+			<colors>
+				<c0> 183 155 98 0 </c0>
+				<c1> 183 155 99 162 </c1>
+				<c2> 66 81 45 0 </c2>
+				<c3> 239 208 33 0 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.3 1.3 0.22 0.08 </Cz01_Skoda_T40>
+			</tiling>
+		</Cz_dust>
+		<summer_camo>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/summer_camo </description>
+			<id> 129 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 98 77 40 255 </c0>
+				<c1> 51 56 34 255 </c1>
+				<c2> 66 81 45 0 </c2>
+				<c3> 239 208 33 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1.6 1.6 0.000000 0.000000 </Cz01_Skoda_T40>
+			</tiling>
+		</summer_camo>
+		<IGR_Winter>
+			<texture> vehicles/german/Camouflage/IGR_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Winter </description>
+			<id> 54 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 65 65 65 210 </c0>
+				<c1> 0 0 0 223 </c1>
+				<c2> 128 128 128 216 </c2>
+				<c3> 255 255 255 216 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.4 1.4 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Winter>
+		<IGR_Summer>
+			<texture> vehicles/german/Camouflage/IGR_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Summer </description>
+			<id> 55 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 157 108 34 214 </c0>
+				<c1> 0 0 0 203 </c1>
+				<c2> 226 210 154 216 </c2>
+				<c3> 61 86 35 220 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.8 1.8 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Summer>
+		<IGR_Desert>
+			<texture> vehicles/german/Camouflage/IGR_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Desert </description>
+			<id> 56 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 196 108 34 175 </c0>
+				<c1> 226 210 154 186 </c1>
+				<c2> 0 0 0 221 </c2>
+				<c3> 113 89 57 206 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 2 2 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Desert>
+		<IGR_K_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Winter </description>
+			<id> 88 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 32 35 23 210 </c0>
+				<c1> 101 74 50 223 </c1>
+				<c2> 164 164 164 181 </c2>
+				<c3> 255 255 255 151 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.9 1.9 0.38 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Winter>
+		<IGR_K_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Desert </description>
+			<id> 90 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 138 90 68 187 </c0>
+				<c1> 203 135 67 200 </c1>
+				<c2> 198 166 117 183 </c2>
+				<c3> 112 67 46 2 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.6 1.6 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Desert>
+		<!-- -->
+		<!--//BLOCK_END:KR_IGR_CAMOUFLAGES//-->
+		<!--//BLOCK_BEGIN:CN_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<IGR_Ch_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Winter </description>
+			<id> 79 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 43 33 23 210 </c0>
+				<c1> 101 74 50 223 </c1>
+				<c2> 181 153 89 216 </c2>
+				<c3> 221 201 153 216 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.4 1.4 0.48 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Winter>
+		<IGR_Ch_Summer>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Summer </description>
+			<id> 80 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 52 78 41 214 </c0>
+				<c1> 108 72 19 203 </c1>
+				<c2> 39 40 30 216 </c2>
+				<c3> 207 196 150 220 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.8 1.8 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Summer>
+		<IGR_Ch_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Desert </description>
+			<id> 81 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 33 27 22 175 </c0>
+				<c1> 153 116 60 186 </c1>
+				<c2> 198 166 117 221 </c2>
+				<c3> 112 67 46 206 </c3>
+			</colors>
+			<tiling>
+				<Cz01_Skoda_T40> 1.8 1.8 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Desert>
+		<!-- -->
+		<!--//BLOCK_END:CN_IGR_CAMOUFLAGES//-->
+		<Clan_camuflage_01>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_01.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_01 </description>
+			<id> 103 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 100 13 0 170 </c0>
+				<c1> 201 136 48 116 </c1>
+				<c2> 16 22 12 206 </c2>
+				<c3> 0 0 0 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1.8 1.8 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+		</Clan_camuflage_01>
+		<Clan_camuflage_02>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_02.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_02 </description>
+			<id> 109 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 39 71 29 155 </c0>
+				<c1> 255 255 255 137 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1.6 1.6 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+		</Clan_camuflage_02>
+		<Clan_camuflage_03>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_03.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_03 </description>
+			<id> 110 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 78 107 69 131 </c0>
+				<c1> 0 13 0 192 </c1>
+				<c2> 16 22 12 0 </c2>
+				<c3> 0 0 0 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1 1 0.18 0.16 </Cz01_Skoda_T40>
+			</tiling>
+		</Clan_camuflage_03>
+		<Clan_camuflage_04>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_04.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_04 </description>
+			<id> 111 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 60 99 1 124 </c0>
+				<c1> 164 217 38 86 </c1>
+				<c2> 4 21 5 221 </c2>
+				<c3> 201 192 133 90 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1 1 0.2 0.2 </Cz01_Skoda_T40>
+			</tiling>
+		</Clan_camuflage_04>
+		<Cracked_ice>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Cracked_ice </description>
+			<id> 114 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 255 255 255 236 </c0>
+				<c1> 255 255 255 0 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 1.8 1.8 0.89 0.2 </Cz01_Skoda_T40>
+			</tiling>
+		</Cracked_ice>
+		<Desert_camou>
+			<texture> vehicles/german/Camouflage/Desert_camo-05-3.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Desert_camou </description>
+			<id> 125 </id>
+			<group> desert </group>
+			<kind> desert </kind>
+			<colors>
+				<c0> 160 126 78 204 </c0>
+				<c1> 16 14 7 0 </c1>
+				<c2> 239 242 125 0 </c2>
+				<c3> 242 216 66 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<Cz01_Skoda_T40> 3.8 3.8 0.1 0.2 </Cz01_Skoda_T40>
+			</tiling>
+		</Desert_camou>
+	</camouflages>
+</root>

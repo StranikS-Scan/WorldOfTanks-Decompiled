@@ -1,0 +1,1117 @@
+<gb08_churchill_i.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	25.7	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <repairCost>	5.66	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	3 3 0.000000 0.000000	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	88.9	</armor_1>
+      <armor_2>	177.8	</armor_2>
+      <armor_3>	63.5	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	76.2	</armor_5>
+      <armor_6>	50.8	</armor_6>
+      <armor_7>	38.1	</armor_7>
+      <armor_8>	25.4	</armor_8>
+      <armor_9>	19.1	</armor_9>
+      <armor_10>	15.9	</armor_10>
+      <armor_11>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_11>
+      <armor_12>	15.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_12>
+      <armor_13>	0	</armor_13>
+      <armor_14>	76.2	</armor_14>
+      <armor_15>	19.1	</armor_15>
+      <armor_16>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	21953	</weight>
+    <maxHealth>	520	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	185	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.012 0.609593 0.041554	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.50861 0.0423081 1.87103	</rayStart>
+        <rayEnd>	1.3086 0.0423081 1.87103	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.50861 0.0894542 0.177422	</rayStart>
+        <rayEnd>	1.30861 0.0894542 0.177422	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	2.14 2.14 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB08_Churchill_I>
+      <userString>	#gb_vehicles:Chassis_GB08_Churchill_I	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4050	</price>
+      <unlocks>
+        <chassis>	Chassis_GB08_Churchill_I_2	  <cost>	2000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8150	</weight>
+      <maxLoad>	39000	</maxLoad>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB08_Churchill_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB08_Churchill_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB08_Churchill_I/track/left.track	</left>
+        <right>	vehicles/british/GB08_Churchill_I/track/right.track	</right>
+        <segmentLength>	0.187	</segmentLength>
+        <segmentOffset>	0.09	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.53	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.25	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.409643	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.409587	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.409643	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.409483	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.167087	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.167087	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+      </wheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06414	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06414	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0379009	</minOffset>
+          <maxOffset>	0.03207	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	10	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0451895	</minOffset>
+          <maxOffset>	0.0451895	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.038	</minOffset>
+          <maxOffset>	0.032	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	10	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.045	</minOffset>
+          <maxOffset>	0.045	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.02	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.094	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1033	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <hullPosition>	-0.012 0.940605 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.0882 1.89761	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.784160 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.410910 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.210920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB08_Churchill_I>
+    <Chassis_GB08_Churchill_I_2>
+      <userString>	#gb_vehicles:Chassis_GB08_Churchill_I_2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8500	</price>
+      <unlocks>
+        <vehicle>	GB40_Gun_Carrier_Churchill	  <cost>	49050	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8150	</weight>
+      <maxLoad>	43000	</maxLoad>
+      <terrainResistance>	1 1.2 2.1	</terrainResistance>
+      <brakeForce>	38000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB08_Churchill_I/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB08_Churchill_I/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB08_Churchill_I/track/left.track	</left>
+        <right>	vehicles/british/GB08_Churchill_I/track/right.track	</right>
+        <segmentLength>	0.187	</segmentLength>
+        <segmentOffset>	0.09	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.53	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.25	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.409643	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.409587	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.409643	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.409483	</radius>
+          <syncAngle>	31.3	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.167087	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.167087	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
+      </wheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06414	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06414	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0379009	</minOffset>
+          <maxOffset>	0.03207	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	10	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0451895	</minOffset>
+          <maxOffset>	0.0451895	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.038	</minOffset>
+          <maxOffset>	0.032	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	10	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.045	</minOffset>
+          <maxOffset>	0.045	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.02	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.094	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1033	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <hullPosition>	-0.012 0.940605 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.0882 1.89761	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.782410 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.410910 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.210920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB08_Churchill_I_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB08_Churchill_I>
+      <userString>	#gb_vehicles:Turret_1_GB08_Churchill_I	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4300.0	</price>
+      <armor>
+        <armor_1>	101.6	</armor_1>
+        <armor_2>	88.9	</armor_2>
+        <armor_3>	88.9	</armor_3>
+        <armor_4>	88.9	</armor_4>
+        <armor_5>	50.8	</armor_5>
+        <armor_6>	28.6	</armor_6>
+        <armor_7>	28.6	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_10>	88.9	</armor_10>
+        <armor_11>	50.8	</armor_11>
+        <armor_12>	76.2	</armor_12>
+        <armor_13>	88.9	</armor_13>
+        <armor_14>	28.6	</armor_14>
+        <armor_15>	28.6	</armor_15>
+        <armor_16>	88.9	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7200	</weight>
+      <maxHealth>	130	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	150	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_GB08_Churchill_I	  <cost>	1200	</cost>
+            </turret>
+            <gun>	_76mm_Howitzer_MkI	  <cost>	2100	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.113264 -0.000153728 0.925669	</rayStart>
+              <rayEnd>	0.47625 -0.00850749 0.91849	</rayEnd>
+              <rayUp>	0.038 0.036 3	</rayUp>
+              <size>	0.25	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.67 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_2pdr_Gun_Mk_X>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	115	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <reloadTime>	4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.113238 -0.000296865 1.00982	</rayStart>
+              <rayEnd>	0.0425262 -0.0813524 1.00982	</rayEnd>
+              <rayUp>	0.05 0.05 4	</rayUp>
+              <size>	0.329	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.36 0.805 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Howitzer_MkI>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.107054 0.356028 0.752321	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.777698 0.460391 0.51063	</rayStart>
+          <rayEnd>	-0.599066 0.440399 0.422932	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.848189 0.548331 -0.947734	</rayStart>
+          <rayEnd>	0.502343 0.528284 -0.747762	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-0.962503 0.464076 -0.102345	</rayStart>
+          <rayEnd>	-0.764559 0.445397 -0.124004	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.981 -0.071 0.910 -0.004 0.738 0.088 0.742 0.358 0.344 0.797 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB08_Churchill_I>
+    <Turret_2_GB08_Churchill_I>
+      <userString>	#gb_vehicles:Turret_2_GB08_Churchill_I	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	7500	</price>
+      <unlocks>
+        <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	88.9	</armor_1>
+        <armor_2>	88.9	</armor_2>
+        <armor_3>	76.2	</armor_3>
+        <armor_4>	76.2	</armor_4>
+        <armor_5>	76.2	</armor_5>
+        <armor_6>	19.1	</armor_6>
+        <armor_7>	19.1	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25.4	</armor_9>
+        <armor_10>	88.9	</armor_10>
+        <armor_11>	88.9	</armor_11>
+        <armor_12>	19.1	</armor_12>
+        <armor_13>	19.1	</armor_13>
+        <armor_14>	88.9	</armor_14>
+      </armor>
+      <primaryArmor>	armor_1 armor_14 armor_4	</primaryArmor>
+      <weight>	7500	</weight>
+      <maxHealth>	180	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	150	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000002 -0.00348712 0.900106	</rayStart>
+              <rayEnd>	0.495046 -0.273405 0.892927	</rayEnd>
+              <rayUp>	0.038 0.036 3	</rayUp>
+              <size>	0.29	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_2pdr_Gun_Mk_X>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	115	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.51	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000028 -0.00365528 0.971161	</rayStart>
+              <rayEnd>	0.152937 -0.0902338 0.971161	</rayEnd>
+              <rayUp>	0.05 0.05 4	</rayUp>
+              <size>	0.361	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Howitzer_MkI>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	84	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.339116 10 0.402778 5 0.597222 5 0.660884 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 -0.00209035 1.05541	</rayStart>
+              <rayEnd>	0.325297 -0.400642 1.0575	</rayEnd>
+              <rayUp>	0.045 0.045 3	</rayUp>
+              <size>	0.361	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 9 0.339116 9 0.402778 5 0.597222 5 0.660884 9 1 9	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_Gun_Mk_V	  <cost>	4000	</cost>
+            </gun>
+            <vehicle>	GB09_Churchill_VII	  <cost>	27000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 -0.00209034 1.20057	</rayStart>
+              <rayEnd>	-0.0411048 -0.243352 1.20067	</rayEnd>
+              <rayUp>	0.041 0.041 3	</rayUp>
+              <size>	0.361	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_V>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	84	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 9 0.339116 9 0.402778 5 0.597222 5 0.660884 9 1 9	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_Gun_Vickers_HV	  <cost>	5000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000065 -0.00196002 1.16728	</rayStart>
+              <rayEnd>	0.00802704 0.00349925 1.1667	</rayEnd>
+              <rayUp>	0.067 0.065 4	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.565 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_Mk_V>
+        <_75mm_Gun_Vickers_HV>	shared	  <maxAmmo>	84	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -12 1 -12	</minPitch>
+            <maxPitch>	0 4 0.339116 4 0.402778 3 0.597222 3 0.660884 4 1 4	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	89	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000001 -0.00321812 1.77533	</rayStart>
+              <rayEnd>	0.0249538 -0.0116694 1.775	</rayEnd>
+              <rayUp>	0.055 0.054 4	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.745 0.475 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_Vickers_HV>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.023538 0.403442 0.640064	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.15932 0.599581 -0.00860037	</rayStart>
+          <rayEnd>	0.563181 0.599581 -0.076577	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.03088 0.436179 0.422504	</rayStart>
+          <rayEnd>	-0.636156 0.434972 0.357727	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.64	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-1.22603 0.592793 -0.150138	</rayStart>
+          <rayEnd>	-0.633596 0.592793 -0.245154	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.995 0.010 1.000 0.000 0.725 0.112 0.935 0.368 0.350 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
+    </Turret_2_GB08_Churchill_I>
+  </turrets0>
+  <engines>
+    <Meadows_DAV>	shared	  <unlocks>
+        <engine>	Vauxhall_Bedford_Twin_Six	  <cost>	850	</cost>
+        </engine>
+      </unlocks>
+    </Meadows_DAV>
+    <Vauxhall_Bedford_Twin_Six>	shared	</Vauxhall_Bedford_Twin_Six>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb08_churchill_i.xml>

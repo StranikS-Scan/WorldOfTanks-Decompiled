@@ -1,0 +1,495 @@
+<gb11_caernarvon_igr.xml>
+  <crew>
+    <commander></commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	34.3	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	7.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	130	</armor_1>
+      <armor_2>	76.2	</armor_2>
+      <armor_3>	130	</armor_3>
+      <armor_4>	38.1	</armor_4>
+      <armor_6>	17	</armor_6>
+      <armor_7>	44.5	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	50.8	</armor_9>
+      <armor_10>	31.8	</armor_10>
+      <armor_11>	30	</armor_11>
+      <armor_13>	254	</armor_13>
+      <armor_14>	44.5	</armor_14>
+      <armor_15>	20	</armor_15>
+      <armor_16>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
+    <weight>	35270	</weight>
+    <maxHealth>	1200	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.677679 0.561323	</turret>
+    </turretPositions>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint_2	</hardPoint>
+    </turretHardPoints>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.000622176 0.102195 3.36344	</rayStart>
+        <rayEnd>	-0.000622176 -0.07101 3.26344	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.368036 0.406562 2.83537	</rayStart>
+        <rayEnd>	-0.368036 0.232961 2.73606	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.87	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB11_Caernarvon_2_IGR>
+      <userString>	#igr_vehicles:Chassis_GB11_Caernarvon_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	63000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	48000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	24	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.5 0.78	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.55	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.428109	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.1375	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.441854	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.239226	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.428109	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.1375	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.441854	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.239513	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.19472 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.52784 2.46214	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.465070 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.434180	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB11_Caernarvon/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB11_Caernarvon/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB11_Caernarvon/track/left.track	</left>
+        <right>	vehicles/british/GB11_Caernarvon/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.155	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.86	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0023	</trackThickness>
+    </Chassis_GB11_Caernarvon_2_IGR>
+  </chassis>
+  <turrets0>
+    <Turret_2_GB11_Caernarvon_IGR>
+      <userString>	#igr_vehicles:Turret_2_GB11_Caernarvon_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	198.1	</armor_1>
+        <armor_2>	198.1	</armor_2>
+        <armor_3>	152.4	</armor_3>
+        <armor_4>	95.3	</armor_4>
+        <armor_5>	30.2	</armor_5>
+        <armor_6>	38.1	</armor_6>
+        <armor_7>	76.2	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	85.7	</armor_9>
+        <armor_10>	95.3	</armor_10>
+        <armor_11>	127	</armor_11>
+        <armor_12>	28.6	</armor_12>
+        <armor_13>	38.1	</armor_13>
+        <armor_14>	50.8	</armor_14>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	10400	</weight>
+      <maxHealth>	400	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.907	</invisibilityFactor>
+      <guns>
+        <_20pdr_Gun_Type_B_IGR>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.405226 10 0.439226 5.9 0.5 6.5 0.557112 5.9 0.589774 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	7.8	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0128477 -0.00247915 2.50836	</rayStart>
+              <rayEnd>	-0.0513541 -0.00625396 2.5079	</rayEnd>
+              <rayUp>	0.08 0.076 4	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_main	</effects>
+          <camouflage>
+            <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_Gun_Type_B_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.326263 1.25517	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.10387 0.71871 -1.18817	</rayStart>
+          <rayEnd>	-0.907534 0.716296 -1.15012	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.09994 0.72095 -1.15965	</rayStart>
+          <rayEnd>	0.902824 0.720526 -1.12584	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.5	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.976 -0.037 0.888 0.000 0.470 0.293 0.664 0.710 0.271 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.715 0.475 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB11_Caernarvon_IGR>
+  </turrets0>
+  <engines>
+    <Rolls_Royse_Meteor_M120_IGR>	shared	</Rolls_Royse_Meteor_M120_IGR>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <C42_IGR>	shared	</C42_IGR>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb11_caernarvon_igr.xml>

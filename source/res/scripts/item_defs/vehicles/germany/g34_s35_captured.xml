@@ -1,0 +1,467 @@
+<g34_s35_captured.xml>
+  <crew>
+    <commander>	gunner
+			loader	</commander>
+    <driver></driver>
+    <radioman></radioman>
+  </crew>
+  <speedLimits>
+    <forward>	37	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	2.6	</repairCost>
+  <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	36	</armor_1>
+      <armor_2>	36	</armor_2>
+      <armor_3>	25	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	35	</armor_5>
+      <armor_6>	35	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_10>
+      <armor_12>	50	</armor_12>
+      <armor_16>	41	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
+    <weight>	10500.0	</weight>
+    <maxHealth>	208	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G34_S35_captured/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G34_S35_captured/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G34_S35_captured/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.017108 0.97142 0.506002	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G34_S35_captured/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.281208 0.681774 1.80942	</rayStart>
+        <rayEnd>	-0.281192 0.510698 1.70582	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.011562 -0.078079 2.2735	</rayStart>
+        <rayEnd>	-0.0115621 -0.105241 2.07535	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.62	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.42 0.985 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <S-35ketten>
+      <userString>	#germany_vehicles:S-35ketten	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1730.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	5950	</weight>
+      <maxLoad>	21300	</maxLoad>
+      <terrainResistance>	1.03 1.14 1.71	</terrainResistance>
+      <brakeForce>	38000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G34_S35_captured/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G34_S35_captured/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G34_S35_captured/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.33 0.37	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.4	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.174867	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.174867	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.122103	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.346238	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.122103	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.346238	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0392562	</minOffset>
+          <maxOffset>	0.0867769	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.039	</minOffset>
+          <maxOffset>	0.087	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G34_S35_captured/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G34_S35_captured/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G34_S35_captured/track/left.track	</left>
+        <right>	vehicles/german/G34_S35_captured/track/right.track	</right>
+        <segmentLength>	0.096	</segmentLength>
+        <segmentOffset>	0.063	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0279	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1311	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.76209 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G34_S35_captured/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.843629 1.48479	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.728250 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.226560 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.058610	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </S-35ketten>
+  </chassis>
+  <turrets0>
+    <Somuaturm>
+      <userString>	#germany_vehicles:Somuaturm	</userString>
+      <tags></tags>
+      <level>	3.0	</level>
+      <price>	1350.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	56	</armor_1>
+        <armor_2>	46	</armor_2>
+        <armor_3>	46	</armor_3>
+        <armor_4>	46	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_8>	0	</armor_8>
+        <armor_15>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_15>
+        <armor_16>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	52	</maxHealth>
+      <rotationSpeed>	41	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_47mm_SA35_L34>	shared	  <armor>
+            <armor_1>	56	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	46	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.469451 10 0.475973 8 0.489285 8 0.497437 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/german/G34_S35_captured/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G34_S35_captured/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G34_S35_captured/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G34_S35_captured/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_47mm_SA35_L34>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G34_S35_captured/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G34_S35_captured/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G34_S35_captured/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G34_S35_captured/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.012532 0.281711 0.622936	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.746557 0.367499 0.278191	</rayStart>
+          <rayEnd>	-0.416171 0.22192 0.10601	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.637898 0.34261 0.343513	</rayStart>
+          <rayEnd>	0.452087 0.283065 0.299596	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.5	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.934 0.006 1.068 0.017 0.715 0.040 0.893 0.534 0.363 0.500 0.306 0.500 0.202 1.000 0.244	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Somuaturm>
+  </turrets0>
+  <engines>
+    <Somua_S-40>	shared	</Somua_S-40>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG8f>	shared	</FuG8f>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g34_s35_captured.xml>

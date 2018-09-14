@@ -7,12 +7,13 @@ from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS, FORT_ORDER_TYPE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
+from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.fort_helpers import FortListener
-from gui.shared.formatters import icons, time_formatters
+from gui.shared.formatters import icons, text_styles, time_formatters
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n, time_utils
 from shared_utils import findFirst
@@ -168,6 +169,15 @@ class FortViewHelper(FortListener):
             toolTipData += orderTooltipData
         return toolTipData
 
+    def getBuildingInfoTooltipData(self, buildingDescr):
+        body = None
+        if buildingDescr is not None:
+            uid = self.getBuildingUIDbyID(buildingDescr.typeID)
+            description = i18n.makeString(FORTIFICATIONS.buildingsprocess_longdescr(uid))
+            level = text_styles.stats(buildingDescr.getUserLevel())
+            body = i18n.makeString(CLANS.SECTION_FORT_BUILDING_TOOLTIP_BODY, level=level, description=description)
+        return body
+
     def _getBaseBuildingUpgradeLevel(self, isDefenceOn):
         baseBuilding = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
         buildingLevel = FortViewHelper._getUpgradeLevelByBuildingLevel(FORTIFICATION_ALIASES.FORT_BASE_BUILDING, baseBuilding.level, isDefenceOn)
@@ -192,7 +202,8 @@ class FortViewHelper(FortListener):
     def _isProductionInPause(self, buildingDescr):
         return self._isBaseBuildingDamaged() or self._isBuildingDamaged(buildingDescr) or self._isFortFrozen()
 
-    def _getProgress(self, typeID, level):
+    @classmethod
+    def _getProgress(cls, typeID, level):
         if level == 0:
             if typeID == 0:
                 return FORTIFICATION_ALIASES.STATE_TROWEL
@@ -339,11 +350,14 @@ class FortViewHelper(FortListener):
 
     def getBuildingTooltipBody(self, hpVal, maxHpValue, defResVal, maxDefResValue):
         nutIcon = ' ' + icons.nut()
-        labelOne = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH)
-        labelTwo = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STORE)
-        fstLine = labelOne + self.__toFormattedStr(hpVal) + '/' + self.__toFormattedStr(maxHpValue) + nutIcon
-        secLine = labelTwo + self.__toFormattedStr(defResVal) + '/' + self.__toFormattedStr(maxDefResValue) + nutIcon
+        labelOne = text_styles.main(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH))
+        labelTwo = text_styles.main(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STORE))
+        defResCompensationValue = 0
+        fstLine = labelOne + text_styles.neutral(self.__toFormattedStr(hpVal)) + ' / ' + text_styles.standard(self.__toFormattedStr(maxHpValue)) + nutIcon
+        secLine = labelTwo + text_styles.neutral(self.__toFormattedStr(defResVal)) + ' / ' + text_styles.standard(self.__toFormattedStr(maxDefResValue)) + nutIcon
         toolTipData = fstLine + secLine
+        if defResCompensationValue > 0:
+            toolTipData += text_styles.standard(i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_COMPENSATION)) + text_styles.neutral(self.__toFormattedStr(defResCompensationValue)) + nutIcon
         return toolTipData
 
     def _isAvailableBlinking(self):

@@ -1,0 +1,1109 @@
+<engines.xml>
+  <ids>
+    <SOFAM_8Gxb>	1	</SOFAM_8Gxb>
+    <_6F11SRY>	2	</_6F11SRY>
+    <Renault_S6>	3	</Renault_S6>
+    <Renault_S6Bis>	4	</Renault_S6Bis>
+    <Renault>	5	</Renault>
+    <Renault_M26_27>	6	</Renault_M26_27>
+    <Franklin>	7	</Franklin>
+    <Renault_Naeder-FIEUX>	8	</Renault_Naeder-FIEUX>
+    <Renault_BDR>	9	</Renault_BDR>
+    <Hotchkiss_35>	10	</Hotchkiss_35>
+    <Renault_S4>	12	</Renault_S4>
+    <Renault_S4B>	13	</Renault_S4B>
+    <Renault_A>	15	</Renault_A>
+    <Berliet_MDP>	16	</Berliet_MDP>
+    <Maybach_HL_230>	17	</Maybach_HL_230>
+    <Maybach_HL_230P45>	18	</Maybach_HL_230P45>
+    <Aster>	19	</Aster>
+    <Somua_LM>	20	</Somua_LM>
+    <Delahaye_103>	21	</Delahaye_103>
+    <Delahaye_103TT>	22	</Delahaye_103TT>
+    <Delahaye_135>	23	</Delahaye_135>
+    <Maybach_HL_295>	24	</Maybach_HL_295>
+    <Saurer>	25	</Saurer>
+    <Renault_T13>	26	</Renault_T13>
+    <Renault_T12>	27	</Renault_T12>
+    <Renault_T14>	28	</Renault_T14>
+    <Aster_M>	29	</Aster_M>
+    <Maybach_HL_234P45>	30	</Maybach_HL_234P45>
+    <Maybach_HL_234P50>	31	</Maybach_HL_234P50>
+    <AMX_B_270>	32	</AMX_B_270>
+    <MATHIS>	33	</MATHIS>
+    <Maybach_HL_295_F>	34	</Maybach_HL_295_F>
+    <Renault_EU>	36	</Renault_EU>
+    <Somua_S-40>	39	</Somua_S-40>
+    <Somua_S-40Bis>	40	</Somua_S-40Bis>
+    <Renault_V4>	42	</Renault_V4>
+    <Detroit_Diesel_6V53T>	43	</Detroit_Diesel_6V53T>
+    <Detroit_Diesel_6V53T-S>	44	</Detroit_Diesel_6V53T-S>
+    <Hispano-Suiza_HS110>	45	</Hispano-Suiza_HS110>
+    <SOFAM_12GSds>	46	</SOFAM_12GSds>
+    <Somua_190CV_V8>	49	</Somua_190CV_V8>
+    <Hispano_219CV_V8>	50	</Hispano_219CV_V8>
+    <Somua_230_V8>	51	</Somua_230_V8>
+    <Renault_ACL>	56	</Renault_ACL>
+    <Sovam_de_150cv>	57	</Sovam_de_150cv>
+    <Maybach_HL_234P45A>	58	</Maybach_HL_234P45A>
+    <Maybach_HL_210_TRM_P30>	59	</Maybach_HL_210_TRM_P30>
+    <Maybach_HL_230_TRM_P30>	60	</Maybach_HL_230_TRM_P30>
+    <Maybach_850CV>	61	</Maybach_850CV>
+    <Ford_GAC_R>	62	</Ford_GAC_R>
+    <Continental_AV-1790-7B>	63	</Continental_AV-1790-7B>
+    <SOFAM_8Gxb_A>	64	</SOFAM_8Gxb_A>
+    <Maybach_HL_295_FA>	65	</Maybach_HL_295_FA>
+    <SOFAM_12GSds_A>	67	</SOFAM_12GSds_A>
+    <Hispano-Suiza_HS110_A>	68	</Hispano-Suiza_HS110_A>
+    <Berliet_MDPA>	69	</Berliet_MDPA>
+    <Berliet_ACRO>	70	</Berliet_ACRO>
+    <Berliet_Ricardo>	71	</Berliet_Ricardo>
+    <Maybach_HL_295_F_fallout>	72	</Maybach_HL_295_F_fallout>
+    <Cummins_VT8-460>	73	</Cummins_VT8-460>
+    <Renault_bot>	75	</Renault_bot>
+    <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
+    <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
+    <Renault_A_IGR>	60003	</Renault_A_IGR>
+    <Somua_S-40Bis_IGR>	60004	</Somua_S-40Bis_IGR>
+    <SOFAM_8Gxb_IGR>	60005	</SOFAM_8Gxb_IGR>
+    <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
+  </ids>
+  <shared>
+    <Somua_S-40>
+      <userString>	#france_vehicles:Somua_S-40	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10420	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	220	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_S-40>
+    <Somua_S-40Bis>
+      <userString>	#france_vehicles:Somua_S-40Bis	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16100	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	260	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_S-40Bis>
+    <Renault_T12>
+      <userString>	#france_vehicles:Renault_T12	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	13000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	350	</power>
+      <weight>	540	</weight>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_T12>
+    <Renault_T13>
+      <userString>	#france_vehicles:Renault_T13	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	21400	</price>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <power>	400	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_T13>
+    <Renault_T14>
+      <userString>	#france_vehicles:Renault_T14	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	22300	</price>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	vehicles_eng_tiger_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_tiger_npc	</wwsoundNPC>
+      <power>	450	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Renault_T14>
+    <SOFAM_8Gxb>
+      <userString>	#france_vehicles:SOFAM_8Gxb	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	400	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </SOFAM_8Gxb>
+    <SOFAM_8Gxb_A>
+      <userString>	#france_vehicles:SOFAM_8Gxb_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	400	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </SOFAM_8Gxb_A>
+    <_6F11SRY>
+      <userString>	#france_vehicles:_6F11SRY	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	280	</power>
+      <weight>	400	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </_6F11SRY>
+    <Detroit_Diesel_6V53T>
+      <userString>	#france_vehicles:Detroit_Diesel_6V53T	</userString>
+      <shortUserString>	#france_vehicles:Detroit_Diesel_6V53T_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	37000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	300	</power>
+      <weight>	770	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Detroit_Diesel_6V53T>
+    <Detroit_Diesel_6V53T-S>
+      <userString>	#france_vehicles:Detroit_Diesel_6V53T-S	</userString>
+      <shortUserString>	#france_vehicles:Detroit_Diesel_6V53T-S_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	39740	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	350	</power>
+      <weight>	770	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Detroit_Diesel_6V53T-S>
+    <Hispano-Suiza_HS110>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	94250	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+    </Hispano-Suiza_HS110>
+    <Hispano-Suiza_HS110_A>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	94250	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Hispano-Suiza_HS110_A>
+    <SOFAM_12GSds_A>
+      <userString>	#france_vehicles:SOFAM_12GSds_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	86050	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	2100	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </SOFAM_12GSds_A>
+    <SOFAM_12GSds>
+      <userString>	#france_vehicles:SOFAM_12GSds	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	86050	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	2100	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </SOFAM_12GSds>
+    <Renault_S6>
+      <userString>	#france_vehicles:Renault_S6	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	700	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	150	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_S6>
+    <Renault_S6Bis>
+      <userString>	#france_vehicles:Renault_S6Bis	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	3500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	180	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_S6Bis>
+    <Renault_Naeder-FIEUX>
+      <userString>	#france_vehicles:Renault_Naeder-FIEUX	</userString>
+      <shortUserString>	#france_vehicles:Renault_Naeder-FIEUX_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	307	</power>
+      <weight>	540	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_Naeder-FIEUX>
+    <Renault_bot>
+      <userString>	#france_vehicles:Renault_bot	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	39	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	800	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Renault_bot>
+    <Renault>
+      <userString>	#france_vehicles:Renault	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	39	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault>
+    <Renault_M26_27>
+      <userString>	#france_vehicles:Renault_M26_27	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	300	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	45	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_M26_27>
+    <Franklin>
+      <userString>	#france_vehicles:Franklin	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	330	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	100	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Franklin>
+    <Renault_ACL>
+      <userString>	#france_vehicles:Renault_ACL	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	5000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	48	</power>
+      <weight>	400	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_ACL>
+    <Renault_BDR>
+      <userString>	#france_vehicles:Renault_BDR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11120	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	350	</power>
+      <weight>	540	</weight>
+      <maxHealth>	95	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_BDR>
+    <Hotchkiss_35>
+      <userString>	#france_vehicles:Hotchkiss_35_1	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	400	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	75	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Hotchkiss_35>
+    <Renault_S4>
+      <userString>	#france_vehicles:Renault_S4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	310	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	65	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_S4>
+    <Renault_S4B>
+      <userString>	#france_vehicles:Renault_S4B	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	350	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	/vehicles/tanks_pc/light/MC-1	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_MC_1_npc	</wwsoundNPC>
+      <power>	74	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_S4B>
+    <Renault_V4>
+      <userString>	#france_vehicles:Renault_V4	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	480	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	/vehicles/tanks_pc/light/MC-1	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_MC_1_npc	</wwsoundNPC>
+      <power>	82	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_V4>
+    <Renault_A>
+      <userString>	#france_vehicles:Renault_A	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	307	</power>
+      <weight>	540	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_A>
+    <Renault_EU>
+      <userString>	#france_vehicles:Renault_EU	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	1500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	38	</power>
+      <weight>	300	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Renault_EU>
+    <Berliet_MDP>
+      <userString>	#france_vehicles:Berliet_MDP	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	91	</power>
+      <weight>	200	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Berliet_MDP>
+    <Berliet_MDPA>
+      <userString>	#france_vehicles:Berliet_MDPA	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	91	</power>
+      <weight>	200	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Berliet_MDPA>
+    <Berliet_ACRO>
+      <userString>	#france_vehicles:Berliet_ACRO	</userString>
+      <tags>	diesel	</tags>
+      <level>	2	</level>
+      <price>	690	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	95	</power>
+      <weight>	200	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Berliet_ACRO>
+    <Berliet_Ricardo>
+      <userString>	#france_vehicles:Berliet_Ricardo	</userString>
+      <tags>	diesel	</tags>
+      <level>	2	</level>
+      <price>	720	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	105	</power>
+      <weight>	200	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Berliet_Ricardo>
+    <Maybach_HL_230P45>
+      <userString>	#france_vehicles:Maybach_HL_230P45	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_230P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_230P45>
+    <Maybach_HL_230>
+      <userString>	#france_vehicles:Maybach_HL_230	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	575	</power>
+      <weight>	700	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_230>
+    <Maybach_HL_234P45>
+      <userString>	#france_vehicles:Maybach_HL_234P45	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_234P45_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	98730	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	850	</power>
+      <weight>	750	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_234P45>
+    <Maybach_HL_234P45A>
+      <userString>	#france_vehicles:Maybach_HL_234P45A	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_234P45A_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	98730	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	750	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_234P45A>
+    <Maybach_HL_234P50>
+      <userString>	#france_vehicles:Maybach_HL_234P50	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_234P50_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	125000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	980	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_234P50>
+    <Aster>
+      <userString>	#france_vehicles:Aster	</userString>
+      <tags>	diesel	</tags>
+      <level>	2	</level>
+      <price>	750	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	150	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Aster>
+    <Somua_LM>
+      <userString>	#france_vehicles:Somua_LM	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	190	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_LM>
+    <Delahaye_103>
+      <userString>	#france_vehicles:Delahaye_103	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	350	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	70	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	900	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
+    </Delahaye_103>
+    <Delahaye_103TT>
+      <userString>	#france_vehicles:Delahaye_103TT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	370	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	75	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Delahaye_103TT>
+    <Delahaye_135>
+      <userString>	#france_vehicles:Delahaye_135	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	450	</price>
+      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
+      <power>	90	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Delahaye_135>
+    <Maybach_HL_295>
+      <userString>	#france_vehicles:Maybach_HL_295	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	78000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_295>
+    <Saurer>
+      <userString>	#france_vehicles:Saurer	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	99800	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Saurer>
+    <Aster_M>
+      <userString>	#france_vehicles:Aster_M	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	160	</power>
+      <weight>	600	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Aster_M>
+    <AMX_B_270>
+      <userString>	#france_vehicles:AMX_B_270	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	5100	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	200	</power>
+      <weight>	340	</weight>
+      <maxHealth>	30	</maxHealth>
+      <maxRegenHealth>	20	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </AMX_B_270>
+    <MATHIS>
+      <userString>	#france_vehicles:MATHIS	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	20000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	250	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </MATHIS>
+    <Maybach_HL_295_F>
+      <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	123000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_295_F>
+    <Maybach_HL_295_F_fallout>
+      <userString>	#france_vehicles:Maybach_HL_295_F_fallout	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	123000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_295_F_fallout>
+    <Maybach_HL_295_FA>
+      <userString>	#france_vehicles:Maybach_HL_295_FA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	123000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Maybach_HL_295_FA>
+    <Somua_190CV_V8>
+      <userString>	#france_vehicles:Somua_190CV_V8	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4500	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	190	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_190CV_V8>
+    <Hispano_219CV_V8>
+      <userString>	#france_vehicles:Hispano_219CV_V8	</userString>
+      <tags>	diesel	</tags>
+      <level>	4	</level>
+      <price>	9800	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	219	</power>
+      <weight>	400	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Hispano_219CV_V8>
+    <Somua_230_V8>
+      <userString>	#france_vehicles:Somua_230_V8	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	230	</power>
+      <weight>	540	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.20	</fireStartingChance>
+    </Somua_230_V8>
+    <Sovam_de_150cv>
+      <userString>	#france_vehicles:Sovam_de_150cv	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	700	</price>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <wwsoundPC>	vehicles_eng_PzIII_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_PzIII_npc	</wwsoundNPC>
+      <power>	150	</power>
+      <weight>	340	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Sovam_de_150cv>
+    <Maybach_HL_210_TRM_P30>
+      <userString>	#france_vehicles:Maybach_HL_210_TRM_P30	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_210_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	35500	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	650	</power>
+      <weight>	850	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_210_TRM_P30>
+    <Maybach_HL_230_TRM_P30>
+      <userString>	#france_vehicles:Maybach_HL_230_TRM_P30	</userString>
+      <shortUserString>	#france_vehicles:Maybach_HL_230_TRM_P30_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	700	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_230_TRM_P30>
+    <Maybach_850CV>
+      <userString>	#france_vehicles:Maybach_850CV	</userString>
+      <shortUserString>	#france_vehicles:Maybach_850CV_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	850	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_850CV>
+    <Ford_GAC_R>
+      <userString>	#usa_vehicles:Ford_GAC_R	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	59000	</price>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <power>	770	</power>
+      <weight>	839	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Ford_GAC_R>
+    <Continental_AV-1790-7B>
+      <userString>	#usa_vehicles:Continental_AV-1790-7B	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-7B_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <power>	810	</power>
+      <weight>	1171	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Continental_AV-1790-7B>
+    <Cummins_VT8-460>
+      <userString>	#france_vehicles:Cummins_VT8-460	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	460	</power>
+      <weight>	1656	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+    </Cummins_VT8-460>
+    <Maybach_HL_295_IGR>
+      <userString>	#igr_vehicles:Maybach_HL_295_IGR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	78000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Maybach_HL_295_IGR>
+    <Detroit_Diesel_6V53T-S_IGR>
+      <userString>	#igr_vehicles:Detroit_Diesel_6V53T-S_IGR	</userString>
+      <shortUserString>	#igr_vehicles:Detroit_Diesel_6V53T-S_IGR_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	39740	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	350	</power>
+      <weight>	770	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+    </Detroit_Diesel_6V53T-S_IGR>
+    <Renault_A_IGR>
+      <userString>	#igr_vehicles:Renault_A_IGR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	307	</power>
+      <weight>	540	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Renault_A_IGR>
+    <Somua_S-40Bis_IGR>
+      <userString>	#igr_vehicles:Somua_S-40Bis_IGR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16100	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
+      <power>	260	</power>
+      <weight>	400	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </Somua_S-40Bis_IGR>
+    <SOFAM_8Gxb_IGR>
+      <userString>	#igr_vehicles:SOFAM_8Gxb_IGR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <wwsoundPC>	vehicles_eng_IS_2_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <wwsoundNPC>	vehicles_eng_IS_2_npc	</wwsoundNPC>
+      <power>	250	</power>
+      <weight>	400	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+    </SOFAM_8Gxb_IGR>
+    <Hispano-Suiza_HS110_IGR>
+      <userString>	#igr_vehicles:Hispano-Suiza_HS110_IGR	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	94250	</price>
+      <notInShop>	true	</notInShop>
+      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
+      <power>	720	</power>
+      <weight>	1426	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+    </Hispano-Suiza_HS110_IGR>
+  </shared>
+</engines.xml>

@@ -1,15 +1,16 @@
 # Embedded file name: scripts/client/gui/wgnc/xml/__init__.py
 import ResMgr
 from gui.wgnc.errors import ParseError
-from gui.wgnc.xml import actions_parsers, gui_parsers, shared_parsers
+from gui.wgnc.xml import actions_parsers, gui_parsers, shared_parsers, proxy_data_parsers
 
 class _NotificationParser(shared_parsers.SectionParser):
-    __slots__ = ('_actionsParser', '_guiParser')
+    __slots__ = ('_actionsParser', '_guiParser', '_proxyDataParser')
 
-    def __init__(self, actionsParser, guiParser):
+    def __init__(self, actionsParser, guiParser, proxyDataParser):
         super(_NotificationParser, self).__init__()
         self._actionsParser = actionsParser
         self._guiParser = guiParser
+        self._proxyDataParser = proxyDataParser
 
     def getTagName(self):
         return 'notification'
@@ -30,14 +31,20 @@ class _NotificationParser(shared_parsers.SectionParser):
         if sub:
             itemsHolder = self._guiParser.parse(sub)
         else:
-            raise ParseError('The tag "gui" is empty.')
+            itemsHolder = None
+        sub = section[self._proxyDataParser.getTagName()]
+        if sub:
+            proxyDataItemsHolder = self._proxyDataParser.parse(sub)
+        else:
+            proxyDataItemsHolder = None
         return (notifyID,
          ttl,
          actionsHolder,
-         itemsHolder)
+         itemsHolder,
+         proxyDataItemsHolder)
 
 
-_PARSER_BY_VER = {'2.0': (_NotificationParser, (actions_parsers.ActionsParser_v2, gui_parsers.GUIItemsParser_v2))}
+_PARSER_BY_VER = {'2.0': (_NotificationParser, (actions_parsers.ActionsParser_v2, gui_parsers.GUIItemsParser_v2, proxy_data_parsers.ProxyDataItemParser_v2))}
 
 def _parse(section):
     ver = section.readString('ver', '')
@@ -45,8 +52,8 @@ def _parse(section):
         raise ParseError('Attribute "ver" is not valid.')
     if ver not in _PARSER_BY_VER:
         raise ParseError('That version {0} is not supported.'.format(ver))
-    clazz, (actionsClazz, guiClazz) = _PARSER_BY_VER[ver]
-    return clazz(actionsClazz(), guiClazz()).parse(section)
+    clazz, (actionsClazz, guiClazz, proxyDataClazz) = _PARSER_BY_VER[ver]
+    return clazz(actionsClazz(), guiClazz(), proxyDataClazz()).parse(section)
 
 
 def fromString(xml):

@@ -1,21 +1,17 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/barracks/Barracks.py
 import BigWorld
 from AccountCommands import LOCK_REASON
-from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
-from gui.shared.utils.functions import getViewName
-from helpers.i18n import convert
-from items.tankmen import getSkillsConfig, ROLES
 from account_helpers.AccountSettings import AccountSettings, BARRACKS_FILTER
 from CurrentVehicle import g_currentVehicle
 from helpers import i18n
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import SystemMessages
-from gui.shared import events, g_itemsCache
+from gui.shared import events, g_itemsCache, REQ_CRITERIA, event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
@@ -24,8 +20,6 @@ from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload
 from gui.shared.utils import decorators
-from gui.shared.utils.requesters.deprecated import Requester
-from gui.shared.utils.requesters import DeprecatedStatsRequester
 
 class Barracks(BarracksMeta, LobbySubView, GlobalListener):
 
@@ -49,8 +43,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         super(LobbySubView, self)._dispose()
 
     def openPersonalCase(self, value, tabNumber):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, value), ctx={'tankmanID': int(value),
-         'page': int(tabNumber)}))
+        shared_events.showPersonalCase(int(value), int(tabNumber), EVENT_BUS_SCOPE.LOBBY)
 
     def closeBarracks(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -73,10 +66,9 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    @process
     def __updateTanksList(self):
         data = list()
-        modulesAll = yield Requester('vehicle').getFromInventory()
+        modulesAll = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         modulesAll.sort()
         for module in modulesAll:
             if self.filter['nation'] != -1 and self.filter['nation'] != module.descriptor.type.id[0] or self.filter['tankType'] != 'None' and self.filter['tankType'] != -1 and self.filter['tankType'] != module.type:
@@ -100,30 +92,6 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         AccountSettings.setFilter(BARRACKS_FILTER, self.filter)
         self.__updateTankmen()
 
-    @process
-    def onShowRecruitWindow(self, callbackID):
-        credits, gold = g_itemsCache.items.stats.money
-        upgradeParams = yield DeprecatedStatsRequester().getTankmanCost()
-        data = [credits,
-         gold,
-         round(upgradeParams[1]['credits']),
-         upgradeParams[2]['gold'],
-         len(ROLES)]
-        for role in ROLES:
-            data.append(role)
-            data.append(convert(getSkillsConfig()[role]['userString']))
-
-        unlocks = yield DeprecatedStatsRequester().getUnlocks()
-        modulesAll = yield Requester('vehicle').getFromShop()
-        modulesAll.sort()
-        for module in modulesAll:
-            compdecs = module.descriptor.type.compactDescr
-            if compdecs in unlocks:
-                data.append(module.type)
-                data.append(module.descriptor.type.id[0])
-                data.append(module.descriptor.type.id[1])
-                data.append(module.descriptor.type.shortUserString)
-
     def __updateTankmen(self, *args):
         tankmen = g_itemsCache.items.getTankmen().values()
         slots = g_itemsCache.items.stats.tankmenBerthsCount
@@ -132,7 +100,6 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
         defaultBerthPrice = g_itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
         tankmenList = list()
         tankmenInBarracks = 0
-        tankmenInSlots = 0
         action = None
         if berthPrice[0] != defaultBerthPrice[0]:
             action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,

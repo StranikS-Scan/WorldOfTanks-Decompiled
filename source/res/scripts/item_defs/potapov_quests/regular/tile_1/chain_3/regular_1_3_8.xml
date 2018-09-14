@@ -1,0 +1,58 @@
+<regular_1_3_8.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_8_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	3	</greaterOrEqual>
+              <classes>	mediumTank	</classes>
+            </vehicleDamage>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	1	</count>
+        </item>
+        <item>	1019	  <count>	1	</count>
+        </item>
+        <item>	507	  <count>	1	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_8_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <eventCount></eventCount>
+              <greaterOrEqual>	3	</greaterOrEqual>
+              <classes>	mediumTank	</classes>
+            </vehicleDamage>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </vehicleDamage>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	35000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_3_8.xml>

@@ -3,11 +3,11 @@ from adisp import process
 from gui import SystemMessages
 from gui.clubs import contexts as club_ctx, formatters as club_fmts
 from gui.clubs.club_helpers import ClubListener
-from gui.Scaleform.daapi.view.lobby.prb_windows.PrbSendInvitesWindow import PrbSendInvitesWindow
+from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
 from gui.Scaleform.locale.WAITING import WAITING
 from messenger.proto.events import g_messengerEvents
 
-class CyberSportSendInvitesWindow(PrbSendInvitesWindow, ClubListener):
+class CyberSportSendInvitesWindow(SendInvitesWindow, ClubListener):
 
     def __init__(self, ctx):
         super(CyberSportSendInvitesWindow, self).__init__(ctx)

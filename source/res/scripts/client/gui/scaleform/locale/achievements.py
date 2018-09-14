@@ -501,6 +501,42 @@ class ACHIEVEMENTS(object):
     FALLOUTALWAYSINLINE = '#achievements:falloutAlwaysInLine'
     FALLOUTALWAYSINLINE_DESCR = '#achievements:falloutAlwaysInLine_descr'
     FALLOUTALWAYSINLINE_CONDITION = '#achievements:falloutAlwaysInLine_condition'
+    SHOULDERTOSHOULDER = '#achievements:shoulderToShoulder'
+    SHOULDERTOSHOULDER_DESCR = '#achievements:shoulderToShoulder_descr'
+    SHOULDERTOSHOULDER_CONDITION = '#achievements:shoulderToShoulder_condition'
+    ALONEINTHEFIELD = '#achievements:aloneInTheField'
+    ALONEINTHEFIELD_DESCR = '#achievements:aloneInTheField_descr'
+    ALONEINTHEFIELD_CONDITION = '#achievements:aloneInTheField_condition'
+    FALLENFLAGS = '#achievements:fallenFlags'
+    FALLENFLAGS_DESCR = '#achievements:fallenFlags_descr'
+    FALLENFLAGS_CONDITION = '#achievements:fallenFlags_condition'
+    STORMLORD = '#achievements:stormLord'
+    STORMLORD_DESCR = '#achievements:stormLord_descr'
+    STORMLORD_CONDITION = '#achievements:stormLord_condition'
+    EFFECTIVESUPPORT = '#achievements:effectiveSupport'
+    EFFECTIVESUPPORT_DESCR = '#achievements:effectiveSupport_descr'
+    EFFECTIVESUPPORT_CONDITION = '#achievements:effectiveSupport_condition'
+    FALLOUTDIEHARD = '#achievements:falloutDieHard'
+    FALLOUTDIEHARD_DESCR = '#achievements:falloutDieHard_descr'
+    FALLOUTDIEHARD_CONDITION = '#achievements:falloutDieHard_condition'
+    WINNERLAURELS = '#achievements:winnerLaurels'
+    WINNERLAURELS_DESCR = '#achievements:winnerLaurels_descr'
+    WINNERLAURELS_CONDITION = '#achievements:winnerLaurels_condition'
+    PREDATOR = '#achievements:predator'
+    PREDATOR_DESCR = '#achievements:predator_descr'
+    PREDATOR_CONDITION = '#achievements:predator_condition'
+    UNREACHABLE = '#achievements:unreachable'
+    UNREACHABLE_DESCR = '#achievements:unreachable_descr'
+    UNREACHABLE_CONDITION = '#achievements:unreachable_condition'
+    CHAMPION = '#achievements:champion'
+    CHAMPION_DESCR = '#achievements:champion_descr'
+    CHAMPION_CONDITION = '#achievements:champion_condition'
+    BANNERMAN = '#achievements:bannerman'
+    BANNERMAN_DESCR = '#achievements:bannerman_descr'
+    BANNERMAN_CONDITION = '#achievements:bannerman_condition'
+    SAURONEYE = '#achievements:sauronEye'
+    SAURONEYE_DESCR = '#achievements:sauronEye_descr'
+    SAURONEYE_CONDITION = '#achievements:sauronEye_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -1055,6 +1091,42 @@ class ACHIEVEMENTS(object):
      FALLOUTALWAYSINLINE,
      FALLOUTALWAYSINLINE_DESCR,
      FALLOUTALWAYSINLINE_CONDITION,
+     SHOULDERTOSHOULDER,
+     SHOULDERTOSHOULDER_DESCR,
+     SHOULDERTOSHOULDER_CONDITION,
+     ALONEINTHEFIELD,
+     ALONEINTHEFIELD_DESCR,
+     ALONEINTHEFIELD_CONDITION,
+     FALLENFLAGS,
+     FALLENFLAGS_DESCR,
+     FALLENFLAGS_CONDITION,
+     STORMLORD,
+     STORMLORD_DESCR,
+     STORMLORD_CONDITION,
+     EFFECTIVESUPPORT,
+     EFFECTIVESUPPORT_DESCR,
+     EFFECTIVESUPPORT_CONDITION,
+     FALLOUTDIEHARD,
+     FALLOUTDIEHARD_DESCR,
+     FALLOUTDIEHARD_CONDITION,
+     WINNERLAURELS,
+     WINNERLAURELS_DESCR,
+     WINNERLAURELS_CONDITION,
+     PREDATOR,
+     PREDATOR_DESCR,
+     PREDATOR_CONDITION,
+     UNREACHABLE,
+     UNREACHABLE_DESCR,
+     UNREACHABLE_CONDITION,
+     CHAMPION,
+     CHAMPION_DESCR,
+     CHAMPION_CONDITION,
+     BANNERMAN,
+     BANNERMAN_DESCR,
+     BANNERMAN_CONDITION,
+     SAURONEYE,
+     SAURONEYE_DESCR,
+     SAURONEYE_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,

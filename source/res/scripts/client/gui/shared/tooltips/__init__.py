@@ -33,6 +33,9 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     CONTACT = 'contact'
     QUESTS = 'quests'
     HANGAR_TUTORIAL = 'hangarTutorial'
+    CLAN_PROFILE = 'clanProfile'
+    TECH_CUSTOMIZATION = 'techCustomization'
+    TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -48,10 +51,12 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     FINAL_STATISTIC = 'FinalStatistic'
     CYBER_SPORT_UNIT = 'CyberSportUnit'
     FORTIFICATIONS = 'fortification'
+    CLAN_PROFILE = 'clanProfile'
     SETTINGS = 'settings'
     CUSTOMIZATION = 'customization'
     CONTACT = 'contact'
     HANGAR_TUTORIAL = 'hangarTutorial'
+    TECH_CUSTOMIZATION = 'techCustomization'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

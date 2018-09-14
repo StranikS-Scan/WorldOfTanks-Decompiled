@@ -1,0 +1,978 @@
+<m4_sherman.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <repairCost>	5.34	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50.8	</armor_1>
+      <armor_2>	50.8	</armor_2>
+      <armor_3>	38.1	</armor_3>
+      <armor_4>	38.1	</armor_4>
+      <armor_5>	38.1	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	12.7	</armor_7>
+      <armor_8>	63.5	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	25.4	</armor_10>
+      <armor_12>	25.4	</armor_12>
+      <armor_13>	44.5	</armor_13>
+      <armor_14>	19.1	</armor_14>
+      <armor_15>	9.5	</armor_15>
+      <armor_16>	50.8	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14600	</weight>
+    <maxHealth>	320	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.06 0.36	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.06 0.36	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.001877 0.964925 -0.053284	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0028241 0.466484 2.4757	</rayStart>
+        <rayEnd>	0.00282403 -0.0294647 2.13801	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.49819 0.625477 0.307854	</rayStart>
+        <rayEnd>	-1.09819 0.625477 0.307854	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.82	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.49819 0.625477 0.307854	</rayStart>
+        <rayEnd>	1.09819 0.625477 0.307854	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.82	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T41>
+      <userString>	#usa_vehicles:T41	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4450.0	</price>
+      <unlocks>
+        <chassis>	T42	  <cost>	2100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	30000	</maxLoad>
+      <terrainResistance>	0.9 1.5 2.3	</terrainResistance>
+      <brakeForce>	46500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A05_M4_Sherman/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A05_M4_Sherman/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A05_M4_Sherman/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A05_M4_Sherman/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A05_M4_Sherman/track/left.track	</left>
+        <right>	vehicles/american/A05_M4_Sherman/track/right.track	</right>
+        <segmentLength>	0.133	</segmentLength>
+        <segmentOffset>	0.018	</segmentOffset>
+        <segment2Offset>	0.073	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.34 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.58	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	27.69230769230769	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.111917	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.278864	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.254882	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.111917	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.278864	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.254882	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.02	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	251	</gravity>
+        <elasticity>	1218	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1.6	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.04421 1.93353	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.592290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.384620 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.347410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T41>
+    <T42>
+      <userString>	#usa_vehicles:T42	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8300	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	32300	</maxLoad>
+      <terrainResistance>	1 1.1 1.7	</terrainResistance>
+      <brakeForce>	46500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	37	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A05_M4_Sherman/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A05_M4_Sherman/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A05_M4_Sherman/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A05_M4_Sherman/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A05_M4_Sherman/track/left.track	</left>
+        <right>	vehicles/american/A05_M4_Sherman/track/right.track	</right>
+        <segmentLength>	0.133	</segmentLength>
+        <segmentOffset>	0.018	</segmentOffset>
+        <segment2Offset>	0.073	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.34 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.58	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	27.69230769230769	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.111917	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.278864	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.254882	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.364321	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.111917	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.278864	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.254882	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.02	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	251	</gravity>
+        <elasticity>	1218	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1.6	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.02	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.03	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.04421 1.93353	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.585780 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.384620 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.347410	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T42>
+  </chassis>
+  <turrets0>
+    <D51066>
+      <userString>	#usa_vehicles:D51066	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4800.0	</price>
+      <armor>
+        <armor_1>	76.2	</armor_1>
+        <armor_2>	76.2	</armor_2>
+        <armor_3>	50.8	</armor_3>
+        <armor_4>	50.8	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_9>	0	</armor_9>
+        <armor_10>	50.8	</armor_10>
+        <armor_11>	25.4	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4800	</weight>
+      <maxHealth>	80	</maxHealth>
+      <rotationSpeed>	39	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	90	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_SPH_M4_L23	  <cost>	1500	</cost>
+            </gun>
+            <turret>	D51072	  <cost>	2700	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0154411 0.00569763 1.1	</rayStart>
+              <rayEnd>	-0.412843 -0.0721393 1.05499	</rayEnd>
+              <rayUp>	0.07 0.065 4	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_M3_L37>
+        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	91.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	45.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	9	</reloadTime>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0451186 0.00809715 1.13	</rayStart>
+              <rayEnd>	-0.160112 -0.0354399 1.09055	</rayEnd>
+              <rayUp>	0.084 0.077 4	</rayUp>
+              <size>	0.503	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_SPH_M4_L23>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.001877 0.31033 0.758253	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.18618 0.384567 0.218055	</rayStart>
+          <rayEnd>	-0.590415 0.313446 0.217212	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.18618 0.384567 0.218055	</rayStart>
+          <rayEnd>	0.590415 0.313446 0.217212	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.010 -0.053 1.000 0.000 0.631 0.104 0.746 0.601 0.495 0.500 0.087 0.500 0.098 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_04	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
+      </camouflage>
+    </D51066>
+    <D51072>
+      <userString>	#usa_vehicles:D51072	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	11500	</price>
+      <unlocks>
+        <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+        </gun>
+        <vehicle>	A36_Sherman_Jumbo	  <cost>	32750	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	63.5	</armor_1>
+        <armor_2>	63.5	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	63.5	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_9>	0	</armor_9>
+        <armor_10>	63.5	</armor_10>
+        <armor_11>	25.4	</armor_11>
+        <armor_12>	44.5	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5000	</weight>
+      <maxHealth>	140	</maxHealth>
+      <rotationSpeed>	37	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.976	</invisibilityFactor>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	90	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 0.0160978 1.35	</rayStart>
+              <rayEnd>	-0.130714 -0.00336769 1.28101	</rayEnd>
+              <rayUp>	0.072 0.066 4	</rayUp>
+              <size>	0.405	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_M3_L37>
+        <_105mm_SPH_M4_L23>	shared	  <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2.5	</aimingTime>
+          <reloadTime>	9	</reloadTime>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00055159 0.016725 1	</rayStart>
+              <rayEnd>	-0.104184 -0.0592577 1.02312	</rayEnd>
+              <rayUp>	0.082 0.075 4	</rayUp>
+              <size>	0.503	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_SPH_M4_L23>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	90	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	M4A3E8_Sherman	  <cost>	30500	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000001 0.0160978 1.8	</rayStart>
+              <rayEnd>	-0.24095 -0.0376926 1.80976	</rayEnd>
+              <rayUp>	0.073 0.068 4	</rayUp>
+              <size>	0.47	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A05_M4_Sherman/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A05_M4_Sherman/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.001877 0.323661 0.874396	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.21789 0.455048 0.107472	</rayStart>
+          <rayEnd>	-0.61789 0.455048 0.108851	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.22975 0.474934 0.16275	</rayStart>
+          <rayEnd>	0.629753 0.474934 0.161372	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.956 -0.031 1.000 0.000 0.650 0.026 0.680 0.577 0.500 0.500 0.060 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_04	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
+      </camouflage>
+    </D51072>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975EC2>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</m4_sherman.xml>

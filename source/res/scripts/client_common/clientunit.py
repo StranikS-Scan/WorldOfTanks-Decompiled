@@ -11,7 +11,7 @@ PLAYER_ID_CHR = '<q'
 VEH_LEN_CHR = '<H'
 VEH_LEN_SIZE = struct.calcsize(VEH_LEN_CHR)
 
-class _ClubExtra(namedtuple('_ClubExtra', ('mapID', 'clubDBID', 'clubName', 'clubEmblemIDs', 'divisionID', 'isBaseDefence', 'accDBIDtoRole', 'isRatedBattle', 'isEnemyReady', 'startTime'))):
+class _ClubExtra(namedtuple('_ClubExtra', ('mapID', 'clubDBID', 'clubName', 'clubEmblemIDs', 'divisionID', 'isBaseDefence', 'accDBIDtoRole', 'accDBIDtoClubTimestamp', 'isRatedBattle', 'isEnemyReady', 'startTime'))):
 
     def getClubDbID(self):
         return self.clubDBID

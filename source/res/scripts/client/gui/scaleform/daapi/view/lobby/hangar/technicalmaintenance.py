@@ -1,33 +1,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
-from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor, VehicleRepairer
+from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleRepairer, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor
 from gui.shared.utils import decorators
-from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
-from gui.shared import events, g_itemsCache
-from gui.shared.formatters import text_styles
-from gui.server_events import g_eventsCache
+from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
 from helpers import i18n
 from helpers.i18n import makeString
-from gui.Scaleform.locale.MENU import MENU
-from gui.doc_loaders.hints_layout import getLayout
 from account_helpers.settings_core.settings_constants import TUTORIAL
 
-class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
+class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     def __init__(self, _ = None):
         super(TechnicalMaintenance, self).__init__()
@@ -51,10 +41,9 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
          'cache.mayConsumeWalletResources': self.onGoldChange,
          'cache.vehsLock': self.__onCurrentVehicleChanged})
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
-        self.startGlobalListening()
         if g_currentVehicle.isPresent():
             self.__currentVehicleId = g_currentVehicle.item.intCD
-        self.populateTechnicalMaintenance(self._getHistoricalBattleData())
+        self.populateTechnicalMaintenance()
         self.populateTechnicalMaintenanceEquipmentDefaults()
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
 
@@ -62,7 +51,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
         g_itemsCache.onSyncCompleted -= self._onShopResync
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
-        self.stopGlobalListening()
         self.removeListener(events.TechnicalMaintenanceEvent.RESET_EQUIPMENT, self.__resetEquipment, scope=EVENT_BUS_SCOPE.LOBBY)
         super(TechnicalMaintenance, self)._dispose()
 
@@ -79,7 +67,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
             self.destroy()
             return
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC or self.__currentVehicleId in diff.get(GUI_ITEM_TYPE.VEHICLE, {}):
-            self.populateTechnicalMaintenance(self._getHistoricalBattleData())
+            self.populateTechnicalMaintenance()
             self.populateTechnicalMaintenanceEquipment(**self.__layout)
 
     def getEquipment(self, eId1, currency1, eId2, currency2, eId3, currency3, slotIndex):
@@ -112,11 +100,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
         if moduleId is None:
             return LOG_ERROR('There is error while attempting to show module info window: ', str(moduleId))
         else:
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, moduleId), {'moduleCompactDescr': str(moduleId),
-             'vehicleDescr': g_currentVehicle.item.descriptor}))
+            shared_events.showModuleInfo(moduleId, g_currentVehicle.item.descriptor)
             return
 
-    def populateTechnicalMaintenance(self, historicalBattleData = None):
+    def populateTechnicalMaintenance(self):
         credits, gold = g_itemsCache.items.stats.money
         goldShellsForCredits = g_itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
         data = {'gold': gold,
@@ -144,7 +131,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
                 if price != defaultPrice:
                     action = getItemActionTooltipData(shell)
                 shells.append({'id': str(shell.intCD),
-                 'compactDescr': shell.intCD,
                  'type': shell.type,
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': shell.count,
@@ -161,11 +147,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
                                  'gold': gold},
                  'actionPriceData': action})
 
-        if historicalBattleData is None:
-            self.as_setDataS(data)
-        else:
-            data.update({'historicalBattle': historicalBattleData})
-            self.as_setHistoricalDataS(data)
+        self.as_setDataS(data)
         return
 
     def populateTechnicalMaintenanceEquipmentDefaults(self):
@@ -251,7 +233,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
         eqsLayout = []
         for shell in shells:
             buyGoldShellForCredits = shell.goldShellsForCredits and shell.prices[1] > 0 and shell.currency == 'credits'
-            shellsLayout.append(shell.compactDescr if not buyGoldShellForCredits else -shell.compactDescr)
+            shellsLayout.append(int(shell.id) if not buyGoldShellForCredits else -int(shell.id))
             shellsLayout.append(int(shell.userCount))
 
         for ei in equipment:
@@ -292,40 +274,11 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta, GlobalListener):
                 self.__isConfirmDialogShown = True
         return
 
-    def onPreQueueSettingsChanged(self, diff):
-        self.populateTechnicalMaintenance(self._getHistoricalBattleData())
-
-    def onPreQueueFunctionalFinished(self):
-        self.populateTechnicalMaintenance()
-
-    def _getHistoricalBattleData(self):
-        historicalBattleData = None
-        if self.preQueueFunctional.getQueueType() == QUEUE_TYPE.HISTORICAL:
-            battleId = self.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID)
-            battle = g_eventsCache.getHistoricalBattles().get(battleId)
-            if battle is not None:
-                vehicle = g_currentVehicle.item
-                if battle.canParticipateWith(vehicle.intCD):
-                    shellsItems = battle.getShellsLayout(vehicle.intCD)
-                    priceString = battle.getShellsLayoutFormatedPrice(vehicle.intCD, self.app.colorManager, True, True)
-                    historicalBattleData = {'price': priceString,
-                     'shells': [],
-                     'battleID': battleId}
-                    shells = historicalBattleData['shells']
-                    for shell, count in shellsItems:
-                        shells.append({'id': str(shell.intCD),
-                         'type': shell.type,
-                         'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-                         'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
-                         'count': count})
-
-        return historicalBattleData
-
     def __onCurrentVehicleChanged(self, *args):
         if g_currentVehicle.isLocked() or not g_currentVehicle.isPresent():
             self.destroy()
         else:
-            self.populateTechnicalMaintenance(self._getHistoricalBattleData())
+            self.populateTechnicalMaintenance()
             if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD != self.__currentVehicleId:
                 self.populateTechnicalMaintenanceEquipmentDefaults()
                 self.__currentVehicleId = g_currentVehicle.item.intCD

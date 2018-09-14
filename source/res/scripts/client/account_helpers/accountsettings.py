@@ -31,6 +31,7 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 JOIN_COMMAND_PRESSED = 'joinCommandPressed'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
+DEFAULT_QUEUE = 'defaultQueue'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -89,7 +90,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
-                        'battlesCountAward': -1},
+                        'battlesCountAward': -1,
+                        'pveBattlesCountAward': -1},
                JOIN_COMMAND_PRESSED: False,
                SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
@@ -197,6 +199,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
                 'minimapSize': 0,
+                'minimapRespawnSize': 0,
                 'nationalVoices': False,
                 'enableVoIP': True,
                 'replayEnabled': 1,
@@ -219,6 +222,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'interfaceScale': 0,
+                DEFAULT_QUEUE: constants.QUEUE_TYPE.SANDBOX,
                 'medKitInstalled': False,
                 'repairKitInstalled': False,
                 'fireExtinguisherInstalled': False}}
@@ -239,7 +243,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 13
+    version = 17
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -436,6 +440,14 @@ class AccountSettings(object):
                     AccountSettings.__readSection(section, KEY_SETTINGS).write('enableVoIP', _pack(enableVoIPVal))
 
                 Settings.g_instance.userPrefs.deleteSection('enableVoIP')
+            if currVersion < 17:
+                for key, section in ads.items()[:]:
+                    if key == 'account':
+                        accSettings = AccountSettings.__readSection(section, KEY_FAVORITES)
+                        for key1, section1 in accSettings.items()[:]:
+                            if key1 == FALLOUT_VEHICLES:
+                                accSettings.deleteSection(key1)
+
             ads.writeInt('version', AccountSettings.version)
 
     @staticmethod

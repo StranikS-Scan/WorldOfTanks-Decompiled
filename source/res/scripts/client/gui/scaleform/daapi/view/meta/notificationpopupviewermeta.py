@@ -15,17 +15,17 @@ class NotificationPopUpViewerMeta(BaseDAAPIComponent):
     def getMessageActualTime(self, msTime):
         self._printOverrideError('getMessageActualTime')
 
-    def as_getPopUpIndexS(self, typeID, entityID):
+    def as_hasPopUpIndexS(self, typeID, entityID):
         if self._isDAAPIInited():
-            return self.flashObject.as_getPopUpIndex(typeID, entityID)
+            return self.flashObject.as_hasPopUpIndex(typeID, entityID)
 
-    def as_appendMessageS(self, messageData):
+    def as_appendMessageS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_appendMessage(messageData)
+            return self.flashObject.as_appendMessage(data)
 
-    def as_updateMessageS(self, messageData):
+    def as_updateMessageS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_updateMessage(messageData)
+            return self.flashObject.as_updateMessage(data)
 
     def as_removeMessageS(self, typeID, entityID):
         if self._isDAAPIInited():

@@ -1,10 +1,13 @@
 # Embedded file name: scripts/common/items/utils.py
 from VehicleDescrCrew import VehicleDescrCrew
+from VehicleQualifiersApplier import VehicleQualifiersApplier
+from items.qualifiers import QUALIFIER_TYPE
 
 def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors):
     crewLevelIncrease = vehicleDescr.miscAttrs['crewLevelIncrease'] + sumCrewLevelIncrease(eqs)
     factors['crewLevelIncrease'] = crewLevelIncrease
-    vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs)
+    mainSkillBonuses = VehicleQualifiersApplier({}, vehicleDescr)[QUALIFIER_TYPE.MAIN_SKILL]
+    vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs, mainSkillBonuses)
     vehicleDescrCrew.onCollectFactors(factors)
     for eq in eqs:
         if eq is not None:

@@ -2,7 +2,7 @@
 import BigWorld
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
-from gui.shared.utils.gui_items import InventoryVehicle
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers.i18n import makeString
 from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
 
@@ -109,7 +109,7 @@ class TankmanStatusField(ToolTipDataField):
             text = makeString(statusTemplate % 'inactiveSkills/text') % {'skills': ', '.join([ roleFormat(role) for role in inactiveRoles ])}
         return {'header': header,
          'text': text,
-         'level': InventoryVehicle.STATE_LEVEL.WARNING}
+         'level': Vehicle.VEHICLE_STATE_LEVEL.WARNING}
 
     def __getRoleBySkill(self, skill):
         for role, skills in SKILLS_BY_ROLES.iteritems():

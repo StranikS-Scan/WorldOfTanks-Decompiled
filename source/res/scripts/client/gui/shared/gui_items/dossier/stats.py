@@ -16,6 +16,7 @@ _ACTION_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.ACTION]
 _NEAREST_ACHIEVEMENTS_COUNT = 5
 _SIGNIFICANT_ACHIEVEMENTS_PER_SECTION = 3
 _7X7_AVAILABLE_RANGE = range(6, 9)
+_FALLOUT_AVAILABLE_RANGE = range(8, constants.MAX_VEHICLE_LEVEL + 1)
 
 def _nearestComparator(x, y):
     if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
@@ -184,6 +185,21 @@ class _MaxStatsBlock(_StatsMaxBlock):
         return self._getStatMax('maxDamage')
 
 
+class _MaxFalloutStatsBlock(_MaxStatsBlock):
+
+    def getMaxVictoryPoints(self):
+        return self._getStatMax('maxWinPoints')
+
+
+class _MaxAvatarFalloutStatsBlock(_MaxStatsBlock):
+
+    def getMaxFragsWithAvatar(self):
+        return self._getStatMax('maxFragsWithAvatar')
+
+    def getMaxDamageWithAvatar(self):
+        return self._getStatMax('maxDamageWithAvatar')
+
+
 class _MaxVehicleStatsBlock(_StatsMaxBlock):
 
     def getMaxXpVehicle(self):
@@ -263,9 +279,6 @@ class _BattleStatsBlock(_CommonBattleStatsBlock):
 
     def getAvgFrags(self):
         return self._getAvgValue(self.getBattlesCount, self.getFragsCount)
-
-    def getAvgDamageDealt(self):
-        return self._getAvgValue(self.getBattlesCount, self.getDamageDealt)
 
     def getAvgDamageReceived(self):
         return self._getAvgValue(self.getBattlesCount, self.getDamageReceived)
@@ -351,6 +364,24 @@ class _Battle2StatsBlock(_StatsBlockAbstract):
 
     def _getStat2(self, statName):
         return self._stats2[statName]
+
+
+class _FalloutStatsBlock(_BattleStatsBlock):
+
+    def getDeathsCount(self):
+        return self._getStat('deathCount')
+
+    def getVictoryPoints(self):
+        return self._getStat('winPoints')
+
+    def getAvgVictoryPoints(self):
+        return self._getAvgValue(self.getBattlesCount, self.getVictoryPoints)
+
+    def getFlagsDelivered(self):
+        return self._getStat('flagCapture')
+
+    def getFlagsAbsorbed(self):
+        return self._getStat('soloFlagCapture')
 
 
 class _FortMiscStatsBlock(_StatsBlockAbstract):
@@ -1320,6 +1351,9 @@ class AccountDossierStats(_DossierStats):
     def getGlobalMapAbsoluteStats(self):
         return GlobalMapAbsoluteBlock(self._getDossierItem())
 
+    def getFalloutStats(self):
+        return AccountFalloutStatsBlock(self._getDossierItem())
+
 
 class VehicleDossierStats(_DossierStats):
 
@@ -1361,6 +1395,9 @@ class VehicleDossierStats(_DossierStats):
 
     def getGlobalMapStats(self):
         return GlobalMapCommon(self._getDossierItem())
+
+    def getFalloutStats(self):
+        return FalloutStatsBlock(self._getDossierItem())
 
 
 class TankmanDossierStats(_DossierStats):
@@ -1420,3 +1457,94 @@ class AccountSeasonRated7x7StatsBlock(AccountRated7x7StatsBlock):
 
     def _getVehDossiersCut(self, dossier):
         return {}
+
+
+class FalloutStatsBlock(_FalloutStatsBlock, _Battle2StatsBlock, _MaxFalloutStatsBlock):
+
+    def __init__(self, dossier):
+        _FalloutStatsBlock.__init__(self, dossier)
+        _Battle2StatsBlock.__init__(self, dossier)
+        _MaxFalloutStatsBlock.__init__(self, dossier)
+
+    def getBattlesCountVer2(self):
+        return self.getBattlesCount()
+
+    def getBattlesCountVer3(self):
+        return self.getBattlesCount()
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['fallout']
+
+    def _getStats2Block(self, dossier):
+        return dossier.getDossierDescr()['fallout']
+
+    def _getStatsMaxBlock(self, dossier):
+        return dossier.getDossierDescr()['maxFallout']
+
+
+class AccountFalloutStatsBlock(FalloutStatsBlock, _VehiclesStatsBlock, _MaxAvatarFalloutStatsBlock):
+    _FalloutVehiclesDossiersCut = namedtuple('VehiclesDossiersCut', ','.join(['battlesCount',
+     'wins',
+     'winPoints',
+     'xp']))
+
+    class FalloutVehiclesDossiersCut(_FalloutVehiclesDossiersCut):
+
+        def __mul__(self, other):
+            self.battlesCount += other.battlesCount
+            self.wins += other.wins
+            self.xp += other.xp
+            self.winPoints += other.winPoints
+
+        def __imul__(self, other):
+            return self + other
+
+    def __init__(self, dossier):
+        FalloutStatsBlock.__init__(self, dossier)
+        _VehiclesStatsBlock.__init__(self, dossier)
+        _MaxAvatarFalloutStatsBlock.__init__(self, dossier)
+
+    def getConsumablesFragsCount(self):
+        return self._getStat('avatarKills')
+
+    def getTotalFragsCount(self):
+        return self.getFragsCount() + self.getConsumablesFragsCount()
+
+    def getAvgFrags(self):
+        return self._getAvgValue(self.getBattlesCount, self.getTotalFragsCount)
+
+    def getConsumablesDamageDealt(self):
+        return self._getStat('avatarDamageDealt')
+
+    def getTotalDamageDelt(self):
+        return self.getDamageDealt() + self.getConsumablesDamageDealt()
+
+    def getAvgDamage(self):
+        return self._getAvgValue(self.getBattlesCount, self.getTotalDamageDelt)
+
+    def getFragsEfficiency(self):
+        return self._getAvgValue(self.getDeathsCount, self.getTotalFragsCount)
+
+    def getDamageEfficiency(self):
+        return self._getAvgValue(self.getDamageReceived, self.getTotalDamageDelt)
+
+    def getMaxDamage(self):
+        return self.getMaxDamageWithAvatar()
+
+    def getMaxFrags(self):
+        return self.getMaxFragsWithAvatar()
+
+    def getMarksOfMastery(self):
+        return (-1, -1, -1, -1)
+
+    def getBattlesStats(self):
+        return self._getBattlesStats(availableRange=_FALLOUT_AVAILABLE_RANGE)
+
+    def getTotalVehicles(self):
+        return len(self._vehsList)
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['falloutCut']
+
+    def _packVehicle(self, battlesCount = 0, wins = 0, xp = 0, winPoints = 0):
+        return self.FalloutVehiclesDossiersCut(battlesCount, wins, winPoints, xp)

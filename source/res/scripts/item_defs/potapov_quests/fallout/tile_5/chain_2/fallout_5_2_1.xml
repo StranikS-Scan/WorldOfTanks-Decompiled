@@ -1,0 +1,49 @@
+<fallout_5_2_1.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_1_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <greaterOrEqual>	250	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	3000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_1_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <greaterOrEqual>	250	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	3000	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_2_1.xml>

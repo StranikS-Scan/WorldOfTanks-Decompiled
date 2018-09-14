@@ -118,7 +118,7 @@ class ContactConverter(object):
             colors = self._getColors('currentUser')
         elif {USER_TAG.FRIEND, USER_TAG.SUB_TO}.issubset(tags):
             colors = self._getColors('friend')
-        elif USER_TAG.CLAN_MEMBER in tags:
+        elif {USER_TAG.CLAN_MEMBER, USER_TAG.OTHER_CLAN_MEMBER}.issubset(tags):
             colors = self._getColors('clanMember')
         elif USER_TAG.CLUB_MEMBER in tags:
             colors = self._getColors('clanMember')
@@ -135,8 +135,13 @@ class ContactConverter(object):
         tags = contact.getTags()
         note = contact.getNote()
         isOnline = contact.isOnline()
+        if USER_TAG.CLAN_MEMBER in tags:
+            pass
+        elif contact.getClanAbbrev():
+            tags.add(USER_TAG.OTHER_CLAN_MEMBER)
         baseUserProps = self.makeBaseUserProps(contact)
         baseUserProps['rgb'] = self.getColor(tags, isOnline)
+        baseUserProps['tags'] = list(tags)
         resourceId = contact.getResourceID() or WG_GAMES.TANKS
         if resourceId != WG_GAMES.TANKS:
             for prefix in WG_GAMES.ALL:

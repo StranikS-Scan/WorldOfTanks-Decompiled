@@ -9,14 +9,15 @@ from gui.wgnc.xml import fromString
 @ReprInjector.simple('notID', 'ttl', 'actions', 'items', 'order', 'marked', 'client')
 
 class _NotificationVO(object):
-    __slots__ = ('notID', 'ttl', 'actions', 'items', 'order', 'marked', 'client')
+    __slots__ = ('notID', 'ttl', 'actions', 'items', 'proxyDataItems', 'order', 'marked', 'client')
 
-    def __init__(self, notID, ttl, actions, items):
+    def __init__(self, notID, ttl, actions, items, proxyDataItems):
         super(_NotificationVO, self).__init__()
         self.notID = notID
         self.ttl = ttl
         self.actions = actions
         self.items = items
+        self.proxyDataItems = proxyDataItems
         self.order = BigWorld.time()
         self.marked = False
         self.client = None
@@ -34,14 +35,16 @@ class _NotificationVO(object):
     def validate(self):
         result = True
         try:
-            self.items.validate(self.actions)
+            if self.items:
+                self.items.validate(self.actions)
             if self.actions:
                 self.actions.validate(self.items)
         except ValidationError as e:
             LOG_ERROR('Notification is invalid', e.message, self)
             result = False
 
-        self.client = self.items.getClientLogic()
+        if self.items:
+            self.client = self.items.getClientLogic()
         return result
 
     def isActive(self):
@@ -53,18 +56,36 @@ class _NotificationVO(object):
         return result
 
     def getItemByName(self, name):
-        return self.items.getItemByName(name)
+        if self.items:
+            return self.items.getItemByName(name)
+        else:
+            return None
 
     def getItemByType(self, itemType):
-        return self.items.getItemByType(itemType)
+        if self.items:
+            return self.items.getItemByType(itemType)
+        else:
+            return None
+
+    def getProxyItemByType(self, itemType):
+        if self.proxyDataItems:
+            return self.proxyDataItems.getItemByType(itemType)
+        else:
+            return None
 
     def showItem(self, notID, target):
-        self.items.showItem(notID, target)
+        if self.items:
+            self.items.showItem(notID, target)
 
     def showAll(self):
-        for item in self.items.all():
-            if not item.isHidden():
-                item.show(self.notID)
+        if self.items:
+            for item in self.items.all():
+                if not item.isHidden():
+                    item.show(self.notID)
+
+        if self.proxyDataItems:
+            for proxyItem in self.proxyDataItems.all():
+                proxyItem.show(self.notID)
 
     def invoke(self, actionsNames, actorName = ''):
         result = False
@@ -109,7 +130,7 @@ class _WGNCProvider(object):
             self.__pending.append(xmlString)
             return
         try:
-            notID, ttl, actionsHolder, itemsHolder = fromString(xmlString)
+            notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder = fromString(xmlString)
         except ParseError as e:
             LOG_ERROR('Can not parse notification', e.message, xmlString)
             return
@@ -117,7 +138,7 @@ class _WGNCProvider(object):
         if notID in self.__nots:
             LOG_WARNING('Notification already is added', notID, self.__nots[notID])
             return 0L
-        vo = _NotificationVO(notID, ttl, actionsHolder, itemsHolder)
+        vo = _NotificationVO(notID, ttl, actionsHolder, guiItemsHolder, proxyDataHolder)
         if not vo.isActive():
             return 0L
         if not vo.validate():
@@ -152,6 +173,13 @@ class _WGNCProvider(object):
         nots = sorted(self.__nots.itervalues(), key=lambda item: item.order)
         for notification in nots:
             if not notification.marked:
+                continue
+            yield notification
+
+    def getNotMarkedNots(self):
+        nots = sorted(self.__nots.itervalues(), key=lambda item: item.order)
+        for notification in nots:
+            if notification.marked:
                 continue
             yield notification
 

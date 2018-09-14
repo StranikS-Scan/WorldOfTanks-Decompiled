@@ -1,0 +1,1214 @@
+<gb60_covenanter.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	50	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	4.17	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	16	</armor_1>
+      <armor_2>	31	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	7	</armor_5>
+      <armor_6>	9	</armor_6>
+      <armor_7>	9	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	40	</armor_9>
+      <armor_10>	14	</armor_10>
+      <armor_11>	30	</armor_11>
+      <armor_12>	20	</armor_12>
+      <armor_13>	15	</armor_13>
+      <armor_16>	14	</armor_16>
+    </armor>
+    <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
+    <weight>	9510	</weight>
+    <maxHealth>	248	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 37.00 0.34 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.28 37.00 0.34 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.76	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.458482 0.313397	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB60_Covenanter/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.51202 0.244215 2.37893	</rayStart>
+        <rayEnd>	0.51202 0.0700902 2.28054	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.25	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB60_Covenanter>
+      <userString>	#gb_vehicles:Chassis_GB60_Covenanter	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1500	</price>
+      <unlocks>
+        <chassis>	Chassis_GB60_Covenanter_2	  <cost>	1200	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	4500	</weight>
+      <maxLoad>	18200	</maxLoad>
+      <terrainResistance>	1 1.2 2	</terrainResistance>
+      <brakeForce>	18000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB60_Covenanter/track/left.track	</left>
+        <right>	vehicles/british/GB60_Covenanter/track/right.track	</right>
+        <segmentLength>	0.097	</segmentLength>
+        <segmentOffset>	0.13	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.35 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	253	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.254906	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.321305	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.254906	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.321305	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.416103	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.416103	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0046	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.112	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.15	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.109	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.143	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.099	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.129	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.068	</offset>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.184	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.184	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.092	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.092	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.112	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.15	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.109	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.143	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.099	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.129	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.068	</offset>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.697980 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.125710	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB60_Covenanter>
+    <Chassis_GB60_Covenanter_2>
+      <userString>	#gb_vehicles:Chassis_GB60_Covenanter_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4200	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	4500	</weight>
+      <maxLoad>	20500	</maxLoad>
+      <terrainResistance>	0.9 1 1.8	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB60_Covenanter/track/left.track	</left>
+        <right>	vehicles/british/GB60_Covenanter/track/right.track	</right>
+        <segmentLength>	0.097	</segmentLength>
+        <segmentOffset>	0.13	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.35 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	253	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.254906	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.321305	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.254906	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.321305	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.416103	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.416103	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0046	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.112	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.15	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.109	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.143	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.099	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.129	</offset>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.068	</offset>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.184	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.184	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.092	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.85	</backwardElastK>
+          <offset>	-0.092	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.112	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.15	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.109	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.143	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.099	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.129	</offset>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.122	</offset>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.068	</offset>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.687260 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.125710	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB60_Covenanter_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB60_Covenanter>
+      <userString>	#gb_vehicles:Turret_1_GB60_Covenanter	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1890.0	</price>
+      <unlocks>
+        <turret>	Turret_2_GB60_Covenanter	  <cost>	1100	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	39	</armor_1>
+        <armor_2>	48	</armor_2>
+        <armor_3>	19.5	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	9	</armor_5>
+        <armor_6>	9	</armor_6>
+        <armor_7>	39	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	9	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	62	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	130	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 0.125 12 0.188662 15 0.339116 15 0.402778 10 0.597222 10 0.660884 15 0.811338 15 0.875 12 1 12	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_40mm_Pom_Pom	  <cost>	1000	</cost>
+            </gun>
+            <gun>	_76mm_Howitzer_MkI	  <cost>	2100	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_2pdr_Gun_Mk_X>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	200	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.125 10 0.188662 15 0.311338 15 0.375 8 0.625 8 0.688662 15 0.811338 15 0.875 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	2.2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	120	</rate>
+          </clip>
+          <burst>
+            <count>	2	</count>
+            <rate>	120	</rate>
+          </burst>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_Pom_Pom>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	74	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 12 0.125 12 0.188662 15 0.325227 15 0.388889 10 0.611111 10 0.674773 15 0.811338 15 0.875 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Howitzer_MkI>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.015997 0.313288 0.654896	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.778195 0.555815 0.243954	</rayStart>
+          <rayEnd>	0.646807 0.415664 0.188323	</rayEnd>
+          <rayUp>	-0.860548 0.478798 -0.17381	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.778195 0.555815 0.243954	</rayStart>
+          <rayEnd>	-0.646807 0.415664 0.188323	</rayEnd>
+          <rayUp>	0.860548 0.478798 -0.173811	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.810673 0.43154 -0.551564	</rayStart>
+          <rayEnd>	0.739429 0.362129 -0.541242	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.66	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.958 -0.059 1.036 0.000 0.497 0.303 1.000 0.667 0.232 0.495 0.362 0.500 0.085 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB60_Covenanter>
+    <Turret_2_GB60_Covenanter>
+      <userString>	#gb_vehicles:Turret_2_GB60_Covenanter	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	5500	</price>
+      <unlocks>
+        <gun>	_40mm_Bofors_MkI	  <cost>	1200	</cost>
+        </gun>
+        <vehicle>	GB20_Crusader	  <cost>	15000	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	39	</armor_1>
+        <armor_2>	39	</armor_2>
+        <armor_3>	19.5	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	9	</armor_5>
+        <armor_6>	9	</armor_6>
+        <armor_7>	39	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	9	</armor_9>
+        <armor_10>	39	</armor_10>
+        <armor_11>	39	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	92	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	130	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 13 0.125 13 0.188662 15 0.339116 15 0.402778 10 0.597222 10 0.660884 15 0.811338 15 0.875 13 1 13	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.745 0.745 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_2pdr_Gun_Mk_X>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	200	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 11 0.125 11 0.188662 15 0.311338 15 0.375 8 0.625 8 0.688662 15 0.811338 15 0.875 11 1 11	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	5	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	4	</count>
+            <rate>	120	</rate>
+          </clip>
+          <burst>
+            <count>	2	</count>
+            <rate>	120	</rate>
+          </burst>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_Pom_Pom>
+        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	74	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 0.125 12 0.188662 15 0.325227 15 0.388889 10 0.611111 10 0.674773 15 0.811338 15 0.875 12 1 12	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <reloadTime>	4.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Howitzer_MkI>
+        <_40mm_Bofors_MkI>	shared	  <maxAmmo>	120	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 13 0.125 13 0.188662 15 0.339116 15 0.402778 10 0.597222 10 0.660884 15 0.811338 15 0.875 13 1 13	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	39	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	150	</rate>
+          </clip>
+          <burst>
+            <count>	2	</count>
+            <rate>	150	</rate>
+          </burst>
+          <models>
+            <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_Bofors_MkI>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.00968 0.313288 0.704896	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.784533 0.548997 0.246141	</rayStart>
+          <rayEnd>	0.653146 0.408846 0.190511	</rayEnd>
+          <rayUp>	-0.860548 0.478798 -0.17381	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.784533 0.548997 0.246141	</rayStart>
+          <rayEnd>	-0.653145 0.408845 0.190511	</rayEnd>
+          <rayUp>	0.860548 0.478798 -0.17381	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.00344938 0.64321 -1.52022	</rayStart>
+          <rayEnd>	0.00344938 0.53552 -1.35169	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.64	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.932 -0.176 1.166 0.000 0.439 0.256 1.000 0.723 0.303 0.500 0.528 0.500 0.055 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+    </Turret_2_GB60_Covenanter>
+  </turrets0>
+  <engines>
+    <Meadows_DAV>	shared	  <unlocks>
+        <engine>	Meadows_DAV_MkI	  <cost>	900	</cost>
+        </engine>
+      </unlocks>
+    </Meadows_DAV>
+    <Meadows_DAV_MkI>	shared	</Meadows_DAV_MkI>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <N9>	shared	  <unlocks>
+        <radio>	N19Mk1	  <cost>	1480	</cost>
+        </radio>
+      </unlocks>
+    </N9>
+    <N19Mk1>	shared	  <unlocks>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	  <unlocks>
+        <radio>	N19Mk3	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk2>
+    <N19Mk3>	shared	</N19Mk3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb60_covenanter.xml>

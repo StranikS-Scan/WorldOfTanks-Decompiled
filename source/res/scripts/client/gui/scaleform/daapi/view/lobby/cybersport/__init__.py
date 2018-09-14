@@ -48,7 +48,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.cyberSport.ClubStatsView import ClubStatsView
     from gui.Scaleform.daapi.view.lobby.cyberSport.ClubLadderView import ClubLadderView
     from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorPopup import VehicleSelectorPopup
-    return [GroupedViewSettings(VIEW_ALIAS.CYBER_SPORT_SEND_INVITES_WINDOW, CyberSportSendInvitesWindow, 'prbSendInvitesWindow.swf', ViewTypes.WINDOW, '', VIEW_ALIAS.CYBER_SPORT_SEND_INVITES_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
+    return (GroupedViewSettings(VIEW_ALIAS.CYBER_SPORT_SEND_INVITES_WINDOW, CyberSportSendInvitesWindow, 'sendInvitesWindow.swf', ViewTypes.WINDOW, '', VIEW_ALIAS.CYBER_SPORT_SEND_INVITES_WINDOW, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY, CyberSportMainWindow, CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_UI, ViewTypes.WINDOW, '', CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY, RosterSlotSettingsWindow, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_UI, ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, True),
      GroupedViewSettings(CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_PY, VehicleSelectorPopup, CYBER_SPORT_ALIASES.VEHICLE_SELECTOR_POPUP_UI, ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, True),
@@ -65,7 +65,7 @@ def getViewSettings():
      ViewSettings(CYBER_SPORT_ALIASES.STATIC_FORMATION_STAFF_PY, ClubStaffView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(CYBER_SPORT_ALIASES.STATIC_FORMATION_LADDER_PY, ClubLadderView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(CYBER_SPORT_ALIASES.STATIC_FORMATION_SUMMARY_PY, ClubSummaryView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_PY, ClubStatsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE)]
+     ViewSettings(CYBER_SPORT_ALIASES.STATIC_FORMATION_STATS_PY, ClubStatsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

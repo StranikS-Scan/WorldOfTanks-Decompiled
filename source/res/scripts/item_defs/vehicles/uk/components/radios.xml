@@ -1,0 +1,283 @@
+<radios.xml>
+  <ids>
+    <N19Mk2_Aust>	1	</N19Mk2_Aust>
+    <British_Wireless_set_N19>	2	</British_Wireless_set_N19>
+    <N14>	4	</N14>
+    <Alarm_flags>	3	</Alarm_flags>
+    <N19Mk2>	8	</N19Mk2>
+    <N19Mk1>	9	</N19Mk1>
+    <N22>	12	</N22>
+    <N9>	15	</N9>
+    <N11>	16	</N11>
+    <N19Mk3>	17	</N19Mk3>
+    <C42>	19	</C42>
+    <C45>	20	</C45>
+    <C45A>	22	</C45A>
+    <Radio_FV4202>	26	</Radio_FV4202>
+    <Alarm_flags_bot>	27	</Alarm_flags_bot>
+    <N14_bot>	28	</N14_bot>
+    <C42_B47>	29	</C42_B47>
+    <N9A>	21	</N9A>
+    <C42_IGR>	60001	</C42_IGR>
+    <N19Mk3_IGR>	60002	</N19Mk3_IGR>
+    <N22_IGR>	60003	</N22_IGR>
+    <C45_IGR>	60004	</C45_IGR>
+  </ids>
+  <shared>
+    <Alarm_flags_bot>
+      <userString>	#gb_vehicles:Alarm_flags_bot	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	24	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Alarm_flags_bot>
+    <N14_bot>
+      <userString>	#gb_vehicles:N14_bot	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	250	</distance>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N14_bot>
+    <Alarm_flags>
+      <userString>	#gb_vehicles:Alarm_flags	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	24	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Alarm_flags>
+    <N14>
+      <userString>	#gb_vehicles:N14	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180	</price>
+      <weight>	40	</weight>
+      <distance>	250	</distance>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N14>
+    <N19Mk1>
+      <userString>	#gb_vehicles:N19Mk1	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <weight>	40	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N19Mk1>
+    <N19Mk2>
+      <userString>	#gb_vehicles:N19Mk2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21000	</price>
+      <weight>	40	</weight>
+      <distance>	450	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk2>
+    <N19Mk2_Aust>
+      <userString>	#gb_vehicles:N19Mk2_Aust	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	450	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk2_Aust>
+    <British_Wireless_set_N19>
+      <userString>	#gb_vehicles:British_Wireless_set_N19	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	9	</level>
+      <price>	29400	</price>
+      <weight>	40	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </British_Wireless_set_N19>
+    <N22>
+      <userString>	#gb_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22>
+    <N9>
+      <userString>	#gb_vehicles:N9	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3600	</price>
+      <weight>	40	</weight>
+      <distance>	375	</distance>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	48	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N9>
+    <N9A>
+      <userString>	#gb_vehicles:N9	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	375	</distance>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	48	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N9A>
+    <N11>
+      <userString>	#gb_vehicles:N11	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	600	</price>
+      <weight>	40	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	36	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N11>
+    <N19Mk3>
+      <userString>	#gb_vehicles:N19Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk3>
+    <C42>
+      <userString>	#gb_vehicles:C42	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42>
+    <C45>
+      <userString>	#gb_vehicles:C45	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45>
+    <C42_B47>
+      <userString>	#gb_vehicles:C42_B47	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_B47>
+    <C45A>
+      <userString>	#gb_vehicles:C45A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45A>
+    <C42_IGR>
+      <userString>	#igr_vehicles:C42_IGR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_IGR>
+    <N19Mk3_IGR>
+      <userString>	#igr_vehicles:N19Mk3_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk3_IGR>
+    <N22_IGR>
+      <userString>	#igr_vehicles:N22_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22_IGR>
+    <C45_IGR>
+      <userString>	#igr_vehicles:C45_IGR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45_IGR>
+    <Radio_FV4202>
+      <userString>	#gb_vehicles:Radio_FV4202	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Radio_FV4202>
+  </shared>
+</radios.xml>

@@ -1,0 +1,210 @@
+<96_prohorovka_defense.xml>
+  <name>	#arenas:96_prohorovka_defense/name	</name>
+  <description>	#arenas:96_prohorovka_defense/description	</description>
+  <geometry>	spaces/96_prohorovka_defense	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/96_prohorovka_defense/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	ground	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
+  <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <artilleryPreparationChance>	0.7	</artilleryPreparationChance>
+      <teamBasePositions>
+        <team1>
+          <position1>	-125.100037 448.300110	</position1>
+        </team1>
+        <team2>
+          <position1>	51.599983 -447.000000	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-37.348 393.967	</position>
+          <position>	-229.021 417.866	</position>
+        </team1>
+        <team2>
+          <position>	10.414 -410.010	</position>
+          <position>	-331.576 -428.692	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	171.058350 16.351446	</controlPoint>
+      <artilleryPreparationChance>	0.5	</artilleryPreparationChance>
+    </domination>
+  </gameplayTypes>
+  <preloadSoundGroups>
+    <groupName>	/combat_atmosphere/combat_atmosphere	</groupName>
+    <groupName>	/plane/planes_with_automatic_weapons	</groupName>
+    <groupName>	/plane/crashes	</groupName>
+    <groupName>	/plane/planes	</groupName>
+  </preloadSoundGroups>
+  <mapActivities>
+    <scenario>
+      <startTime>	30.000000 30.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	450.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a5	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc1_a6	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	170.000000 170.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	450.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	prohorovka_defense_sc2_a1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc2_a2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc2_a3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc2_a4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	290.000000 290.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	450.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	prohorovka_defense_sc3_a1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc3_a2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc3_a3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc3_a4	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	410.000000 410.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <period>	450.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	prohorovka_defense_sc4_a1	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc4_a2	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.000000 6.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	prohorovka_defense_sc4_a3	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.000000 6.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</96_prohorovka_defense.xml>

@@ -10,6 +10,9 @@ class _EmptyPlayersPanel(UIInterface):
     def getPlayerNameLength(self):
         return 31
 
+    def getVehicleNameLength(self):
+        return 31
+
 
 class _GeneralPlayersPanel(_EmptyPlayersPanel):
 
@@ -44,16 +47,25 @@ class _GeneralPlayersPanel(_EmptyPlayersPanel):
     def getPlayerNameLength(self):
         return self.GUICtrl.getPlayerNameLength()
 
+    def getVehicleNameLength(self):
+        return self.GUICtrl.getVehicleNameLength()
+
 
 class _FalloutPlayersPanel(_EmptyPlayersPanel):
 
     def getPlayerNameLength(self):
         return 9
 
+    def getVehicleNameLength(self):
+        return 9
+
 
 class _MultiTeamsPlayersPanel(_EmptyPlayersPanel):
 
     def getPlayerNameLength(self):
+        return 16
+
+    def getVehicleNameLength(self):
         return 16
 
 

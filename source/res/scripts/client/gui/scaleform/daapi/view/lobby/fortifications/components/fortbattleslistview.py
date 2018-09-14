@@ -40,7 +40,7 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
         return
 
     def onUnitFunctionalInited(self):
-        self.unitFunctional.setPrbType(PREBATTLE_TYPE.FORT_BATTLE)
+        self.unitFunctional.setEntityType(PREBATTLE_TYPE.FORT_BATTLE)
 
     def onFortBattleChanged(self, cache, item, battleItem):
         prevIdx = self._searchDP.getSelectedIdx()
@@ -96,8 +96,8 @@ class FortBattlesListView(FortClanBattleListMeta, FortListener, UnitListener):
 
     def _populate(self):
         super(FortBattlesListView, self)._populate()
-        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setPrbType(PREBATTLE_TYPE.FORT_BATTLE)
+        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setEntityType(PREBATTLE_TYPE.FORT_BATTLE)
         self.startFortListening()
         cache = self.fortCtrl.getFortBattlesCache()
         if cache:

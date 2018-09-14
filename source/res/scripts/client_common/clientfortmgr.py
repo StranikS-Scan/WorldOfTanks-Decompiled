@@ -153,8 +153,8 @@ class ClientFortMgr(object):
     def changeVacation(self, timeVacationStart, timeVacationDuration):
         return self.__callFortMethod(FORT_CLIENT_METHOD.CHANGE_VACATION, timeVacationStart, timeVacationDuration, 0)
 
-    def setDevMode(self, isOn = True):
-        return self.__callFortMethod(FORT_CLIENT_METHOD.SET_DEV_MODE, int(isOn), 0, 0)
+    def setDevMode(self, isOn = True, fortBattleMgrDevMode = False):
+        return self.__callFortMethod(FORT_CLIENT_METHOD.SET_DEV_MODE, int(isOn), int(fortBattleMgrDevMode), 0)
 
     def addTimeShift(self, timeShiftSeconds = 3600):
         return self.__callFortMethod(FORT_CLIENT_METHOD.ADD_TIME_SHIFT, timeShiftSeconds, 0, 0)

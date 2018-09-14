@@ -83,7 +83,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, NotificationLayoutVie
                 self.__sendMessageForDisplay(notification)
 
     def __onNotificationUpdated(self, notification, isStateChanged):
-        if self.as_getPopUpIndexS(notification.getType(), notification.getID()) > -1:
+        if self.as_hasPopUpIndexS(notification.getType(), notification.getID()):
             self.as_updateMessageS(notification.getPopUpVO())
         elif isStateChanged:
             self.__onNotificationReceived(notification)

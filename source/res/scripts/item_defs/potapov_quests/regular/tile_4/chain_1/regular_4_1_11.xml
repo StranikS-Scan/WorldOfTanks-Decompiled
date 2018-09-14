@@ -1,0 +1,46 @@
+<regular_4_1_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
+              <greaterOrEqual>	12	</greaterOrEqual>
+              <eventCount></eventCount>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
+              <greaterOrEqual>	12	</greaterOrEqual>
+              <eventCount></eventCount>
+            </vehicleDamage>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2500	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	2	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_1_11.xml>

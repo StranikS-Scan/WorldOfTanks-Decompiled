@@ -1,0 +1,733 @@
+<ch07_vickers_mke_type_bt26.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <repairCost>	2.35	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/Vickers_MkE_Type_BT26_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	12.7	</armor_1>
+      <armor_2>	12.7	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	5	</armor_7>
+      <armor_8>	5	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	5	</armor_11>
+      <armor_12>	5	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3736	</weight>
+    <maxHealth>	124	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	75	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 37.00 0.34 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.28 37.00 0.34 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.76	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.205377 0.668865 -0.007865	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.52387 0.368338 1.57149	</rayStart>
+        <rayEnd>	-0.523866 -0.0249602 1.49858	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.306822 0.366426 1.58182	</rayStart>
+        <rayEnd>	0.306823 -0.0268712 1.50891	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	0.895 0.7 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Ch07_Vickers_MkE_Type_BT26>
+      <userString>	#china_vehicles:Chassis_Ch07_Vickers_MkE_Type_BT26	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	340.0	</price>
+      <unlocks>
+        <chassis>	Chassis_Ch07_Vickers_MkE_Type_BT26_2	  <cost>	105	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	1880	</weight>
+      <maxLoad>	7500	</maxLoad>
+      <terrainResistance>	1.2 1.3 2.3	</terrainResistance>
+      <brakeForce>	7500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	44	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.23	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.347794	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.141941	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.322874	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.161809	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347794	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.141941	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.322874	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.161809	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.840639 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.02531 1.38191	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.264230 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.260960 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.251260	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch07_Vickers_MkE_Type_BT26>
+    <Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+      <userString>	#china_vehicles:Chassis_Ch07_Vickers_MkE_Type_BT26_2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	620	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	1880	</weight>
+      <maxLoad>	10000	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
+      <brakeForce>	8500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	48	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.23	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.347794	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.141941	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.322874	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.161809	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347794	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.141941	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.322874	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.161809	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.840639 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.02531 1.38191	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.265170 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.260960 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.251260	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ch07_Vickers_MkE_Type_BT26>
+      <userString>	#china_vehicles:Turret_1_Ch07_Vickers_MkE_Type_BT26	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	160	</price>
+      <unlocks>
+        <turret>	Turret_2_Ch07_Vickers_MkE_Type_BT26	  <cost>	100	</cost>
+        </turret>
+        <vehicle>	Ch08_Type97_Chi_Ha	  <cost>	1300	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	8	</armor_2>
+        <armor_3>	12.7	</armor_3>
+        <armor_4>	12.7	</armor_4>
+        <armor_5>	5	</armor_5>
+        <armor_6>	5	</armor_6>
+        <armor_7>	12.7	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	650	</weight>
+      <maxHealth>	31	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_47mm_QFSA>	shared	  <maxAmmo>	50	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_37mm_KwK_L46	  <cost>	35	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_47mm_QFSA>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	100	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_KwK_L46>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.205377 0.308224 0.41096	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.775916 0.392914 -0.0491512	</rayStart>
+          <rayEnd>	0.378432 0.348124 -0.04916	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-0.638132 0.361155 -0.454985	</rayStart>
+          <rayEnd>	-0.293601 0.316326 -0.256774	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.006 1.000 0.000 0.486 0.359 0.599 0.500 0.500 0.500 0.134 0.500 0.149 0.500 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1 0.835 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Ch07_Vickers_MkE_Type_BT26>
+    <Turret_2_Ch07_Vickers_MkE_Type_BT26>
+      <userString>	#china_vehicles:Turret_2_Ch07_Vickers_MkE_Type_BT26	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <unlocks>
+        <gun>	_45mm_20K	  <cost>	125.0	</cost>
+        </gun>
+        <gun>	_40mm_Pom_Pom	  <cost>	500	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	10	</armor_8>
+        <armor_9>	10	</armor_9>
+        <armor_10>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1050	</weight>
+      <maxHealth>	46	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.011	</invisibilityFactor>
+      <guns>
+        <_47mm_QFSA>	shared	  <maxAmmo>	96	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+        </_47mm_QFSA>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	160	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_KwK_L46>
+        <_45mm_20K>	shared	  <maxAmmo>	136	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_45mm_20K>
+        <_40mm_Pom_Pom>	shared	  <maxAmmo>	160	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	96	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_Pom_Pom>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch07_Vickers_MkE_Type_BT26/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.205377 0.353496 0.580065	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.661891 0.413922 -0.700386	</rayStart>
+          <rayEnd>	0.276379 0.413767 -0.593705	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-0.656389 0.415693 -0.705809	</rayStart>
+          <rayEnd>	-0.271659 0.415693 -0.596342	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.936 -0.064 1.000 0.000 0.404 0.255 0.878 0.633 0.415 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
+    </Turret_2_Ch07_Vickers_MkE_Type_BT26>
+  </turrets0>
+  <engines>
+    <Armstrong_Siddeley>	shared	  <unlocks>
+        <engine>	Franklin	  <cost>	80	</cost>
+        </engine>
+      </unlocks>
+    </Armstrong_Siddeley>
+    <Franklin>	shared	</Franklin>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Fanions_de_signaux>	shared	  <unlocks>
+        <radio>	_Marconi_SB4a	  <cost>	30	</cost>
+        </radio>
+      </unlocks>
+    </Fanions_de_signaux>
+    <_Marconi_SB4a>	shared	  <unlocks>
+        <radio>	_71-TK-3	  <cost>	95	</cost>
+        </radio>
+      </unlocks>
+    </_Marconi_SB4a>
+    <_71-TK-3>	shared	</_71-TK-3>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	china_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</ch07_vickers_mke_type_bt26.xml>

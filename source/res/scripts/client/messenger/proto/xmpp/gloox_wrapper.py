@@ -21,7 +21,8 @@ _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onHandleIq', 'onHandleIq'),
  ('onRosterQuerySend', 'onRosterQuerySend'),
  ('onHandleMsg', 'onHandleMsg'),
- ('onHandlePresence', 'onHandlePresence'))
+ ('onHandlePresence', 'onHandlePresence'),
+ ('onHandlePresenceError', 'onHandlePresenceError'))
 
 class ClientDecorator(object):
 
@@ -192,8 +193,11 @@ class ClientDecorator(object):
     def onRosterItemRemoved(self, jid):
         self.__handleEvent(GLOOX_EVENT.ROSTER_ITEM_REMOVED, ContactBareJID(jid))
 
-    def onHandlePresence(self, jid, priority, status, presence, wgexts):
+    def onHandlePresence(self, jid, priority, status, presence, wgexts, mucInfo):
         self.__handleEvent(GLOOX_EVENT.PRESENCE, JID(jid), Resource(priority, status, presence, makeWGInfoFromPresence(wgexts)))
+
+    def onHandlePresenceError(self, *args, **kwargs):
+        pass
 
     def onSubscriptionRequest(self, jid, message, nickname, wgexts):
         self.__cancelInboundSubsCallback()

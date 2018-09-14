@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/invite_windows.py
 from PlayerEvents import g_playerEvents
 from adisp import process
-from gui.prb_control import getPrebattleAutoInvites
+from gui.prb_control.prb_getters import getPrebattleAutoInvites
 from gui.prb_control.context.prb_ctx import JoinBattleSessionCtx
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher

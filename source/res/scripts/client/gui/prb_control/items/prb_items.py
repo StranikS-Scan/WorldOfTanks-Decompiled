@@ -2,7 +2,6 @@
 from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.gui_items.Vehicle import Vehicle
 
 class PlayerPrbInfo(object):
@@ -37,6 +36,7 @@ class PlayerPrbInfo(object):
             pDBID = self.dbID
         else:
             pDBID = None
+        from gui.LobbyContext import g_lobbyContext
         return g_lobbyContext.getPlayerFullName(self.name, clanAbbrev=clanAbbrev, pDBID=pDBID)
 
     def isVehicleSpecified(self):

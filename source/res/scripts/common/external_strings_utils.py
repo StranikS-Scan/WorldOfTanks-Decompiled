@@ -27,19 +27,6 @@ class TextRestrictionsBasic(object):
         self.CLAN_MOTTO_MAX_LENGTH = 100
 
 
-class TextRestrictionsVietnam(TextRestrictionsBasic):
-    __slots__ = TextRestrictionsBasic.__slots__
-
-    def __init__(self):
-        super(TextRestrictionsBasic, self).__init__()
-        self.LOGIN_NAME_RE = re.compile('^[a-zA-Z0-9_][a-zA-Z0-9._]+$')
-        self.LOGIN_NAME_MIN_LENGTH = 3
-        self.LOGIN_NAME_MAX_LENGTH = 24
-        self.PASSWORD_RE = re.compile('^[a-zA-Z0-9+!@#$%^&*()?.,_=";:><{}\\[\\]\']+$')
-        self.PASSWORD_MIN_LENGTH = 4
-        self.PASSWORD_MAX_LENGTH = 32
-
-
 class TextRestrictionsChinese(TextRestrictionsBasic):
     __slots__ = TextRestrictionsBasic.__slots__
 
@@ -82,8 +69,6 @@ if CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.BASIC:
     textRestrictions = TextRestrictionsBasic()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.CHINESE:
     textRestrictions = TextRestrictionsChinese()
-elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.VIETNAM:
-    textRestrictions = TextRestrictionsVietnam()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.KOREA:
     textRestrictions = TextRestrictionsKorea()
 else:

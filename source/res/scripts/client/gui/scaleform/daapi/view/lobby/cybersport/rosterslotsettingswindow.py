@@ -5,7 +5,6 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.RosterSlotSettingsWindowMeta import RosterSlotSettingsWindowMeta
 from gui.shared.ItemsCache import g_itemsCache, REQ_CRITERIA
 from gui.shared.events import CSRosterSlotSettingsWindow
-__author__ = 'd_savitski'
 
 class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase):
 
@@ -35,7 +34,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         self.updateData()
 
     def updateData(self):
-        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET), self.__levelsRange, self.__vehicleTypes)
+        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET), self.__levelsRange, self.__vehicleTypes, isVehicleRoster=True)
         self.as_setListDataS(result)
 
     def getFilterData(self):

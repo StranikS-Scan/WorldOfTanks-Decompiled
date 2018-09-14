@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/tutorial/control/quests/triggers.py
 import BigWorld
+from gui.shared import g_eventBus, events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from tutorial import doc_loader
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -9,7 +11,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RESEARCH_CRITERIA
 from tutorial.control import g_tutorialWeaver
 from tutorial.control.quests import aspects
-from tutorial.control.triggers import Trigger, TriggerWithValidateVar
+from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
 from tutorial.settings import createSettingsCollection
 
 class AllTutorialBonusesTrigger(TriggerWithValidateVar):
@@ -350,3 +352,33 @@ class TimerTrigger(TriggerWithValidateVar):
         self.__timerCallback = None
         self.toggle(isOn=True)
         return
+
+
+class SimpleWindowCloseTrigger(TriggerWithSubscription):
+
+    def isOn(self, targetID = None):
+        return targetID == self.getVar()
+
+    def _subscribe(self):
+        g_eventBus.addListener(events.TutorialEvent.SIMPLE_WINDOW_CLOSED, self.__onCloseSimpleWindow, scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    def _unsubscribe(self):
+        g_eventBus.removeListener(events.TutorialEvent.SIMPLE_WINDOW_CLOSED, self.__onCloseSimpleWindow, scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    def __onCloseSimpleWindow(self, event):
+        self.toggle(isOn=self.isOn(event.targetID))
+
+
+class SimpleWindowProcessTrigger(TriggerWithSubscription):
+
+    def isOn(self, targetID = None):
+        return targetID == self.getVar()
+
+    def _subscribe(self):
+        g_eventBus.addListener(events.TutorialEvent.SIMPLE_WINDOW_PROCESSED, self.__onProcessSimpleWindow, scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    def _unsubscribe(self):
+        g_eventBus.removeListener(events.TutorialEvent.SIMPLE_WINDOW_PROCESSED, self.__onProcessSimpleWindow, scope=EVENT_BUS_SCOPE.GLOBAL)
+
+    def __onProcessSimpleWindow(self, event):
+        self.toggle(isOn=self.isOn(event.targetID))

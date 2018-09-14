@@ -5,6 +5,8 @@ from tutorial.data.events import ClickEvent
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform.meta.TutorialDialogMeta import TutorialDialogMeta
 from tutorial.logger import LOG_ERROR
+from gui.Scaleform.locale.BATTLE_TUTORIAL import BATTLE_TUTORIAL
+from helpers import i18n
 
 class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
 
@@ -25,10 +27,6 @@ class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
 
 class TutorialDialog(TutorialPopUp, TutorialDialogMeta):
 
-    def _populate(self):
-        super(TutorialDialog, self)._populate()
-        self.as_setContentS(self._content.copy())
-
     def _stop(self):
         self._content.clear()
         self._gui.effects.stop(GUI_EFFECT_NAME.SHOW_DIALOG, effectID=self.uniqueName)
@@ -43,6 +41,41 @@ class TutorialDialog(TutorialPopUp, TutorialDialogMeta):
 
     def onWindowClose(self):
         self.cancel()
+
+
+class TutorialQueueDialog(TutorialDialog):
+
+    def _populate(self):
+        super(TutorialQueueDialog, self)._populate()
+        data = self._content
+        pointcuts = data['timePointcuts']
+        firstPntCut = pointcuts[0]
+        lastPntCut = pointcuts[len(pointcuts) - 1]
+        self.as_setContentS({'title': data['title'],
+         'message': data['message'],
+         'playerTimeTextStart': data['playerTimeTextStart'],
+         'playerTimeTextEnd': data['playerTimeTextEnd'],
+         'avgTimeText': data['avgTimeText'],
+         'updatePeriod': 60,
+         'timePointcuts': {'firstPointcut': {'value': firstPntCut,
+                                             'text': i18n.makeString(BATTLE_TUTORIAL.LABELS_LESS_N_MINUTES, minutes=firstPntCut)},
+                           'lastPointcut': {'value': lastPntCut,
+                                            'text': i18n.makeString(BATTLE_TUTORIAL.LABELS_MORE_N_MINUTES, minutes=lastPntCut)},
+                           'betweenPointcutsTextAlias': BATTLE_TUTORIAL.LABELS_MINUTES}})
+
+    def as_updateContentS(self, data):
+        return super(TutorialQueueDialog, self).as_updateContentS({'avgTimeText': data['avgTimeText']})
+
+
+class TutorialGreetingDialog(TutorialDialog):
+
+    def _populate(self):
+        super(TutorialGreetingDialog, self)._populate()
+        data = self._content
+        self.as_setContentS({'message': data['message'],
+         'imageUrl': data['imageUrl'],
+         'timeNoteValue': data['timeNoteValue'],
+         'bonuses': data['bonuses']})
 
 
 class TutorialWindow(TutorialPopUp):

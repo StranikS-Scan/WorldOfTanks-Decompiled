@@ -1,0 +1,49 @@
+<regular_1_4_4.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_4_4_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <whileInvisible></whileInvisible>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_4_4_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <vehicle>
+            <and>
+              <installedModules>
+                <optionalDevice>	camouflageNet	</optionalDevice>
+              </installedModules>
+            </and>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <whileInvisible></whileInvisible>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_4_4.xml>

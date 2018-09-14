@@ -258,7 +258,7 @@ class _PreDefinedHostList(object):
             peripheryID, expired = self.readPeripheryTL()
             if peripheryID > 0 and expired > 0:
                 if expired > time.time():
-                    host = self.periphery(peripheryID)
+                    host = self.periphery(peripheryID, False)
                     if host is not None:
                         LOG_DEBUG('Recommended host taken from cache', host)
                         callback(host)
@@ -447,14 +447,15 @@ class _PreDefinedHostList(object):
             result = self._hosts[index].urlIterator
         return result
 
-    def periphery(self, peripheryID):
+    def periphery(self, peripheryID, useRoaming = True):
         if peripheryID in self._peripheryMap:
             index = self._peripheryMap[peripheryID]
             return self._hosts[index]
         else:
-            roamingHosts = dict(((host.peripheryID, host) for host in self.roamingHosts()))
-            if peripheryID in roamingHosts:
-                return roamingHosts[peripheryID]
+            if useRoaming:
+                roamingHosts = dict(((host.peripheryID, host) for host in self.roamingHosts()))
+                if peripheryID in roamingHosts:
+                    return roamingHosts[peripheryID]
             return None
 
     def peripheries(self):

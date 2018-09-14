@@ -4,10 +4,6 @@ from tutorial.control.context import StartReqs
 from tutorial.settings import TUTORIAL_SETTINGS
 from tutorial import doc_loader
 
-def getQuestsDescriptor():
-    return doc_loader.loadDescriptorData(TUTORIAL_SETTINGS.QUESTS)
-
-
 class QuestsStartReqs(StartReqs):
 
     def isEnabled(self):

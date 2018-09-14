@@ -3,8 +3,9 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 import SoundGroups
-from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
+from constants import IGR_TYPE, IS_SHOW_SERVER_STATS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.utils.HangarSpace import g_hangarSpace
@@ -15,15 +16,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.daapi import LobbySubView
 from gui.shared import g_itemsCache, events, EVENT_BUS_SCOPE
-from gui.server_events import g_eventsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
@@ -55,11 +53,10 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
-        g_prbCtrlEvents.onPreQueueFunctionalChanged += self.onPreQueueFunctionalChanged
         g_itemsCache.onSyncCompleted += self.onCacheResync
-        g_eventsCache.onSyncCompleted += self.onEventsCacheResync
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
+        g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
          'stats.gold': self.onMoneyUpdate,
          'stats.vehicleSellsLeft': self.onFittingUpdate,
@@ -113,10 +110,8 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
-        g_eventsCache.onSyncCompleted -= self.onEventsCacheResync
         g_itemsCache.onSyncCompleted -= self.onCacheResync
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_prbCtrlEvents.onPreQueueFunctionalChanged -= self.onPreQueueFunctionalChanged
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         g_playerEvents.onBattleResultsReceived -= self.onFittingUpdate
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
@@ -124,6 +119,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
+        g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
@@ -136,17 +132,9 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if self.ammoPanel:
             self.ammoPanel.update()
 
-    def __clearHistoricalAmmoPanel(self):
-        if self.ammoPanel:
-            self.ammoPanel.clearHistorical()
-
     def __updateParams(self):
         if self.paramsPanel:
             self.paramsPanel.update()
-
-    def __clearHistoricalParams(self):
-        if self.paramsPanel:
-            self.paramsPanel.clearHistorical()
 
     def __updateCarouselVehicles(self, vehicles = None):
         if self.tankCarousel is not None:
@@ -170,7 +158,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         return
 
     def __highlight3DEntityAndShowTT(self, entity):
-        BigWorld.wgAddEdgeDetectEntity(entity, 0, 0)
+        BigWorld.wgAddEdgeDetectEntity(entity, 0, 2)
         itemId = entity.selectionId
         self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
@@ -195,7 +183,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         if self.__isCursorOver3dScene:
             self.__highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
-                SoundGroups.g_instance.playSound3D(entity.model, entity.mouseOverSoundName)
+                SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
 
     def __on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
@@ -235,10 +223,6 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
                 self.__updateAmmoPanel()
             return
 
-    def onEventsCacheResync(self):
-        if self.preQueueFunctional.getQueueType() == QUEUE_TYPE.HISTORICAL:
-            self.tankCarousel.updateVehicles()
-
     def onPlayerStateChanged(self, functional, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
             self.__updateState()
@@ -246,40 +230,19 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
-            self.__updateState()
-            self.__updateAmmoPanel()
+            self.__onFunctionalChanged()
 
     def onPrbFunctionalInited(self):
-        self.__updateState()
-        self.__updateAmmoPanel()
+        self.__onFunctionalChanged()
 
     def onUnitFunctionalInited(self):
-        self.__updateState()
-        self.__updateAmmoPanel()
+        self.__onFunctionalChanged()
 
     def onPrbFunctionalFinished(self):
-        self.__updateState()
-        self.__updateAmmoPanel()
+        self.__onFunctionalChanged()
 
     def onUnitFunctionalFinished(self):
-        self.__updateState()
-        self.__updateAmmoPanel()
-
-    def onPreQueueSettingsChanged(self, diff):
-        if PREQUEUE_SETTING_NAME.BATTLE_ID in diff:
-            self.tankCarousel.updateVehicles()
-        self.__updateAmmoPanel()
-        self.__updateParams()
-
-    def onPreQueueFunctionalChanged(self):
-        self.tankCarousel.updateVehicles()
-        self.__updateAmmoPanel()
-        self.__updateParams()
-
-    def onPreQueueFunctionalFinished(self):
-        if self.preQueueFunctional.getQueueType() == QUEUE_TYPE.HISTORICAL:
-            self.__clearHistoricalAmmoPanel()
-            self.__clearHistoricalParams()
+        self.__onFunctionalChanged()
 
     def __onVehicleBecomeElite(self, vehTypeCompDescr):
         self.__updateCarouselVehicles([vehTypeCompDescr])
@@ -343,3 +306,11 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def __onStatsReceived(self, stats):
         if IS_SHOW_SERVER_STATS:
             self.as_setServerStatsS(*game_control.g_instance.serverStats.getFormattedStats())
+
+    def __onFunctionalChanged(self):
+        self.__updateState()
+        self.__updateAmmoPanel()
+
+    def __onVehicleClientStateChanged(self, vehicles):
+        self.__updateCarouselVehicles(vehicles)
+        self.__updateAmmoPanel()

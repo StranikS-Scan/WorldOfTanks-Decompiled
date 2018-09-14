@@ -37,8 +37,17 @@ class AwardAbstract(object):
     def getAdditionalText(self):
         return ''
 
+    def getTextAreaIconPath(self):
+        return ''
+
+    def getTextAreaIconIsShow(self):
+        return False
+
     def getExtraFields(self):
         return {}
+
+    def getHasDashedLine(self):
+        return False
 
     def getButtonStates(self):
         return (True, False, False)
@@ -99,10 +108,12 @@ class AwardWindow(AwardWindowMeta):
          'header': self.__award.getHeader(),
          'description': self.__award.getDescription(),
          'additionalText': self.__award.getAdditionalText(),
-         'isDashLineEnabled': False,
+         'isDashLineEnabled': self.__award.getHasDashedLine(),
          'buttonText': self.__award.getOkButtonText(),
          'closeBtnLabel': self.__award.getCloseButtonText(),
          'takeNextBtnLabel': self.__award.getBodyButtonText(),
+         'textAreaIconPath': self.__award.getTextAreaIconPath(),
+         'textAreaIconIsShow': self.__award.getTextAreaIconIsShow(),
          'isOKBtnEnabled': okBtn,
          'isCloseBtnEnabled': closeBtn,
          'isTakeNextBtnEnabled': bodyBtn}

@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/ProfileSummaryWindowMeta.py
-from gui.Scaleform.daapi.view.lobby.profile import ProfileSummary
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSummary import ProfileSummary
 
 class ProfileSummaryWindowMeta(ProfileSummary):
 

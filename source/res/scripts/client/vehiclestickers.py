@@ -4,9 +4,6 @@ from collections import namedtuple
 import math
 import constants
 import Account
-from gui.prb_control.prb_helpers import preQueueFunctionalProperty
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
-from gui.server_events import g_eventsCache
 from gui.LobbyContext import g_lobbyContext
 import items
 from items import vehicles
@@ -47,7 +44,7 @@ class ModelStickers():
         if 'clan' in self.__texParamsBySlotType:
             self.__texParamsBySlotType[SlotTypes.CLAN] = [TextureParams('', '', False)]
         self.__stickerModel = BigWorld.WGStickerModel()
-        self.__stickerModel.setLODDistances(vDesc.type.emblemsLodDist, vDesc.type.damageStickersLodDist)
+        self.__stickerModel.setLODDistance(vDesc.type.emblemsLodDist)
         return
 
     def __calcTexParams(self, vDesc, emblemSlots, onHull, insigniaRank):
@@ -111,23 +108,14 @@ class ModelStickers():
         self.__parentNode = parentNode
         self.__isDamaged = isDamaged
         self.__parentNode.attach(self.__stickerModel)
-        isHBParticipatingVehicle = False
-        if self.preQueueFunctional is not None and self.preQueueFunctional.getQueueType() == constants.QUEUE_TYPE.HISTORICAL:
-            battleId = self.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID)
-            battle = g_eventsCache.getHistoricalBattles().get(battleId)
-            if battle is not None and battle.canParticipateWith(self.__vehicleDescriptor.type.compactDescr):
-                isHBParticipatingVehicle = True
         replayCtrl = BattleReplay.g_replayCtrl
         for slotType, slots in self.__slotsByType.iteritems():
             if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
                 if slotType != SlotTypes.CLAN:
                     self.__doAttachStickers(slotType)
             elif slotType == SlotTypes.CLAN:
-                arenaBonusType = None
-                if hasattr(BigWorld.player(), 'arena'):
-                    arenaBonusType = BigWorld.player().arena.bonusType
                 serverSettings = g_lobbyContext.getServerSettings()
-                if serverSettings is not None and serverSettings.roaming.isInRoaming() or arenaBonusType == constants.ARENA_BONUS_TYPE.HISTORICAL or isHBParticipatingVehicle or self.__isLoadingClanEmblems:
+                if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
                     continue
                 self.__isLoadingClanEmblems = True
                 accountRep = Account.g_accountRepository
@@ -181,12 +169,8 @@ class ModelStickers():
                 self.attachStickers(self.__model, self.__parentNode, self.__isDamaged)
             return
 
-    def setAlphas(self, emblemAlpha, dmgStickerAlpha):
-        self.__stickerModel.setAlphas(emblemAlpha, dmgStickerAlpha)
-
-    @preQueueFunctionalProperty
-    def preQueueFunctional(self):
-        return None
+    def setAlpha(self, stickersAlpha):
+        self.__stickerModel.setAlpha(stickersAlpha)
 
     def __doAttachStickers(self, slotType):
         if self.__model is None or slotType == SlotTypes.CLAN and self.__clanID == 0:
@@ -257,7 +241,7 @@ class VehicleStickers(object):
         multipliedAlpha = alpha * self.__defaultAlpha
         for componentStickers in self.__stickers.itervalues():
             actualAlpha = multipliedAlpha if self.__show else 0.0
-            componentStickers.stickers.setAlphas(actualAlpha, actualAlpha)
+            componentStickers.stickers.setAlpha(actualAlpha)
             componentStickers.alpha = multipliedAlpha
 
     alpha = property(lambda self: self.__stickers[TankComponentNames.HULL].alpha, __setAlpha)
@@ -266,7 +250,7 @@ class VehicleStickers(object):
         self.__show = show
         for componentStickers in self.__stickers.itervalues():
             alpha = componentStickers.alpha if show else 0.0
-            componentStickers.stickers.setAlphas(alpha, alpha)
+            componentStickers.stickers.setAlpha(alpha)
 
     show = property(lambda self: self.__show, __setShow)
     COMPONENT_NAMES = (TankComponentNames.HULL, TankComponentNames.TURRET, TankComponentNames.GUN)
@@ -297,7 +281,7 @@ class VehicleStickers(object):
             componentStickers = self.__stickers[componentName]
             componentStickers.stickers.attachStickers(model, parentNode, isDamaged)
             if showDamageStickers:
-                for damageSticker in componentStickers.damageStickers:
+                for damageSticker in componentStickers.damageStickers.itervalues():
                     if damageSticker.handle is not None:
                         componentStickers.stickers.delDamageSticker(damageSticker.handle)
                         damageSticker.handle = None

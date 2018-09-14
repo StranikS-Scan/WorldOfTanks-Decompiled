@@ -1,0 +1,1049 @@
+<gb24_centurion_mk3.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	9.4	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	120.7	</armor_1>
+      <armor_2>	76.2	</armor_2>
+      <armor_3>	50.8	</armor_3>
+      <armor_4>	31.8	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	50.8	</armor_6>
+      <armor_7>	17	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	154.3	</armor_9>
+      <armor_10>	28.6	</armor_10>
+      <armor_11>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_11>
+      <armor_12>	28.6	</armor_12>
+      <armor_13>	19.1	</armor_13>
+      <armor_14>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	27730	</weight>
+    <maxHealth>	1296	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 32.00 0.38 1.00 0.05 0.28	</pitchParams>
+      <rollParams>	1.00 0.22 32.00 0.38 1.00 0.05 0.28	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.012 0.543833 0.30876	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.85711 0.269033 2.43793	</rayStart>
+        <rayEnd>	1.45711 0.269033 2.43793	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.83311 0.201777 2.16976	</rayStart>
+        <rayEnd>	-1.43311 0.201777 2.16976	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.88	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB24_Centurion_Mk3>
+      <userString>	#gb_vehicles:Chassis_GB24_Centurion_Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31500.0	</price>
+      <unlocks>
+        <chassis>	Chassis_GB24_Centurion_Mk3_2	  <cost>	23000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	51500	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	45000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	175	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB24_Centurion_Mk3/track/left.track	</left>
+        <right>	vehicles/british/GB24_Centurion_Mk3/track/right.track	</right>
+        <segmentLength>	0.165	</segmentLength>
+        <segmentOffset>	0.11	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.47 0.65	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.45	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	22.5	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.424	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.424	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.339685	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.124443	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.424898	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.339685	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.124443	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.424898	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+        </node>
+      </trackNodes>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	-0.012 1.10081 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.3 2.35344	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.492120 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.651210 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.943070	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB24_Centurion_Mk3>
+    <Chassis_GB24_Centurion_Mk3_2>
+      <userString>	#gb_vehicles:Chassis_GB24_Centurion_Mk3_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	63000	</price>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	54000	</maxLoad>
+      <terrainResistance>	1 1.1 1.9	</terrainResistance>
+      <brakeForce>	50000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB24_Centurion_Mk3/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB24_Centurion_Mk3/track/left.track	</left>
+        <right>	vehicles/british/GB24_Centurion_Mk3/track/right.track	</right>
+        <segmentLength>	0.165	</segmentLength>
+        <segmentOffset>	0.11	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.65	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.45	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	22.5	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.339685	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.124443	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.42	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.424898	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.339685	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.124443	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.42	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.424898	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.13	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.5	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.71	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1.93	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+          <backwardElastK>	1.98	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.92	</forwardElastK>
+        </node>
+      </trackNodes>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	-0.012 1.10081 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.3 2.35344	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.466710 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.651210 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.943070	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB24_Centurion_Mk3_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB24_Centurion_Mk3>
+      <userString>	#gb_vehicles:Turret_1_GB24_Centurion_Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	50500	</price>
+      <armor>
+        <armor_1>	152.4	</armor_1>
+        <armor_2>	152.4	</armor_2>
+        <armor_3>	88.9	</armor_3>
+        <armor_4>	88.9	</armor_4>
+        <armor_5>	28.6	</armor_5>
+        <armor_6>	28.6	</armor_6>
+        <armor_7>	88.9	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	50.8	</armor_9>
+        <armor_10>	88.9	</armor_10>
+        <armor_11>	88.9	</armor_11>
+        <armor_12>	28.6	</armor_12>
+        <armor_13>	28.6	</armor_13>
+        <armor_14>	38.1	</armor_14>
+        <armor_15>	25.4	</armor_15>
+        <armor_16>	120.7	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_10	</primaryArmor>
+      <weight>	10400	</weight>
+      <maxHealth>	324	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_20pdr_Gun_Type_B	  <cost>	45000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0708393 0.0182139 3.14903	</rayStart>
+              <rayEnd>	0.071098 -0.0373812 3.14805	</rayEnd>
+              <rayUp>	0.081 0.076 4	</rayUp>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_Gun_Type_A>
+        <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_GB24_Centurion_Mk3	  <cost>	24000	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	5.7	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0708399 0.0182143 2.99296	</rayStart>
+              <rayEnd>	0.0659861 -0.0210624 2.99193	</rayEnd>
+              <rayUp>	0.082 0.077 4	</rayUp>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.85 0.475 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_Gun_Type_B>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.07084 0.43133 0.98384	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.21797 0.674252 -0.560309	</rayStart>
+          <rayEnd>	-0.829411 0.638011 -0.472545	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.41496 0.861218 -0.433384	</rayStart>
+          <rayEnd>	1.27201 0.488206 -0.412675	</rayEnd>
+          <rayUp>	-0.902377 0.408884 0.136119	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.220 0.000 0.625 0.126 0.621 0.593 0.604 0.500 0.000 0.500 0.060 0.000 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.82 0.565 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB24_Centurion_Mk3>
+    <Turret_2_GB24_Centurion_Mk3>
+      <userString>	#gb_vehicles:Turret_2_GB24_Centurion_Mk3	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	61000	</price>
+      <unlocks>
+        <gun>	_105mm_Gun_L7	  <cost>	55000	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	152.4	</armor_1>
+        <armor_2>	152.4	</armor_2>
+        <armor_3>	88.9	</armor_3>
+        <armor_4>	88.9	</armor_4>
+        <armor_5>	28.6	</armor_5>
+        <armor_6>	28.6	</armor_6>
+        <armor_7>	88.9	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	50.8	</armor_9>
+        <armor_10>	88.9	</armor_10>
+        <armor_11>	88.9	</armor_11>
+        <armor_12>	28.6	</armor_12>
+        <armor_13>	28.6	</armor_13>
+        <armor_14>	38.1	</armor_14>
+        <armor_15>	25.4	</armor_15>
+        <armor_16>	120.7	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	10900	</weight>
+      <maxHealth>	424	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	410	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0708393 0.0182139 3.2198	</rayStart>
+              <rayEnd>	0.0670883 0.0208441 3.21881	</rayEnd>
+              <rayUp>	0.08 0.076 4	</rayUp>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.595 0.355 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_Gun_Type_A>
+        <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 1 0.555556 1 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	5.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0708399 0.0182143 2.91657	</rayStart>
+              <rayEnd>	0.0602322 -0.00175441 2.91555	</rayEnd>
+              <rayUp>	0.082 0.077 4	</rayUp>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.655 0.385 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_20pdr_Gun_Type_B>
+        <_105mm_Gun_L7>	shared	  <maxAmmo>	72	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 0.1 0.555556 0.1 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	GB86_Centurion_Action_X	  <cost>	180000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0708376 0.0182135 2.81825	</rayStart>
+              <rayEnd>	0.0553732 0.0281832 2.81709	</rayEnd>
+              <rayUp>	0.094 0.091 4	</rayUp>
+              <size>	0.634	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.655 0.37 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Gun_L7>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.07084 0.43133 0.98384	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.21583 0.682685 -0.566344	</rayStart>
+          <rayEnd>	-0.827258 0.646443 -0.478579	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.40271 0.860895 -0.523703	</rayStart>
+          <rayEnd>	1.25977 0.487885 -0.502993	</rayEnd>
+          <rayUp>	-0.902377 0.408884 0.136119	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.111 -0.201 1.182 0.000 0.630 0.127 0.558 0.683 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.82 0.625 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_GB24_Centurion_Mk3>
+  </turrets0>
+  <engines>
+    <Rolls_Royse_Meteor_MkIV>	shared	  <unlocks>
+        <engine>	Rolls_Royse_Meteor_MkIVC	  <cost>	31000	</cost>
+        </engine>
+      </unlocks>
+    </Rolls_Royse_Meteor_MkIV>
+    <Rolls_Royse_Meteor_MkIVC>	shared	  <unlocks>
+        <engine>	Rolls_Royce_Griffon	  <cost>	45000	</cost>
+        </engine>
+      </unlocks>
+    </Rolls_Royse_Meteor_MkIVC>
+    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <N19Mk3>	shared	  <unlocks>
+        <radio>	N22	  <cost>	4500	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk3>
+    <N22>	shared	  <unlocks>
+        <radio>	C42	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </N22>
+    <C42>	shared	</C42>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb24_centurion_mk3.xml>

@@ -167,10 +167,10 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_SESSION_WINDOW = 'hideBattleSessionWindow'
     HIDE_UNIT_WINDOW = 'hideUnitWindow'
-    HIDE_HISTORICAL_BATTLES_WINDOW = 'hideHistoricalBattlesWindow'
     HIDE_VEHICLE_SELECTOR_WINDOW = 'showVehicleSelectorWindow'
     HIDE_ROSTER_SLOT_SETTINGS_WINDOW = 'showRosterSlotSettingsWindow'
     HIDE_LEGAL_INFO_WINDOW = 'showLegalInfoWindow'
+    HIDE_SANDBOX_QUEUE_DIALOG = 'hideSandboxQueueDialog'
     HIDE_FALLOUT_WINDOW = 'hideFalloutWindow'
 
 
@@ -239,6 +239,7 @@ class CoolDownEvent(SharedEvent):
     BW_CHAT2 = 'bwChat2CoolDown'
     XMPP = 'xmppCoolDown'
     CLUB = 'club'
+    CLAN = 'clan'
 
     def __init__(self, eventType = None, requestID = 0, coolDown = 5.0):
         super(CoolDownEvent, self).__init__(eventType)
@@ -253,19 +254,25 @@ class TutorialEvent(SharedEvent):
     ON_COMPONENT_FOUND = 'onComponentFound'
     ON_COMPONENT_LOST = 'onComponentLost'
     ON_TRIGGER_ACTIVATED = 'onTriggerActivated'
+    SIMPLE_WINDOW_CLOSED = 'simpleWindowClosed'
+    SIMPLE_WINDOW_PROCESSED = 'simpleWindowProcessed'
 
-    def __init__(self, eventType, settingsID = '', targetID = '', reloadIfRun = False, initialChapter = None, restoreIfRun = False):
+    def __init__(self, eventType, settingsID = '', targetID = '', reloadIfRun = False, initialChapter = None, restoreIfRun = False, isStopForced = False, isAfterBattle = False):
         super(TutorialEvent, self).__init__(eventType)
         self.settingsID = settingsID
         self.targetID = targetID
         self.reloadIfRun = reloadIfRun
         self.initialChapter = initialChapter
         self.restoreIfRun = restoreIfRun
+        self.isStopForced = isStopForced
+        self.isAfterBattle = isAfterBattle
 
     def getState(self):
         return {'reloadIfRun': self.reloadIfRun,
          'initialChapter': self.initialChapter,
-         'restoreIfRun': self.restoreIfRun}
+         'restoreIfRun': self.restoreIfRun,
+         'isStopForced': self.isStopForced,
+         'isAfterBattle': self.isAfterBattle}
 
 
 class MessengerEvent(HasCtxEvent):
@@ -347,7 +354,7 @@ class FortEvent(HasCtxEvent):
     ON_INTEL_FILTER_DO_REQUEST = 'onIntelFilterDoRequest'
     TRANSPORTATION_STEP = 'transportationStep'
     CHOICE_DIVISION = 'testChoiceDivision'
-    CLOSE_TRANSPORT_CONFIRM_WINDOW = 'closeTransportConfirmWindow'
+    REQUEST_TRANSPORTATION = 'requestTransportation'
 
     class TRANSPORTATION_STEPS(CONST_CONTAINER):
         NONE = 0
@@ -384,6 +391,10 @@ class OpenLinkEvent(SharedEvent):
     REPAIRKITHELP_HELP = 'repairkitHelp'
     FIRE_EXTINGUISHERHELP_HELP = 'fireExtinguisherHelp'
     INVIETES_MANAGEMENT = 'invitesManagementURL'
+    GLOBAL_MAP_SUMMARY = 'globalMapSummary'
+    GLOBAL_MAP_PROMO_SUMMARY = 'globalMapPromoSummary'
+    GLOBAL_MAP_CAP = 'globalMapCap'
+    GLOBAL_MAP_PROMO = 'globalMapPromo'
 
     def __init__(self, eventType, url = '', title = ''):
         super(OpenLinkEvent, self).__init__(eventType)

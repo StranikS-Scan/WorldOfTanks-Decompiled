@@ -14,7 +14,6 @@ from account_helpers.AccountSettings import AccountSettings
 from gui import getNationIndex
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
-from gui.shared.utils.gui_items import InventoryVehicle
 from items import ITEM_TYPE_INDICES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -267,7 +266,7 @@ class Shop(ShopMeta):
                   GUI_ITEM_TYPE.EQUIPMENT) else module.icon,
          'disabled': disabled,
          'statusMessage': statusMessage,
-         'statusLevel': InventoryVehicle.STATE_LEVEL.WARNING,
+         'statusLevel': Vehicle.VEHICLE_STATE_LEVEL.WARNING,
          'removable': module.isRemovable if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else True,
          'tankType': module.type if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE else type,
          'isPremium': module.isPremium if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE else False,

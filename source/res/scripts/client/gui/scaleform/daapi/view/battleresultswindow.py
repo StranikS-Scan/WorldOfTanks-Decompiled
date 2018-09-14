@@ -12,6 +12,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_control.arena_info import getArenaIcon, hasResourcePoints
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.battle_results.VehicleProgressHelper import VehicleProgressHelper, PROGRESS_ACTION
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.event_dispatcher import showResearchView, showPersonalCase, showBattleResultsFromData
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.functions import getArenaSubTypeName
@@ -25,18 +26,18 @@ from debug_utils import LOG_DEBUG
 from helpers import i18n, time_utils
 from adisp import async, process
 from CurrentVehicle import g_currentVehicle
-from constants import ARENA_BONUS_TYPE, IS_DEVELOPMENT, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION, TEAMS_IN_ARENA
+from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, IGR_TYPE, EVENT_TYPE, FINISH_REASON as FR, FLAG_ACTION, TEAMS_IN_ARENA
 from dossiers2.custom.records import RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.ui import achievements
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
-from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
+from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS, isAchievementRegistered
 from gui import makeHtmlString, GUI_SETTINGS, SystemMessages
 from gui.server_events import g_eventsCache, events_dispatcher as quests_events
 from gui.shared import g_itemsCache, events
 from gui.shared.utils import isVehicleObserver
 from items import vehicles as vehicles_core, vehicles
 from items.vehicles import VEHICLE_CLASS_TAGS
-from shared_utils import findFirst
+from shared_utils import findFirst, isDefaultDict
 from gui.clubs import events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
 from gui.clubs.settings import getLeagueByDivision, getDivisionWithinLeague
@@ -52,6 +53,7 @@ from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.shared.formatters import text_styles
 from gui.battle_results import formatters as battle_res_fmts
+from gui.shared.utils.HangarSpace import g_hangarSpace
 
 def _wrapEmblemUrl(emblemUrl):
     return ' <IMG SRC="img://%s" width="24" height="24" vspace="-10"/>' % emblemUrl
@@ -108,6 +110,10 @@ FALLOUT_ONLY_STATS = ('killed', 'killsByOrder', 'damageDealtByOrder', 'flags', '
 FALLOUT_ORDER_STATS = ('damageDealtByOrder', 'killsByOrder')
 FALLOUT_EXCLUDE_VEHICLE_STATS = ('damagedKilled', 'sniperDamageDealt', 'capturePoints', 'droppedCapturePoints', 'capturePointsVal', 'mileage')
 
+def _skip(a, b):
+    return a
+
+
 def _intSum(a, b):
     return a + b
 
@@ -124,12 +130,18 @@ def _listCollect(a, b):
     return tuple(a) + tuple(b)
 
 
+def _uniqueListCollect(a, b):
+    result = list(a)
+    result.extend([ j for j in b if j not in a ])
+    return tuple(result)
+
+
 def _calculateDailyXP(oritinalData, data):
-    return (data['originalXP'] - int(data.get('xpPenaltyBase', 0))) * data['dailyXPFactor10'] / 10.0
+    return (data.get('originalXP', 0) - int(data.get('xpPenaltyBase', 0))) * data.get('dailyXPFactor10', 0) / 10.0
 
 
 def _calculateDailyFreeXP(oritinalData, data):
-    return data['originalFreeXP'] * data['dailyXPFactor10'] / 10.0
+    return data.get('originalFreeXP', 0) * data.get('dailyXPFactor10', 0) / 10.0
 
 
 def _calculateBaseXpPenalty(originalData, data):
@@ -140,7 +152,7 @@ def _calculateBaseXpPenalty(originalData, data):
     igrXpFactor = originalData.get('igrXPFactor10', 10) / 10.0
     premXpFactor = originalData.get('premiumXPFactor10', 10) / 10.0
     dailyXpFactor = originalData.get('dailyXPFactor10', 10) / 10.0
-    xpPenalty = data['xpPenalty']
+    xpPenalty = data.get('xpPenalty', 0)
     xpPenalty = math.ceil(int(xpPenalty / aogasFactor) / dailyXpFactor)
     if isPremium:
         xpPenalty = math.ceil(xpPenalty / premXpFactor)
@@ -152,40 +164,49 @@ def _calculateBaseXpPenalty(originalData, data):
 RELATED_ACCOUNT_DATA = {'dailyXP': _calculateDailyXP,
  'dailyFreeXP': _calculateDailyFreeXP,
  'xpPenaltyBase': _calculateBaseXpPenalty}
-CUMULATIVE_ACCOUNT_DATA = (('credits', (0, _intSum)),
- ('achievementCredits', (0, _intSum)),
+COMMON_DATA = (('achievementCredits', (0, _intSum)),
  ('creditsContributionIn', (0, _intSum)),
  ('creditsToDraw', (0, _intSum)),
  ('creditsPenalty', (0, _intSum)),
  ('creditsContributionOut', (0, _intSum)),
  ('originalCredits', (0, _intSum)),
- ('eventCredits', (0, _intSum)),
- ('eventGold', (0, _intSum)),
  ('orderCredits', (0, _intSum)),
  ('boosterCredits', (0, _intSum)),
  ('autoRepairCost', (0, _intSum)),
  ('autoLoadCost', ((0, 0), _listSum)),
  ('autoEquipCost', ((0, 0), _listSum)),
  ('histAmmoCost', ((0, 0), _listSum)),
- ('xp', (0, _intSum)),
- ('freeXP', (0, _intSum)),
  ('achievementXP', (0, _intSum)),
  ('achievementFreeXP', (0, _intSum)),
  ('xpPenalty', (0, _intSum)),
  ('originalXP', (0, _intSum)),
  ('originalFreeXP', (0, _intSum)),
- ('dossierPopUps', ((), _listCollect)),
+ ('dossierPopUps', ((), _uniqueListCollect)),
  ('orderXP', (0, _intSum)),
  ('boosterXP', (0, _intSum)),
  ('orderFreeXP', (0, _intSum)),
  ('boosterFreeXP', (0, _intSum)),
- ('eventXP', (0, _intSum)),
- ('eventFreeXP', (0, _intSum)),
  ('premiumVehicleXP', (0, _intSum)),
  ('dailyXPFactor10', (10, _intMax)),
  ('xpPenaltyBase', (0, _intSum)),
  ('dailyXP', (0, _intSum)),
  ('dailyFreeXP', (0, _intSum)))
+VEHICLE_DATA = (('credits', (0, _skip)),
+ ('xp', (0, _skip)),
+ ('freeXP', (0, _skip)),
+ ('eventCredits', (0, _skip)),
+ ('eventGold', (0, _skip)),
+ ('eventXP', (0, _skip)),
+ ('eventFreeXP', (0, _skip)))
+AVATAR_DATA = (('credits', (0, _intSum)),
+ ('xp', (0, _intSum)),
+ ('freeXP', (0, _intSum)),
+ ('eventCredits', (0, _intSum)),
+ ('eventGold', (0, _intSum)),
+ ('eventXP', (0, _intSum)),
+ ('eventFreeXP', (0, _intSum)))
+CUMULATIVE_VEHICLE_DATA = list(COMMON_DATA + VEHICLE_DATA)
+CUMULATIVE_ACCOUNT_DATA = list(COMMON_DATA + AVATAR_DATA)
 CUMULATIVE_STATS_DATA = {'shots': (0, _intSum),
  'tkills': (0, _intSum),
  'damageDealt': (0, _intSum),
@@ -226,6 +247,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         raise ctx['dataProvider'] is not None or AssertionError
         self.dataProvider = ctx['dataProvider']
         self.__premiumBonusesDiff = {}
+        self.__isFallout = False
         return
 
     @storage_getter('users')
@@ -252,30 +274,33 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         super(BattleResultsWindow, self)._dispose()
 
     def onWindowClose(self):
-        import MusicController
-        MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes, True)
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
+        g_hangarSpace.playHangarMusic(True)
         self.destroy()
 
     def getDenunciations(self):
         return g_itemsCache.items.stats.denunciationsLeft
 
     def showEventsWindow(self, eID, eventType):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
         return quests_events.showEventsWindow(eID, eventType)
 
     def saveSorting(self, iconType, sortDirection, bonusType):
         AccountSettings.setSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie', {'iconType': iconType,
          'sortDirection': sortDirection})
 
-    def __getPlayerName(self, playerDBID):
+    def __getPlayerName(self, playerDBID, bots, vID = None):
         playerNameRes = self.__playersNameCache.get(playerDBID)
         if playerNameRes is None:
-            player = self.dataProvider.getPlayerData(playerDBID)
-            playerNameRes = self.__playersNameCache[playerDBID] = (player.getFullName(), (player.name,
+            botName = bots.get(vID, (None, None))[1]
+            player = self.dataProvider.getPlayerData(playerDBID, botName)
+            playerNameRes = (player.getFullName(), (player.name,
               player.clanAbbrev,
               player.getRegionCode(),
               player.igrType))
+            if playerDBID is not None:
+                self.__playersNameCache[playerDBID] = playerNameRes
         return playerNameRes
 
     def __getVehicleData(self, vehicleCompDesc):
@@ -396,9 +421,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
     def __makeRedLabel(self, value):
         return makeHtmlString('html_templates:lobby/battle_results', 'negative_value', {'value': value})
 
-    def __populateStatValues(self, node, isFallout, isSelf = False):
+    def __populateStatValues(self, node, isSelf = False):
         node = node.copy()
-        if not isFallout:
+        if not self.__isFallout:
             node['damagedKilled'] = self.__makeSlashedValuesStr(node, 'damaged', 'kills')
             node['capturePointsVal'] = self.__makeSlashedValuesStr(node, 'capturePoints', 'droppedCapturePoints')
         else:
@@ -412,9 +437,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         node['victoryScore'] = node.get('winPoints', 0)
         result = []
         for key, isInt, selfKey in STATS_KEYS:
-            if not isFallout and key in FALLOUT_ONLY_STATS:
+            if not self.__isFallout and key in FALLOUT_ONLY_STATS:
                 continue
-            if isFallout and key in FALLOUT_EXCLUDE_VEHICLE_STATS:
+            if self.__isFallout and key in FALLOUT_EXCLUDE_VEHICLE_STATS:
                 continue
             if key in FALLOUT_ORDER_STATS and key not in node:
                 continue
@@ -432,7 +457,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
 
         return result
 
-    def __populateAccounting(self, commonData, personalCommonData, personalData, playersData, personalDataOutput, isFallout):
+    def __populateAccounting(self, commonData, personalCommonData, personalData, playersData, personalDataOutput, playerAvatarData):
         if self.dataProvider.getArenaUniqueID() in self.__buyPremiumCache:
             isPostBattlePremium = True
         else:
@@ -462,7 +487,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         igrType = playerData.get('igrType', 0)
         vehsCreditsData = []
         vehsXPData = []
-        for vehIntCD, sourceData in self.__buildPersonalDataSource(personalData, isFallout):
+        personalDataSource = self.__buildPersonalDataSource(personalData, playerAvatarData)
+        for vehIntCD, sourceData in personalDataSource:
             dailyXpFactor = sourceData['dailyXPFactor10'] / 10.0
             creditsData = []
             creditsToDraw = self.__calculateBaseParam('creditsToDraw', sourceData, premCreditsFactor, isPremium)
@@ -576,16 +602,19 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             xpPenalty = int(sourceData.get('xpPenaltyBase', 0))
             xpBase = int(sourceData['originalXP'])
             xpCell = xpBase - achievementXP
-            xpCellPrem = int(round(xpCell * premXpFactor))
+            keys = ('originalXP', 'achievementXP')
+            xpCellPrem = self.__getPremCellValue(vehIntCD, keys, personalDataSource, premXpFactor, isPremium)
             dailyXP = sourceData['dailyXP']
             dailyXPCell = dailyXP - achievementXP
             dailyXPCellPrem = int(round(dailyXPCell * premXpFactor))
             xpCellStr = self.__makeXpLabel(xpCell, not isPostBattlePremium)
             xpCellPremStr = self.__makeXpLabel(xpCellPrem, isPostBattlePremium)
             freeXpBase = sourceData['originalFreeXP']
+            freeXpCell = freeXpBase - achievementFreeXP
             dailyFreeXP = sourceData['dailyFreeXP']
-            freeXpBaseStr = self.__makeFreeXpLabel(freeXpBase - achievementFreeXP, not isPostBattlePremium)
-            freeXpBasePremStr = self.__makeFreeXpLabel(int(round((freeXpBase - achievementFreeXP) * premXpFactor)), isPostBattlePremium)
+            freeXpBaseStr = self.__makeFreeXpLabel(freeXpCell, not isPostBattlePremium)
+            keys = ('originalFreeXP', 'achievementFreeXP')
+            freeXpBasePremStr = self.__makeFreeXpLabel(self.__getPremCellValue(vehIntCD, keys, personalDataSource, premXpFactor, isPremium), isPostBattlePremium)
             medals = sourceData['dossierPopUps']
             if RECORD_DB_IDS[('max15x15', 'maxXP')] in map(lambda (id, value): id, medals):
                 label = makeHtmlString('html_templates:lobby/battle_results', 'xpRecord', {})
@@ -680,7 +709,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             self.__premiumBonusesDiff = {'xpDiff': xpDiff,
              'creditDiff': creditsDiff}
             if g_lobbyContext.getServerSettings().isPremiumInPostBattleEnabled() and not isPremium and not g_itemsCache.items.stats.isPremium and commonData.get('bonusType', 0) == ARENA_BONUS_TYPE.REGULAR and xpDiff > 0 and creditsDiff > 0:
-                personalDataOutput['getPremVO'] = {'arenaUniqueID': self.dataProvider.getArenaUniqueID(),
+                personalDataOutput['getPremVO'] = {'arenaUniqueID': g_lobbyContext.getClientIDByArenaUniqueID(self.dataProvider.getArenaUniqueID()),
                  'creditsDiff': creditsDiff,
                  'xpDiff': xpDiff}
                 showDiffs = True
@@ -712,26 +741,32 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             personalDataOutput['resourceData'] = resData
         return
 
-    def __buildPersonalDataSource(self, personalData, isFallout):
+    def __buildPersonalDataSource(self, personalData, playerAvatarData):
         totalData = {}
+        data = {}
+        self.__aggregateData(data, playerAvatarData, totalData, CUMULATIVE_ACCOUNT_DATA)
         personaDataSource = [(None, totalData)]
         for vehIntCD, pData in personalData:
             data = {}
-            for k, (d, func) in CUMULATIVE_ACCOUNT_DATA:
-                if k in RELATED_ACCOUNT_DATA:
-                    v = RELATED_ACCOUNT_DATA[k](pData, data)
-                else:
-                    v = pData.get(k, d)
-                data[k] = v
-                if func is not None:
-                    totalData.setdefault(k, d)
-                    totalData[k] = func(totalData[k], v)
-                else:
-                    totalData[k] = d
-
+            self.__aggregateData(data, pData, totalData, CUMULATIVE_VEHICLE_DATA)
             personaDataSource.append((vehIntCD, data))
 
         return personaDataSource
+
+    def __aggregateData(self, data, pData, totalData, params):
+        for k, (d, func) in params:
+            if k in RELATED_ACCOUNT_DATA:
+                v = RELATED_ACCOUNT_DATA[k](pData, data)
+            else:
+                v = pData.get(k, d)
+            data[k] = v
+            if func is not None:
+                totalData.setdefault(k, d)
+                totalData[k] = func(totalData[k], v)
+            else:
+                totalData[k] = d
+
+        return
 
     def __buildEfficiencyDataSource(self, pData, pCommonData, playersData, commonData):
         totalEnemies = []
@@ -740,6 +775,17 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         efficiencyDataSource = [(totalTechniquesGroup, totalEnemies, totalBasesGroup)]
         playerTeam = pCommonData.get('team')
         playerDBID = pCommonData.get('accountDBID')
+        emptyDetails = {'spotted': 0,
+         'deathReason': -1,
+         'directHits': 0,
+         'explosionHits': 0,
+         'piercings': 0,
+         'damageDealt': 0,
+         'damageAssistedTrack': 0,
+         'damageAssistedRadio': 0,
+         'crits': 0,
+         'fire': 0,
+         'targetKills': 0}
         totalVehsData = {}
         for vehIntCD, data in pData:
             enemiesGroup = []
@@ -750,6 +796,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                     continue
                 team = pInfo.get('team', data.get('team') % 2 + 1)
                 if team == playerTeam:
+                    continue
+                if isDefaultDict(iInfo, emptyDetails):
                     continue
                 if (vId, vIntCD) not in totalVehsData:
                     totalVehsData[vId, vIntCD] = iInfo.copy()
@@ -819,13 +867,13 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
     def __populatePersonalMedals(self, pData, personalDataOutput):
         personalDataOutput['dossierType'] = None
         personalDataOutput['dossierCompDescr'] = None
-        personalDataOutput['achievementsLeft'] = []
-        personalDataOutput['achievementsRight'] = []
+        personalDataOutput['achievementsLeft'] = achievementsLeft = []
+        personalDataOutput['achievementsRight'] = achievementsRight = []
         for _, data in pData:
             achievementsData = data.get('dossierPopUps', [])
             for achievementId, achieveValue in achievementsData:
                 record = DB_ID_TO_RECORD[achievementId]
-                if record in IGNORED_BY_BATTLE_RESULTS:
+                if record in IGNORED_BY_BATTLE_RESULTS or not isAchievementRegistered(record):
                     continue
                 factory = getAchievementFactory(record)
                 if factory is not None:
@@ -838,24 +886,27 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                             achieve.setDamageRating(data['damageRating'])
                     achieveData = self._packAchievement(achieve, isUnique=True)
                     if achieve.getName() in achievements.BATTLE_ACHIEVES_RIGHT:
-                        personalDataOutput['achievementsRight'].append(achieveData)
-                    else:
-                        personalDataOutput['achievementsLeft'].append(achieveData)
+                        if achieveData not in achievementsRight:
+                            achievementsRight.append(achieveData)
+                    elif achieveData not in achievementsLeft:
+                        achievementsLeft.append(achieveData)
 
             markOfMastery = data.get('markOfMastery', 0)
             factory = getAchievementFactory(('achievements', 'markOfMastery'))
             if markOfMastery > 0 and factory is not None:
-                from gui.shared import g_itemsCache
                 achieve = factory.create(value=markOfMastery)
                 achieve.setPrevMarkOfMastery(data.get('prevMarkOfMastery', 0))
                 achieve.setCompDescr(data.get('typeCompDescr'))
-                personalDataOutput['achievementsLeft'].append(self._packAchievement(achieve))
-            personalDataOutput['achievementsRight'].sort(key=lambda k: k['isEpic'], reverse=True)
+                achieveData = self._packAchievement(achieve)
+                if achieveData not in achievementsLeft:
+                    achievementsLeft.append(achieveData)
+            achievementsRight.sort(key=lambda k: k['isEpic'], reverse=True)
 
         return
 
     def __populateEfficiency(self, pData, pCommonData, playersData, commonData, personalDataOutput):
         valsStr = makeHtmlString('html_templates:lobby/battle_results', 'tooltip_params_style', {'text': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL)})
+        bots = commonData.get('bots', {})
         details = []
         for techniquesGroup, enemiesGroup, basesGroup in self.__buildEfficiencyDataSource(pData, pCommonData, playersData, commonData):
             enemies = []
@@ -863,6 +914,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 result = {}
                 accountDBID = self.dataProvider.getAccountDBID(vId)
                 vehsData = self.dataProvider.getVehiclesData(accountDBID)
+                if vIntCD is None and accountDBID is None and vId in bots:
+                    vIntCD = bots.get(vId, (None, None))[0]
                 deathReason = iInfo.get('deathReason', -1)
                 if vehsData:
                     vInfo = vehsData[0]
@@ -872,7 +925,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 result['spotted'] = iInfo.get('spotted', 0)
                 result['piercings'] = iInfo.get('piercings', 0)
                 result['damageDealt'] = iInfo.get('damageDealt', 0)
-                playerNameData = self.__getPlayerName(accountDBID)
+                playerNameData = self.__getPlayerName(accountDBID, bots, vId)
                 result['playerFullName'] = playerNameData[0]
                 result['playerName'], result['playerClan'], result['playerRegion'], _ = playerNameData[1]
                 result['vehicleId'] = vId
@@ -890,6 +943,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             details.append(techniquesGroup + enemies + basesGroup)
 
         personalDataOutput['details'] = details
+        return
 
     def __getDamageInfo(self, iInfo, valsStr):
         piercings = iInfo['piercings']
@@ -999,20 +1053,21 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}Destroyed'.format(key),
          'value': i18n.makeString('#item_types:tankman/roles/{0}'.format(key))})
 
-    @classmethod
-    def __populateResultStrings(cls, commonData, pData, commonDataOutput, isFallout, isMultiTeamMode):
+    def __populateResultStrings(self, commonData, pData, avatarData, commonDataOutput, isMultiTeamMode):
         bonusType = commonData.get('bonusType', 0)
         winnerTeam = commonData.get('winnerTeam', 0)
+        playerTeam = pData.get('team')
         finishReason = commonData.get('finishReason', 0)
+        gasAttackWinnerTeam = commonData.get('gasAttackWinnerTeam', -1)
         if not winnerTeam:
             status = 'tie'
-            if isMultiTeamMode and isFallout:
+            if isMultiTeamMode and self.__isFallout:
                 status = 'ended'
-        elif winnerTeam == pData.get('team'):
+        elif winnerTeam == playerTeam:
             status = 'win'
         else:
             status = 'lose'
-            if isMultiTeamMode and isFallout:
+            if isMultiTeamMode and self.__isFallout:
                 status = 'ended'
 
         def _finishReasonFormatter(formatter, **kwargs):
@@ -1021,10 +1076,10 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             return i18n.makeString(formatter.format(finishReason))
 
         if bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
-            fortBuilding = pData.get('fortBuilding', {})
+            fortBuilding = avatarData.get('fortBuilding', {})
             buildTypeID, buildTeam = fortBuilding.get('buildTypeID'), fortBuilding.get('buildTeam')
             if status == 'tie':
-                status = 'win' if buildTeam == pData.get('team') else 'lose'
+                status = 'win' if buildTeam == playerTeam else 'lose'
             commonDataOutput['resultShortStr'] = 'clanBattle_%s' % status
             if buildTypeID is not None:
                 buildingName = FortBuilding(typeID=buildTypeID).userName
@@ -1037,37 +1092,43 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         else:
             commonDataOutput['resultShortStr'] = status
             _frFormatter = lambda : _finishReasonFormatter(FINISH_REASON)
-        if not isFallout:
+        if not self.__isFallout:
             commonDataOutput['finishReasonStr'] = _frFormatter()
         else:
             falloutSubMode = 'multiteam' if isMultiTeamMode else 'classic'
             resultTemplate = '#battle_results:fallout/{submode}/{status}'.format(submode=falloutSubMode, status=status)
             if status != 'tie' and status != 'ended':
                 finishReasonStr = 'points'
-                if finishReason == FR.WIN_POINTS_CAP:
+                if finishReason in (FR.WIN_POINTS_CAP, FR.WIN_POINTS):
                     finishReasonStr = 'cap'
                 elif finishReason == FR.EXTERMINATION:
                     finishReasonStr = 'extermination'
                 resultTemplate += '/' + finishReasonStr
             commonDataOutput['finishReasonStr'] = i18n.makeString(resultTemplate)
+        commonDataOutput['overtime'] = {'enabled': gasAttackWinnerTeam > -1,
+         'mainTitle': BATTLE_RESULTS.COMMON_MAINFINISHREASONTITLE,
+         'overtimeTitle': BATTLE_RESULTS.COMMON_OVERTIMEFINISHREASONTITLE,
+         'overtimeFinishReason': BATTLE_RESULTS.FINISH_OVERTIME_WIN if gasAttackWinnerTeam == playerTeam else BATTLE_RESULTS.FINISH_OVERTIME_LOSE}
         commonDataOutput['resultStr'] = RESULT_.format(status)
         return
 
-    def __populateTankSlot(self, commonDataOutput, pData, pCommonData, isFallout):
+    def __populateTankSlot(self, commonDataOutput, pData, pCommonData, commonData):
         vehsData = []
-        playerNameData = self.__getPlayerName(pCommonData.get('accountDBID', None))
+        vehNames = []
+        bots = commonData.get('bots', {})
+        accountDBID = pCommonData.get('accountDBID', None)
+        playerNameData = self.__getPlayerName(accountDBID, bots, self.dataProvider.getVehicleID(accountDBID))
         commonDataOutput['playerNameStr'], commonDataOutput['clanNameStr'], commonDataOutput['regionNameStr'], _ = playerNameData[1]
         commonDataOutput['playerFullNameStr'] = playerNameData[0]
-        if len(pData) > 1 or isFallout:
-            vehsData.append({'vehicleName': i18n.makeString(BATTLE_RESULTS.ALLVEHICLES),
-             'tankIcon': RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL})
+        if len(pData) > 1 or self.__isFallout:
+            vehNames.append(i18n.makeString(BATTLE_RESULTS.ALLVEHICLES))
+            vehsData.append({'tankIcon': RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL})
         for vehTypeCompDescr, data in pData:
             curVeh = {}
-            curVeh['vehicleName'], _, curVeh['tankIcon'], _, _, nation = self.__getVehicleData(vehTypeCompDescr)
+            vehicleName, _, curVeh['tankIcon'], _, _, nation = self.__getVehicleData(vehTypeCompDescr)
             killerID = data.get('killerID', 0)
             curVeh['killerID'] = killerID
             deathReason = data.get('deathReason', -1)
-            curVeh['deathReason'] = deathReason
             isPrematureLeave = data.get('isPrematureLeave', False)
             curVeh['isPrematureLeave'] = isPrematureLeave
             curVeh['flag'] = nations.NAMES[nation]
@@ -1079,7 +1140,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                     killerPlayerId = self.dataProvider.getAccountDBID(killerID)
                     curVeh['vehicleStatePrefixStr'] = '{0} ('.format(curVeh['vehicleStateStr'])
                     curVeh['vehicleStateSuffixStr'] = ')'
-                    playerNameData = self.__getPlayerName(killerPlayerId)
+                    playerNameData = self.__getPlayerName(killerPlayerId, bots, killerID)
                     curVeh['killerFullNameStr'] = playerNameData[0]
                     curVeh['killerNameStr'], curVeh['killerClanNameStr'], curVeh['killerRegionNameStr'], _ = playerNameData[1]
                 else:
@@ -1089,12 +1150,14 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                     curVeh['killerClanNameStr'], curVeh['killerRegionNameStr'] = ('', '')
             else:
                 curVeh['vehicleStateStr'] = BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE
+            vehNames.append(vehicleName)
             vehsData.append(curVeh)
 
         commonDataOutput['playerVehicles'] = vehsData
+        commonDataOutput['playerVehicleNames'] = vehNames
         return
 
-    def __populateArenaData(self, commonData, pData, commonDataOutput, isFallout, isMultiTeamMode, isResource):
+    def __populateArenaData(self, commonData, pData, commonDataOutput, isMultiTeamMode, isResource):
         arenaGuiType = self.dataProvider.getArenaGuiType()
         arenaType = self.dataProvider.getArenaType()
         if arenaGuiType == ARENA_GUI_TYPE.SORTIE:
@@ -1158,7 +1221,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             val = makeHtmlString('html_templates:lobby/battle_results', 'empty_stat_value', {'value': val})
         return val
 
-    def __populateTeamsData(self, pCommonData, playersData, commonData, commonDataOutput, avatarsData, isFallout, isMultiTeamMode):
+    def __populateTeamsData(self, pCommonData, playersData, commonData, commonDataOutput, avatarsData, isMultiTeamMode):
         squads = defaultdict(dict)
         stat = defaultdict(list)
         teamsScore = defaultdict(int)
@@ -1173,12 +1236,13 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         bonusType = self.dataProvider.getArenaBonusType()
         winnerTeam = commonData.get('winnerTeam', 0)
         finishReason = commonData.get('finishReason', 0)
+        bots = commonData.get('bots', {})
         playerNamePosition = bonusType in (ARENA_BONUS_TYPE.FORT_BATTLE, ARENA_BONUS_TYPE.CYBERSPORT, ARENA_BONUS_TYPE.RATED_CYBERSPORT)
         isPlayerObserver = isVehicleObserver(pCommonData.get('typeCompDescr', 0))
         fairPlayViolationName = self.__getFairPlayViolationName(pCommonData)
-        if isFallout and not isMultiTeamMode:
+        if self.__isFallout and not isMultiTeamMode:
             isSolo = findFirst(lambda pData: pData['team'] == playerTeam, playersData.itervalues()) is None
-            pointsKill, pointsFlags = getCosts(arenaType, isSolo)
+            pointsKill, pointsFlags, _ = getCosts(arenaType, isSolo)
             formatter = BigWorld.wg_getNiceNumberFormat
             scorePatterns = []
             if pointsKill > 0:
@@ -1207,7 +1271,16 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         teamResource = 0
         teamInfluence = 0
         for pId, pInfo in playersData.iteritems():
-            vehsData = self.dataProvider.getVehiclesData(pId)
+            rawVehsData = self.dataProvider.getVehiclesData(pId)
+
+            def comparator(xData, yData):
+                xIntCD = xData.get('typeCompDescr', None)
+                yIntCD = yData.get('typeCompDescr', None)
+                xVeh = g_itemsCache.items.getItemByCD(xIntCD)
+                yVeh = g_itemsCache.items.getItemByCD(yIntCD)
+                return cmp(xVeh, yVeh)
+
+            vehsData = sorted(rawVehsData, cmp=comparator)
             vId = self.dataProvider.getVehicleID(pId)
             row = {'vehicleId': vId}
             isSelf = playerDBID == pId
@@ -1224,12 +1297,12 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 totalDamageAssisted += assisted
                 xp += data.get('xp', 0) - data.get('achievementXP', 0)
                 damageDealt += data.get('damageDealt', 0)
-                statValues.append(self.__populateStatValues(data, isFallout, isSelf))
+                statValues.append(self.__populateStatValues(data, isSelf))
                 achievementsData += data.get('achievements', [])
                 for k, (d, func) in CUMULATIVE_STATS_DATA.iteritems():
-                    if isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
+                    if self.__isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
                         continue
-                    if not isFallout and k in FALLOUT_ONLY_STATS:
+                    if not self.__isFallout and k in FALLOUT_ONLY_STATS:
                         continue
                     v = data.get(k, d)
                     totalStatValues.setdefault(k, d)
@@ -1245,15 +1318,15 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             if pId in avatarsData:
                 curAvatarData = avatarsData[pId]
                 self.__addOrderDataToTotalValue(avatarsData[pId], totalStatValues)
-                row['damageDealt'] += curAvatarData['damageDealt']
-                row['kills'] += curAvatarData['kills']
-                row['realKills'] += curAvatarData['kills']
-            statValues.insert(0, self.__populateStatValues(totalStatValues, isFallout, isSelf))
+                row['damageDealt'] += curAvatarData['avatarDamageDealt']
+                row['kills'] += curAvatarData['avatarKills']
+                row['realKills'] += curAvatarData['avatarKills']
+            statValues.insert(0, self.__populateStatValues(totalStatValues, isSelf))
             row['statValues'] = statValues
             vehs = []
             vInfo = vehsData[0]
             team = pInfo['team']
-            if len(vehsData) > 1 or isFallout:
+            if len(vehsData) > 1 or self.__isFallout:
                 vehs.append({'label': i18n.makeString(BATTLE_RESULTS.ALLVEHICLES),
                  'icon': RES_ICONS.MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL})
                 for vInfo in vehsData:
@@ -1286,8 +1359,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             achievementsList = []
             if not (pId == playerDBID and fairPlayViolationName is not None):
                 for achievementId in achievementsData:
-                    factory = getAchievementFactory(DB_ID_TO_RECORD[achievementId])
-                    if factory is not None:
+                    record = DB_ID_TO_RECORD[achievementId]
+                    factory = getAchievementFactory(record)
+                    if factory is not None and isAchievementRegistered(record):
                         achive = factory.create(value=0)
                         if not achive.isApproachable():
                             achievementsList.append(self._packAchievement(achive, isUnique=True))
@@ -1301,7 +1375,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             row['isPrematureLeave'] = isPrematureLeave
             row['vehicleStateStr'] = ''
             row['killerID'] = 0
-            if isFallout:
+            if self.__isFallout:
                 row['deathReason'] = 0 if isDead else -1
                 if isPrematureLeave:
                     row['vehicleStateStr'] = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
@@ -1320,14 +1394,14 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                         killerPlayerId = self.dataProvider.getAccountDBID(killerID)
                         row['vehicleStatePrefixStr'] = '{0} ('.format(row['vehicleStateStr'])
                         row['vehicleStateSuffixStr'] = ')'
-                        playerNameData = self.__getPlayerName(killerPlayerId)
+                        playerNameData = self.__getPlayerName(killerPlayerId, bots, killerID)
                         row['killerFullNameStr'] = playerNameData[0]
                         row['killerNameStr'], row['killerClanNameStr'], row['killerRegionNameStr'], _ = playerNameData[1]
                 else:
                     row['vehicleStateStr'] = BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE
             row['playerId'] = pId
             row['userName'] = pInfo.get('name')
-            playerNameData = self.__getPlayerName(pId)
+            playerNameData = self.__getPlayerName(pId, bots, vId)
             playerName, playerClan, playerRegion, playerIgrType = playerNameData[1]
             row['playerName'] = playerName
             row['userVO'] = {'fullName': playerNameData[0],
@@ -1336,7 +1410,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
              'region': playerRegion,
              'igrType': playerIgrType}
             row['playerNamePosition'] = playerNamePosition
-            if isFallout:
+            if self.__isFallout:
                 flagActions = totalStatValues['flagActions']
                 row['falloutResourcePoints'] = totalStatValues['resourceAbsorbed']
                 row['flags'] = flagActions[FLAG_ACTION.CAPTURED]
@@ -1367,7 +1441,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             if not (isPlayerObserver and isVehObserver):
                 stat[team].append(row)
 
-        processSquads = bonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EVENT_BATTLES) and not (IS_DEVELOPMENT and squadManCount == len(playersData))
+        processSquads = bonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EVENT_BATTLES)
         for team, data in stat.iteritems():
             data = sorted(data, cmp=self.__vehiclesComparator)
             sortIdx = len(data)
@@ -1414,13 +1488,13 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         return (team1, team2)
 
     def __addOrderDataToTotalValue(self, avatarData, resultDict):
-        if 'damageDealt' in avatarData and 'kills' in avatarData:
-            damageByOrder = avatarData['damageDealt']
-            killsByOrder = avatarData['kills']
+        if 'avatarDamageDealt' in avatarData and 'avatarKills' in avatarData:
+            damageByOrder = avatarData['avatarDamageDealt']
+            killsByOrder = avatarData['avatarKills']
             resultDict['damageDealt'] += damageByOrder
             resultDict['kills'] += killsByOrder
             resultDict['damaged'] = avatarData['totalDamaged']
-            resultDict['damagedByOrder'] = avatarData['damaged']
+            resultDict['damagedByOrder'] = avatarData['avatarDamaged']
             resultDict['damageDealtByOrder'] = damageByOrder
             resultDict['killsByOrder'] = killsByOrder
 
@@ -1462,9 +1536,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         if isPremium != usePremFactor:
             premFactor = premXpFactor if usePremFactor else 1.0
             if isPremium:
-                premiumVehicleXP = pData['premiumVehicleXP'] / premFactor
+                premiumVehicleXP = pData['premiumVehicleXP'] / premXpFactor
             else:
-                premiumVehicleXP = pData['premiumVehicleXP'] * premFactor
+                premiumVehicleXP = pData['premiumVehicleXP'] * premXpFactor
             subtotalXp = int(round(int(round((baseXp - xpPenalty) * premFactor)) * igrXpFactor))
             resultXp = int(round(int(round(dailyXP * premFactor)) * igrXpFactor))
             if abs(refSystemFactor - 1.0) > 0.001:
@@ -1495,9 +1569,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         g_currentVehicle.selectVehicle(inventoryId)
         return g_currentVehicle.invID == inventoryId
 
-    @classmethod
-    def __parseQuestsProgress(cls, personalData):
-        questsProgress = {}
+    def __parseQuestsProgress(self, personalData, avatarData):
+        questsProgress = avatarData.get('questsProgress', {})
         for _, data in personalData:
             questsProgress.update(data.get('questsProgress', {}))
 
@@ -1540,7 +1613,11 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                          isCompleted))
                 elif potapov_quests.g_cache.isPotapovQuest(qID):
                     pqID = potapov_quests.g_cache.getPotapovQuestIDByUniqueID(qID)
-                    quest = g_eventsCache.potapov.getQuests()[pqID]
+                    if self.__isFallout:
+                        questsCache = g_eventsCache.fallout
+                    else:
+                        questsCache = g_eventsCache.random
+                    quest = questsCache.getQuests()[pqID]
                     progress = potapovQuests.setdefault(quest, {})
                     progress.update({qID: isCompleted})
 
@@ -1574,14 +1651,21 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         LOG_DEBUG('Player got battle results', self.dataProvider, results)
         if results:
             personalDataSource = results.get('personal', {}).copy()
+            playerAvatarData = personalDataSource.pop('avatar', {})
             avatarsData = results.pop('avatars', {})
             personalCommonData = personalDataSource.values()[0]
             playerID = personalCommonData['accountDBID']
-            personalData = []
-            for vehicleData in self.dataProvider.getVehiclesData(playerID):
-                vehTypeCD = vehicleData['typeCompDescr']
-                personalData.append((vehTypeCD, personalDataSource[vehTypeCD]))
 
+            def comparator(x, y):
+                _, xData = x
+                _, yData = y
+                xIntCD = xData.get('typeCompDescr', None)
+                yIntCD = yData.get('typeCompDescr', None)
+                xVeh = g_itemsCache.items.getItemByCD(xIntCD)
+                yVeh = g_itemsCache.items.getItemByCD(yIntCD)
+                return cmp(xVeh, yVeh)
+
+            personalData = sorted(personalDataSource.iteritems(), cmp=comparator)
             playersData = results.get('players', {}).copy()
             commonData = results.get('common', {}).copy()
             bonusType = commonData.get('bonusType', 0)
@@ -1598,7 +1682,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             commonDataOutput['battleResultsSharingIsAvailable'] = self._isSharingBtnEnabled()
             arenaType = self.dataProvider.getArenaType()
             arenaBonusType = self.dataProvider.getArenaBonusType()
-            isFallout = self.dataProvider.getArenaGuiType() == ARENA_GUI_TYPE.EVENT_BATTLES
+            arenaGUIType = self.dataProvider.getArenaGuiType()
+            self.__isFallout = arenaGUIType == ARENA_GUI_TYPE.EVENT_BATTLES
             teams = {}
             for pInfo in playersData.itervalues():
                 team = pInfo['team']
@@ -1609,7 +1694,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             isFFA = findFirst(lambda prbID: prbID > 0, teams.itervalues()) is None
             isResource = hasResourcePoints(arenaType, arenaBonusType)
             statsSorting = AccountSettings.getSettings('statsSorting' if bonusType != ARENA_BONUS_TYPE.SORTIE else 'statsSortingSortie')
-            if isFallout:
+            if self.__isFallout:
                 commonDataOutput['iconType'] = 'victoryScore'
                 commonDataOutput['sortDirection'] = 'descending'
             else:
@@ -1623,11 +1708,11 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 assisted = data.get('damageAssistedTrack', 0) + data.get('damageAssistedRadio', 0)
                 damageAssisted.append(assisted)
                 totalDamageAssisted += assisted
-                statValues.append(self.__populateStatValues(data, isFallout, True))
+                statValues.append(self.__populateStatValues(data, True))
                 for k, (d, func) in CUMULATIVE_STATS_DATA.iteritems():
-                    if isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
+                    if self.__isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
                         continue
-                    if not isFallout and k in FALLOUT_ONLY_STATS:
+                    if not self.__isFallout and k in FALLOUT_ONLY_STATS:
                         continue
                     v = data.get(k, d)
                     totalStatValues.setdefault(k, d)
@@ -1638,18 +1723,18 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
             totalStatValues['damageAssisted'] = totalDamageAssisted
             if playerID in avatarsData:
                 self.__addOrderDataToTotalValue(avatarsData[playerID], totalStatValues)
-            statValues.insert(0, self.__populateStatValues(totalStatValues, isFallout, True))
+            statValues.insert(0, self.__populateStatValues(totalStatValues, True))
             personalDataOutput['statValues'] = statValues
-            self.__populateResultStrings(commonData, personalCommonData, commonDataOutput, isFallout, isMultiTeamMode)
+            self.__populateResultStrings(commonData, personalCommonData, playerAvatarData, commonDataOutput, isMultiTeamMode)
             self.__populatePersonalMedals(personalData, personalDataOutput)
-            self.__populateArenaData(commonData, personalCommonData, commonDataOutput, isFallout, isMultiTeamMode, isResource)
-            self.__populateAccounting(commonData, personalCommonData, personalData, playersData, personalDataOutput, isFallout)
-            self.__populateTankSlot(commonDataOutput, personalData, personalCommonData, isFallout)
+            self.__populateArenaData(commonData, personalCommonData, commonDataOutput, isMultiTeamMode, isResource)
+            self.__populateAccounting(commonData, personalCommonData, personalData, playersData, personalDataOutput, playerAvatarData)
+            self.__populateTankSlot(commonDataOutput, personalData, personalCommonData, commonData)
             self.__populateEfficiency(personalData, personalCommonData, playersData, commonData, personalDataOutput)
-            team1, team2 = self.__populateTeamsData(personalCommonData, playersData, commonData, commonDataOutput, avatarsData, isFallout, isMultiTeamMode)
+            team1, team2 = self.__populateTeamsData(personalCommonData, playersData, commonData, commonDataOutput, avatarsData, isMultiTeamMode)
             resultingVehicles = []
             falloutMode = ''
-            if isFallout:
+            if self.__isFallout:
                 if isResource:
                     falloutMode = 'points'
                 else:
@@ -1662,7 +1747,7 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
                   'linkage': 'MultiteamStatsUI',
                   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
-                  'linkage': 'detailsStatsScrollPane',
+                  'linkage': 'DetailsStatsViewUI',
                   'showWndBg': True}]
             else:
                 tabInfo = [{'label': MENU.FINALSTATISTIC_TABS_COMMONSTATS,
@@ -1670,21 +1755,35 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
                   'linkage': 'TeamStatsUI',
                   'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
-                  'linkage': 'detailsStatsScrollPane',
+                  'linkage': 'DetailsStatsViewUI',
                   'showWndBg': True}]
             textData = {'windowTitle': i18n.makeString(MENU.FINALSTATISTIC_WINDOW_TITLE),
              'shareButtonLabel': i18n.makeString(BATTLE_RESULTS.COMMON_RESULTSSHAREBTN),
              'shareButtonTooltip': i18n.makeString(TOOLTIPS.BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN)}
+            if arenaGUIType == ARENA_GUI_TYPE.SANDBOX:
+                personalDataOutput['showNoIncomeAlert'] = True
+                sandboxStrBuilder = text_styles.builder(delimiter='\n')
+                sandboxStrBuilder.addStyledText(text_styles.middleTitle, BATTLE_RESULTS.COMMON_NOINCOME_ALERT_TITLE)
+                sandboxStrBuilder.addStyledText(text_styles.standard, BATTLE_RESULTS.COMMON_NOINCOME_ALERT_TEXT)
+                personalDataOutput['noIncomeAlert'] = {'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON,
+                 'text': sandboxStrBuilder.render()}
+            selectedTeamMemberId = -1
+            closingTeamMemberStatsEnabled = True
+            if arenaGUIType in ARENA_GUI_TYPE.SANDBOX_RANGE:
+                selectedTeamMemberId = personalCommonData.get('accountDBID')
+                closingTeamMemberStatsEnabled = False
             results = {'personal': personalDataOutput,
              'common': commonDataOutput,
              'team1': team1,
              'team2': team2,
              'textData': textData,
              'vehicles': resultingVehicles,
-             'quests': self.__parseQuestsProgress(personalData),
+             'quests': self.__parseQuestsProgress(personalData, playerAvatarData),
              'unlocks': self.__getVehicleProgress(self.dataProvider.getArenaUniqueID(), personalData),
              'tabInfo': tabInfo,
-             'isFreeForAll': isFFA}
+             'isFreeForAll': isFFA,
+             'closingTeamMemberStatsEnabled': closingTeamMemberStatsEnabled,
+             'selectedTeamMemberId': selectedTeamMemberId}
             if self.dataProvider.results:
                 self.dataProvider.results.updateViewData(results)
             callback(results)
@@ -1806,6 +1905,9 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         return progressList
 
     def showUnlockWindow(self, itemId, unlockType):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher and prbDispatcher.getFunctionalState().isNavigationDisabled():
+            return SystemMessages.pushI18nMessage('#system_messages:queue/isInQueue', type=SystemMessages.SM_TYPE.Error)
         if unlockType in (PROGRESS_ACTION.RESEARCH_UNLOCK_TYPE, PROGRESS_ACTION.PURCHASE_UNLOCK_TYPE):
             showResearchView(itemId)
             self.onWindowClose()
@@ -1826,3 +1928,17 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         results = self.dataProvider.getResults()
         self.onWindowClose()
         showBattleResultsFromData(results)
+
+    def __getPremCellValue(self, calcVehIntCD, keys, personalDataSource, premXpFactor, isPremium):
+        premSum = 0
+        xpKey, achievementKey = keys
+        for vehIntCD, sourceData in personalDataSource:
+            xpCell = sourceData[xpKey] - sourceData[achievementKey]
+            if calcVehIntCD is not None and calcVehIntCD == vehIntCD:
+                return int(round(xpCell * premXpFactor))
+            if not isPremium and calcVehIntCD is None and calcVehIntCD == vehIntCD:
+                return int(round(xpCell * premXpFactor))
+            if vehIntCD is not None:
+                premSum += int(round(xpCell * premXpFactor))
+
+        return premSum

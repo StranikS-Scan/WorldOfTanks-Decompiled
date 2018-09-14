@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SquadActionButtonStateVO.py
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.game_control import getFalloutCtrl
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.server_events import g_eventsCache
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -30,16 +31,23 @@ class SquadActionButtonStateVO(ActionButtonStateVO):
         return ('', {})
 
     def _getFalloutVehLevelStr(self):
-        config = g_eventsCache.getFalloutConfig(self._extra.eventType)
-        if len(config.allowedLevels) > 1:
-            return ('#cyberSport:window/unit/message/falloutMin', {'level': toRomanRangeString(list(config.allowedLevels), 1)})
+        if self._extra is None:
+            return
         else:
-            return ('#cyberSport:window/unit/message/falloutLevel', {'level': int2roman(config.vehicleLevelRequired)})
+            config = g_eventsCache.getFalloutConfig(self._extra.eventType)
+            requiredLevelStr = int2roman(config.vehicleLevelRequired)
+            return (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTLEVEL, {'level': requiredLevelStr})
 
     def _getFalloutVehMinStr(self):
-        config = g_eventsCache.getFalloutConfig(self._extra.eventType)
-        return ('#cyberSport:window/unit/message/falloutMin', {'min': str(config.minVehiclesPerPlayer),
-          'level': toRomanRangeString(list(config.allowedLevels), 1)})
+        if self._extra is None:
+            return
+        else:
+            config = g_eventsCache.getFalloutConfig(self._extra.eventType)
+            allowedLevelsList = list(config.allowedLevels)
+            if len(allowedLevelsList) > 1:
+                return (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTMIN_LEVELRANGE, {'level': toRomanRangeString(allowedLevelsList, 1)})
+            return (CYBERSPORT.WINDOW_UNIT_MESSAGE_FALLOUTMIN_REQUIREDLEVEL, {'level': int2roman(config.vehicleLevelRequired)})
+            return
 
     def _getFalloutVehBrokenStr(self):
         return ('#cyberSport:window/unit/message/falloutGroupNotReady', {})

@@ -2,6 +2,7 @@
 import random
 import BigWorld
 from Event import Event
+from gui.prb_control import prb_getters
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.vehicle_view_states import createState4CurrentVehicle
 from items import vehicles
@@ -26,7 +27,6 @@ class _CurrentVehicle():
     def __init__(self):
         self.__vehInvID = 0
         self.__changeCallbackID = None
-        self.__historicalBattle = None
         self.onChanged = Event()
         self.onChangeStarted = Event()
         return
@@ -89,10 +89,6 @@ class _CurrentVehicle():
 
     def refreshModel(self):
         if self.isPresent() and self.isInHangar() and self.item.modelState:
-            if self.__historicalBattle is not None:
-                historical = g_tankActiveCamouflage['historical']
-                if self.__historicalBattle.canParticipateWith(self.item.intCD) and self.item.intCD not in historical:
-                    historical[self.item.intCD] = self.__historicalBattle.getArenaType().vehicleCamouflageKind
             if self.item.intCD not in g_tankActiveCamouflage:
                 availableKinds = []
                 currKind = 0
@@ -103,7 +99,7 @@ class _CurrentVehicle():
 
                 if len(availableKinds) > 0:
                     g_tankActiveCamouflage[self.item.intCD] = random.choice(availableKinds)
-            _getHangarSpace().updateVehicle(self.item, self.__historicalBattle)
+            _getHangarSpace().updateVehicle(self.item)
         else:
             _getHangarSpace().removeVehicle()
         return
@@ -213,12 +209,6 @@ class _CurrentVehicle():
             return (state, '#menu:currentVehicleStatus/' + state, stateLvl)
         return (Vehicle.VEHICLE_STATE.NOT_PRESENT, MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
 
-    def setHistoricalBattle(self, historicalBattle):
-        g_tankActiveCamouflage['historical'] = {}
-        self.__historicalBattle = historicalBattle
-        self.refreshModel()
-        self.onChanged()
-
     def getViewState(self):
         return createState4CurrentVehicle(self)
 
@@ -246,9 +236,9 @@ class _CurrentVehicle():
         return
 
     def __checkPrebattleLockedVehicle(self):
-        clientPrb = prb_control.getClientPrebattle()
+        clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
-            rosters = prb_control.getPrebattleRosters(prebattle=clientPrb)
+            rosters = prb_getters.getPrebattleRosters(prebattle=clientPrb)
             for rId, roster in rosters.iteritems():
                 if BigWorld.player().id in roster:
                     vehCompDescr = roster[BigWorld.player().id].get('vehCompDescr', '')

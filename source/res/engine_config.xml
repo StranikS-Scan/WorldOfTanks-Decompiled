@@ -1,0 +1,229 @@
+<engine_config.xml>
+  <personality>	game	</personality>
+  <preferences>	preferences.xml	</preferences>
+  <enableBalanceCPU>	true	</enableBalanceCPU>
+  <enableServerTimeSync>	true	</enableServerTimeSync>
+  <spaceType>	COMPILED_SPACE	</spaceType>
+  <renderer>
+    <disableSLI>	false	</disableSLI>
+    <cacheEffects>	true	</cacheEffects>
+    <gammaCorrectionOutside>	1.0	</gammaCorrectionOutside>
+    <gammaCorrectionInside>	1.0	</gammaCorrectionInside>
+    <gammaCorrectionSpeed>	0.2	</gammaCorrectionSpeed>
+    <maxFrameRate>	120	</maxFrameRate>
+    <reducedFrameRate>	60	</reducedFrameRate>
+    <settings></settings>
+    <useLatentOcclusionQueries>	true	</useLatentOcclusionQueries>
+    <DRRAutoscaler>
+      <criticalFPS>	15	</criticalFPS>
+      <safeFPSMultiplier>	1.15	</safeFPSMultiplier>
+      <timeStep>	1.0	</timeStep>
+      <correctionStep>	0.05	</correctionStep>
+      <correctionBigStep>	0.1	</correctionBigStep>
+      <minScale>	0.5	</minScale>
+    </DRRAutoscaler>
+    <globalVBSize>	10485760	</globalVBSize>
+    <globalIBSize>	102400	</globalIBSize>
+  </renderer>
+  <influx>
+    <force_use_bw_collision>	true	</force_use_bw_collision>
+    <control_point_hmap_offset>	0.1f	</control_point_hmap_offset>
+    <control_point_grid_step>	1.0f	</control_point_grid_step>
+  </influx>
+  <animation>
+    <streamCacheSizeKB>	2048	</streamCacheSizeKB>
+  </animation>
+  <screenShot>
+    <extension>	jpg	</extension>
+    <name>	screenshots/shot	</name>
+  </screenShot>
+  <superShot>
+    <hRes>	2048	</hRes>
+    <farPlaneDist>	1500	</farPlaneDist>
+    <floraVBSize>	16000000	</floraVBSize>
+    <disableGUI>	true	</disableGUI>
+  </superShot>
+  <accessMonitor>	false	</accessMonitor>
+  <hasDevelopmentAssertions>	true	</hasDevelopmentAssertions>
+  <debugKeys>
+    <combination>
+      <key>	APPS	</key>
+    </combination>
+    <combination>
+      <key>	GRAVE	</key>
+    </combination>
+    <enableEndStopApp>	false	</enableEndStopApp>
+  </debugKeys>
+  <entities>
+    <disablePreloads>	false	</disablePreloads>
+    <enforcePreloads>	false	</enforcePreloads>
+    <entityCollision>	false	</entityCollision>
+    <particlesActive>	true	</particlesActive>
+    <movementThreshold>	0.25	</movementThreshold>
+  </entities>
+  <ui>
+    <straferate>	5.0	</straferate>
+    <loadingText>	151 231 233	</loadingText>
+  </ui>
+  <camera>
+    <lookTable>	0.00	0.00	</lookTable>
+    <lookTable>	0.10	0.05	</lookTable>
+    <lookTable>	0.30	0.10	</lookTable>
+    <lookTable>	0.50	0.15	</lookTable>
+    <lookTable>	0.70	0.30	</lookTable>
+    <lookTable>	0.90	1.00	</lookTable>
+    <lookAxisMin>	0.10	</lookAxisMin>
+    <lookAxisMax>	0.91	</lookAxisMax>
+    <cameraYawSpeed>	90	</cameraYawSpeed>
+    <cameraPitchSpeed>	60	</cameraPitchSpeed>
+    <accelerateStart>	0.00	</accelerateStart>
+    <accelerateRate>	2.00	</accelerateRate>
+    <accelerateEnd>	1.00	</accelerateEnd>
+  </camera>
+  <directionCursor>
+    <invertVerticalMovement>	false	</invertVerticalMovement>
+    <mouseSensitivity>	0.005	</mouseSensitivity>
+    <mouseHVBias>	0.667	</mouseHVBias>
+    <maxPitch>	50.0	</maxPitch>
+    <minPitch>	-65.0	</minPitch>
+    <yaw>	0.000	</yaw>
+    <pitch>	0.000	</pitch>
+    <lookSpring>	false	</lookSpring>
+    <lookSpringRate>	0.75	</lookSpringRate>
+    <lookSpringIdleTime>	3600.0	</lookSpringIdleTime>
+    <lookSpringOnMove>	true	</lookSpringOnMove>
+  </directionCursor>
+  <simpleGui>
+    <breakOnLeak>	false	</breakOnLeak>
+    <breakOnAllocId>	0	</breakOnAllocId>
+  </simpleGui>
+  <ParticleSystem>
+    <PS_PERFORMANCE_FIXED_FPS>	29.9	</PS_PERFORMANCE_FIXED_FPS>
+    <PS_PERFORMANCE_MIN_FPS>	22	</PS_PERFORMANCE_MIN_FPS>
+    <PS_PERFORMANCE_MAX_FPS>	26	</PS_PERFORMANCE_MAX_FPS>
+    <PS_PERFORMANCE_SPEED_MULT>	10	</PS_PERFORMANCE_SPEED_MULT>
+    <PS_PERFORMANCE_LOD_OFFSET>	0	</PS_PERFORMANCE_LOD_OFFSET>
+    <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
+  </ParticleSystem>
+  <debug>
+    <framesCount>	0	</framesCount>
+    <enableServers>	false	</enableServers>
+    <profilerBufferSize>	12582912	</profilerBufferSize>
+    <enableLoggingAssetMsg>	false	</enableLoggingAssetMsg>
+    <assetLogPath>	asset.log	</assetLogPath>
+    <enableColorFill>	false	</enableColorFill>
+    <remotePythonConsole>	true	</remotePythonConsole>
+  </debug>
+  <hitchDetector>
+    <numTimeSamples>	10	</numTimeSamples>
+    <frameMSLimit>	100.0	</frameMSLimit>
+    <overAverageFactor>	1.5	</overAverageFactor>
+  </hitchDetector>
+  <log_console>
+    <enable>	false	</enable>
+    <monitor>	false	</monitor>
+    <colors>	false	</colors>
+    <timestamp>	true	</timestamp>
+    <real_time>	true	</real_time>
+    <wrap>	false	</wrap>
+    <auto_scroll>	true	</auto_scroll>
+    <priority>	1111111111	</priority>
+  </log_console>
+  <soundMgr>
+    <memoryManager>
+      <defaultPool>	4	</defaultPool>
+      <lowEnginePool>	8	</lowEnginePool>
+      <preparedPool>	150	</preparedPool>
+      <streamingPool>	4	</streamingPool>
+    </memoryManager>
+    <enabled>	true	</enabled>
+    <errorLevel>	warning	</errorLevel>
+    <softwareChannels>	64	</softwareChannels>
+    <virtualChannels>	512	</virtualChannels>
+    <speakerConfig>	255	</speakerConfig>
+    <ADPCMCodecs>	128	</ADPCMCodecs>
+    <mediaPath>	audio	</mediaPath>
+    <soundbanks>
+      <project>
+        <name>	ambient	</name>
+      </project>
+      <project>
+        <name>	burn	</name>
+      </project>
+      <project>
+        <name>	combat_atmosphere	</name>
+      </project>
+      <project>
+        <name>	explosions	</name>
+      </project>
+      <project>
+        <name>	GUI	</name>
+      </project>
+      <project>
+        <name>	guns	</name>
+      </project>
+      <project>
+        <name>	hangar	</name>
+      </project>
+      <project>
+        <name>	hits	</name>
+      </project>
+      <project>
+        <name>	ingame_voice	</name>
+      </project>
+      <project>
+        <name>	music	</name>
+      </project>
+      <project>
+        <name>	objects	</name>
+      </project>
+      <project>
+        <name>	plane	</name>
+      </project>
+      <project>
+        <name>	tanks	</name>
+      </project>
+      <project>
+        <name>	trees	</name>
+      </project>
+      <project>
+        <name>	turret	</name>
+      </project>
+      <project>
+        <name>	tutorial_voice	</name>
+      </project>
+      <project>
+        <name>	vehicles	</name>
+      </project>
+      <project>
+        <name>	wind	</name>
+      </project>
+      <project>
+        <name>	fortified_area	</name>
+      </project>
+    </soundbanks>
+    <networkUpdates>	false	</networkUpdates>
+    <enableProfiler>	false	</enableProfiler>
+    <allowUnload>	true	</allowUnload>
+    <maxSoundSpeed>	1000	</maxSoundSpeed>
+    <maxListenerSpeed>	50	</maxListenerSpeed>
+  </soundMgr>
+  <logging>
+    <suppress>
+      <categories></categories>
+    </suppress>
+    <logToMessageLogger>	false	</logToMessageLogger>
+    <loggerID>	111	</loggerID>
+    <file>	game.log	  <enabled>	true	</enabled>
+      <openMode>	a	</openMode>
+      <maxSizeKB>	2048	</maxSizeKB>
+      <trimToKB>	512	</trimToKB>
+    </file>
+    <file>	python.log	  <enabled>	true	</enabled>
+      <source>	SCRIPT	</source>
+      <openMode>	a	</openMode>
+      <maxSizeKB>	200	</maxSizeKB>
+      <trimToKB>	50	</trimToKB>
+    </file>
+  </logging>
+</engine_config.xml>

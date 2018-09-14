@@ -19,13 +19,12 @@ from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
 import MusicController
 import TriggersManager
-from helpers import RSSDownloader
+from helpers import RSSDownloader, OfflineMode
 import Settings
 from MemoryCriticalController import g_critMemHandler
 import VOIP
 import WebBrowser
 import SoundGroups
-import OfflineMode
 loadingScreenClass = None
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
@@ -238,9 +237,6 @@ def abort():
 def fini():
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
-        OfflineMode.onShutdown()
-        return
-    elif OfflineMode.enabled():
         return
     else:
         BigWorld.wg_setScreenshotNotifyCallback(None)
@@ -253,9 +249,6 @@ def fini():
             Cat.fini()
         if MusicController.g_musicController is not None:
             MusicController.g_musicController.destroy()
-        if TriggersManager.g_manager is not None:
-            TriggersManager.g_manager.destroy()
-            TriggersManager.g_manager = None
         if RSSDownloader.g_downloader is not None:
             RSSDownloader.g_downloader.destroy()
         connectionManager.onConnected -= onConnected
@@ -268,8 +261,9 @@ def fini():
             EdgeDetectColorController.g_instance = None
         BigWorld.resetEntityManager(False, False)
         BigWorld.clearAllSpaces()
-        from gui.social_network_login.Bridge import bridge
-        bridge.fini()
+        if TriggersManager.g_manager is not None:
+            TriggersManager.g_manager.destroy()
+            TriggersManager.g_manager = None
         gui_personality.fini()
         tutorialLoaderFini()
         import LcdKeyboard
@@ -492,6 +486,10 @@ def wg_onChunkLoose(spaceID, chunkID, isOutside):
         return
     if spaceID == AreaDestructibles.g_destructiblesManager.getSpaceID():
         AreaDestructibles.g_destructiblesManager.onChunkLoose(chunkID)
+
+
+def wg_playModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokVisible):
+    AreaDestructibles.g_destructiblesManager.onPlayModuleDestructionAnimation(chunkID, destrIndex, moduleIndex, isShotDamage, isHavokVisible)
 
 
 def convertKeyEvent(event):

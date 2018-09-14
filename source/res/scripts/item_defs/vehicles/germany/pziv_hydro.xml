@@ -1,0 +1,352 @@
+<pziv_hydro.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	3.50	</repairCost>
+  <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G70_PzIV_Hydro/PzIV_Hydro_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	50	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	10	</armor_8>
+      <armor_9>	10	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	50	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	50	</armor_13>
+      <armor_14>	20	</armor_14>
+      <armor_15>	8	</armor_15>
+      <armor_16>	20	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10860	</weight>
+    <maxHealth>	440	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G70_PzIV_Hydro/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.069333 0.797766 -0.126203	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G70_PzIV_Hydro/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.40647 0.362247 2.37632	</rayStart>
+        <rayEnd>	-0.40647 -0.0156422 2.24518	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.000701201 0.328133 -3.00232	</rayStart>
+        <rayEnd>	-0.000701178 0.0491123 -2.71571	</rayEnd>
+        <rayUp>	0.0997217 0.995003 -0.00486422	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_PzIV_Hydro>
+      <userString>	#germany_vehicles:Chassis_PzIV_Hydro	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	7910.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	27000	</maxLoad>
+      <terrainResistance>	0.9 1 2.1	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G70_PzIV_Hydro/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.43	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.39171	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127726	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.323607	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.250585	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.39171	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127726	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.323607	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.250585	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G70_PzIV_Hydro/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.20923 1.81852	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.005780 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.910380	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_PzIV_Hydro>
+  </chassis>
+  <turrets0>
+    <Turret_1_PzIV_Hydro>
+      <userString>	#germany_vehicles:Turret_1_PzIV_Hydro	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	95	</armor_5>
+        <armor_6>	95	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	10	</armor_8>
+        <armor_9>	30	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	8	</armor_12>
+        <armor_13>	0	</armor_13>
+        <armor_14>	95	</armor_14>
+        <armor_15>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_15>
+        <armor_16>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3400	</weight>
+      <maxHealth>	110	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_40_L48A>	shared	  <maxAmmo>	87	</maxAmmo>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	4.3	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.366894 10 0.430556 7 0.569444 7 0.633106 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/german/G70_PzIV_Hydro/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G70_PzIV_Hydro/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000338786 -0.0181657 2.79	</rayStart>
+              <rayEnd>	-0.283245 -0.426063 2.7504	</rayEnd>
+              <rayUp>	0.06 0.055 3	</rayUp>
+              <size>	0.29	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.54 1.54 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L48A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G70_PzIV_Hydro/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G70_PzIV_Hydro/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G70_PzIV_Hydro/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.311256 0.717268	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.985827 0.287797 0.810631	</rayStart>
+          <rayEnd>	-0.872995 0.287797 0.769778	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.996116 0.280998 0.788111	</rayStart>
+          <rayEnd>	0.883288 0.280998 0.747259	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.909 0.072 1.000 0.000 0.426 0.133 0.741 0.540 0.369 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+    </Turret_1_PzIV_Hydro>
+  </turrets0>
+  <engines>
+    <Maybach_HL_120_TRM_C>	shared	</Maybach_HL_120_TRM_C>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <FuG5A>	shared	</FuG5A>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</pziv_hydro.xml>

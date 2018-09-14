@@ -1,0 +1,718 @@
+<t-46.xml>
+  <crew>
+    <commander>	radioman
+			loader	</commander>
+    <driver></driver>
+    <gunner></gunner>
+  </crew>
+  <speedLimits>
+    <forward>	58	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	2.68	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R22_T-46/T-46_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	15	</armor_1>
+      <armor_2>	22	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	7	</armor_5>
+      <armor_6>	7	</armor_6>
+      <armor_7>	15	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	15	</armor_9>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	7800	</weight>
+    <maxHealth>	176	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R22_T-46/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 32.00 0.38 1.00 0.06 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 32.00 0.38 1.00 0.06 0.34	</rollParams>
+      <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.012283 0.476161 0.20145	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R22_T-46/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.547508 0.326946 1.32873	</rayStart>
+        <rayEnd>	0.547508 -0.0631148 1.24012	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.55167 0.312472 -0.217505	</rayStart>
+        <rayEnd>	-1.15168 0.312472 -0.217505	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.55167 0.312472 -0.217505	</rayStart>
+        <rayEnd>	1.15168 0.312472 -0.217505	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T-46-1>
+      <userString>	#ussr_vehicles:T-46_mod_1	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	660.0	</price>
+      <unlocks>
+        <chassis>	T-46-2	  <cost>	340	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	4200	</weight>
+      <maxLoad>	17000	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.3	</terrainResistance>
+      <brakeForce>	32500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	52	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R22_T-46/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.36 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.66	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.4235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.4235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.384	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.137	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.329	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.384	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.137	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.329	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	-0.012425 1.02636 0.021236	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R22_T-46/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.12485 1.62933	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.797600 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.539540 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.191450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T-46-1>
+    <T-46-2>
+      <userString>	#ussr_vehicles:T-46_mod_2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1840.0	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	4200	</weight>
+      <maxLoad>	17300	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	32800	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	55	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R22_T-46/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.36 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.66	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.4235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.4235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.384	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.137	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.329	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.384	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.137	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.329	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	-0.012425 1.02636 0.021236	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R22_T-46/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.12485 1.62933	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.805830 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.539540 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.191450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T-46-2>
+  </chassis>
+  <turrets0>
+    <T-46>
+      <userString>	#ussr_vehicles:Turret_1_T46	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	840.0	</price>
+      <unlocks>
+        <turret>	T-46-1	  <cost>	340	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	15	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	7	</armor_5>
+        <armor_6>	7	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	7	</armor_9>
+        <armor_10>	7	</armor_10>
+      </armor>
+      <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
+      <weight>	1000	</weight>
+      <maxHealth>	44	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	260	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20K>	shared	  <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	101	</maxAmmo>
+          <unlocks>
+            <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_45mm_20K>
+        <_37mm_ZiS-19>	shared	  <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	101	</maxAmmo>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_ZiS-19>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R22_T-46/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R22_T-46/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000142 0.369662 0.626422	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.704799 0.440692 -0.658153	</rayStart>
+          <rayEnd>	0.31983 0.440692 -0.549533	</rayEnd>
+          <rayUp>	-0.00947698 0.999391 0.0335881	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.704799 0.440692 -0.658153	</rayStart>
+          <rayEnd>	-0.31983 0.440692 -0.549533	</rayEnd>
+          <rayUp>	-0.00947698 0.999391 0.0335881	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.981 -0.029 1.000 0.000 0.536 0.136 0.793 0.607 0.430 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </T-46>
+    <T-46-1>
+      <userString>	#ussr_vehicles:T-46-1	</userString>
+      <shortUserString>	#ussr_vehicles:T-46-1_short	</shortUserString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800.0	</price>
+      <unlocks>
+        <gun>	_45mm_VT-42	  <cost>	850.0	</cost>
+        </gun>
+        <gun>	_37mm_automatic_SH-37	  <cost>	2600.0	</cost>
+        </gun>
+        <gun>	_76mm_L-10	  <cost>	400.0	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	15	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	7	</armor_5>
+        <armor_6>	7	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	7	</armor_9>
+        <armor_10>	7	</armor_10>
+      </armor>
+      <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
+      <weight>	1450	</weight>
+      <maxHealth>	74	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.972	</invisibilityFactor>
+      <guns>
+        <_45mm_20K>	shared	  <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	114	</maxAmmo>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_45mm_20K>
+        <_37mm_ZiS-19>	shared	  <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	114	</maxAmmo>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+        </_37mm_ZiS-19>
+        <_45mm_VT-42>	shared	  <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	84	</maxAmmo>
+          <unlocks>
+            <vehicle>	T-50	  <cost>	3800	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_45mm_VT-42>
+        <_37mm_automatic_SH-37>	shared	  <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	4.6	</reloadTime>
+          <clip>
+            <count>	5	</count>
+            <rate>	170	</rate>
+          </clip>
+          <burst>
+            <count>	3	</count>
+            <rate>	170	</rate>
+          </burst>
+          <maxAmmo>	120	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	2.2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_automatic_SH-37>
+        <_76mm_L-10>	shared	  <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 6 0.40856 6 0.472222 4 0.527778 4 0.59144 6 1 6	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	R06_T-28	  <cost>	3600	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.57	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/russian/R22_T-46/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R22_T-46/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+        </_76mm_L-10>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R22_T-46/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R22_T-46/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R22_T-46/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R22_T-46/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000142 0.362713 0.607961	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.820495 0.358427 -0.774319	</rayStart>
+          <rayEnd>	0.433508 0.358427 -0.673119	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.820495 0.358427 -0.774319	</rayStart>
+          <rayEnd>	-0.433508 0.358427 -0.673119	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.970 -0.028 1.000 0.000 0.508 0.130 0.790 0.567 0.477 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </T-46-1>
+  </turrets0>
+  <engines>
+    <V-4>	shared	  <unlocks>
+        <engine>	MT-5-1	  <cost>	700.0	</cost>
+        </engine>
+      </unlocks>
+    </V-4>
+    <MT-5-1>	shared	</MT-5-1>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <_71-TK-3>	shared	  <unlocks>
+        <radio>	_10R	  <cost>	610.0	</cost>
+        </radio>
+      </unlocks>
+    </_71-TK-3>
+    <_10R>	shared	</_10R>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</t-46.xml>

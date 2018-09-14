@@ -33,6 +33,7 @@ class NODE_STATE:
     CAN_SELL = 8192
     VEHICLE_CAN_BE_CHANGED = 16384
     VEHICLE_IN_RENT = 32768
+    VEHICLE_RENTAL_IS_OVER = 65536
 
     @classmethod
     def add(cls, state, flag):
@@ -116,6 +117,10 @@ class NODE_STATE:
                 state ^= cls.ENOUGH_XP
         state |= cls.UNLOCKED
         return state
+
+    @classmethod
+    def isRentalOver(cls, state):
+        return state & cls.VEHICLE_RENTAL_IS_OVER
 
 
 class UnlockStats(namedtuple('UnlockStats', 'unlocked xps freeXP')):

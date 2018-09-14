@@ -24,7 +24,7 @@ class GreetingContent(ContentQuery):
                      'received': chapter.isBonusReceived(completed)})
 
             content['bonuses'] = result
-            content['timeNoteValue'] = content['timeNoteValue'].format(i18n.makeString('#battle_tutorial:labels/minutes', minutes=str(TUTORIAL_AVG_SESSION_TIME)))
+            content['timeNoteValue'] = content['timeNoteValue'].format(i18n.makeString('#battle_tutorial:labels/minutes', units=str(TUTORIAL_AVG_SESSION_TIME)))
             return
 
 
@@ -39,7 +39,7 @@ class TutorialQueueText(ContentQuery):
         else:
             filtered = filter(lambda pointcut: pointcut >= inMin, pointcuts)
             if len(filtered):
-                minString = i18n.makeString('#battle_tutorial:labels/minutes', minutes=str(filtered[0]))
+                minString = i18n.makeString('#battle_tutorial:labels/minutes', units=str(filtered[0]))
             else:
                 minString = i18n.makeString('#battle_tutorial:labels/more_n_minutes', minutes=str(pointcuts[-1]))
         content['avgTimeText'] = content['avgTimeTextFormat'].format(minString)

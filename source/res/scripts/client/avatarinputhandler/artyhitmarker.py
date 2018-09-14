@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/AvatarInputHandler/ArtyHitMarker.py
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.control_modes import _SuperGunMarker, _SPGFlashGunMarker
 import BattleReplay
 import BigWorld

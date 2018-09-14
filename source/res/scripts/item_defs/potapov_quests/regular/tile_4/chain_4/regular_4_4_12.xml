@@ -1,0 +1,50 @@
+<regular_4_4_12.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_12_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
+            <vehicleKills>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_12_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
+            <vehicleKills>
+              <classes>	heavyTank	</classes>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	2	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_4_12.xml>

@@ -1,0 +1,65 @@
+<repairpoint.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <radius>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	5	</Default>
+    </radius>
+    <cooldown>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	10	</Default>
+    </cooldown>
+    <repairTime>
+      <Type>	FLOAT32	</Type>
+      <Editable>	true	</Editable>
+      <Default>	5	</Default>
+    </repairTime>
+    <stopFire>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </stopFire>
+    <healVehicle>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </healVehicle>
+    <healCrew>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </healCrew>
+    <healDevices>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </healDevices>
+    <replenishAmmo>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </replenishAmmo>
+    <replenishEquip>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </replenishEquip>
+    <reloadGun>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <Default>	1	</Default>
+    </reloadGun>
+    <radiusModel>
+      <Type>	STRING	</Type>
+      <Default>	repairPointRadiusModel	</Default>
+      <Editable>	true	</Editable>
+    </radiusModel>
+    <flagModel>
+      <Type>	STRING	</Type>
+      <Default>	repair_point_flag	</Default>
+      <Editable>	true	</Editable>
+    </flagModel>
+  </Properties>
+</repairpoint.def>

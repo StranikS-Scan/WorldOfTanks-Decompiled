@@ -1,0 +1,750 @@
+<a108_t18_hmc.xml>
+  <crew>
+    <commander>	radioman loader	</commander>
+    <gunner></gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	6	</backward>
+  </speedLimits>
+  <repairCost>	6.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	50.8	</armor_1>
+      <armor_2>	44.5	</armor_2>
+      <armor_3>	31.8	</armor_3>
+      <armor_4>	25.4	</armor_4>
+      <armor_5>	31.8	</armor_5>
+      <armor_6>	9.5	</armor_6>
+      <armor_7>	46	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	25.4	</armor_9>
+      <armor_10>	15.9	</armor_10>
+      <armor_11>	9.5	</armor_11>
+      <armor_12>	6.4	</armor_12>
+      <armor_13>	25.4	</armor_13>
+      <armor_14>	12.7	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	9784	</weight>
+    <maxHealth>	88	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A108_T18_HMC/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A108_T18_HMC/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 36.00 0.38 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.28 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.64	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_small	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.320658 0.35686 0.668212	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A108_T18_HMC/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.173812 0.157651 1.7163	</rayStart>
+        <rayEnd>	-0.173819 -0.0289111 1.64423	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.22 0.907282 0.0625	</rayStart>
+        <rayEnd>	-1.02 0.907281 0.0624999	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	-1.22 0.533935 0.0332963	</rayStart>
+        <rayEnd>	-1.02 0.533935 0.0332962	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.55	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	1.22 0.907282 0.0625	</rayStart>
+        <rayEnd>	1.02 0.907281 0.0624999	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	1.22 0.533935 0.0332963	</rayStart>
+        <rayEnd>	1.02 0.533935 0.0332962	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.55	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	2.14 2.14 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A108_T18_HMC>
+      <userString>	#usa_vehicles:Chassis_A108_T18_HMC	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <unlocks>
+        <chassis>	Chassis_A108_T18_HMC_2	  <cost>	350	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	15000	</maxLoad>
+      <terrainResistance>	2 2.2 2.9	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	23	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A108_T18_HMC/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A108_T18_HMC/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.35 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.85	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.329924	</radius>
+          <syncAngle>	25.714	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.11	</radius>
+          <syncAngle>	51.4	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.11	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255962	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.329924	</radius>
+          <syncAngle>	25.714	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.11	</radius>
+          <syncAngle>	51.4	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.11	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255682	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.906399 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A108_T18_HMC/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.9332 1.55085	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.998140 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.025390 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.308780	</row2>
+            <row3>	0.000000 0.000000 -0.000068	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.0167	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	-5.7	</gravity>
+        <elasticity>	1500	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	3	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	-0.05	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.04	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.04	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A108_T18_HMC/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A108_T18_HMC/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A108_T18_HMC/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A108_T18_HMC/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A108_T18_HMC/track/left.track	</left>
+        <right>	vehicles/american/A108_T18_HMC/track/right.track	</right>
+        <segmentLength>	0.126	</segmentLength>
+        <segmentOffset>	0.119	</segmentOffset>
+        <segment2Offset>	0.008	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	4	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.2	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	4	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.2	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_A108_T18_HMC>
+    <Chassis_A108_T18_HMC_2>
+      <userString>	#usa_vehicles:Chassis_A108_T18_HMC_2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	15000	</maxLoad>
+      <terrainResistance>	2 2.2 2.9	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	23	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A108_T18_HMC/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A108_T18_HMC/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.35 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.85	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.329924	</radius>
+          <syncAngle>	25.714	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.11	</radius>
+          <syncAngle>	51.4	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.11	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255962	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.329924	</radius>
+          <syncAngle>	25.714	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.11	</radius>
+          <syncAngle>	51.4	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.11	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255682	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.906399 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A108_T18_HMC/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.9332 1.55085	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.256510 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.025390 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.173660	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.0167	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	-5.7	</gravity>
+        <elasticity>	1500	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	3	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	-0.05	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.04	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <backwardElastK>	0.9	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.04	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A108_T18_HMC/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A108_T18_HMC/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A108_T18_HMC/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A108_T18_HMC/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A108_T18_HMC/track/left.track	</left>
+        <right>	vehicles/american/A108_T18_HMC/track/right.track	</right>
+        <segmentLength>	0.126	</segmentLength>
+        <segmentOffset>	0.119	</segmentOffset>
+        <segment2Offset>	0.008	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	4	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.2	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.08	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	4	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.2	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_A108_T18_HMC_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_A108_T18_HMC>
+      <userString>	#usa_vehicles:Turret_1_A108_T18_HMC	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	3	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	50.8	</armor_1>
+        <armor_2>	25.4	</armor_2>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	100	</weight>
+      <maxHealth>	22	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	45	</maxHealth>
+        <maxRegenHealth>	22.5	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Howitzer_M1A1_SPG>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -40 1 -40	</minPitch>
+            <maxPitch>	0 8.33 1 8.33	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	15	</gun>
+          </armor>
+          <turretYawLimits>	-21.21 21.21	</turretYawLimits>
+          <shotDispersionRadius>	0.68	</shotDispersionRadius>
+          <reloadTime>	7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.35	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	4.8	</aimingTime>
+          <models>
+            <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A108_T18_HMC/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A108_T18_HMC/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A108_T18_HMC/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.895 0.46 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Howitzer_M1A1_SPG>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A108_T18_HMC/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A108_T18_HMC/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A108_T18_HMC/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A108_T18_HMC/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.010396 0.315402 0.377694	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <physicsShape>	0.890 0.135 1.014 0.000 0.907 -0.039 0.693 0.000 0.648 0.515 0.000 0.500 0.000 0.100 0.152	</physicsShape>
+      <camouflage>
+        <tiling>	0.865 0.25 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A108_T18_HMC>
+  </turrets0>
+  <engines>
+    <Guiberson_T-1020-4>	shared	  <unlocks>
+        <engine>	Continental_W-670	  <cost>	310	</cost>
+        </engine>
+      </unlocks>
+    </Guiberson_T-1020-4>
+    <Continental_W-670>	shared	  <unlocks>
+        <vehicle>	A27_T82	  <cost>	4620	</cost>
+        </vehicle>
+      </unlocks>
+    </Continental_W-670>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <SCR_200>	shared	  <unlocks>
+        <radio>	SCR_210	  <cost>	330	</cost>
+        </radio>
+      </unlocks>
+    </SCR_200>
+    <SCR_210>	shared	  <unlocks>
+        <radio>	SCR_506	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </SCR_210>
+    <SCR_506>	shared	</SCR_506>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a108_t18_hmc.xml>

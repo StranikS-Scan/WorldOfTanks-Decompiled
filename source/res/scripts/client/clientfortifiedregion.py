@@ -8,8 +8,8 @@ from ClientUnit import ClientUnit
 from ConnectionManager import connectionManager
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
 import Event
-from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from FortifiedRegionBase import FortifiedRegionBase, FORT_STATE, FORT_EVENT_TYPE, NOT_ACTIVATED, FORT_ATK_IDX
+from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 import fortified_regions
 from shared_utils import CONST_CONTAINER, findFirst
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -18,7 +18,7 @@ from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.fort_seqs import ClanCardItem, AttackItem, DefenceItem, BattleItem
 from gui.shared.gui_items.dossier import FortDossier
-from gui.prb_control import getUnitMgrID
+from gui.prb_control.prb_getters import getUnitMgrID
 from helpers import time_utils, i18n
 from items import vehicles
 UNIT_MGR_ID_CHR = '<qH'
@@ -809,7 +809,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onFortBattleChanged(battleID)
 
     def _onDeleteBattle(self, key, args, reason, isDefence):
-        battleID = args[3]
+        battleID = args[FORT_ATK_IDX.BATTLE_ID]
         FortifiedRegionBase._onDeleteBattle(self, key, args, reason, isDefence)
         self.onFortBattleRemoved(battleID)
 

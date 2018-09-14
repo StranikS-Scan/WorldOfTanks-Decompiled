@@ -587,7 +587,8 @@ class Token(_Requirement):
 
     def _format(self, svrEvents, event = None):
         result = []
-        for eID, e in svrEvents.iteritems():
+        eventScope = [event] if event is not None else svrEvents.values()
+        for e in eventScope:
             if e.getType() not in _TOKEN_REQUIREMENT_QUESTS:
                 continue
             children = e.getChildren()
@@ -614,7 +615,7 @@ class Token(_Requirement):
                         counterDescr = i18n.makeString('#quests:quests/table/battlesLeft')
                     groupID = quest.getGroupID()
                     group = self.__getGroup(groupID)
-                    if group is not None and tokensCountNeed > 1:
+                    if group is not None and tokensCountNeed > 1 and self.__getUniqueGroupTokensCount(svrEvents, group) == 1:
                         groupName = group.getUserName()
                         label = i18n.makeString('#quests:details/requirements/group/token/N', groupName=groupName, count=BigWorld.wg_getIntegralFormat(tokensCountNeed))
                         groupedResult[groupID, group.getPriority()] = formatters.packTextBlock(label, isAvailable=isAvailable, counterValue=battlesLeft, counterDescr=counterDescr)
@@ -633,6 +634,14 @@ class Token(_Requirement):
     def __getTokensCount(self):
         from gui.server_events import g_eventsCache
         return g_eventsCache.questsProgress.getTokenCount(self._id)
+
+    def __getUniqueGroupTokensCount(self, svrEvents, group):
+        uniqueTokens = set()
+        for qID in group.getGroupEvents():
+            quest = svrEvents.get(qID)
+            uniqueTokens |= set(quest.getChildren().keys())
+
+        return len(uniqueTokens)
 
     def __getGroup(self, groupID):
         from gui.server_events import g_eventsCache
@@ -934,25 +943,6 @@ class BattleClanMembership(_Condition, _Negatable):
 
     def __repr__(self):
         return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusType(self.__proxy))
-
-
-class HistoricalBattles(_Condition, _Negatable):
-
-    def __init__(self, path, data):
-        super(HistoricalBattles, self).__init__('historicalBattleIDs', dict(data), path)
-        self._battlesIDs = self._data.get('value')
-
-    def negate(self):
-        pass
-
-    def _format(self, svrEvents, event = None):
-        result = []
-        if event is None or not event.isGuiDisabled():
-            result.append(formatters.packIconTextBlock(formatters.formatGray('#quests:details/conditions/historicalBattles'), iconTexts=[ formatters.packHistoricalBattleElement(bID) for bID in self._battlesIDs ]))
-        return result
-
-    def __repr__(self):
-        return 'HistoricalBattles<value=%r>' % self._battlesIDs
 
 
 class BattleCamouflage(_Condition, _Negatable):

@@ -1,9 +1,11 @@
 # Embedded file name: scripts/common/ArenaType.py
+from collections import namedtuple
 import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
+from GasAttackSettings import GasAttackSettings
 if IS_CLIENT:
     from helpers import i18n
     import FMOD
@@ -217,8 +219,23 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
                 cfg['mapActivitiesSection'] = section['mapActivities']
             if section.has_key('soundRemapping'):
                 cfg['soundRemapping'] = section['soundRemapping']
-        cfg['controlPoints'] = (IS_CLIENT or IS_BOT) and __readControlPoints(section)
-        cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
+        if IS_CLIENT or IS_BOT:
+            cfg['controlPoints'] = __readControlPoints(section)
+            cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
+            cfg['botPoints'] = __readBotPoints(section)
+        if __hasKey('gasAttack', section, defaultXml):
+            gasAttackSection = section['gasAttack']
+            cfg['gasAttackSettings'] = __readGasAttackSettings(gasAttackSection['gameplaySettings'])
+            if IS_CLIENT:
+                from battleground import gas_attack
+                cfg['gasAttackVisual'] = gas_attack.GasAttackMapSettings.fromSection(gasAttackSection['visualSettings'])
+        elif raiseIfMissing:
+            cfg['gasAttackSettings'] = None
+            cfg['gasAttackVisual'] = None
+        if not IS_CLIENT:
+            if raiseIfMissing or __hasKey('battleScenario', section, defaultXml):
+                cfg['battleScenarios'] = __readBattleScenarios(section['battleScenario'])
+            cfg['waypoints'] = (raiseIfMissing or __hasKey('waypoints', section, defaultXml)) and __readString('waypoints', section, defaultXml)
     return cfg
 
 
@@ -231,6 +248,18 @@ def __readString(key, xml, defaultXml, defaultValue = None):
         return xml.readString(key)
     elif defaultXml.has_key(key):
         return defaultXml.readString(key)
+    elif defaultValue is not None:
+        return defaultValue
+    else:
+        raise Exception, "missing key '%s'" % key
+        return
+
+
+def __readStrings(key, xml, defaultXml, defaultValue = None):
+    if xml.has_key(key):
+        return xml.readStrings(key)
+    elif defaultXml.has_key(key):
+        return defaultXml.readStrings(key)
     elif defaultValue is not None:
         return defaultValue
     else:
@@ -308,6 +337,21 @@ def __readWeatherPresets(section):
         return presets
 
 
+def __readBattleScenarios(section):
+    res = {}
+    if section is None:
+        return res
+    else:
+        default = section.asString.split()
+        if default:
+            res['default'] = default
+        for levelSubsection in section.values():
+            level = levelSubsection.asInt
+            res[level] = __readStrings('scenario', levelSubsection, levelSubsection)
+
+        return res
+
+
 def __readVehicleCamouflageKind(section):
     kindName = section.readString('vehicleCamouflageKind')
     kind = CAMOUFLAGE_KINDS.get(kindName)
@@ -361,8 +405,14 @@ def __readMapActivitiesTimeframes(section):
     timeframes = []
     for activityXML in mapActivitiesXML.values():
         startTimes = activityXML.readVector2('startTime')
+        if (startTimes[0] >= 0) != (startTimes[1] >= 0):
+            raise Exception, "wrong subsection 'mapActivities/startTime'. All values of startTime must have same sign"
         possibility = activityXML.readFloat('possibility', 1.0)
-        timeframes.append((startTimes[0], startTimes[1], possibility))
+        visibilityMask = activityXML.readInt('visibilityMask', 255)
+        timeframes.append((startTimes[0],
+         startTimes[1],
+         possibility,
+         visibilityMask))
 
     return timeframes
 
@@ -385,6 +435,20 @@ def __readControlPoints(section):
     for name, value in section.items():
         if name == 'controlPoint':
             res.append(value.readVector2(''))
+
+    if res:
+        return res
+    else:
+        return None
+
+
+def __readBotPoints(section):
+    res = {}
+    for name, value in section.items():
+        if name == 'botPoint':
+            index = value['index'].readInt('')
+            pos = value['position'].readVector3('')
+            res[index] = pos
 
     if res:
         return res
@@ -471,6 +535,10 @@ def __readGameplayPoints(section):
      'repairPoints': rps,
      'resourcePoints': rsps}
     return cfg
+
+
+def __readGasAttackSettings(section):
+    return GasAttackSettings(section.readInt('attackLength'), section.readFloat('preparationPeriod'), section.readVector3('position'), section.readFloat('startRadius'), section.readFloat('endRadius'), section.readFloat('compressionTime'))
 
 
 def __readWinPoints(section):

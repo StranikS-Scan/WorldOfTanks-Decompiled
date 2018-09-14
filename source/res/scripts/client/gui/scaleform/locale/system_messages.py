@@ -19,6 +19,7 @@ class SYSTEM_MESSAGES(object):
     PREMIUM_SERVER_ERROR = '#system_messages:premium/server_error'
     PREMIUM_NOT_ENOUGH_GOLD = '#system_messages:premium/not_enough_gold'
     PREMIUM_WALLET_NOT_AVAILABLE = '#system_messages:premium/wallet_not_available'
+    PREMIUM_POST_BATTLE_PREMIUM = '#system_messages:premium/post_battle_premium'
     BOOSTER_ACTIVATIONSUCCESS = '#system_messages:booster/activationSuccess'
     BOOSTER_SERVER_ERROR = '#system_messages:booster/server_error'
     BOOSTER_NO_BOOSTERS = '#system_messages:booster/NO_BOOSTERS'
@@ -714,6 +715,63 @@ class SYSTEM_MESSAGES(object):
     CLUBS_REQUEST_ERRORS_SENDINVITE_IGNORED = '#system_messages:clubs/request/errors/sendInvite/ignored'
     CLUBS_REQUEST_ERRORS_SENDAPP_IGNORED = '#system_messages:clubs/request/errors/sendApp/ignored'
     CLUBS_REQUEST_ERRORS_JOINUNIT_WEBUNAVAILABLE = '#system_messages:clubs/request/errors/joinUnit/webUnavailable'
+    CLANS_ISCLANPROFILEDISABLED = '#system_messages:clans/isClanProfileDisabled'
+    CLANS_REQUEST_ERRORS_FORBIDDEN_ACCOUNT_TYPE = '#system_messages:clans/request/errors/FORBIDDEN_ACCOUNT_TYPE'
+    CLANS_REQUEST_ERRORS_CANT_SEND_INVITES = '#system_messages:clans/request/errors/CANT_SEND_INVITES'
+    CLANS_REQUEST_ERRORS_CLAN_CONSCRIPTION_CLOSED = '#system_messages:clans/request/errors/CLAN_CONSCRIPTION_CLOSED'
+    CLANS_REQUEST_ERRORS_CLAN_IS_FULL = '#system_messages:clans/request/errors/CLAN_IS_FULL'
+    CLANS_REQUEST_ERRORS_DEFAULT = '#system_messages:clans/request/errors/DEFAULT'
+    CLANS_REQUEST_ERRORS_USER_IS_NOT_AUTHENTIFICATED = '#system_messages:clans/request/errors/User is not authentificated'
+    CLANS_REQUEST_ERRORS_FORBIDDEN = '#system_messages:clans/request/errors/Forbidden'
+    CLANS_REQUEST_ERRORS_BAD_REQUEST = '#system_messages:clans/request/errors/Bad request'
+    CLANS_REQUEST_ERRORS_EXPORTER_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Exporter error was occurred'
+    CLANS_REQUEST_ERRORS_SPA_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/SPA error was occurred'
+    CLANS_REQUEST_ERRORS_GLOBAL_MAP_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Global map error was occurred'
+    CLANS_REQUEST_ERRORS_WGRS_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/Wgrs error was occurred'
+    CLANS_REQUEST_ERRORS_WGCCFE_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/WGCCFE error was occurred'
+    CLANS_REQUEST_ERRORS_CLAN_IS_DISBANDED = '#system_messages:clans/request/errors/Clan is disbanded'
+    CLANS_REQUEST_ERRORS_STRONGHOLD_IS_NOT_FOUND = '#system_messages:clans/request/errors/Stronghold is not found'
+    CLANS_REQUEST_ERRORS_WGCCBE_ERROR_WAS_OCCURRED = '#system_messages:clans/request/errors/WGCCBE error was occurred'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED = '#system_messages:clans/request/errors/Account is banned'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN = '#system_messages:clans/request/errors/Account in unknown'
+    CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Clan does not exist'
+    CLANS_REQUEST_ERRORS_CLAN_IS_FULL_ = '#system_messages:clans/request/errors/Clan is full'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
+    CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH = '#system_messages:clans/request/errors/Recruiting policy mismatch'
+    CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS = '#system_messages:clans/request/errors/Account does not meet requirements'
+    CLANS_REQUEST_ERRORS_TOO_MANY_INVITES = '#system_messages:clans/request/errors/Too many invites'
+    CLANS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Invite does not exist'
+    CLANS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE = '#system_messages:clans/request/errors/Invite is not active'
+    CLANS_REQUEST_ERRORS_TOO_MANY_APPLICATIONS = '#system_messages:clans/request/errors/Too Many Applications'
+    CLANS_REQUEST_ERRORS_APPLICATION_DOES_NOT_EXIST = '#system_messages:clans/request/errors/Application does not exist'
+    CLANS_REQUEST_ERRORS_APPLICATION_IS_NOT_ACTIVE = '#system_messages:clans/request/errors/Application is not active'
+    CLANS_REQUEST_ERRORS_CLAN_IS_NOT_ACTIVE = '#system_messages:clans/request/errors/Clan is not active'
+    CLANS_NOTIFICATIONS_FROM = '#system_messages:clans/notifications/from'
+    CLANS_NOTIFICATIONS_ACCEPT = '#system_messages:clans/notifications/accept'
+    CLANS_NOTIFICATIONS_DECLINE = '#system_messages:clans/notifications/decline'
+    CLANS_NOTIFICATIONS_INFO = '#system_messages:clans/notifications/info'
+    CLANS_NOTIFICATIONS_INVITE = '#system_messages:clans/notifications/invite'
+    CLANS_NOTIFICATIONS_INVITE_ACCEPTED = '#system_messages:clans/notifications/invite/accepted'
+    CLANS_NOTIFICATIONS_INVITE_DECLINED = '#system_messages:clans/notifications/invite/declined'
+    CLANS_NOTIFICATIONS_INVITE_EXPIRED = '#system_messages:clans/notifications/invite/expired'
+    CLANS_NOTIFICATIONS_REQUEST = '#system_messages:clans/notifications/request'
+    CLANS_NOTIFICATIONS_REQUEST_ACCEPTED = '#system_messages:clans/notifications/request/accepted'
+    CLANS_NOTIFICATIONS_REQUEST_DECLINED = '#system_messages:clans/notifications/request/declined'
+    CLANS_NOTIFICATIONS_INVITES = '#system_messages:clans/notifications/invites'
+    CLANS_NOTIFICATIONS_INVITES_TURNOFF = '#system_messages:clans/notifications/invites/turnOff'
+    CLANS_NOTIFICATIONS_INVITES_WATCHINVITES = '#system_messages:clans/notifications/invites/watchInvites'
+    CLANS_NOTIFICATIONS_REQUESTS = '#system_messages:clans/notifications/requests'
+    CLANS_NOTIFICATIONS_REQUESTS_WATCHREQUESTS = '#system_messages:clans/notifications/requests/watchRequests'
+    CLANS_NOTIFICATIONS_REQUESTSENT = '#system_messages:clans/notifications/requestSent'
+    CLANS_NOTIFICATIONS_INVITESENT = '#system_messages:clans/notifications/inviteSent'
+    CLANS_NOTIFICATIONS_INVITESSENT = '#system_messages:clans/notifications/invitesSent'
+    CLANS_NOTIFICATIONS_INVITESENDERROR = '#system_messages:clans/notifications/inviteSendError'
+    CLANS_NOTIFICATIONS_INVITESSENDERROR = '#system_messages:clans/notifications/invitesSendError'
+    CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED = '#system_messages:clans/notifications/personal/appAccepted'
+    CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED = '#system_messages:clans/notifications/personal/appDeclined'
+    CLANS_NOTIFICATIONS_INVITEACCEPTED = '#system_messages:clans/notifications/inviteAccepted'
+    CLANS_NOTIFICATIONS_INVITEDECLINED = '#system_messages:clans/notifications/inviteDeclined'
     EXCHANGE_SUCCESS = '#system_messages:exchange/success'
     EXCHANGE_NOT_ENOUGH_GOLD = '#system_messages:exchange/not_enough_gold'
     EXCHANGE_WALLET_NOT_AVAILABLE = '#system_messages:exchange/wallet_not_available'
@@ -744,6 +802,8 @@ class SYSTEM_MESSAGES(object):
     POTAPOVQUESTS_REFUSE_SUCCESS = '#system_messages:potapovQuests/refuse/success'
     POTAPOVQUESTS_REFUSE_SERVER_ERROR = '#system_messages:potapovQuests/refuse/server_error'
     POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/refuse/server_error/LOCKED_BY_VEHICLE_QUEST'
+    POTAPOVQUESTS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/select/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
+    POTAPOVQUESTS_REFUSE_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/refuse/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
     POTAPOVQUESTS_REFUSE_DISABLED = '#system_messages:potapovQuests/refuse/DISABLED'
     POTAPOVQUESTS_REWARD_REGULAR_SUCCESS = '#system_messages:potapovQuests/reward/regular/success'
     POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR = '#system_messages:potapovQuests/reward/regular/server_error'
@@ -956,6 +1016,7 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED = '#system_messages:fortification/errors/JOIN_CTX_LOCKED'
     FORTIFICATION_ERRORS_ATTACK_TOO_LATE = '#system_messages:fortification/errors/ATTACK_TOO_LATE'
     FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR = '#system_messages:fortification/errors/FORBIDDEN_FORT_BATTLE_HOUR'
+    FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID = '#system_messages:fortification/errors/BAD_SORTIE_PERIPHERY_ID'
     BUTTONS_GOTOPOLL = '#system_messages:buttons/goToPoll'
     INVITE_STATUS_WRONG_CLAN = '#system_messages:invite/status/WRONG_CLAN'
     INVITE_STATUS_LEGIONARIES_NOT_ALLOWED = '#system_messages:invite/status/LEGIONARIES_NOT_ALLOWED'
@@ -1157,7 +1218,8 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
      FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
-     FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR)
+     FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR,
+     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID)
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
@@ -1198,6 +1260,7 @@ class SYSTEM_MESSAGES(object):
      PREMIUM_SERVER_ERROR,
      PREMIUM_NOT_ENOUGH_GOLD,
      PREMIUM_WALLET_NOT_AVAILABLE,
+     PREMIUM_POST_BATTLE_PREMIUM,
      BOOSTER_ACTIVATIONSUCCESS,
      BOOSTER_SERVER_ERROR,
      BOOSTER_NO_BOOSTERS,
@@ -1889,6 +1952,63 @@ class SYSTEM_MESSAGES(object):
      CLUBS_REQUEST_ERRORS_SENDINVITE_IGNORED,
      CLUBS_REQUEST_ERRORS_SENDAPP_IGNORED,
      CLUBS_REQUEST_ERRORS_JOINUNIT_WEBUNAVAILABLE,
+     CLANS_ISCLANPROFILEDISABLED,
+     CLANS_REQUEST_ERRORS_FORBIDDEN_ACCOUNT_TYPE,
+     CLANS_REQUEST_ERRORS_CANT_SEND_INVITES,
+     CLANS_REQUEST_ERRORS_CLAN_CONSCRIPTION_CLOSED,
+     CLANS_REQUEST_ERRORS_CLAN_IS_FULL,
+     CLANS_REQUEST_ERRORS_DEFAULT,
+     CLANS_REQUEST_ERRORS_USER_IS_NOT_AUTHENTIFICATED,
+     CLANS_REQUEST_ERRORS_FORBIDDEN,
+     CLANS_REQUEST_ERRORS_BAD_REQUEST,
+     CLANS_REQUEST_ERRORS_EXPORTER_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_SPA_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_GLOBAL_MAP_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_WGRS_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_WGCCFE_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_CLAN_IS_DISBANDED,
+     CLANS_REQUEST_ERRORS_STRONGHOLD_IS_NOT_FOUND,
+     CLANS_REQUEST_ERRORS_WGCCBE_ERROR_WAS_OCCURRED,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IS_BANNED,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IN_UNKNOWN,
+     CLANS_REQUEST_ERRORS_CLAN_DOES_NOT_EXIST,
+     CLANS_REQUEST_ERRORS_CLAN_IS_FULL_,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
+     CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH,
+     CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS,
+     CLANS_REQUEST_ERRORS_TOO_MANY_INVITES,
+     CLANS_REQUEST_ERRORS_INVITE_DOES_NOT_EXIST,
+     CLANS_REQUEST_ERRORS_INVITE_IS_NOT_ACTIVE,
+     CLANS_REQUEST_ERRORS_TOO_MANY_APPLICATIONS,
+     CLANS_REQUEST_ERRORS_APPLICATION_DOES_NOT_EXIST,
+     CLANS_REQUEST_ERRORS_APPLICATION_IS_NOT_ACTIVE,
+     CLANS_REQUEST_ERRORS_CLAN_IS_NOT_ACTIVE,
+     CLANS_NOTIFICATIONS_FROM,
+     CLANS_NOTIFICATIONS_ACCEPT,
+     CLANS_NOTIFICATIONS_DECLINE,
+     CLANS_NOTIFICATIONS_INFO,
+     CLANS_NOTIFICATIONS_INVITE,
+     CLANS_NOTIFICATIONS_INVITE_ACCEPTED,
+     CLANS_NOTIFICATIONS_INVITE_DECLINED,
+     CLANS_NOTIFICATIONS_INVITE_EXPIRED,
+     CLANS_NOTIFICATIONS_REQUEST,
+     CLANS_NOTIFICATIONS_REQUEST_ACCEPTED,
+     CLANS_NOTIFICATIONS_REQUEST_DECLINED,
+     CLANS_NOTIFICATIONS_INVITES,
+     CLANS_NOTIFICATIONS_INVITES_TURNOFF,
+     CLANS_NOTIFICATIONS_INVITES_WATCHINVITES,
+     CLANS_NOTIFICATIONS_REQUESTS,
+     CLANS_NOTIFICATIONS_REQUESTS_WATCHREQUESTS,
+     CLANS_NOTIFICATIONS_REQUESTSENT,
+     CLANS_NOTIFICATIONS_INVITESENT,
+     CLANS_NOTIFICATIONS_INVITESSENT,
+     CLANS_NOTIFICATIONS_INVITESENDERROR,
+     CLANS_NOTIFICATIONS_INVITESSENDERROR,
+     CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED,
+     CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED,
+     CLANS_NOTIFICATIONS_INVITEACCEPTED,
+     CLANS_NOTIFICATIONS_INVITEDECLINED,
      EXCHANGE_SUCCESS,
      EXCHANGE_NOT_ENOUGH_GOLD,
      EXCHANGE_WALLET_NOT_AVAILABLE,
@@ -1919,6 +2039,8 @@ class SYSTEM_MESSAGES(object):
      POTAPOVQUESTS_REFUSE_SUCCESS,
      POTAPOVQUESTS_REFUSE_SERVER_ERROR,
      POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     POTAPOVQUESTS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
+     POTAPOVQUESTS_REFUSE_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
      POTAPOVQUESTS_REFUSE_DISABLED,
      POTAPOVQUESTS_REWARD_REGULAR_SUCCESS,
      POTAPOVQUESTS_REWARD_REGULAR_SERVER_ERROR,
@@ -2131,6 +2253,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
      FORTIFICATION_ERRORS_ATTACK_TOO_LATE,
      FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR,
+     FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID,
      BUTTONS_GOTOPOLL,
      INVITE_STATUS_WRONG_CLAN,
      INVITE_STATUS_LEGIONARIES_NOT_ALLOWED,

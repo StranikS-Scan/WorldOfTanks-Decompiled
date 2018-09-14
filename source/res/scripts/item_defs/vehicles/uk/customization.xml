@@ -1,0 +1,3333 @@
+<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan">
+	<!-- The namespaces enable tags like <ussr:T-43> -->
+	<!-- RGB of typical armor color. Is used for showing of previews. -->
+	<armorColor> 82 72 51 0 </armorColor>
+	<inscriptions>
+		<!-- Properties of each inscription:
+			id : identifier unique among all inscriptions in all groups, integer in [1, 5000].
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+			userString (optional) : key to a user-visible name.
+			isFeatured (optional) : true or false. If true, the iscription is marked as "featured" in GUI.
+		-->
+		<!-- Warning: inscription IDs are saved into DB and therefore should not change. -->
+		<uk>
+			<userString> #vehicle_customization:inscription/historical </userString>
+			<priceFactor> 1.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 1 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_01.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/demon </userString>
+					<qualifier> player_health_less_20_percent_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 2 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_02.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/hunter </userString>
+					<qualifier> enemy_tank_destroyed_less_30s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 3 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_03.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/harbinger </userString>
+					<qualifier> enemy_tank_destroyed_less_30s_ago_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 4 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_04.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/warrior </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 5 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_05.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/thunderbolt </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 6 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_06.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/dreadnought </userString>
+					<qualifier> player_health_greater_80_percent_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 7 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_07.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/dogs </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 8 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_08.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/bullpup </userString>
+					<qualifier> main_skill_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 9 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_09.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/fireball </userString>
+					<qualifier> main_skill_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 10 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_10.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/hit_run </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 11 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_11.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/face </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 12 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_12.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/impertinent </userString>
+					<qualifier> nearby_enemies_count_greater_3_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 13 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_13.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/daredevil </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 14 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_14.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/brother </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 15 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_15.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/manowar </userString>
+					<qualifier> player_health_greater_80_percent_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 16 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_16.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/agility </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 17 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_17.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/fist </userString>
+					<qualifier> enemy_tank_destroyed_less_30s_ago_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 18 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_18.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/destroyer </userString>
+					<qualifier> enemy_tank_destroyed_less_30s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 19 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_19.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/miller </userString>
+					<qualifier> nearby_enemies_count_greater_3_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 20 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_20.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/god_queen </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 21 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_21.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/wrath </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 22 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_22.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/invulnerable </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 23 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_23.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/dust </userString>
+					<qualifier> map_kind_desert_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 24 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_24.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/god_king </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 25 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_25.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/avenger </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 26 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_26.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/devastator </userString>
+					<qualifier> enemy_tank_destroyed_less_30s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 27 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_27.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/blockbuster </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 28 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_28.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/ussr </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 29 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_29.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/phantom </userString>
+					<qualifier> main_skill_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 30 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_30.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/clang </userString>
+					<qualifier> nearby_enemies_count_greater_3_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 31 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_31.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/bert </userString>
+					<qualifier> main_skill_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 32 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_32.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/for_king </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 33 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_33.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/cossack </userString>
+					<qualifier> map_kind_desert_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 34 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_34.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/elusive </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 35 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_35.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/achilles </userString>
+					<qualifier> player_health_greater_80_percent_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 36 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_36.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/apollo </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 37 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_37.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/viper </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 38 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_38.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/warspite </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 39 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_39.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/centaur </userString>
+					<qualifier> main_skill_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 40 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_40.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/duke </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 41 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_41.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/tiger </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 42 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_42.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/robroy </userString>
+					<qualifier> alive_squad_members_count_greater_or_equal_2_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 43 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_43.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/ali </userString>
+					<qualifier> nearby_heavy_medium_enemies_count_greater_2_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 44 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_44.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/talisman </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 45 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_45.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/panda </userString>
+					<qualifier> player_health_greater_80_percent_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 46 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_46.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/princess </userString>
+					<qualifier> nearby_enemies_count_greater_3_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 47 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_47.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/firm </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<!--
+                <inscription>
+					<id>48</id>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_48.dds</texName>
+					<userString> #vehicle_customization:inscription/uk/betty</userString>
+					<qualifier> alive_allies_count_less_6_loader </qualifier>
+				</inscription>
+				-->
+				<inscription>
+					<id> 49 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_49.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/serenade </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 50 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_50.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/scorpion </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id> 51 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_51.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/dragon </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 52 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_52.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/battleaxe </userString>
+					<qualifier> main_skill_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 53 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_53.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/ace </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 54 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_54.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/junior </userString>
+					<qualifier> player_health_greater_80_percent_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 55 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_55.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/gnome </userString>
+					<qualifier> player_health_greater_80_percent_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 56 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_56.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/jumbo </userString>
+					<qualifier> enemy_tank_detected_less_20s_ago_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 57 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_57.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/squirrel </userString>
+					<qualifier> nearby_enemies_count_greater_3_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 58 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_58.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/ally </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<!--//BLOCK_BEGIN:CN_INSCRIPTIONS//-->
+				<!--
+				<inscription>
+					<id>1001</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1001.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_01</userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id>1002</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1002.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_02</userString>
+					<qualifier> alive_allies_count_less_6_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id>1003</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1003.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_03</userString>
+					<qualifier> main_skill_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id>1004</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1004.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_04</userString>
+					<qualifier> player_health_less_20_percent_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id>1005</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1005.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_05</userString>
+					<qualifier> nearby_heavy_medium_enemies_count_greater_2_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1006</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1006.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_06</userString>
+					<qualifier> main_skill_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1007</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1007.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_07</userString>
+					<qualifier> main_skill_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id>1008</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/uk/inscription_1008.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/uk/inscription_08</userString>
+					<qualifier> player_health_greater_80_percent_driver </qualifier>
+				</inscription>
+				-->
+				<!--//BLOCK_END:CN_INSCRIPTIONS//-->
+			</inscriptions>
+		</uk>
+		<deprecated>
+			<userString> #vehicle_customization:inscription/historical </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 1.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 48 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/uk/inscription_48.dds </texName>
+					<userString> #vehicle_customization:inscription/uk/betty </userString>
+				</inscription>
+			</inscriptions>
+		</deprecated>
+		<clan_content>
+			<userString> #vehicle_customization:inscription/clan_content </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 0.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 701 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_05.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_05 </userString>
+					<qualifier> player_health_less_20_percent_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 711 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_15.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_15 </userString>
+					<qualifier> player_health_greater_80_percent_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 725 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_25.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_25 </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_all_crew </qualifier>
+				</inscription>
+			</inscriptions>
+		</clan_content>
+		<special>
+			<userString> #vehicle_customization:inscription/special </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 0.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 801 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/special/inscription_01.dds </texName>
+					<userString> #vehicle_customization:inscription/special/special_01 </userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_all_crew </qualifier>
+				</inscription>
+			</inscriptions>
+		</special>
+	</inscriptions>
+	<insigniaOnGun>
+		<!-- Properties for each insignia:
+			'id': int > 0 - rank of the insignia
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+		-->
+		<insignia>
+			<id> 1 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_france_uk_1.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 2 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_france_uk_2.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 3 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_france_uk_3.dds </texName>
+		</insignia>
+	</insigniaOnGun>
+	<camouflageGroups>
+		<winter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+		</winter>
+		<summer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+		</summer>
+		<desert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+		</desert>
+		<!--//BLOCK_BEGIN:IGR_CAMOUFLAGES_GROUPS//-->
+		<!-- -->
+		<IGRwinter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+			<igrType> 2 </igrType>
+		</IGRwinter>
+		<IGRsummer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+			<igrType> 2 </igrType>
+		</IGRsummer>
+		<IGRdesert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+			<igrType> 2 </igrType>
+		</IGRdesert>
+		<!-- -->
+		<!--//BLOCK_END:IGR_CAMOUFLAGES_GROUPS//-->
+	</camouflageGroups>
+	<camouflages>
+		<!-- Fields of each camouflage section:
+			id: int in [1, 5000] unique among all camouflages.
+				Warning: IDs are saved into DB, and therefore should not change.
+			kind: winter, summer or desert.
+			group: one of names from <camouflagegroup>.
+			priceFactor: factor to apply to base price of camouflages.
+			invisibilityFactor: factor to apply to <invisibility/camouflageBonus> of the vehicle.
+			description: optional, key to localized (user-friendly) description of the camouflage.
+			texture: name of texture file.
+			colors: 4 subsections of ints in [0, 255]: <> R G B A </>.
+			allow (optional): space-delimited list of names of vehicles (within nation) that are allowed
+				to use this camouflage. If the list is empty, all vehicles are allowed to.
+			deny (optional): space-delimited list of names of vehicles (within nation) that are disallowed
+				to use this camouflage. If the list is empty, no vehicles are disallowed to.
+			tiling (optional): sequence of <[nation_name:]vehicle_name> x y offs_x offs_z </[nation_name:]vehicle_name>.
+				The nation_name part may be omitted if the vehicle_name is within the default nation for this file.
+			isNew (optional): bool, if true, the camouflage is marked as "new" in GUI.
+			notInShop (optional): bool, if true, the camouflage is not shown in the shop.
+		-->
+		<!-- Warning: IDs are saved into DB, and therefore should not change. -->
+		<desert_splintered>
+			<texture> vehicles/british/Camouflage/GB_1_desert_splintered.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/desert_splintered </description>
+			<id> 4 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 70 34 23 220 </c0>
+				<c1> 211 162 105 142 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 5.4 5.5 0.24 0.6 </GB32_Tortoise>
+				<GB14_M2> 3.7 3.5 0.26 0.38 </GB14_M2>
+				<GB07_Matilda> 4.9 4.9 0.81 0.45 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 4.3 4.5 0.1 0.06 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 3.5 3.6 0.36 0.87 </GB15_Stuart_I>
+				<GB21_Cromwell> 4.9 4.9 0.9 0.18 </GB21_Cromwell>
+				<GB20_Crusader> 3 3 0.000000 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 2.5 2.6 0.48 0.98 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 2.5 2.5 0.41 0.96 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.3 2.5 0.66 0.000000 </GB08_Churchill_I>
+				<GB10_Black_Prince> 4.8 4.8 0.22 0.68 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4 4.1 0.26 0.16 </GB11_Caernarvon>
+				<GB12_Conqueror> 4.1 4.1 0.63 0.44 </GB12_Conqueror>
+				<GB27_Sexton> 4.4 4.5 0.4 0.6 </GB27_Sexton>
+				<GB09_Churchill_VII> 3.3 3.3 0.7 0.48 </GB09_Churchill_VII>
+				<GB17_Grant_I> 5.3 5.5 0.82 1 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 3.8 3.9 0.73 0.3 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 4 4.1 0.24 0.74 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4.4 4.6 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.9 3.8 0.34 0.6 </GB24_Centurion_Mk3>
+				<GB22_Comet> 4.2 4.2 0.16 0.02 </GB22_Comet>
+				<GB23_Centurion> 3.8 4.8 0.85 0.47 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 6 6.1 0.48 0.15 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3.9 3.9 0.24 0.14 </GB13_FV215b>
+				<GB60_Covenanter> 4.2 4.2 0.49 0.54 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 4.6 4.7 0.51 0.34 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 4.4 4.5 0.59 0.29 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 4.1 4.2 0.23 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3.8 3.9 0.000000 0.4 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.2 4.2 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.6 3.6 0.32 0.44 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.8 4.8 0.72 0.000000 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 4.7 4.7 0.08 0.18 </GB72_AT15>
+				<GB73_AT2> 3.1 3.3 0.34 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 4.5 4.5 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 4.6 4.6 0.07 0.95 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.7 3.9 0.36 0.26 </GB75_AT7>
+				<GB57_Alecto> 4.7 4.8 0.12 0.06 </GB57_Alecto>
+				<GB48_FV215b_183> 3.7 3.9 0.34 0.34 </GB48_FV215b_183>
+				<GB74_AT8> 3.9 4 0.68 0.02 </GB74_AT8>
+				<GB51_Excelsior> 3.5 3.4 0.19 0.32 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.44 0.32 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.6 4.6 0.6 0.5 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 6.9 6.7 0.93 0.64 </GB26_Birch_Gun>
+				<GB28_Bishop> 4.3 4.3 0.12 0.04 </GB28_Bishop>
+				<GB30_FV3805> 4.8 5 0.2 0.04 </GB30_FV3805>
+				<GB79_FV206> 3.5 3.6 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.3 4.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 3.5 3.5 0.31 0.29 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.2 5.5 0.2 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6.4 3.1 0.32 0.08 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3.5 3.6 1 0.31 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3 2.9 0.9 0.18 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.8 4.8 0.85 0.47 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3.5 3.5 0.31 0.29 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.3 2.5 0.66 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.9 3.9 0.24 0.14 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.7 4.7 0.08 0.18 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3.4 3.3 0.88 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.7 2.7 0.34 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.76 0.06 </GB83_FV4005>
+				<GB44_Archer> 8.8 8.4 0.000000 0.74 </GB44_Archer>
+				<GB41_Challenger> 4.2 4.2 0.42 0.02 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.26 0.34 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6 3.3 0.3 0.26 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.4 0.2 </GB80_Charioteer>
+				<GB52_A45> 1.3 1.3 0.52 0.000000 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.63 0.63 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.2 1.2 0.64 0.62 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.000000 0.08 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.8 4.8 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</desert_splintered>
+		<bicolor_classic>
+			<texture> vehicles/british/Camouflage/GB_1_bicolor_classic.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/bicolor_classic </description>
+			<id> 3 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 62 34 21 190 </c0>
+				<c1> 206 179 96 147 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 3.9 3.9 0.22 0.28 </GB32_Tortoise>
+				<GB14_M2> 4.7 4.7 0.26 0.46 </GB14_M2>
+				<GB07_Matilda> 4.4 4.4 0.6 0.27 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 3.6 3.7 0.1 0.8 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 4.1 4.3 0.08 0.82 </GB15_Stuart_I>
+				<GB21_Cromwell> 4.4 4.4 0.66 0.14 </GB21_Cromwell>
+				<GB20_Crusader> 3.4 3.5 0.000000 0.16 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 3.4 3.4 0.4 0.18 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 3.4 3.4 0.5 0.12 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 3.4 3.4 0.54 0.84 </GB08_Churchill_I>
+				<GB10_Black_Prince> 5.9 5.9 0.28 0.37 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.9 4.9 0.35 0.58 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.8 3.8 0.36 0.5 </GB12_Conqueror>
+				<GB27_Sexton> 4.8 4.9 0.22 0.54 </GB27_Sexton>
+				<GB09_Churchill_VII> 3.8 3.8 0.33 0.22 </GB09_Churchill_VII>
+				<GB17_Grant_I> 5.8 6 0.2 0.66 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 4.7 4.7 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 4.5 4.6 0.53 0.63 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4.2 4.2 0.03 0.11 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 4.6 4.6 0.24 0.18 </GB24_Centurion_Mk3>
+				<GB22_Comet> 3.7 4.9 0.45 0.31 </GB22_Comet>
+				<GB23_Centurion> 4.5 4.5 0.35 0.32 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 5.5 5.4 0.61 0.3 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3.6 3.6 0.18 0.000000 </GB13_FV215b>
+				<GB60_Covenanter> 4.7 4.7 0.91 0.4 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 4.8 4.8 0.77 0.9 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 4.4 4.4 0.1 0.38 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 4.3 4.1 0.3 0.32 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3.7 3.8 0.29 0.66 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.8 4.9 0.44 0.26 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.4 3.6 0.54 0.3 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 5.1 5.1 0.24 0.78 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 5 4.9 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.8 4.1 0.3 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 5.3 5.3 0.95 0.25 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 4 4.1 0.5 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.7 3.8 0.29 0.02 </GB75_AT7>
+				<GB57_Alecto> 5.4 5.4 0.000000 0.52 </GB57_Alecto>
+				<GB48_FV215b_183> 4.8 4.7 0.22 0.06 </GB48_FV215b_183>
+				<GB74_AT8> 4.6 4.6 0.83 0.44 </GB74_AT8>
+				<GB51_Excelsior> 4.1 4.1 0.25 0.32 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3.4 3.4 0.67 1 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 5.2 5.3 0.15 0.39 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.6 4.7 0.22 0.64 </GB26_Birch_Gun>
+				<GB28_Bishop> 4.4 4.4 0.94 0.56 </GB28_Bishop>
+				<GB30_FV3805> 4.5 4.6 0.38 0.51 </GB30_FV3805>
+				<GB79_FV206> 3.8 4.9 0.48 0.66 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.6 4.5 0.67 0.51 </GB31_Conqueror_Gun>
+				<GB77_FV304> 3.8 3.9 0.51 0.38 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.3 5 0.6 0.4 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6.5 3 0.14 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 4.1 4.1 0.4 0.88 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 4.4 4.4 0.12 0.76 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 4.5 4.5 0.35 0.32 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3.8 3.9 0.51 0.38 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3.4 3.4 0.54 0.84 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.6 3.6 0.18 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5 4.9 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.9 2.8 0.59 0.9 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 4.3 4.2 0.26 1 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.56 0.12 </GB83_FV4005>
+				<GB44_Archer> 6.8 7 0.96 0.46 </GB44_Archer>
+				<GB41_Challenger> 3.8 3.8 0.36 0.56 </GB41_Challenger>
+				<GB81_FV4004> 3 3.3 0.26 0.3 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.2 3.8 0.08 0.4 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3.3 3 0.000000 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.62 0.000000 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.9 1.9 0.25 0.45 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.8 1.8 0.62 0.76 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.7 1.7 0.15 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.5 3.5 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 4.4 4.4 0.000000 0.46 </GB33_Sentinel_AC_I>
+			</tiling>
+		</bicolor_classic>
+		<grassy_green>
+			<texture> vehicles/british/Camouflage/GB_1_grassy_green.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/grassy_green </description>
+			<id> 5 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 4 32 5 208 </c0>
+				<c1> 94 119 40 142 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 5 4.8 0.22 0.91 </GB32_Tortoise>
+				<GB14_M2> 4.8 5 0.54 0.12 </GB14_M2>
+				<GB07_Matilda> 3.8 3.8 0.27 0.000000 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 3.7 3.7 0.6 0.2 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 3.9 3.7 0.37 0.51 </GB15_Stuart_I>
+				<GB21_Cromwell> 3.6 3.5 0.71 0.07 </GB21_Cromwell>
+				<GB20_Crusader> 3 3 0.1 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 3.1 3.1 0.62 0.000000 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 2.6 2.6 0.24 0.58 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.1 2.1 0.000000 0.22 </GB08_Churchill_I>
+				<GB10_Black_Prince> 6 6 0.08 0.14 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4 4 0.46 0.38 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.7 3.7 0.65 0.36 </GB12_Conqueror>
+				<GB27_Sexton> 4 4 0.79 0.28 </GB27_Sexton>
+				<GB09_Churchill_VII> 3 3 0.7 0.39 </GB09_Churchill_VII>
+				<GB17_Grant_I> 6.7 6.8 0.13 0.75 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 3.9 3.8 0.89 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 4 3.7 0.54 0.58 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 3.6 3.6 0.74 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.7 3.7 0.83 0.08 </GB24_Centurion_Mk3>
+				<GB22_Comet> 4.2 4.3 0.53 0.33 </GB22_Comet>
+				<GB23_Centurion> 4.1 4.2 0.59 0.000000 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 4.4 4.3 0.32 0.42 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3.5 3.7 0.88 0.33 </GB13_FV215b>
+				<GB60_Covenanter> 3 3 0.42 0.44 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 3.9 4 0.38 0.55 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 4.3 4.5 0.5 0.3 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 3.6 3.7 0.23 0.18 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3 3.2 0.36 0.68 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4 4 0.35 0.62 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.4 3.4 0.46 0.13 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.3 4.4 0.75 0.3 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 4.2 4.3 0.96 0.000000 </GB72_AT15>
+				<GB73_AT2> 2.9 2.9 1 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 4.8 5 0.88 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 4 4 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.8 3.4 0.94 0.68 </GB75_AT7>
+				<GB57_Alecto> 4 4.1 0.14 0.5 </GB57_Alecto>
+				<GB48_FV215b_183> 4.4 4.4 0.22 0.17 </GB48_FV215b_183>
+				<GB74_AT8> 3.5 3.6 0.000000 0.000000 </GB74_AT8>
+				<GB51_Excelsior> 3.3 3.3 0.16 0.13 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3.4 3.4 0.16 0.86 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.5 4.6 0.83 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4 4 0.2 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 3.3 3.5 0.78 0.28 </GB28_Bishop>
+				<GB30_FV3805> 4.5 4.8 0.000000 0.78 </GB30_FV3805>
+				<GB79_FV206> 3.7 4.4 0.02 0.14 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.4 4.6 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.4 4.4 0.18 0.53 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.2 4.8 0.31 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 7 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.45 0.26 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3 3 0.02 0.4 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.6 3.5 0.29 0.16 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 4.1 4.2 0.59 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.4 4.4 0.18 0.53 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.1 2.1 0.000000 0.22 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.5 3.7 0.88 0.33 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.2 4.3 0.96 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3.1 3.1 0.57 0.26 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.3 3.2 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.46 0.48 </GB83_FV4005>
+				<GB44_Archer> 5.8 5.8 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.2 3.2 0.8 0.34 </GB41_Challenger>
+				<GB81_FV4004> 2.3 2.4 0.14 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.4 2.6 0.18 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 5 5 0.18 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.24 0.000000 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.2 1.2 0.16 0.16 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.4 0.2 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.8 3.8 0.21 0.21 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.4 3.4 0.18 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</grassy_green>
+		<LRDG>
+			<texture> vehicles/british/Camouflage/GB_1_LRDG.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/LRDG </description>
+			<id> 33 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 63 21 20 187 </c0>
+				<c1> 172 145 168 148 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 5.9 6 0.64 0.42 </GB32_Tortoise>
+				<GB14_M2> 4 3 0.48 0.82 </GB14_M2>
+				<GB07_Matilda> 4.8 4.8 0.55 1 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 3.7 3.7 0.26 0.13 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 5 4.7 0.7 0.02 </GB15_Stuart_I>
+				<GB21_Cromwell> 5.1 5.1 0.04 0.72 </GB21_Cromwell>
+				<GB20_Crusader> 4.2 3.1 0.12 0.72 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 3.1 3.1 0.63 0.000000 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 3.4 3.4 0.72 0.68 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 3.6 2.8 0.58 0.22 </GB08_Churchill_I>
+				<GB10_Black_Prince> 5.8 5.8 0.000000 0.68 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.9 3.9 0.66 0.08 </GB11_Caernarvon>
+				<GB12_Conqueror> 5.3 5.3 0.64 1 </GB12_Conqueror>
+				<GB27_Sexton> 4.6 4.5 0.16 0.33 </GB27_Sexton>
+				<GB09_Churchill_VII> 3.6 3.6 0.000000 0.9 </GB09_Churchill_VII>
+				<GB17_Grant_I> 5.5 5.2 0.6 0.04 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 4.2 4.7 0.26 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 3.8 4.2 0.78 0.31 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4.2 4.4 0.81 0.24 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 4.9 3.5 0.32 0.000000 </GB24_Centurion_Mk3>
+				<GB22_Comet> 4.2 4.1 0.24 0.28 </GB22_Comet>
+				<GB23_Centurion> 2 4.2 0.58 0.000000 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 6.4 6.5 0.5 0.22 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 4.5 4.4 0.28 0.16 </GB13_FV215b>
+				<GB60_Covenanter> 3.9 3.9 0.29 0.2 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 4 4.5 0.27 0.42 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.5 3.8 0.12 0.5 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 4.1 3.8 0.23 0.32 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3.2 3.2 0.76 0.21 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.5 4.5 0.64 0.74 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 4.9 4.9 0.99 0.48 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 6.1 6.1 0.84 0.72 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 5 5.2 0.23 0.16 </GB72_AT15>
+				<GB73_AT2> 3.5 3.6 0.12 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 5.1 5.3 0.000000 0.25 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 5 5.2 0.48 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.3 3.7 0.79 0.26 </GB75_AT7>
+				<GB57_Alecto> 4.5 4.5 0.000000 0.000000 </GB57_Alecto>
+				<GB48_FV215b_183> 3.8 4 0.48 0.3 </GB48_FV215b_183>
+				<GB74_AT8> 3.6 3.6 0.2 0.000000 </GB74_AT8>
+				<GB51_Excelsior> 4.9 3 0.02 0.000000 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3.6 3.6 0.64 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.6 4.6 0.42 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 5.5 5.6 0.4 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 4.8 4.9 1 0.57 </GB28_Bishop>
+				<GB30_FV3805> 5 4.6 0.58 0.000000 </GB30_FV3805>
+				<GB79_FV206> 3.5 3.9 0.52 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.6 4.6 0.52 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 3.7 4 0.8 0.2 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.8 4.8 0.36 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 7 3 0.32 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.3 2.4 0.76 0.62 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3.9 3.9 0.68 0.08 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 4 3.1 0.04 0.72 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 2 4.2 0.58 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3.7 4 0.8 0.2 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3.6 2.8 0.58 0.22 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4.5 4.4 0.28 0.16 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5 5.2 0.23 0.16 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.8 2.7 0.000000 0.92 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.4 3.5 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.48 0.000000 </GB83_FV4005>
+				<GB44_Archer> 6.8 10.2 0.24 0.06 </GB44_Archer>
+				<GB41_Challenger> 4.6 4.6 0.56 0.86 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.79 0.56 </GB81_FV4004>
+				<GB70_N_FV4202_105> 7.2 5.2 0.26 0.48 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3.4 0.34 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.06 0.000000 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.1 1.1 0.08 0.51 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.000000 0.22 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.8 3.8 0.000000 0.05 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.8 3.8 0.82 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</LRDG>
+		<sophisticated_bicolor>
+			<texture> vehicles/british/Camouflage/GB_1_sophisticated_bicolor.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/sophisticated_bicolor </description>
+			<id> 34 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 29 19 12 225 </c0>
+				<c1> 196 171 121 255 </c1>
+				<c2> 102 151 85 93 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 7.8 7.7 0.6 0.2 </GB32_Tortoise>
+				<GB14_M2> 3.6 3.5 0.54 0.57 </GB14_M2>
+				<GB07_Matilda> 4.4 4.4 0.38 0.78 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 4.8 4.6 0.75 0.2 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 6 6 0.65 0.73 </GB15_Stuart_I>
+				<GB21_Cromwell> 4.3 4.3 0.04 0.06 </GB21_Cromwell>
+				<GB20_Crusader> 4.6 4.7 0.52 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 4.1 4.3 0.02 0.85 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 4.4 4.4 0.22 0.56 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 4.5 4.4 0.18 0.000000 </GB08_Churchill_I>
+				<GB10_Black_Prince> 11 11 0.18 0.04 </GB10_Black_Prince>
+				<GB11_Caernarvon> 5.7 5.6 0.6 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 4.8 4.8 0.14 0.06 </GB12_Conqueror>
+				<GB27_Sexton> 6.1 6.2 0.16 0.000000 </GB27_Sexton>
+				<GB09_Churchill_VII> 4.3 4.3 0.24 0.56 </GB09_Churchill_VII>
+				<GB17_Grant_I> 7.2 6.9 0.26 0.9 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 4.7 4.8 0.61 0.11 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 5.4 5.4 0.81 0.64 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4.8 4.8 0.06 0.2 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 5.6 5.5 0.51 0.14 </GB24_Centurion_Mk3>
+				<GB22_Comet> 6 6.2 0.06 0.000000 </GB22_Comet>
+				<GB23_Centurion> 6.5 6.5 0.23 0.49 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 6.6 6.7 0.3 0.17 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 6.7 6.7 0.66 0.75 </GB13_FV215b>
+				<GB60_Covenanter> 3.2 3.2 0.8 0.4 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 5.5 5.5 0.15 0.22 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 6 6.1 0.82 0.41 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 5 5.1 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 4.6 4.6 0.26 0.16 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.8 4.9 0.23 0.000000 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 4.5 4.6 0.84 0.56 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 6 5.9 0.5 0.58 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 5.6 5.7 0.42 0.82 </GB72_AT15>
+				<GB73_AT2> 4.5 4.5 0.27 0.46 </GB73_AT2>
+				<GB42_Valentine_AT> 5.3 5.4 0.43 0.1 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 5.3 5.5 0.06 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.9 3.9 0.45 0.9 </GB75_AT7>
+				<GB57_Alecto> 4.9 5.1 0.76 0.32 </GB57_Alecto>
+				<GB48_FV215b_183> 6.8 6.9 0.36 0.05 </GB48_FV215b_183>
+				<GB74_AT8> 4.8 4.9 0.32 0.61 </GB74_AT8>
+				<GB51_Excelsior> 4.4 4.4 0.13 0.57 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3.5 3.5 0.46 0.18 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 5.8 5.8 0.2 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 7 7.3 0.5 1 </GB26_Birch_Gun>
+				<GB28_Bishop> 6.1 6.2 0.42 0.32 </GB28_Bishop>
+				<GB30_FV3805> 6.6 6.6 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 4.8 4.9 0.000000 0.3 </GB79_FV206>
+				<GB31_Conqueror_Gun> 5.7 5.8 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 6.2 6.3 0.25 0.2 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.6 4.5 0.1 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 9 3.4 0.36 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.7 2.7 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 5.7 5.6 0.6 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 5.7 5.8 0.1 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 6.5 6.5 0.23 0.49 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 6.2 6.3 0.25 0.2 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 4.5 4.4 0.18 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 6.7 6.7 0.66 0.75 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5.6 5.7 0.42 0.82 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.4 4.3 0.32 0.05 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 4.4 4.3 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.000000 0.000000 </GB83_FV4005>
+				<GB44_Archer> 8 8 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.6 3.6 0.08 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 4.7 4.5 0.000000 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6 3.6 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 4.5 3.3 0.86 0.84 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.5 0.47 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.4 1.4 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 2.4 2.4 0.38 0.51 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.8 1.8 0.000000 0.2 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.3 4.3 0.31 0.21 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 4.4 4.4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</sophisticated_bicolor>
+		<tricolor_canadian>
+			<texture> vehicles/british/Camouflage/GB_1_tricolor_canadian.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/tricolor_canadian </description>
+			<id> 35 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 46 53 21 226 </c0>
+				<c1> 75 61 27 139 </c1>
+				<c2> 187 193 60 156 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 5 5 0.34 0.06 </GB32_Tortoise>
+				<GB14_M2> 3.2 3 0.48 0.36 </GB14_M2>
+				<GB07_Matilda> 4.1 4.1 0.42 0.000000 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 6.7 6.8 0.35 0.36 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 3.7 3.5 0.24 0.000000 </GB15_Stuart_I>
+				<GB21_Cromwell> 5 5 0.22 0.39 </GB21_Cromwell>
+				<GB20_Crusader> 5.5 5.4 0.34 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 4.8 5.3 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 4 4 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 3.6 3.7 0.000000 0.000000 </GB08_Churchill_I>
+				<GB10_Black_Prince> 4.8 4.8 0.12 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 6.3 6.3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.7 3.7 0.000000 0.06 </GB12_Conqueror>
+				<GB27_Sexton> 7.1 7.1 0.000000 0.000000 </GB27_Sexton>
+				<GB09_Churchill_VII> 2.4 2.4 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB17_Grant_I> 7.4 6.7 0.28 0.34 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 6 6.1 0.41 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 5.5 5.6 0.000000 0.000000 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 5.7 5.8 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 6.2 6.3 0.46 0.18 </GB24_Centurion_Mk3>
+				<GB22_Comet> 5.5 5.7 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 6.5 6.5 0.19 0.000000 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 4.6 4.7 0.13 0.14 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 4.6 4.7 0.000000 0.000000 </GB13_FV215b>
+				<GB60_Covenanter> 3.6 3.6 0.000000 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 5.3 5.3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 5.5 5.7 0.000000 0.000000 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 6.2 6.5 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 4.6 4.7 0.000000 0.000000 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 5.9 6 0.14 0.000000 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 5.6 5.4 0.000000 0.000000 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 5.7 5.8 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 5.4 5.5 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 4.9 5 0.000000 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 5.5 5.6 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 5 5.2 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 4.5 4.5 0.000000 0.000000 </GB75_AT7>
+				<GB57_Alecto> 4.9 5 0.26 0.44 </GB57_Alecto>
+				<GB48_FV215b_183> 5.6 5.5 0.000000 0.000000 </GB48_FV215b_183>
+				<GB74_AT8> 5.4 5.2 0.000000 0.000000 </GB74_AT8>
+				<GB51_Excelsior> 4 3.9 0.000000 0.000000 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 3.2 3.2 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 6.5 6.6 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 7.1 7.2 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 5.4 5.4 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 5.3 5.4 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 6.9 6.9 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.1 4.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 6.1 5.7 0.2 0.03 </GB77_FV304>
+				<GB29_Crusader_5inch> 6.3 5.9 0.2 0.000000 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6.9 3.5 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.5 2.6 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 9 9.1 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 6.5 6.6 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 6.5 6.5 0.19 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 6.1 5.7 0.2 0.03 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3.6 3.7 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4.6 4.7 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5.4 5.5 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.7 4.6 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 4.1 4.1 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3 3.2 0.38 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.5 5.8 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 4 4 0.1 0.14 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.08 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6.2 2.8 0.2 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3.3 0.66 0.42 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.48 0.5 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.9 1.9 0.31 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 2.3 2.3 0.000000 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 2.1 2.1 0.000000 0.4 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.9 3.9 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 4.4 4.4 0.16 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</tricolor_canadian>
+		<tricolor_classic>
+			<texture> vehicles/british/Camouflage/GB_1_tricolor_classic.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/tricolor_classic </description>
+			<id> 36 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 22 22 39 214 </c0>
+				<c1> 54 99 39 88 </c1>
+				<c2> 226 165 82 118 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 5.1 5 0.32 0.42 </GB32_Tortoise>
+				<GB14_M2> 3.1 2.7 0.08 0.05 </GB14_M2>
+				<GB07_Matilda> 3.9 3.9 0.5 0.56 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 4.8 5 0.9 0.27 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 2.6 2.5 0.64 0.66 </GB15_Stuart_I>
+				<GB21_Cromwell> 3.7 3.9 0.28 0.4 </GB21_Cromwell>
+				<GB20_Crusader> 3 3.1 0.000000 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 2.5 2.6 0.56 0.14 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 2.9 2.9 0.12 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.3 2.4 0.52 0.000000 </GB08_Churchill_I>
+				<GB10_Black_Prince> 4.6 4.6 0.16 0.28 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.1 4.1 0.67 0.54 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.5 3.5 1 0.48 </GB12_Conqueror>
+				<GB27_Sexton> 3.7 3.7 0.1 0.2 </GB27_Sexton>
+				<GB09_Churchill_VII> 1.9 1.9 0.32 0.000000 </GB09_Churchill_VII>
+				<GB17_Grant_I> 4.1 4.1 0.68 0.22 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 4 4 0.22 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 3.6 3.7 0.59 0.000000 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 3.1 2.6 0.14 0.02 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.1 3.2 0.23 0.000000 </GB24_Centurion_Mk3>
+				<GB22_Comet> 3.9 4 0.51 0.33 </GB22_Comet>
+				<GB23_Centurion> 3.7 3.2 0.08 0.27 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 5 5.1 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3 3.1 0.34 0.000000 </GB13_FV215b>
+				<GB60_Covenanter> 3.7 3.7 0.000000 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 3.1 3.2 0.62 0.21 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 4.5 4.1 0.31 0.000000 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 2.8 2.9 0.26 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 2.3 2.3 0.58 0.48 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 2.7 2.8 0.08 0.45 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.3 3.4 0.06 0.000000 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4 4 0.47 0.22 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 3.5 3.6 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.1 3.2 0.000000 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 4.1 4.3 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 3.1 3.1 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 2.7 2.7 0.000000 0.000000 </GB75_AT7>
+				<GB57_Alecto> 3.5 3.7 0.000000 0.08 </GB57_Alecto>
+				<GB48_FV215b_183> 3.2 3.2 0.56 0.2 </GB48_FV215b_183>
+				<GB74_AT8> 2.8 2.8 0.59 0.26 </GB74_AT8>
+				<GB51_Excelsior> 3 2.8 0.25 0.09 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 2.7 2.7 0.28 0.18 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 3.7 3.6 0.000000 0.46 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.7 4.7 0.25 0.04 </GB26_Birch_Gun>
+				<GB28_Bishop> 2.8 2.9 0.23 0.3 </GB28_Bishop>
+				<GB30_FV3805> 3.9 3.9 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 2.5 2.6 0.12 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 2.5 2.7 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.5 4.7 0.13 0.000000 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.8 5.1 0.07 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6.6 3.1 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3.3 3.3 0.2 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.7 3.9 0.28 0.4 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.7 3.2 0.08 0.27 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.5 4.7 0.13 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.3 2.4 0.52 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3 3.1 0.34 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.5 3.6 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.3 2.3 0.000000 0.77 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.7 3.6 0.18 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 4.9 4.8 0.7 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.4 5.6 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.4 3.4 0.11 0.3 </GB41_Challenger>
+				<GB81_FV4004> 3.3 3 0.32 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.6 2.8 0.26 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.000000 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.63 0.000000 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.13 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.7 1.7 0.71 0.29 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.8 1.8 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.3 2.3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.2 3.2 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</tricolor_classic>
+		<tricolor_diagonal>
+			<texture> vehicles/british/Camouflage/GB_1_tricolor_diagonal.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/tricolor_diagonal </description>
+			<id> 37 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 83 172 215 178 </c0>
+				<c1> 53 15 11 230 </c1>
+				<c2> 227 205 81 141 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 6.5 6.2 0.14 0.26 </GB32_Tortoise>
+				<GB14_M2> 2.7 2.6 0.2 0.34 </GB14_M2>
+				<GB07_Matilda> 4.7 5.1 0.4 0.29 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 3.6 3.4 0.53 0.74 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 1.9 2.9 0.42 0.24 </GB15_Stuart_I>
+				<GB21_Cromwell> 5.8 5.8 0.84 0.42 </GB21_Cromwell>
+				<GB20_Crusader> 3.4 3.4 0.44 0.76 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 3 3.3 0.54 0.16 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 2.6 2.6 0.43 0.67 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.7 2.3 0.96 0.52 </GB08_Churchill_I>
+				<GB10_Black_Prince> 3.6 3.6 0.64 0.43 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.5 3.7 0.56 0.42 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.4 3.4 0.22 0.16 </GB12_Conqueror>
+				<GB27_Sexton> 4.8 3.7 0.13 0.57 </GB27_Sexton>
+				<GB09_Churchill_VII> 4 4 0.000000 0.2 </GB09_Churchill_VII>
+				<GB17_Grant_I> 4.5 4.6 0.7 0.67 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 3.2 3.3 0.45 0.46 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 4.4 4.8 0.18 0.08 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 3.6 3.7 0.04 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.4 3.7 0.36 0.000000 </GB24_Centurion_Mk3>
+				<GB22_Comet> 2.6 4.9 0.68 0.71 </GB22_Comet>
+				<GB23_Centurion> 3.6 3.5 0.000000 0.000000 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 7.9 7.9 0.12 0.000000 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3.2 3.2 0.1 0.000000 </GB13_FV215b>
+				<GB60_Covenanter> 3.1 3.1 0.66 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 5 3.2 0.28 0.3 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.8 3.9 0.3 0.28 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 3.5 3.6 0.08 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 2.7 3.4 0.000000 0.28 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.5 4.6 0.1 0.000000 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.3 2.5 0.16 0.12 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 3.3 4.3 0.34 0.4 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 4.6 4.6 0.71 0.32 </GB72_AT15>
+				<GB73_AT2> 3.8 3.3 0.000000 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 3.5 4 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 2.8 3.1 0.29 0.3 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 2.6 3.2 0.000000 0.000000 </GB75_AT7>
+				<GB57_Alecto> 4 4.3 0.31 0.16 </GB57_Alecto>
+				<GB48_FV215b_183> 3.3 4.7 0.74 0.17 </GB48_FV215b_183>
+				<GB74_AT8> 3.1 3.3 0.1 0.000000 </GB74_AT8>
+				<GB51_Excelsior> 3.8 2.6 0.4 0.000000 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 2.7 2.7 0.54 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 3.8 3.8 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.7 3.4 0.41 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 2.9 2.4 0.21 0.14 </GB28_Bishop>
+				<GB30_FV3805> 2.2 3.9 0.3 0.69 </GB30_FV3805>
+				<GB79_FV206> 2 4.9 0.36 0.28 </GB79_FV206>
+				<GB31_Conqueror_Gun> 1.7 4.6 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 3.3 3 0.48 0.23 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.2 5.7 0.18 0.000000 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6.6 3.2 0.34 0.28 </GB76_Mk_VIC>
+				<GB11_Caernarvon_IGR> 3.5 3.7 0.52 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.3 2.3 0.39 0.86 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.6 3.5 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3.3 3 0.48 0.23 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.7 2.3 0.96 0.52 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.2 3.2 0.1 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.6 4.6 0.71 0.32 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.3 2.3 0.33 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.3 2.3 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.03 0.44 </GB83_FV4005>
+				<GB44_Archer> 6.4 6.6 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 5 5 0.42 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3.6 0.000000 0.92 </GB81_FV4004>
+				<GB70_N_FV4202_105> 7 6 0.000000 0.48 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3.4 0.54 0.52 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 1 0.13 </GB52_A45>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.000000 0.13 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 6 6 0.16 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.4 3.4 0.16 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</tricolor_diagonal>
+		<stains_with_notches>
+			<texture> vehicles/british/Camouflage/GB_1_stains_with_notches.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/stains_with_notches </description>
+			<id> 38 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 73 55 37 229 </c0>
+				<c1> 0 0 0 246 </c1>
+				<c2> 255 255 255 211 </c2>
+				<c3> 207 173 122 190 </c3>
+			</colors>
+			<tiling>
+				<GB32_Tortoise> 4.6 4.5 0.66 0.26 </GB32_Tortoise>
+				<GB14_M2> 2.4 2.5 0.38 0.53 </GB14_M2>
+				<GB07_Matilda> 3.8 3.8 0.04 0.52 </GB07_Matilda>
+				<GB05_Vickers_Medium_Mk_II> 4.1 4.2 0.14 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB15_Stuart_I> 4.8 4.8 0.22 0.08 </GB15_Stuart_I>
+				<GB21_Cromwell> 3.5 3.5 0.1 0.1 </GB21_Cromwell>
+				<GB20_Crusader> 3.7 3.8 0.000000 0.000000 </GB20_Crusader>
+				<GB01_Medium_Mark_I> 3.7 3.3 0.44 0.57 </GB01_Medium_Mark_I>
+				<GB06_Vickers_Medium_Mk_III> 3.6 3.6 0.55 0.77 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.6 2.6 0.44 0.06 </GB08_Churchill_I>
+				<GB10_Black_Prince> 4.6 4.6 0.18 0.28 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.5 4.6 0.36 0.9 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.1 3.1 0.6 0.46 </GB12_Conqueror>
+				<GB27_Sexton> 4.5 4.5 0.52 0.25 </GB27_Sexton>
+				<GB09_Churchill_VII> 3.4 3.4 0.000000 0.26 </GB09_Churchill_VII>
+				<GB17_Grant_I> 5.2 5.4 0.74 0.26 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 3.6 3.7 0.56 0.43 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 3.9 3.9 0.24 0.52 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4 4.1 0.06 0.14 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 4.6 4.6 0.57 0.56 </GB24_Centurion_Mk3>
+				<GB22_Comet> 4.1 4.2 0.37 0.6 </GB22_Comet>
+				<GB23_Centurion> 3.5 4.4 0.98 0.39 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 5.4 5.4 0.38 0.000000 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 4.8 4.9 0.4 0.31 </GB13_FV215b>
+				<GB60_Covenanter> 2.8 2.8 0.2 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 4 4 0.1 0.58 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.8 3.6 0.06 0.06 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 3.7 4 0.4 0.08 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3.1 3.1 0.46 0.68 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.2 4.4 0.46 0.2 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 4.2 3.9 0.48 0.37 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.5 4.6 0.48 0.04 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 4.4 4.4 0.33 0.56 </GB72_AT15>
+				<GB73_AT2> 3 3 0.32 0.14 </GB73_AT2>
+				<GB42_Valentine_AT> 3.7 3.8 0.74 0.59 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 4.1 4 0.68 0.85 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 2.8 2.9 0.86 0.4 </GB75_AT7>
+				<GB57_Alecto> 4.3 4.3 0.18 0.08 </GB57_Alecto>
+				<GB48_FV215b_183> 5.7 5.7 0.49 0.46 </GB48_FV215b_183>
+				<GB74_AT8> 3.5 3.5 0.72 0.32 </GB74_AT8>
+				<GB51_Excelsior> 3.4 3.5 0.22 0.86 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 2.1 2.1 0.88 0.79 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.2 4.3 0.08 0.12 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 5.4 5.5 1 0.58 </GB26_Birch_Gun>
+				<GB28_Bishop> 3.8 4 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 4.8 5 0.19 0.21 </GB30_FV3805>
+				<GB79_FV206> 3.7 3.7 0.65 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 4.1 4.2 0.2 0.67 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.8 4.8 0.000000 0.000000 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.7 5.4 0.2 0.4 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 7.3 3 0.24 0.000000 </GB76_Mk_VIC>
+				<GB11_Caernarvon_IGR> 4.5 4.6 0.36 0.9 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.3 2.3 0.39 0.86 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.5 4.4 0.98 0.39 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.8 4.8 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.6 2.6 0.44 0.06 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4.8 4.9 0.4 0.31 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.4 4.4 0.33 0.56 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.5 4.3 0.000000 0.39 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.7 3.5 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.24 0.16 </GB83_FV4005>
+				<GB44_Archer> 6.8 5.8 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 2.8 2.8 0.000000 0.06 </GB41_Challenger>
+				<GB81_FV4004> 3 2.9 0.1 0.08 </GB81_FV4004>
+				<GB70_N_FV4202_105> 4.7 2.5 0.000000 0.03 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.46 0.88 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.78 0.52 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.4 1.4 0.11 0.59 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.7 1.7 0.11 0.47 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.000000 0.14 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.8 4.8 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.4 3.4 0.000000 0.24 </GB33_Sentinel_AC_I>
+			</tiling>
+		</stains_with_notches>
+		<large-spotted>
+			<texture> vehicles/british/Camouflage/GB_1_large-spotted.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/tricolor/large-spotted </description>
+			<id> 44 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 174 164 113 229 </c0>
+				<c1> 24 31 31 239 </c1>
+				<c2> 79 78 47 201 </c2>
+				<c3> 207 173 122 0 </c3>
+			</colors>
+			<tiling>
+				<GB10_Black_Prince> 4.2 4.2 0.000000 0.19 </GB10_Black_Prince>
+				<GB01_Medium_Mark_I> 2.8 2.9 0.08 0.000000 </GB01_Medium_Mark_I>
+				<GB05_Vickers_Medium_Mk_II> 2.8 2.8 0.08 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3.1 3.1 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.6 3.6 0.26 0.44 </GB07_Matilda>
+				<GB08_Churchill_I> 2.4 2.6 0.22 0.000000 </GB08_Churchill_I>
+				<GB14_M2> 3 3.3 0.22 0.93 </GB14_M2>
+				<GB15_Stuart_I> 3.1 3.1 0.2 0.000000 </GB15_Stuart_I>
+				<GB20_Crusader> 3 3 0.08 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 5.3 5.3 0.000000 0.000000 </GB21_Cromwell>
+				<GB32_Tortoise> 5.1 5.2 0.25 0.38 </GB32_Tortoise>
+				<GB11_Caernarvon> 4.6 4.6 0.34 0.38 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.5 3.5 0.44 0.42 </GB12_Conqueror>
+				<GB27_Sexton> 3.9 4 0.84 0.56 </GB27_Sexton>
+				<GB09_Churchill_VII> 3.6 3.6 0.16 0.16 </GB09_Churchill_VII>
+				<GB17_Grant_I> 3.6 3.8 0.46 0.12 </GB17_Grant_I>
+				<GB68_Matilda_Black_Prince> 4.1 4.1 0.14 0.000000 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 3.7 3.8 0.72 0.34 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4 3.9 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.8 3.9 0.22 0.5 </GB24_Centurion_Mk3>
+				<GB22_Comet> 3.8 3.7 0.000000 0.28 </GB22_Comet>
+				<GB23_Centurion> 4.8 4.5 0.56 0.49 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 5.5 5.5 0.2 0.06 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 3.1 3.1 0.76 0.8 </GB13_FV215b>
+				<GB60_Covenanter> 3 3 0.32 0.4 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 3.5 3.5 0.41 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.2 3.1 0.000000 0.000000 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 4 4 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 2.8 2.8 0.41 0.44 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 3.7 3.8 0.33 0.53 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.3 3.4 0.000000 0.06 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.8 4.8 0.01 0.000000 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 3.9 4 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.4 3.4 0.32 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 4.1 4.1 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 2.9 3 0.26 0.1 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.2 3.3 0.1 0.000000 </GB75_AT7>
+				<GB57_Alecto> 4.8 4.9 0.36 0.000000 </GB57_Alecto>
+				<GB48_FV215b_183> 3.1 3.1 0.6 0.76 </GB48_FV215b_183>
+				<GB74_AT8> 3.8 3.8 0.000000 0.000000 </GB74_AT8>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 2.3 2.3 0.68 0.5 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.1 4.2 0.1 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 3.6 3.7 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 3.4 3.4 0.31 0.4 </GB28_Bishop>
+				<GB30_FV3805> 3 3 0.3 0.14 </GB30_FV3805>
+				<GB79_FV206> 3.3 3.3 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 3.2 3.2 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.7 5 0.13 0.18 </GB77_FV304>
+				<GB29_Crusader_5inch> 7.3 5.7 0.2 0.2 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 5.1 2.8 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB11_Caernarvon_IGR> 4.6 4.6 0.34 0.38 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.3 2.3 0.39 0.86 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 4.8 4.5 0.56 0.49 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.7 5 0.13 0.18 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.4 2.6 0.22 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.1 3.1 0.76 0.8 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.9 4 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.6 2.9 0.000000 0.26 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.9 2.8 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.38 0.000000 </GB83_FV4005>
+				<GB44_Archer> 6.8 7 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 4 4 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 4.8 3.9 0.08 0.3 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.9 3.5 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.88 0.06 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.74 0.12 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.59 0.82 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.12 0.28 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.6 1.6 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.4 4.4 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.4 3.4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</large-spotted>
+		<Mickey_Mouse_ears>
+			<texture> vehicles/british/Camouflage/GB_1_Mickey_Mouse_ears.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/large-Mickey_Mouse_ears </description>
+			<id> 45 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 0 17 0 187 </c0>
+				<c1> 255 255 255 162 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 2.5 2.6 0.19 0.52 </GB01_Medium_Mark_I>
+				<GB05_Vickers_Medium_Mk_II> 2.9 3 0.38 0.46 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.4 2.4 0.6 0.41 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.4 3.4 0.48 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 2.3 2.4 0.37 0.52 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.3 2.3 0.82 0.66 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 10.9 10.9 0.16 0.36 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.7 3.7 0.4 0.49 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.6 3.1 0.81 0.48 </GB12_Conqueror>
+				<GB14_M2> 3 2.6 0.6 0.43 </GB14_M2>
+				<GB15_Stuart_I> 3.8 3.7 0.41 0.4 </GB15_Stuart_I>
+				<GB17_Grant_I> 4.8 4.8 0.33 0.45 </GB17_Grant_I>
+				<GB20_Crusader> 2.3 2.4 0.66 0.5 </GB20_Crusader>
+				<GB21_Cromwell> 5.3 5.3 0.39 0.86 </GB21_Cromwell>
+				<GB27_Sexton> 3.1 3.2 0.18 0.69 </GB27_Sexton>
+				<GB32_Tortoise> 5.4 5.4 0.74 0.79 </GB32_Tortoise>
+				<GB68_Matilda_Black_Prince> 3.8 3.9 0.28 0.07 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 3.7 3.8 0.27 0.43 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 3.5 3.5 0.26 0.63 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3.2 3.2 0.88 0.43 </GB24_Centurion_Mk3>
+				<GB22_Comet> 3 2.9 0.000000 0.26 </GB22_Comet>
+				<GB23_Centurion> 3.6 3.2 0.34 0.04 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 3 3.2 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 2.6 2.5 0.4 0.38 </GB13_FV215b>
+				<GB60_Covenanter> 3.6 3.6 0.16 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 3.4 3.6 0.49 0.63 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.5 3.5 0.5 0.94 </GB70_FV4202_105>
+				<GB59_Cruiser_Mk_IV> 3.5 3.1 0.59 0.2 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 3 3.2 0.000000 0.14 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 3.7 3.5 0.44 0.43 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 3.1 3.1 0.92 0.17 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.4 4.1 0.6 0.62 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 3.9 4 0.56 0.000000 </GB72_AT15>
+				<GB73_AT2> 4.2 4.2 0.24 0.18 </GB73_AT2>
+				<GB42_Valentine_AT> 4.3 4.3 0.79 0.000000 </GB42_Valentine_AT>
+				<GB40_Gun_Carrier_Churchill> 3.2 3.3 0.82 0.35 </GB40_Gun_Carrier_Churchill>
+				<GB75_AT7> 3.1 3.3 0.68 0.22 </GB75_AT7>
+				<GB57_Alecto> 3.8 3.9 0.12 0.000000 </GB57_Alecto>
+				<GB48_FV215b_183> 3.5 3.5 0.56 0.15 </GB48_FV215b_183>
+				<GB74_AT8> 3 3 0.4 0.5 </GB74_AT8>
+				<GB51_Excelsior> 3 3.1 0.13 0.25 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 2.5 2.5 0.26 0.85 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 3.7 3.9 0.24 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 3.6 3.7 0.66 0.21 </GB26_Birch_Gun>
+				<GB28_Bishop> 2.9 2.9 0.19 0.72 </GB28_Bishop>
+				<GB30_FV3805> 3.5 3.5 0.5 0.1 </GB30_FV3805>
+				<GB79_FV206> 2.1 2.1 0.000000 0.14 </GB79_FV206>
+				<GB31_Conqueror_Gun> 2.4 2.7 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 3 3.1 0.56 0.2 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.9 5.8 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 5.5 3.2 0.68 0.4 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.57 0.59 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3.2 3.3 0.41 0.38 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.3 2.3 0.39 0.86 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.6 3.2 0.34 0.04 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3.1 0.56 0.2 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.3 2.4 0.37 0.52 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 2.6 2.5 0.4 0.38 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.9 4 0.56 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.8 2.7 0.73 0.22 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.8 2.7 0.28 0.6 </GB45_Achilles_IIC>
+				<GB83_FV4005> 4.4 4.5 0.22 0.62 </GB83_FV4005>
+				<GB44_Archer> 6.2 6.2 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 4.8 4.8 0.14 0.18 </GB41_Challenger>
+				<GB81_FV4004> 2.7 2.7 0.16 0.1 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.8 2.7 0.76 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3.7 3.3 0.72 0.53 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.55 0.6 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.14 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1 1 0.000000 0.38 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.6 2.6 0.35 0.38 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 1.8 1.8 0.34 0.2 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Mickey_Mouse_ears>
+		<winter>
+			<texture> vehicles/british/Camouflage/GB_1_winter.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/uk/bicolor/winter </description>
+			<id> 46 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 255 255 255 187 </c0>
+				<c1> 111 89 57 35 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 3.1 3.2 0.1 0.000000 </GB01_Medium_Mark_I>
+				<GB05_Vickers_Medium_Mk_II> 2.7 2.6 0.33 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3 3.2 0.4 0.12 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3 2.8 0.6 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 3 3.1 0.22 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 3.8 3.1 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 3.4 3.3 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.7 3.3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.6 3.2 0.000000 0.38 </GB12_Conqueror>
+				<GB14_M2> 2.9 2.8 0.000000 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 3.3 3.3 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 2.3 2.4 0.000000 0.000000 </GB17_Grant_I>
+				<GB20_Crusader> 3.2 3.1 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3.1 3.3 0.000000 0.000000 </GB21_Cromwell>
+				<GB27_Sexton> 3 3 0.000000 0.000000 </GB27_Sexton>
+				<GB32_Tortoise> 3 3 0.000000 0.000000 </GB32_Tortoise>
+				<GB68_Matilda_Black_Prince> 3.7 3.9 0.19 0.28 </GB68_Matilda_Black_Prince>
+				<GB04_Valentine> 4 4.1 0.000000 0.26 </GB04_Valentine>
+				<GB03_Cruiser_Mk_I> 4.1 5 0.19 0.000000 </GB03_Cruiser_Mk_I>
+				<GB24_Centurion_Mk3> 3 5 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB22_Comet> 3.2 3.7 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 4.3 4.4 0.000000 0.000000 </GB23_Centurion>
+				<GB19_Sherman_Firefly> 3.9 3.9 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB13_FV215b> 4.3 4 0.000000 0.000000 </GB13_FV215b>
+				<GB60_Covenanter> 5.2 4.9 0.000000 0.000000 </GB60_Covenanter>
+				<GB69_Cruiser_Mk_II> 5 5.2 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.1 3.4 0.000000 0.000000 </GB70_FV4202_105>
+				<GB63_TOG_II> 3.6 3.8 0.000000 0.000000 </GB63_TOG_II>
+				<GB58_Cruiser_Mk_III> 4.3 4.4 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB71_AT_15A> 4 4.1 0.000000 0.000000 </GB71_AT_15A>
+				<GB39_Universal_CarrierQF2> 4.7 4.8 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB72_AT15> 4.9 5 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 4.9 5.1 0.000000 0.000000 </GB73_AT2>
+				<GB42_Valentine_AT> 4.9 5 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB75_AT7> 5 5.1 0.000000 0.000000 </GB75_AT7>
+				<GB48_FV215b_183> 5 4.8 0.000000 0.000000 </GB48_FV215b_183>
+				<GB74_AT8> 4.6 4.4 0.000000 0.000000 </GB74_AT8>
+				<GB59_Cruiser_Mk_IV> 4.8 4.4 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB51_Excelsior> 4.8 4.8 0.000000 0.000000 </GB51_Excelsior>
+				<GB25_Loyd_Gun_Carriage> 4.8 4.8 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB78_Sexton_I> 4.8 4.9 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 6.3 6.4 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 5.9 6 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 5.2 5.7 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 4.2 4.2 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 3.4 3.4 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 5.2 5.1 0.2 0.4 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.1 5.8 0.2 0.000000 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 5 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 3 3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 3.7 3.3 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.8 3.8 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 4.3 4.4 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 5.2 5.1 0.2 0.4 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3 3.1 0.22 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4.3 4 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.9 5 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.1 4.1 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.3 3.3 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.000000 0.000000 </GB83_FV4005>
+				<GB41_Challenger> 4.5 4.5 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.000000 0.000000 </GB81_FV4004>
+				<GB80_Charioteer> 3 3 0.000000 0.000000 </GB80_Charioteer>
+				<GB87_Chieftain_T95_turret> 3 3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+			</tiling>
+		</winter>
+		<GB_victim_yellow>
+			<texture> vehicles/british/Camouflage/GB_victim_yellow.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description/>
+			<id> 54 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 208 196 32 203 </c0>
+				<c1> 129 112 16 203 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB13_FV215b> 4.5 4.4 0.55 0.2 </GB13_FV215b>
+				<GB01_Medium_Mark_I> 4.1 3.8 0.58 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 4.6 4.6 0.24 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3.7 3.8 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3.9 3.9 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3 3 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.1 3.1 0.18 0.2 </GB07_Matilda>
+				<GB08_Churchill_I> 2.1 2.1 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.7 2.7 0.17 0.21 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.7 4.7 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.2 4.1 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3 3 0.000000 0.000000 </GB12_Conqueror>
+				<GB14_M2> 2.6 2.6 0.02 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 4 2.8 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 5 5 0.21 0.38 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.9 4.1 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3.8 3.9 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 4.2 4.2 0.18 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3.6 3.6 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.4 3.5 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 4.6 4 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB27_Sexton> 4.1 2.3 0.000000 0.000000 </GB27_Sexton>
+				<GB32_Tortoise> 4 2.4 0.04 0.14 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 4.2 3.5 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.4 3.6 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3.8 3.9 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3.4 3.4 0.5 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3.1 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 3.2 3.2 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 4.1 4.2 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 4.1 4.1 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3 3 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 2.3 2.4 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 2.8 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3.1 3.2 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.4 3.4 0.29 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3.2 2.2 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3 3 0.11 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.4 2.3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3 2.8 0.04 0.000000 </GB74_AT8>
+				<GB75_AT7> 3.4 3.5 0.000000 0.000000 </GB75_AT7>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.2 4.2 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 4.4 4.4 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 3.1 3.1 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 4 4.1 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 3.7 3.7 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.8 5 0.000000 0.000000 </GB77_FV304>
+				<GB29_Crusader_5inch> 5.2 5.3 0.4 0.000000 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 5.4 2.7 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.1 2.1 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 4.2 4.1 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.8 3.8 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.4 3.5 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.8 5 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.1 2.1 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4.5 4.4 0.55 0.2 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3 3 0.11 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.3 4.3 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.7 2.7 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3.6 3.6 0.32 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.4 5.4 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.2 3.2 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.5 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6 3.4 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3.7 3.3 0.1 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.79 0.74 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.9 1.9 0.09 0.1 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.5 1.5 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.1 4.1 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> true </notInShop>
+		</GB_victim_yellow>
+		<GB_victim_red>
+			<texture> vehicles/british/Camouflage/GB_victim_red.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description/>
+			<id> 55 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 138 21 21 229 </c0>
+				<c1> 77 15 15 203 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB13_FV215b> 3.9 4 0.32 0.000000 </GB13_FV215b>
+				<GB01_Medium_Mark_I> 3.2 3.2 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3.8 3.6 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3.4 3.5 0.36 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 4.2 4.2 0.2 0.34 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3 3 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3 3 0.3 0.28 </GB07_Matilda>
+				<GB08_Churchill_I> 2.2 2.4 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.6 2.6 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.5 4.5 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4 3.8 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3 3 0.000000 0.000000 </GB12_Conqueror>
+				<GB14_M2> 2.8 2.5 0.42 0.04 </GB14_M2>
+				<GB15_Stuart_I> 4.1 2.6 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 4.8 4.9 0.29 0.26 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 4.2 4 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3.5 3.6 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 4.3 4.3 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 4.1 4.2 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.6 3.4 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.8 4.3 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.29 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB27_Sexton> 4.5 3.3 0.000000 0.000000 </GB27_Sexton>
+				<GB32_Tortoise> 4 4.4 0.32 0.04 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3.8 3.7 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.4 3.5 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3.7 3.7 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3.8 3.9 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3.5 3.5 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 2.9 3.1 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 4.2 4.3 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3 3.1 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3 3 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 1.9 1.9 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 3 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3.2 3.1 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.5 3.5 0.13 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 4 2.7 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3.2 3.3 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.5 3.4 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3.3 3.2 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 2.9 2.8 0.000000 0.000000 </GB75_AT7>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 5.1 4.9 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 3.5 3.6 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 3.5 3.6 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 4.9 5 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 3.1 3.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.5 4.8 0.2 0.6 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.8 4.8 0.2 0.4 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 5.3 2.8 0.06 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.3 2.3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 4 3.8 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.5 3.5 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.6 3.4 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.5 4.8 0.2 0.6 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.2 2.4 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.9 4 0.32 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.2 3.3 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3 3 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.3 3.2 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3.9 3.9 0.2 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.4 5.4 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.2 3.2 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.24 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6 3.4 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.3 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.26 0.58 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.000000 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.7 1.7 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.1 4.1 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> true </notInShop>
+		</GB_victim_red>
+		<GB_victim_black>
+			<texture> vehicles/british/Camouflage/GB_victim_black.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description/>
+			<id> 56 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 0 0 0 243 </c0>
+				<c1> 31 31 31 212 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB13_FV215b> 4 4 1 0.43 </GB13_FV215b>
+				<GB01_Medium_Mark_I> 3.5 3.6 0.4 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 4 4.6 0.4 0.3 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 4.1 4 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 4.2 4.2 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3 3 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.7 3.7 0.16 0.14 </GB07_Matilda>
+				<GB08_Churchill_I> 2.4 2.4 0.2 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.6 2.6 0.15 0.18 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.5 4.5 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.8 4.8 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3 3 0.44 0.000000 </GB12_Conqueror>
+				<GB14_M2> 2.3 2.4 0.6 0.2 </GB14_M2>
+				<GB15_Stuart_I> 4.5 2.9 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 4.8 4.9 0.29 0.26 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 4.1 3.9 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3.7 3.8 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3 3.2 0.27 0.2 </GB21_Cromwell>
+				<GB22_Comet> 3.7 3.9 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.8 3.7 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.9 4.3 0.04 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.17 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB27_Sexton> 4.2 3.2 0.000000 0.000000 </GB27_Sexton>
+				<GB32_Tortoise> 4 4 0.02 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3.5 2.5 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.7 3.8 0.12 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 2.9 0.21 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3.7 3.7 0.2 0.46 </GB48_FV215b_183>
+				<GB51_Excelsior> 3.4 3.5 0.06 0.06 </GB51_Excelsior>
+				<GB57_Alecto> 3.2 3.3 0.07 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3.5 3.7 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3.9 3.9 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3 3 0.12 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 2.3 2.3 0.28 0.14 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3.4 3.2 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3.3 3.3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.3 3.3 0.5 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 4.1 2.4 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3.6 3.8 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.7 2.9 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3.2 3.2 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.9 5.1 0.3 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 4 4.1 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 3.5 3.7 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 3.1 3.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.5 4.9 0.6 0.4 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.9 4.8 0.2 0.6 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 7 3.1 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.3 2.3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 4.8 4.8 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 4 3.8 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.8 3.7 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.5 4.9 0.6 0.4 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.4 2.4 0.2 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 4 4 1 0.43 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.6 3.8 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3.9 3.9 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.3 3.2 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 4.6 4.5 0.76 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.5 5.5 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.4 3.6 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.5 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.9 3.3 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3.6 0.14 0.14 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.22 0.89 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.000000 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.5 1.5 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.7 3.7 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> true </notInShop>
+		</GB_victim_black>
+		<GB_victim_silver>
+			<texture> vehicles/british/Camouflage/GB_victim_silver.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description/>
+			<id> 57 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 168 177 181 255 </c0>
+				<c1> 97 112 114 174 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<tiling>
+				<GB13_FV215b> 3.7 3.6 0.24 0.16 </GB13_FV215b>
+				<GB01_Medium_Mark_I> 3.9 3.9 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3.8 3.9 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3.8 3.7 0.15 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3.8 3.8 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3 3 0.06 0.32 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 2.8 2.8 0.29 0.17 </GB07_Matilda>
+				<GB08_Churchill_I> 2.6 2.6 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.3 2.3 0.12 0.36 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.3 4.2 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 4.3 4.3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3 3 0.25 0.22 </GB12_Conqueror>
+				<GB14_M2> 3.2 2.8 0.26 0.34 </GB14_M2>
+				<GB15_Stuart_I> 4.3 2.4 0.06 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 4.8 4.9 0.29 0.26 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.8 3.9 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3.4 3.5 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 4 3.8 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3.8 3.7 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.9 2.3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.8 4.3 0.36 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.32 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB27_Sexton> 3.8 2.3 0.28 0.000000 </GB27_Sexton>
+				<GB32_Tortoise> 4.2 4.5 0.4 0.08 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3.5 2.2 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.5 3.5 0.46 0.14 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3.5 3.6 0.46 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3.1 3.2 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3.9 3.8 0.06 0.06 </GB51_Excelsior>
+				<GB57_Alecto> 2.6 2.7 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3.6 3.7 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3.4 3.5 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3 3 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 2.4 2.5 0.2 0.32 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 2.9 2.8 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3.2 3.2 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.9 4 0.28 0.04 </GB70_FV4202_105>
+				<GB71_AT_15A> 3.8 2.4 0.08 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3.6 2.8 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3.2 3.4 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3.3 3.4 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 2.8 2.9 0.000000 0.000000 </GB75_AT7>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB26_Birch_Gun> 4.3 4.4 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB28_Bishop> 3.4 3 0.000000 0.000000 </GB28_Bishop>
+				<GB30_FV3805> 3.8 3.9 0.000000 0.000000 </GB30_FV3805>
+				<GB79_FV206> 4.2 4.2 0.000000 0.000000 </GB79_FV206>
+				<GB31_Conqueror_Gun> 2.9 3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB77_FV304> 4.5 4.5 0.2 0.49 </GB77_FV304>
+				<GB29_Crusader_5inch> 4.7 4.7 0.08 0.4 </GB29_Crusader_5inch>
+				<GB76_Mk_VIC> 6 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<uk:GB08_Churchill_I> 2.3 2.3 0.000000 0.000000 </uk:GB08_Churchill_I>
+				<GB11_Caernarvon_IGR> 4.3 4.3 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 4 3.8 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.9 2.3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.5 4.5 0.2 0.49 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.6 2.6 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.7 3.6 0.24 0.16 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.6 2.8 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 4.3 4.3 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.1 3.1 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.4 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.5 5.5 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.4 3.4 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.000000 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6.1 3.3 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3.3 0.76 0.51 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.62 0.68 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.000000 0.1 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.9 1.9 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 4.8 4.8 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> true </notInShop>
+		</GB_victim_silver>
+		<!--//BLOCK_BEGIN:KR_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<IGR_Winter>
+			<texture> vehicles/german/Camouflage/IGR_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Winter </description>
+			<id> 68 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 82 82 82 225 </c0>
+				<c1> 0 0 0 216 </c1>
+				<c2> 192 192 192 218 </c2>
+				<c3> 255 255 255 223 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 3.3 3.4 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3.4 3.4 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3.2 3.3 0.3 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3 3 0.16 0.02 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 1.9 1.9 0.16 0.28 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 2.7 2.7 0.29 0.04 </GB07_Matilda>
+				<GB08_Churchill_I> 1.8 1.8 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.8 1.8 0.13 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.2 4.2 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.8 3.9 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.2 2.2 0.17 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 3.3 3.3 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 3 2.3 0.5 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 3.8 3.7 0.3 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 2.3 2.3 0.37 0.000000 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.3 3.2 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3.8 3.7 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 2.7 2.8 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3.2 3.2 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.3 3.3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.2 3.3 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2 2 0.63 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 3.6 3.7 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 4.4 4.4 0.28 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3 0.2 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.4 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 2.9 3 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 3 3.1 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3.8 3.8 0.5 0.68 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 4.3 4.3 0.16 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.6 3.6 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 4.4 4.4 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 5 5 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 4.4 4.5 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 3.9 4 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 4 4 0.1 0.24 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3.3 3.4 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.2 2.2 0.08 0.2 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3.2 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3.5 3.6 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3.9 3.9 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.6 3.6 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3 3.1 0.34 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3.8 3.9 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 2.8 2.9 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB77_FV304> 3 3 0.22 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3.9 4 0.000000 0.000000 </GB78_Sexton_I>
+				<GB76_Mk_VIC> 5.8 2.8 0.48 0.26 </GB76_Mk_VIC>
+				<GB79_FV206> 4.1 4.1 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 3.8 3.9 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.7 2.8 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.3 3.3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3 0.22 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 1.8 1.8 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.3 3.3 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.8 3.9 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.7 2.7 0.14 0.1 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.3 2.3 0.44 0.82 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 4.7 0.2 0.2 </GB83_FV4005>
+				<GB44_Archer> 3.6 3.6 0.000000 0.1 </GB44_Archer>
+				<GB41_Challenger> 2.4 2.4 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.2 0.6 </GB81_FV4004>
+				<GB70_N_FV4202_105> 3.9 2.2 0.04 0.28 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.6 0.16 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.000000 0.62 </GB52_A45>
+				<GB86_Centurion_Action_X> 1 1 0.04 0.07 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.1 1.1 0.09 0.12 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3 3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2.4 2.4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Winter>
+		<IGR_Summer>
+			<texture> vehicles/german/Camouflage/IGR_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Summer </description>
+			<id> 69 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 157 108 34 214 </c0>
+				<c1> 226 210 154 217 </c1>
+				<c2> 0 0 0 219 </c2>
+				<c3> 61 86 35 217 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 3.4 3.6 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3.2 3.2 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 2.9 3 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3 3.1 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.3 2.3 0.2 0.06 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.3 3.3 0.06 0.14 </GB07_Matilda>
+				<GB08_Churchill_I> 2.2 2.2 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.4 2.4 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 3.9 3.9 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3 3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.9 3.4 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 3.6 3.7 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 2.5 2.7 0.36 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 3.2 3.1 0.000000 0.31 </GB15_Stuart_I>
+				<GB17_Grant_I> 3.6 4.7 0.000000 0.16 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 4 4 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 2.5 2.4 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 2.5 2.6 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3 3.1 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3.2 3.3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.4 3.3 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2.1 2.1 0.3 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 3.8 3.9 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3.7 3.8 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3.2 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 3 3.1 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 3 3.1 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3.1 3.1 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3 3.1 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.2 3.2 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 3.1 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3 3 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 2.8 2.9 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3 3.1 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 2.7 2.9 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.6 2.6 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 3 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3 3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3 3.1 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3 3 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3 3.3 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3 3 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB77_FV304> 3 3.2 0.16 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3 3.3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB76_Mk_VIC> 5.7 2.6 0.28 0.000000 </GB76_Mk_VIC>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 3 3 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.6 2.7 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.2 3.3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3.2 0.16 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.2 2.2 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.6 3.7 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3 3.3 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.3 2.3 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3 3.1 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.44 0.74 </GB83_FV4005>
+				<GB44_Archer> 5.4 4.8 0.12 0.24 </GB44_Archer>
+				<GB41_Challenger> 3.4 3.4 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 2.6 2.4 0.48 0.12 </GB81_FV4004>
+				<GB70_N_FV4202_105> 7 4.2 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 2.8 3 0.86 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.16 0.68 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.58 0.36 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.3 1.3 0.2 0.15 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.6 2.6 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.2 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Summer>
+		<IGR_Desert>
+			<texture> vehicles/german/Camouflage/IGR_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Desert </description>
+			<id> 70 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 196 126 34 229 </c0>
+				<c1> 226 210 154 235 </c1>
+				<c2> 0 0 0 226 </c2>
+				<c3> 113 89 57 231 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 2.8 3.1 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3.1 3.3 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 2.7 2.8 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 2.5 2.5 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2 2 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 2.6 2.7 0.24 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 2.1 2.2 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.8 1.8 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.2 4.2 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.1 3.1 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.9 2.9 0.000000 0.48 </GB12_Conqueror>
+				<GB13_FV215b> 2.4 2.5 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 2.8 2.7 0.2 0.34 </GB14_M2>
+				<GB15_Stuart_I> 3.2 3.2 0.34 0.57 </GB15_Stuart_I>
+				<GB17_Grant_I> 3.8 3.8 0.000000 0.000000 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.2 3.3 0.14 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 2.5 2.5 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3.3 3.3 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3.1 3.2 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 2.9 3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.1 3.3 0.24 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2 2 0.15 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 3.2 3.2 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3 3 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 3 3.3 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 3 3.1 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 2.6 2.6 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3 3 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.3 3.4 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 3.2 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3 3 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 3 3 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3 3.1 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3 3.1 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.2 2.2 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 3.1 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3 3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3 3 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3 3 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3 3.1 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 2.8 3 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB77_FV304> 3 3 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB76_Mk_VIC> 5.1 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 3.1 3.1 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.6 2.7 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 2.9 3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.1 2.2 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 2.4 2.5 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3 3.1 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2 1.9 0.48 0.35 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.4 2.4 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 4.7 5 0.000000 0.54 </GB83_FV4005>
+				<GB44_Archer> 3.6 3.6 0.000000 0.12 </GB44_Archer>
+				<GB41_Challenger> 3 3 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 2.7 3 0.2 0.2 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.6 3 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 2.7 2.8 0.35 0.6 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.000000 0.2 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.5 1.5 0.14 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.5 1.5 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.6 2.6 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2.8 2.8 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Desert>
+		<IGR_K_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Winter </description>
+			<id> 85 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 32 35 43 225 </c0>
+				<c1> 101 74 50 216 </c1>
+				<c2> 164 164 164 194 </c2>
+				<c3> 255 255 255 178 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 5 5 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 5 5 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 5 5 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 5 5 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3.4 3.4 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 5 4.8 0.000000 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 3 3 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 3 3 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 5.4 5.4 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 5 5 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3.6 3.6 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 5 5 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 3 3 0.92 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 5 5 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 3.6 3.6 0.2 0.1 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 5 5 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 5 5 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 5 5 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 5 5 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 5 5 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 5 5 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2.4 2.4 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 5 5 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 5 5 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 5 5 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 5 5 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 5 5 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 5 5 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 5 5 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 5 5 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 5 5 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 5 5 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 5 5 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 5 5 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 5 5 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 5 5 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 5 5 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3.6 3.6 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 5 5 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 5 5 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 5 5 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 5 5 0.4 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 5 5 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 5 5 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 5 5 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 5 5 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 5 5 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 5 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 5 5 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 5 5 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 5 5 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 5 5 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 5 5 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 5 5 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 5 5 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3 3 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 5 5 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5 5 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3 3 0.28 0.8 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.6 3.6 0.13 0.71 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.000000 0.44 </GB83_FV4005>
+				<GB44_Archer> 6.6 6.6 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3.6 3.6 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 3 3.2 0.000000 0.06 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.4 3.2 0.08 0.16 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.34 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.5 0.88 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.5 1.5 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.8 1.8 0.16 0.49 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.000000 0.4 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3 3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.6 3.6 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Winter>
+		<IGR_K_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Desert </description>
+			<id> 87 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 138 90 68 229 </c0>
+				<c1> 203 135 67 216 </c1>
+				<c2> 202 169 123 204 </c2>
+				<c3> 112 67 46 0 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 5 5 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 5 5 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 5 5 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 5 5 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.6 2.6 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 5.4 5.4 0.000000 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 3 3 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.6 2.6 0.12 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 3.7 3.7 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 5 5 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.6 2.6 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 5 5 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 2.6 3 0.4 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 5 5 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 3.9 3.9 0.000000 0.000000 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.8 3.8 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 5 5 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 4 4 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 5 5 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 5 5 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 5 5 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2 2 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 5 5 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 5 5 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 5 5 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 5 5 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 5 5 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 5 5 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 5 5 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 5 5 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 5 5 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 5 5 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 5 5 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 5 5 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 5 5 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 5 5 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 5 5 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.2 2.2 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 5 5 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 5 5 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 5 5 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 5 5 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 5 5 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 5 5 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 5 5 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 5 5 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 5 5 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 5 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 5 5 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 5 5 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 5 5 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 5 5 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 5 5 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 5 5 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 5 5 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3 3 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 5 5 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5 5 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 3.1 2.9 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 3.3 3.3 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.000000 0.2 </GB83_FV4005>
+				<GB44_Archer> 3.2 3.2 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 2.8 2.8 0.24 0.06 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.000000 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.1 2.9 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.000000 0.1 </GB80_Charioteer>
+				<GB52_A45> 1.4 1.4 0.24 0.18 </GB52_A45>
+				<GB85_Cromwell_Berlin> 2 2 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 2 2 0.000000 0.12 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.9 1.9 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3 3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.6 3.6 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Desert>
+		<!-- -->
+		<!--//BLOCK_END:KR_IGR_CAMOUFLAGES//-->
+		<!--//BLOCK_BEGIN:CN_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<IGR_Ch_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Winter </description>
+			<id> 76 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 43 33 23 225 </c0>
+				<c1> 101 74 50 216 </c1>
+				<c2> 181 153 89 218 </c2>
+				<c3> 221 201 153 223 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 3 3 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3 3 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3 3 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3 3 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.6 2.6 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.2 3.2 0.34 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 1.8 2.2 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.2 2.2 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 3.9 3.9 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3 3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.4 2.4 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 3 3 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 3 2.8 0.1 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 3 2.9 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 2.7 3 0.000000 0.18 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.4 3.4 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3 3 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3 3 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3 3 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3 3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3 3 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2 2 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 3 3 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3 3 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB31_Conqueror_Gun> 3 3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3 3 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3 3 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3 3 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 3 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3 3 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 3 3 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3 3 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3 3 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2 2 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 3 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3 3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3 3 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3 3 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3 3 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3 3 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 3 2.1 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 3 3 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB30_FV3805> 3 3 0.000000 0.000000 </GB30_FV3805>
+				<GB11_Caernarvon_IGR> 3 3 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3 3 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3 3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 1.8 2.2 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3 3 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3 3 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.3 2.3 0.000000 0.08 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.5 2.5 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5 5 0.2 0.000000 </GB83_FV4005>
+				<GB44_Archer> 3.8 3.8 0.28 0.000000 </GB44_Archer>
+				<GB41_Challenger> 2.4 2.4 0.06 0.02 </GB41_Challenger>
+				<GB81_FV4004> 2.9 3 0.4 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.1 3.5 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.000000 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.94 0.61 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.07 0.5 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.5 1.5 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.8 2.8 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2.8 2.8 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Winter>
+		<IGR_Ch_Summer>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Summer </description>
+			<id> 77 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 52 78 41 214 </c0>
+				<c1> 108 72 19 217 </c1>
+				<c2> 39 40 30 219 </c2>
+				<c3> 207 196 150 217 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 3 3 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 3 3 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 3 3 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 3 3 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.8 2.8 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.2 3.2 0.000000 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 2.1 2.2 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2 2 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4 4 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3 3 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 2.4 2.4 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 3 3 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 2.9 2.8 0.48 0.2 </GB14_M2>
+				<GB15_Stuart_I> 3 3 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 4 4.1 0.08 0.23 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3 3 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3 3 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3 3 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 3 3 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 3 3 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3 3 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2.2 2.2 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 3 3 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3 3 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB31_Conqueror_Gun> 3 3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3 3 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 3 3 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3 3 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 3 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3 3 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 3 3 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3 3 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3 3 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.6 2.6 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3 3 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 3 3 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3 3 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 3 3 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3 3 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 3 3 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3 3 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 3 2 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 3 3 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3 3 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB30_FV3805> 3 3 0.000000 0.000000 </GB30_FV3805>
+				<GB11_Caernarvon_IGR> 3 3 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3 3 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3 3 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 3 3 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2.1 2.2 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3 3 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3 3 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.7 2.7 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.5 2.6 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 5.2 5 0.4 0.5 </GB83_FV4005>
+				<GB44_Archer> 3.6 3.6 0.000000 0.22 </GB44_Archer>
+				<GB41_Challenger> 2.6 2.6 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 2.5 2.4 0.5 0.16 </GB81_FV4004>
+				<GB70_N_FV4202_105> 6.3 2.7 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.2 0.44 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.52 0.52 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.15 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 2.1 2.1 0.000000 0.13 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.000000 0.13 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3 3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Summer>
+		<IGR_Ch_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Desert </description>
+			<id> 78 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 33 27 22 229 </c0>
+				<c1> 153 116 60 235 </c1>
+				<c2> 198 166 117 226 </c2>
+				<c3> 112 67 46 231 </c3>
+			</colors>
+			<tiling>
+				<GB01_Medium_Mark_I> 5 5 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 5 5 0.000000 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 5 5 0.000000 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 5 5 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.4 2.4 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 4.8 4.8 0.000000 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 2 2.2 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 3.2 3.2 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 3.6 3.6 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 2.9 2.9 0.000000 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 3 3 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 5 5 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 3 3 0.000000 0.36 </GB14_M2>
+				<GB15_Stuart_I> 4.1 3.9 0.000000 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 5 5 0.000000 0.000000 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 4 4 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 3 3 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3.9 4 0.000000 0.000000 </GB21_Cromwell>
+				<GB22_Comet> 5 5 0.000000 0.000000 </GB22_Comet>
+				<GB23_Centurion> 5 5 0.000000 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 5 5 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 2.4 2.4 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 5 5 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3 3 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 3 3 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3 3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB31_Conqueror_Gun> 3 3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 5 5 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 5 5 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 5 5 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 5 5 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 5 5 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 3 3 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 5 5 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 5 5 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 5 5 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.4 2.4 0.000000 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 5 5 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 5 5 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 5 5 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 5 5 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 5 5 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 5 5 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 3 3 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 5 5 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 5 5 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 5 3 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 5 5 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 5 5 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 3 3 0.000000 0.000000 </GB79_FV206>
+				<GB30_FV3805> 3 3 0.000000 0.000000 </GB30_FV3805>
+				<GB11_Caernarvon_IGR> 5 5 0.000000 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 3.9 4 0.000000 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 5 5 0.000000 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 5 5 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 2 2.2 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 5 5 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 5 5 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB50_Sherman_III> 2.3 2.5 0.000000 0.000000 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 2.6 2.6 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3.9 3.9 0.000000 0.4 </GB83_FV4005>
+				<GB44_Archer> 3.8 3.8 0.000000 0.08 </GB44_Archer>
+				<GB41_Challenger> 3 3 0.06 0.1 </GB41_Challenger>
+				<GB81_FV4004> 3 3.3 0.000000 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5.5 2.9 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.000000 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.52 0.24 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.7 1.7 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.5 1.5 0.000000 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.000000 0.24 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.9 2.9 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3.4 3.4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Desert>
+		<!-- -->
+		<!--//BLOCK_END:CN_IGR_CAMOUFLAGES//-->
+		<Clan_camuflage_01>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_01.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_01 </description>
+			<id> 104 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 94 12 0 190 </c0>
+				<c1> 201 136 48 152 </c1>
+				<c2> 13 18 10 211 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 3.9 3.9 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 5.1 5 0.15 0.17 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 5.6 5.5 0.7 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 5.3 5.2 0.000000 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 3.4 3.4 0.36 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 3.8 3.8 0.48 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 3.8 3.9 0.86 0.16 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 3.3 3.3 0.24 0.41 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 5.7 5.7 0.23 0.14 </GB10_Black_Prince>
+				<GB11_Caernarvon> 5 4.9 0.6 0.4 </GB11_Caernarvon>
+				<GB13_FV215b> 5.9 5.9 0.89 0.000000 </GB13_FV215b>
+				<GB14_M2> 3.3 3 0.76 0.86 </GB14_M2>
+				<GB15_Stuart_I> 2.9 2.9 0.13 1 </GB15_Stuart_I>
+				<GB19_Sherman_Firefly> 5.2 5.2 0.2 0.34 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 4.2 4.2 0.11 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 3.7 3.7 0.14 0.26 </GB21_Cromwell>
+				<GB22_Comet> 5.2 5.2 0.21 0.68 </GB22_Comet>
+				<GB23_Centurion> 5 5 0.25 0.000000 </GB23_Centurion>
+				<GB25_Loyd_Gun_Carriage> 2.9 2.9 0.44 0.17 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 5.5 3.4 0.33 0.77 </GB26_Birch_Gun>
+				<GB27_Sexton> 5.7 5.6 0.21 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 5 5 0.000000 0.82 </GB28_Bishop>
+				<GB29_Crusader_5inch> 4.5 4.5 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 5.6 5.5 0.16 0.46 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 4.7 4.8 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB39_Universal_CarrierQF2> 5 4.9 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 4.8 4.8 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 5.7 5.7 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 4.8 4.8 0.000000 0.000000 </GB48_FV215b_183>
+				<GB51_Excelsior> 4.6 4.6 0.000000 0.15 </GB51_Excelsior>
+				<GB57_Alecto> 5.9 3 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 6.6 6.6 0.81 0.18 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 5.3 5.4 0.11 0.72 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3.6 3.6 0.16 0.21 </GB60_Covenanter>
+				<GB63_TOG_II> 4.7 4.7 0.32 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 4.4 4.3 0.34 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 4.4 4.4 0.58 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 4.8 4.8 0.76 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 5 4.9 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 4.6 4.6 0.82 0.32 </GB72_AT15>
+				<GB73_AT2> 4.1 4.1 0.19 0.52 </GB73_AT2>
+				<GB74_AT8> 4.5 4.7 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 4.4 4.3 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 4.4 2.7 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 4.4 4.4 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 6.1 5.6 0.62 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 4.8 4.8 0.34 0.67 </GB79_FV206>
+				<GB32_Tortoise> 6 6.3 0.39 0.39 </GB32_Tortoise>
+				<GB24_Centurion_Mk3> 4.8 4.8 0.23 0.13 </GB24_Centurion_Mk3>
+				<GB11_Caernarvon_IGR> 5 4.9 0.6 0.4 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 4.3 4.4 0.16 0.26 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 5 5 0.25 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 4.4 4.4 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 3.8 3.9 0.86 0.16 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 5.9 5.9 0.89 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 4.6 4.6 0.82 0.32 </GB72_AT15_IGR>
+				<GB17_Grant_I> 6.3 6.2 0.000000 0.000000 </GB17_Grant_I>
+				<GB50_Sherman_III> 3.2 3.2 0.54 0.22 </GB50_Sherman_III>
+				<GB45_Achilles_IIC> 4 3.8 0.000000 0.12 </GB45_Achilles_IIC>
+				<GB12_Conqueror> 4 4 0.000000 0.000000 </GB12_Conqueror>
+				<GB83_FV4005> 5 5 0.32 0.000000 </GB83_FV4005>
+				<GB44_Archer> 5.7 5.6 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 3 3 0.000000 0.32 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.26 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 4 2.8 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 4.2 4.3 0.24 0.000000 </GB80_Charioteer>
+				<GB52_A45> 1.2 1.2 0.9 0.86 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.7 1.7 0.000000 0.26 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.5 1.5 0.02 0.14 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.5 3.5 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 4 4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Clan_camuflage_01>
+		<Clan_camuflage_02>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_02.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_02 </description>
+			<id> 106 </id>
+			<group> winter </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 16 48 21 200 </c0>
+				<c1> 255 255 255 139 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 1.9 1.9 0.33 0.59 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 2.1 2.1 0.09 0.12 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 2.6 2.6 0.56 0.74 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 2.4 2.4 0.2 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 1.6 1.6 0.72 0.35 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 1.6 1.6 0.06 0.14 </GB07_Matilda>
+				<GB08_Churchill_I> 1.6 1.6 0.82 0.36 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.6 1.6 0.92 0.49 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 2.9 2.9 0.79 0.7 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.9 3.7 0.22 0.6 </GB11_Caernarvon>
+				<GB13_FV215b> 3.3 3.3 0.000000 0.000000 </GB13_FV215b>
+				<GB17_Grant_I> 2.4 2.4 0.000000 0.1 </GB17_Grant_I>
+				<GB20_Crusader> 2.7 2.7 0.14 0.74 </GB20_Crusader>
+				<GB21_Cromwell> 1.8 1.8 0.22 0.16 </GB21_Cromwell>
+				<GB22_Comet> 1.6 1.6 0.000000 0.41 </GB22_Comet>
+				<GB23_Centurion> 3.7 3.7 0.13 0.04 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3.5 3.5 0.19 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 1.6 1.6 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 2.1 2.1 0.06 0.04 </GB26_Birch_Gun>
+				<GB27_Sexton> 3.6 3.6 0.000000 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 2.3 2.3 0.49 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 2.7 2.7 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 3.1 3.1 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 3 3 0.26 0.5 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3 3 0.14 0.15 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 2.7 2.7 0.06 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.1 3.1 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 3 3 0.33 0.85 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 3.8 3.8 0.09 0.04 </GB48_FV215b_183>
+				<GB51_Excelsior> 2.9 2.9 0.35 1 </GB51_Excelsior>
+				<GB57_Alecto> 2.8 2.8 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3.7 3.7 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 3.3 3.2 0.17 0.37 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 1.8 1.8 0.1 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3.1 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 2.6 2.6 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 2.9 2.9 0.08 0.04 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 3.3 3.3 0.000000 0.06 </GB70_FV4202_105>
+				<GB71_AT_15A> 3.4 3.4 0.000000 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 3.2 3.2 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 2.8 2.8 0.15 0.21 </GB73_AT2>
+				<GB74_AT8> 3.2 3.2 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 3.3 3.3 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 2.4 1.2 0.000000 0.18 </GB76_Mk_VIC>
+				<GB77_FV304> 2 2 0.1 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3.3 3.3 0.28 0.33 </GB78_Sexton_I>
+				<GB79_FV206> 3.1 3.1 0.12 0.13 </GB79_FV206>
+				<GB15_Stuart_I> 2 2 0.06 0.18 </GB15_Stuart_I>
+				<GB50_Sherman_III> 2.1 2.1 0.41 0.43 </GB50_Sherman_III>
+				<GB11_Caernarvon_IGR> 4.1 4.1 0.22 0.6 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.4 2.4 0.47 0.75 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.5 3.5 0.13 0.04 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 2 2 0.000000 0.16 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 1.6 1.6 0.82 0.32 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 3.2 3.1 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 3.6 3.6 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB19_Sherman_Firefly> 2 2 0.1 0.06 </GB19_Sherman_Firefly>
+				<GB45_Achilles_IIC> 2.1 2.2 0.51 0.98 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3 3 0.13 0.000000 </GB83_FV4005>
+				<GB44_Archer> 2.8 2.8 0.000000 0.12 </GB44_Archer>
+				<GB41_Challenger> 1.6 1.6 0.1 0.1 </GB41_Challenger>
+				<GB81_FV4004> 2.4 2.4 0.22 0.3 </GB81_FV4004>
+				<GB70_N_FV4202_105> 3.3 1.7 0.000000 0.12 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 3 3 0.14 0.2 </GB80_Charioteer>
+				<GB14_M2> 2.2 2.2 0.74 0.3 </GB14_M2>
+				<GB12_Conqueror> 2.2 2.2 0.4 0.000000 </GB12_Conqueror>
+				<GB52_A45> 1.6 1.6 0.77 0.12 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1.6 1.6 0.23 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1.6 1.6 0.19 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.2 1.2 0.08 0.14 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.2 3.2 0.04 0.36 </GB87_Chieftain_T95_turret>
+				<GB01_Medium_Mark_I_bot> 1.8 1.8 0.14 0.14 </GB01_Medium_Mark_I_bot>
+				<GB05_Vickers_Medium_Mk_II_bot> 2 2 0.1 0.000000 </GB05_Vickers_Medium_Mk_II_bot>
+				<GB33_Sentinel_AC_I> 2.2 2.2 0.12 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Clan_camuflage_02>
+		<Clan_camuflage_03>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_03.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_03 </description>
+			<id> 108 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 95 103 67 183 </c0>
+				<c1> 0 17 6 240 </c1>
+				<c2> 13 18 10 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 2.3 2.3 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 2.9 2.8 0.71 0.12 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 2.3 3.5 0.19 0.000000 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 2.7 2.7 0.16 0.21 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 1.5 1.5 0.000000 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 1.8 1.8 0.16 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 1.5 1.5 0.46 0.79 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.6 1.6 0.14 0.000000 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 8.6 8.6 0.27 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 3.2 3.3 0.43 0.65 </GB11_Caernarvon>
+				<GB13_FV215b> 2.5 2.4 0.000000 0.000000 </GB13_FV215b>
+				<GB14_M2> 2.3 2.3 0.36 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 1.4 1.4 0.46 0.14 </GB15_Stuart_I>
+				<GB17_Grant_I> 2 2 0.000000 0.000000 </GB17_Grant_I>
+				<GB20_Crusader> 2.1 2.1 0.42 0.25 </GB20_Crusader>
+				<GB21_Cromwell> 2 2 0.19 0.15 </GB21_Cromwell>
+				<GB22_Comet> 2.8 2.7 0.2 0.36 </GB22_Comet>
+				<GB23_Centurion> 2.8 2.6 1 0.43 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 2.6 2.6 0.06 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 1.7 1.7 0.15 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 2.3 2.3 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 2.5 2.4 0.07 0.19 </GB27_Sexton>
+				<GB28_Bishop> 2 2 0.67 0.55 </GB28_Bishop>
+				<GB29_Crusader_5inch> 2.3 2.3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 2 2 0.11 0.32 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 2.3 2.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 1.9 2 0.08 0.32 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 2.8 2.8 0.42 0.92 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 2.3 2.3 0.6 0.7 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 2.6 2.5 0.34 0.41 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 2.3 2.3 0.49 0.48 </GB48_FV215b_183>
+				<GB50_Sherman_III> 1.6 1.6 0.53 0.57 </GB50_Sherman_III>
+				<GB51_Excelsior> 2.6 2.6 0.08 0.29 </GB51_Excelsior>
+				<GB57_Alecto> 2.3 2.3 0.24 0.27 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3.1 3.1 0.05 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 2.4 2.3 0.63 1 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 1.9 1.9 0.04 0.19 </GB60_Covenanter>
+				<GB63_TOG_II> 2.3 2.3 0.04 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 2.2 2.2 0.88 0.66 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 2.4 2.3 0.36 0.13 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 2 1.9 0.43 0.21 </GB70_FV4202_105>
+				<GB71_AT_15A> 2.2 2.2 0.26 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 1.9 2 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 1.9 1.8 0.15 0.000000 </GB73_AT2>
+				<GB74_AT8> 2 2 0.39 0.64 </GB74_AT8>
+				<GB75_AT7> 2.1 2.1 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 2.2 1.6 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 2 1.9 0.17 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 2.3 2.3 0.16 0.14 </GB78_Sexton_I>
+				<GB79_FV206> 1.6 1.6 0.17 0.27 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 2.8 2.7 0.46 0.74 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.6 2.5 0.19 0.15 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 2.8 2.6 1 0.43 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 2 1.9 0.17 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 1.5 1.5 0.46 0.79 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 2.5 2.4 0.000000 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 1.9 2 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB19_Sherman_Firefly> 2 2 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB45_Achilles_IIC> 1.5 1.5 0.21 0.57 </GB45_Achilles_IIC>
+				<GB83_FV4005> 3.5 3.6 0.4 0.000000 </GB83_FV4005>
+				<GB44_Archer> 3.4 3.6 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 1.6 1.6 0.24 0.22 </GB41_Challenger>
+				<GB81_FV4004> 3 3 0.18 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 3.2 1.8 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 2.7 3 0.1 0.4 </GB80_Charioteer>
+				<GB12_Conqueror> 1.5 1.5 0.26 0.000000 </GB12_Conqueror>
+				<GB52_A45> 1.2 1.2 1 0.74 </GB52_A45>
+				<GB85_Cromwell_Berlin> 1 1 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 1 1 0.19 0.000000 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1 1 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2 2 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2.8 2.8 0.16 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Clan_camuflage_03>
+		<Clan_camuflage_04>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_04.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_04 </description>
+			<id> 109 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 21 83 0 175 </c0>
+				<c1> 118 209 35 112 </c1>
+				<c2> 6 34 15 235 </c2>
+				<c3> 201 192 133 187 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB50_Sherman_III> 1.8 1.8 0.000000 0.000000 </GB50_Sherman_III>
+				<GB01_Medium_Mark_I> 3 2.1 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 2.3 2.3 0.31 0.61 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 2.7 2.7 0.7 1 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 2.7 2.7 0.26 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 1.6 1.6 0.000000 0.42 </GB06_Vickers_Medium_Mk_III>
+				<GB07_Matilda> 2.4 2.4 0.000000 0.000000 </GB07_Matilda>
+				<GB08_Churchill_I> 1.6 1.6 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.4 1.4 0.3 0.29 </GB09_Churchill_VII>
+				<GB10_Black_Prince> 4.6 4.6 0.000000 0.000000 </GB10_Black_Prince>
+				<GB11_Caernarvon> 2.3 2.3 0.32 0.000000 </GB11_Caernarvon>
+				<GB13_FV215b> 2.5 2.5 0.15 0.000000 </GB13_FV215b>
+				<GB15_Stuart_I> 2.1 2.2 0.53 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 3.9 3.1 0.000000 0.000000 </GB17_Grant_I>
+				<GB20_Crusader> 3.1 2.1 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 2.6 2.6 0.19 0.42 </GB21_Cromwell>
+				<GB22_Comet> 2.7 2.7 0.66 0.11 </GB22_Comet>
+				<GB23_Centurion> 3.1 3.1 0.26 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 2.8 2.8 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 1.6 1.6 0.32 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 2.7 2.7 0.000000 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 2.9 2.9 0.19 0.09 </GB27_Sexton>
+				<GB28_Bishop> 2.3 2.2 0.35 0.63 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3.1 3.2 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 2.6 2.6 0.12 0.27 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 2.6 2.6 0.14 0.46 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 3.8 3.8 0.000000 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 2.8 2.7 0.13 0.43 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 3.1 3 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB42_Valentine_AT> 2.9 2.8 0.2 0.25 </GB42_Valentine_AT>
+				<GB48_FV215b_183> 2.6 2.6 0.14 0.56 </GB48_FV215b_183>
+				<GB51_Excelsior> 2.5 2.4 0.000000 0.000000 </GB51_Excelsior>
+				<GB57_Alecto> 2.5 2.5 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3 3 0.08 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 2.8 2.7 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 2.4 2.4 0.33 0.000000 </GB60_Covenanter>
+				<GB63_TOG_II> 3 3 0.000000 0.000000 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 3.1 3.1 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 2.4 2.4 0.000000 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 2.8 2.8 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 2.4 2.4 0.45 0.000000 </GB71_AT_15A>
+				<GB72_AT15> 2.4 2.4 0.000000 0.000000 </GB72_AT15>
+				<GB73_AT2> 2.3 2.3 0.22 0.42 </GB73_AT2>
+				<GB74_AT8> 2.4 2.3 0.000000 0.000000 </GB74_AT8>
+				<GB75_AT7> 2.2 2.2 0.23 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 4 1.6 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 2.3 2.3 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 2.4 2.3 0.46 0.75 </GB78_Sexton_I>
+				<GB79_FV206> 2.5 2.4 0.000000 0.000000 </GB79_FV206>
+				<GB11_Caernarvon_IGR> 3.6 2.3 0.32 0.000000 </GB11_Caernarvon_IGR>
+				<GB21_Cromwell_IGR> 2.6 2.6 0.19 0.42 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 3.1 3.1 0.26 0.000000 </GB23_Centurion_IGR>
+				<GB77_FV304_IGR> 2.3 2.3 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB08_Churchill_I_IGR> 1.6 1.6 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB13_FV215b_IGR> 2.5 2.5 0.15 0.000000 </GB13_FV215b_IGR>
+				<GB72_AT15_IGR> 2.4 2.4 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB19_Sherman_Firefly> 3 3 0.000000 0.000000 </GB19_Sherman_Firefly>
+				<GB45_Achilles_IIC> 2.5 2.4 0.18 0.000000 </GB45_Achilles_IIC>
+				<GB83_FV4005> 4 3.4 0.2 0.1 </GB83_FV4005>
+				<GB44_Archer> 3.8 3.8 0.000000 0.000000 </GB44_Archer>
+				<GB41_Challenger> 2.2 2.2 0.000000 0.000000 </GB41_Challenger>
+				<GB81_FV4004> 2.1 2.2 0.000000 0.000000 </GB81_FV4004>
+				<GB70_N_FV4202_105> 5 2.8 0.000000 0.000000 </GB70_N_FV4202_105>
+				<GB80_Charioteer> 2.9 3 0.07 0.000000 </GB80_Charioteer>
+				<GB14_M2> 2.3 2.3 0.2 0.4 </GB14_M2>
+				<GB12_Conqueror> 1.8 1.8 0.000000 0.000000 </GB12_Conqueror>
+				<GB52_A45> 1 1 0.16 0.74 </GB52_A45>
+				<GB86_Centurion_Action_X> 1.2 1.2 0.000000 0.1 </GB86_Centurion_Action_X>
+				<GB84_Chieftain_Mk6> 1.3 1.3 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.6 2.6 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2.6 2.6 0.000000 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Clan_camuflage_04>
+		<Cracked_ice>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Cracked_ice </description>
+			<id> 116 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 255 255 255 239 </c0>
+				<c1> 255 255 255 0 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 3.3 3.3 0.37 0.67 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 4.2 4.2 0.82 0.72 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 4.4 4.4 0.87 0.58 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 4.2 4.2 0.86 0.53 </GB05_Vickers_Medium_Mk_II>
+				<GB06_Vickers_Medium_Mk_III> 2.3 2.3 0.11 0.47 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I> 2.6 2.6 0.000000 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 2.6 2.6 0.000000 0.000000 </GB09_Churchill_VII>
+				<GB11_Caernarvon> 4 4 0.24 0.18 </GB11_Caernarvon>
+				<GB11_Caernarvon_IGR> 4.6 4.6 0.18 0.08 </GB11_Caernarvon_IGR>
+				<GB12_Conqueror> 2.4 2.4 0.02 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 4.3 4.3 0.25 0.12 </GB13_FV215b>
+				<GB13_FV215b_IGR> 4.7 4.7 0.000000 0.32 </GB13_FV215b_IGR>
+				<GB14_M2> 4.1 4.1 0.12 0.33 </GB14_M2>
+				<GB15_Stuart_I> 3.4 3.4 0.14 0.000000 </GB15_Stuart_I>
+				<GB17_Grant_I> 4.9 4.9 0.36 0.14 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 3.9 3.9 0.2 0.45 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 4.3 4.3 0.34 0.83 </GB20_Crusader>
+				<GB21_Cromwell> 3 3 0.26 0.18 </GB21_Cromwell>
+				<GB21_Cromwell_IGR> 2.9 2.9 0.26 0.16 </GB21_Cromwell_IGR>
+				<GB23_Centurion> 4.9 4.9 0.17 0.74 </GB23_Centurion>
+				<GB23_Centurion_IGR> 5 5 0.16 0.79 </GB23_Centurion_IGR>
+				<GB24_Centurion_Mk3> 4.7 4.7 0.000000 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 3 3 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 4 4 0.23 0.4 </GB26_Birch_Gun>
+				<GB27_Sexton> 4.5 4.5 0.12 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 4.2 4.2 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 5.3 5.3 0.22 0.58 </GB29_Crusader_5inch>
+				<GB30_FV3805> 4.5 4.5 0.14 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 4 4 0.12 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 5 5 0.35 0.23 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 4.9 4.9 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 4.7 4.7 0.000000 0.000000 </GB40_Gun_Carrier_Churchill>
+				<GB41_Challenger> 2.6 2.6 0.4 0.000000 </GB41_Challenger>
+				<GB42_Valentine_AT> 5.3 5.3 0.000000 0.000000 </GB42_Valentine_AT>
+				<GB44_Archer> 3.5 3.5 0.42 0.000000 </GB44_Archer>
+				<GB45_Achilles_IIC> 3 3 0.36 0.32 </GB45_Achilles_IIC>
+				<GB48_FV215b_183> 4.8 4.8 0.42 0.1 </GB48_FV215b_183>
+				<GB50_Sherman_III> 3.4 3.4 0.2 0.16 </GB50_Sherman_III>
+				<GB51_Excelsior> 4.8 4.8 0.76 0.66 </GB51_Excelsior>
+				<GB52_A45> 1.5 1.5 0.66 0.56 </GB52_A45>
+				<GB57_Alecto> 5 5 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 5.2 5.2 0.64 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 4.4 4.4 0.58 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 3 3 0.4 0.3 </GB60_Covenanter>
+				<GB63_TOG_II> 4.4 4.4 0.54 0.14 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 4.8 4.8 0.44 0.44 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 5.1 5.1 0.37 0.33 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 5.1 5.1 0.57 0.45 </GB70_FV4202_105>
+				<GB70_N_FV4202_105> 5.2 5.2 0.08 0.37 </GB70_N_FV4202_105>
+				<GB71_AT_15A> 4.3 4.3 0.69 0.2 </GB71_AT_15A>
+				<GB72_AT15> 4.5 4.5 0.13 0.92 </GB72_AT15>
+				<GB72_AT15_IGR> 4.6 4.6 0.16 0.82 </GB72_AT15_IGR>
+				<GB75_AT7> 4 4 0.08 0.48 </GB75_AT7>
+				<GB76_Mk_VIC> 4.3 4.3 0.71 1 </GB76_Mk_VIC>
+				<GB77_FV304> 4.2 4.2 0.000000 0.000000 </GB77_FV304>
+				<GB77_FV304_IGR> 4.2 4.2 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB78_Sexton_I> 5.1 5.1 0.000000 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 4.7 4.7 0.18 0.12 </GB79_FV206>
+				<GB80_Charioteer> 5.6 5.6 0.61 0.44 </GB80_Charioteer>
+				<GB81_FV4004> 4.7 4.7 0.58 0.38 </GB81_FV4004>
+				<GB83_FV4005> 4.6 4.6 0.21 0.6 </GB83_FV4005>
+				<GB85_Cromwell_Berlin> 1.8 1.8 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 2.6 2.6 0.56 0.19 </GB86_Centurion_Action_X>
+				<GB07_Matilda> 3.2 3.2 0.5 0.14 </GB07_Matilda>
+				<GB10_Black_Prince> 4.2 4.2 0.48 0.11 </GB10_Black_Prince>
+				<GB22_Comet> 2.1 2.1 0.08 0.1 </GB22_Comet>
+				<GB01_Medium_Mark_I_bot> 3.5 3.5 0.37 0.68 </GB01_Medium_Mark_I_bot>
+				<GB05_Vickers_Medium_Mk_II_bot> 4 4 0.86 0.48 </GB05_Vickers_Medium_Mk_II_bot>
+				<GB08_Churchill_I_IGR> 2.7 2.7 0.000000 0.000000 </GB08_Churchill_I_IGR>
+				<GB73_AT2> 3.9 3.9 0.31 0.43 </GB73_AT2>
+				<GB74_AT8> 4.3 4.3 0.3 0.31 </GB74_AT8>
+				<GB84_Chieftain_Mk6> 1.9 1.9 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 3.5 3.5 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 3 3 0.2 0.000000 </GB33_Sentinel_AC_I>
+			</tiling>
+		</Cracked_ice>
+		<summer_camo>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/summer_camo </description>
+			<id> 119 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 98 74 43 255 </c0>
+				<c1> 47 55 40 255 </c1>
+				<c2> 6 34 15 0 </c2>
+				<c3> 201 192 133 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 1.6 1.6 0.000000 0.000000 </GB01_Medium_Mark_I>
+				<GB03_Cruiser_Mk_I> 1.9 1.9 0.18 0.000000 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 1.9 1.9 0.46 0.41 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 2.3 2.3 0.21 0.000000 </GB05_Vickers_Medium_Mk_II>
+				<GB08_Churchill_I> 1.4 1.4 0.2 0.000000 </GB08_Churchill_I>
+				<GB09_Churchill_VII> 1.3 1.3 0.16 0.000000 </GB09_Churchill_VII>
+				<GB11_Caernarvon> 2.1 2.1 0.4 0.000000 </GB11_Caernarvon>
+				<GB12_Conqueror> 1.3 1.3 0.000000 0.000000 </GB12_Conqueror>
+				<GB13_FV215b> 2.6 2.6 0.2 0.000000 </GB13_FV215b>
+				<GB14_M2> 2 2 0.34 0.000000 </GB14_M2>
+				<GB15_Stuart_I> 2 2 0.000000 0.13 </GB15_Stuart_I>
+				<GB17_Grant_I> 2.5 2.5 0.2 0.21 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 2 2 0.44 0.000000 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 2.8 2.8 0.000000 0.000000 </GB20_Crusader>
+				<GB21_Cromwell> 1.6 1.6 0.43 0.000000 </GB21_Cromwell>
+				<GB23_Centurion> 2.4 2.4 0.81 0.000000 </GB23_Centurion>
+				<GB24_Centurion_Mk3> 3 3 0.69 0.000000 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 1.7 1.7 0.000000 0.000000 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 2.3 2.3 0.21 0.000000 </GB26_Birch_Gun>
+				<GB27_Sexton> 3.3 3.3 0.22 0.000000 </GB27_Sexton>
+				<GB28_Bishop> 2.3 2.3 0.000000 0.000000 </GB28_Bishop>
+				<GB29_Crusader_5inch> 3.3 3.3 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB30_FV3805> 2.2 2.2 0.000000 0.000000 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 2.3 2.3 0.000000 0.000000 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 2.3 2.3 0.24 0.000000 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 2.4 2.4 0.000000 0.000000 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 2.9 2.9 0.12 0.18 </GB40_Gun_Carrier_Churchill>
+				<GB41_Challenger> 1.5 1.5 0.11 0.94 </GB41_Challenger>
+				<GB42_Valentine_AT> 2.9 2.9 0.2 0.000000 </GB42_Valentine_AT>
+				<GB44_Archer> 2.3 2.3 0.000000 0.000000 </GB44_Archer>
+				<GB45_Achilles_IIC> 1.6 1.6 0.000000 0.000000 </GB45_Achilles_IIC>
+				<GB48_FV215b_183> 2.3 2.3 0.32 0.22 </GB48_FV215b_183>
+				<GB50_Sherman_III> 1.7 1.7 0.000000 0.000000 </GB50_Sherman_III>
+				<GB51_Excelsior> 2.1 2.1 0.000000 0.12 </GB51_Excelsior>
+				<GB57_Alecto> 2.2 2.2 0.000000 0.000000 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 3.4 3.4 0.28 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 2.7 2.7 0.000000 0.000000 </GB59_Cruiser_Mk_IV>
+				<GB60_Covenanter> 1.2 1.2 0.000000 0.32 </GB60_Covenanter>
+				<GB63_TOG_II> 1.9 1.9 0.3 0.28 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 2.8 2.8 0.000000 0.000000 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 2.6 2.6 0.26 0.000000 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 2.6 2.6 0.000000 0.000000 </GB70_FV4202_105>
+				<GB71_AT_15A> 2.4 2.4 0.33 0.33 </GB71_AT_15A>
+				<GB72_AT15> 2.6 2.6 0.000000 0.000000 </GB72_AT15>
+				<GB75_AT7> 2.1 2.1 0.000000 0.000000 </GB75_AT7>
+				<GB76_Mk_VIC> 2 2 0.000000 0.000000 </GB76_Mk_VIC>
+				<GB77_FV304> 2 2 0.000000 0.000000 </GB77_FV304>
+				<GB78_Sexton_I> 3 3 0.12 0.19 </GB78_Sexton_I>
+				<GB79_FV206> 2.5 2.5 0.000000 0.000000 </GB79_FV206>
+				<GB80_Charioteer> 2.3 2.3 0.000000 0.000000 </GB80_Charioteer>
+				<GB81_FV4004> 2.2 2.2 0.1 0.000000 </GB81_FV4004>
+				<GB83_FV4005> 2.4 2.4 0.13 0.31 </GB83_FV4005>
+				<GB86_Centurion_Action_X> 1.3 1.3 0.08 0.000000 </GB86_Centurion_Action_X>
+				<GB07_Matilda> 1.4 1.4 0.54 0.000000 </GB07_Matilda>
+				<GB10_Black_Prince> 3 3 0.000000 0.000000 </GB10_Black_Prince>
+				<GB70_N_FV4202_105> 2.5 2.5 0.46 0.37 </GB70_N_FV4202_105>
+				<GB22_Comet> 1.7 1.7 0.000000 0.000000 </GB22_Comet>
+				<GB01_Medium_Mark_I_bot> 1.6 1.6 0.000000 0.000000 </GB01_Medium_Mark_I_bot>
+				<GB05_Vickers_Medium_Mk_II_bot> 2.4 2.4 0.14 0.000000 </GB05_Vickers_Medium_Mk_II_bot>
+				<GB06_Vickers_Medium_Mk_III> 1.3 1.3 0.16 0.000000 </GB06_Vickers_Medium_Mk_III>
+				<GB08_Churchill_I_IGR> 1.4 1.4 0.2 0.000000 </GB08_Churchill_I_IGR>
+				<GB11_Caernarvon_IGR> 2.1 2.1 0.38 0.000000 </GB11_Caernarvon_IGR>
+				<GB13_FV215b_IGR> 2.5 2.5 0.21 0.04 </GB13_FV215b_IGR>
+				<GB21_Cromwell_IGR> 2.1 2.1 0.41 0.000000 </GB21_Cromwell_IGR>
+				<GB23_Centurion_IGR> 2.4 2.4 0.84 0.000000 </GB23_Centurion_IGR>
+				<GB52_A45> 1 1 0.000000 0.000000 </GB52_A45>
+				<GB73_AT2> 1.8 1.8 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 1.9 1.9 0.09 0.42 </GB74_AT8>
+				<GB77_FV304_IGR> 2 2 0.000000 0.000000 </GB77_FV304_IGR>
+				<GB72_AT15_IGR> 2.7 2.7 0.000000 0.000000 </GB72_AT15_IGR>
+				<GB84_Chieftain_Mk6> 1.4 1.4 0.000000 0.000000 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 2.3 2.3 0.000000 0.000000 </GB87_Chieftain_T95_turret>
+				<GB33_Sentinel_AC_I> 2 2 0.000000 0.34 </GB33_Sentinel_AC_I>
+			</tiling>
+		</summer_camo>
+		<Desert_camou>
+			<texture> vehicles/german/Camouflage/Desert_camo-05-3.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Desert_camou </description>
+			<id> 123 </id>
+			<group> desert </group>
+			<kind> desert </kind>
+			<colors>
+				<c0> 160 123 78 211 </c0>
+				<c1> 0 0 0 45 </c1>
+				<c2> 255 255 255 0 </c2>
+				<c3> 255 255 255 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<GB01_Medium_Mark_I> 6 6 0.56 0.1 </GB01_Medium_Mark_I>
+				<GB01_Medium_Mark_I_bot> 7.2 7.2 0.58 0.28 </GB01_Medium_Mark_I_bot>
+				<GB03_Cruiser_Mk_I> 7.8 7.8 0.9 0.08 </GB03_Cruiser_Mk_I>
+				<GB04_Valentine> 6.5 7.7 0.74 0.32 </GB04_Valentine>
+				<GB05_Vickers_Medium_Mk_II> 7.2 7.2 0.09 0.48 </GB05_Vickers_Medium_Mk_II>
+				<GB05_Vickers_Medium_Mk_II_bot> 6.8 6.8 0.4 0.000000 </GB05_Vickers_Medium_Mk_II_bot>
+				<GB08_Churchill_I> 4.2 4.2 0.54 1 </GB08_Churchill_I>
+				<GB08_Churchill_I_IGR> 3.8 3.8 0.28 0.000000 </GB08_Churchill_I_IGR>
+				<GB09_Churchill_VII> 3.8 3.8 0.34 0.000000 </GB09_Churchill_VII>
+				<GB11_Caernarvon> 7.6 7.6 0.16 0.4 </GB11_Caernarvon>
+				<GB11_Caernarvon_IGR> 7.2 7.2 0.36 0.4 </GB11_Caernarvon_IGR>
+				<GB12_Conqueror> 4.4 4.4 0.12 0.66 </GB12_Conqueror>
+				<GB13_FV215b> 7 8 0.84 0.8 </GB13_FV215b>
+				<GB13_FV215b_IGR> 7.3 8.6 0.66 0.44 </GB13_FV215b_IGR>
+				<GB14_M2> 7.4 8.4 0.7 0.14 </GB14_M2>
+				<GB15_Stuart_I> 5 5 0.4 0.4 </GB15_Stuart_I>
+				<GB17_Grant_I> 9.6 7.8 0.14 0.32 </GB17_Grant_I>
+				<GB19_Sherman_Firefly> 6 6 0.36 0.22 </GB19_Sherman_Firefly>
+				<GB20_Crusader> 7.6 7.6 0.86 0.2 </GB20_Crusader>
+				<GB21_Cromwell> 5.4 5.4 0.34 0.000000 </GB21_Cromwell>
+				<GB21_Cromwell_IGR> 5.4 5.4 0.3 0.86 </GB21_Cromwell_IGR>
+				<GB23_Centurion> 8.6 8.6 0.29 0.5 </GB23_Centurion>
+				<GB23_Centurion_IGR> 8.6 8.6 0.24 0.86 </GB23_Centurion_IGR>
+				<GB24_Centurion_Mk3> 8.6 7.6 0.36 0.06 </GB24_Centurion_Mk3>
+				<GB25_Loyd_Gun_Carriage> 4.8 4.8 0.28 0.48 </GB25_Loyd_Gun_Carriage>
+				<GB26_Birch_Gun> 7.8 7.8 0.22 0.6 </GB26_Birch_Gun>
+				<GB27_Sexton> 8.4 8.4 0.4 0.44 </GB27_Sexton>
+				<GB28_Bishop> 7.2 7.2 0.69 0.4 </GB28_Bishop>
+				<GB30_FV3805> 7.4 7.4 0.16 0.38 </GB30_FV3805>
+				<GB31_Conqueror_Gun> 6.5 6.5 0.62 0.18 </GB31_Conqueror_Gun>
+				<GB32_Tortoise> 8.5 8.5 0.74 0.94 </GB32_Tortoise>
+				<GB39_Universal_CarrierQF2> 8 8 0.44 0.03 </GB39_Universal_CarrierQF2>
+				<GB40_Gun_Carrier_Churchill> 10 10 0.000000 0.18 </GB40_Gun_Carrier_Churchill>
+				<GB41_Challenger> 4.2 4.2 0.06 0.74 </GB41_Challenger>
+				<GB42_Valentine_AT> 8.2 8.2 0.2 1 </GB42_Valentine_AT>
+				<GB44_Archer> 6 6 0.000000 0.58 </GB44_Archer>
+				<GB45_Achilles_IIC> 5.8 5.8 0.18 0.44 </GB45_Achilles_IIC>
+				<GB48_FV215b_183> 7.2 7.2 0.63 0.28 </GB48_FV215b_183>
+				<GB50_Sherman_III> 5.4 5.4 0.62 0.32 </GB50_Sherman_III>
+				<GB51_Excelsior> 7 7 0.74 0.76 </GB51_Excelsior>
+				<GB52_A45> 3.2 3.2 0.000000 0.000000 </GB52_A45>
+				<GB57_Alecto> 8.2 8.2 0.46 0.48 </GB57_Alecto>
+				<GB58_Cruiser_Mk_III> 9.2 9.2 0.000000 0.000000 </GB58_Cruiser_Mk_III>
+				<GB59_Cruiser_Mk_IV> 6.2 6.2 0.44 0.74 </GB59_Cruiser_Mk_IV>
+				<GB63_TOG_II> 7.6 7.6 0.76 0.5 </GB63_TOG_II>
+				<GB68_Matilda_Black_Prince> 8.4 8.4 0.3 0.3 </GB68_Matilda_Black_Prince>
+				<GB69_Cruiser_Mk_II> 6.6 6.6 0.06 0.84 </GB69_Cruiser_Mk_II>
+				<GB70_FV4202_105> 7.4 7.4 0.4 0.54 </GB70_FV4202_105>
+				<GB70_N_FV4202_105> 8 6.6 0.56 0.42 </GB70_N_FV4202_105>
+				<GB71_AT_15A> 7.2 7.2 0.74 0.12 </GB71_AT_15A>
+				<GB72_AT15_IGR> 6.8 6.8 0.24 0.04 </GB72_AT15_IGR>
+				<GB75_AT7> 6.6 6.6 0.73 0.7 </GB75_AT7>
+				<GB77_FV304> 5.2 5.2 0.4 0.42 </GB77_FV304>
+				<GB77_FV304_IGR> 6.6 6.6 0.6 0.12 </GB77_FV304_IGR>
+				<GB78_Sexton_I> 7.2 7.2 0.48 0.000000 </GB78_Sexton_I>
+				<GB79_FV206> 6.6 6.6 0.5 0.9 </GB79_FV206>
+				<GB80_Charioteer> 6.8 6.8 0.4 0.32 </GB80_Charioteer>
+				<GB81_FV4004> 6.4 6.4 0.6 0.18 </GB81_FV4004>
+				<GB83_FV4005> 5.8 5.8 0.04 0.56 </GB83_FV4005>
+				<GB85_Cromwell_Berlin> 3.4 2.6 0.000000 0.000000 </GB85_Cromwell_Berlin>
+				<GB86_Centurion_Action_X> 4.4 3.2 0.22 0.12 </GB86_Centurion_Action_X>
+				<GB07_Matilda> 5.6 5.6 0.46 0.88 </GB07_Matilda>
+				<GB10_Black_Prince> 6.4 8.4 0.22 0.88 </GB10_Black_Prince>
+				<GB22_Comet> 4 4 0.2 0.06 </GB22_Comet>
+				<GB06_Vickers_Medium_Mk_III> 3.4 3.4 0.47 0.19 </GB06_Vickers_Medium_Mk_III>
+				<GB29_Crusader_5inch> 7.5 7.5 0.000000 0.000000 </GB29_Crusader_5inch>
+				<GB73_AT2> 7.6 7.6 0.000000 0.000000 </GB73_AT2>
+				<GB74_AT8> 7 7 0.000000 0.000000 </GB74_AT8>
+				<GB84_Chieftain_Mk6> 2.8 2.8 0.24 0.07 </GB84_Chieftain_Mk6>
+				<GB87_Chieftain_T95_turret> 5.4 5.4 0.52 0.15 </GB87_Chieftain_T95_turret>
+				<GB60_Covenanter> 2.8 2.8 0.000000 0.000000 </GB60_Covenanter>
+				<GB33_Sentinel_AC_I> 5.4 5.4 0.000000 0.000000 </GB33_Sentinel_AC_I>
+				<GB72_AT15> 6.6 6.6 0.000000 0.000000 </GB72_AT15>
+				<GB76_Mk_VIC> 7.2 3.4 0.000000 0.000000 </GB76_Mk_VIC>
+			</tiling>
+		</Desert_camou>
+	</camouflages>
+</root>

@@ -1,0 +1,37 @@
+<47_canada_a.xml>
+  <name>	#arenas:47_canada_a/name	</name>
+  <description>	#arenas:47_canada_a/description	</description>
+  <geometry>	spaces/47_canada_a	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/47_canada_a/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/America	</loadingMusic>
+  <wwloadingMusic>	music_america	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-126.841339 -305.554016	</position1>
+        </team1>
+        <team2>
+          <position1>	213.172150 328.463013	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</47_canada_a.xml>

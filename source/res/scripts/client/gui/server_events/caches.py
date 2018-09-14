@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/server_events/caches.py
 from collections import namedtuple
+from debug_utils import LOG_ERROR
 from gui import nationCompareByIndex, getNationIndex
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
@@ -37,45 +38,103 @@ def clearVehiclesData():
     _g_sortedVehs.clear()
 
 
-@ReprInjector.simple('tabID', 'potapov', 'common')
+PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM, _QA.SEASON_VIEW_TAB_FALLOUT)
+
+class QuestInfo(object):
+    __slots__ = ('questID',)
+
+    def __init__(self, *args):
+        super(QuestInfo, self).__init__()
+        raise len(args) == len(self.__slots__) or AssertionError
+        for idx, fieldName in enumerate(self.__slots__):
+            object.__setattr__(self, fieldName, args[idx])
+
+    def __setattr__(self, key, value):
+        raise AssertionError
+
+    def update(self, **kwargs):
+        for key, value in kwargs.iteritems():
+            if key in self.__slots__:
+                object.__setattr__(self, key, value)
+            else:
+                LOG_ERROR('Unsupported argument for object:', self, key, value)
+
+        return self
+
+    def clear(self):
+        for field_name in self.__slots__:
+            object.__setattr__(self, field_name, None)
+
+        return
+
+
+class PQInfo(QuestInfo):
+    __slots__ = ('tileID', 'questID', 'filters')
+
+
+@ReprInjector.simple('tabID', 'random', 'falloutQuests', 'common', 'tutorial')
 
 class _NavigationInfo(object):
-    PQInfo = namedtuple('PQInfo', 'tileID questID filters')
-    QuestInfo = namedtuple('CommonInfo', 'questID')
 
     def __init__(self):
         self.tabID = None
-        self.potapov = self.PQInfo(None, None, None)
-        self.common = self.QuestInfo(None)
-        self.tutorial = self.QuestInfo(None)
+        self.random = PQInfo(None, None, None)
+        self.falloutQuests = PQInfo(None, None, None)
+        self.common = QuestInfo(None)
+        self.tutorial = QuestInfo(None)
+        self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
         return
+
+    @property
+    def selectedPQ(self):
+        if self.__selectedPQType == _QA.SEASON_VIEW_TAB_RANDOM:
+            return self.random
+        else:
+            return self.falloutQuests
+
+    @property
+    def selectedPQType(self):
+        return self.__selectedPQType
+
+    def setPQTypeByTabID(self, tabID):
+        if tabID in PQ_TABS:
+            self.__selectedPQType = tabID
+        else:
+            LOG_ERROR('Wrong tabID to set as selected PQ type')
 
     def selectTab(self, tabID, doResetNavInfo = False):
         if doResetNavInfo:
             if tabID == _QA.TAB_PERSONAL_QUESTS:
-                self.potapov = self.__clearCache(self.potapov)
+                self.random.clear()
+                self.falloutQuests.clear()
             else:
-                self.common = self.__clearCache(self.potapov)
+                self.common.clear()
         self.tabID = tabID
 
     def selectPotapovQuest(self, tileID, questID = None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
-        self.potapov = self.potapov._replace(tileID=tileID, questID=questID)
+        self.selectedPQ.update(tileID=tileID, questID=questID)
+
+    def selectRandomQuest(self, tileID, questID = None):
+        self.tabID = _QA.TAB_PERSONAL_QUESTS
+        self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
+        self.random = self.random.update(tileID=tileID, questID=questID)
+
+    def selectFalloutQuest(self, tileID, questID = None):
+        self.tabID = _QA.TAB_PERSONAL_QUESTS
+        self.__selectedPQType = _QA.SEASON_VIEW_TAB_FALLOUT
+        self.falloutQuests = self.falloutQuests.update(tileID=tileID, questID=questID)
 
     def changePQFilters(self, *args):
-        self.potapov = self.potapov._replace(filters=args)
+        self.selectedPQ.update(filters=args)
 
     def selectCommonQuest(self, questID):
         self.tabID = _QA.TAB_COMMON_QUESTS
-        self.common = self.common._replace(questID=questID)
+        self.common = self.common.update(questID=questID)
 
     def selectTutorialQuest(self, questID):
         self.tabID = _QA.TAB_BEGINNER_QUESTS
-        self.tutorial = self.tutorial._replace(questID=questID)
-
-    @classmethod
-    def __clearCache(cls, cacheTuple):
-        return cacheTuple._replace(**dict(map(lambda n: (n, None), cacheTuple._fields)))
+        self.tutorial = self.tutorial.update(questID=questID)
 
 
 _g_navInfo = None

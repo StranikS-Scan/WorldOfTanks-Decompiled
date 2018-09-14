@@ -15,13 +15,17 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
         BaseMessagesController.__init__(self, model)
         app = g_appLoader.getDefLobbyApp()
         isViewAvailable = app.containerManager.isViewAvailable(ViewTypes.LOBBY_SUB)
+        isNowCustomizationLoading = False
         if isViewAvailable:
             view = app.containerManager.getView(ViewTypes.LOBBY_SUB)
             isNowHangarLoading = view.settings.alias == VIEW_ALIAS.LOBBY_HANGAR
+            isNowCustomizationLoading = view.settings.alias == VIEW_ALIAS.LOBBY_CUSTOMIZATION
         else:
             isNowHangarLoading = app.loaderManager.isViewLoading(VIEW_ALIAS.LOBBY_HANGAR)
         if isNowHangarLoading:
             self.__onHangarViewSelected({})
+        elif isNowCustomizationLoading:
+            self.__onCustomizationViewSelected({})
         else:
             self.__onSomeViewSelected({})
         self.addListener(VIEW_ALIAS.LOBBY_HANGAR, self.__onHangarViewSelected, EVENT_BUS_SCOPE.LOBBY)
@@ -31,10 +35,10 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
         self.addListener(VIEW_ALIAS.LOBBY_TECHTREE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_RESEARCH, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.LOBBY_BARRACKS, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.BATTLE_QUEUE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.BATTLE_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.__onCustomizationViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(LobbySimpleEvent.HIDE_HANGAR, self.__onHideHangarHandler)
@@ -49,6 +53,9 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
     def __onHangarViewSelected(self, _ = None):
         self._model.setLayoutSettings(*LAYOUT_PADDING.HANGAR)
 
+    def __onCustomizationViewSelected(self, _ = None):
+        self._model.setLayoutSettings(*LAYOUT_PADDING.CUSTOMIZATION)
+
     def cleanUp(self):
         self.removeListener(VIEW_ALIAS.LOBBY_HANGAR, self.__onHangarViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_INVENTORY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
@@ -57,10 +64,10 @@ class LayoutController(BaseMessagesController, EventSystemEntity):
         self.removeListener(VIEW_ALIAS.LOBBY_TECHTREE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_RESEARCH, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.LOBBY_BARRACKS, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.BATTLE_QUEUE, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.BATTLE_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(VIEW_ALIAS.TUTORIAL_LOADING, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.__onCustomizationViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, self.__onSomeViewSelected, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self.__onHideHangarHandler)

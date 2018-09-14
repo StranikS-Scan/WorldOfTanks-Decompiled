@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/tutorial/doc_loader/__init__.py
 import ResMgr
+from debug_utils import LOG_DEBUG
+from tutorial import settings
 from tutorial.doc_loader import gui_config
 from tutorial.doc_loader.parsers import DescriptorParser, ChapterParser
-from tutorial.settings import GLOBAL_REFS_FILE_PATH
+from tutorial.settings import GLOBAL_REFS_FILE_PATH, TUTORIAL_SETTINGS
 from tutorial.logger import LOG_CURRENT_EXCEPTION
 
 def loadDescriptorData(setting, exParsers = None, clearCache = False):
@@ -13,11 +15,8 @@ def loadDescriptorData(setting, exParsers = None, clearCache = False):
         if clearCache:
             ResMgr.purge(setting.descriptorPath)
         classPath = setting.descriptorParser
-        imported = __import__(classPath.module, globals(), locals(), [classPath.clazz])
-        if not imported:
-            raise ValueError('Can not find class {0.module} in {0.clazz}'.format(classPath))
-        clazz = getattr(imported, classPath.clazz)
-        return clazz().parse(setting.descriptorPath)
+        parser = settings.createTutorialElement(classPath)
+        return parser.parse(setting.descriptorPath)
     except Exception:
         LOG_CURRENT_EXCEPTION()
         return
@@ -28,11 +27,8 @@ def loadDescriptorData(setting, exParsers = None, clearCache = False):
 def loadChapterData(chapter, chapterParser, afterBattle = False, initial = False):
     if chapter is not None and not chapter.isValid():
         try:
-            imported = __import__(chapterParser.module, globals(), locals(), [chapterParser.clazz])
-            if not imported:
-                raise ValueError('Can not find class {0.module} in {0.clazz}'.format(chapterParser))
-            clazz = getattr(imported, chapterParser.clazz)
-            clazz().parse(chapter, afterBattle=afterBattle, initial=initial)
+            parser = settings.createTutorialElement(chapterParser)
+            parser.parse(chapter, afterBattle=afterBattle, initial=initial)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             return
@@ -48,3 +44,13 @@ def clearChapterData(chapter):
     if defPath != abPath:
         ResMgr.purge(abPath)
     chapter.clear()
+
+
+def getQuestsDescriptor():
+    global _questsDescriptor
+    if _questsDescriptor is None:
+        _questsDescriptor = loadDescriptorData(TUTORIAL_SETTINGS.QUESTS)
+    return _questsDescriptor
+
+
+_questsDescriptor = None

@@ -2,17 +2,16 @@
 import BigWorld
 import constants
 import MusicController
-from debug_utils import LOG_DEBUG
 from gui import prb_control, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.game_control import getFalloutCtrl
+from gui.prb_control import prb_getters
+import gui.prb_control.prb_getters
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty, prbDispatcherProperty
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared import events
-from gui.server_events import g_eventsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.server_events.event_items import HistoricalBattle
 from helpers.i18n import makeString
 from PlayerEvents import g_playerEvents
 from gui.prb_control.dispatcher import g_prbLoader
@@ -58,11 +57,24 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         dispatcher = g_prbLoader.getDispatcher()
         queueType = None
         if dispatcher is not None:
-            queueType = dispatcher.getPreQueueFunctional().getQueueType()
+            queueType = dispatcher.getPreQueueFunctional().getEntityType()
             permissions = dispatcher.getUnitFunctional().getPermissions()
             if permissions and not permissions.canExitFromQueue():
                 self.as_showExitS(False)
-        self.as_setTypeS(prb_control.getArenaGUIType(queueType=queueType))
+        postFix = ''
+        if self.__isInEventBattles():
+            queueType = constants.ARENA_GUI_TYPE.EVENT_BATTLES
+            battleType = getFalloutCtrl().getBattleType()
+            if battleType == constants.FALLOUT_BATTLE_TYPE.MULTITEAM:
+                postFix = '/multiteam'
+        guiType = prb_getters.getArenaGUIType(queueType=queueType)
+        title = '#menu:loading/battleTypes/%d%s' % (guiType, postFix)
+        description = '#menu:loading/battleTypes/desc/%d%s' % (guiType, postFix)
+        if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
+            iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
+        else:
+            iconlabel = 'neutral'
+        self.as_setTypeInfoS(iconlabel, title, description)
         return
 
     @preQueueFunctionalProperty
@@ -90,8 +102,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             dispatcher.exitFromQueue()
         return
 
-    def onQueueInfoReceived(self, randomsQueueInfo, companiesQueueInfo, historicalQueueInfo, eventQueueInfo):
-        if prb_control.isCompany():
+    def onQueueInfoReceived(self, randomsQueueInfo, companiesQueueInfo, _, eventQueueInfo):
+        if gui.prb_control.prb_getters.isCompany():
             data = {'title': '#menu:prebattle/typesCompaniesTitle',
              'data': list()}
             self.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'teams', {'count': sum(companiesQueueInfo['divisions'])}))
@@ -103,27 +115,6 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
 
                 self.as_setListByTypeS(data)
             self.as_showStartS(constants.IS_DEVELOPMENT)
-        elif prb_control.isInHistoricalQueue():
-            battleID = self.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID)
-            battleData = historicalQueueInfo[battleID]
-            battle = g_eventsCache.getHistoricalBattles(False)[battleID]
-            teamA = battleData.get(HistoricalBattle.SIDES.A, {})
-            teamB = battleData.get(HistoricalBattle.SIDES.B, {})
-            countA = sum(teamA.get('by_class', {}).values())
-            countB = sum(teamB.get('by_class', {}).values())
-            self.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'twoSides', {'sideA': battle.getSideUserName(HistoricalBattle.SIDES.A),
-             'countA': countA,
-             'sideB': battle.getSideUserName(HistoricalBattle.SIDES.B),
-             'countB': countB}))
-            data = {'title': '#menu:prebattle/typesTitle',
-             'data': []}
-            vClassesData = data['data']
-            for vClass, message in BattleQueue.TYPES_ORDERED:
-                byClassA = teamA.get('by_class', {}).get(vClass, 0)
-                byClassB = teamB.get('by_class', {}).get(vClass, 0)
-                vClassesData.append((message, byClassA + byClassB))
-
-            self.as_setListByTypeS(data)
         elif self.__isInEventBattles():
             info = dict(eventQueueInfo)
             vClasses = info.get('classes', [])
@@ -178,7 +169,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__queueCallback = None
         currPlayer = BigWorld.player()
         if currPlayer is not None and hasattr(currPlayer, 'requestQueueInfo'):
-            if prb_control.isCompany():
+            if gui.prb_control.prb_getters.isCompany():
                 qType = constants.QUEUE_TYPE.COMPANIES
             elif self.__isInEventBattles():
                 qType = constants.QUEUE_TYPE.EVENT_BATTLES
@@ -202,4 +193,4 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             isInFallout = self.prbDispatcher.getFunctionalState().isInFallout()
         else:
             isInFallout = False
-        return prb_control.isInEventBattlesQueue() or isInFallout
+        return prb_getters.isInEventBattlesQueue() or isInFallout

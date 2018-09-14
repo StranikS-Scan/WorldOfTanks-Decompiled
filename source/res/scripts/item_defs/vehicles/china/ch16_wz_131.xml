@@ -1,0 +1,827 @@
+<ch16_wz_131.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <repairCost>	7.29	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/chinese/Ch16_WZ_131/WZ_131_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	35	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	16	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	20	</armor_8>
+      <armor_9>	16	</armor_9>
+      <armor_10>	12.5	</armor_10>
+      <armor_11>	0	</armor_11>
+      <armor_12>	20	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7860	</weight>
+    <maxHealth>	656	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	2.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.531444 0.088507	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.317433 0.273327 2.59557	</rayStart>
+        <rayEnd>	-0.317427 -0.0666476 2.38483	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_Ch16_WZ_131>
+      <userString>	#china_vehicles:Chassis_Ch16_WZ_131	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	9500.0	</price>
+      <unlocks>
+        <chassis>	Chassis_Ch16_WZ_131_2	  <cost>	8300	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5500	</weight>
+      <maxLoad>	21500	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	52	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.215845	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.285962	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.215845	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.285962	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.381678	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.381678	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.18784 1.74815	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.951810 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.642970	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch16_WZ_131>
+    <Chassis_Ch16_WZ_131_2>
+      <userString>	#china_vehicles:Chassis_Ch16_WZ_131_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18500	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5500	</weight>
+      <maxLoad>	24000	</maxLoad>
+      <terrainResistance>	0.6 0.7 1.4	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	54	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.44 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.215845	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.285962	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.215845	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.285962	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.381678	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.381678	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.18784 1.74815	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.968470 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.642970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch16_WZ_131_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ch16_WZ_131>
+      <userString>	#china_vehicles:Turret_1_Ch16_WZ_131	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	7800.0	</price>
+      <armor>
+        <armor_1>	45	</armor_1>
+        <armor_2>	37.5	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	45	</armor_6>
+        <armor_7>	37.5	</armor_7>
+        <armor_8>	30	</armor_8>
+        <armor_9>	20	</armor_9>
+        <armor_10>	20	</armor_10>
+        <armor_11>	12.5	</armor_11>
+        <armor_12>	0	</armor_12>
+        <armor_13>	20	</armor_13>
+        <armor_14>	12.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_14>
+        <armor_15>	20	</armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4750	</weight>
+      <maxHealth>	164	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_54-76TG>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_85mm_Tip_56-85JT	  <cost>	6100	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <clip>
+            <count>	5	</count>
+            <rate>	45	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00561403 -0.0699894 1.3	</rayStart>
+              <rayEnd>	-0.851856 -0.285504 1.25941	</rayEnd>
+              <rayUp>	0.06 0.051 2	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_54-76TG>
+        <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	47	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_Ch16_WZ_131	  <cost>	8900	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	5.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00561401 -0.0699892 1.3	</rayStart>
+              <rayEnd>	-0.822149 -0.283125 1.23686	</rayEnd>
+              <rayUp>	0.089 0.083 2	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_Tip_56-85JT>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.005614 0.316814 1.11001	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.08471 0.283353 0.551683	</rayStart>
+          <rayEnd>	-0.73591 0.181545 0.384438	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.08471 0.283353 0.551683	</rayStart>
+          <rayEnd>	0.73591 0.181545 0.384438	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.21058 0.273732 -0.522787	</rayStart>
+          <rayEnd>	-0.837258 0.16164 -0.432976	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.21058 0.273732 -0.522787	</rayStart>
+          <rayEnd>	0.837258 0.16164 -0.432976	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.011 -0.011 1.050 0.000 0.539 0.211 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.239	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
+    </Turret_1_Ch16_WZ_131>
+    <Turret_2_Ch16_WZ_131>
+      <userString>	#china_vehicles:Turret_2_Ch16_WZ_131	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	23000	</price>
+      <unlocks>
+        <gun>	_85mm_Tip_62-85T	  <cost>	15500	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	45	</armor_1>
+        <armor_2>	40	</armor_2>
+        <armor_3>	35	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	45	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	35	</armor_8>
+        <armor_9>	20	</armor_9>
+        <armor_10>	20	</armor_10>
+        <armor_11>	12.5	</armor_11>
+        <armor_12>	0	</armor_12>
+        <armor_13>	20	</armor_13>
+        <armor_14>	12.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_14>
+        <armor_15>	40	</armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5000	</weight>
+      <maxHealth>	244	</maxHealth>
+      <rotationSpeed>	48	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.023	</invisibilityFactor>
+      <guns>
+        <_76mm_54-76TG>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <clip>
+            <count>	5	</count>
+            <rate>	45	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0239251 0.00708522 1.3	</rayStart>
+              <rayEnd>	-0.864808 -0.243205 1.23573	</rayEnd>
+              <rayUp>	0.062 0.051 2	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.79 0.79 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_54-76TG>
+        <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	47	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0229793 0.00722979 1.3	</rayStart>
+              <rayEnd>	-0.833765 -0.238126 1.24173	</rayEnd>
+              <rayUp>	0.09 0.084 2	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_Tip_56-85JT>
+        <_85mm_Tip_62-85T>	shared	  <maxAmmo>	47	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_85mm_Tip_64-85T	  <cost>	16000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0224383 0.00497398 1.3	</rayStart>
+              <rayEnd>	-0.875668 -0.00927447 1.3567	</rayEnd>
+              <rayUp>	0.082 0.079 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_Tip_62-85T>
+        <_85mm_Tip_64-85T>	shared	  <maxAmmo>	47	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_100mm_59-100T	  <cost>	18000	</cost>
+            </gun>
+            <vehicle>	Ch17_WZ131_1_WZ132	  <cost>	75000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	5.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0230634 0.00705931 1.16204	</rayStart>
+              <rayEnd>	-0.843104 -0.251658 1.16215	</rayEnd>
+              <rayUp>	0.082 0.082 2	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_Tip_64-85T>
+        <_100mm_59-100T>	shared	  <maxAmmo>	43	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.394671 5 0.458333 1 0.541667 1 0.605329 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	8.7	</reloadTime>
+          <aimingTime>	2.7	</aimingTime>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0230211 0.00783644 1.3	</rayStart>
+              <rayEnd>	-0.875555 -0.013342 1.3016	</rayEnd>
+              <rayUp>	0.082 0.079 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_100mm_59-100T>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch16_WZ_131/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch16_WZ_131/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch16_WZ_131/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.252912 1.06411	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.11382 0.283488 0.470343	</rayStart>
+          <rayEnd>	-0.746965 0.187102 0.343348	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.11382 0.283488 0.470343	</rayStart>
+          <rayEnd>	0.746965 0.187102 0.343348	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.22044 0.252364 -0.612431	</rayStart>
+          <rayEnd>	-0.84766 0.169271 -0.493567	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.22044 0.252364 -0.612431	</rayStart>
+          <rayEnd>	0.84766 0.169271 -0.493567	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.011 -0.011 1.050 0.000 0.522 0.289 0.692 0.369 0.611 0.500 0.289 0.500 0.267 0.375 0.239	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	1.06 1.06 0.26 0.71	</tiling>
+      </camouflage>
+    </Turret_2_Ch16_WZ_131>
+  </turrets0>
+  <engines>
+    <_12150L3>	shared	  <unlocks>
+        <engine>	_12150L	  <cost>	16000	</cost>
+        </engine>
+      </unlocks>
+    </_12150L3>
+    <_12150L>	shared	</_12150L>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <A-220_1>	shared	  <unlocks>
+        <radio>	A-220B	  <cost>	9500	</cost>
+        </radio>
+      </unlocks>
+    </A-220_1>
+    <A-220B>	shared	</A-220B>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	china_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.84	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</ch16_wz_131.xml>

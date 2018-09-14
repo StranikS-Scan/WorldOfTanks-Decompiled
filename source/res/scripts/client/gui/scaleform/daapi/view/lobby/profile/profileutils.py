@@ -2,13 +2,325 @@
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.shared.formatters import text_styles
-from gui.shared.utils.functions import getClanRoleString
 from helpers import i18n
 from gui.shared import g_itemsCache
-from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock
+from gui.shared.gui_items.dossier.stats import _MaxVehicleStatsBlock, _FalloutStatsBlock, _VehiclesStatsBlock
 from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.Scaleform.locale.MENU import MENU
-from helpers.i18n import makeString
+
+def _emptyField(targetData, isCurrentUser):
+    return None
+
+
+class _AbstractField(object):
+
+    def __init__(self, label, tooltip):
+        super(_AbstractField, self).__init__()
+        self._label = label
+        self._tooltip = tooltip
+
+    def __call__(self, targetData, isCurrentUser):
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), self._tooltip, self._buildTooltipData(targetData, isCurrentUser))
+
+    def isVisible(self, targetData, isCurrentUser):
+        return True
+
+    def _buildData(self, targetData, isCurrentUser):
+        return None
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        return None
+
+
+class _OnlyAccountField(_AbstractField):
+
+    def isVisible(self, targetData, isCurrentUser):
+        return isinstance(targetData, _VehiclesStatsBlock)
+
+
+class _BattlesCountField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getBattlesCount())
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        lossesCount = targetData.getLossesCount()
+        winsCount = targetData.getWinsCount()
+        drawsCount = targetData.getDrawsCount()
+        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
+        return ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr))
+
+
+class _WinsEfficiencyField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(targetData.getWinsEfficiency()))
+
+
+class _WinsField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getWinsCount())
+
+
+class _SurvivalField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(targetData.getSurvivalEfficiency()))
+
+
+class _HitsField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(targetData.getHitsEfficiency()))
+
+
+class _DamageCoefficientField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        if isinstance(targetData, _FalloutStatsBlock):
+            if not isinstance(targetData, _VehiclesStatsBlock):
+                tooltip += '/vehicle'
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, self._buildTooltipData(targetData, isCurrentUser))
+
+    def _buildData(self, targetData, isCurrentUser):
+        return ProfileUtils.formatEfficiency(targetData.getDamageReceived(), targetData.getDamageEfficiency)
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        damageToolTipData = [BigWorld.wg_getIntegralFormat(targetData.getDamageDealt()), BigWorld.wg_getIntegralFormat(targetData.getDamageReceived())]
+        if isinstance(targetData, _FalloutStatsBlock):
+            if isinstance(targetData, _VehiclesStatsBlock):
+                damageToolTipData.append(BigWorld.wg_getIntegralFormat(targetData.getConsumablesDamageDealt()))
+        return ProfileUtils.createToolTipData(damageToolTipData)
+
+
+class _DestructionCoefficientField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        if isinstance(targetData, _FalloutStatsBlock):
+            if not isinstance(targetData, _VehiclesStatsBlock):
+                tooltip += '/vehicle'
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, self._buildTooltipData(targetData, isCurrentUser))
+
+    def _buildData(self, targetData, isCurrentUser):
+        return ProfileUtils.formatEfficiency(targetData.getDeathsCount(), targetData.getFragsEfficiency)
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        destructionToolTipData = [BigWorld.wg_getIntegralFormat(targetData.getFragsCount()), BigWorld.wg_getIntegralFormat(targetData.getDeathsCount())]
+        if isinstance(targetData, _FalloutStatsBlock):
+            if isinstance(targetData, _VehiclesStatsBlock):
+                destructionToolTipData.append(BigWorld.wg_getIntegralFormat(targetData.getConsumablesFragsCount()))
+        return ProfileUtils.createToolTipData(destructionToolTipData)
+
+
+class _ArmorusingField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        damageBlockedByArmor = targetData.getDamageBlockedByArmor()
+        potentialDamageReceived = targetData.getPotentialDamageReceived()
+        pResDmg = potentialDamageReceived - damageBlockedByArmor
+        return ProfileUtils.formatEfficiency(pResDmg, targetData.getArmorUsingEfficiency)
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        return ProfileUtils.createToolTipData((ProfileUtils.getAvgDamageBlockedValue(targetData),))
+
+
+def _avgExpField(targetData, isCurrentUser):
+    formatedExp = BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgXP()))
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE_SHORT, formatedExp, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT)
+
+
+class _AvgDmgField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        if isinstance(targetData, _FalloutStatsBlock):
+            if not isinstance(targetData, _VehiclesStatsBlock):
+                tooltip += '/vehicle'
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, None)
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage()))
+
+
+class _AvgReceivedDmgField(_AbstractField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageReceived()))
+
+
+def _avgAssignedDmgField(targetData, isCurrentUser):
+    formatedAssignedDmg = ProfileUtils.formatEfficiency(targetData.getBattlesCountVer2(), targetData.getDamageAssistedEfficiency)
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTOTHER, formatedAssignedDmg, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentUser else PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTOTHER)
+
+
+def _avgDetectedField(targetData, isCurrentUser):
+    formatedDetected = BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted()))
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDETECTEDENEMIES, formatedDetected, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDETECTEDENEMIES)
+
+
+class _AvgDestroyedField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        if isinstance(targetData, _FalloutStatsBlock):
+            if not isinstance(targetData, _VehiclesStatsBlock):
+                tooltip += '/vehicle'
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, None)
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags()))
+
+
+def _maxXPField(targetData, isCurrentUser):
+    formatedMaxXP = BigWorld.wg_getIntegralFormat(targetData.getMaxXp())
+    maxXpVehicle = None
+    if isinstance(targetData, _MaxVehicleStatsBlock):
+        maxXpVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, formatedMaxXP, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle))
+
+
+class _MaxDamageField(_AbstractField):
+
+    def __init__(self, label, tooltip, unavailableTooltip):
+        super(_MaxDamageField, self).__init__(label, tooltip)
+        self._unavailableTooltip = unavailableTooltip
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._unavailableTooltip
+        tooltipData = None
+        if targetData.getBattlesCountVer3() > 0:
+            tooltip = self._tooltip
+            if isinstance(targetData, _MaxVehicleStatsBlock):
+                tooltipData = self._buildTooltipData(targetData, isCurrentUser)
+            elif isinstance(targetData, _FalloutStatsBlock):
+                if not isinstance(targetData, _VehiclesStatsBlock):
+                    tooltip = self._tooltip + '/vehicle'
+            else:
+                tooltipData = ProfileUtils.createToolTipData(None)
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
+
+    def _buildData(self, targetData, isCurrentUser):
+        if targetData.getBattlesCountVer3() > 0:
+            return BigWorld.wg_getIntegralFormat(targetData.getMaxDamage())
+        return ProfileUtils.UNAVAILABLE_VALUE
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxDamageVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxDamageVehicle)
+
+
+class _MaxDestroyedField(_AbstractField):
+
+    def __call__(self, targetData, isCurrentUser):
+        tooltip = self._tooltip
+        tooltipData = None
+        if isinstance(targetData, _MaxVehicleStatsBlock):
+            tooltipData = self._buildTooltipData(targetData, isCurrentUser)
+        elif isinstance(targetData, _FalloutStatsBlock):
+            if not isinstance(targetData, _VehiclesStatsBlock):
+                tooltip = self._tooltip + '/vehicle'
+        else:
+            tooltipData = ProfileUtils.createToolTipData(None)
+        return DetailedStatisticsUtils.getDetailedDataObject(self._label, self._buildData(targetData, isCurrentUser), tooltip, tooltipData)
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getMaxFrags())
+
+    def _buildTooltipData(self, targetData, isCurrentUser):
+        maxFragsVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
+        return ProfileUtils.getRecordTooltipDataByVehicle(maxFragsVehicle)
+
+
+class _CapturePointsField(_OnlyAccountField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getCapturePoints())
+
+
+class _DroppedPointsField(_OnlyAccountField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getDroppedCapturePoints())
+
+
+class _TotalVehiclesField(_OnlyAccountField):
+
+    def _buildData(self, targetData, isCurrentUser):
+        return BigWorld.wg_getIntegralFormat(targetData.getTotalVehicles())
+
+
+def _totalVehiclesField(targetData, isCurrentUser):
+    formattedVehicles = BigWorld.wg_getIntegralFormat(targetData.getTotalVehicles())
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_TOTALVEHS, formattedVehicles, PROFILE.PROFILE_PARAMS_TOOLTIP_TOTALVEHS)
+
+
+def _flagsDeliveredField(targetData, isCurrentUser):
+    formattedDelivered = BigWorld.wg_getIntegralFormat(targetData.getFlagsDelivered())
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FLAGSDELIVERED, formattedDelivered, PROFILE.PROFILE_PARAMS_TOOLTIP_FLAGSDELIVERED)
+
+
+def _flagsAbsorbedField(targetData, isCurrentUser):
+    formattedAbsorbed = BigWorld.wg_getIntegralFormat(targetData.getFlagsAbsorbed())
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FLAGSABSORBED, formattedAbsorbed, PROFILE.PROFILE_PARAMS_TOOLTIP_FLAGSABSORBED)
+
+
+def _maxWinPointsField(targetData, isCurrentUser):
+    formatedMaxWP = BigWorld.wg_getIntegralFormat(targetData.getMaxVictoryPoints())
+    return DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXVICTORYPOINTS, formatedMaxWP, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXVICTORYPOINTS)
+
+
+COMMON_SECTION_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
+ _WinsEfficiencyField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS),
+ _SurvivalField(PROFILE.SECTION_STATISTICS_SCORES_SURVIVAL, PROFILE.PROFILE_PARAMS_TOOLTIP_SURVIVAL),
+ _HitsField(PROFILE.SECTION_STATISTICS_SCORES_HITS, PROFILE.PROFILE_PARAMS_TOOLTIP_HITS),
+ _emptyField,
+ _DamageCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF),
+ _DestructionCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DESTROYCOEFF),
+ _ArmorusingField(PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, PROFILE.PROFILE_PARAMS_TOOLTIP_ARMORUSING),
+ _CapturePointsField(PROFILE.SECTION_STATISTICS_SCORES_CAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS),
+ _DroppedPointsField(PROFILE.SECTION_STATISTICS_SCORES_DROPPEDCAPTUREPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS))
+COMMON_SECTION_FORT_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT),
+ _WinsEfficiencyField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS),
+ _SurvivalField(PROFILE.SECTION_STATISTICS_SCORES_SURVIVAL, PROFILE.PROFILE_PARAMS_TOOLTIP_SURVIVAL),
+ _HitsField(PROFILE.SECTION_STATISTICS_SCORES_HITS, PROFILE.PROFILE_PARAMS_TOOLTIP_HITS),
+ _emptyField,
+ _DamageCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF),
+ _DestructionCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DESTROYCOEFF),
+ _ArmorusingField(PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, PROFILE.PROFILE_PARAMS_TOOLTIP_ARMORUSING))
+COMMON_SECTION_FALLOUT_FIELDS = (_BattlesCountField(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_BATTLESCOUNT),
+ _WinsField(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_WINS),
+ _HitsField(PROFILE.SECTION_STATISTICS_SCORES_HITS, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_HITS),
+ _DamageCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_DAMAGECOEFF),
+ _DestructionCoefficientField(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_DESTROYCOEFF),
+ _ArmorusingField(PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_ARMORUSING),
+ _TotalVehiclesField(PROFILE.SECTION_STATISTICS_SCORES_TOTALVEHS, PROFILE.PROFILE_PARAMS_TOOLTIP_TOTALVEHS),
+ _emptyField,
+ _flagsDeliveredField,
+ _flagsAbsorbedField)
+AVERAGE_SECTION_FIELDS = (_avgExpField,
+ _emptyField,
+ _AvgDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDMG_SHORT),
+ _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
+ _avgAssignedDmgField,
+ _emptyField,
+ _avgDetectedField,
+ _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES))
+AVERAGE_SECTION_FALLOUT_FIELDS = (_avgExpField,
+ _emptyField,
+ _AvgDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDMG_SHORT),
+ _AvgReceivedDmgField(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGRECEIVEDDAMAGE),
+ _emptyField,
+ _AvgDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDESTROYEDVEHICLES))
+RECORD_SECTION_FIELDS = (_maxXPField, _MaxDamageField(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE), _MaxDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED))
+RECORD_SECTION_FALLOUT_FIELDS = (_maxXPField,
+ _MaxDamageField(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE),
+ _MaxDestroyedField(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, PROFILE.PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED),
+ _maxWinPointsField)
+STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, COMMON_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, AVERAGE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, RECORD_SECTION_FIELDS))
+FORT_STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, COMMON_SECTION_FORT_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, AVERAGE_SECTION_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, RECORD_SECTION_FIELDS))
+FALLOUT_STATISTICS_LAYOUT = ((PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, COMMON_SECTION_FALLOUT_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, AVERAGE_SECTION_FALLOUT_FIELDS), (PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, RECORD_SECTION_FALLOUT_FIELDS))
 
 class HeaderItemsTypes(object):
     VALUE_PREFIX = 'value_'
@@ -20,6 +332,7 @@ class HeaderItemsTypes(object):
 class ProfileUtils(object):
     UNAVAILABLE_VALUE = -1
     UNAVAILABLE_SYMBOL = '--'
+    PERCENT_SYMBOL = '%'
     VIEW_TYPE_TABLES = 0
     VIEW_TYPE_CHARTS = 1
     VIEW_TYPE_TABLE = 2
@@ -72,6 +385,13 @@ class ProfileUtils(object):
             return ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
+    def getEfficiencyPercent(dividend, delimiter):
+        if delimiter != 0:
+            return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL
+        else:
+            return ProfileUtils.UNAVAILABLE_VALUE
+
+    @staticmethod
     def packLditItemData(text, description, tooltip, icon, tooltipData = None):
         finalText = text
         enabled = True
@@ -91,10 +411,6 @@ class ProfileUtils(object):
             return targetValue
         else:
             return ProfileUtils.UNAVAILABLE_VALUE
-
-    @staticmethod
-    def getDrawCount(battlesCount, lossesCount, winsCount):
-        return battlesCount - (winsCount + lossesCount)
 
     @staticmethod
     def getLabelDataObject(label, data):
@@ -136,9 +452,9 @@ class ProfileUtils(object):
         battlesCount = targetData.getBattlesCount()
         lossesCount = targetData.getLossesCount()
         winsCount = targetData.getWinsCount()
-        drawsCount = ProfileUtils.getDrawCount(battlesCount, lossesCount, winsCount)
+        drawsCount = targetData.getDrawsCount()
         drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
-        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr]
+        battlesToolTipData = (BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr)
         return ProfileUtils.packLditItemData(BigWorld.wg_getIntegralFormat(battlesCount), description, tooltip, 'battles40x32.png', ProfileUtils.createToolTipData(battlesToolTipData))
 
     @staticmethod
@@ -174,58 +490,17 @@ class DetailedStatisticsUtils(object):
         return dataObject
 
     @staticmethod
-    def getStatistics(targetData, isCurrentuser):
-        battlesCount = targetData.getBattlesCount()
-        lossesCount = targetData.getLossesCount()
-        winsCount = targetData.getWinsCount()
-        drawsCount = battlesCount - (winsCount + lossesCount)
-        drawsStr = BigWorld.wg_getIntegralFormat(drawsCount) if drawsCount >= 0 else ProfileUtils.UNAVAILABLE_SYMBOL
-        battlesToolTipData = [BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount), drawsStr]
-        formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
-        winsEfficiency = targetData.getWinsEfficiency()
-        formattedWinsEfficiency = ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(winsEfficiency))
-        dmgDealt = targetData.getDamageDealt()
-        dmgReceived = targetData.getDamageReceived()
-        damageBlockedByArmor = targetData.getDamageBlockedByArmor()
-        potentialDamageReceived = targetData.getPotentialDamageReceived()
-        pResDmg = potentialDamageReceived - damageBlockedByArmor
-        avgXP = ProfileUtils.getValueOrUnavailable(targetData.getAvgXP())
-        avgDmg = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
-        maxXP = targetData.getMaxXp()
-        maxXP_formattedStr = BigWorld.wg_getIntegralFormat(maxXP)
-        maxXpVehicle = None
-        maxDamageVehicle = None
-        maxFragsVehicle = None
-        if isinstance(targetData, _MaxVehicleStatsBlock):
-            maxXpVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
-            maxDamageVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxDamageVehicle())
-            maxFragsVehicle = g_itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())
-        maxExpToolTipData = ProfileUtils.getRecordTooltipDataByVehicle(maxXpVehicle)
-        maxDestroyedToolTipData = ProfileUtils.getRecordTooltipDataByVehicle(maxFragsVehicle)
-        maxDmg = targetData.getMaxDamage()
-        maxDamageToolTipData = None
-        if targetData.getBattlesCountVer3() > 0:
-            maxDmg_formattedStr = BigWorld.wg_getIntegralFormat(maxDmg)
-            maxDamageToolTipData = ProfileUtils.getRecordTooltipDataByVehicle(maxDamageVehicle)
-            maxDamageTooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDAMAGE
-        else:
-            maxDmg_formattedStr = ProfileUtils.UNAVAILABLE_VALUE
-            maxDamageTooltip = PROFILE.PROFILE_PARAMS_TOOLTIP_UNAVAILABLEMAXDAMAGE
-        return (ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_COMMON, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT, ProfileUtils.createToolTipData(battlesToolTipData)),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, formattedWinsEfficiency, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_SURVIVAL, ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(targetData.getSurvivalEfficiency())), PROFILE.PROFILE_PARAMS_TOOLTIP_SURVIVAL),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_HITS, ProfileUtils.formatFloatPercent(ProfileUtils.getValueOrUnavailable(targetData.getHitsEfficiency())), PROFILE.PROFILE_PARAMS_TOOLTIP_HITS),
-          None,
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_DAMAGECOEFFICIENT, ProfileUtils.formatEfficiency(dmgReceived, targetData.getDamageEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_DAMAGECOEFF, ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(dmgDealt), BigWorld.wg_getIntegralFormat(dmgReceived)))),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT, ProfileUtils.formatEfficiency(targetData.getDeathsCount(), targetData.getFragsEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_DESTROYCOEFF, ProfileUtils.createToolTipData((BigWorld.wg_getIntegralFormat(targetData.getFragsCount()), BigWorld.wg_getIntegralFormat(targetData.getDeathsCount())))),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_ARMORUSING, ProfileUtils.formatEfficiency(pResDmg, targetData.getArmorUsingEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_ARMORUSING, ProfileUtils.createToolTipData([ProfileUtils.getAvgDamageBlockedValue(targetData)]))]), ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_AVERAGE, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE_SHORT, BigWorld.wg_getIntegralFormat(avgXP), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT),
-          None,
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDAMAGE, BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDMG_SHORT),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGRECEIVEDDAMAGE, BigWorld.wg_getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgDamageReceived())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentuser else PROFILE.SECTION_STATISTICS_SCORES_AVGASSISTEDDAMAGE_SHORTOTHER, ProfileUtils.formatEfficiency(targetData.getBattlesCountVer2(), targetData.getDamageAssistedEfficiency), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTSELF if isCurrentuser else PROFILE.PROFILE_PARAMS_TOOLTIP_AVGASSISTEDDAMAGE_SHORTOTHER),
-          None,
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDETECTEDENEMIES, BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDETECTEDENEMIES),
-          DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_AVGDESTROYEDVEHICLES, BigWorld.wg_getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDESTROYEDVEHICLES)]), ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RECORD, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, maxXP_formattedStr, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, maxExpToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_MAXDAMAGE, maxDmg_formattedStr, maxDamageTooltip, maxDamageToolTipData), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_DETAILED_MAXDESTROYEDVEHICLES, BigWorld.wg_getIntegralFormat(targetData.getMaxFrags()), PROFILE.PROFILE_PARAMS_TOOLTIP_MAXDESTROYED, maxDestroyedToolTipData)]))
+    def getStatistics(targetData, isCurrentUser, layout):
+        result = []
+        for section, fields in layout:
+            sectionFields = []
+            for field in fields:
+                if not isinstance(field, _AbstractField) or field.isVisible(targetData, isCurrentUser):
+                    sectionFields.append(field(targetData, isCurrentUser))
+
+            result.append(ProfileUtils.getLabelDataObject(section, sectionFields))
+
+        return result
 
 
 def getProfileCommonInfo(userName, dossier):

@@ -4,6 +4,7 @@ import math
 import BigWorld
 from Math import Vector3, Vector2, Matrix
 from debug_utils import *
+from constants import IS_DEVELOPMENT
 
 class ModelHitTester(object):
     bbox = None
@@ -51,6 +52,11 @@ class ModelHitTester(object):
 
     def localHitTest(self, start, stop):
         return self.__bspModel.collideSegment(start, stop)
+
+    def localHitTestFull_debug(self, start, stop):
+        raise IS_DEVELOPMENT or AssertionError
+        LOG_DEBUG('localHitTestFull_debug', self.bspModelName, start, stop)
+        return self.__bspModel.collideSegmentFull_debug(start, stop)
 
     def worldHitTest(self, start, stop, worldMatrix):
         worldToLocal = Matrix(worldMatrix)

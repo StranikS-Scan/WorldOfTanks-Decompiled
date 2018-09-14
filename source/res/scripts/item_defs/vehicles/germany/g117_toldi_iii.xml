@@ -1,0 +1,450 @@
+<g117_toldi_iii.xml>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	35	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	13	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	6	</armor_5>
+      <armor_6>	6	</armor_6>
+      <armor_7>	35	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	</armor_9>
+      <armor_10>	6	</armor_10>
+      <armor_11>	35	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3938	</weight>
+    <maxHealth>	184	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 32.00 0.38 1.00 0.06 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 32.00 0.38 1.00 0.06 0.34	</rollParams>
+      <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000437 0.411415 0.516828	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G117_Toldi_III/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.300218 0.0558851 2.26041	</rayStart>
+        <rayEnd>	0.300218 -0.116356 2.15875	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.349364 0.0553981 2.26124	</rayStart>
+        <rayEnd>	-0.349364 -0.116843 2.15958	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.509	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	0.937657 0.293105 0.998686	</rayStart>
+        <rayEnd>	0.745671 0.249325 0.963687	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.48	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	4 4 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G117_Toldi_III>	.	  <userString>	#germany_vehicles:Chassis_G117_Toldi_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	12000	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.7	</terrainResistance>
+      <brakeForce>	9500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	45	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.32 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.386506	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.15	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.298684	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R4	</name>
+          <radius>	0.316436	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.386506	</radius>
+          <syncAngle>	12.8571	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.15	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.298684	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L4	</name>
+          <radius>	0.316436	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.074	</minOffset>
+          <maxOffset>	0.0971897	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.074	</minOffset>
+          <maxOffset>	0.097	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G117_Toldi_III/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G117_Toldi_III/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G117_Toldi_III/track/left.track	</left>
+        <right>	vehicles/german/G117_Toldi_III/track/right.track	</right>
+        <segmentLength>	0.077	</segmentLength>
+        <segmentOffset>	0.104	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0128	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.04	</maxAmplitude>
+        <maxOffset>	0.04	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1114	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.159	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.91	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.99	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.159	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.04	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.025	</offset>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.877632 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G117_Toldi_III/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.876401 1.54221	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.872810 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.988272 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.967980	</row2>
+            <row3>	0.000000 0.000000 -0.000006	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_G117_Toldi_III>
+  </chassis>
+  <turrets0>
+    <Turret_1_G117_Toldi_III>
+      <guns>
+        <_40mm_37_42_M_L45_A>	shared	  <maxAmmo>	87	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	3.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G117_Toldi_III/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <camouflage>
+            <tiling>	0.865 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_40mm_37_42_M_L45_A>
+      </guns>
+      <userString>	#germany_vehicles:Turret_1_G117_Toldi_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <notInShop>	true	</notInShop>
+      <yawLimits>	-180 180	</yawLimits>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	25	</armor_2>
+        <armor_3>	25	</armor_3>
+        <armor_4>	25	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	13	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	13	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	13	</armor_11>
+        <armor_12>	35	</armor_12>
+      </armor>
+      <primaryArmor>	armor_12 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	46	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <models>
+        <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G117_Toldi_III/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G117_Toldi_III/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.088187 0.322202 0.576575	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.642574 0.378563 -0.295488	</rayStart>
+          <rayEnd>	-0.45365 0.325158 -0.257324	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.642574 0.378563 -0.295488	</rayStart>
+          <rayEnd>	0.45365 0.325158 -0.257324	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	0.913 0.051 0.964 0.000 0.492 0.175 0.741 0.595 0.252 0.500 0.275 0.500 0.000 0.500 0.000	</physicsShape>
+      <camouflage>
+        <tiling>	2.8 1.66 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_G117_Toldi_III>
+  </turrets0>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	45	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	2.5	</repairCost>
+  <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <engines>
+    <Ganz_VIII_VGT_107>	shared	</Ganz_VIII_VGT_107>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <R_5a>	shared	</R_5a>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g117_toldi_iii.xml>

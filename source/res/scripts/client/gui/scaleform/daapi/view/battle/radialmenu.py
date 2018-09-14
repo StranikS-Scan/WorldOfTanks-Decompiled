@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/RadialMenu.py
+from weakref import proxy
 import BigWorld
 import Keys
 import GUI
@@ -8,16 +9,17 @@ from gui.shared.events import GameEvent
 from helpers import isPlayerAvatar
 from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from debug_utils import LOG_ERROR
-from weakref import proxy
 from gui.Scaleform.windows import UIInterface
 import CommandMapping
+import FMOD
 
 class RadialMenu(UIInterface):
     DEFAULT_CUT = 'default'
     ALLY_CUT = 'ally'
     ENEMY_CUT = 'enemy'
     ENEMY_SPG_CUT = 'enemy_spg'
-    SELECT_EFFECT_SND = 'effects.select_radial_button'
+    if FMOD.enabled:
+        SELECT_EFFECT_SND = 'effects.select_radial_button'
     INDEX_REFERENCES = (2, 1, 5, 4, 0, 3)
     ALL_SHORTCUTS = {DEFAULT_CUT: {'labels': ['attack',
                               'backToBase',
@@ -214,7 +216,8 @@ class RadialMenu(UIInterface):
         if self.__currentTarget is not None and isinstance(self.__currentTarget, Vehicle.Vehicle):
             if self.__currentTarget.isAlive():
                 if player is not None and isPlayerAvatar():
-                    return True
+                    vInfo = g_sessionProvider.getArenaDP().getVehicleInfo(self.__currentTarget.id)
+                    return not vInfo.isActionsDisabled()
         return False
 
     def __getCurrentVehicleDesc(self):
@@ -229,6 +232,7 @@ class RadialMenu(UIInterface):
         return getScaleformKey(fireKey)
 
     def __playSound(self, soundName):
+        print 'radial', soundName
         if self.uiHolder.soundManager is not None:
             self.uiHolder.soundManager.playSound(soundName)
         return

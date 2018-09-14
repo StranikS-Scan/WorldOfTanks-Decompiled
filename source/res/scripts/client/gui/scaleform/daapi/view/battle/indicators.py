@@ -47,7 +47,7 @@ class _DamageIndicator(Flash, IHitIndicator):
         self.component.invoke(name, ('show', [isDamage, timeLeft * _DAMAGE_INDICATOR_FRAME_RATE]))
 
     def hideHitDirection(self, idx):
-        self.component.invoke(_DAMAGE_INDICATOR_MC_NAME.format(idx), ('hide', []))
+        self.component.invoke(_DAMAGE_INDICATOR_MC_NAME.format(idx), ('hide',))
 
 
 class IndicatorsCollection(object):

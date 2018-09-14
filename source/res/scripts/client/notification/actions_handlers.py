@@ -2,16 +2,20 @@
 from collections import defaultdict
 import BigWorld
 from adisp import process
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages, game_control
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.clans import contexts as clan_ctxs
+from gui.clans.clan_controller import g_clanCtrl
+from gui.clans.settings import showAcceptClanInviteDialog
 from gui.clubs import contexts as club_ctx, events_dispatcher as club_events
 from gui.clubs.club_helpers import ClubListener
-from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.prb_control import getBattleID
+from gui.prb_control.prb_getters import getBattleID
 from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
-from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
-from gui.shared.utils.requesters import DeprecatedStatsRequester
+from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events, event_dispatcher
+from gui.shared.gui_items.processors.common import BattleResultsGetter
 from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
 from gui.wgnc import g_wgncProvider
 from messenger.m_constants import PROTO_TYPE
@@ -19,6 +23,7 @@ from messenger.proto import proto_getter
 from notification.tutorial_helper import TutorialGlobalStorage, TUTORIAL_GLOBAL_VAR
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from predefined_hosts import g_preDefinedHosts
+from gui.shared.utils import decorators
 
 class _ActionHandler(object):
 
@@ -78,6 +83,183 @@ class _ShowArenaResultHandler(_ActionHandler):
         BigWorld.callback(0.0, showMessage)
 
 
+class _ShowClanSettingsHandler(_ActionHandler):
+
+    @classmethod
+    def getActions(self):
+        return ('showClanSettingsAction',)
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowClanSettingsHandler, self).handleAction(model, entityID, action)
+        LOG_DEBUG('_ShowClanSettingsHandler handleAction:')
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False}), EVENT_BUS_SCOPE.LOBBY)
+
+
+class _ShowClanSettingsFromAppsHandler(_ShowClanSettingsHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_APPS
+
+
+class _ShowClanSettingsFromInvitesHandler(_ShowClanSettingsHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_INVITES
+
+
+class _ShowClanAppsHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_APPS
+
+    @classmethod
+    def getActions(self):
+        return ('showClanStaffProfile',)
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowClanAppsHandler, self).handleAction(model, entityID, action)
+        return event_dispatcher.showClanInvitesWindow()
+
+
+class _ShowClanInvitesHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_INVITES
+
+    @classmethod
+    def getActions(self):
+        return ('showClanPersonalInvites',)
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowClanInvitesHandler, self).handleAction(model, entityID, action)
+        g_eventBus.handleEvent(events.LoadViewEvent(CLANS_ALIASES.CLAN_PERSONAL_INVITES_WINDOW_PY), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+class _ClanAppHandler(_ActionHandler):
+
+    def _getAccountID(self, model, entityID):
+        return model.getNotification(self.getNotType(), entityID).getAccountID()
+
+    def _getApplicationID(self, model, entityID):
+        return model.getNotification(self.getNotType(), entityID).getApplicationID()
+
+
+class _AcceptClanAppHandler(_ClanAppHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_APP
+
+    @classmethod
+    def getActions(self):
+        return ('acceptClanAppAction',)
+
+    @process
+    def handleAction(self, model, entityID, action):
+        super(_AcceptClanAppHandler, self).handleAction(model, entityID, action)
+        yield g_clanCtrl.sendRequest(clan_ctxs.AcceptApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
+
+
+class _DeclineClanAppHandler(_ClanAppHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_APP
+
+    @classmethod
+    def getActions(self):
+        return ('declineClanAppAction',)
+
+    @process
+    def handleAction(self, model, entityID, action):
+        super(_DeclineClanAppHandler, self).handleAction(model, entityID, action)
+        yield g_clanCtrl.sendRequest(clan_ctxs.DeclineApplicationCtx(self._getApplicationID(model, entityID)), allowDelay=True)
+
+
+class _ShowClanAppUserInfoHandler(_ClanAppHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_APP
+
+    @classmethod
+    def getActions(self):
+        return ('showUserProfileAction',)
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowClanAppUserInfoHandler, self).handleAction(model, entityID, action)
+        accID = self._getAccountID(model, entityID)
+
+        def onDossierReceived(databaseID, userName):
+            event_dispatcher.showProfileWindow(databaseID, userName)
+
+        event_dispatcher.requestProfile(accID, model.getNotification(self.getNotType(), entityID).getUserName(), successCallback=onDossierReceived)
+        return None
+
+
+class _ClanInviteHandler(_ActionHandler):
+
+    def __init__(self):
+        super(_ClanInviteHandler, self).__init__()
+
+    def _getInviteID(self, model, entityID):
+        return model.getNotification(self.getNotType(), entityID).getInviteID()
+
+
+class _AcceptClanInviteHandler(_ClanInviteHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_INVITE
+
+    @classmethod
+    def getActions(self):
+        return ('acceptClanInviteAction',)
+
+    @process
+    def handleAction(self, model, entityID, action):
+        super(_AcceptClanInviteHandler, self).handleAction(model, entityID, action)
+        entity = model.getNotification(self.getNotType(), entityID).getEntity()
+        result = yield showAcceptClanInviteDialog(entity.getClanName(), entity.getClanTag())
+        if result:
+            yield g_clanCtrl.sendRequest(clan_ctxs.AcceptInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
+
+
+class _DeclineClanInviteHandler(_ClanInviteHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_INVITE
+
+    @classmethod
+    def getActions(self):
+        return ('declineClanInviteAction',)
+
+    @process
+    def handleAction(self, model, entityID, action):
+        super(_DeclineClanInviteHandler, self).handleAction(model, entityID, action)
+        yield g_clanCtrl.sendRequest(clan_ctxs.DeclineInviteCtx(self._getInviteID(model, entityID)), allowDelay=True)
+
+
+class _ShowClanProfileHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.CLAN_INVITE
+
+    @classmethod
+    def getActions(self):
+        return ('showClanProfileAction',)
+
+    def handleAction(self, model, entityID, action):
+        super(_ShowClanProfileHandler, self).handleAction(model, entityID, action)
+        shared_events.showClanProfileWindow(model.getNotification(self.getNotType(), entityID).getClanID())
+
+
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
 
     def _updateNotification(self, notification):
@@ -88,14 +270,12 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
     def getActions(self):
         return ('showBattleResults',)
 
-    @process
+    @decorators.process('loadStats')
     def _showWindow(self, notification, arenaUniqueID):
         arenaUniqueID = long(arenaUniqueID)
-        Waiting.show('loadStats')
-        results = yield DeprecatedStatsRequester().getBattleResults(long(arenaUniqueID))
-        Waiting.hide('loadStats')
-        if results:
-            shared_events.showBattleResultsFromData(results)
+        results = yield BattleResultsGetter(arenaUniqueID).request()
+        if results.success:
+            shared_events.showBattleResultsFromData(results.auxData)
         else:
             self._updateNotification(notification)
 
@@ -420,7 +600,17 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  AcceptClubInviteHandler,
  DeclineClubInviteHandler,
  ShowClubInviteHandler,
- ShowClubAppsHandler)
+ ShowClubAppsHandler,
+ _ShowClanAppsHandler,
+ _ShowClanInvitesHandler,
+ _AcceptClanAppHandler,
+ _DeclineClanAppHandler,
+ _ShowClanAppUserInfoHandler,
+ _ShowClanProfileHandler,
+ _ShowClanSettingsFromAppsHandler,
+ _ShowClanSettingsFromInvitesHandler,
+ _AcceptClanInviteHandler,
+ _DeclineClanInviteHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

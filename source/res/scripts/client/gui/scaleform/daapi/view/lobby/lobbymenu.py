@@ -16,7 +16,7 @@ class LobbyMenu(LobbyMenuMeta):
         self.destroy()
 
     def settingsClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False}))
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False}), EVENT_BUS_SCOPE.LOBBY)
 
     def onWindowClose(self):
         self.destroy()

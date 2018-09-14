@@ -1,31 +1,30 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
-from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
+from gui import makeHtmlString
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.game_control import getFalloutCtrl
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH
-from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import events, g_itemsCache
-from gui.server_events import g_eventsCache
+from gui.shared import g_itemsCache
 from gui.shared.events import LobbySimpleEvent, LoadViewEvent
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
 from items import ITEM_TYPE_NAMES
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared import event_dispatcher as shared_events
 
-class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
+class AmmunitionPanel(AmmunitionPanelMeta):
     __FITTING_SLOTS = (GUI_ITEM_TYPE_NAMES[2],
      GUI_ITEM_TYPE_NAMES[3],
      GUI_ITEM_TYPE_NAMES[4],
@@ -37,30 +36,37 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
-        self.startGlobalListening()
+        g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
+        self.__falloutCtrl = getFalloutCtrl()
+        self.__falloutCtrl.onSettingsChanged += self._updateFalloutSettings
         self.update()
 
     def _dispose(self):
-        self.stopGlobalListening()
+        self.__falloutCtrl.onSettingsChanged -= self._updateFalloutSettings
+        self.__falloutCtrl = None
+        g_clientUpdateManager.removeObjectCallbacks(self)
         super(AmmunitionPanel, self)._dispose()
+        return
+
+    def _updateFalloutSettings(self):
+        self._update()
 
     def update(self):
-        self._update(*self._getHistoricalBattleData())
+        self._update()
 
-    def _update(self, modulesData = None, shellsData = None, historicalBattleID = -1):
+    def _update(self, modulesData = None, shellsData = None):
         if g_currentVehicle.isPresent():
-            self.as_setHistoricalBattleS(historicalBattleID)
-            self.as_setModulesEnabledS(historicalBattleID == -1)
-            self.__updateAmmo(shellsData, historicalBattleID)
+            self.as_setModulesEnabledS(True)
+            self.__updateAmmo(shellsData)
             money = g_itemsCache.items.stats.money
             exchangeRate = g_itemsCache.items.shop.exchangeRate
             vehicle = g_currentVehicle.item
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             devices = []
-            for type in AmmunitionPanel.__FITTING_SLOTS:
-                data = g_itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[type], REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE_INDICES[type]])).values()
+            for slotType in AmmunitionPanel.__FITTING_SLOTS:
+                data = g_itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE_INDICES[slotType]])).values()
                 data.sort(reverse=True)
-                if type in AmmunitionPanel.__ARTEFACTS_SLOTS:
+                if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
                     dataProvider = [[], [], []]
                 else:
                     dataProvider = []
@@ -77,7 +83,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
                     if price != defaultPrice:
                         action = getItemActionTooltipData(module)
                     moduleData = {'id': module.intCD,
-                     'type': type,
+                     'type': slotType,
                      'name': module.userName,
                      'desc': module.getShortInfo(),
                      'target': target if thisTypeHBItem is not None else module.getTarget(vehicle),
@@ -85,7 +91,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
                      'currency': 'credits' if price[1] == 0 else 'gold',
                      'actionPriceData': action,
                      'moduleLabel': module.getGUIEmblemID()}
-                    if type == ITEM_TYPE_NAMES[4]:
+                    if slotType == ITEM_TYPE_NAMES[4]:
                         if module.isClipGun(vehicle.descriptor):
                             moduleData[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
                     isFit, reason = True, ''
@@ -93,7 +99,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
                         isFit, reason = module.mayPurchase(money)
                         if not isFit and reason == 'credit_error':
                             isFit = module.mayPurchaseWithExchange(money, exchangeRate)
-                    if type in AmmunitionPanel.__ARTEFACTS_SLOTS:
+                    if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
                         moduleData['removable'] = module.isRemovable
                         for i in xrange(3):
                             md = moduleData.copy()
@@ -121,12 +127,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
                         moduleData['disabled'] = not isFit or reason == 'unlock_error'
                         dataProvider.append(moduleData)
 
-                if type in AmmunitionPanel.__ARTEFACTS_SLOTS:
+                if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
                     for i in xrange(3):
-                        self.__addDevice(devices, dataProvider[i], type, i)
+                        self.__addDevice(devices, dataProvider[i], slotType, i)
 
                 else:
-                    self.__addDevice(devices, dataProvider, type)
+                    self.__addDevice(devices, dataProvider, slotType)
 
             self.as_setDataS(devices)
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
@@ -134,25 +140,35 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
             if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
                 canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
                 rentAvailable = vehicle.isRentable and canBuyOrRent
-            self.as_updateVehicleStatusS(i18n.makeString(msg), msgLvl, rentAvailable)
+            isBackground = False
+            if statusId == Vehicle.VEHICLE_STATE.NOT_PRESENT:
+                isBackground = True
+            isSuitableVeh = not (self.__falloutCtrl.isSelected() and not g_currentVehicle.item.isFalloutAvailable) and g_currentVehicle.item.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
+            if not isSuitableVeh:
+                msg = i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % Vehicle.VEHICLE_STATE.NOT_SUITABLE)
+                msgLvl = Vehicle.VEHICLE_STATE_LEVEL.WARNING
+            msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': i18n.makeString(msg)})
+            self.as_updateVehicleStatusS({'message': msgString,
+             'rentAvailable': rentAvailable,
+             'isBackground': isBackground})
         return
 
-    def __addDevice(self, seq, dp, type, slotIndex = 0):
-        device = {'slotType': type,
+    def __addDevice(self, seq, dp, slotType, slotIndex = 0):
+        device = {'slotType': slotType,
          'slotIndex': slotIndex,
          'selectedIndex': self.__getSelectedItemIndex(dp),
          'availableDevices': dp,
          'tooltip': '',
          'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_MODULE}
-        self.updateDeviceTooltip(device, type)
+        self.updateDeviceTooltip(device, slotType)
         seq.append(device)
 
-    def updateDeviceTooltip(self, device, type):
+    def updateDeviceTooltip(self, device, slotType):
         if device['selectedIndex'] == -1:
-            if type == FITTING_TYPES.OPTIONAL_DEVICE:
+            if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
                 device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
-            elif type == FITTING_TYPES.EQUIPMENT:
+            elif slotType == FITTING_TYPES.EQUIPMENT:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
                 device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
             else:
@@ -175,22 +191,21 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
         else:
             return installReason
 
-    def __updateAmmo(self, shellsData = None, historicalBattleID = -1):
+    def __updateAmmo(self, shellsData = None):
         shells = []
         stateWarning = False
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            isAmmoFull = vehicle.isAmmoFull or historicalBattleID != -1
-            stateWarning = vehicle.isBroken or not isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
+            stateWarning = vehicle.isBroken or not vehicle.isAmmoFull or not g_currentVehicle.isAutoLoadFull() or not g_currentVehicle.isAutoEquipFull()
             if shellsData is None:
                 shellsData = map(lambda shell: (shell, shell.count), vehicle.shells)
             for shell, count in shellsData:
-                shells.append({'id': shell.intCD,
-                 'ammunitionType': shell.type,
+                shells.append({'id': str(shell.intCD),
+                 'type': shell.type,
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': count,
-                 'historicalBattleID': historicalBattleID,
+                 'historicalBattleID': -1,
                  'tooltip': '',
                  'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
 
@@ -211,48 +226,24 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener):
             vehicle = g_currentVehicle.item
             canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
             if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
-                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_BUY_WINDOW, ctx={'nationID': vehicle.nationID,
-                 'itemID': vehicle.innationID}))
+                shared_events.showVehicleBuyDialog(vehicle)
 
     def showModuleInfo(self, moduleId):
         if moduleId is None:
             return LOG_ERROR('There is error while attempting to show module info window: ', str(moduleId))
         else:
-            vehicle = g_currentVehicle.item
-            vDescr = vehicle.descriptor
-            _, _, battleID = self._getHistoricalBattleData()
-            battle = g_eventsCache.getHistoricalBattles().get(battleID)
-            if battle is not None and battle.canParticipateWith(vehicle.intCD):
-                vDescr = battle.getVehicleModifiedDescr(vehicle)
-            self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.MODULE_INFO_WINDOW, getViewName(VIEW_ALIAS.MODULE_INFO_WINDOW, moduleId), {'moduleCompactDescr': str(moduleId),
-             'vehicleDescr': vDescr}))
+            shared_events.showModuleInfo(moduleId, g_currentVehicle.item.descriptor)
             return
 
     def setVehicleModule(self, newId, slotIdx, oldId, isRemove):
         invID = g_currentVehicle.invID
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_MODULE, invID, newId, slotIdx, oldId, isRemove)
 
-    def clearHistorical(self):
-        self._update()
-        self.as_setHistoricalBattleS(-1)
-        self.as_setModulesEnabledS(True)
-
-    def _getHistoricalBattleData(self):
-        modulesData, shellsData = (None, None)
-        historicalBattleID = -1
-        if self.preQueueFunctional.getQueueType() == QUEUE_TYPE.HISTORICAL:
-            battleId = self.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID)
-            battle = g_eventsCache.getHistoricalBattles().get(battleId)
-            if battle is not None and g_currentVehicle.isPresent():
-                vehicleData = battle.getVehicleData(g_currentVehicle.item.intCD)
-                if vehicleData is not None:
-                    historicalBattleID = battleId
-                    modulesData = battle.getModules(g_currentVehicle.item)
-                    shellsData = battle.getShellsLayout(g_currentVehicle.item.intCD)
-        return (modulesData, shellsData, historicalBattleID)
-
     def __getStatus(self, reason):
         if reason is not None:
             return '#menu:moduleFits/' + reason.replace(' ', '_')
         else:
             return ''
+
+    def __inventoryUpdateCallBack(self, *args):
+        self.update()

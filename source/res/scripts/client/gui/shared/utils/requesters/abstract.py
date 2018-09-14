@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/abstract.py
 import BigWorld
+from collections import namedtuple
 from AccountCommands import isCodeValid, RES_FAILURE, RES_SUCCESS
 from helpers import isPlayerAccount
 from ids_generators import Int32IDGenerator
 from gui.shared.utils import code2str
 from adisp import async, process
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.Waiting import Waiting
 from gui.shared.utils.decorators import ReprInjector
 
@@ -75,6 +76,7 @@ class AbstractSyncDataRequester(AbstractRequester):
 @ReprInjector.simple(('getWaitingID', 'waitingID'), ('getRequestType', 'requestType'))
 
 class RequestCtx(object):
+    __slots__ = ('_waitingID', '_callback')
 
     def __init__(self, waitingID = ''):
         self._waitingID = waitingID
@@ -223,23 +225,26 @@ class RequestsByIDProcessor(object):
             return result
             return
 
+    def _getSenderMethod(self, sender, methodName):
+        return getattr(sender, methodName, None)
+
     def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
         result, requestID = False, 0
         requester = self.getSender()
         if not requester:
+            LOG_WARNING('There is not sender is present')
             return (result, requestID)
-        else:
-            method = getattr(requester, methodName, None)
-            if callable(method):
-                requestID = self._doCall(method, *args, **kwargs)
-                if requestID > 0:
-                    self._requests[requestID] = (ctx, chain)
-                    result = True
-                else:
-                    LOG_ERROR('Request ID can not be null')
+        method = self._getSenderMethod(requester, methodName)
+        if callable(method):
+            requestID = self._doCall(method, *args, **kwargs)
+            if requestID > 0:
+                self._requests[requestID] = (ctx, chain)
+                result = True
             else:
-                LOG_ERROR('Name of method is invalid', methodName)
-            return (result, requestID)
+                LOG_ERROR('Request ID can not be null')
+        else:
+            LOG_ERROR('Name of method is invalid', methodName)
+        return (result, requestID)
 
     def _sendNextRequest(self, ctx, chain):
         methodName, args, kwargs = chain[0]
@@ -270,3 +275,59 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
         requestID = self._idsGenerator.next()
         method(requestID, *args, **kwargs)
         return requestID
+
+
+_Response = namedtuple('_Response', ['code',
+ 'errStr',
+ 'data',
+ 'extraCode'])
+_Response.__new__.__defaults__ = (0, '', None, 0)
+
+class Response(_Response):
+
+    def isSuccess(self):
+        return self.code == 0
+
+    def getCode(self):
+        return self.code
+
+    def getExtraCode(self):
+        return self.extraCode
+
+    def getErrString(self):
+        return self.errStr
+
+    def getData(self):
+        return self.data
+
+
+class ClientRequestsByIDProcessor(RequestsByIDProcessor):
+
+    def __init__(self, sender = None, responseClass = None, idsGenerator = None):
+        super(ClientRequestsByIDProcessor, self).__init__(idsGenerator=idsGenerator or Int32IDGenerator())
+        self.__responseClass = responseClass or Response
+        self._sender = sender
+
+    def getSender(self):
+        return self._sender
+
+    def _doCall(self, method, *args, **kwargs):
+        requestID = self._idsGenerator.next()
+
+        def _callback(code, errStr, data):
+            ctx = self._requests.get(requestID)
+            self._onResponseReceived(requestID, self._makeResponse(code, errStr, data, ctx))
+
+        method(callback=_callback, *args, **kwargs)
+        return requestID
+
+    def _makeResponse(self, code = 0, errMsg = '', data = None, ctx = None, extraCode = 0):
+        response = self.__responseClass(code, errMsg, data, extraCode)
+        if not response.isSuccess():
+            LOG_WARNING('Client request error', ctx, response)
+        return response
+
+    def fini(self):
+        self._sender = None
+        super(ClientRequestsByIDProcessor, self).fini()
+        return

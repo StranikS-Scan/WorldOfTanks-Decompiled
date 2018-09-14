@@ -3,8 +3,11 @@ from collections import namedtuple
 import BigWorld
 import Math
 from constants import EVENT_TYPE as _ET
+from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from items import vehicles, tankmen
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -63,6 +66,12 @@ class SimpleBonus(object):
     def getDescription(self):
         return i18n.makeString('#quests:bonuses/%s/description' % self._name, value=self.formatValue())
 
+    def getList(self):
+        return None
+
+    def hasIconFormat(self):
+        return False
+
 
 class FakeTextBonus(SimpleBonus):
 
@@ -96,6 +105,14 @@ class CreditsBonus(IntegralBonus):
     def getTooltipIcon(self):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARD_CREDITS
 
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1,
+          'tooltip': TOOLTIPS.AWARDITEM_CREDITS}]
+
+    def hasIconFormat(self):
+        return True
+
 
 class GoldBonus(SimpleBonus):
 
@@ -107,6 +124,35 @@ class GoldBonus(SimpleBonus):
 
     def getIcon(self):
         return RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG,
+          'tooltip': TOOLTIPS.AWARDITEM_GOLD}]
+
+    def hasIconFormat(self):
+        return True
+
+
+class FreeXpBonus(IntegralBonus):
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG,
+          'tooltip': TOOLTIPS.AWARDITEM_FREEXP}]
+
+    def hasIconFormat(self):
+        return True
+
+
+class PremiumDaysBonus(IntegralBonus):
+
+    def getList(self):
+        return [{'itemSource': RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG,
+          'tooltip': TOOLTIPS.AWARDITEM_PREMDAYS}]
+
+    def hasIconFormat(self):
+        return True
 
 
 class MetaBonus(SimpleBonus):
@@ -156,6 +202,12 @@ class PotapovTokensBonus(TokensBonus):
         return makeHtmlString('html_templates:lobby/quests/bonuses', 'pqTokens', {'value': self.formatValue()})
 
 
+class FalloutTokensBonus(PotapovTokensBonus):
+
+    def isShowInGUI(self):
+        return False
+
+
 class ItemsBonus(SimpleBonus):
 
     def getItems(self):
@@ -176,6 +228,20 @@ class ItemsBonus(SimpleBonus):
         else:
             return
 
+    def getList(self):
+        result = []
+        for item, count in self.getItems().iteritems():
+            if item is not None and count:
+                tooltip = makeTooltip(header=item.userName, body=item.fullDescription)
+                result.append({'value': BigWorld.wg_getIntegralFormat(count),
+                 'itemSource': item.icon,
+                 'tooltip': tooltip})
+
+        return result
+
+    def hasIconFormat(self):
+        return True
+
 
 class BoosterBonus(SimpleBonus):
 
@@ -191,15 +257,36 @@ class BoosterBonus(SimpleBonus):
         return boosters
 
     def format(self):
+        return ', '.join(self.formattedList())
+
+    @staticmethod
+    def __makeBoosterVO(booster):
+        return {'icon': booster.icon,
+         'showCount': False,
+         'qualityIconSrc': booster.getQualityIcon(),
+         'slotLinkage': BOOSTER_CONSTANTS.SLOT_UI,
+         'showLeftTime': False}
+
+    def hasIconFormat(self):
+        return True
+
+    def getList(self):
+        result = []
+        for booster, count in sorted(self.getBoosters().iteritems(), key=lambda (booster, count): booster.boosterType):
+            if booster is not None:
+                result.append({'value': BigWorld.wg_getIntegralFormat(count),
+                 'tooltip': makeTooltip(header=booster.userName, body=booster.description),
+                 'boosterVO': self.__makeBoosterVO(booster)})
+
+        return result
+
+    def formattedList(self):
         result = []
         for booster, count in self.getBoosters().iteritems():
             if booster is not None:
                 result.append(i18n.makeString('#quests:bonuses/boosters/name', name=booster.userName, quality=booster.qualityStr, count=count))
 
-        if result:
-            return ', '.join(result)
-        else:
-            return
+        return result
 
 
 class VehiclesBonus(SimpleBonus):
@@ -455,7 +542,7 @@ class CustomizationsBonus(SimpleBonus):
 _BONUSES = {'credits': CreditsBonus,
  'gold': GoldBonus,
  'xp': IntegralBonus,
- 'freeXP': IntegralBonus,
+ 'freeXP': FreeXpBonus,
  'tankmenXP': IntegralBonus,
  'xpFactor': FloatBonus,
  'creditsFactor': FloatBonus,
@@ -465,32 +552,52 @@ _BONUSES = {'credits': CreditsBonus,
  'items': ItemsBonus,
  'slots': IntegralBonus,
  'berths': IntegralBonus,
- 'premium': IntegralBonus,
+ 'premium': PremiumDaysBonus,
  'vehicles': VehiclesBonus,
  'meta': MetaBonus,
- 'tokens': TokensBonus,
- 'dossier': DossierBonus,
- 'tankmen': TankmenBonus,
+ 'tokens': {'default': TokensBonus,
+            _ET.POTAPOV_QUEST: {'regular': PotapovTokensBonus,
+                                'fallout': FalloutTokensBonus}},
+ 'dossier': {'default': DossierBonus,
+             _ET.POTAPOV_QUEST: PotapovDossierBonus},
+ 'tankmen': {'default': TankmenBonus,
+             _ET.POTAPOV_QUEST: PotapovTankmenBonus,
+             _ET.REF_SYSTEM_QUEST: RefSystemTankmenBonus},
  'customizations': CustomizationsBonus,
  'goodies': BoosterBonus,
  'strBonus': SimpleBonus}
-_BONUSES_BY_TYPE = {(_ET.POTAPOV_QUEST, 'tokens'): PotapovTokensBonus,
- (_ET.POTAPOV_QUEST, 'dossier'): PotapovDossierBonus,
- (_ET.POTAPOV_QUEST, 'tankmen'): PotapovTankmenBonus,
- (_ET.REF_SYSTEM_QUEST, 'tankmen'): RefSystemTankmenBonus}
+
+def _getClassFromTree(tree, path):
+    if not tree or not path:
+        return
+    else:
+        key = path[0]
+        subTree = None
+        if key in tree:
+            subTree = tree[key]
+        elif 'default' in tree:
+            subTree = tree['default']
+        if type(subTree) is dict:
+            return _getClassFromTree(subTree, path[1:])
+        return subTree
+        return
+
+
+def _initFromTree(key, name, value):
+    bonus = None
+    clazz = _getClassFromTree(_BONUSES, key)
+    if clazz is not None:
+        bonus = clazz(name, value)
+    return bonus
+
 
 def getBonusObj(quest, name, value):
-    key = (quest.getType(), name)
-    if key in _BONUSES_BY_TYPE:
-        return _BONUSES_BY_TYPE[key](name, value)
-    elif name in _BONUSES:
-        return _BONUSES[name](name, value)
-    else:
-        return None
+    questType = quest.getType()
+    key = [name, questType]
+    if questType == _ET.POTAPOV_QUEST:
+        key.append(quest.getQuestBranchName())
+    return _initFromTree(key, name, value)
 
 
 def getTutorialBonusObj(name, value):
-    if name in _BONUSES:
-        return _BONUSES[name](name, value)
-    else:
-        return None
+    return _initFromTree((name,), name, value)

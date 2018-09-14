@@ -1,0 +1,19 @@
+<tutorial-quest-10.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects>
+        <next-chapter>
+          <condition>
+            <active>	CloseChapter10	</active>
+          </condition>
+        </next-chapter>
+      </runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id></has-id>
+  <triggers></triggers>
+  <vars></vars>
+</tutorial-quest-10.xml>

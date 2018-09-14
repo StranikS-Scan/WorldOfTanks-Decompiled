@@ -1,9 +1,17 @@
 # Embedded file name: scripts/client/helpers/ServerSettings.py
 import types
 from collections import namedtuple
+from constants import IS_TUTORIAL_ENABLED
+from debug_utils import LOG_WARNING
 from shared_utils import makeTupleByDict
 from gui.shared.utils.decorators import ReprInjector
 from gui import GUI_SETTINGS
+from Event import Event
+_CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
+ 32: 'clan_emblems_small',
+ 64: 'clan_emblems_big',
+ 128: 'clan_emblems_128',
+ 256: 'clan_emblems_256'}
 
 @ReprInjector.simple(('centerID', 'centerID'), ('dbidMin', 'dbidMin'), ('dbidMin', 'dbidMin'), ('regionCode', 'regionCode'))
 
@@ -65,11 +73,8 @@ class _FileServerSettings(object):
     def getUrls(self):
         return self.__urls
 
-    def getClanEmblem64x64Url(self, clanDBID):
-        return self.__getUrl('clan_emblems_big', clanDBID)
-
-    def getClanEmblem32x32Url(self, clanDBID):
-        return self.__getUrl('clan_emblems_small', clanDBID)
+    def getClanEmblemBySize(self, clanDBID, size):
+        return self.__getUrl(_CLAN_EMBLEMS_SIZE_MAPPING[size], clanDBID)
 
     def getClanEmblem64x64VehicleUrl(self, clanDBID):
         return self.__getUrl('clan_emblems', clanDBID)
@@ -85,10 +90,12 @@ class _FileServerSettings(object):
         return self.__getUrl('rare_achievements_texts', langID)
 
     def __getUrl(self, urlKey, *args):
-        if urlKey in self.__urls:
+        try:
             return self.__urls[urlKey] % args
-        else:
-            return None
+        except (KeyError, TypeError):
+            LOG_WARNING('There is invalid url while getting emblem from web', urlKey, args)
+
+        return None
 
     @classmethod
     def defaults(cls):
@@ -127,9 +134,29 @@ class _ESportCurrentSeason(namedtuple('_ESportSeason', ['eSportSeasonID', 'eSpor
         return cls(0, 0, 0)
 
 
+class _ClanProfile(namedtuple('_ClanProfile', ['enabled', 'url', 'type'])):
+
+    def isEnabled(self):
+        return bool(self.enabled and len(self.getSettingsJSON()))
+
+    def getAccessorType(self):
+        return self.type
+
+    def getGateUrl(self):
+        return self.url
+
+    def getSettingsJSON(self):
+        return '{"type": "%s", "accessor_config": "%s"}' % (self.getAccessorType(), self.getGateUrl())
+
+    @classmethod
+    def defaults(cls):
+        return cls(False, '', '')
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
+        self.onServerSettingsChange = Event()
         self.__serverSettings = serverSettings if serverSettings else {}
         if 'roaming' in self.__serverSettings:
             roamingSettings = self.__serverSettings['roaming']
@@ -148,6 +175,16 @@ class ServerSettings(object):
             self.__eSportCurrentSeason = makeTupleByDict(_ESportCurrentSeason, self.__serverSettings)
         except TypeError:
             self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
+
+        self.__updateClanProfile(self.__serverSettings)
+
+    def update(self, serverSettingsDiff):
+        self.__serverSettings.update(serverSettingsDiff)
+        self.__updateClanProfile(serverSettingsDiff)
+        self.onServerSettingsChange(serverSettingsDiff)
+
+    def clear(self):
+        self.onServerSettingsChange.clear()
 
     def getSettings(self):
         return self.__serverSettings
@@ -168,6 +205,10 @@ class ServerSettings(object):
     def eSportCurrentSeason(self):
         return self.__eSportCurrentSeason
 
+    @property
+    def clanProfile(self):
+        return self.__clanProfile
+
     def isPotapovQuestEnabled(self):
         return self.__getGlobalSetting('isPotapovQuestEnabled', False)
 
@@ -179,6 +220,12 @@ class ServerSettings(object):
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
+
+    def isTutorialEnabled(self):
+        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
+
+    def isSandboxEnabled(self):
+        return self.__getGlobalSetting('isSandboxEnabled', False)
 
     def isPromoAutoViewsEnabled(self):
         return True
@@ -200,3 +247,10 @@ class ServerSettings(object):
 
     def __getGlobalSetting(self, settingsName, default = None):
         return self.__serverSettings.get(settingsName, default)
+
+    def __updateClanProfile(self, targetSettings):
+        if 'clanProfile' in targetSettings:
+            cProfile = targetSettings['clanProfile']
+            self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'))
+        else:
+            self.__clanProfile = _ClanProfile.defaults()

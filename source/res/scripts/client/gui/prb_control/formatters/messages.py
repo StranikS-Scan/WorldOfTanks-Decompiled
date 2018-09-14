@@ -1,11 +1,11 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/messages.py
 from CurrentVehicle import g_currentVehicle
-from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES
+from constants import JOIN_FAILURE_NAMES, KICK_REASON_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control import getLevelLimits, getClassLevelLimits, getTotalLevelLimits
-from gui.prb_control.settings import PREBATTLE_RESTRICTION
+from gui.prb_control import prb_getters
+from gui.prb_control.settings import PREBATTLE_RESTRICTION, CTRL_ENTITY_TYPE
 from gui.prb_control.settings import UNIT_ERROR_NAMES, UNIT_BROWSER_ERROR_NAMES
 from gui.prb_control.settings import UNIT_ERRORS_TRANSLATE_AS_WARNINGS
 from helpers import i18n
@@ -61,12 +61,12 @@ def getNationLimitMessage4Vehicle(teamLimits):
 
 
 def getLevelLimitMessage4Vehicle(teamLimits):
-    minLevel, maxLevel = getLevelLimits(teamLimits)
+    minLevel, maxLevel = prb_getters.getLevelLimits(teamLimits)
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/level', minLevel, maxLevel)
 
 
 def getClassLevelLimitMessage4Vehicle(teamLimits):
-    minLevel, maxLevel = getClassLevelLimits(teamLimits, g_currentVehicle.item.type)
+    minLevel, maxLevel = prb_getters.getClassLevelLimits(teamLimits, g_currentVehicle.item.type)
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/level', minLevel, maxLevel)
 
 
@@ -75,12 +75,12 @@ def getMinCountLimitMessage4Team(teamLimits):
 
 
 def getTotalLevelLimitMessage4Team(teamLimits):
-    minTotalLevel, maxTotalLevel = getTotalLevelLimits(teamLimits)
+    minTotalLevel, maxTotalLevel = prb_getters.getTotalLevelLimits(teamLimits)
     return i18n.makeString('#system_messages:prebattle/teamInvalid/limit/totalLevel', minTotalLevel=minTotalLevel, maxTotalLevel=maxTotalLevel)
 
 
 def getLevelLimitMessage4Team(teamLimits):
-    minLevel, maxLevel = getLevelLimits(teamLimits)
+    minLevel, maxLevel = prb_getters.getLevelLimits(teamLimits)
     return i18n.makeString('#system_messages:prebattle/teamInvalid/limits/level', minLevel=minLevel, maxLevel=maxLevel)
 
 
@@ -197,3 +197,20 @@ def getUnitBrowserMessage(errorCode, errorString):
 
 def getUnitPlayerNotification(key, pInfo):
     return i18n.makeString(SYSTEM_MESSAGES.unit_notification(key), userName=pInfo.getFullName())
+
+
+def makeEntityI18nKey(ctrlType, entityType, prefix):
+    if ctrlType in (CTRL_ENTITY_TYPE.PREBATTLE, CTRL_ENTITY_TYPE.UNIT):
+        if entityType == PREBATTLE_TYPE.SQUAD:
+            name = 'squad'
+        else:
+            name = 'rally'
+    elif ctrlType == CTRL_ENTITY_TYPE.PREQUEUE and entityType == QUEUE_TYPE.SANDBOX:
+        name = 'sandBox'
+    else:
+        name = 'rally'
+    return '{0}/{1}'.format(name, prefix)
+
+
+def getLeaveDisabledMessage(ctrlType, entityType):
+    return '#system_messages:{0}'.format(makeEntityI18nKey(ctrlType, entityType, 'leaveDisabled'))

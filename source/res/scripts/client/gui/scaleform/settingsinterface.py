@@ -322,12 +322,12 @@ class SettingsInterface(UIInterface):
          'storeReceiverInBattle': g_settingsCore.getSetting('storeReceiverInBattle'),
          'disableBattleChat': g_settingsCore.getSetting('disableBattleChat'),
          'chatContactsListOnly': g_settingsCore.getSetting('chatContactsListOnly'),
+         'receiveClanInvitesNotifications': g_settingsCore.getSetting('receiveClanInvitesNotifications'),
          'dynamicCamera': g_settingsCore.getSetting('dynamicCamera'),
          'horStabilizationSnp': g_settingsCore.getSetting('horStabilizationSnp'),
          'enableVoIP': g_settingsCore.getSetting('enableVoIP'),
          'enablePostMortemEffect': g_settingsCore.getSetting('enablePostMortemEffect'),
          'enablePostMortemDelay': g_settingsCore.getSetting('enablePostMortemDelay'),
-         'nationalVoices': g_settingsCore.getSetting('nationalVoices'),
          'isColorBlind': g_settingsCore.getSetting('isColorBlind'),
          'graphicsQualityHDSD': g_settingsCore.getSetting('graphicsQualityHDSD'),
          'useServerAim': g_settingsCore.getSetting('useServerAim'),
@@ -522,7 +522,6 @@ class SettingsInterface(UIInterface):
         g_settingsCore.applySetting('fov', settings['fov'])
         g_settingsCore.applySetting('dynamicFov', settings['dynamicFov'])
         g_settingsCore.applySetting('enableOpticalSnpEffect', settings['enableOpticalSnpEffect'])
-        g_settingsCore.applySetting('nationalVoices', settings['nationalVoices'])
         g_settingsCore.applySetting('isColorBlind', settings['isColorBlind'])
         g_settingsCore.applySetting('useServerAim', settings['useServerAim'])
         g_settingsCore.applySetting('showVehiclesCounter', settings['showVehiclesCounter'])
@@ -628,10 +627,6 @@ class SettingsInterface(UIInterface):
         SoundGroups.g_instance.setVolume('masterVivox', float(settings['masterVivoxVolume']) / 100)
         SoundGroups.g_instance.setVolume('micVivox', float(settings['micVivoxVolume']) / 100)
         SoundGroups.g_instance.setVolume('masterFadeVivox', float(settings['masterFadeVivoxVolume']) / 100)
-        from BattleReplay import g_replayCtrl
-        if g_replayCtrl is not None and g_replayCtrl.isPlaying:
-            if g_replayCtrl.playbackSpeed == 0 or g_replayCtrl.playbackSpeed > 4.0:
-                SoundGroups.g_instance.enableReplaySounds(False)
         g_settingsCore.applySetting('showDateMessage', settings['datetimeIdx'] & 1)
         g_settingsCore.applySetting('showTimeMessage', settings['datetimeIdx'] & 2)
         g_settingsCore.applySetting('enableOlFilter', settings['enableOlFilter'])
@@ -678,6 +673,7 @@ class SettingsInterface(UIInterface):
         if restartClient:
             BigWorld.savePreferences()
             if restartApproved:
+                from BattleReplay import g_replayCtrl
                 if g_replayCtrl.isPlaying and g_replayCtrl.playbackSpeed == 0:
                     g_replayCtrl.setPlaybackSpeedIdx(5)
                 BigWorld.callback(0.3, self.__restartGame)

@@ -1,0 +1,46 @@
+<regular_3_2_10.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_2_10_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	4	</count>
+        </item>
+        <item>	1019	  <count>	4	</count>
+        </item>
+        <item>	507	  <count>	4	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_2_10_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_2_10.xml>

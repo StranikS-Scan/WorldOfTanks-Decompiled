@@ -64,6 +64,7 @@ class WAITING(object):
     SINHRONIZE = '#waiting:sinhronize'
     CHANGINGROLE = '#waiting:changingRole'
     GETCLUBINFO = '#waiting:getClubInfo'
+    LOADINGDATA = '#waiting:loadingData'
     TUTORIAL_REQUEST_BONUS = '#waiting:tutorial-request-bonus'
     TUTORIAL_REQUEST_BATTLE_COUNT = '#waiting:tutorial-request-battle-count'
     TUTORIAL_REQUEST_UNLOCKS = '#waiting:tutorial-request-unlocks'
@@ -82,7 +83,6 @@ class WAITING(object):
     TUTORIAL_REQUEST_SHOP = '#waiting:tutorial-request-shop'
     TUTORIAL_REQUEST_SLOTS = '#waiting:tutorial-request-slots'
     TUTORIAL_QUEUE = '#waiting:tutorial-queue'
-    WAITING_EBANK_RESPONSE = '#waiting:waiting_ebank_response'
     BUTTONS_EXITQUEUE = '#waiting:buttons/exitQueue'
     BUTTONS_AUTOSEARCH = '#waiting:buttons/autoSearch'
     BUTTONS_CANCEL = '#waiting:buttons/cancel'
@@ -169,6 +169,7 @@ class WAITING(object):
     CLUBS_INVITATIONS_REQUIREMENTS_CHANGE = '#waiting:clubs/invitations/requirements/change'
     CLUBS_INVITATIONS_LIST_CHANGE = '#waiting:clubs/invitations/list/change'
     CLUBS_INVITES_SEND = '#waiting:clubs/invites/send'
+    CLANS_INVITES_SEND = '#waiting:clans/invites/send'
     MESSAGE_ENUM = (MESSAGE_QUEUE,
      MESSAGE_USEAUTOSEARCH,
      MESSAGE_AUTOLOGIN,

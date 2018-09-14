@@ -1,0 +1,482 @@
+<env_artillery.xml>
+  <crew>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	0.000001	</forward>
+    <backward>	0.000001	</backward>
+  </speedLimits>
+  <repairCost>	6.57	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	30	</armor_1>
+      <armor_2>	15	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	15	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	</armor_9>
+      <armor_10>	6	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_6 armor_8	</primaryArmor>
+    <weight>	9700	</weight>
+    <maxHealth>	240	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G02_Hummel/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000154 1.0552 -0.166347	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G02_Hummel/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00298952 0.574702 2.1748	</rayStart>
+        <rayEnd>	-0.00247027 0.487172 1.99497	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.30419 0.999523 -1.65247	</rayStart>
+        <rayEnd>	-1.24638 0.983444 -1.65247	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	-1.29636 1.02755 -0.555693	</rayStart>
+        <rayEnd>	-1.23855 1.01147 -0.555695	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.88	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	1.28669 0.993111 -1.65444	</rayStart>
+        <rayEnd>	1.26742 0.987752 -1.65444	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	1.2995 1.02154 -0.551011	</rayStart>
+        <rayEnd>	1.24169 1.00547 -0.551013	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.88	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <exclusionMask></exclusionMask>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Env_Artillery>
+      <userString>	#germany_vehicles:Chassis_Env_Artillery	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	23000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	21000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	24	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G02_Hummel/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G02_Hummel/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G02_Hummel/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G02_Hummel/track/left.track	</left>
+        <right>	vehicles/german/G02_Hummel/track/right.track	</right>
+        <segmentLength>	0.122	</segmentLength>
+        <segmentOffset>	0.149	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.6 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.98	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.26	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.26	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.15	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.15	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.4	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.39	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.4	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.39	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0075	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.3	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1049	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.01	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.85	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.65	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.39	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.19	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.85	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.65	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.39	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.19	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.039	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.02225 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G02_Hummel/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.26711 1.78935	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.099760 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.050000 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.809600	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Env_Artillery>
+  </chassis>
+  <turrets0>
+    <Turret_1_Env_Artillery>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:Turret_1_Env_Artillery	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	6	</level>
+      <price>	200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	6	</armor_2>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	60	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Gun_Env_Artillery>	shared	  <reloadTime>	31.3	</reloadTime>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <aimingTime>	7.0	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0.0 -42.0 1.0 -42.0	</minPitch>
+            <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.76	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.48	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-15 15	</turretYawLimits>
+          <hitTester>
+            <collisionModel>	vehicles/german/G02_Hummel/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <models>
+            <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G02_Hummel/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000590633 -0.0210966 3.70241	</rayStart>
+              <rayEnd>	-0.00767752 -0.0831617 3.70032	</rayEnd>
+              <rayUp>	0.11 0.106 4	</rayUp>
+              <size>	0.356	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
+            <exclusionMask></exclusionMask>
+          </camouflage>
+        </Gun_Env_Artillery>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G02_Hummel/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G02_Hummel/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G02_Hummel/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.002121 0.662594 -0.136024	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.798 0.234 1.000 0.000 1.000 0.000 0.500 0.023 0.471 0.500 0.268 0.500 0.649 0.082 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_Env_Artillery>
+  </turrets0>
+  <engines>
+    <Development_Engine>	shared	</Development_Engine>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <Development_Radio>	shared	</Development_Radio>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.84	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</env_artillery.xml>

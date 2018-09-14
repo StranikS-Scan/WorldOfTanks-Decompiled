@@ -99,7 +99,9 @@ class ClubStatsView(StaticFormationStatsViewMeta, ClubPage):
         if len(seasons):
             for sID, dossier in sorted(seasons.iteritems(), key=itemgetter(0), reverse=True):
                 if dossier.getTotalStats().getBattlesCount():
-                    self._seasons.append(_SeasonItem(sID, dossier, self.clubsCtrl.getSeasonUserName(sID)))
+                    seasonUserName = self.clubsCtrl.getSeasonUserName(sID)
+                    if seasonUserName:
+                        self._seasons.append(_SeasonItem(sID, dossier, seasonUserName))
 
             self.__updateData(self.clubsCtrl.getClub(self._clubDbID))
 

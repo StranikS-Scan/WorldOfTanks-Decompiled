@@ -6,6 +6,9 @@ class BattleRespawnViewMeta(BattleComponentMeta):
     def py_vehicleSelected(self, vehicleID):
         raise NotImplementedError
 
+    def onPostmortemBtnClickS(self):
+        raise NotImplementedError
+
     def as_updateRespawnViewS(self, vehicleName, slotsStatesData):
         self._flashObject.as_updateRespawnView(vehicleName, slotsStatesData)
 
@@ -20,3 +23,6 @@ class BattleRespawnViewMeta(BattleComponentMeta):
 
     def as_initializeS(self, mainData, slots, helpText):
         self._flashObject.as_initialize(mainData, slots, helpText)
+
+    def as_showGasAtackMode(self):
+        self._flashObject.as_showGasAtackMode()

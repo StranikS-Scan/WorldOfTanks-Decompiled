@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/battle_control/BattleSessionProvider.py
+from collections import namedtuple
 import weakref
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG
@@ -21,11 +22,14 @@ from gui.battle_control.RepairController import RepairController
 from gui.battle_control.arena_info.ArenaDataProvider import ArenaDataProvider
 from gui.battle_control.arena_info.listeners import ListenersCollection
 from gui.battle_control.dyn_squad_functional import DynSquadFunctional
+from gui.battle_control.gas_attack_controller import GasAttackController
 from gui.battle_control.hit_direction_ctrl import HitDirectionController
 from gui.battle_control.requests import AvatarRequestsController
+BattleSessionProviderStartCtx = namedtuple('BattleSessionProviderStartCtx', ('avatar', 'arena', 'replayCtrl', 'gasAttackMgr'))
+BattleSessionProviderStartCtx.__new__.__defaults__ = (None, None, None, None)
 
 class BattleSessionProvider(object):
-    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl', '__dynSquadFunctional', '__weakref__')
+    __slots__ = ('__ammoCtrl', '__equipmentsCtrl', '__optDevicesCtrl', '__vehicleStateCtrl', '__chatCommands', '__drrScaleCtrl', '__feedback', '__ctx', '__arenaDP', '__arenaListeners', '__arenaLoadCtrl', '__respawnsCtrl', '__notificationsCtrl', '__isBattleUILoaded', '__arenaTeamsBasesCtrl', '__periodCtrl', '__messagesCtrl', '__repairCtrl', '__hitDirectionCtrl', '__requestsCtrl', '__avatarStatsCtrl', '__dynSquadFunctional', '__weakref__', '__gasAttackCtrl')
 
     def __init__(self):
         super(BattleSessionProvider, self).__init__()
@@ -51,6 +55,7 @@ class BattleSessionProvider(object):
         self.__avatarStatsCtrl = None
         self.__arenaListeners = None
         self.__isBattleUILoaded = False
+        self.__gasAttackCtrl = None
         return
 
     def isBattleUILoaded(self):
@@ -104,6 +109,9 @@ class BattleSessionProvider(object):
     def getPeriodCtrl(self):
         return self.__periodCtrl
 
+    def getGasAttackCtrl(self):
+        return self.__gasAttackCtrl
+
     @async
     def sendRequest(self, ctx, callback, allowDelay = None):
         self.__requestsCtrl.request(ctx, callback=callback, allowDelay=allowDelay)
@@ -135,12 +143,10 @@ class BattleSessionProvider(object):
         if self.__arenaListeners:
             self.__arenaListeners.removeController(controller)
 
-    def start(self, avatar = None):
-        import BattleReplay
-        replayCtrl = BattleReplay.g_replayCtrl
-        isReplayRecording = replayCtrl.isRecording
-        isReplayPlaying = replayCtrl.isPlaying
-        self.__arenaDP = ArenaDataProvider(avatar=avatar)
+    def start(self, startCtx = None):
+        isReplayRecording = startCtx.replayCtrl.isRecording
+        isReplayPlaying = startCtx.replayCtrl.isPlaying
+        self.__arenaDP = ArenaDataProvider(avatar=startCtx.avatar)
         self.__ctx.start(self.__arenaDP)
         self.__ammoCtrl = consumables.createAmmoCtrl(isReplayPlaying, isReplayRecording)
         self.__equipmentsCtrl = consumables.createEquipmentCtrl(isReplayPlaying)
@@ -151,17 +157,18 @@ class BattleSessionProvider(object):
         self.__arenaTeamsBasesCtrl = createTeamsBasesCtrl(isReplayPlaying)
         self.__periodCtrl = createPeriodCtrl(isReplayPlaying, isReplayRecording)
         self.__drrScaleCtrl = DRRScaleController()
-        self.__respawnsCtrl = RespawnsController()
+        self.__respawnsCtrl = RespawnsController(startCtx)
         self.__repairCtrl = RepairController()
         self.__dynSquadFunctional = DynSquadFunctional()
         self.__notificationsCtrl = NotificationsController(self.__arenaDP)
+        self.__gasAttackCtrl = GasAttackController(startCtx)
         ctx = weakref.proxy(self.__ctx)
         self.__arenaListeners = ListenersCollection()
         self.__arenaListeners.addController(ctx, self.__arenaLoadCtrl)
         self.__arenaListeners.addController(ctx, self.__arenaTeamsBasesCtrl)
         self.__arenaListeners.addController(ctx, self.__periodCtrl)
         self.__arenaListeners.addController(ctx, self.__respawnsCtrl)
-        self.__arenaListeners.start(getClientArena(avatar=avatar), arenaDP=self.__arenaDP)
+        self.__arenaListeners.start(startCtx.arena, arenaDP=self.__arenaDP)
         self.__feedback = createFeedbackAdaptor(isReplayPlaying)
         self.__feedback.start(self.__arenaDP)
         self.__messagesCtrl = createBattleMessagesCtrl(isReplayPlaying)
@@ -216,6 +223,7 @@ class BattleSessionProvider(object):
         self.__respawnsCtrl = None
         self.__notificationsCtrl = None
         self.__repairCtrl = None
+        self.__gasAttackCtrl = None
         self.__dynSquadFunctional = None
         if self.__avatarStatsCtrl is not None:
             self.__avatarStatsCtrl.stop()
@@ -230,7 +238,6 @@ class BattleSessionProvider(object):
         self.__periodCtrl.setUI(battleUI.timersBar, battleUI.ppSwitcher)
         self.__hitDirectionCtrl.setUI(battleUI.indicators)
         self.__drrScaleCtrl.start(battleUI)
-        self.__repairCtrl.start(battleUI)
         self.__dynSquadFunctional.setUI(battleUI, self)
 
     def clearBattleUI(self):
@@ -239,13 +246,13 @@ class BattleSessionProvider(object):
         self.__periodCtrl.clearUI()
         self.__hitDirectionCtrl.clearUI()
         self.__drrScaleCtrl.stop()
-        self.__repairCtrl.stop()
         self.__dynSquadFunctional.clearUI(self)
 
     def switchToPostmortem(self):
         self.__ammoCtrl.clear()
         self.__equipmentsCtrl.clear()
         self.__optDevicesCtrl.clear()
+        self.__gasAttackCtrl.clear()
         self.__feedback.setPlayerVehicle(0L)
         self.__vehicleStateCtrl.switchToPostmortem()
 
@@ -260,8 +267,8 @@ class BattleSessionProvider(object):
         self.__vehicleStateCtrl.movingToRespawn()
         self.__respawnsCtrl.movingToRespawn()
 
-    def invalidateVehicleState(self, state, value):
-        self.__vehicleStateCtrl.invalidate(state, value)
+    def invalidateVehicleState(self, state, value, vehicleID = 0):
+        self.__vehicleStateCtrl.invalidate(state, value, vehicleID)
 
     def repairPointAction(self, repairPointIndex, action, nextActionTime):
         self.__repairCtrl.action(repairPointIndex, action, nextActionTime)

@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import Preb
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
 from gui.prb_control.functional.default import PrbRosterRequester
-from gui.prb_control.settings import REQUEST_TYPE
+from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.prb_control.context import prb_ctx
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
@@ -29,11 +29,11 @@ class CompaniesWindow(PrebattlesListWindow, CompaniesWindowMeta):
 
     @process
     def createCompany(self):
-        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create'))
+        yield self.prbDispatcher.create(prb_ctx.CompanySettingsCtx(waitingID='prebattle/create', flags=FUNCTIONAL_FLAG.SWITCH))
 
     @process
     def joinCompany(self, prbID):
-        yield self.prbDispatcher.join(prb_ctx.JoinCompanyCtx(prbID, waitingID='prebattle/join'))
+        yield self.prbDispatcher.join(prb_ctx.JoinCompanyCtx(prbID, waitingID='prebattle/join', flags=FUNCTIONAL_FLAG.SWITCH))
 
     def refreshCompaniesList(self, owner, isNotInBattle, division):
         self.__getCompaniesList(isNotInBattle, division, owner)

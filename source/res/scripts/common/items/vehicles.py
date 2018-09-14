@@ -23,7 +23,7 @@ if IS_CLIENT:
     from helpers import i18n
     from helpers import EffectsList
     from VehicleEffects import ExhaustEffectsDescriptor, VehicleExhaustDescriptor
-    import FMOD
+    import ReloadEffect
 elif IS_WEB:
     from web_stubs import *
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
@@ -50,13 +50,13 @@ VEHICLE_TANKMAN_TYPE_NAMES = ('commander',
  'radioman',
  'gunner',
  'loader')
-OBLIGATORY_HB_TAGS = frozenset(('secret', 'cannot_be_sold', 'historical_battles'))
 PREMIUM_IGR_TAGS = frozenset(('premiumIGR',))
 NUM_OPTIONAL_DEVICE_SLOTS = 3
 NUM_EQUIPMENT_SLOTS = 3
 CAMOUFLAGE_KINDS = {'winter': 0,
  'summer': 1,
  'desert': 2}
+CAMOUFLAGE_KIND_INDICES = dict(((v, k) for k, v in CAMOUFLAGE_KINDS.iteritems()))
 
 class HORN_COOLDOWN():
     WINDOW = 25.0
@@ -671,6 +671,12 @@ class VehicleDescr(object):
             for extra in self.extras:
                 prereqs.update(extra.prerequisites())
 
+        for elem in copy.copy(prereqs):
+            if elem in g_cache.requestOncePrereqs:
+                prereqs.remove(elem)
+            else:
+                g_cache.requestOncePrereqs.add(elem)
+
         return list(prereqs)
 
     def keepPrereqs(self, prereqs):
@@ -979,6 +985,7 @@ class VehicleDescr(object):
                 rotationSpeedLimit = min(rotationSpeedLimit, chassis['rotationSpeedLimit'])
             physics['rotationSpeedLimit'] = rotationSpeedLimit
             physics['rotationEnergy'] = rotationEnergy
+            physics['massRotationFactor'] = defWeight / weight
             if IS_CELLAPP or IS_DEVELOPMENT:
                 invisibilityFactor = 1.0
                 for turretDescr, _ in self.turrets:
@@ -1014,7 +1021,6 @@ class VehicleType(object):
         self.name = basicInfo['name']
         self.id = (nationID, basicInfo['id'])
         self.compactDescr = basicInfo['compactDescr']
-        self.historicalModelOf = basicInfo.get('historicalModelOf', self.compactDescr)
         section = ResMgr.openSection(xmlPath)
         if section is None:
             _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
@@ -1225,10 +1231,16 @@ class Cache(object):
         if IS_CLIENT:
             self.__vehicleEffects = None
             self.__gunEffects = None
+            self.__gunReloadEffects = None
             self.__chassisEffects = None
             self.__exhaustEffects = None
             self.__turretDetachmentEffects = None
+            self.__requestOncePrereqs = set()
         return
+
+    @property
+    def requestOncePrereqs(self):
+        return self.__requestOncePrereqs
 
     def clearPrereqs(self):
         pass
@@ -1397,6 +1409,12 @@ class Cache(object):
         return self.__gunEffects
 
     @property
+    def _gunReloadEffects(self):
+        if self.__gunReloadEffects is None:
+            self.__gunReloadEffects = _readReloadEffectGroups(_VEHICLE_TYPE_XML_PATH + 'common/gun_reload_effects.xml')
+        return self.__gunReloadEffects
+
+    @property
     def _exhaustEffects(self):
         if self.__exhaustEffects is None:
             self.__exhaustEffects = _readExhaustEffectsGroups(_VEHICLE_TYPE_XML_PATH + 'common/exhaust_effects.xml')
@@ -1490,7 +1508,6 @@ class VehicleList(object):
     def __readVehicleList(self, nation, section, xmlPath):
         res = {}
         ids = {}
-        historicalModelsOf = {}
         nationID = nations.INDICES[nation]
         pricesDest = _g_prices
         if pricesDest is not None:
@@ -1514,10 +1531,6 @@ class VehicleList(object):
             tags = _readTags(ctx, vsection, 'tags', 'vehicle')
             if 1 != len(tags & VEHICLE_CLASS_TAGS):
                 _xml.raiseWrongXml(ctx, 'tags', 'vehicle class tag is missing or is multiple')
-            if vsection.has_key('historicalModelOf'):
-                if len(tags & OBLIGATORY_HB_TAGS) != 3:
-                    _xml.raiseWrongXml(ctx, 'tags', 'vehicle with tag <historicalModelOf> must contain secret, cannot_be_sold and historical_battles tags')
-                historicalModelsOf[id] = vsection.readString('historicalModelOf')
             res[id]['tags'] = tags
             if IS_CLIENT or IS_WEB:
                 res[id]['userString'] = i18n.makeString(vsection.readString('userString'))
@@ -1541,17 +1554,6 @@ class VehicleList(object):
                     pricesDest['vehiclesToSellForGold'].add(compactDescr)
                 rentPrice = _xml.readRentPrice(ctx, vsection, 'rent') if IS_RENTALS_ENABLED else {}
                 pricesDest['vehiclesRentPrices'][compactDescr] = rentPrice
-
-        for histModelID, baseModelName in historicalModelsOf.iteritems():
-            compactDescr = makeIntCompactDescrByID('vehicle', nationID, histModelID)
-            if pricesDest is not None and compactDescr not in pricesDest['notInShopItems']:
-                _xml.raiseWrongXml(ctx, 'notInShop', 'Historical model %s must contain notInShop tag equals to True' % res[histModelID]['name'])
-            if baseModelName not in ids:
-                _xml.raiseWrongXml(ctx, 'historicalModelOf', 'Invalid base vehicle %s for historical model %s' % (baseModelName, res[histModelID]['name']))
-            baseID = ids[baseModelName]
-            if res[baseID]['tags'] - res[histModelID]['tags'] - OBLIGATORY_HB_TAGS:
-                _xml.raiseWrongXml(ctx, 'tags', 'Historical model %s must contain the same tags as base vehicle %s' % (res[histModelID]['name'], baseModelName))
-            res[histModelID]['historicalModelOf'] = makeIntCompactDescrByID('vehicle', nationID, baseID)
 
         return res
 
@@ -2239,6 +2241,8 @@ def _readEngine(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
     if IS_CLIENT or IS_WEB:
         _readUserText(res, section)
     if IS_CLIENT:
+        res['rpm_min'] = section.readInt('rpm_min', 1000)
+        res['rpm_max'] = section.readInt('rpm_max', 2600)
         res['sound'] = section.readString('sound', '')
         res['soundPC'] = section.readString('soundPC', '')
         res['soundNPC'] = section.readString('soundNPC', '')
@@ -2310,6 +2314,11 @@ def _xphysicsParse_engine(isDetailed, ctx, sec):
         res.update(_parseFloatArrList(ctx, sec, floatArrParamsDetailed))
         res['engineTorque'] = tuple(zip(res['engineTorque'][0::2], res['engineTorque'][1::2]))
         res['gearVelocities'] = tuple((KMH_TO_MS * v for v in res['gearVelocities']))
+        res['powerFactor'] = sec.readFloat('powerFactor', 1.0)
+        res['rotationFactor'] = sec.readFloat('rotationFactor', 1.0)
+        res['smplEnginePower'] = sec.readFloat('smplEnginePower', 600.0)
+        res['smplFwMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplFwMaxSpeed', 55.0)
+        res['smplBkMaxSpeed'] = KMH_TO_MS * sec.readFloat('smplBkMaxSpeed', 15.0)
     else:
         floatParamsSimplified = ('minRPM', 'smplEngPower')
         res.update(_parseFloatList(ctx, sec, floatParamsSimplified))
@@ -2325,6 +2334,7 @@ def _xphysicsParse_ground(ctx, sec):
     res['dirtCumulationRate'] *= KMH_TO_MS
     res['hbComSideFriction'] = sec.readFloat('hbComSideFriction', 0.0)
     res['hbSideFrictionAddition'] = sec.readFloat('hbSideFrictionAddition', 0.0)
+    res['rotationFactor'] = sec.readFloat('rotationFactor', 1.0)
     return res
 
 
@@ -2346,6 +2356,7 @@ def _xphysicsParse_chassis(isDetailed, ctx, sec):
     res['wPushedMediumFactor'] = sec.readFloat('wPushedMediumFactor', 1.0)
     res['wPushedSoftFactor'] = sec.readFloat('wPushedSoftFactor', 1.0)
     res['sideFrictionConstantRatio'] = sec.readFloat('sideFrictionConstantRatio', 0.0)
+    res['angVelocityFactor0'] = sec.readFloat('angVelocityFactor0', 1.0)
     floatArrParamsCommon = (('hullCOM', 3),
      ('roadWheelPositions', 5),
      ('stiffnessFactors', 5),
@@ -2370,6 +2381,7 @@ def _readXPhysicsMode(xmlCtx, sec, subsectionName, isDetailed):
     else:
         ctx = (xmlCtx, subsectionName)
         res = {}
+        res['gravityFactor'] = subsec.readFloat('gravityFactor', 1.0)
         res['engines'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_engine, isDetailed), 'engines')
         res['chassis'] = _parseSectionList(ctx, subsec, partial(_xphysicsParse_chassis, isDetailed), 'chassis')
         return res
@@ -2383,8 +2395,8 @@ def _readXPhysics(xmlCtx, section, subsectionName):
         ctx = (xmlCtx, subsectionName)
         res = {}
         res['mode'] = _xml.readInt(ctx, xsec, 'mode', 1)
+        res['useSimplifiedGearbox'] = _xml.readBool(ctx, xsec, 'useSimplifiedGearbox')
         res['detailed'] = _readXPhysicsMode(ctx, xsec, 'detailed', True)
-        res['simplified'] = _readXPhysicsMode(ctx, xsec, 'simplified', False)
         return res
 
 
@@ -2418,9 +2430,8 @@ def _readTurret(xmlCtx, section, compactDescr, unlocksDescrs = None, parentItem 
         res['showEmblemsOnGun'] = section.readBool('showEmblemsOnGun', False)
         if section.has_key('camouflage'):
             res['camouflageTiling'], res['camouflageExclusionMask'] = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', (None, None))
-        if FMOD.enabled:
-            res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
-            res['turretRotatorSoundGear'] = section.readString('turretRotatorSoundGear')
+        res['turretRotatorSoundManual'] = section.readString('turretRotatorSoundManual')
+        res['turretRotatorSoundGear'] = section.readString('turretRotatorSoundGear')
         res['AODecals'] = _readAODecals(xmlCtx, section, 'AODecals')
         commonConfig = g_cache.commonConfig
         res['turretDetachmentEffects'] = _readTurretDetachmentEffects(xmlCtx, section, 'turretDetachmentEffects', commonConfig['defaultTurretDetachmentEffects'])
@@ -2489,6 +2500,12 @@ def _readGun(xmlCtx, section, compactDescr, unlocksDescrs = None, turretCompactD
         if eff is None:
             _xml.raiseWrongXml(xmlCtx, 'effects', "unknown effect '%s'" % effName)
         res['effects'] = eff
+        effName = _xml.readStringOrNone(xmlCtx, section, 'reloadEffect')
+        if effName is not None:
+            reloadEff = g_cache._gunReloadEffects.get(effName, None)
+            if reloadEff is None:
+                _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
+            res['reloadEffect'] = reloadEff
         res['impulse'] = _xml.readNonNegativeFloat(xmlCtx, section, 'impulse')
         res['recoil'] = {'lodDist': _readLodDist(xmlCtx, section, 'recoil/lodDist'),
          'amplitude': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'),
@@ -2641,6 +2658,14 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
              'amplitude': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'),
              'backoffTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime'),
              'returnTime': _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')}
+        reloadEffect = sharedDescr.get('reloadEffect', None)
+        if section.has_key('reloadEffect'):
+            hasOverride = True
+            effName = _xml.readStringOrNone(xmlCtx, section, 'reloadEffect')
+            if effName is not None:
+                reloadEffect = g_cache._gunReloadEffects.get(effName, None)
+                if reloadEffect is None:
+                    _xml.raiseWrongXml(xmlCtx, 'effects', "unknown reload effect '%s'" % effName)
         sharedCam = (sharedDescr.get('camouflageTiling'), sharedDescr.get('camouflageExclusionMask'))
         cam = _readCamouflageTilingAndMask(xmlCtx, section, 'camouflage', sharedCam)
         if cam != sharedCam:
@@ -2712,6 +2737,7 @@ def _readGunLocals(xmlCtx, section, sharedDescr, unlocksDescrs, turretCompactDes
             descr['camouflageExclusionMask'] = cam[1]
             descr['animateEmblemSlots'] = animateEmblemSlots
             descr['emblemSlots'] = emblemSlots
+            descr['reloadEffect'] = reloadEffect
         if not IS_CLIENT or IS_DEVELOPMENT:
             descr['invisibilityFactorAtShot'] = invisibilityFactorAtShot
         return descr
@@ -3182,6 +3208,28 @@ def _readEffectGroups(xmlPath, withSubgroups = False):
     return res
 
 
+def __readReloadEffect(xmlCtx, section):
+    try:
+        reloadEffect = ReloadEffect.effectFromSection(section)
+        return reloadEffect
+    except Exception as x:
+        _xml.raiseWrongXml(xmlCtx, section.name, str(x))
+
+
+def _readReloadEffectGroups(xmlPath):
+    res = {}
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    xmlCtx = (None, xmlPath)
+    for sname, subsection in section.items():
+        sname = intern(sname)
+        ctx = (xmlCtx, sname)
+        res[sname] = __readReloadEffect(ctx, subsection)
+
+    return res
+
+
 def _readExhaustEffectsGroups(xmlPath):
     res = {}
     section = ResMgr.openSection(xmlPath)
@@ -3213,19 +3261,19 @@ def _readChassisEffectGroups(xmlPath):
             if matkindName != 'default' and matkindName not in EFFECT_MATERIALS:
                 _xml.raiseWrongXml(ctx, matkindName, 'unknown material kind')
             else:
-                effectName = _xml.readNonEmptyString((ctx, matkindName), matkindSection, '').strip()
-                if effectName.lower() == 'none':
-                    continue
-                if effectName.find('|') != -1:
-                    effectName = effectName.split('|')
-                    for i in xrange(0, len(effectName)):
-                        effectName[i] = effectName[i].strip()
+                effectNames = []
+                if len(matkindSection.keys()) > 0:
+                    for idx, side in enumerate(('left', 'right', 'leftFront', 'rightFront')):
+                        sideEffectName = _xml.readNonEmptyString((ctx, matkindName), matkindSection, side)
+                        effectNames.append(sideEffectName)
 
+                else:
+                    effectNames = _xml.readNonEmptyString((ctx, matkindName), matkindSection, '')
                 if matkindName == 'default':
-                    effects[-1] = effectName
+                    effects[-1] = effectNames
                 else:
                     effectIndex = material_kinds.EFFECT_MATERIAL_INDEXES_BY_NAMES[matkindName]
-                    effects[effectIndex] = effectName
+                    effects[effectIndex] = effectNames
             res[sname] = (effects, set())
 
         matkindSection = None
@@ -3870,6 +3918,7 @@ def _readPlayerEmblems(xmlPath):
                 isMirrored = False
             tags = _xml.readStringOrNone(ctx, subsection, 'tags')
             tags = frozenset() if tags is None else frozenset(tags.split())
+            qualifier = _xml.readStringOrNone(ctx, subsection, 'qualifier')
             emblemIDs.append(emblemID)
             emblems[emblemID] = (groupName,
              igrType,
@@ -3877,7 +3926,8 @@ def _readPlayerEmblems(xmlPath):
              bumpTexName,
              emblemUserString,
              isMirrored,
-             tags)
+             tags,
+             qualifier)
             if sname != 'emblem':
                 names[intern(sname)] = emblemID
 
@@ -3922,6 +3972,7 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
                 _xml.raiseWrongXml(ctx, '', 'inscription ID is not unique')
             tags = _xml.readStringOrNone(ctx, subsection, 'tags')
             tags = frozenset() if tags is None else frozenset(tags.split())
+            qualifier = _xml.readStringOrNone(ctx, subsection, 'qualifier')
             if IS_CLIENT:
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpTexName = subsection.readString('bumpTexName', '')
@@ -3933,9 +3984,13 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
                  bumpTexName,
                  inscrUserString,
                  isFeatured,
-                 tags)
+                 tags,
+                 qualifier)
             else:
-                inscrs[inscrID] = (groupName, igrType, tags)
+                inscrs[inscrID] = (groupName,
+                 igrType,
+                 tags,
+                 qualifier)
             inscrIDs.append(inscrID)
 
         groups[groupName] = (inscrIDs,
@@ -4062,7 +4117,10 @@ def _extractNeededPrereqs(prereqs, resourceNames):
         try:
             res.append(prereqs[name])
         except Exception:
-            LOG_WARNING('Resource is not found: %s' % name)
+            if name not in g_cache.requestOncePrereqs:
+                LOG_WARNING('Resource is not found: %s' % name)
+            else:
+                res.append(None)
 
     return res
 

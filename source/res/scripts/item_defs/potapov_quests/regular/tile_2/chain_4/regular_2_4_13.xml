@@ -1,0 +1,60 @@
+<regular_2_4_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <unit>
+              <and>
+                <unitVehicleKills>
+                  <greaterOrEqual>	4	</greaterOrEqual>
+                </unitVehicleKills>
+              </and>
+            </unit>
+            <and>
+              <vehicleKills>
+                <greaterOrEqual>	4	</greaterOrEqual>
+              </vehicleKills>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleKills>
+                    <greaterOrEqual>	4	</greaterOrEqual>
+                  </unitVehicleKills>
+                </and>
+              </unit>
+              <and>
+                <vehicleKills>
+                  <greaterOrEqual>	4	</greaterOrEqual>
+                </vehicleKills>
+              </and>
+            </or>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_4_13.xml>

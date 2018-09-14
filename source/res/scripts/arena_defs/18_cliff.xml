@@ -1,0 +1,149 @@
+<18_cliff.xml>
+  <name>	#arenas:18_cliff/name	</name>
+  <description>	#arenas:18_cliff/description	</description>
+  <geometry>	spaces/18_cliff	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/18_cliff/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/euro_village	</loadingMusic>
+  <wwloadingMusic>	music_euro_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-273.785675 -436.600922	</position1>
+        </team1>
+        <team2>
+          <position1>	-251.606262 434.591003	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2>
+          <position>	-285.944 -451.039	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-252.066513 434.820923	</position1>
+          <position2>	228.184692 176.506927	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+    <fallout4>
+      <winPoints>	RESOURCE_15x15_FULL	</winPoints>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <roundLength>	900	</roundLength>
+      <resourcePoint>
+        <position>	-364.883820 -14.861121 -8.616982	</position>
+        <radius>	15.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	25	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	5AB3971D.45B69498.DF013492.B519D575	</guid>
+      </resourcePoint>
+      <resourcePoint>
+        <position>	-80.612442 0.701819 9.467126	</position>
+        <radius>	15.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	25	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	D418D7CD.4286BF99.F90FBF8A.9BA56F08	</guid>
+      </resourcePoint>
+      <resourcePoint>
+        <position>	311.175690 -0.617003 18.193464	</position>
+        <radius>	15.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	25	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	AC4A6EB9.4373DE85.F59449BC.E82C7C0D	</guid>
+      </resourcePoint>
+    </fallout4>
+    <fallout5>
+      <winPoints>	ONE_FLAG_15x15	</winPoints>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-253 450	</position>
+        </team1>
+        <team2>
+          <position>	-290 -450	</position>
+        </team2>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	-14.692039 7.625658 4.136230	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	173.385773 2.190620 -258.510590	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	AB19AFEC.4A6ED240.3EEF3281.CF91BA48	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-382.395630 -14.734519 -294.043060	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	CDE7741D.46C71115.8F6F23AA.5347B744	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	140.056854 1.992256 279.849487	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	4B7494AD.4DC4A2C4.772A2EB3.0A3A0F4D	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-416.480103 -15.733672 264.147705	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	10C36C50.4E5C0A57.DDE389B1.74BD24F4	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	308.760712 -0.747955 13.720349	</position>
+        <guid>	CA32FCD6.4BCECD84.9A2F09BA.3C2D6EB9	</guid>
+      </repairPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-393.529541 -14.880033 -6.641266	</position>
+        <guid>	12A7C7C7.45E7E5E9.DA93BE87.80E4D067	</guid>
+      </repairPoint>
+    </fallout5>
+  </gameplayTypes>
+</18_cliff.xml>

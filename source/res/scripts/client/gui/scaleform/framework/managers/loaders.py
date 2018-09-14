@@ -89,7 +89,7 @@ class LoaderManager(LoaderManagerMeta):
         return
 
     def __doLoadView(self, alias, name, *args, **kwargs):
-        viewTutorialID = self.__app.tutorialManager.getViewTutorialID(alias)
+        viewTutorialID = self.__app.tutorialManager.getViewTutorialID(name)
         if name in self.__nameToLoadingItem:
             item = self.__nameToLoadingItem[name]
             self.as_loadViewS(item.pyEntity.settings._asdict(), alias, name, viewTutorialID)

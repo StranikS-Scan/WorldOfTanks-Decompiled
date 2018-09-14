@@ -4,9 +4,10 @@ from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES
 from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import ACHIEVEMENTRATED7X7_DEPENDENCIES
 from dossiers2.custom.dependencies import HISTORICAL_ACHIEVEMENTS_DEPENDENCIES
+from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
-from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import FORT_MISC_DEPENDENCIES
+from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from battle_statistics_layouts import *
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
@@ -37,6 +38,7 @@ _fortSortiesBlockBuilder = StaticSizeBlockBuilder('fortSorties', FORT_BLOCK_LAYO
 _globalMapMiddleBlockBuilder = StaticSizeBlockBuilder('globalMapMiddle', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _globalMapChampionBlockBuilder = StaticSizeBlockBuilder('globalMapChampion', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
 _globalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('globalMapAbsolute', GLOBAL_MAP_BLOCK_LAYOUT, GLOBAL_MAP_STATS_DEPENDENCIES, [])
+_falloutBlockBuilder = StaticSizeBlockBuilder('fallout', FALLOUT_BLOCK_LAYOUT, FALLOUT_STATS_DEPENDENCIES, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -48,6 +50,7 @@ _maxFortSortiesInClanBlockBuilder = StaticSizeBlockBuilder('maxFortSortiesInClan
 _maxGlobalMapMiddleBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapMiddle', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxGlobalMapChampionBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapChampion', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxGlobalMapAbsoluteBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapAbsolute', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxFalloutBlockBuilder = StaticSizeBlockBuilder('maxFallout', MAX_FALLOUT_BLOCK_LAYOUT_WITH_AVATAR, {}, [])
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
@@ -56,6 +59,7 @@ _historicalCutBlockBuilder = DictBlockBuilder('historicalCut', 'I', 'III', {})
 _fortBattlesCutBlockBuilder = DictBlockBuilder('fortBattlesCut', 'I', 'III', {})
 _fortSortiesCutBlockBuilder = DictBlockBuilder('fortSortiesCut', 'I', 'III', {})
 _globalMapCommonCutBlockBuilder = DictBlockBuilder('globalMapCommonCut', 'I', 'III', {})
+_falloutCutBlockBuilder = DictBlockBuilder('falloutCut', 'I', 'IIII', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -431,6 +435,31 @@ FORT_MISC_LAYOUT = ['fortResourceInBattles',
  'enemyBasePlunderNumberInAttack']
 _fortMiscBlockBuilder = StaticSizeBlockBuilder('fortMisc', FORT_MISC_LAYOUT, FORT_MISC_DEPENDENCIES, [])
 _fortMiscInClanBlockBuilder = StaticSizeBlockBuilder('fortMiscInClan', FORT_MISC_LAYOUT, {}, [])
+FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT = ['shoulderToShoulder',
+ 'aloneInTheField',
+ 'fallenFlags',
+ 'effectiveSupport',
+ 'stormLord',
+ 'winnerLaurels',
+ 'predator',
+ 'unreachable',
+ 'champion',
+ 'bannerman',
+ 'falloutDieHard',
+ 'sauronEye']
+_falloutAchievementsPopUps = ['shoulderToShoulder',
+ 'aloneInTheField',
+ 'fallenFlags',
+ 'effectiveSupport',
+ 'stormLord',
+ 'winnerLaurels',
+ 'predator',
+ 'unreachable',
+ 'champion',
+ 'bannerman',
+ 'falloutDieHard',
+ 'sauronEye']
+_falloutAchievementsBlockBuilder = StaticSizeBlockBuilder('falloutAchievements', FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _falloutAchievementsPopUps)
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -477,4 +506,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _maxGlobalMapMiddleBlockBuilder,
  _maxGlobalMapChampionBlockBuilder,
  _maxGlobalMapAbsoluteBlockBuilder,
- _globalMapCommonCutBlockBuilder)
+ _globalMapCommonCutBlockBuilder,
+ _falloutBlockBuilder,
+ _falloutCutBlockBuilder,
+ _maxFalloutBlockBuilder,
+ _falloutAchievementsBlockBuilder)

@@ -290,17 +290,17 @@ class Stats(object):
         elif premCost is None:
             LOG_ERROR('Result of the getPremiumCost request is None')
             if callback is not None:
-                callback(AccountCommands.RES_FAILURE)
+                callback(AccountCommands.RES_FAILURE, None)
             return
         else:
             gold = premCost.get(days, None)
             if gold is None:
                 LOG_ERROR('Wrong days number')
                 if callback is not None:
-                    callback(AccountCommands.RES_WRONG_ARGS)
+                    callback(AccountCommands.RES_WRONG_ARGS, None)
                 return
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
+                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, errorStr)
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_PREMIUM, shopRev, days, arenaUniqueID, proxy)

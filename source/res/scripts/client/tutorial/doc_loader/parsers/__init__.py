@@ -4,6 +4,7 @@ from helpers.html import translation
 from items import _xml
 from tutorial.data.chapter import Bonus, Chapter, Scene
 from tutorial.data.descriptor import DescriptorData
+from tutorial.data.hints import HintsData
 from tutorial.doc_loader import sub_parsers
 from tutorial.settings import TUTORIAL_STOP_REASON_NAMES, GLOBAL_REFS_FILE_PATH, BONUSES_REFS_FILE_PATH
 
@@ -232,3 +233,21 @@ class BonusRefParser(object):
             result[bonusID] = Bonus(subSec.readInt('id', -1), subSec.readString('message'), sub_parsers.readValues(subSec))
 
         return result
+
+
+class HintsParser(object):
+
+    @staticmethod
+    def parse(filePath, excludedHints):
+        hints = HintsData()
+        section = ResMgr.openSection(filePath)
+        if section is None:
+            _xml.raiseWrongXml(None, filePath, 'can not open or read')
+        xmlCtx = (None, filePath)
+        hints.setGuiFilePath(_xml.readString(xmlCtx, section, 'gui'))
+        for _, subSec in _xml.getChildren(xmlCtx, section, 'hints'):
+            hint = sub_parsers.parseHint(xmlCtx, subSec)
+            if hint['hintID'] not in excludedHints:
+                hints.addHint(hint)
+
+        return hints

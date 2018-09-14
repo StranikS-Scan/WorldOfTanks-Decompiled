@@ -22,6 +22,7 @@ class ACHIEVEMENT_BLOCK:
     SINGLE_7X7 = 'singleAchievementsRated7x7'
     CLAN = 'clanAchievements'
     RATED_7X7 = 'achievementsRated7x7'
+    FALLOUT = 'falloutAchievements'
     ALL = (CLIENT,
      TOTAL,
      TEAM_7X7,
@@ -32,7 +33,8 @@ class ACHIEVEMENT_BLOCK:
      SINGLE,
      CLAN,
      RATED_7X7,
-     SINGLE_7X7)
+     SINGLE_7X7,
+     FALLOUT)
 
 
 class ACHIEVEMENT_MODE:

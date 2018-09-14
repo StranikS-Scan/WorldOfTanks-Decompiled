@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorBase.py
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleBasicVO, makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.shared.ItemsCache import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
@@ -26,7 +26,7 @@ class VehicleSelectorBase(object):
     def _getLevelsRange(self):
         return range(11)
 
-    def _updateData(self, allVehicles, levelsRange, vehicleTypes):
+    def _updateData(self, allVehicles, levelsRange, vehicleTypes, isVehicleRoster = False):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
         criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
@@ -47,8 +47,9 @@ class VehicleSelectorBase(object):
         else:
             predicate = lambda vo: True
         result = []
+        makeVehicleVOAction = makeVehicleBasicVO if isVehicleRoster else makeVehicleVO
         for v in filteredVehicles.itervalues():
-            vo = makeVehicleVO(v, levelsRange, vehicleTypes)
+            vo = makeVehicleVOAction(v, levelsRange, vehicleTypes)
             if predicate(vo):
                 result.append(vo)
 

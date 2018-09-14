@@ -1,0 +1,68 @@
+<regular_2_4_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <win></win>
+            <or>
+              <unit>
+                <and>
+                  <results>
+                    <key>	percentFromTotalTeamDamage	</key>
+                    <greaterOrEqual>	25	</greaterOrEqual>
+                  </results>
+                </and>
+              </unit>
+              <and>
+                <results>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	25	</greaterOrEqual>
+                </results>
+              </and>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <win></win>
+            <or>
+              <unit>
+                <and>
+                  <results>
+                    <key>	percentFromTotalTeamDamage	</key>
+                    <greaterOrEqual>	25	</greaterOrEqual>
+                  </results>
+                </and>
+              </unit>
+              <and>
+                <results>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	25	</greaterOrEqual>
+                </results>
+              </and>
+            </or>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_4_14.xml>

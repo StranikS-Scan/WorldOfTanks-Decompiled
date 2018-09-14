@@ -85,8 +85,6 @@ class BattleMessagesController(object):
         return
 
     def showAllyHitMessage(self, vehicleID = None):
-        if isEventBattle():
-            return
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self.__battleCtx.getFullPlayerName(vID=vehicleID)}, (('entity', vehicleID),))
 
     def __getEntityString(self, avatar, entityID):
@@ -135,10 +133,10 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
-    def showVehicleDamageInfo(self, avatar, code, entityID, extra):
+    def showVehicleDamageInfo(self, avatar, code, entityID, extra, equipmentID):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, entityID, extra)
+        super(BattleMessagesPlayer, self).showVehicleDamageInfo(avatar, code, entityID, extra, equipmentID)
 
     def showVehicleMessage(self, key, args = None):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:

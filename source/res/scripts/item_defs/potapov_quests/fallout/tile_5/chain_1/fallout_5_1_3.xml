@@ -1,0 +1,44 @@
+<fallout_5_1_3.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_3_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+              <whileEnemyWithFlag></whileEnemyWithFlag>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_3_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+              <whileEnemyWithFlag></whileEnemyWithFlag>
+            </vehicleKills>
+            <results>
+              <key>	xp	</key>
+              <greaterOrEqual>	1500	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_1_3.xml>

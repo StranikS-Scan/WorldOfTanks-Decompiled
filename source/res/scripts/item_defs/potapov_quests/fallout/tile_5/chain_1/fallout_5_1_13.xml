@@ -1,0 +1,52 @@
+<fallout_5_1_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <vehicleDamage>
+            <distance>	156	</distance>
+            <greaterOrEqual>	15000	</greaterOrEqual>
+          </vehicleDamage>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <goodie>
+          <count>	4	</count>
+          <id>	5022	</id>
+        </goodie>
+        <goodie>
+          <count>	4	</count>
+          <id>	5038	</id>
+        </goodie>
+        <goodie>
+          <count>	4	</count>
+          <id>	5031	</id>
+        </goodie>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <distance>	156	</distance>
+              <greaterOrEqual>	15000	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_1_13.xml>

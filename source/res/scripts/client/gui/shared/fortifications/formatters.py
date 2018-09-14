@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/formatters.py
-import re
 import BigWorld
 import constants
 from helpers import time_utils, i18n

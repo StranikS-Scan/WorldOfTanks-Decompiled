@@ -3,32 +3,30 @@ import cgi
 import time
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR, SORTIE_DIVISION
+from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR
+from UnitBase import SORTIE_DIVISION
 import account_helpers
-from gui.game_control import getFalloutCtrl
 from gui.prb_control.functional import action_handlers
 from gui.prb_control.restrictions import createUnitActionValidator
+from gui.prb_control.restrictions.permissions import IntroUnitPermissions
 from gui.shared.fortifications import getClientFortMgr
 from messenger.ext import passCensor
 from account_helpers.AccountSettings import AccountSettings
 from adisp import process
 from constants import PREBATTLE_TYPE, REQUEST_COOLDOWN, FALLOUT_BATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from gui import prb_control, DialogsInterface
 from gui.clubs import contexts as clubs_ctx
 from gui.clubs.club_helpers import ClubListener
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
-from gui.prb_control import settings
-from gui.prb_control import isParentControlActivated
+from gui.prb_control import prb_getters, settings
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.functional import interfaces
 from gui.prb_control.functional import unit_ext
-from gui.prb_control.items import unit_items
+from gui.prb_control.items import unit_items, SelectResult
 from gui.prb_control.prb_cooldown import UnitCooldownManager
-from gui.prb_control.restrictions.interfaces import IUnitPermissions
-from gui.prb_control.restrictions.permissions import UnitPermissions, SquadPermissions
-from gui.prb_control.settings import FUNCTIONAL_INIT_RESULT, FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE
+from gui.prb_control.restrictions import permissions
+from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.utils.ListenersCollection import ListenersCollection
@@ -47,17 +45,18 @@ class UnitIntro(interfaces.IPrbEntry):
         return unit_ctx.JoinModeCtx(self._prbType)
 
     def create(self, ctx, callback = None):
-        raise Exception, 'UnitIntro is not create entity'
+        raise Exception('UnitIntro is not create entity')
 
     def join(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
-            g_prbCtrlEvents.onUnitIntroModeJoined(ctx.getPrbType(), ctx.getModeFlags())
-            if callback:
+        if not prb_getters.hasModalEntity() or ctx.isForced():
+            g_prbCtrlEvents.onUnitIntroModeJoined(ctx.getEntityType(), ctx.getFlags())
+            if callback is not None:
                 callback(True)
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
     def select(self, ctx, callback = None):
         self.join(ctx, callback=callback)
@@ -65,25 +64,27 @@ class UnitIntro(interfaces.IPrbEntry):
 
 class UnitEntry(interfaces.IPrbEntry):
 
-    def __init__(self):
+    def __init__(self, accountsToInvite = None):
         super(UnitEntry, self).__init__()
+        self._accountsToInvite = accountsToInvite or ()
 
     def create(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
-            unitMgr = prb_control.getClientUnitMgr()
+        if not prb_getters.hasModalEntity() or ctx.isForced():
+            unitMgr = prb_getters.getClientUnitMgr()
             if unitMgr:
                 ctx.startProcessing(callback=callback)
-                unitMgr.create()
+                self._doCreate(unitMgr, ctx)
             else:
                 LOG_ERROR('Unit manager is not defined')
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
     def join(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
-            unitMgr = prb_control.getClientUnitMgr()
+        if not prb_getters.hasModalEntity() or ctx.isForced():
+            unitMgr = prb_getters.getClientUnitMgr()
             if unitMgr:
                 ctx.startProcessing(callback=callback)
                 unitMgr.join(ctx.getID(), slotIdx=ctx.getSlotIdx())
@@ -91,47 +92,52 @@ class UnitEntry(interfaces.IPrbEntry):
                 LOG_ERROR('Unit manager is not defined')
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
     def select(self, ctx, callback = None):
         LOG_ERROR('Routine "select" can not be invoked for UnitEntry')
 
+    def _doCreate(self, unitMgr, ctx):
+        unitMgr.create()
 
-class SquadEntry(interfaces.IPrbEntry):
 
-    def __init__(self):
-        super(SquadEntry, self).__init__()
+class SquadEntry(UnitEntry):
+
+    def __init__(self, accountsToInvite = None):
+        super(SquadEntry, self).__init__(accountsToInvite=accountsToInvite)
 
     def makeDefCtx(self):
-        return unit_ctx.SquadSettingsCtx(waitingID='prebattle/create')
-
-    def create(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
-            unitMgr = prb_control.getClientUnitMgr()
-            if unitMgr:
-                ctx.startProcessing(callback=callback)
-                falloutCtrl = getFalloutCtrl()
-                battleType = falloutCtrl.getBattleType()
-                if falloutCtrl.isSelected():
-                    unitMgr.createEventSquad(battleType)
-                else:
-                    unitMgr.createSquad()
-            else:
-                LOG_ERROR('Unit manager is not defined')
-        else:
-            LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
-                callback(False)
+        return unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)
 
     def join(self, ctx, callback = None):
         super(SquadEntry, self).join(ctx, callback)
-        LOG_ERROR('Player can not join to squad by invite')
+        LOG_ERROR('Player can join to squad by invite only')
         if callback:
             callback(False)
 
     def select(self, ctx, callback = None):
         self.create(ctx, callback=callback)
+
+    def _doCreate(self, unitMgr, ctx):
+        unitMgr.createSquad()
+
+
+class EventSquadEntry(UnitEntry):
+
+    def __init__(self, battleType, accountsToInvite = None):
+        super(EventSquadEntry, self).__init__(accountsToInvite=accountsToInvite)
+        self.__battleType = battleType
+
+    def makeDefCtx(self):
+        return unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', flags=FUNCTIONAL_FLAG.SWITCH, accountsToInvite=self._accountsToInvite)
+
+    def select(self, ctx, callback = None):
+        self.create(ctx, callback=callback)
+
+    def _doCreate(self, unitMgr, ctx):
+        unitMgr.createEventSquad(self.__battleType)
 
 
 class FortBattleEntry(interfaces.IPrbEntry):
@@ -140,7 +146,7 @@ class FortBattleEntry(interfaces.IPrbEntry):
         super(FortBattleEntry, self).__init__()
 
     def create(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_getters.hasModalEntity() or ctx.isForced():
             fortMgr = getClientFortMgr()
             if fortMgr:
                 ctx.startProcessing(callback=callback)
@@ -149,11 +155,12 @@ class FortBattleEntry(interfaces.IPrbEntry):
                 LOG_ERROR('Fort provider is not defined')
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
     def join(self, ctx, callback = None):
-        if not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_getters.hasModalEntity() or ctx.isForced():
             fortMgr = getClientFortMgr()
             if fortMgr:
                 ctx.startProcessing(callback=callback)
@@ -162,8 +169,9 @@ class FortBattleEntry(interfaces.IPrbEntry):
                 LOG_ERROR('Fort provider is not defined')
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
     def select(self, ctx, callback = None):
         LOG_ERROR('Routine "select" can not be invoked for FortBattleEntry')
@@ -180,15 +188,19 @@ class ClubBattleEntry(interfaces.IPrbEntry, ClubListener):
     @process
     def __createOrJoin(self, ctx, callback = None):
         yield lambda callback: callback(None)
-        if not prb_control.hasModalEntity() or ctx.isForced():
+        if not prb_getters.hasModalEntity() or ctx.isForced():
             yield self.clubsCtrl.sendRequest(clubs_ctx.JoinUnitCtx(ctx.getClubDbID(), ctx.getJoiningTime()), allowDelay=ctx.isAllowDelay())
         else:
             LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
-            if callback:
+            if callback is not None:
                 callback(False)
+        return
 
 
 class NoUnitFunctional(interfaces.IUnitFunctional):
+
+    def getFunctionalFlags(self):
+        return FUNCTIONAL_FLAG.NO_UNIT
 
     def exitFromQueue(self):
         return False
@@ -196,9 +208,9 @@ class NoUnitFunctional(interfaces.IUnitFunctional):
 
 class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
-    def __init__(self, requestHandlers, listenerClass, prbType, rosterSettings):
+    def __init__(self, requestHandlers, listenerClass, prbType, rosterSettings, flags = settings.FUNCTIONAL_FLAG.UNDEFINED):
         super(_UnitFunctional, self).__init__()
-        self._exit = settings.FUNCTIONAL_EXIT.NO_FUNC
+        self._flags = flags
         self._listReq = None
         self._setListenerClass(listenerClass)
         self._requestHandlers = requestHandlers
@@ -209,20 +221,19 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
         self._showLeadershipNotification = False
         return
 
-    def getExit(self):
-        return self._exit
+    def getFunctionalFlags(self):
+        return self._flags
 
-    def setExit(self, exit):
-        if exit in settings.FUNCTIONAL_EXIT.UNIT_RANGE:
-            self._exit = exit
+    def setFunctionalFlags(self, flags):
+        self._flags = flags
 
-    def showGUI(self):
+    def showGUI(self, ctx = None):
         g_eventDispatcher.showUnitWindow(self._prbType)
 
-    def setPrbType(self, prbType):
+    def setEntityType(self, prbType):
         self._prbType = prbType
 
-    def getPrbType(self):
+    def getEntityType(self):
         return self._prbType
 
     def hasEntity(self):
@@ -264,12 +275,12 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
                 inSlots = unit.getPlayerSlots()
                 if dbID in inSlots:
                     isPlayerReady = unit.isPlayerReadyInSlot(inSlots[dbID])
-            if self.getPrbType() == PREBATTLE_TYPE.SQUAD:
-                return SquadPermissions(roles, unit._flags, pDbID == dbID, isPlayerReady)
+            if self.getEntityType() == PREBATTLE_TYPE.SQUAD:
+                return permissions.SquadPermissions(roles, unit._flags, pDbID == dbID, isPlayerReady)
             else:
-                return UnitPermissions(roles, unit._flags, pDbID == dbID, isPlayerReady)
+                return permissions.UnitPermissions(roles, unit._flags, pDbID == dbID, isPlayerReady)
         else:
-            return IUnitPermissions()
+            return IntroUnitPermissions()
         return
 
     def isCreator(self, dbID = None, unitIdx = None):
@@ -277,7 +288,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             dbID = account_helpers.getAccountDatabaseID()
         _, unit = self.getUnit(unitIdx=unitIdx)
         if unit:
-            result = UnitPermissions.isCreator(unit.getPlayers().get(dbID, {}).get('role', 0))
+            result = permissions.UnitPermissions.isCreator(unit.getPlayers().get(dbID, {}).get('role', 0))
         else:
             result = False
         return result
@@ -411,20 +422,6 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             if callback:
                 callback(False)
 
-    @process
-    def doLeaveAction(self, dispatcher, ctx = None):
-        meta = self.getConfirmDialogMeta()
-        if meta is not None:
-            isConfirmed = yield DialogsInterface.showDialog(meta)
-        else:
-            isConfirmed = yield lambda callback: callback(True)
-        if isConfirmed:
-            if ctx is None:
-                ctx = unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave')
-            if dispatcher._setRequestCtx(ctx):
-                self.leave(ctx)
-        return
-
     def getSelectedVehicles(self, section, useAll = True):
         accSettings = dict(AccountSettings.getSettings('unitWindow'))
         vehicles = accSettings.get(section, [])
@@ -519,7 +516,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
     def isParentControlActivated(self, callback = None):
         result = False
-        if isParentControlActivated():
+        if prb_getters.isParentControlActivated():
             g_eventDispatcher.showParentControlNotification()
             if callback:
                 callback(False)
@@ -529,13 +526,12 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
 
 class IntroFunctional(_UnitFunctional):
 
-    def __init__(self, prbType, modeFlags, rosterSettings):
+    def __init__(self, prbType, flags, rosterSettings):
         RQ_TYPE = settings.REQUEST_TYPE
         handlers = {RQ_TYPE.AUTO_SEARCH: self.doAutoSearch,
          RQ_TYPE.ACCEPT_SEARCH: self.acceptSearch,
          RQ_TYPE.DECLINE_SEARCH: self.declineSearch}
-        super(IntroFunctional, self).__init__(handlers, interfaces.IIntroUnitListener, prbType, rosterSettings)
-        self._modeFlags = modeFlags
+        super(IntroFunctional, self).__init__(handlers, interfaces.IIntroUnitListener, prbType, rosterSettings, flags | FUNCTIONAL_FLAG.UNIT_INTRO)
         self._clubsPaginator = None
         self._clubsFinder = None
         return
@@ -555,12 +551,12 @@ class IntroFunctional(_UnitFunctional):
         self._clubsPaginator.init()
         self._clubsFinder = ClubFinder(g_clubsCtrl)
         self._clubsFinder.init()
-        g_eventDispatcher.loadUnit(self._prbType, self._modeFlags)
+        g_eventDispatcher.loadUnit(self._prbType, self._flags & FUNCTIONAL_FLAG.ACTIONS_BITMASK)
         for listener in self._listeners:
             listener.onIntroUnitFunctionalInited()
 
         g_eventDispatcher.updateUI()
-        return FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
+        return FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, woEvents = False):
         if self._searchHandler is not None:
@@ -577,14 +573,17 @@ class IntroFunctional(_UnitFunctional):
         for listener in self._listeners:
             listener.onIntroUnitFunctionalFinished()
 
-        if self._exit != settings.FUNCTIONAL_EXIT.UNIT:
+        if self._flags & FUNCTIONAL_FLAG.SWITCH == 0:
             g_eventDispatcher.unloadUnit(self._prbType)
             g_eventDispatcher.updateUI()
         unit_ext.destroyListReq()
-        return
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     def canPlayerDoAction(self):
         return (not self._hasEntity, '')
+
+    def getExtra(self, unitIdx = None):
+        return None
 
     def getUnit(self, unitIdx = None, safe = False):
         if unitIdx is None and not safe:
@@ -593,18 +592,22 @@ class IntroFunctional(_UnitFunctional):
         else:
             return unit_ext.getUnitFromStorage(self._prbType, unitIdx)
 
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
-        return rally_dialog_meta.createUnitIntroLeaveMeta(funcExit, self._prbType)
+    def getConfirmDialogMeta(self, ctx):
+        return rally_dialog_meta.createUnitIntroLeaveMeta(ctx, self._prbType)
 
     def isPlayerJoined(self, ctx):
         result = False
         if isinstance(ctx, unit_ctx.JoinModeCtx):
-            result = ctx.getPrbType() == self._prbType
-            self._modeFlags = ctx.getModeFlags()
+            result = ctx.getEntityType() == self._prbType
         return result
 
-    def showGUI(self):
-        g_eventDispatcher.showUnitWindow(self._prbType, self._modeFlags)
+    def showGUI(self, ctx = None):
+        if ctx is not None:
+            flags = ctx.getFlags() & FUNCTIONAL_FLAG.ACTIONS_BITMASK
+        else:
+            flags = FUNCTIONAL_FLAG.UNDEFINED
+        g_eventDispatcher.showUnitWindow(self._prbType, flags)
+        return
 
     def initEvents(self, listener):
         if listener in self._listeners:
@@ -618,7 +621,6 @@ class IntroFunctional(_UnitFunctional):
             self._searchHandler.stop()
 
     def leave(self, ctx, callback = None):
-        self._exit = ctx.getFuncExit()
         g_prbCtrlEvents.onUnitIntroModeLeft()
         if callback:
             callback(True)
@@ -631,7 +633,7 @@ class IntroFunctional(_UnitFunctional):
         if action.actionName == PREBATTLE_ACTION_NAME.UNIT and self._prbType in [PREBATTLE_TYPE.CLUBS]:
             g_eventDispatcher.showUnitWindow(self._prbType)
             result = True
-        return result
+        return SelectResult(result)
 
     def doAutoSearch(self, ctx, callback = None):
         if ctx.isRequestToStart():
@@ -664,7 +666,7 @@ class IntroFunctional(_UnitFunctional):
 
 class UnitFunctional(_UnitFunctional):
 
-    def __init__(self, prbType, rosterSettings):
+    def __init__(self, prbType, rosterSettings, flags = FUNCTIONAL_FLAG.UNIT):
         RQ_TYPE = settings.REQUEST_TYPE
         handlers = {RQ_TYPE.ASSIGN: self.assign,
          RQ_TYPE.LOCK: self.lock,
@@ -688,7 +690,7 @@ class UnitFunctional(_UnitFunctional):
             self._actionHandler = action_handlers.SquadActionsHandler(self)
         else:
             self._actionHandler = action_handlers.CommonUnitActionsHandler(self)
-        super(UnitFunctional, self).__init__(handlers, interfaces.IUnitListener, prbType, rosterSettings)
+        super(UnitFunctional, self).__init__(handlers, interfaces.IUnitListener, prbType, rosterSettings, flags & FUNCTIONAL_FLAG.UNIT_BITMASK)
         self._requestsProcessor = None
         self._vehiclesWatcher = None
         self._lastErrorCode = UNIT_ERROR.OK
@@ -724,7 +726,7 @@ class UnitFunctional(_UnitFunctional):
         g_eventDispatcher.loadHangar()
         g_eventDispatcher.updateUI()
         self._scheduler.init()
-        return initResult | FUNCTIONAL_INIT_RESULT.INITED | FUNCTIONAL_INIT_RESULT.LOAD_WINDOW
+        return initResult | FUNCTIONAL_FLAG.LOAD_WINDOW
 
     def fini(self, woEvents = False):
         flags = self.getFlags()
@@ -746,8 +748,11 @@ class UnitFunctional(_UnitFunctional):
         if self._vehiclesWatcher:
             self._vehiclesWatcher.fini()
             self._vehiclesWatcher = None
+        if self._actionHandler is not None:
+            self._actionHandler.clear()
+            self._actionHandler = None
         self._removeClientUnitListeners()
-        if self._exit == settings.FUNCTIONAL_EXIT.INTRO_UNIT:
+        if self._flags & FUNCTIONAL_FLAG.SWITCH > 0:
             g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
             return
         else:
@@ -762,9 +767,7 @@ class UnitFunctional(_UnitFunctional):
                 g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.UNIT)
             g_eventDispatcher.updateUI()
             self._deferredReset = False
-            self._actionHandler.clear()
-            self._actionHandler = None
-            return
+            return FUNCTIONAL_FLAG.UNDEFINED
 
     def addListener(self, listener):
         super(UnitFunctional, self).addListener(listener)
@@ -796,45 +799,42 @@ class UnitFunctional(_UnitFunctional):
 
     def isPlayerJoined(self, ctx):
         result = ctx.getCtrlType() is settings.CTRL_ENTITY_TYPE.UNIT and ctx.getID() == self.getID()
-        if result and hasattr(ctx, 'getPrbType'):
-            result = ctx.getPrbType() == self._prbType
+        if result and hasattr(ctx, 'getEntityType'):
+            result = ctx.getEntityType() == self._prbType
         return result
 
     def setLastError(self, errorCode):
         self._lastErrorCode = errorCode
 
-    def isKicked(self):
-        return self._lastErrorCode in [UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER, UNIT_ERROR.CLAN_CHANGED]
+    def canSwitchToIntro(self):
+        _, unit = self.getUnit()
+        result = True
+        if unit.isSortie():
+            result = not self.getPlayerInfo().isLegionary()
+        elif unit.isSquad():
+            result = False
+        return result
 
-    def getConfirmDialogMeta(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+    def isKicked(self):
+        return self._lastErrorCode in (UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER, UNIT_ERROR.CLAN_CHANGED)
+
+    def getConfirmDialogMeta(self, ctx):
         if self.hasLockedState():
             meta = rally_dialog_meta.RallyLeaveDisabledDialogMeta(CTRL_ENTITY_TYPE.UNIT, self._prbType)
         else:
-            meta = rally_dialog_meta.createUnitLeaveMeta(funcExit, self._prbType)
+            meta = rally_dialog_meta.createUnitLeaveMeta(ctx, self._prbType)
         return meta
 
     def getID(self):
-        return prb_control.getUnitMgrID()
+        return prb_getters.getUnitMgrID()
 
     def getUnitIdx(self):
-        return prb_control.getUnitIdx()
-
-    def setExit(self, funcExit):
-        allowToStoreExit = True
-        _, unit = self.getUnit()
-        if unit.isSortie():
-            pInfo = self.getPlayerInfo()
-            if pInfo.isLegionary():
-                allowToStoreExit = False
-        elif unit.isSquad():
-            allowToStoreExit = False
-        if allowToStoreExit:
-            super(UnitFunctional, self).setExit(funcExit)
+        return prb_getters.getUnitIdx()
 
     def getUnit(self, unitIdx = None, safe = False):
         if unitIdx is None:
             unitIdx = self.getUnitIdx()
-        return (unitIdx, prb_control.getUnit(unitIdx, safe=True))
+        return (unitIdx, prb_getters.getUnit(unitIdx, safe=True))
 
     def hasLockedState(self):
         pInfo = self.getPlayerInfo()
@@ -858,8 +858,7 @@ class UnitFunctional(_UnitFunctional):
 
     def leave(self, ctx, callback = None):
         ctx.startProcessing(callback)
-        self.setExit(ctx.getFuncExit())
-        unitMgr = prb_control.getClientUnitMgr()
+        unitMgr = prb_getters.getClientUnitMgr()
         unitMgr.leave()
 
     def assign(self, ctx, callback = None):
@@ -1164,9 +1163,13 @@ class UnitFunctional(_UnitFunctional):
             self._requestsProcessor.doRawRequest('stopAutoSearch')
         elif pInfo.isReady:
             if not flags.isInIdle():
-                ctx = unit_ctx.SetReadyUnitCtx(False)
-                ctx.resetVehicle = True
-                self.setPlayerReady(ctx)
+                if self.getEntityType() == PREBATTLE_TYPE.SQUAD and self.getExtra().eventType:
+                    ctx = unit_ctx.SetReadyEventSquadCtx(False)
+                    self.setEventSquadReady(ctx)
+                else:
+                    ctx = unit_ctx.SetReadyUnitCtx(False)
+                    ctx.resetVehicle = True
+                    self.setPlayerReady(ctx)
             else:
                 self._deferredReset = True
         g_eventDispatcher.updateUI()
@@ -1177,9 +1180,9 @@ class UnitFunctional(_UnitFunctional):
             waitingID = 'prebattle/player_ready'
         else:
             waitingID = 'prebattle/player_not_ready'
-        if self.getPrbType() == PREBATTLE_TYPE.SQUAD and self.getExtra().eventType:
-            selVehCtx = unit_ctx.SetReadyEventSquadCtx(notReady, waitingID=waitingID)
-            self.setEventSquadReady(selVehCtx)
+        if self.getEntityType() == PREBATTLE_TYPE.SQUAD and self.getExtra().eventType:
+            ctx = unit_ctx.SetReadyEventSquadCtx(notReady, waitingID=waitingID)
+            self.setEventSquadReady(ctx)
             return
         if launchChain:
             if notReady:
@@ -1198,16 +1201,22 @@ class UnitFunctional(_UnitFunctional):
 
     def doSelectAction(self, action):
         result = False
-        if action.actionName == PREBATTLE_ACTION_NAME.FORT and self._prbType in [PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE]:
+        name = action.actionName
+        if name == PREBATTLE_ACTION_NAME.FORT and self._prbType in (PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE):
             g_eventDispatcher.showUnitWindow(self._prbType)
             result = True
-        if action.actionName == PREBATTLE_ACTION_NAME.UNIT and self._prbType in [PREBATTLE_TYPE.CLUBS]:
+        if name == PREBATTLE_ACTION_NAME.UNIT and self._prbType in (PREBATTLE_TYPE.CLUBS,):
             g_eventDispatcher.showUnitWindow(self._prbType)
             result = True
-        return result
+        if name == PREBATTLE_ACTION_NAME.FALLOUT and self._prbType in (PREBATTLE_TYPE.SQUAD,):
+            extra = self.getExtra()
+            if extra is not None and extra.eventType:
+                g_eventDispatcher.showFalloutWindow()
+                result = True
+        return SelectResult(result)
 
-    def doAction(self, action = None, dispatcher = None):
-        if super(UnitFunctional, self).doAction(action, dispatcher):
+    def doAction(self, action = None):
+        if super(UnitFunctional, self).doAction(action):
             return True
         self._actionHandler.execute(customData={'rosterSettings': self._rosterSettings})
         return True
@@ -1490,7 +1499,7 @@ class UnitFunctional(_UnitFunctional):
         self._invokeListeners('onUnitExtraChanged', extras)
 
     def _addClientUnitListeners(self):
-        unit = prb_control.getUnit(self.getUnitIdx())
+        unit = prb_getters.getUnit(self.getUnitIdx())
         unit.onUnitFlagsChanged += self.unit_onUnitFlagsChanged
         unit.onUnitReadyMaskChanged += self.unit_onUnitReadyMaskChanged
         unit.onUnitVehicleChanged += self.unit_onUnitVehicleChanged
@@ -1506,7 +1515,7 @@ class UnitFunctional(_UnitFunctional):
         unit.onUnitExtraChanged += self.unit_onUnitExtraChanged
 
     def _removeClientUnitListeners(self):
-        unit = prb_control.getUnit(self.getUnitIdx(), safe=True)
+        unit = prb_getters.getUnit(self.getUnitIdx(), safe=True)
         if unit:
             unit.onUnitFlagsChanged -= self.unit_onUnitFlagsChanged
             unit.onUnitReadyMaskChanged -= self.unit_onUnitReadyMaskChanged

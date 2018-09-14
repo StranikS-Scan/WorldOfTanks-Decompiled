@@ -28,6 +28,7 @@ class FalloutDeathMode(IControlMode):
     def destroy(self):
         self.disable()
         self.__aim.destroy()
+        self.__cam.destroy()
         self.__cam = None
         return
 
@@ -43,7 +44,6 @@ class FalloutDeathMode(IControlMode):
         self.__aim.enable()
         player = BigWorld.player()
         self.__curVehicleID = player.playerVehicleID
-        self.__cam.vehicleMProv = player.getOwnVehicleMatrix()
         self.__isEnabled = True
         return
 

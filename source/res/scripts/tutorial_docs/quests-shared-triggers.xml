@@ -1,0 +1,594 @@
+<quests-shared-triggers.xml>
+  <triggers>
+    <trigger>	ResearchHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	ResearchVar	</validate-var>
+      <off-effects>
+        <activate>	ShowResearchHint	</activate>
+      </off-effects>
+      <on-effects>
+        <inactivate>	ShowResearchHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	TechTreeHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	ResearchTreeVar	</validate-var>
+      <off-effects>
+        <activate>	ShowTechTreeHint	</activate>
+      </off-effects>
+      <on-effects>
+        <inactivate>	ShowTechTreeHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	PersonalCaseHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	PersonalCaseVar	</validate-var>
+      <off-effects>
+        <activate>	ShowPersonalCaseHint	</activate>
+      </off-effects>
+      <on-effects>
+        <inactivate>	ShowPersonalCaseHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	TechnicalMaintenanceHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	TechnicalMaintenanceVar	</validate-var>
+      <off-effects>
+        <activate>	ShowTechnicalMaintenanceHint	</activate>
+      </off-effects>
+      <on-effects>
+        <inactivate>	ShowTechnicalMaintenanceHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	CustomizationHelpButtonTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	CustomizationVar	</validate-var>
+      <off-effects>
+        <activate>	ShowCustomizationHint	</activate>
+      </off-effects>
+      <on-effects>
+        <inactivate>	ShowCustomizationHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	FightBtnLoopTrigger	  <type>	timer	</type>
+      <validate-var>	FightBtnTimer	</validate-var>
+      <set-var>	ShownBattleButtonHint	</set-var>
+      <off-effects></off-effects>
+      <on-effects>
+        <inactivate>	ShownBattleButtonHint	</inactivate>
+      </on-effects>
+    </trigger>
+    <trigger>	InSandBoxOrRandomPreQueueTrigger	  <type>	isInSandboxOrRandom	</type>
+      <on-effects>
+        <activate>	InSandboxOrRandom	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	InSandboxOrRandom	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	FightBtnDisableTrigger	  <type>	fightBtn	</type>
+      <on-effects>
+        <activate>	FightBtnDisabled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	FightBtnDisabled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	QueueTrigger	  <type>	queue	</type>
+      <on-effects>
+        <activate>	IsInQueue	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	IsInQueue	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	InvalidateFlagsBonusTrigger	  <type>	invalidateFlags	</type>
+      <off-effects></off-effects>
+      <on-effects></on-effects>
+    </trigger>
+    <trigger>	TankamAcademyDiscountTrigger	  <type>	tankmanAcademyDiscount	</type>
+      <validate-var>	TankmanCostIndex	</validate-var>
+      <on-effects>
+        <activate>	PlayerHasTankmanDiscount	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	PlayerHasTankmanDiscount	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	BattleTutorialBonusesTrigger	  <type>	allTutorialBonuses	</type>
+      <validate-var>	BattleTutorialSettingVar	</validate-var>
+      <on-effects>
+        <activate>	BattleBonusesReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BattleBonusesReceived	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	RandomBattlesCountTrigger	  <type>	randomBattlesCount	</type>
+      <on-effects>
+        <activate>	RandomBattlesCountComplete	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	RandomBattlesCountComplete	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	InstallModuleTrigger	  <type>	installModule	</type>
+      <on-effects>
+        <activate>	ModuleInstalled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	ModuleInstalled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	BuyVehicleTrigger	  <type>	buyVehicle	</type>
+      <validate-var>	Level2Var	</validate-var>
+      <on-effects>
+        <activate>	Vehicle2LvlBought	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Vehicle2LvlBought	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	BuySlotTrigger	  <type>	buySlot	</type>
+      <on-effects>
+        <activate>	SlotBought	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	SlotBought	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	VehicleBattlesTrigger	  <type>	vehicleBattlesCount	</type>
+      <validate-var>	VehicleConditionVar	</validate-var>
+      <on-effects>
+        <activate>	VehicleBattlesComplete	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	VehicleBattlesComplete	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	xpExchangeTrigger	  <type>	xpExchange	</type>
+      <on-effects>
+        <activate>	XpExchanged	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	XpExchanged	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	BuyVehicle3LvlTrigger	  <type>	buyVehicle	</type>
+      <validate-var>	Level3Var	</validate-var>
+      <on-effects>
+        <activate>	Vehicle3LvlBought	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Vehicle3LvlBought	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	PremiumDiscountTrigger	  <type>	premiumDiscount	</type>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	PremiumDiscountUsed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	PremiumDiscountUsed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	BuyVehicle4LvlTrigger	  <type>	buyVehicle	</type>
+      <validate-var>	Level4Var	</validate-var>
+      <on-effects>
+        <activate>	Vehicle4LvlBought	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	Vehicle4LvlBought	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	MedKitInstallTrigger	  <type>	installItems	</type>
+      <validate-var>	MedKitsConditionVar	</validate-var>
+      <on-effects>
+        <save-account-setting>	MedKitInstalledSetting	</save-account-setting>
+      </on-effects>
+      <off-effects>
+        <save-account-setting>	MedKitUninstalledSetting	</save-account-setting>
+      </off-effects>
+    </trigger>
+    <trigger>	MedKitUsedTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	MedKitUsedVar	</validate-var>
+      <on-effects>
+        <activate>	MedKitUsed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	MedKitUsed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	RepairKitInstallTrigger	  <type>	installItems	</type>
+      <validate-var>	RepairKitsConditionVar	</validate-var>
+      <on-effects>
+        <save-account-setting>	RepairKitInstalledSetting	</save-account-setting>
+      </on-effects>
+      <off-effects>
+        <save-account-setting>	RepairKitUninstalledSetting	</save-account-setting>
+      </off-effects>
+    </trigger>
+    <trigger>	RepairKitUsedTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	RepairKitUsedVar	</validate-var>
+      <on-effects>
+        <activate>	RepairKitUsed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	RepairKitUsed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	FireExtinguisherInstallTrigger	  <type>	installItems	</type>
+      <validate-var>	FireExtinguishersConditionVar	</validate-var>
+      <on-effects>
+        <save-account-setting>	FireExtinguisherInstalledSetting	</save-account-setting>
+      </on-effects>
+      <off-effects>
+        <save-account-setting>	FireExtinguisherUninstalledSetting	</save-account-setting>
+      </off-effects>
+    </trigger>
+    <trigger>	FireExtinguisherUsedTrigger	  <type>	tutorialIntSetting	</type>
+      <validate-var>	FireExtinguisherUsedVar	</validate-var>
+      <on-effects>
+        <activate>	FireExtinguisherUsed	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	FireExtinguisherUsed	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	OptionalDeviceInstallTrigger	  <type>	installItems	</type>
+      <validate-var>	OptionalDeviceConditionVar	</validate-var>
+      <on-effects>
+        <activate>	OptionalDeviceInstalled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	OptionalDeviceInstalled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	AwardWindow2ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter2Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward2	</inactivate>
+        <inactivate>	RandomBattlesCountComplete	</inactivate>
+        <activate>	CloseChapter2	</activate>
+        <show-unlocked-chapter>	Chapter2Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow2CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter2Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward2	</inactivate>
+        <inactivate>	RandomBattlesCountComplete	</inactivate>
+        <activate>	CloseChapter2	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow3ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter3Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward3	</inactivate>
+        <inactivate>	ModuleInstalled	</inactivate>
+        <activate>	CloseChapter3	</activate>
+        <show-unlocked-chapter>	Chapter3Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow3CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter3Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward3	</inactivate>
+        <inactivate>	ModuleInstalled	</inactivate>
+        <activate>	CloseChapter3	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow4ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter4Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward4	</inactivate>
+        <inactivate>	Vehicle2LvlBought	</inactivate>
+        <activate>	CloseChapter4	</activate>
+        <show-unlocked-chapter>	Chapter4Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow4CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter4Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward4	</inactivate>
+        <inactivate>	Vehicle2LvlBought	</inactivate>
+        <activate>	CloseChapter4	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow5ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter5Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward5	</inactivate>
+        <inactivate>	SlotBought	</inactivate>
+        <activate>	CloseChapter5	</activate>
+        <show-unlocked-chapter>	Chapter5Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow5CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter5Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward5	</inactivate>
+        <inactivate>	SlotBought	</inactivate>
+        <activate>	CloseChapter5	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow6ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter6Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward6	</inactivate>
+        <inactivate>	VehicleBattlesComplete	</inactivate>
+        <activate>	CloseChapter6	</activate>
+        <show-unlocked-chapter>	Chapter6Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow6CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter6Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward6	</inactivate>
+        <inactivate>	VehicleBattlesComplete	</inactivate>
+        <activate>	CloseChapter6	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow7ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter7Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward7	</inactivate>
+        <inactivate>	XpExchanged	</inactivate>
+        <activate>	CloseChapter7	</activate>
+        <show-unlocked-chapter>	Chapter7Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow7CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter7Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward7	</inactivate>
+        <inactivate>	XpExchanged	</inactivate>
+        <activate>	CloseChapter7	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow8ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter8Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward8	</inactivate>
+        <inactivate>	Vehicle3LvlBought	</inactivate>
+        <activate>	CloseChapter8	</activate>
+        <show-unlocked-chapter>	Chapter8Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow8CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter8Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward8	</inactivate>
+        <inactivate>	Vehicle3LvlBought	</inactivate>
+        <activate>	CloseChapter8	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow9ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter9Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward9	</inactivate>
+        <inactivate>	PremiumDiscountUsed	</inactivate>
+        <activate>	CloseChapter9	</activate>
+        <show-unlocked-chapter>	Chapter9Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow9CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter9Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward9	</inactivate>
+        <inactivate>	PremiumDiscountUsed	</inactivate>
+        <activate>	CloseChapter9	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow10ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter10Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward10	</inactivate>
+        <inactivate>	Vehicle4LvlBought	</inactivate>
+        <activate>	CloseChapter10	</activate>
+        <show-unlocked-chapter>	Chapter10Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow10CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter10Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward10	</inactivate>
+        <inactivate>	Vehicle4LvlBought	</inactivate>
+        <activate>	CloseChapter10	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow11ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter11Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward11	</inactivate>
+        <inactivate>	MedKitUsed	</inactivate>
+        <activate>	CloseChapter11	</activate>
+        <show-unlocked-chapter>	Chapter11Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow11CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter11Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward11	</inactivate>
+        <inactivate>	MedKitUsed	</inactivate>
+        <activate>	CloseChapter11	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow12ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter12Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward12	</inactivate>
+        <inactivate>	RepairKitUsed	</inactivate>
+        <activate>	CloseChapter12	</activate>
+        <show-unlocked-chapter>	Chapter12Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow12CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter12Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward12	</inactivate>
+        <inactivate>	RepairKitUsed	</inactivate>
+        <activate>	CloseChapter12	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow13ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter13Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward13	</inactivate>
+        <inactivate>	FireExtinguisherUsed	</inactivate>
+        <activate>	CloseChapter13	</activate>
+        <show-unlocked-chapter>	Chapter13Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow13CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter13Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward13	</inactivate>
+        <inactivate>	FireExtinguisherUsed	</inactivate>
+        <activate>	CloseChapter13	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow14ProcessTrigger	  <type>	windowProcessed	</type>
+      <validate-var>	Chapter14Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <clear-scene></clear-scene>
+        <go-scene>	Hangar	  <condition>
+            <inactive>	IsInQueue	</inactive>
+          </condition>
+        </go-scene>
+        <inactivate>	ShowAward14	</inactivate>
+        <inactivate>	OptionalDeviceInstalled	</inactivate>
+        <activate>	CloseChapter14	</activate>
+        <show-unlocked-chapter>	Chapter14Var	</show-unlocked-chapter>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+    <trigger>	AwardWindow14CloseTrigger	  <type>	windowClosed	</type>
+      <validate-var>	Chapter14Var	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <inactivate>	ShowAward14	</inactivate>
+        <inactivate>	OptionalDeviceInstalled	</inactivate>
+        <activate>	CloseChapter14	</activate>
+        <activate>	ShowQuestsControlHint	</activate>
+      </on-effects>
+      <off-effects></off-effects>
+    </trigger>
+  </triggers>
+</quests-shared-triggers.xml>

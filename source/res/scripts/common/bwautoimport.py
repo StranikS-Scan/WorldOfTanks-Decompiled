@@ -19,3 +19,17 @@ def _fixed_asdict(t):
 
 
 collections.namedtuple = _fixed_namedtuple
+
+def _fix_base_handler_in_urllib2():
+    import weakref
+    import functools
+    from urllib2 import BaseHandler
+
+    def add_parent(self_, parent):
+        self_.parent = weakref.proxy(parent)
+
+    functools.update_wrapper(add_parent, BaseHandler.add_parent)
+    setattr(BaseHandler, 'add_parent', add_parent)
+
+
+_fix_base_handler_in_urllib2()

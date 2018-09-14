@@ -62,6 +62,9 @@ class NotificationsModel:
     def hasNotification(self, typeID, entityID):
         return self.__collection.getItem(typeID, entityID) is not None
 
+    def getNotification(self, typeID, entityID):
+        return self.__collection.getItem(typeID, entityID)
+
     def setLayoutSettings(self, paddingRight, paddingBottom):
         self.__layoutSettings = {'paddingRight': paddingRight,
          'paddingBottom': paddingBottom}

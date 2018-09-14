@@ -3,8 +3,8 @@ import BigWorld
 from debug_utils import *
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.utils.gui_items import formatPrice, formatGoldPrice
-from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.formatters import formatPrice, formatGoldPrice
+from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
 from helpers import i18n
 
 class TankmanBerthsBuyer(Processor):
@@ -29,19 +29,17 @@ class TankmanBerthsBuyer(Processor):
 
 class PremiumAccountBuyer(Processor):
 
-    def __init__(self, period, price, arenaUniqueID = 0):
+    def __init__(self, period, price, arenaUniqueID = 0, withoutBenefits = False):
         self.wasPremium = g_itemsCache.items.stats.isPremium
-        localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
-        super(PremiumAccountBuyer, self).__init__((plugins.MessageConfirmator(localKey, ctx={'days': int(period),
-          'gold': BigWorld.wg_getGoldFormat(price)}), plugins.MoneyValidator((0, price))))
+        super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator((0, price))))
         self.premiumPrice = price
         self.period = period
         self.arenaUniqueID = arenaUniqueID
 
     def _errorHandler(self, code, errStr = '', ctx = None):
         if len(errStr) and i18n.doesTextExist('#system_messages:premium/%s' % errStr):
-            return makeI18nError('premium/%s' % errStr, period=self.period)
-        return makeI18nError('premium/server_error', period=self.period)
+            return makeI18nError('premium/%s' % errStr, period=self.period, auxData={'errStr': errStr})
+        return makeI18nError('premium/server_error', period=self.period, auxData={'errStr': errStr})
 
     def _successHandler(self, code, ctx = None):
         localKey = 'premium/continueSuccess' if self.wasPremium else 'premium/buyingSuccess'
@@ -49,7 +47,16 @@ class PremiumAccountBuyer(Processor):
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy premium account', self.period, self.premiumPrice)
-        BigWorld.player().stats.upgradeToPremium(self.period, self.arenaUniqueID, lambda code: self._response(code, callback))
+        BigWorld.player().stats.upgradeToPremium(self.period, self.arenaUniqueID, lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+    def __getConfirmator(self, withoutBenefits, period, price):
+        if withoutBenefits:
+            return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': int(period),
+             'gold': BigWorld.wg_getGoldFormat(price)})
+        else:
+            localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
+            return plugins.MessageConfirmator(localKey, ctx={'days': int(period),
+             'gold': BigWorld.wg_getGoldFormat(price)})
 
 
 class GoldToCreditsExchanger(Processor):
@@ -105,3 +112,21 @@ class FreeXPExchanger(Processor):
         else:
             sourceKey = 'XP_EXCHANGE_FOR_GOLD'
         return plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', extra, sourceKey=sourceKey)
+
+
+class BattleResultsGetter(Processor):
+
+    def __init__(self, arenaUniqueID):
+        super(BattleResultsGetter, self).__init__()
+        self.__arenaUniqueID = arenaUniqueID
+
+    def _errorHandler(self, code, errStr = '', ctx = None):
+        LOG_ERROR('Error on server request to get battle results ', self.__arenaUniqueID, code, errStr, ctx)
+        return makeError()
+
+    def _successHandler(self, code, ctx = None):
+        return makeSuccess(auxData=ctx)
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to get battle results')
+        BigWorld.player().battleResultsCache.get(self.__arenaUniqueID, lambda code, battleResults: self._response(code, callback, ctx=battleResults))

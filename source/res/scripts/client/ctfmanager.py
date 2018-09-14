@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/CTFManager.py
 import BigWorld
+import Math
 import operator
 import Event
 import ResMgr
@@ -12,6 +13,60 @@ from helpers.EffectsList import effectsFromSection, EffectsListPlayer
 _DYNAMIC_OBJECTS_CONFIG_FILE = 'scripts/dynamic_objects.xml'
 _FLAG_MODEL_NAME = 'ctf_flag'
 _FLAG_CIRCLE_MODEL_NAME = 'ctf_flag_circle'
+
+class Flag(object):
+    flagEntities = []
+
+    def __init__(self, position, isVisible, flagID):
+        position = Vector3(0.0, 0.0, 0.0) if position is None else position
+        self.__flagEntity = None
+        self.__position = position
+        self.__isVisible = isVisible
+        self.__flagID = flagID
+        spaceId = BigWorld.player().spaceID
+        if spaceId != 0:
+            self.create()
+        else:
+            g_ctfManager.addDelayedFlag(self)
+        return
+
+    def flagEnterWorld(self, entity):
+        if self.__flagEntity is not None:
+            LOG_ERROR('Flags: Wrong usage of offline flags')
+            return
+        else:
+            self.__flagEntity = entity
+            self.__flagEntity.show(not g_ctfManager.isNeedHideAll and self.__isVisible)
+            return
+
+    def destroy(self):
+        if self.__flagEntity is not None:
+            self.__flagEntity.show(False)
+        return
+
+    def flagLeaveWorld(self):
+        self.__flagEntity = None
+        return
+
+    def setPosition(self, position):
+        self.__position = Vector3(0.0, 0.0, 0.0) if position is None else position
+        if self.__flagEntity is not None:
+            self.__flagEntity.setPosition(position)
+        return
+
+    def show(self, isVisible):
+        self.__isVisible = isVisible
+        if self.__flagEntity:
+            self.__flagEntity.show(isVisible)
+
+    def create(self):
+        if self.__flagEntity is not None:
+            LOG_ERROR('Flags: Wrong usage of offline flags')
+            return
+        else:
+            self.__entityID = BigWorld.createEntity('OfflineFlag', BigWorld.player().spaceID, 0, self.__position, Vector3(0.0, 0.0, 0.0), dict({'flagID': self.__flagID}))
+            return
+
 
 class _CTFConfigReader():
     name = property(lambda self: ('empty' if self.__configSection is None else self.__configSection.name))
@@ -59,6 +114,19 @@ class _CTFConfigReader():
 _g_ctfConfig = _CTFConfigReader()
 
 class _CTFManager():
+    isNeedHideAll = property(lambda self: self.__needHideAll)
+
+    @property
+    def flagModelName(self):
+        return self.__flagModelFile
+
+    @property
+    def flagCircleModelName(self):
+        return self.__flagCircleModelFile
+
+    @property
+    def flagAnimAction(self):
+        return self.__flagAnimAction
 
     def __init__(self):
         self.__flagModelFile = None
@@ -69,12 +137,14 @@ class _CTFManager():
         self.__resourcePoints = {}
         self.__rpGuids = {}
         self.__resourcePointsLock = None
+        self.__delayedFlags = []
         self.__evtManager = Event.EventManager()
         self.onFlagSpawning = Event.Event(self.__evtManager)
         self.onFlagSpawnedAtBase = Event.Event(self.__evtManager)
         self.onFlagCapturedByVehicle = Event.Event(self.__evtManager)
         self.onFlagDroppedToGround = Event.Event(self.__evtManager)
         self.onFlagAbsorbed = Event.Event(self.__evtManager)
+        self.onFlagRemoved = Event.Event(self.__evtManager)
         self.onCarriedFlagsPositionUpdated = Event.Event(self.__evtManager)
         self.onFlagTeamsUpdated = Event.Event(self.__evtManager)
         self.onResPointIsFree = Event.Event(self.__evtManager)
@@ -85,6 +155,8 @@ class _CTFManager():
         self.onOwnVehicleInsideResPoint = Event.Event(self.__evtManager)
         self.onOwnVehicleLockedForResPoint = Event.Event(self.__evtManager)
         self.onResPointAmountChanged = Event.Event(self.__evtManager)
+        self.onHideAll = Event.Event(self.__evtManager)
+        self.__needHideAll = False
         flagModelParams = _g_ctfConfig.readModelParams(_FLAG_MODEL_NAME)
         if flagModelParams is not None:
             self.__flagModelFile = flagModelParams.get('file')
@@ -94,10 +166,17 @@ class _CTFManager():
             self.__flagCircleModelFile = flagCircleModelParams.get('file')
         return
 
+    def addDelayedFlag(self, flag):
+        self.__delayedFlags.append(flag)
+
     def onEnterArena(self):
-        pass
+        for flag in self.__delayedFlags:
+            flag.create()
+
+        self.__delayedFlags = []
 
     def onLeaveArena(self):
+        self.__needHideAll = False
         self.__clear()
 
     def onFlagStateChanged(self, data):
@@ -142,6 +221,13 @@ class _CTFManager():
                     return vehicle.position
             return flag['minimapPos']
 
+    def hideAll(self):
+        self.__needHideAll = True
+        for flag in self.__flags.itervalues():
+            flag['flag'].show(False)
+
+        self.onHideAll()
+
     def __switchFlagToState(self, flagID, prevState, newState, stateParams):
         if flagID not in self.__flags:
             self.__flags[flagID] = {'state': None,
@@ -149,7 +235,7 @@ class _CTFManager():
              'minimapPos': None,
              'vehicle': None,
              'respawnTime': 0.0,
-             'model': None,
+             'flag': None,
              'team': self.__flagTeams[flagID]}
         flag = self.__flags[flagID]
         flag['state'] = newState
@@ -191,73 +277,33 @@ class _CTFManager():
             flag['respawnTime'] = respawnTime
             self.__flagModelSet(flagID, None, False)
             self.onFlagAbsorbed(flagID, flagTeam, vehicleID, respawnTime)
+        elif newState == FLAG_STATE.UNKNOWN:
+            vehicleID = flag['vehicle']
+            self.__flagModelSet(flagID, None, False)
+            flag['vehicle'] = None
+            flag['respawnTime'] = 0.0
+            flag['minimapPos'] = None
+            self.onFlagRemoved(flagID, flagTeam, vehicleID)
         return
 
     def __flagModelSet(self, flagID, flagPos, isVisible):
         if flagID not in self.__flags:
             return
         else:
-            flagModel = self.__flags[flagID]['model']
-            if flagModel is None:
-                self.__createFlagAt(flagID, flagPos, isVisible)
+            flagEntity = self.__flags[flagID]['flag']
+            if flagEntity is None:
+                self.__flags[flagID]['flag'] = Flag(flagPos, isVisible, flagID)
             else:
-                BigWorld.wgEdgeDetectModelSetVisible(flagModel, isVisible)
-                if flagPos is not None:
-                    flagModel.position = flagPos
-            return
-
-    def __createFlagAt(self, flagID, position, isVisible):
-        if self.__flagModelFile is None:
-            LOG_ERROR('CTFManager: flag model is not specified')
-            return
-        else:
-            if 'spawnData' not in self.__flags[flagID]:
-                BigWorld.loadResourceListBG((self.__flagModelFile, self.__flagCircleModelFile), partial(self.__onFlagModelLoaded, flagID))
-            self.__flags[flagID]['spawnData'] = (position, isVisible)
-            return
-
-    def __onFlagModelLoaded(self, flagID, resourceRefs):
-        if resourceRefs.failedIDs:
-            LOG_ERROR('Failed to load flag model %s' % (resourceRefs.failedIDs,))
-        else:
-            model = resourceRefs[self.__flagModelFile]
-            circleModel = resourceRefs[self.__flagCircleModelFile]
-            spawnPosition, isVisible = self.__flags[flagID].get('spawnData', (None, False))
-            if spawnPosition is not None:
-                model.position = spawnPosition
-            BigWorld.addModel(model, BigWorld.player().spaceID)
-            model.root.attach(circleModel)
-            BigWorld.wgAddEdgeDetectModel(model, 3, 2)
-            BigWorld.wgEdgeDetectModelSetVisible(model, isVisible)
-            if self.__flagAnimAction is not None:
-                try:
-                    animAction = model.action(self.__flagAnimAction)
-                    animAction()
-                except:
-                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
-
-            self.__flags[flagID]['model'] = model
-        return
-
-    def __removeFlag(self, flagID):
-        if flagID not in self.__flags:
-            return
-        else:
-            flagModel = self.__flags[flagID]['model']
-            if flagModel is not None:
-                BigWorld.wgDelEdgeDetectModel(flagModel)
-                BigWorld.delModel(self.__flags[flagID]['model'])
-            del self.__flags[flagID]
+                flagEntity.setPosition(flagPos)
+                flagEntity.show(isVisible)
             return
 
     def __clear(self):
         for flag in self.__flags.itervalues():
-            flagModel = flag['model']
-            if flagModel is not None:
-                BigWorld.wgDelEdgeDetectModel(flagModel)
-                BigWorld.delModel(flagModel)
-                flag['model'] = None
+            if flag is not None:
+                flag['flag'].destroy()
 
+        self.__delayedFlags = []
         self.__flags.clear()
         self.__flagTeams = ()
         self.__evtManager.clear()
@@ -411,17 +457,34 @@ class _CTFManager():
 
 g_ctfManager = _CTFManager()
 
+class _GlobalHideListener():
+
+    def __init__(self, hideMethod):
+        self.__hideMethod = hideMethod
+        g_ctfManager.onHideAll += self.__hide
+
+    def __del__(self):
+        g_ctfManager.onHideAll -= self.__hide
+        self.__hideMethod = None
+        return
+
+    def __hide(self):
+        self.__hideMethod()
+
+
 class _CTFCheckPoint():
 
     def __init__(self, radiusModelName):
         self.__terrainSelectedArea = None
         self.__fakeModel = None
+        self.__hideListener = None
         self.__radiusModelName = _g_ctfConfig.readRadiusModelName(radiusModelName)
         if self.__radiusModelName is None:
             LOG_ERROR('%s: unable to load value from "%s" section' % (_g_ctfConfig.name, radiusModelName))
         return
 
     def __del__(self):
+        self.__hideListener = None
         if self.__fakeModel is not None:
             BigWorld.delModel(self.__fakeModel)
             self.__fakeModel = None
@@ -432,15 +495,24 @@ class _CTFCheckPoint():
     def _createTerrainSelectedArea(self, position, size, overTerrainHeight, color):
         if self.__radiusModelName is None:
             return
+        elif g_ctfManager.isNeedHideAll:
+            return
         else:
             self.__fakeModel = BigWorld.Model('objects/fake_model.model')
             self.__fakeModel.position = position
             BigWorld.addModel(self.__fakeModel, BigWorld.player().spaceID)
+            self.__fakeModel.addMotor(BigWorld.Servo(Math.Matrix(self.__fakeModel.matrix)))
             rootNode = self.__fakeModel.node('')
             self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
             self.__terrainSelectedArea.setup(self.__radiusModelName, Vector2(size, size), overTerrainHeight, color)
             rootNode.attach(self.__terrainSelectedArea)
+            self.__hideListener = _GlobalHideListener(self.__hideCheckPoint)
             return
+
+    def __hideCheckPoint(self):
+        if self.__fakeModel is not None:
+            self.__fakeModel.visible = False
+        return
 
 
 class _FlagResourceLoader():
@@ -479,6 +551,7 @@ class _CTFPointFlag():
         self.__flagAnimAction = None
         self.__flagPos = flagPos
         self.__loadTask = None
+        self.__hideListener = None
         flagModelParams = _g_ctfConfig.readModelParams(flagModelName)
         if flagModelParams is not None:
             self.__flagModelFile = flagModelParams.get('file')
@@ -488,6 +561,7 @@ class _CTFPointFlag():
         return
 
     def __del__(self):
+        self.__hideListener = None
         if self.__loadTask is not None:
             _g_resLoader.stopLoadTask(self.__loadTask)
             self.__loadTask = None
@@ -500,27 +574,39 @@ class _CTFPointFlag():
         return
 
     def _createFlag(self, applyOverlay = False):
-        raise self.__flagModelFile is not None or AssertionError
-        self.__loadTask = _g_resLoader.startLoadTask((self.__flagModelFile,), partial(self.__onModelLoaded, applyOverlay))
-        return
+        if g_ctfManager.isNeedHideAll:
+            return
+        else:
+            raise self.__flagModelFile is not None or AssertionError
+            self.__loadTask = _g_resLoader.startLoadTask((self.__flagModelFile,), partial(self.__onModelLoaded, applyOverlay))
+            return
 
     def __onModelLoaded(self, applyOverlay, resourceRefs):
         if resourceRefs.failedIDs:
             LOG_ERROR('Failed to load flag model %s' % (resourceRefs.failedIDs,))
         else:
             model = resourceRefs[self.__flagModelFile]
-            raise model is not None or AssertionError
-            model.position = self.__flagPos
-            BigWorld.addModel(model, BigWorld.player().spaceID)
-            BigWorld.wg_applyOverlayToModel(model, applyOverlay)
-            self.__flagModel = model
-            if self.__flagAnimAction is not None:
-                try:
-                    animAction = model.action(self.__flagAnimAction)
-                    animAction()
-                except:
-                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
+            if not model is not None:
+                raise AssertionError
+                model.position = self.__flagPos
+                BigWorld.addModel(model, BigWorld.player().spaceID)
+                BigWorld.wg_applyOverlayToModel(model, applyOverlay)
+                self.__flagModel = model
+                if self.__flagAnimAction is not None:
+                    try:
+                        animAction = model.action(self.__flagAnimAction)
+                        animAction()
+                    except:
+                        LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
 
+                g_ctfManager.isNeedHideAll and self.__hidePointFlag()
+            else:
+                self.__hideListener = _GlobalHideListener(self.__hidePointFlag)
+        return
+
+    def __hidePointFlag(self):
+        if self.__flagModel is not None:
+            self.__flagModel.visible = False
         return
 
 
@@ -532,6 +618,7 @@ class _CTFResourcePointModel():
         self.__effectsTimeLine = None
         self.__effectsPlayer = None
         self.__loadTask = None
+        self.__hideListener = None
         g_ctfManager.registerResourcePointModel(self)
         modelParams = _g_ctfConfig.readModelParams(pointModelName)
         if modelParams is not None:
@@ -544,6 +631,7 @@ class _CTFResourcePointModel():
         return
 
     def __del__(self):
+        self.__hideListener = None
         if self.__loadTask is not None:
             _g_resLoader.stopLoadTask(self.__loadTask)
             self.__loadTask = None
@@ -559,29 +647,44 @@ class _CTFResourcePointModel():
         return
 
     def _createPoint(self):
-        raise self.__modelFile is not None or AssertionError
-        self.__loadTask = _g_resLoader.startLoadTask((self.__modelFile,), self.__onModelLoaded)
-        return
+        if g_ctfManager.isNeedHideAll:
+            return
+        else:
+            raise self.__modelFile is not None or AssertionError
+            self.__loadTask = _g_resLoader.startLoadTask((self.__modelFile,), self.__onModelLoaded)
+            return
 
     def __onModelLoaded(self, resourceRefs):
         if resourceRefs.failedIDs:
             LOG_ERROR('Failed to load model %s' % (resourceRefs.failedIDs,))
         else:
             model = resourceRefs[self.__modelFile]
-            raise model is not None or AssertionError
-            model.position = self.position
-            roll, pitch, yaw = self.direction
-            model.rotate(roll, (0.0, 0.0, 1.0))
-            model.rotate(pitch, (1.0, 0.0, 0.0))
-            model.rotate(yaw, (0.0, 1.0, 0.0))
-            BigWorld.addModel(model, BigWorld.player().spaceID)
-            BigWorld.wg_applyOverlayToModel(model, False)
-            self.__model = model
-            g_ctfManager.updateRegisteredResourcePointModel(self)
+            if not model is not None:
+                raise AssertionError
+                model.position = self.position
+                roll, pitch, yaw = self.direction
+                model.rotate(roll, (0.0, 0.0, 1.0))
+                model.rotate(pitch, (1.0, 0.0, 0.0))
+                model.rotate(yaw, (0.0, 1.0, 0.0))
+                BigWorld.addModel(model, BigWorld.player().spaceID)
+                BigWorld.wg_applyOverlayToModel(model, False)
+                self.__model = model
+                g_ctfManager.updateRegisteredResourcePointModel(self)
+                g_ctfManager.isNeedHideAll and self.__hideResPointFlag()
+            else:
+                self.__hideListener = _GlobalHideListener(self.__hideResPointFlag)
+        return
+
+    def __hideResPointFlag(self):
+        if self.__model is not None:
+            self.__model.visible = False
+        self.stopEffect()
         return
 
     def playEffect(self):
         if self.__effectsPlayer is not None:
+            return
+        elif self.__model is None:
             return
         else:
             if self.__effectsTimeLine is not None:
@@ -596,3 +699,17 @@ class _CTFResourcePointModel():
             self.__effectsPlayer.stop()
             self.__effectsPlayer = None
             return
+
+
+class _UDOAttributeChecker():
+    isAttrCheckFailed = property(lambda self: self.__isCheckFailed)
+
+    def __init__(self):
+        self.__isCheckFailed = False
+
+    def checkAttribute(self, attributeName):
+        self.__isCheckFailed = True
+        attribute = getattr(self, attributeName, None)
+        raise attribute is not None and len(attribute) > 0 or AssertionError
+        self.__isCheckFailed = False
+        return

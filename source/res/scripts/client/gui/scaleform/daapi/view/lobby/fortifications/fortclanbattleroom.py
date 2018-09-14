@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanBattleRoom.py
 import ArenaType
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from helpers import i18n, int2roman
 from UnitBase import UNIT_OP
 from adisp import process
@@ -18,8 +19,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.prb_helpers import UnitListener
-from gui.prb_control import settings, getBattleID
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
+from gui.prb_control import settings
+from gui.prb_control import prb_getters
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui import SystemMessages
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
@@ -78,7 +80,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if not vInfo.isEmpty():
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange(), isCreator=pInfo.isCreator(), isCurrentPlayer=pInfo.isCurrentPlayer())
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = functional.getSlotState(slotIdx)
@@ -157,12 +159,15 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __initData(self):
         fort = self.fortCtrl.getFort()
-        self.__battleID = getBattleID()
+        self.__battleID = prb_getters.getBattleID()
         self.__battle = fort.getBattle(self.__battleID)
+        if self.__battleID is None:
+            LOG_ERROR('Initialization Error! battle ID must not be None!')
         self.__allBuildings = self.__battle.getAllBuildList()
         if self.__allBuildings:
             self.__prevBuilding = self.__allBuildings[self.__battle.getPrevBuildNum()]
             self.__currentBuilding = self.__allBuildings[self.__battle.getCurrentBuildNum()]
+        return
 
     def __makeData(self):
         self.__makeMainVO()
@@ -320,7 +325,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def __leaveOnError(self):
         SystemMessages.pushI18nMessage('#system_messages:fortification/fortBattleFinished', type=SystemMessages.SM_TYPE.Error)
-        self.unitFunctional.leave(LeaveUnitCtx(funcExit=FUNCTIONAL_EXIT.NO_FUNC))
+        self.unitFunctional.leave(LeaveUnitCtx(flags=FUNCTIONAL_FLAG.UNDEFINED))
 
     @process
     def __requestMineClanEmblem(self):

@@ -6,7 +6,7 @@ import Math
 import math
 from Math import Vector3, Matrix
 import constants
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 
 class ValueTracker(CallbackDelayer):
     _ENABLED = True and constants.IS_DEVELOPMENT

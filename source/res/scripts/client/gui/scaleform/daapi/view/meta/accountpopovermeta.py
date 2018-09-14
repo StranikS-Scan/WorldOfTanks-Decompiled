@@ -6,6 +6,15 @@ class AccountPopoverMeta(SmartPopOverView):
     def openBoostersWindow(self, slotId):
         self._printOverrideError('openBoostersWindow')
 
+    def openClanResearch(self):
+        self._printOverrideError('openClanResearch')
+
+    def openRequestWindow(self):
+        self._printOverrideError('openRequestWindow')
+
+    def openInviteWindow(self):
+        self._printOverrideError('openInviteWindow')
+
     def openClanStatistic(self):
         self._printOverrideError('openClanStatistic')
 
@@ -15,9 +24,17 @@ class AccountPopoverMeta(SmartPopOverView):
     def openReferralManagement(self):
         self._printOverrideError('openReferralManagement')
 
-    def as_setDataS(self, userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData, boostersBlockTitle):
+    def as_setDataS(self, data):
         if self._isDAAPIInited():
-            return self.flashObject.as_setData(userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData, boostersBlockTitle)
+            return self.flashObject.as_setData(data)
+
+    def as_setClanDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setClanData(data)
+
+    def as_setCrewDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setCrewData(data)
 
     def as_setClanEmblemS(self, emblemId):
         if self._isDAAPIInited():

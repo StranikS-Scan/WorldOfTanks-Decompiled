@@ -1,0 +1,74 @@
+<regular_4_1_8.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_8_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <and>
+                <results>
+                  <key>	isEnemyBaseCaptured	</key>
+                  <equal>	1	</equal>
+                </results>
+                <results>
+                  <key>	capturePoints	</key>
+                  <greaterOrEqual>	60	</greaterOrEqual>
+                </results>
+              </and>
+              <results>
+                <key>	droppedCapturePoints	</key>
+                <greaterOrEqual>	60	</greaterOrEqual>
+              </results>
+            </or>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	7	</count>
+        </item>
+        <item>	1019	  <count>	7	</count>
+        </item>
+        <item>	507	  <count>	7	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_8_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <and>
+                <results>
+                  <key>	isEnemyBaseCaptured	</key>
+                  <equal>	1	</equal>
+                </results>
+                <results>
+                  <key>	capturePoints	</key>
+                  <greaterOrEqual>	60	</greaterOrEqual>
+                </results>
+              </and>
+              <results>
+                <key>	droppedCapturePoints	</key>
+                <greaterOrEqual>	60	</greaterOrEqual>
+              </results>
+            </or>
+            <vehicleKills>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_1_8.xml>

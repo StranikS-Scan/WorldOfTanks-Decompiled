@@ -36,6 +36,7 @@ class MessengerEntry(object):
         self.__msgFiltersChain.init()
         self.__protoPlugins.setFilters(self.__msgFiltersChain)
         g_playerEvents.onAccountShowGUI += self.__pe_onAccountShowGUI
+        g_playerEvents.onGuiCacheSyncCompleted += self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAccountBecomePlayer += self.__pe_onAccountBecomePlayer
         g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
         g_playerEvents.onAccountBecomeNonPlayer += self.__pe_onAccountBecomeNonPlayer
@@ -50,6 +51,7 @@ class MessengerEntry(object):
         self.__storage.clear()
         g_settings.fini()
         g_playerEvents.onAccountShowGUI -= self.__pe_onAccountShowGUI
+        g_playerEvents.onGuiCacheSyncCompleted -= self.__pe_onGuiCacheSyncCompleted
         g_playerEvents.onAccountBecomePlayer -= self.__pe_onAccountBecomePlayer
         g_playerEvents.onAvatarBecomePlayer -= self.__pe_onAvatarBecomePlayer
         g_playerEvents.onAccountBecomeNonPlayer -= self.__pe_onAccountBecomeNonPlayer
@@ -57,7 +59,7 @@ class MessengerEntry(object):
         connectionManager.onDisconnected -= self.__cm_onDisconnected
 
     def onAccountShowGUI(self):
-        self.__playerHelper.onAccountShowGUI()
+        self.__playerHelper.initPersonalAccount()
         self.__storage.restoreFromCache()
         self.__protoPlugins.view(MESSENGER_SCOPE.LOBBY)
 
@@ -79,6 +81,9 @@ class MessengerEntry(object):
 
     def __pe_onAccountShowGUI(self, _):
         self.onAccountShowGUI()
+
+    def __pe_onGuiCacheSyncCompleted(self, _):
+        self.__playerHelper.initCachedData()
 
     def __pe_onAccountBecomePlayer(self):
         scope = MESSENGER_SCOPE.LOBBY

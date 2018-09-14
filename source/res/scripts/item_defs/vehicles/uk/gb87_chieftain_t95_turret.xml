@@ -1,0 +1,490 @@
+<gb87_chieftain_t95_turret.xml>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	85	</armor_1>
+      <armor_2>	76.2	</armor_2>
+      <armor_3>	50.8	</armor_3>
+      <armor_4>	25.4	</armor_4>
+      <armor_5>	19.1	</armor_5>
+      <armor_6>	17	</armor_6>
+      <armor_7>	38.1	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	85	</armor_10>
+      <armor_11>	44.5	</armor_11>
+      <armor_12>	127	</armor_12>
+      <armor_13>	114.3	</armor_13>
+      <armor_14>	101.6	</armor_14>
+      <armor_15>	85	</armor_15>
+      <armor_16>	152.4	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	24732	</weight>
+    <maxHealth>	1120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB87_Chieftain_T95_turret/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 32.00 0.38 1.00 0.04 0.28	</pitchParams>
+      <rollParams>	1.00 0.20 32.00 0.38 1.00 0.04 0.28	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000001 0.511346 0.610158	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.297381 0.307868 2.99829	</rayStart>
+        <rayEnd>	-0.298011 0.118875 2.93287	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_GB87_Chieftain_T95_turret>
+      <userString>	#gb_vehicles:Chassis_GB87_Chieftain_T95_turret	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	11800	</weight>
+      <maxLoad>	60000	</maxLoad>
+      <terrainResistance>	0.8 1 1.8	</terrainResistance>
+      <brakeForce>	50000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB87_Chieftain_T95_turret/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.317459	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.142955	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.339623	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.410069	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.317459	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.142955	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.339623	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.410069	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07847 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.34524 2.31032	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB87_Chieftain_T95_turret/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB87_Chieftain_T95_turret/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB87_Chieftain_T95_turret/track/left.track	</left>
+        <right>	vehicles/british/GB87_Chieftain_T95_turret/track/right.track	</right>
+        <segmentLength>	0.156	</segmentLength>
+        <segmentOffset>	0.164	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.065	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0079	</trackThickness>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.698980 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.266790 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.676500	</row2>
+            <row3>	0.000000 0.000000 -0.000038	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB87_Chieftain_T95_turret>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB87_Chieftain_T95_turret>
+      <guns>
+        <_90mm_Gun_T208_rifled>	shared	  <maxAmmo>	80	</maxAmmo>
+          <armor>
+            <armor_1>	381	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.35 10 0.352778 9 0.355556 8 0.358333 7 0.361111 6 0.363889 5 0.366667 4 0.369444 3 0.372222 2.4 0.408333 2.4 0.411111 2.2 0.416667 2 0.422222 1.8 0.427778 1.6 0.486111 1.6 0.488889 1.4 0.491667 1.2 0.508333 1.2 0.511111 1.4 0.513889 1.6 0.572222 1.6 0.577778 1.8 0.583333 2 0.588889 2.2 0.591667 2.4 0.627778 2.4 0.630556 3 0.633333 4 0.636111 5 0.638889 6 0.641667 7 0.644444 8 0.647222 9 0.65 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB87_Chieftain_T95_turret/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000439617 -0.00530108 3.37345	</rayStart>
+              <rayEnd>	-0.0141278 -0.0193823 3.37249	</rayEnd>
+              <rayUp>	0.086 0.083 4	</rayUp>
+              <size>	0.525	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.415 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_Gun_T208_rifled>
+      </guns>
+      <userString>	#gb_vehicles:Turret_1_GB87_Chieftain_T95_turret	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	355.6	</armor_1>
+        <armor_2>	254	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	50.8	</armor_4>
+        <armor_5>	38.1	</armor_5>
+        <armor_6>	38.1	</armor_6>
+        <armor_7>	114.3	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	127	</armor_9>
+        <armor_10>	101.6	</armor_10>
+        <armor_11>	76.2	</armor_11>
+        <armor_12>	88.9	</armor_12>
+        <armor_13>	139.7	</armor_13>
+        <armor_14>	165.1	</armor_14>
+        <armor_15>	152.4	</armor_15>
+      </armor>
+      <primaryArmor>	armor_2 armor_12 armor_4	</primaryArmor>
+      <weight>	10200	</weight>
+      <maxHealth>	280	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <models>
+        <undamaged>	vehicles/british/GB87_Chieftain_T95_turret/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000499 0.365597 1.3023	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.837505 0.622196 0.72851	</rayStart>
+          <rayEnd>	-0.750902 0.451819 0.669615	</rayEnd>
+          <rayUp>	0.752227 0.24774 -0.610557	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.12816 0.622443 -0.195028	</rayStart>
+          <rayEnd>	-1.00555 0.472102 -0.19563	</rayEnd>
+          <rayUp>	0.776761 0.629553 -0.0174624	</rayUp>
+          <size>	0.683	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.945027 0.521842 0.727088	</rayStart>
+          <rayEnd>	0.815455 0.411587 0.621964	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.3056 0.40743 -0.239353	</rayStart>
+          <rayEnd>	1.13764 0.312637 -0.218376	</rayEnd>
+          <rayUp>	-0.00351588 0.999536 -0.0302468	</rayUp>
+          <size>	0.683	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.538 0.133 0.766 0.646 0.445 0.500 0.355 0.500 0.000 0.100 0.310	</physicsShape>
+      <camouflage>
+        <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB87_Chieftain_T95_turret>
+  </turrets0>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	42	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <repairCost>	8.5	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <engines>
+    <Leyland_L60_No_4>	shared	</Leyland_L60_No_4>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <C42_B47>	shared	</C42_B47>
+  </radios>
+  <effects>
+    <collision>	collision	</collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb87_chieftain_t95_turret.xml>

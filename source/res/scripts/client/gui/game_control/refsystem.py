@@ -17,7 +17,7 @@ from gui.shared.formatters import icons, text_styles
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events
+from gui.shared import g_itemsCache, events, g_eventBus, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from gui.server_events import g_eventsCache
 from messenger.m_constants import USER_TAG
 from messenger.proto.entities import SharedUserEntity, ClanInfo
@@ -236,12 +236,12 @@ class RefSystem(Controller):
         return refSystemStats.get('activeInvitations', 0) > 0 or len(refSystemStats.get('referrals', {})) > 0
 
     def showReferrerIntroWindow(self, invitesCount):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}))
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW, ctx={'invitesCount': invitesCount}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferrer()
 
     def showReferralIntroWindow(self, nickname, isNewbie = False):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, ctx={'referrerName': nickname,
-         'newbie': isNewbie}))
+         'newbie': isNewbie}), EVENT_BUS_SCOPE.LOBBY)
         self.onPlayerBecomeReferral()
 
     def __stop(self):

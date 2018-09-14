@@ -1,0 +1,51 @@
+<fallout_5_2_3.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_3_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	avatarDamageDealt	</key>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	inBattleMaxPiercingSeries	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_3_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	avatarDamageDealt	</key>
+              <greaterOrEqual>	1000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	inBattleMaxPiercingSeries	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </results>
+            <vehicleKills>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_2_3.xml>

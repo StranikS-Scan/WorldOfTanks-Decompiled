@@ -3,6 +3,7 @@
 
 class PROFILE_DROPDOWN_KEYS(object):
     ALL = 'all'
+    FALLOUT = 'fallout'
     HISTORICAL = 'historical'
     TEAM = 'team'
     STATICTEAM = 'staticTeam'

@@ -1,0 +1,42 @@
+<regular_3_5_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_5_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <multiDamageEvent>
+              <killedByShot>	1	</killedByShot>
+              <damagedByShot>	2	</damagedByShot>
+            </multiDamageEvent>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_5_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <multiDamageEvent>
+              <killedByShot>	1	</killedByShot>
+              <damagedByShot>	2	</damagedByShot>
+            </multiDamageEvent>
+            <win></win>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_5_11.xml>

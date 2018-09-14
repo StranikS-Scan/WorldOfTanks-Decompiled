@@ -25,7 +25,7 @@ class SquadPromoWindow(SquadPromoWindowMeta):
         self.as_setWindowTitleS(_ms('#menu:headerButtons/btnLabel/inSquad'))
         self.as_setTextS(_ms('#miniclient:squad_promo_window/header'), _ms('#miniclient:squad_promo_window/description'))
         self.as_setHyperlinkS(_ms('#miniclient:personal_quests_welcome_view/continue_download'))
-        self.as_setButtonsS([{'label': _ms('#quests:QuestsPersonalWelcomeView/btnLabel'),
+        self.as_setButtonsS([{'label': _ms('#miniclient:squad_promo_window/btn'),
           'btnLinkage': BUTTON_LINKAGES.BUTTON_NORMAL,
           'action': self._CLOSE_BTN_ACTION,
           'isFocused': True,

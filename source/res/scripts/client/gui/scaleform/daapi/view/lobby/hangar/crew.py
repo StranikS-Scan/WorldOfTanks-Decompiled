@@ -1,21 +1,21 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
-from gui.shared.SoundEffectsId import SoundEffectsId
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui import SystemMessages
+from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
+from gui.shared.events import LoadViewEvent
+from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
+from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
+from gui.shared.SoundEffectsId import SoundEffectsId
+from gui.shared.utils import decorators
+import SoundGroups
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.utils.functions import getViewName
+from gui.Scaleform.Waiting import Waiting
 from items.tankmen import getSkillsConfig, compareMastery, ACTIVE_SKILLS
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared import events, g_itemsCache
-from gui.shared.events import LoadViewEvent
-from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils import decorators, sound
-from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
-from gui.shared.gui_items.processors.tankman import TankmanUnload, TankmanEquip
 
 class Crew(CrewMeta):
 
@@ -133,10 +133,7 @@ class Crew(CrewMeta):
         return
 
     def __playSound(self, soundID):
-        if self.dogSound is None:
-            self.dogSound = sound.SoundSequence([self.app.soundManager.sounds.getEffectSound(soundID)], afterPlayCB=self.afterPlayingDogSound)
-            self.dogSound.play()
-        return
+        SoundGroups.g_instance.playSound2D(self.app.soundManager.sounds.getEffectSound(soundID))
 
     @decorators.process('equipping')
     def equipTankman(self, tmanInvID, slot):
@@ -156,5 +153,4 @@ class Crew(CrewMeta):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openPersonalCase(self, value, tabNumber):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, getViewName(VIEW_ALIAS.PERSONAL_CASE, value), {'tankmanID': int(value),
-         'page': int(tabNumber)}))
+        shared_events.showPersonalCase(int(value), int(tabNumber), EVENT_BUS_SCOPE.LOBBY)

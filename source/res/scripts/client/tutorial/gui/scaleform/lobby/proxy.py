@@ -35,6 +35,9 @@ class SfLobbyProxy(GUIProxy):
     def getViewSettings(self):
         raise Exception, 'Routine getViewSettings must be implemented'
 
+    def getViewsAliases(self):
+        raise Exception, 'Routine getViewsAliases must be implemented'
+
     def init(self):
         result = False
         addListener = g_eventBus.addListener
@@ -152,6 +155,12 @@ class SfLobbyProxy(GUIProxy):
         if self.proto:
             messageID = self.proto.serviceChannel.pushClientMessage(data, msgType)
         return messageID
+
+    def showAwardWindow(self, windowID, windowType, content):
+        aliasMap = self.getViewsAliases()
+        if windowType in aliasMap:
+            alias = aliasMap[windowType]
+            self.app.loadView(alias, windowID, content)
 
     def getItemsOnScene(self):
         if self.app is not None and self.app.tutorialManager is not None:

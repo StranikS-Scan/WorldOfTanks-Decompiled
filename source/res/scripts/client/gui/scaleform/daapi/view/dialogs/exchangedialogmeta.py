@@ -295,7 +295,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
     @async
     @decorators.process('exchangeVehiclesXP')
     def submit(self, gold, xpToExchange, callback = None):
-        criteria = REQ_CRITERIA.VEHICLE.ELITE | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
+        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([self._parentCD])
         eliteVehicles = self._items.getVehicles(criteria).keys()
         result = yield FreeXPExchanger(xpToExchange, eliteVehicles).request()
         if callback is not None:
@@ -335,7 +335,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         return text_styles.expText
 
     def _getMaxExchangeValue(self):
-        eliteVehicles = self._items.getVehicles(REQ_CRITERIA.VEHICLE.ELITE).values()
+        eliteVehicles = self._items.getVehicles(REQ_CRITERIA.VEHICLE.FULLY_ELITE).values()
         result = sum(map(operator.attrgetter('xp'), eliteVehicles))
         return min(int(result / self.getExchangeRate()), self._items.stats.actualGold)
 

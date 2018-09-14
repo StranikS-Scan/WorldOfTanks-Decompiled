@@ -1,0 +1,62 @@
+<regular_1_3_4.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_4_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <vehicleDamage>
+              <eventCount></eventCount>
+              <enemyImmobilized></enemyImmobilized>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_4_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <vehicleDamage>
+              <eventCount></eventCount>
+              <enemyImmobilized></enemyImmobilized>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <enemyImmobilized></enemyImmobilized>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_3_4.xml>

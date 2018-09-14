@@ -24,17 +24,16 @@ class WebBrowser(object):
     isFocused = property(lambda self: self.__isFocused)
     updateInterval = 0.01
 
-    def __init__(self, browserID, uiObj, texName, size, url = 'about:blank', isFocused = False, backgroundUrl = 'file:///gui/maps/bg.png'):
+    def __init__(self, browserID, uiObj, texName, size, url = 'about:blank', isFocused = False):
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
-        self.__backgroundUrl = backgroundUrl
         self.onLoadStart = Event()
         self.onLoadEnd = Event()
         self.onReadyToShowContent = Event()
         self.onNavigate = Event()
         LOG_BROWSER('__init__', self.__baseUrl, texName, size)
-        self.__browser = uiObj.movie.createBrowser(texName, backgroundUrl, size[0], size[1])
+        self.__browser = uiObj.movie.createBrowser(texName, '', size[0], size[1])
         if self.__browser is None:
             return
         else:
@@ -317,24 +316,18 @@ class WebBrowser(object):
     def __onLoadStart(self):
         self.__isNavigationComplete = False
         self.__loadStartTime = BigWorld.time()
-        if self.__browser.url != self.__backgroundUrl:
-            LOG_BROWSER('onLoadStart', self.__browser.url)
-            self.onLoadStart(self.__browser.url)
+        LOG_BROWSER('onLoadStart', self.__browser.url)
+        self.onLoadStart(self.__browser.url)
 
     def __onLoadEnd(self, isLoaded = True):
         self.__isNavigationComplete = True
         if not self.__processDelayedNavigation():
-            if self.__browser.url == self.__backgroundUrl:
-                LOG_BROWSER('onLoadEnd: prevent navigating to baseurl')
-                self.__browser.goForward()
-            else:
-                LOG_BROWSER('onLoadEnd', self.__browser.url)
-                self.onLoadEnd(self.__browser.url, isLoaded)
+            LOG_BROWSER('onLoadEnd', self.__browser.url)
+            self.onLoadEnd(self.__browser.url, isLoaded)
 
     def __onReadyToShowContent(self):
-        if self.__browser.url != self.__backgroundUrl:
-            LOG_BROWSER('onReadyToShowContent', self.__browser.url)
-            self.onReadyToShowContent(self.__browser.url)
+        LOG_BROWSER('onReadyToShowContent', self.__browser.url)
+        self.onReadyToShowContent(self.__browser.url)
 
     def __onCursorUpdated(self):
         if self.hasBrowser and self.isFocused:
@@ -385,7 +378,7 @@ class EventListener():
 
     def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, errorDesc, url):
         if isMainFrame:
-            LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorDesc)
+            LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorCode, errorDesc)
             self.onLoadEnd(False)
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url):

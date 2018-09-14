@@ -72,7 +72,8 @@ class IntSettingsRequester(object):
      'FALLOUT': 60,
      'TUTORIAL': 61,
      'FALLOUT_CAROUSEL_FILTER': 62,
-     'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN}
+     'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN,
+     'ONCE_ONLY_HINTS': 70}
 
     def __init__(self):
         self.__cache = dict()

@@ -37,8 +37,10 @@ def isPlayerTeamKillSuspected():
     return bool(getattr(BigWorld.player(), 'tkillIsSuspected', 0))
 
 
-def getArenaGuiType():
-    return getattr(getClientArena(), 'guiType', constants.ARENA_GUI_TYPE.UNKNOWN)
+def getArenaGuiType(arena = None):
+    if arena is None:
+        arena = getClientArena()
+    return getattr(arena, 'guiType', constants.ARENA_GUI_TYPE.UNKNOWN)
 
 
 def getArenaBonusType():
@@ -61,8 +63,21 @@ def isLowLevelBattle():
     return 0 < battleLevel < 4
 
 
+def isRandomBattle():
+    return getArenaGuiType() == constants.ARENA_GUI_TYPE.RANDOM
+
+
 def isEventBattle():
     return getArenaGuiType() == constants.ARENA_GUI_TYPE.EVENT_BATTLES
+
+
+def isFalloutBattle():
+    arenaType = getArenaType()
+    return isEventBattle() and arenaType is not None and arenaType.gameplayName.startswith('fallout')
+
+
+def isInSandboxBattle(arena = None):
+    return getArenaGuiType(arena=arena) in constants.ARENA_GUI_TYPE.SANDBOX_RANGE
 
 
 def makeClientTeamBaseID(team, baseID):
@@ -124,7 +139,7 @@ def hasResourcePoints(arenaType = None, arenBonusType = None):
 def getIsMultiteam(arenaType = None):
     if arenaType is None:
         arenaType = getArenaType()
-    return arenaType.gameplayName in ('fallout', 'fallout1', 'fallout2', 'fallout3')
+    return arenaType.gameplayName in ('fallout', 'fallout2', 'fallout3')
 
 
 def hasRepairPoints(arenaType = None, arenBonusType = None):
@@ -152,5 +167,14 @@ def hasRage(arenBonusType = None):
         arenBonusType = getArenaBonusType()
     if arenBonusType is not None:
         return caps.get(arenBonusType) & caps.RAGE_MECHANICS > 0
+    else:
+        return False
+
+
+def hasGasAttack(arenBonusType = None):
+    if arenBonusType is None:
+        arenBonusType = getArenaBonusType()
+    if arenBonusType is not None:
+        return caps.get(arenBonusType) & caps.GAS_ATTACK_MECHANICS > 0 and getIsMultiteam()
     else:
         return False

@@ -1,0 +1,81 @@
+<regular_2_1_13.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_1_13_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <and>
+              <results>
+                <key>	damageAssistedRadio	</key>
+                <greaterOrEqual>	2000	</greaterOrEqual>
+              </results>
+              <results>
+                <key>	damageDealt	</key>
+                <greaterOrEqual>	1500	</greaterOrEqual>
+              </results>
+            </and>
+            <unit>
+              <and>
+                <results>
+                  <key>	damageAssistedRadio	</key>
+                  <greaterOrEqual>	2000	</greaterOrEqual>
+                </results>
+                <results>
+                  <key>	damageDealt	</key>
+                  <greaterOrEqual>	1500	</greaterOrEqual>
+                </results>
+              </and>
+            </unit>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_1_13_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <and>
+                <results>
+                  <key>	damageAssistedRadio	</key>
+                  <greaterOrEqual>	2000	</greaterOrEqual>
+                </results>
+                <results>
+                  <key>	damageDealt	</key>
+                  <greaterOrEqual>	1500	</greaterOrEqual>
+                </results>
+              </and>
+              <unit>
+                <and>
+                  <results>
+                    <key>	damageAssistedRadio	</key>
+                    <greaterOrEqual>	2000	</greaterOrEqual>
+                  </results>
+                  <results>
+                    <key>	damageDealt	</key>
+                    <greaterOrEqual>	1500	</greaterOrEqual>
+                  </results>
+                </and>
+              </unit>
+            </or>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_1_13.xml>

@@ -12,6 +12,7 @@ from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPo
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
 from constants import SERVER_TICK_LENGTH
+import FMOD
 _MIN_COLLISION_SPEED = 3.5
 
 class DetachedTurret(BigWorld.Entity):
@@ -60,7 +61,7 @@ class DetachedTurret(BigWorld.Entity):
         for desc in self.__componentsDesc:
             desc['hitTester'].loadBspModel()
 
-        from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+        from helpers.CallbackDelayer import CallbackDelayer
         self.__isBeingPulledCallback = CallbackDelayer()
         self.__isBeingPulledCallback.delayCallback(self.__checkIsBeingPulled(), self.__checkIsBeingPulled)
         DetachedTurret.allTurrets.append(self)
@@ -160,7 +161,8 @@ class _TurretDetachmentEffects(object):
     _MAX_COLLISION_ENERGY = 98.10000000000001
     _MIN_COLLISION_ENERGY = _MIN_COLLISION_SPEED ** 2 * 0.5
     _MIN_NORMALIZED_ENERGY = 0.1
-    _DROP_ENERGY_PARAM = 'dropEnergy'
+    if FMOD.enabled:
+        _DROP_ENERGY_PARAM = 'dropEnergy'
 
     def __init__(self, turretModel, detachmentEffectsDesc, onGround):
         self.__turretModel = turretModel

@@ -96,13 +96,27 @@ def readQuestConditions(section):
     return result
 
 
+def _readSimpleWindowCloseTriggerSection(xmlCtx, section, _, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.SimpleWindowCloseTrigger, validateUpdateOnly='validate-update-only' in section.keys())
+
+
+def _readSimpleWindowProcessTriggerSection(xmlCtx, section, _, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.SimpleWindowProcessTrigger, validateUpdateOnly='validate-update-only' in section.keys())
+
+
+def _readFightBtnDisableTriggerSection(xmlCtx, section, _, triggerID):
+    return triggers.FightButtonDisabledTrigger(triggerID)
+
+
 def init():
     sub_parsers.setEffectsParsers({'save-setting': readSaveTutorialSettingSection,
-     'save-account-setting': readSaveAccountSettingSection})
-    sub_parsers.setEntitiesParsers({'hint': chains._readHintSection,
+     'save-account-setting': readSaveAccountSettingSection,
+     'show-unlocked-chapter': chains.readShowUnlockedChapterSection})
+    sub_parsers.setEntitiesParsers({'hint': chains.readHintSection,
      'tutorial-setting': readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'bonus': lobby.readBonusTriggerSection,
      'premiumDiscount': lobby.readPremiumDiscountsUseTriggerSection,
+     'tankmanAcademyDiscount': chains.readTankmanPriceDiscountTriggerSection,
      'allTutorialBonuses': _readAllTurorialBonusesTriggerSection,
      'randomBattlesCount': _readRandomBattlesCountTriggerSection,
      'researchModule': _readResearchModuleTriggerSection,
@@ -117,5 +131,10 @@ def init():
      'installItems': _readItemsInstallTriggerSection,
      'invalidateFlags': _readInvalidateFlagsTriggerSection,
      'timer': _readTimerTriggerSection,
-     'queue': chains.readQueueTrigger})
+     'fightBtn': chains.readFightBtnDisableTriggerSection,
+     'windowClosed': _readSimpleWindowCloseTriggerSection,
+     'windowProcessed': _readSimpleWindowProcessTriggerSection,
+     'isInSandbox': chains.readIsInSandBoxPreQueueTriggerSection,
+     'queue': chains.readQueueTrigger,
+     'isInSandboxOrRandom': chains.readIsInSandBoxOrRandomPreQueueTriggerSection})
     sub_parsers.setWindowsParsers({'awardWindow': sub_parsers.readQuestAwardWindowSection})

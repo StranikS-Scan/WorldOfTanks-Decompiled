@@ -1,0 +1,1254 @@
+<root xmlns:ussr="ussr" xmlns:germany="germany" xmlns:usa="usa" xmlns:france="france" xmlns:uk="uk" xmlns:czech="czech" xmlns:china="china" xmlns:japan="japan">
+	<!-- The namespaces enable tags like <ussr:T-43> -->
+	<!-- RGB of typical armor color. Is used for showing of previews. -->
+	<armorColor> 15 36 36 0 </armorColor>
+	<inscriptions>
+		<!-- Properties of each inscription:
+			id : identifier unique among all inscriptions in all groups, integer in [1, 5000].
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+			userString (optional) : key to a user-visible name.
+			isFeatured (optional) : true or false. If true, the iscription is marked as "featured" in GUI.
+		-->
+		<!-- Warning: inscription IDs are saved into DB and therefore should not change. -->
+		<japan>
+			<userString> #vehicle_customization:inscription/historical </userString>
+			<priceFactor> 1.0 </priceFactor>
+			<inscriptions>
+				<!--//BLOCK_BEGIN:NONCN_INSCRIPTIONS//-->
+				<!-- -->
+				<inscription>
+					<id> 1 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_01.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/shield </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 2 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_02.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/patriotism </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 3 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_03.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/taku </userString>
+					<qualifier> main_skill_radioman </qualifier>
+				</inscription>
+				<inscription>
+					<id> 4 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_04.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/attack </userString>
+					<qualifier> main_skill_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id> 5 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_05.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/waterfall </userString>
+					<qualifier> main_skill_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 6 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_06.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/steel </userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id> 7 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_07.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/commandos </userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 8 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_08.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/spirit </userString>
+					<qualifier> main_skill_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id> 9 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/japan/inscription_09.dds </texName>
+					<userString> #vehicle_customization:inscription/japan/blow </userString>
+					<qualifier> main_skill_gunner </qualifier>
+				</inscription>
+				<!-- -->
+				<!--//BLOCK_END:NONCN_INSCRIPTIONS//-->
+				<!--//BLOCK_BEGIN:CN_INSCRIPTIONS//-->
+				<!--
+				<inscription>
+					<id>1001</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1001.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_01</userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1002</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1002.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_02</userString>
+					<qualifier> alive_allies_count_less_6_commander </qualifier>
+				</inscription>
+				<inscription>
+					<id>1003</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1003.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_03</userString>
+					<qualifier> main_skill_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id>1004</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1004.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_04</userString>
+					<qualifier> player_tank_unproductive_hit_less_10s_ago_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1005</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1005.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_05</userString>
+					<qualifier> player_health_greater_80_percent_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id>1006</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1006.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_06</userString>
+					<qualifier> main_skill_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1007</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1007.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_07</userString>
+					<qualifier> enemy_tank_critical_hit_less_20s_ago_loader </qualifier>
+				</inscription>
+				<inscription>
+					<id>1008</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1008.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_08</userString>
+					<qualifier> main_skill_gunner </qualifier>
+				</inscription>
+				<inscription>
+					<id>1009</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1009.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_09</userString>
+					<qualifier> main_skill_driver </qualifier>
+				</inscription>
+				<inscription>
+					<id>1010</id>
+					<isFeatured>True</isFeatured>
+					<texName>gui/maps/vehicles/decals/inscriptions/japan/inscription_1010.dds</texName>
+					<userString> #vehicle_customization_cn:inscription/japan/inscription_10</userString>
+					<qualifier> main_skill_loader </qualifier>
+				</inscription>
+				-->
+				<!--//BLOCK_END:CN_INSCRIPTIONS//-->
+			</inscriptions>
+		</japan>
+		<clan_content>
+			<userString> #vehicle_customization:inscription/clan_content </userString>
+			<notInShop> true </notInShop>
+			<priceFactor> 0.0 </priceFactor>
+			<inscriptions>
+				<inscription>
+					<id> 701 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_04.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_04 </userString>
+					<qualifier> alive_allies_count_less_6_all_crew </qualifier>
+				</inscription>
+				<inscription>
+					<id> 711 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_14.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_14 </userString>
+					<qualifier> player_health_greater_80_percent_all_crew </qualifier>
+				</inscription>
+				<!--//BLOCK_BEGIN:NONCN_INSCRIPTIONS//-->
+				<!-- -->
+				<inscription>
+					<id> 724 </id>
+					<texName> gui/maps/vehicles/decals/inscriptions/clan_content/inscription_24.dds </texName>
+					<userString> #vehicle_customization:inscription/clan_content/inscription_24 </userString>
+					<qualifier> player_health_less_20_percent_driver </qualifier>
+				</inscription>
+				<!-- -->
+				<!--//BLOCK_END:NONCN_INSCRIPTIONS//-->
+			</inscriptions>
+		</clan_content>
+	</inscriptions>
+	<insigniaOnGun>
+		<!-- Properties for each insignia:
+			'id': int > 0 - rank of the insignia
+			texName : texture file name.
+			bumpTexName (optional) : bump texture file name.
+		-->
+		<insignia>
+			<id> 1 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_japan_1.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 2 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_japan_2.dds </texName>
+		</insignia>
+		<insignia>
+			<id> 3 </id>
+			<texName> gui/maps/vehicles/decals/insignia/gun_japan_3.dds </texName>
+		</insignia>
+	</insigniaOnGun>
+	<camouflageGroups>
+		<winter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+		</winter>
+		<summer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+		</summer>
+		<desert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+		</desert>
+		<!--//BLOCK_BEGIN:IGR_CAMOUFLAGES_GROUPS//-->
+		<!-- -->
+		<IGRwinter>
+			<userString> #vehicle_customization:camouflage/winter </userString>
+			<igrType> 2 </igrType>
+		</IGRwinter>
+		<IGRsummer>
+			<userString> #vehicle_customization:camouflage/summer </userString>
+			<igrType> 2 </igrType>
+		</IGRsummer>
+		<IGRdesert>
+			<userString> #vehicle_customization:camouflage/desert </userString>
+			<igrType> 2 </igrType>
+		</IGRdesert>
+		<!-- -->
+		<!--//BLOCK_END:IGR_CAMOUFLAGES_GROUPS//-->
+	</camouflageGroups>
+	<camouflages>
+		<!-- Fields of each camouflage section:
+			id: int in [1, 5000] unique among all camouflages.
+				Warning: IDs are saved into DB, and therefore should not change.
+			kind: winter, summer or desert.
+			group: one of names from <camouflagegroup>.
+			priceFactor: factor to apply to base price of camouflages.
+			invisibilityFactor: factor to apply to <invisibility/camouflageBonus> of the vehicle.
+			description: optional, key to localized (user-friendly) description of the camouflage.
+			texture: name of texture file.
+			colors: 4 subsections of ints in [0, 255]: <> R G B A </>.
+			allow (optional): space-delimited list of names of vehicles (within nation) that are allowed
+				to use this camouflage. If the list is empty, all vehicles are allowed to.
+			deny (optional): space-delimited list of names of vehicles (within nation) that are disallowed
+				to use this camouflage. If the list is empty, no vehicles are disallowed to.
+			tiling (optional): sequence of <[nation_name:]vehicle_name> x y offs_x offs_z </[nation_name:]vehicle_name>.
+				The nation_name part may be omitted if the vehicle_name is within the default nation for this file.
+			isNew (optional): bool, if true, the camouflage is marked as "new" in GUI.
+			notInShop (optional): bool, if true, the camouflage is not shown in the shop.
+		-->
+		<!-- Warning: IDs are saved into DB, and therefore should not change. -->
+		<winter_white>
+			<texture> vehicles/japan/Camouflage/winter_white.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/winter_white </description>
+			<id> 2 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 255 255 255 199 </c0>
+				<c1> 47 47 0 105 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 6.1 6.1 0.26 0.000000 </Chi_Nu_Kai>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 5 3 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni_B> 5 5 0.000000 0.000000 </Ke_Ni_B>
+				<Chi_Ri> 5 5 0.000000 0.000000 </Chi_Ri>
+				<Chi_He> 5 5 0.000000 0.000000 </Chi_He>
+				<Chi_Nu> 5 5 0.000000 0.000000 </Chi_Nu>
+				<Chi_To> 5 5 0.000000 0.000000 </Chi_To>
+				<Ke_Ni> 5 5 0.000000 0.000000 </Ke_Ni>
+				<Chi_Ha> 5 5 0.000000 0.000000 </Chi_Ha>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Ke_Ho> 4 1.8 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ni> 4.6 4.6 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 4.6 4.6 0.000000 0.000000 </Type_61>
+				<ST_B1> 5 4.9 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5 5 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 5 4.9 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 5.1 5.3 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 5 5 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3 3 0.000000 0.000000 </J23_Mi_To>
+				<J26_Type_89> 4.3 4.3 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 7 7 0.000000 0.000000 </J28_O_I_100>
+				<J22_Type_95> 2.4 2.4 0.000000 0.000000 </J22_Type_95>
+				<J27_O_I_120> 2 2 0.000000 0.000000 </J27_O_I_120>
+				<J25_Type_4> 3 3 0.000000 0.000000 </J25_Type_4>
+			</tiling>
+		</winter_white>
+		<winter_spots>
+			<texture> vehicles/japan/Camouflage/winter_spots.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/winter_spots </description>
+			<id> 3 </id>
+			<kind> winter </kind>
+			<group> winter </group>
+			<colors>
+				<c0> 255 255 255 172 </c0>
+				<c1> 0 64 0 105 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 2.9 3 0.18 0.17 </Chi_Nu_Kai>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 3 3 0.56 0.54 </Ha_Go>
+				<Ke_Ni_B> 3 3 0.02 0.26 </Ke_Ni_B>
+				<Chi_Ri> 5 5 0.000000 0.000000 </Chi_Ri>
+				<Chi_He> 5 5 0.25 0.24 </Chi_He>
+				<Chi_Nu> 3.9 4.1 0.16 0.28 </Chi_Nu>
+				<Chi_To> 4.4 4.3 0.000000 0.000000 </Chi_To>
+				<Ke_Ni> 4.4 4.4 0.2 0.000000 </Ke_Ni>
+				<Chi_Ha> 4 4 0.26 0.000000 </Chi_Ha>
+				<STA_1> 5 5 0.06 0.000000 </STA_1>
+				<Ke_Ho> 3.6 1.6 0.000000 0.4 </Ke_Ho>
+				<Chi_Ni> 5.1 5.2 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 5.1 5 0.22 0.1 </Type_61>
+				<ST_B1> 5.1 5 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5.9 4 0.4 0.13 </Te_Ke>
+				<STA_1_IGR> 5 5 0.06 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 5.1 5 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.7 4.8 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.8 4.8 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 4 4 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.7 2.7 0.08 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 2.6 2.6 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.4 2.4 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.9 1.9 0.88 0.68 </J28_O_I_100>
+				<J22_Type_95> 1.6 1.6 0.000000 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.6 1.6 0.000000 0.2 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.12 0.22 </J25_Type_4>
+			</tiling>
+		</winter_spots>
+		<summer_four-color>
+			<texture> vehicles/japan/Camouflage/summer_four-color.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/summer_four-color </description>
+			<id> 4 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 30 72 32 217 </c0>
+				<c1> 216 197 137 135 </c1>
+				<c2> 0 0 0 255 </c2>
+				<c3> 98 58 19 166 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 3.9 4 0.000000 0.000000 </Chi_Nu_Kai>
+				<NC27> 5 3 0.4 0.000000 </NC27>
+				<Ha_Go> 5 5 0.26 0.000000 </Ha_Go>
+				<Ke_Ni_B> 5 5 0.62 0.3 </Ke_Ni_B>
+				<Chi_Ri> 5 5 0.000000 0.000000 </Chi_Ri>
+				<Chi_He> 4.1 4 0.41 0.12 </Chi_He>
+				<Chi_Nu> 5 5 0.28 0.43 </Chi_Nu>
+				<Chi_To> 5 5 0.16 0.000000 </Chi_To>
+				<Ke_Ni> 5 5 0.16 0.000000 </Ke_Ni>
+				<Chi_Ha> 5 5 0.35 0.55 </Chi_Ha>
+				<STA_1> 4.6 4.5 0.1 0.000000 </STA_1>
+				<Ke_Ho> 5.4 3.5 0.58 0.62 </Ke_Ho>
+				<Chi_Ni> 5 4.9 0.62 0.28 </Chi_Ni>
+				<Type_61> 5.2 5.2 0.02 0.000000 </Type_61>
+				<ST_B1> 4.5 4.4 0.1 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 4.6 4.5 0.1 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 4.5 4.4 0.1 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.3 4.4 0.22 0.22 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.3 4.3 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 4.3 4.3 0.95 0.3 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.78 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 2 2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.7 2.7 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.6 1.6 0.36 0.000000 </J28_O_I_100>
+				<J22_Type_95> 1.8 1.8 0.12 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.2 1.2 0.000000 0.4 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.5 0.000000 </J25_Type_4>
+			</tiling>
+		</summer_four-color>
+		<summer_three-color_spots>
+			<texture> vehicles/japan/Camouflage/summer_three-color_spots.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/summer_three-color_spots </description>
+			<id> 5 </id>
+			<kind> summer </kind>
+			<group> summer </group>
+			<colors>
+				<c0> 30 100 35 202 </c0>
+				<c1> 177 175 109 204 </c1>
+				<c2> 61 38 24 181 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 2.9 2.9 0.16 0.000000 </Chi_Nu_Kai>
+				<NC27> 5 3 0.44 0.3 </NC27>
+				<Ha_Go> 5 5 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni_B> 3 3 0.62 0.55 </Ke_Ni_B>
+				<Chi_Ri> 3 3 0.72 0.000000 </Chi_Ri>
+				<Chi_He> 4.3 4.3 0.04 0.000000 </Chi_He>
+				<Chi_Nu> 4 4 0.39 0.000000 </Chi_Nu>
+				<Chi_To> 5 5 0.36 0.000000 </Chi_To>
+				<Ke_Ni> 4 4.1 0.000000 0.000000 </Ke_Ni>
+				<Chi_Ha> 4.1 4 0.46 0.34 </Chi_Ha>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Ke_Ho> 3.9 1.9 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ni> 5 5 0.86 0.29 </Chi_Ni>
+				<Type_61> 3.6 3.6 0.000000 0.000000 </Type_61>
+				<ST_B1> 4 4 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5.7 3.7 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.72 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 4 4 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 5.4 5.4 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 5.5 5.5 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.6 3.6 0.85 0.54 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.3 2.3 0.000000 0.54 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 2 2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.2 2.2 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.6 1.6 0.000000 0.000000 </J28_O_I_100>
+				<J22_Type_95> 2 2 0.000000 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.6 1.6 0.000000 0.18 </J27_O_I_120>
+				<J25_Type_4> 4.6 4.6 0.000000 0.24 </J25_Type_4>
+			</tiling>
+		</summer_three-color_spots>
+		<desert_blue-brown>
+			<texture> vehicles/japan/Camouflage/desert_blue-brown.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/desert_blue-brown </description>
+			<id> 7 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 113 63 38 213 </c0>
+				<c1> 15 52 94 203 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 2.6 2.7 0.000000 0.000000 </Chi_Nu_Kai>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 3 3 0.28 0.000000 </Ha_Go>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Chi_Ri> 3 3 0.02 0.000000 </Chi_Ri>
+				<Chi_He> 3.9 3.9 0.22 0.000000 </Chi_He>
+				<Chi_Nu> 3.5 3.6 0.22 0.000000 </Chi_Nu>
+				<Chi_To> 5 5 0.24 0.000000 </Chi_To>
+				<Ke_Ni> 3 3 0.04 0.000000 </Ke_Ni>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Ke_Ho> 2.7 1.2 0.1 0.1 </Ke_Ho>
+				<Chi_Ni> 3.3 3.3 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 3.4 3.4 0.000000 0.000000 </Type_61>
+				<ST_B1> 3.6 3.5 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.02 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3.6 3.5 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.8 4.8 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.8 4.8 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2.2 2.2 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.3 0.44 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.8 1.8 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.5 2.5 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.12 0.02 </J28_O_I_100>
+				<J22_Type_95> 1.7 1.7 0.26 0.38 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.1 </J27_O_I_120>
+				<J25_Type_4> 3.4 3.4 0.000000 0.000000 </J25_Type_4>
+			</tiling>
+		</desert_blue-brown>
+		<desert_green-brown_spots>
+			<texture> vehicles/japan/Camouflage/desert_green-brown_spots.dds </texture>
+			<priceFactor> 0.5 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/japan/desert_green-brown_spots </description>
+			<id> 8 </id>
+			<kind> desert </kind>
+			<group> desert </group>
+			<colors>
+				<c0> 41 86 33 179 </c0>
+				<c1> 126 91 65 205 </c1>
+				<c2> 224 188 114 151 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<tiling>
+				<Chi_Nu_Kai> 2.7 2.8 0.59 0.35 </Chi_Nu_Kai>
+				<NC27> 5 3 0.4 0.2 </NC27>
+				<Ha_Go> 4.1 4 0.26 0.2 </Ha_Go>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Chi_Ri> 5 5 0.3 0.26 </Chi_Ri>
+				<Chi_He> 5 4.8 0.41 0.06 </Chi_He>
+				<Chi_Nu> 5 5 0.14 0.000000 </Chi_Nu>
+				<Chi_To> 5 5 0.12 0.63 </Chi_To>
+				<Ke_Ni> 4.1 4.2 0.000000 0.000000 </Ke_Ni>
+				<Chi_Ha> 3.6 3.7 0.33 0.31 </Chi_Ha>
+				<STA_1> 4.5 4.5 0.000000 0.000000 </STA_1>
+				<Ke_Ho> 3.4 1.6 0.16 0.000000 </Ke_Ho>
+				<Chi_Ni> 3.5 3.4 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 5.1 5 0.000000 0.000000 </Type_61>
+				<ST_B1> 3.8 3.7 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5 4 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 4.5 4.5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.3 0.26 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3.8 3.7 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.2 4.2 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.1 4.1 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.9 3.9 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.6 1.6 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.3 2.3 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.6 1.6 0.000000 0.000000 </J28_O_I_100>
+				<J22_Type_95> 1.6 1.6 0.71 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.28 </J27_O_I_120>
+				<J25_Type_4> 3.4 3.4 0.16 0.000000 </J25_Type_4>
+			</tiling>
+		</desert_green-brown_spots>
+		<!--//BLOCK_BEGIN:KR_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<IGR_Winter>
+			<texture> vehicles/german/Camouflage/IGR_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Winter </description>
+			<id> 94 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 75 75 75 229 </c0>
+				<c1> 0 0 0 255 </c1>
+				<c2> 192 192 192 226 </c2>
+				<c3> 255 255 255 237 </c3>
+			</colors>
+			<tiling>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 5 5 0.000000 0.000000 </Type_61>
+				<STA_1> 4 4 0.000000 0.000000 </STA_1>
+				<Chi_Nu_Kai> 3 3 0.000000 0.000000 </Chi_Nu_Kai>
+				<Chi_Ri> 3 3 0.2 0.000000 </Chi_Ri>
+				<Chi_To> 3.9 3.9 0.2 0.000000 </Chi_To>
+				<Chi_He> 3 3 0.28 0.000000 </Chi_He>
+				<Chi_Nu> 3.9 3.9 0.000000 0.000000 </Chi_Nu>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<Ke_Ho> 4 2.2 0.2 0.000000 </Ke_Ho>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ha_Go> 4.1 4.1 0.000000 0.000000 </Ha_Go>
+				<NC27> 3.9 2.2 0.34 0.12 </NC27>
+				<ST_B1> 3 3 0.26 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 4 4 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.2 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.26 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.3 4.3 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.2 3.2 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2.3 2.3 0.19 0.68 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.32 0.12 </J20_Type_2605>
+				<J21_Type_91> 2.2 2.2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.7 1.7 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.4 0.11 </J28_O_I_100>
+				<J22_Type_95> 1.4 1.4 0.5 0.6 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.1 </J27_O_I_120>
+				<J25_Type_4> 4.4 4.4 0.000000 0.000000 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Winter>
+		<IGR_Summer>
+			<texture> vehicles/german/Camouflage/IGR_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Summer </description>
+			<id> 95 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 61 86 35 202 </c0>
+				<c1> 226 210 154 204 </c1>
+				<c2> 0 0 0 190 </c2>
+				<c3> 157 108 34 202 </c3>
+			</colors>
+			<tiling>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 3.7 3.8 0.000000 0.000000 </Type_61>
+				<STA_1> 4 4.1 0.5 0.000000 </STA_1>
+				<Chi_Nu_Kai> 3 3 0.000000 0.000000 </Chi_Nu_Kai>
+				<Chi_Ri> 3 3 0.000000 0.000000 </Chi_Ri>
+				<Chi_To> 3.7 3.7 0.000000 0.000000 </Chi_To>
+				<Chi_He> 3.6 3.6 0.18 0.000000 </Chi_He>
+				<Chi_Nu> 3.6 3.6 0.000000 0.000000 </Chi_Nu>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<Ke_Ho> 3.6 2 0.000000 0.000000 </Ke_Ho>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ha_Go> 3.7 3.6 0.000000 0.000000 </Ha_Go>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<ST_B1> 3.7 3.7 0.32 0.44 </ST_B1>
+				<Te_Ke> 5 3.5 0.35 0.55 </Te_Ke>
+				<STA_1_IGR> 4 4.1 0.5 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3.7 3.7 0.32 0.44 </ST_B1_IGR>
+				<J18_STA_2_3> 3.6 3.6 0.09 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.7 3.7 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2.8 2.8 0.52 0.81 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.04 0.26 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.46 0.14 </J20_Type_2605>
+				<J21_Type_91> 2.4 2.4 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.5 1.5 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.5 1.5 0.4 0.3 </J28_O_I_100>
+				<J22_Type_95> 1.4 1.4 0.06 0.3 </J22_Type_95>
+				<J27_O_I_120> 1.6 1.6 0.74 0.000000 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.54 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Summer>
+		<IGR_Desert>
+			<texture> vehicles/german/Camouflage/IGR_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Desert </description>
+			<id> 96 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 196 126 34 209 </c0>
+				<c1> 229 210 154 200 </c1>
+				<c2> 0 0 0 197 </c2>
+				<c3> 113 89 57 214 </c3>
+			</colors>
+			<tiling>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<Type_61> 5 5 0.000000 0.000000 </Type_61>
+				<STA_1> 3.4 3.5 0.000000 0.000000 </STA_1>
+				<Chi_Nu_Kai> 3 3 0.000000 0.000000 </Chi_Nu_Kai>
+				<Chi_Ri> 3 3 0.000000 0.000000 </Chi_Ri>
+				<Chi_To> 3 3 0.000000 0.000000 </Chi_To>
+				<Chi_He> 3.6 3.5 0.000000 0.000000 </Chi_He>
+				<Chi_Nu> 3.9 4 0.000000 0.000000 </Chi_Nu>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<Ke_Ho> 5 3 0.000000 0.000000 </Ke_Ho>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ha_Go> 3.7 3.8 0.000000 0.000000 </Ha_Go>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<ST_B1> 3 3 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 3.4 3.5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 3.6 3.6 0.11 0.02 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.4 3.4 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2.3 2.3 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.66 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.8 3.8 0.28 0.32 </J20_Type_2605>
+				<J21_Type_91> 2.4 2.4 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2 2 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 2.1 2.1 0.000000 0.2 </J28_O_I_100>
+				<J22_Type_95> 2.6 2.6 0.1 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.8 1.8 0.16 0.36 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.12 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Desert>
+		<IGR_K_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Winter </description>
+			<id> 91 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 32 35 43 172 </c0>
+				<c1> 101 74 50 158 </c1>
+				<c2> 164 164 164 172 </c2>
+				<c3> 255 255 255 204 </c3>
+			</colors>
+			<tiling>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 5 5 0.000000 0.12 </Ha_Go>
+				<Ke_Ni> 3 3 0.38 0.16 </Ke_Ni>
+				<Ke_Ni_B> 3 3 0.44 0.08 </Ke_Ni_B>
+				<Ke_Ho> 5 3 0.2 0.6 </Ke_Ho>
+				<Chi_Ha> 5 5 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 5 5 0.56 0.12 </Chi_Nu>
+				<Chi_He> 3.9 4 0.000000 0.000000 </Chi_He>
+				<Chi_To> 5 5 0.2 0.000000 </Chi_To>
+				<Chi_Ri> 3.9 3.9 0.43 0.06 </Chi_Ri>
+				<Chi_Nu_Kai> 4.1 4.1 0.36 0.06 </Chi_Nu_Kai>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Type_61> 5 5 0.000000 0.06 </Type_61>
+				<Chi_Ni> 3.5 3.6 0.14 0.000000 </Chi_Ni>
+				<ST_B1> 3.7 3.7 0.24 0.02 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3.9 3.9 0.43 0.06 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3.7 3.7 0.24 0.02 </ST_B1_IGR>
+				<J18_STA_2_3> 4.4 4.4 0.09 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.7 4.7 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.1 3.1 0.41 0.89 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.46 0.5 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.8 3.8 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 2.3 2.3 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.8 1.8 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.8 1.8 0.2 0.08 </J28_O_I_100>
+				<J22_Type_95> 1.8 1.8 0.000000 0.58 </J22_Type_95>
+				<J27_O_I_120> 2 2 0.04 0.24 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.3 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Winter>
+		<IGR_K_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_K_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_K_Desert </description>
+			<id> 93 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 138 90 68 204 </c0>
+				<c1> 203 135 67 196 </c1>
+				<c2> 203 169 123 202 </c2>
+				<c3> 112 66 42 0 </c3>
+			</colors>
+			<tiling>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 3 3 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 5 3 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 4.2 4.2 0.000000 0.000000 </Chi_Nu>
+				<Chi_He> 4 4.1 0.000000 0.000000 </Chi_He>
+				<Chi_To> 5 5 0.000000 0.000000 </Chi_To>
+				<Chi_Ri> 5 5 0.000000 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 5 5 0.000000 0.000000 </Chi_Nu_Kai>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Type_61> 5 5 0.000000 0.000000 </Type_61>
+				<Chi_Ni> 5 5 0.000000 0.000000 </Chi_Ni>
+				<ST_B1> 3 3 0.22 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.22 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 3.6 3.5 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.5 3.5 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.3 3.3 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.16 0.32 </J20_Type_2605>
+				<J21_Type_91> 3 3 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.8 1.8 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.6 0.000000 </J28_O_I_100>
+				<J22_Type_95> 1.7 1.7 0.48 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.88 0.1 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.000000 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_K_Desert>
+		<!-- -->
+		<!--//BLOCK_END:KR_IGR_CAMOUFLAGES//-->
+		<!--//BLOCK_BEGIN:CN_IGR_CAMOUFLAGES//-->
+		<!-- -->
+		<IGR_Ch_Winter>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Winter.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Winter </description>
+			<id> 77 </id>
+			<kind> winter </kind>
+			<group> IGRwinter </group>
+			<colors>
+				<c0> 43 33 23 172 </c0>
+				<c1> 101 74 50 158 </c1>
+				<c2> 181 153 89 172 </c2>
+				<c3> 221 201 153 204 </c3>
+			</colors>
+			<tiling>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 3 3 0.12 0.000000 </Ha_Go>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 3.4 2 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 5 3 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 3 3 0.2 0.000000 </Chi_Nu>
+				<Chi_He> 3 3 0.000000 0.000000 </Chi_He>
+				<Chi_To> 3 3 0.2 0.000000 </Chi_To>
+				<Chi_Ri> 3 3 0.32 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 3 3 0.04 0.000000 </Chi_Nu_Kai>
+				<STA_1> 3 3 0.2 0.000000 </STA_1>
+				<Type_61> 4 4 0.26 0.46 </Type_61>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<ST_B1> 3 3 0.22 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 3 3 0.2 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.32 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.22 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 2.3 2.4 0.16 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 2.6 2.6 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 5.1 5.1 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.34 0.000000 </J20_Type_2605>
+				<J21_Type_91> 2 2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.6 1.6 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.4 0.4 </J28_O_I_100>
+				<J22_Type_95> 1.2 1.2 0.34 0.16 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.14 0.04 </J27_O_I_120>
+				<J25_Type_4> 3.4 3.4 0.000000 0.48 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Winter>
+		<IGR_Ch_Summer>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Summer.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Summer </description>
+			<id> 78 </id>
+			<kind> summer </kind>
+			<group> IGRsummer </group>
+			<colors>
+				<c0> 52 78 41 202 </c0>
+				<c1> 108 72 19 204 </c1>
+				<c2> 39 40 30 190 </c2>
+				<c3> 207 196 150 202 </c3>
+			</colors>
+			<tiling>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 3 3 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 3 3 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 3 3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 5 2.5 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 3 3 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 3 3 0.2 0.02 </Chi_Nu>
+				<Chi_He> 3 3 0.3 0.18 </Chi_He>
+				<Chi_To> 3 3 0.1 0.08 </Chi_To>
+				<Chi_Ri> 3 3 0.22 0.08 </Chi_Ri>
+				<Chi_Nu_Kai> 3 3 0.16 0.5 </Chi_Nu_Kai>
+				<STA_1> 3 3 0.2 0.000000 </STA_1>
+				<Type_61> 4 4.1 0.24 0.000000 </Type_61>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<ST_B1> 3 3 0.14 0.000000 </ST_B1>
+				<Te_Ke> 5.1 2.3 0.000000 0.000000 </Te_Ke>
+				<STA_1_IGR> 3 3 0.2 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 3 3 0.22 0.08 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.14 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 2.8 2.8 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 2.9 2.9 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.5 3.5 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.4 0.22 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.18 </J20_Type_2605>
+				<J21_Type_91> 2.2 2.2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.5 1.5 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.8 1.8 0.38 0.2 </J28_O_I_100>
+				<J22_Type_95> 1 1 0.44 0.16 </J22_Type_95>
+				<J27_O_I_120> 1 1 0.28 0.2 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.08 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Summer>
+		<IGR_Ch_Desert>
+			<texture> vehicles/chinese/Camouflage/IGR_Ch_Desert.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/IGR_Ch_Desert </description>
+			<id> 79 </id>
+			<kind> desert </kind>
+			<group> IGRdesert </group>
+			<colors>
+				<c0> 33 27 22 204 </c0>
+				<c1> 153 116 60 196 </c1>
+				<c2> 198 166 116 202 </c2>
+				<c3> 112 66 42 204 </c3>
+			</colors>
+			<tiling>
+				<NC27> 5 3 0.000000 0.000000 </NC27>
+				<Ha_Go> 5 5 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 5 5 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 3.8 3.7 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 5 3 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 5 5 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 5 5 0.000000 0.000000 </Chi_Nu>
+				<Chi_He> 5 5 0.000000 0.000000 </Chi_He>
+				<Chi_To> 5 5 0.000000 0.000000 </Chi_To>
+				<Chi_Ri> 5 5 0.000000 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 5 5 0.000000 0.000000 </Chi_Nu_Kai>
+				<STA_1> 5 5 0.000000 0.000000 </STA_1>
+				<Type_61> 5 5 0.000000 0.000000 </Type_61>
+				<Chi_Ni> 3 3 0.000000 0.000000 </Chi_Ni>
+				<ST_B1> 3 3 0.000000 0.000000 </ST_B1>
+				<Te_Ke> 5 3 0.01 0.000000 </Te_Ke>
+				<STA_1_IGR> 5 5 0.000000 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 5 5 0.000000 0.000000 </Chi_Ri_IGR>
+				<ST_B1_IGR> 3 3 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 3 3 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.3 3.3 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.5 3.5 0.09 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.16 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.6 1.6 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.6 2.6 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.6 0.000000 </J28_O_I_100>
+				<J22_Type_95> 1.6 1.6 0.000000 0.02 </J22_Type_95>
+				<J27_O_I_120> 1.2 1.2 0.000000 0.000000 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.000000 </J25_Type_4>
+			</tiling>
+			<notInShop> false </notInShop>
+		</IGR_Ch_Desert>
+		<!-- -->
+		<!--//BLOCK_END:CN_IGR_CAMOUFLAGES//-->
+		<Clan_camuflage_01>
+			<texture> vehicles/japan/Camouflage/Clan_camuflage_01.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_01 </description>
+			<id> 101 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 100 13 0 227 </c0>
+				<c1> 201 136 48 155 </c1>
+				<c2> 12 17 9 228 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<NC27> 6.4 3.5 0.1 0.000000 </NC27>
+				<Te_Ke> 7.1 4.6 0.000000 0.26 </Te_Ke>
+				<Ha_Go> 4.5 4.4 0.52 0.81 </Ha_Go>
+				<Ke_Ni> 5 5 0.77 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 5.3 4.7 0.56 0.58 </Ke_Ni_B>
+				<Ke_Ho> 7.5 3.1 0.32 0.52 </Ke_Ho>
+				<Chi_Ha> 6.4 6.4 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 6.8 6.7 0.000000 0.000000 </Chi_Nu>
+				<Chi_He> 5.4 5.4 0.000000 0.000000 </Chi_He>
+				<Chi_To> 6.5 6.3 0.46 0.000000 </Chi_To>
+				<Chi_Ri> 4.8 4.8 0.96 0.56 </Chi_Ri>
+				<Chi_Nu_Kai> 5.3 5.3 0.54 0.000000 </Chi_Nu_Kai>
+				<STA_1> 5.8 5.8 0.61 0.000000 </STA_1>
+				<Type_61> 5.9 5.8 0.39 0.000000 </Type_61>
+				<Chi_Ni> 4.8 4.9 0.21 0.34 </Chi_Ni>
+				<ST_B1> 4.9 4.9 0.000000 0.000000 </ST_B1>
+				<STA_1_IGR> 5.8 5.8 0.61 0.000000 </STA_1_IGR>
+				<Chi_Ri_IGR> 4.8 4.8 0.96 0.56 </Chi_Ri_IGR>
+				<ST_B1_IGR> 4.9 4.9 0.000000 0.000000 </ST_B1_IGR>
+				<J18_STA_2_3> 4.7 4.7 0.000000 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.8 4.8 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 3.9 3.9 0.51 0.5 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.16 0.7 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.42 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.5 1.5 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 3.2 3.2 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.000000 0.000000 </J28_O_I_100>
+				<J27_O_I_120> 1.6 1.6 0.000000 0.34 </J27_O_I_120>
+				<J25_Type_4> 3.8 3.8 0.000000 0.32 </J25_Type_4>
+			</tiling>
+		</Clan_camuflage_01>
+		<Clan_camuflage_02>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_02.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_02 </description>
+			<id> 116 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 54 70 21 118 </c0>
+				<c1> 255 255 255 148 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<ST_B1> 2.9 2.9 0.47 0.49 </ST_B1>
+				<NC27> 4.5 2.1 0.000000 0.000000 </NC27>
+				<Te_Ke> 2.9 2.9 0.000000 0.000000 </Te_Ke>
+				<Ha_Go> 3.5 3.4 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 3 3 0.63 0.42 </Ke_Ni>
+				<Ke_Ni_B> 2.6 2.6 0.000000 0.42 </Ke_Ni_B>
+				<Ke_Ho> 3.8 1.8 0.4 0.000000 </Ke_Ho>
+				<Chi_Ha> 2.7 2.7 0.000000 0.06 </Chi_Ha>
+				<Chi_Nu> 3 3 0.000000 0.000000 </Chi_Nu>
+				<Chi_He> 3.1 3 0.000000 0.000000 </Chi_He>
+				<Chi_To> 3.2 3.2 0.000000 0.000000 </Chi_To>
+				<Chi_Ri> 3.1 3.1 0.27 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 2.4 2.4 0.29 0.13 </Chi_Nu_Kai>
+				<STA_1> 2.8 2.7 0.000000 0.000000 </STA_1>
+				<Type_61> 3.1 3 0.4 0.44 </Type_61>
+				<Chi_Ni> 2.3 2.3 0.000000 1 </Chi_Ni>
+				<J18_STA_2_3> 3 3 0.63 0.16 </J18_STA_2_3>
+				<Chi_Ri_IGR> 3 3 0.000000 0.000000 </Chi_Ri_IGR>
+				<STA_1_IGR> 3 3 0.000000 0.000000 </STA_1_IGR>
+				<ST_B1_IGR> 3 3 0.000000 0.000000 </ST_B1_IGR>
+				<J19_Tiger_I_Jpn> 3.2 3.2 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2.8 2.8 0.04 0.05 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.1 2.1 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.6 1.6 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 2.3 2.3 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.3 1.3 0.000000 0.000000 </J28_O_I_100>
+				<J22_Type_95> 1 1 0.36 0.000000 </J22_Type_95>
+				<J27_O_I_120> 1.2 1.2 0.000000 0.16 </J27_O_I_120>
+				<J25_Type_4> 4 4 0.24 0.14 </J25_Type_4>
+			</tiling>
+		</Clan_camuflage_02>
+		<Clan_camuflage_03>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_03.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_03 </description>
+			<id> 117 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 108 119 77 177 </c0>
+				<c1> 0 13 0 155 </c1>
+				<c2> 15 21 11 0 </c2>
+				<c3> 186 147 12 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<ST_B1> 2.2 2.2 0.000000 0.000000 </ST_B1>
+				<NC27> 2.3 1.3 0.07 0.000000 </NC27>
+				<Te_Ke> 2.3 1.7 0.19 0.39 </Te_Ke>
+				<Ha_Go> 2.3 2.3 0.25 0.000000 </Ha_Go>
+				<Ke_Ni> 1.7 1.6 0.24 0.54 </Ke_Ni>
+				<Ke_Ni_B> 2.3 2.3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 2.3 1.5 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 2.3 2.3 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 2.7 2.6 0.1 0.37 </Chi_Nu>
+				<Chi_He> 2.1 2.1 0.09 0.000000 </Chi_He>
+				<Chi_To> 2.3 2.3 0.08 0.13 </Chi_To>
+				<Chi_Ri> 2.1 2.2 0.03 0.11 </Chi_Ri>
+				<Chi_Nu_Kai> 2 1.9 0.000000 0.000000 </Chi_Nu_Kai>
+				<STA_1> 2.2 2.1 0.25 0.000000 </STA_1>
+				<Type_61> 2.2 2.1 0.13 0.19 </Type_61>
+				<Chi_Ni> 1.9 1.9 0.000000 0.000000 </Chi_Ni>
+				<J18_STA_2_3> 2.3 2.3 0.000000 0.000000 </J18_STA_2_3>
+				<Chi_Ri_IGR> 2.3 2.3 0.38 0.000000 </Chi_Ri_IGR>
+				<STA_1_IGR> 3 3 0.22 0.000000 </STA_1_IGR>
+				<ST_B1_IGR> 2.3 2.4 0.2 0.2 </ST_B1_IGR>
+				<J19_Tiger_I_Jpn> 2.4 2.4 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 1.8 1.8 1 0.19 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.000000 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.2 1.2 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.2 1.2 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.6 1.6 0.000000 0.000000 </J28_O_I_100>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.12 </J27_O_I_120>
+				<J25_Type_4> 3.6 3.6 0.000000 0.21 </J25_Type_4>
+			</tiling>
+		</Clan_camuflage_03>
+		<Clan_camuflage_04>
+			<texture> vehicles/french/Camouflage/Clan_camuflage_04.DDS </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Clan_camouflage_04 </description>
+			<id> 118 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 43 63 1 109 </c0>
+				<c1> 164 217 38 99 </c1>
+				<c2> 0 0 0 219 </c2>
+				<c3> 201 192 133 140 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<ST_B1> 2.8 2.8 0.000000 0.000000 </ST_B1>
+				<NC27> 4.9 1.7 0.24 0.19 </NC27>
+				<Te_Ke> 4.2 2.1 0.3 0.000000 </Te_Ke>
+				<Ha_Go> 2.7 2.6 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 2.3 2.3 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 2.3 2.3 0.000000 0.000000 </Ke_Ni_B>
+				<Ke_Ho> 4.1 1.6 0.17 0.000000 </Ke_Ho>
+				<Chi_Ha> 2.7 2.6 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 2.4 2.4 0.000000 0.000000 </Chi_Nu>
+				<Chi_He> 2.3 2.3 0.4 0.000000 </Chi_He>
+				<Chi_To> 2.4 2.2 0.000000 0.000000 </Chi_To>
+				<Chi_Ri> 2.5 2.4 0.000000 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 2.2 2.1 0.000000 0.000000 </Chi_Nu_Kai>
+				<STA_1> 2.8 2.7 0.000000 0.000000 </STA_1>
+				<Type_61> 2.5 2.5 0.000000 0.000000 </Type_61>
+				<Chi_Ni> 3.1 3.2 0.000000 0.000000 </Chi_Ni>
+				<J18_STA_2_3> 3.2 3 0.000000 0.000000 </J18_STA_2_3>
+				<Chi_Ri_IGR> 2.2 2.3 0.000000 0.000000 </Chi_Ri_IGR>
+				<STA_1_IGR> 2.3 2.4 0.000000 0.000000 </STA_1_IGR>
+				<ST_B1_IGR> 2.1 2.3 0.000000 0.000000 </ST_B1_IGR>
+				<J19_Tiger_I_Jpn> 3.2 3.2 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J23_Mi_To> 2 2 0.68 0.4 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.6 2.6 0.000000 0.000000 </J24_Mi_To_130_tons>
+				<J20_Type_2605> 3.6 3.6 0.16 0.000000 </J20_Type_2605>
+				<J21_Type_91> 1.4 1.4 0.000000 0.000000 </J21_Type_91>
+				<J26_Type_89> 1.5 1.5 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.7 1.7 0.000000 0.000000 </J28_O_I_100>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.4 </J27_O_I_120>
+				<J25_Type_4> 3.4 3.4 0.000000 0.48 </J25_Type_4>
+			</tiling>
+		</Clan_camuflage_04>
+		<Cracked_ice>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Cracked_ice </description>
+			<id> 119 </id>
+			<group> winter </group>
+			<kind> winter </kind>
+			<colors>
+				<c0> 255 255 255 238 </c0>
+				<c1> 47 47 0 0 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<NC27> 4.2 3 0.000000 0.000000 </NC27>
+				<Te_Ke> 4.3 4.3 0.26 0.000000 </Te_Ke>
+				<Ha_Go> 4.3 4.3 0.4 0.000000 </Ha_Go>
+				<Ke_Ni> 4 4 0.41 0.78 </Ke_Ni>
+				<Ke_Ni_B> 3.5 3.5 0.7 0.94 </Ke_Ni_B>
+				<Ke_Ho> 5 2.8 0.000000 0.000000 </Ke_Ho>
+				<Chi_Ha> 5 4.5 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 4.9 3.3 0.29 0.84 </Chi_Nu>
+				<Chi_He> 4.2 4.2 0.48 0.2 </Chi_He>
+				<Chi_To> 4.2 4.2 0.27 0.87 </Chi_To>
+				<Chi_Ri> 4.2 4.2 0.14 0.000000 </Chi_Ri>
+				<Chi_Ri_IGR> 4.2 4.2 0.21 0.000000 </Chi_Ri_IGR>
+				<Chi_Nu_Kai> 3.6 3.6 0.18 1 </Chi_Nu_Kai>
+				<STA_1> 4.7 4.7 0.32 0.81 </STA_1>
+				<STA_1_IGR> 4.5 4.5 0.34 0.88 </STA_1_IGR>
+				<Type_61> 4.7 4.7 0.55 0.43 </Type_61>
+				<Chi_Ni> 3.9 3.9 0.3 0.000000 </Chi_Ni>
+				<J18_STA_2_3> 5 5 0.58 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 4.8 4.8 0.1 0.85 </J19_Tiger_I_Jpn>
+				<J20_Type_2605> 3.7 3.7 0.06 0.14 </J20_Type_2605>
+				<J21_Type_91> 2.6 2.6 0.24 0.06 </J21_Type_91>
+				<J23_Mi_To> 4.3 4.3 0.4 0.87 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 3.2 3.2 0.46 0.46 </J24_Mi_To_130_tons>
+				<J26_Type_89> 2.6 2.6 0.000000 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.6 1.6 0.37 0.28 </J28_O_I_100>
+				<J22_Type_95> 1.8 1.8 0.16 0.36 </J22_Type_95>
+				<J27_O_I_120> 1.4 1.4 0.000000 0.28 </J27_O_I_120>
+				<J25_Type_4> 3.4 3.4 0.000000 0.46 </J25_Type_4>
+				<ST_B1> 3.6 3.6 0.000000 0.000000 </ST_B1>
+				<ST_B1_IGR> 3.6 3.6 0.000000 0.000000 </ST_B1_IGR>
+			</tiling>
+		</Cracked_ice>
+		<summer_camo>
+			<texture> vehicles/american/Camouflage/Cracked_ice.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/summer_camo </description>
+			<id> 122 </id>
+			<group> summer </group>
+			<kind> summer </kind>
+			<colors>
+				<c0> 119 80 32 255 </c0>
+				<c1> 64 62 45 255 </c1>
+				<c2> 0 0 0 0 </c2>
+				<c3> 201 192 133 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<NC27> 2.9 2.9 0.000000 0.000000 </NC27>
+				<Te_Ke> 3.9 3.9 0.24 0.000000 </Te_Ke>
+				<Ha_Go> 3 3 0.000000 0.000000 </Ha_Go>
+				<Ke_Ni> 1.7 1.7 0.000000 0.000000 </Ke_Ni>
+				<Ke_Ni_B> 2.6 2.6 0.22 0.32 </Ke_Ni_B>
+				<Ke_Ho> 2.9 1 0.24 0.000000 </Ke_Ho>
+				<Chi_Ha> 2.8 2.8 0.000000 0.000000 </Chi_Ha>
+				<Chi_Nu> 2 2 0.18 0.000000 </Chi_Nu>
+				<Chi_He> 1.9 1.9 0.38 0.68 </Chi_He>
+				<Chi_To> 2.2 2.2 0.000000 0.000000 </Chi_To>
+				<Chi_Ri> 2.2 2.2 0.2 0.000000 </Chi_Ri>
+				<Chi_Nu_Kai> 1.8 1.8 0.000000 0.000000 </Chi_Nu_Kai>
+				<STA_1> 3 3 0.3 0.26 </STA_1>
+				<Type_61> 2.9 2.9 0.24 0.86 </Type_61>
+				<Chi_Ni> 2.1 2.1 0.000000 0.000000 </Chi_Ni>
+				<J18_STA_2_3> 2.7 2.7 0.36 0.000000 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 3.4 3.4 0.000000 0.000000 </J19_Tiger_I_Jpn>
+				<J20_Type_2605> 2.6 2.6 0.46 0.02 </J20_Type_2605>
+				<J21_Type_91> 1.1 1.1 0.000000 0.000000 </J21_Type_91>
+				<J22_Type_95> 1.2 1.2 0.000000 0.000000 </J22_Type_95>
+				<J23_Mi_To> 2.4 2.4 0.000000 0.000000 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 2.1 2.1 0.46 0.000000 </J24_Mi_To_130_tons>
+				<J26_Type_89> 1.9 1.9 0.34 0.000000 </J26_Type_89>
+				<J28_O_I_100> 1.2 1.2 0.22 0.22 </J28_O_I_100>
+				<J27_O_I_120> 2 2 0.000000 0.12 </J27_O_I_120>
+				<J25_Type_4> 2.2 2.2 0.000000 0.000000 </J25_Type_4>
+				<STA_1_IGR> 1.7 1.7 0.58 0.62 </STA_1_IGR>
+				<Chi_Ri_IGR> 2.3 2.3 0.18 0.000000 </Chi_Ri_IGR>
+				<ST_B1> 1.5 1.5 0.000000 0.000000 </ST_B1>
+				<ST_B1_IGR> 1.4 1.4 0.000000 0.000000 </ST_B1_IGR>
+			</tiling>
+		</summer_camo>
+		<Desert_camou>
+			<texture> vehicles/german/Camouflage/Desert_camo-05-3.dds </texture>
+			<priceFactor> 0.000000 </priceFactor>
+			<invisibilityFactor> 1.0 </invisibilityFactor>
+			<description> #vehicle_customization:camouflage/Desert_camou </description>
+			<id> 127 </id>
+			<group> desert </group>
+			<kind> desert </kind>
+			<colors>
+				<c0> 162 123 77 255 </c0>
+				<c1> 15 52 94 0 </c1>
+				<c2> 41 39 3 0 </c2>
+				<c3> 21 100 125 0 </c3>
+			</colors>
+			<notInShop> true </notInShop>
+			<tiling>
+				<NC27> 8.3 5 0.52 0.32 </NC27>
+				<Te_Ke> 10.6 6 0.08 0.9 </Te_Ke>
+				<Ha_Go> 6 8.8 0.79 0.6 </Ha_Go>
+				<Ke_Ni> 6 6 0.7 0.14 </Ke_Ni>
+				<Ke_Ni_B> 5.4 5.4 0.94 0.04 </Ke_Ni_B>
+				<Ke_Ho> 6.4 3.4 0.41 0.28 </Ke_Ho>
+				<Chi_Ha> 5 5 0.4 0.46 </Chi_Ha>
+				<Chi_Nu> 4.4 6.5 0.14 0.73 </Chi_Nu>
+				<Chi_He> 5.2 5.2 0.37 0.9 </Chi_He>
+				<Chi_To> 5.4 5.4 0.02 0.78 </Chi_To>
+				<Chi_Ri> 5.8 6.2 0.34 0.76 </Chi_Ri>
+				<Chi_Ri_IGR> 5.4 6 0.62 0.89 </Chi_Ri_IGR>
+				<Chi_Nu_Kai> 5 5 0.4 0.7 </Chi_Nu_Kai>
+				<STA_1> 7.6 7.6 0.32 0.94 </STA_1>
+				<Type_61> 7.4 8.6 0.24 0.76 </Type_61>
+				<Chi_Ni> 5 5 0.92 0.18 </Chi_Ni>
+				<J18_STA_2_3> 9 7.6 0.26 0.04 </J18_STA_2_3>
+				<J19_Tiger_I_Jpn> 6.4 6.4 0.08 0.62 </J19_Tiger_I_Jpn>
+				<J20_Type_2605> 5.8 5 0.82 0.14 </J20_Type_2605>
+				<J21_Type_91> 3.4 3.4 0.12 0.58 </J21_Type_91>
+				<J22_Type_95> 2.4 2.4 0.3 0.2 </J22_Type_95>
+				<J23_Mi_To> 6 6 0.63 0.12 </J23_Mi_To>
+				<J24_Mi_To_130_tons> 4.4 4.2 0.3 0.52 </J24_Mi_To_130_tons>
+				<J26_Type_89> 3.6 3.6 0.000000 0.58 </J26_Type_89>
+				<J27_O_I_120> 4.8 4.8 0.08 0.28 </J27_O_I_120>
+				<J28_O_I_100> 2.4 2.4 0.65 0.48 </J28_O_I_100>
+				<J25_Type_4> 5.6 5 0.06 0.000000 </J25_Type_4>
+				<STA_1_IGR> 7 7 0.49 0.4 </STA_1_IGR>
+				<ST_B1> 6.4 5.4 0.78 0.28 </ST_B1>
+				<ST_B1_IGR> 7.2 6.2 0.5 0.86 </ST_B1_IGR>
+			</tiling>
+		</Desert_camou>
+	</camouflages>
+</root>

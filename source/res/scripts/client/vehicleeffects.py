@@ -5,13 +5,43 @@ import Math
 import Pixie
 from Math import Vector3, Matrix
 import math
-from constants import VEHICLE_HIT_EFFECT
+from constants import VEHICLE_HIT_EFFECT, ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
 from items import _xml
+from random import uniform
 import items.vehicles
 import material_kinds
 from functools import partial
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
+
+class RangeTable(object):
+
+    def __init__(self, keys, values):
+        self.keys = keys
+        self.values = values
+
+    def lookup(self, point, defaultValue = None):
+        foundValue = defaultValue
+        idx = -1
+        for leftBound in self.keys:
+            if point < leftBound:
+                break
+            idx += 1
+
+        if idx == -1 or len(self.values) <= idx:
+            return foundValue
+        return self.values[idx]
+
+
+def enablePixie(pixie, turnOn):
+    multiplier = 1.0 if turnOn else 0.0
+    for i in xrange(pixie.nSystems()):
+        try:
+            source = pixie.system(i).action(16)
+            source.MultRate(multiplier)
+        except:
+            LOG_CURRENT_EXCEPTION()
+
 
 class TankComponentNames():
     CHASSIS = 'chassis'
@@ -23,18 +53,67 @@ class TankComponentNames():
 class DetailedEngineState(object):
     rpm = property(lambda self: self.__rpm)
     gearNum = property(lambda self: self.__gearNum)
+    gearUp = property(lambda self: self.__gearUp)
+    mode = property(lambda self: self.__mode)
+    starting = property(lambda self: self.__starting)
+    __STOPPED = 0
+    __IDLE = 1
+    __MEDIUM = 2
+    __HIGH = 3
 
     def __init__(self):
         self.__rpm = 0.0
         self.__gearNum = 0
+        self.__mode = DetailedEngineState.__STOPPED
+        self.__starting = False
+        self.__gearUp = False
+        self.__startEngineCbk = None
+        self.__prevArenaPeriod = BigWorld.player().arena.period
+        BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
+        return
+
+    def destroy(self):
+        BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
+        if self.__startEngineCbk is not None:
+            BigWorld.cancelCallback(self.__startEngineCbk)
+        return
+
+    def __arenaPeriodChanged(self, *args):
+        period = BigWorld.player().arena.period
+        if period != self.__prevArenaPeriod and period == ARENA_PERIOD.PREBATTLE:
+            if period == ARENA_PERIOD.PREBATTLE:
+                self.__mode = DetailedEngineState.__STOPPED
+                self.__prevArenaPeriod = period
+                time = uniform(0.0, (BigWorld.player().arena.periodEndTime - BigWorld.serverTime()) * 0.7)
+                self.__startEngineCbk = BigWorld.callback(time, self.__startEngineFunc)
+            elif period == ARENA_PERIOD.BATTLE:
+                self.__starting = False
+
+    def __startEngineFunc(self):
+        self.__startEngineCbk = None
+        self.__starting = True
+        self.__mode = DetailedEngineState.__IDLE
+        return
+
+    def setMode(self, mode):
+        if mode > DetailedEngineState.__STOPPED:
+            if self.__mode == DetailedEngineState.__STOPPED:
+                self.__starting = True
+        else:
+            self.__starting = False
+        self.__mode = mode
 
     def refresh(self, vehicleSpeed, vehicleTypeDescriptor):
         speedRange = vehicleTypeDescriptor.physics['speedLimits'][0] + vehicleTypeDescriptor.physics['speedLimits'][1]
-        speedRangePerGear = speedRange / 3
-        gearNum = math.ceil(math.floor(math.fabs(vehicleSpeed) * 50) / 50 / speedRangePerGear)
+        speedRangePerGear = speedRange / 3.0
+        if self.__mode == DetailedEngineState.__IDLE:
+            gearNum = 0
+        else:
+            gearNum = math.ceil(math.floor(math.fabs(vehicleSpeed) * 50.0) / 50.0 / speedRangePerGear)
         self.__rpm = math.fabs(1 + (vehicleSpeed - gearNum * speedRangePerGear) / speedRangePerGear)
         if gearNum == 0:
-            self.__rpm = 0
+            self.__rpm = 0.0
+        self.__gearUp = gearNum > self.__gearNum
         self.__gearNum = gearNum
 
 
@@ -62,7 +141,6 @@ class VehicleTrailEffects():
         self.__trailParticleNodes = [chassisModel.node('', mMidLeft), chassisModel.node('', mMidRight)]
         i = 0
         for nodeName in ('HP_Track_LFront', 'HP_Track_RFront', 'HP_Track_LRear', 'HP_Track_RRear'):
-            node = None
             try:
                 identity = Math.Matrix()
                 identity.setIdentity()
@@ -77,7 +155,6 @@ class VehicleTrailEffects():
         identity.setIdentity()
         self.__centerNode = chassisModel.node('', identity)
         self.__trailParticlesDelayBeforeShow = BigWorld.time() + 4.0
-        return
 
     def destroy(self):
         self.stopEffects()
@@ -98,9 +175,11 @@ class VehicleTrailEffects():
     def stopEffects(self):
         for node in self.__trailParticles.iterkeys():
             for trail in self.__trailParticles[node]:
-                node.detach(trail[0])
+                if trail[0] is not None:
+                    node.detach(trail[0])
 
         self.__trailParticles = {}
+        return
 
     def update(self):
         vehicle = self.__vehicle
@@ -187,18 +266,25 @@ class VehicleTrailEffects():
                     if nodeEffect[1] == effectIndex and createdForActiveNode == isActiveNode:
                         return
 
+            effectRecord = [None,
+             effectIndex,
+             0,
+             0,
+             0.0,
+             isActiveNode]
             elemDesc = [drawOrder,
              node,
              effectName,
              effectIndex,
              isActiveNode,
-             nodeEffects]
+             effectRecord]
+            nodeEffects.append(effectRecord)
             Pixie.createBG(effectName, partial(self._callbackTrailParticleLoaded, elemDesc))
             return
 
     def _callbackTrailParticleLoaded(self, elemDesc, pixie):
         if self.__vehicle is None:
-            LOG_WARNING("The vehicle object is 'None', can't attach pixie '%'" % elemDesc[self._TRAIL_E_PIXIE_FILE])
+            LOG_WARNING("The vehicle object is 'None', can't attach pixie '%s'" % elemDesc[self._TRAIL_E_PIXIE_FILE])
             return
         elif pixie is None:
             LOG_ERROR("Can't create pixie '%s'." % elemDesc[self._TRAIL_E_PIXIE_FILE])
@@ -217,57 +303,38 @@ class VehicleTrailEffects():
                     source = pixie.system(i).action(16)
                     source.MultRate(0.01)
 
-            elemDesc[self._TRAIL_E_PIXIE_EFFECTS].append([pixie,
-             elemDesc[self._TRAIL_E_PIXIE_INDEX],
-             0,
-             0,
-             basicRates,
-             elemDesc[self._TRAIL_E_PIXIE_ACTIVE]])
+            elemDesc[self._TRAIL_E_PIXIE_EFFECTS][0] = pixie
+            elemDesc[self._TRAIL_E_PIXIE_EFFECTS][4] = basicRates
             return
 
     def __updateNodeEffect(self, nodeEffect, node, nodeEffects, relSpeed, stopParticles):
         relEmissionRate = 0.0 if stopParticles else abs(relSpeed)
         basicEmissionRates = nodeEffect[4]
         pixie = nodeEffect[0]
-        for i in xrange(pixie.nSystems()):
-            if basicEmissionRates[i] < 0:
-                source = pixie.system(i).action(16)
-                source.MultRate(relEmissionRate)
-            else:
-                source = pixie.system(i).action(1)
-                source.rate = relEmissionRate * basicEmissionRates[i]
-
-        effectInactive = relEmissionRate < 0.0001
-        if effectInactive:
-            time = BigWorld.time()
-            timeOfStop = nodeEffect[3]
-            if timeOfStop == 0:
-                nodeEffect[3] = time
-            elif time - timeOfStop > 5.0 or material_kinds.EFFECT_MATERIALS[nodeEffect[1]] == 'water':
-                pixie = nodeEffect[0]
-                node.detach(pixie)
-                nodeEffects.remove(nodeEffect)
+        if pixie is None:
+            return
         else:
-            nodeEffect[3] = 0
+            for i in xrange(pixie.nSystems()):
+                if basicEmissionRates[i] < 0:
+                    source = pixie.system(i).action(16)
+                    source.MultRate(relEmissionRate)
+                else:
+                    source = pixie.system(i).action(1)
+                    source.rate = relEmissionRate * basicEmissionRates[i]
 
-
-class RangeTable(object):
-
-    def __init__(self, keys, values):
-        self.keys = keys
-        self.values = values
-
-    def lookup(self, point, defaultValue = None):
-        foundValue = defaultValue
-        idx = -1
-        for leftBound in self.keys:
-            if point < leftBound:
-                break
-            idx += 1
-
-        if idx == -1 or len(self.values) <= idx:
-            return foundValue
-        return self.values[idx]
+            effectInactive = relEmissionRate < 0.0001
+            if effectInactive:
+                time = BigWorld.time()
+                timeOfStop = nodeEffect[3]
+                if timeOfStop == 0:
+                    nodeEffect[3] = time
+                elif time - timeOfStop > 5.0 or material_kinds.EFFECT_MATERIALS[nodeEffect[1]] == 'water':
+                    pixie = nodeEffect[0]
+                    node.detach(pixie)
+                    nodeEffects.remove(nodeEffect)
+            else:
+                nodeEffect[3] = 0
+            return
 
 
 class ExhaustEffectsDescriptor(object):
@@ -462,19 +529,9 @@ class VehicleExhaustEffects():
             return
 
 
-def enablePixie(pixie, turnOn):
-    multiplier = 1.0 if turnOn else 0.0
-    for i in xrange(pixie.nSystems()):
-        try:
-            source = pixie.system(i).action(16)
-            source.MultRate(multiplier)
-        except:
-            LOG_CURRENT_EXCEPTION()
-
-
 class DamageFromShotDecoder(object):
     ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectGroup'))
-    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorHit', 'armorHit', 'armorCriticalHit')
+    __hitEffectCodeToEffectGroup = ('armorBasicRicochet', 'armorRicochet', 'armorResisted', 'armorResisted', 'armorHit', 'armorCriticalHit')
 
     @staticmethod
     def hasDamaged(vehicleHitEffectCode):

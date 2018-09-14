@@ -1,0 +1,50 @@
+<regular_2_4_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_4_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_4_11.xml>

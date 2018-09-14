@@ -1,0 +1,35 @@
+<17_munchen.xml>
+  <name>	#arenas:17_munchen/name	</name>
+  <description>	#arenas:17_munchen/description	</description>
+  <geometry>	spaces/17_munchen	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	300.0 300.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/17_munchen/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-83.669548 -201.705368	</position1>
+        </team1>
+        <team2>
+          <position1>	61.929901 242.775330	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <useAdvancedPhysics>	true	</useAdvancedPhysics>
+</17_munchen.xml>

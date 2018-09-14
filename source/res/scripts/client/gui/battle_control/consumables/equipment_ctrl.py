@@ -2,14 +2,20 @@
 from collections import namedtuple
 from functools import partial
 import Event
+import FMOD
+import SoundGroups
+import BigWorld
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS
+from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
 from items import vehicles
 from shared_utils import findFirst, forEach
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
+
+@ReprInjector.simple(('_tag', 'tag'), ('_quantity', 'quantity'), ('_stage', 'stage'), ('_prevStage', 'prevStage'), ('_timeRemaining', 'timeRemaining'))
 
 class _EquipmentItem(object):
     __slots__ = ('_tag', '_descriptor', '_quantity', '_stage', '_prevStage', '_timeRemaining')
@@ -23,9 +29,6 @@ class _EquipmentItem(object):
         self._prevStage = 0
         self._timeRemaining = 0
         self.update(quantity, stage, timeRemaining)
-
-    def __repr__(self):
-        return '{0:>s}(id={1!r:s}, quantity = {2:n}, timeRemaining = {3:n})'.format(self.__class__.__name__, self._descriptor.id, self._quantity, self._timeRemaining)
 
     def getTag(self):
         return _getSupportedTag(self._descriptor)
@@ -266,7 +269,7 @@ class _BomberItem(_OrderItem):
         return 'bomber'
 
 
-def _tiggerItemFactory(descriptor, quantity, stage, timeRemaining, tag = None):
+def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, tag = None):
     if descriptor.name.startswith('artillery'):
         return _ArtilleryItem(descriptor, quantity, stage, timeRemaining, tag)
     if descriptor.name.startswith('bomber'):
@@ -276,7 +279,7 @@ def _tiggerItemFactory(descriptor, quantity, stage, timeRemaining, tag = None):
 
 _EQUIPMENT_TAG_TO_ITEM = {'fuel': _AutoItem,
  'stimulator': _AutoItem,
- 'trigger': _tiggerItemFactory,
+ 'trigger': _triggerItemFactory,
  'extinguisher': _ExtinguisherItem,
  'medkit': _MedKitItem,
  'repairkit': _RepairKitItem}
@@ -291,7 +294,7 @@ def _getSupportedTag(descriptor):
 
 
 class EquipmentsController(object):
-    __slots__ = ('__eManager', '__equipments', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown')
+    __slots__ = ('__eManager', '_equipments', '__readySndName', 'onEquipmentAdded', 'onEquipmentUpdated', 'onEquipmentMarkerShown', 'onEquipmentCooldownInPercent')
 
     def __init__(self):
         super(EquipmentsController, self).__init__()
@@ -299,10 +302,14 @@ class EquipmentsController(object):
         self.onEquipmentAdded = Event.Event(self.__eManager)
         self.onEquipmentUpdated = Event.Event(self.__eManager)
         self.onEquipmentMarkerShown = Event.Event(self.__eManager)
-        self.__equipments = {}
+        self.onEquipmentCooldownInPercent = Event.Event(self.__eManager)
+        self._equipments = {}
+        self.__readySndName = 'combat_reserve'
+        if FMOD.enabled:
+            self.__readySndName = '/ingame_voice/ingame_voice_flt/combat_reserve'
 
     def __repr__(self):
-        return 'EquipmentsController({0!r:s})'.format(self.__equipments)
+        return 'EquipmentsController({0!r:s})'.format(self._equipments)
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining):
@@ -318,12 +325,12 @@ class EquipmentsController(object):
     def clear(self, leave = True):
         if leave:
             self.__eManager.clear()
-        while len(self.__equipments):
-            _, item = self.__equipments.popitem()
+        while len(self._equipments):
+            _, item = self._equipments.popitem()
             item.clear()
 
     def cancel(self):
-        item = findFirst(lambda item: item.getStage() == EQUIPMENT_STAGES.PREPARING, self.__equipments.itervalues())
+        item = findFirst(lambda item: item.getStage() == EQUIPMENT_STAGES.PREPARING, self._equipments.itervalues())
         if item is not None:
             item.deactivate()
             return True
@@ -332,7 +339,7 @@ class EquipmentsController(object):
 
     def getEquipment(self, intCD):
         try:
-            item = self.__equipments[intCD]
+            item = self._equipments[intCD]
         except KeyError:
             LOG_ERROR('Equipment is not found.', intCD)
             item = None
@@ -344,14 +351,16 @@ class EquipmentsController(object):
             self.onEquipmentAdded(intCD, None)
             return
         else:
-            if intCD in self.__equipments:
-                item = self.__equipments[intCD]
+            if intCD in self._equipments:
+                item = self._equipments[intCD]
                 item.update(quantity, stage, timeRemaining)
                 self.onEquipmentUpdated(intCD, item)
+                if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
+                    SoundGroups.g_instance.playSound2D(self.__readySndName)
             else:
                 descriptor = vehicles.getDictDescr(intCD)
                 item = self.createItem(descriptor, quantity, stage, timeRemaining)
-                self.__equipments[intCD] = item
+                self._equipments[intCD] = item
                 self.onEquipmentAdded(intCD, item)
             return
 
@@ -384,7 +393,7 @@ class EquipmentsController(object):
             return (False, None)
         else:
             result, error = True, None
-            for intCD, item in self.__equipments.iteritems():
+            for intCD, item in self._equipments.iteritems():
                 if item.getTag() == tag and item.getQuantity() > 0:
                     result, error = self.__doChangeSetting(item, entityName, avatar)
                     break
@@ -392,7 +401,7 @@ class EquipmentsController(object):
             return (result, error)
 
     def showMarker(self, eq, pos, direction, time):
-        item = findFirst(lambda e: e.getEquipmentID() == eq.id[1], self.__equipments.itervalues())
+        item = findFirst(lambda e: e.getEquipmentID() == eq.id[1], self._equipments.itervalues())
         if item is None:
             item = self.createItem(eq, 0, -1, 0)
         self.onEquipmentMarkerShown(item, pos, direction, time)
@@ -404,12 +413,21 @@ class EquipmentsController(object):
             if item.getStage() == EQUIPMENT_STAGES.PREPARING:
                 item.deactivate()
             else:
-                forEach(lambda e: e.deactivate(), [ e for e in self.__equipments.itervalues() if e.getStage() == EQUIPMENT_STAGES.PREPARING ])
+                forEach(lambda e: e.deactivate(), [ e for e in self._equipments.itervalues() if e.getStage() == EQUIPMENT_STAGES.PREPARING ])
                 item.activate(entityName, avatar)
         return (result, error)
 
 
 class _ReplayItem(_EquipmentItem):
+    __slots__ = '__cooldonwTime'
+
+    def __init__(self, descriptor, quantity, stage, timeRemaining, tag = None):
+        super(_ReplayItem, self).__init__(descriptor, quantity, stage, timeRemaining, tag)
+        self.__cooldonwTime = BigWorld.serverTime() + timeRemaining
+
+    def update(self, quantity, stage, timeRemaining):
+        super(_ReplayItem, self).update(quantity, stage, timeRemaining)
+        self.__cooldonwTime = BigWorld.serverTime() + timeRemaining
 
     def getEntitiesIterator(self, avatar = None):
         return []
@@ -420,12 +438,104 @@ class _ReplayItem(_EquipmentItem):
     def canActivate(self, entityName = None, avatar = None):
         return (False, None)
 
+    def getTimeRemaining(self):
+        return max(0, self.__cooldonwTime - BigWorld.serverTime())
+
+    def getCooldownPercents(self):
+        totalTime = self.getTotalTime()
+        timeRemaining = self.getTimeRemaining()
+        if totalTime > 0:
+            return round(float(totalTime - timeRemaining) / totalTime * 100.0)
+        return 0.0
+
+
+class _ReplayOrderItem(_ReplayItem):
+
+    def update(self, quantity, stage, timeRemaining):
+        from AvatarInputHandler import MapCaseMode
+        if stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+            MapCaseMode.activateMapCase(self.getEquipmentID(), partial(self.deactivate))
+        elif self._stage == EQUIPMENT_STAGES.PREPARING and self._stage != stage:
+            MapCaseMode.turnOffMapCase(self.getEquipmentID())
+        super(_ReplayOrderItem, self).update(quantity, stage, timeRemaining)
+
+    def getTotalTime(self):
+        if self._stage == EQUIPMENT_STAGES.DEPLOYING:
+            return self._descriptor.deployTime
+        if self._stage == EQUIPMENT_STAGES.COOLDOWN:
+            return self._descriptor.cooldownTime
+        return super(_ReplayOrderItem, self).getTotalTime()
+
+
+class _ReplayArtilleryItem(_ReplayOrderItem):
+
+    def getMarker(self):
+        return 'artillery'
+
+
+class _ReplayBomberItem(_ReplayOrderItem):
+
+    def getMarker(self):
+        return 'bomber'
+
+
+def _replayTriggerItemFactory(descriptor, quantity, stage, timeRemaining, tag = None):
+    if descriptor.name.startswith('artillery'):
+        return _ReplayArtilleryItem(descriptor, quantity, stage, timeRemaining, tag)
+    if descriptor.name.startswith('bomber'):
+        return _ReplayBomberItem(descriptor, quantity, stage, timeRemaining, tag)
+    return _ReplayItem(descriptor, quantity, stage, timeRemaining, tag)
+
+
+_REPLAY_EQUIPMENT_TAG_TO_ITEM = {'fuel': _ReplayItem,
+ 'stimulator': _ReplayItem,
+ 'trigger': _replayTriggerItemFactory,
+ 'extinguisher': _ReplayItem,
+ 'medkit': _ReplayItem,
+ 'repairkit': _ReplayItem}
 
 class EquipmentsReplayPlayer(EquipmentsController):
+    __slots__ = ('__callbackID', '__percentGetters', '__percents')
+
+    def __init__(self):
+        super(EquipmentsReplayPlayer, self).__init__()
+        self.__callbackID = None
+        self.__percentGetters = {}
+        self.__percents = {}
+        return
+
+    def clear(self, leave = True):
+        if leave:
+            if self.__callbackID is not None:
+                BigWorld.cancelCallback(self.__callbackID)
+                self.__callbackID = None
+            self.__percents.clear()
+            self.__percentGetters.clear()
+        super(EquipmentsReplayPlayer, self).clear(leave)
+        return
+
+    def setEquipment(self, intCD, quantity, stage, timeRemaining):
+        super(EquipmentsReplayPlayer, self).setEquipment(intCD, quantity, stage, timeRemaining)
+        self.__percents.pop(intCD, None)
+        self.__percentGetters.pop(intCD, None)
+        if stage in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.COOLDOWN):
+            self.__percentGetters[intCD] = self._equipments[intCD].getCooldownPercents
+            if self.__callbackID is not None:
+                BigWorld.cancelCallback(self.__callbackID)
+                self.__callbackID = None
+            self.__timeLoop()
+        return
 
     @classmethod
     def createItem(cls, descriptor, quantity, stage, timeRemaining):
-        return _ReplayItem(descriptor, quantity, timeRemaining, stage, _getSupportedTag(descriptor))
+        tag = _getSupportedTag(descriptor)
+        clazz = tag and _REPLAY_EQUIPMENT_TAG_TO_ITEM[tag]
+        if not clazz:
+            raise AssertionError
+            item = clazz(descriptor, quantity, stage, timeRemaining, tag)
+        else:
+            item = _ReplayItem(descriptor, quantity, timeRemaining, stage)
+        return item
 
     def getActivationCode(self, intCD, entityName = None, avatar = None):
         return None
@@ -438,6 +548,20 @@ class EquipmentsReplayPlayer(EquipmentsController):
 
     def changeSettingByTag(self, tag, entityName = None, avatar = None):
         return (False, None)
+
+    def __timeLoop(self):
+        self.__callbackID = None
+        self.__tick()
+        self.__callbackID = BigWorld.callback(0.1, self.__timeLoop)
+        return
+
+    def __tick(self):
+        for intCD, percentGetter in self.__percentGetters.iteritems():
+            percent = percentGetter()
+            currentPercent = self.__percents.get(intCD)
+            if currentPercent != percent:
+                self.__percents[intCD] = percent
+                self.onEquipmentCooldownInPercent(intCD, percent)
 
 
 __all__ = ('EquipmentsController', 'EquipmentsReplayPlayer')

@@ -465,7 +465,8 @@ class BuildingDescr():
         self.typeID = typeID
         self.level = level
         self.hp = min(resourceCount, levelRef.hp)
-        self.storage = min(levelRef.storage, max(0, resourceCount - levelRef.hp))
+        storage = max(0, resourceCount - levelRef.hp)
+        self.storage = storage if typeID == FORT_BUILDING_TYPE.MILITARY_BASE else min(levelRef.storage, storage)
         self.direction, self.position = parseDirPosByte(dirPosByte)
         if productionCount:
             self.orderInProduction = {'count': abs(productionCount),
@@ -500,7 +501,7 @@ class BuildingDescr():
         resCount -= hpInc
         if self.hp >= levelRef.hp and self.level == 0:
             self.level = 1
-        storageInc = min(resCount, max(levelRef.storage - self.storage, 0))
+        storageInc = resCount if self.typeID == FORT_BUILDING_TYPE.MILITARY_BASE else min(resCount, max(levelRef.storage - self.storage, 0))
         self.storage += storageInc
         resCount -= storageInc
         return resCount
@@ -516,7 +517,9 @@ class BuildingDescr():
         resCount -= hp
         if self.hp >= levelRef.hp and self.level == 0:
             self.level = 1
-        storage = min(max(0, resCount), levelRef.storage)
+        storage = max(0, resCount)
+        if self.typeID != FORT_BUILDING_TYPE.MILITARY_BASE:
+            storage = min(storage, levelRef.storage)
         self.storage = storage
         resCount -= storage
         return resCount
@@ -1940,7 +1943,7 @@ class FortifiedRegionBase(OpsUnpacker):
                 continue
             if defenderClanDBID == enemyClanDBID and timeStart <= timeAttack <= timeFinish:
                 args = self.attacks.pop(key)
-                self._onDeleteBattle(key, args, reason, isDefence=True)
+                self._onDeleteBattle(key, args, reason, isDefence=False)
 
         for key in self.defences.keys():
             timeAttack, dirTo = key

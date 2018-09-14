@@ -1,0 +1,48 @@
+<dynamic_objects.xml>
+  <models>
+    <model>
+      <name>	ctf_flag	</name>
+      <file>	content/Environment/env_111_02_FalloutFlag/normal/lod0/env_111_02_FalloutFlag.model	</file>
+      <action>	FalloutFlagAnimAction	</action>
+      <udoRef>	FlagSpawnPoint	</udoRef>
+    </model>
+    <model>
+      <name>	ctf_flag_circle	</name>
+      <file>	content/Environment/env_111_02_FalloutFlag/normal/lod0/env_111_02_FalloutFlag_border.model	</file>
+      <udoRef>	FlagSpawnPoint	</udoRef>
+    </model>
+    <model>
+      <name>	repair_point_flag	</name>
+      <file>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</file>
+      <action>	RepairFlagAnimAction	</action>
+    </model>
+    <model>
+      <name>	absorption_point_flag_green	</name>
+      <file>	content/Environment/env_111_03_AbsorptionFlag/normal/lod0/env_111_03_AbsorptionFlag_green.model	</file>
+    </model>
+    <model>
+      <name>	absorption_point_flag_red	</name>
+      <file>	content/Environment/env_111_03_AbsorptionFlag/normal/lod0/env_111_03_AbsorptionFlag_red.model	</file>
+    </model>
+    <model>
+      <name>	resource_point	</name>
+      <file>	content/Environment/env_111_05_ResourcePoint/normal/lod0/env_111_05_ResourcePoint.model	</file>
+    </model>
+  </models>
+  <repairPointRadiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</repairPointRadiusModel>
+  <absorptionPointRadiusModel>	content/Interface/CheckPoint/CheckPoint_white.visual	</absorptionPointRadiusModel>
+  <resourcePointRadiusModel>	content/Interface/CheckPoint/CheckPoint_white.visual	</resourcePointRadiusModel>
+  <resourcePointEffect>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/map/inf_resourcepoint.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+    </effects>
+  </resourcePointEffect>
+</dynamic_objects.xml>

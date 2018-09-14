@@ -20,6 +20,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.battle_results.VehicleProgressCache import g_vehicleProgressCache
 from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.clubs.ClubsController import g_clubsCtrl
+from gui.clans.clan_controller import g_clanCtrl
 from gui.prb_control.dispatcher import g_prbLoader
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -36,6 +37,7 @@ from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.utils import ParametersCache
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
+from gui.login import g_loginManager
 try:
     from gui import mods
     guiModsInit = mods.init
@@ -68,9 +70,6 @@ def onAccountShowGUI(ctx):
     game_control.g_instance.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     accDossier = g_itemsCache.items.getAccountDossier()
     g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
-    MusicController.g_musicController.setAccountAttrs(g_itemsCache.items.stats.attributes)
-    MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-    MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
     premium = isPremiumAccount(g_itemsCache.items.stats.attributes)
     if g_hangarSpace.inited:
         g_hangarSpace.refreshSpace(premium)
@@ -81,6 +80,7 @@ def onAccountShowGUI(ctx):
     g_prbLoader.onAccountShowGUI(g_lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
     g_clubsCtrl.start()
+    g_clanCtrl.start()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
     guiModsSendEvent('onAccountShowGUI', ctx)
@@ -101,6 +101,8 @@ def onAvatarBecomePlayer():
     yield g_settingsCache.update()
     g_settingsCore.serverSettings.applySettings()
     g_clubsCtrl.stop()
+    g_clanCtrl.stop()
+    g_eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     game_control.g_instance.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
@@ -121,6 +123,7 @@ def onClientUpdate(diff):
         yield g_itemsCache.update(CACHE_SYNC_REASON.CLIENT_UPDATE, diff)
         yield g_eventsCache.update(diff)
         yield g_clanCache.update(diff)
+    g_lobbyContext.update(diff)
     g_clientUpdateManager.update(diff)
 
 
@@ -163,6 +166,7 @@ def init(loadingScreenGUI = None):
     global onAccountBecomePlayer
     global onKickedFromServer
     global onShopResync
+    g_loginManager.init()
     miniclient.configure_state()
     connectionManager.onKickedFromServer += onKickedFromServer
     g_playerEvents.onAccountShowGUI += onAccountShowGUI
@@ -194,6 +198,7 @@ def init(loadingScreenGUI = None):
     g_eventsCache.init()
     g_clanCache.init()
     g_clubsCtrl.init()
+    g_clanCtrl.init()
     g_vehicleProgressCache.init()
     g_goodiesCache.init()
     BigWorld.wg_setScreenshotNotifyCallback(onScreenShotMade)
@@ -222,6 +227,7 @@ def fini():
     g_eventBus.clear()
     g_prbLoader.fini()
     g_clubsCtrl.fini()
+    g_clanCtrl.fini()
     g_clanCache.fini()
     game_control.g_instance.fini()
     g_settingsCore.fini()
@@ -241,6 +247,7 @@ def fini():
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
+    g_loginManager.fini()
     BigWorld.wg_setScreenshotNotifyCallback(None)
     from constants import IS_DEVELOPMENT
     if IS_DEVELOPMENT:
@@ -266,6 +273,7 @@ def onDisconnected():
     g_clanCache.onDisconnected()
     game_control.g_instance.onDisconnected()
     g_clubsCtrl.stop(isDisconnected=True)
+    g_clanCtrl.stop()
     g_wgncProvider.clear()
     g_itemsCache.clear()
     g_goodiesCache.clear()

@@ -4,7 +4,6 @@ from gui import game_control
 from gui.app_loader import g_appLoader
 from gui.battle_control.arena_info import getArenaGuiType
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
-import BattleReplay
 
 class ArenaLoadController(IArenaLoadController):
 
@@ -26,5 +25,3 @@ class ArenaLoadController(IArenaLoadController):
         MessengerEntry.g_instance.onAvatarShowGUI()
         g_appLoader.showBattle()
         BigWorld.wg_clearTextureReuseList()
-        if BattleReplay.isPlaying:
-            BattleReplay.g_replayCtrl.onArenaLoaded()

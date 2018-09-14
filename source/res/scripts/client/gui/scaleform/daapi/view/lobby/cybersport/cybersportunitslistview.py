@@ -35,7 +35,7 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         self._cooldown = CooldownHelper(self.getCoolDownRequests(), self._onCooldownHandle, events.CoolDownEvent.PREBATTLE)
 
     def onUnitFunctionalInited(self):
-        self.unitFunctional.setPrbType(PREBATTLE_TYPE.UNIT)
+        self.unitFunctional.setEntityType(PREBATTLE_TYPE.UNIT)
 
     def getPyDataProvider(self):
         return ManualSearchDataProvider()
@@ -104,8 +104,8 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         self._cooldown.start()
         self.addListener(CSVehicleSelectEvent.VEHICLE_SELECTED, self.__onVehiclesSelectedTeams)
         self.startUnitListening()
-        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setPrbType(PREBATTLE_TYPE.UNIT)
+        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setEntityType(PREBATTLE_TYPE.UNIT)
         self.updateSelectedVehicles()
         unit_ext.initListReq(self._unitTypeFlags).start(self.__onUnitsListUpdated)
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})

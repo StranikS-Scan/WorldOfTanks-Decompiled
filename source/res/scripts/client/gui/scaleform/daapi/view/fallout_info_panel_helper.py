@@ -1,11 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/fallout_info_panel_helper.py
-import BigWorld
-import constants
 from gui.battle_control.arena_info import hasResourcePoints, getIsMultiteam
 import win_points
 from gui.Scaleform.locale.FALLOUT import FALLOUT
-from helpers.i18n import makeString
-from gui.shared.formatters.text_styles import neutral, main, warning
+from gui.shared.formatters.text_styles import neutral, main
 
 def getHelpTextAsDicts(arenaType = None, arenaBonusType = None):
     pointsObjective = hasResourcePoints(arenaType, arenaBonusType)
@@ -48,8 +45,10 @@ def getHelpText(arenaType = None, arenaBonusType = None):
 def getCosts(arenaType, isSolo = False, forVehicle = True):
     costKill = 0
     costFlags = set()
+    costDamage = set()
     if hasattr(arenaType, 'winPoints'):
         winPoints = win_points.g_cache[arenaType.winPoints]
         costKill = winPoints.pointsForKill(isSolo, forVehicle)
         costFlags = set(winPoints.pointsForFlag(isSolo))
-    return (costKill, costFlags)
+        costDamage = winPoints.pointsForDamage(isSolo, forVehicle)
+    return (costKill, costFlags, costDamage)

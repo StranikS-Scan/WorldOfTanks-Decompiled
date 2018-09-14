@@ -3,7 +3,7 @@ import operator
 from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
-from gui.prb_control.prb_helpers import prbDispatcherProperty, preQueueFunctionalProperty
+from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.shared import g_itemsCache, REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from items import vehicles, getTypeOfCompactDescr, ITEM_TYPE_NAMES
@@ -39,7 +39,7 @@ class _ItemsData(object):
         return vehicleCanBeChanged
 
     def _getAllPossibleXP(self, nodeCD, unlockStats):
-        criteria = REQ_CRITERIA.VEHICLE.ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
+        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
         eliteVehicles = g_itemsCache.items.getVehicles(criteria)
         dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
         exchangeRate = self._items.shop.freeXPConversion[0]
@@ -58,14 +58,11 @@ class _ItemsData(object):
         if item.rentalIsOver:
             state = NODE_STATE.removeIfHas(state, NODE_STATE.IN_INVENTORY)
             state = NODE_STATE.removeIfHas(state, NODE_STATE.VEHICLE_IN_RENT)
+            state |= NODE_STATE.VEHICLE_RENTAL_IS_OVER
         return state
 
     @prbDispatcherProperty
     def prbDispatcher(self):
-        return None
-
-    @preQueueFunctionalProperty
-    def preQueueFunctional(self):
         return None
 
     def __del__(self):
@@ -343,7 +340,7 @@ class ResearchItemsData(_ItemsData):
 
     def isInstallItemsEnabled(self):
         rootItem = self.getRootItem()
-        return rootItem.isInInventory and not rootItem.lock and not rootItem.repairCost
+        return rootItem.isInInventory and not rootItem.isLocked and not rootItem.repairCost
 
     def load(self):
         g_techTreeDP.load()

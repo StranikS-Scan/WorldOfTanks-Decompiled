@@ -95,7 +95,12 @@ class ShopCommonStats(object):
         @param currentSlotsCount: current vehicle slots count
         @return: new vehicle slot price
         """
-        return BigWorld.player().shop.getNextSlotPrice(currentSlotsCount, self.slotsPrices)
+        player = BigWorld.player()
+        if player is not None:
+            return player.shop.getNextSlotPrice(currentSlotsCount, self.slotsPrices)
+        else:
+            return 10000000000.0
+            return
 
     @property
     def dropSkillsCost(self):

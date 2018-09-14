@@ -1,0 +1,1030 @@
+<f44_somua_s35.xml>
+  <crew>
+    <commander>	gunner
+			loader	</commander>
+    <driver></driver>
+    <radioman>	loader	</radioman>
+  </crew>
+  <speedLimits>
+    <forward>	45	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	3.2	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	47	</armor_1>
+      <armor_2>	47	</armor_2>
+      <armor_3>	25	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_6>	35	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	20	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_10>
+      <armor_11>	47	</armor_11>
+      <armor_12>	40	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_5 armor_6	</primaryArmor>
+    <weight>	10860	</weight>
+    <maxHealth>	184	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.36	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.011963 0.977937 0.508367	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/french/F44_Somua_S35/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.379651 0.777935 1.85188	</rayStart>
+        <rayEnd>	0.379614 0.436481 1.64352	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.233792 0.709472 1.95305	</rayStart>
+        <rayEnd>	-0.234099 0.381846 1.72359	</rayEnd>
+        <rayUp>	0.0285852 -0.000313032 -0.999591	</rayUp>
+        <size>	0.55	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	1 0.58 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Somua_S35>
+      <userString>	#france_vehicles:Chassis_Somua_S35	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <unlocks>
+        <chassis>	Chassis_Somua_S35_2	  <cost>	320	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	6000	</weight>
+      <maxLoad>	20200	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	35	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.38 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.4	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.122104	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.346237	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.183866	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.122104	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.34582	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.183866	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.765029 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.827688 1.48389	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.981180 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.890240 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.730210	</row2>
+            <row3>	0.000000 0.000000 0.000022	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0392562	</minOffset>
+          <maxOffset>	0.0867769	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.039	</minOffset>
+          <maxOffset>	0.087	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F44_Somua_S35/track/segmentL.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F44_Somua_S35/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F44_Somua_S35/track/left.track	</left>
+        <right>	vehicles/french/F44_Somua_S35/track/right.track	</right>
+        <segmentLength>	0.102	</segmentLength>
+        <segmentOffset>	0.059	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0279	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1311	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+    </Chassis_Somua_S35>
+    <Chassis_Somua_S35_2>
+      <userString>	#france_vehicles:Chassis_Somua_S35_2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1900	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	6000	</weight>
+      <maxLoad>	23500	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.4	</terrainResistance>
+      <brakeForce>	23000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.4	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.122104	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.346237	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.183866	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.288256	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.122104	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.34582	</radius>
+          <syncAngle>	16.3636	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.183866	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.765029 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.827688 1.48389	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.055570 0.000000 0.000000	</row0>
+            <row1>	0.000000 0.890241 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.076680	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0392562	</minOffset>
+          <maxOffset>	0.0867769	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.039	</minOffset>
+          <maxOffset>	0.087	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F44_Somua_S35/track/segmentL.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F44_Somua_S35/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F44_Somua_S35/track/left.track	</left>
+        <right>	vehicles/french/F44_Somua_S35/track/right.track	</right>
+        <segmentLength>	0.102	</segmentLength>
+        <segmentOffset>	0.059	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxOffset>	0.095	</maxOffset>
+        <gravity>	-8.9	</gravity>
+        <elasticity>	1311	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.79	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <offset>	-0.018	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.022	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0279	</trackThickness>
+    </Chassis_Somua_S35_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Somua_S35>
+      <userString>	#france_vehicles:Turret_1_Somua_S35	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <armor>
+        <armor_1>	42	</armor_1>
+        <armor_2>	42	</armor_2>
+        <armor_3>	42	</armor_3>
+        <armor_4>	42	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_9>	0	</armor_9>
+        <armor_10>	42	</armor_10>
+        <armor_11>	40	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	46	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	320	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_47mm_SA34>	shared	  <maxAmmo>	118	</maxAmmo>
+          <unlocks>
+            <gun>	_47mm_SA35	  <cost>	265	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	42	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_6>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_10>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_10>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 18 0.333333 18 0.388889 5 0.611111 5 0.666667 18 1 18	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.49 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA34>
+        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_Somua_S35	  <cost>	350	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	42	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 18 0.333333 18 0.388889 8 0.611111 8 0.666667 18 1 18	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.4	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.46 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA35>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.054616 0.281711 0.622936	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.673486 0.413209 0.407088	</rayStart>
+          <rayEnd>	-0.326389 0.26755 0.271823	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.379484 0.435406 -0.876662	</rayStart>
+          <rayEnd>	0.224623 0.266913 -0.548625	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.4	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.707668 0.384063 0.365866	</rayStart>
+          <rayEnd>	0.370786 0.262553 0.187732	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.965 0.032 1.000 0.000 0.570 0.009 0.500 0.434 0.435 0.500 0.344 0.500 0.258 0.727 0.104	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Somua_S35>
+    <Turret_2_Somua_S35>
+      <userString>	#france_vehicles:Turret_2_Somua_S35	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <unlocks>
+        <gun>	_47mm_SA37	  <cost>	450	</cost>
+        </gun>
+        <vehicle>	F70_SARL42	  <cost>	3230	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	40	</armor_1>
+        <armor_2>	40	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	60	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	25	</armor_8>
+        <armor_9>	35	</armor_9>
+        <armor_10>	25	</armor_10>
+        <armor_11>	0	</armor_11>
+        <armor_12>	40	</armor_12>
+        <armor_13>	35	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2340	</weight>
+      <maxHealth>	66	</maxHealth>
+      <rotationSpeed>	42	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.013	</invisibilityFactor>
+      <guns>
+        <_47mm_SA34>	shared	  <maxAmmo>	118	</maxAmmo>
+          <armor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_10>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 14 0.288889 14 0.388889 3 0.611111 3 0.711111 14 1 14	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_07.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA34>
+        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+          <armor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 16 0.288889 16 0.388889 4 0.611111 4 0.711111 16 1 16	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_08.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA35>
+        <_47mm_SA37>	shared	  <maxAmmo>	69	</maxAmmo>
+          <armor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 11 0.438889 11 0.458333 4 0.541667 4 0.561111 11 1 11	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_09.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA37>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.165286 0.23746 0.496743	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.679414 0.283849 0.311078	</rayStart>
+          <rayEnd>	-0.340822 0.154039 0.142275	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.611591 0.285316 -0.593105	</rayStart>
+          <rayEnd>	-0.564573 0.267051 -0.560614	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.48	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.66011 0.282479 -0.47082	</rayStart>
+          <rayEnd>	0.625502 0.270253 -0.454919	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.896 -0.081 1.041 0.027 0.652 0.190 1.000 0.407 0.493 0.500 0.371 0.500 0.090 0.000 0.154	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Somua_S35>
+  </turrets0>
+  <engines>
+    <Somua_190CV_V8>	shared	  <unlocks>
+        <engine>	Hispano_219CV_V8	  <cost>	820	</cost>
+        </engine>
+      </unlocks>
+    </Somua_190CV_V8>
+    <Hispano_219CV_V8>	shared	  <unlocks>
+        <engine>	Somua_230_V8	  <cost>	1050	</cost>
+        </engine>
+      </unlocks>
+    </Hispano_219CV_V8>
+    <Somua_230_V8>	shared	</Somua_230_V8>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <ER_28>	shared	  <unlocks>
+        <radio>	ER_29	  <cost>	630	</cost>
+        </radio>
+      </unlocks>
+    </ER_28>
+    <ER_29>	shared	  <unlocks>
+        <radio>	ER_26_ter	  <cost>	3100	</cost>
+        </radio>
+      </unlocks>
+    </ER_29>
+    <ER_26_ter>	shared	  <unlocks>
+        <radio>	ER_27	  <cost>	7100	</cost>
+        </radio>
+      </unlocks>
+    </ER_26_ter>
+    <ER_27>	shared	</ER_27>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f44_somua_s35.xml>

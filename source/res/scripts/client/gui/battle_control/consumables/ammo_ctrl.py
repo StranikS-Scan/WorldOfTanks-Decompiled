@@ -12,23 +12,27 @@ from gui.shared.utils.MethodsRules import MethodsRules
 from items import vehicles
 _ClipBurstSettings = namedtuple('_ClipBurstSettings', 'size interval')
 
-class _GunSettings(namedtuple('_GunSettings', 'clip burst shots')):
+class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
 
     @classmethod
     def default(cls):
-        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {})
+        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None)
 
     @classmethod
     def make(cls, gun):
         clip = _ClipBurstSettings(*gun['clip'])
         burst = _ClipBurstSettings(*gun['burst'])
         shots = {}
+        reloadEffect = None
+        reloadEffectDesc = gun.get('reloadEffect', None)
+        if reloadEffectDesc is not None:
+            reloadEffect = reloadEffectDesc.create()
         for shotIdx, shotDescr in enumerate(gun['shots']):
             nationID, itemID = shotDescr['shell']['id']
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
             shots[intCD] = (shotIdx, shotDescr['piercingPower'][0])
 
-        return cls.__new__(cls, clip, burst, shots)
+        return cls.__new__(cls, clip, burst, shots, reloadEffect)
 
     def getShotIndex(self, intCD):
         if intCD in self.shots:
@@ -181,6 +185,8 @@ class AmmoController(MethodsRules):
     @MethodsRules.delayable('setCurrentShellCD')
     def setGunReloadTime(self, timeLeft, baseTime):
         interval = self.__gunSettings.clip.interval
+        if timeLeft == baseTime and self.__gunSettings.reloadEffect is not None:
+            self.__gunSettings.reloadEffect.start(baseTime)
         if interval > 0:
             if self.__ammo[self.__currShellCD][1] != 1:
                 baseTime = interval
@@ -193,6 +199,7 @@ class AmmoController(MethodsRules):
         self.__baseTime = baseTime
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, timeLeft, baseTime)
+        return
 
     def getGunReloadTime(self):
         return self.__reloadTime
@@ -390,6 +397,7 @@ class AmmoReplayPlayer(AmmoController):
             self.__percent = percent
             self.onGunReloadTimeSetInPercent(self.getCurrentShellCD(), percent)
 
+    @MethodsRules.delayable('setShells')
     def __onAmmoSettingChanged(self, idx):
         if idx >= len(self._order) or idx < 0:
             return

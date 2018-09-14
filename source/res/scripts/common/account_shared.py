@@ -1,18 +1,11 @@
 # Embedded file name: scripts/common/account_shared.py
 import time
 import collections
-import base64
-import struct
 import re
-import ArenaType
 import nations
 from items import vehicles, ITEM_TYPES
 from constants import IGR_TYPE, FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from debug_utils import *
-import ArenaType
-_ITEM_TYPE_VEHICLE = ITEM_TYPES['vehicle']
-_ITEM_TYPE_GUN = ITEM_TYPES['vehicleGun']
-_ITEM_TYPE_TURRET = ITEM_TYPES['vehicleTurret']
 
 class AmmoIterator(object):
 
@@ -141,36 +134,8 @@ def getIGRCustomizedVehCompDescr(igrCustomizationLayout, vehInvID, accountIGRTyp
         return vehDescr.makeCompactDescr()
 
 
-def getHistoricalCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
-    vehDescr = vehicles.VehicleDescr(vehCompDescr)
-    vehicleDef = battleDef['vehicles'][vehDescr.type.compactDescr]
-    histVehDescr = vehicles.VehicleDescr(vehicleDef['historicalVehCompDescr'])
-    histCamouflageID = vehicleDef.get('camouflageID')
-    arenaGeometryID = battleDef['arenaTypeID']
-    camouflageSeasonKind = ArenaType.g_cache[arenaGeometryID].vehicleCamouflageKind
-    currentCamouflageID = None
-    if accountIGRType != IGR_TYPE.NONE:
-        currentCamouflageID = getCustomizedComponentInIGR(igrLayout, vehInvID, 'camouflages', accountIGRType, camouflageSeasonKind, 0)[0]
-    if currentCamouflageID is None:
-        currentCamouflageID = vehDescr.camouflages[camouflageSeasonKind][0]
-    if currentCamouflageID is not None and histCamouflageID is not None:
-        histVehDescr.setCamouflage(camouflageSeasonKind, histCamouflageID, int(time.time()), 0)
-    optionalDevices = vehDescr.optionalDevices
-    for slotIdx in xrange(len(optionalDevices)):
-        optDevice = optionalDevices[slotIdx]
-        if optDevice is None:
-            continue
-        histVehDescr.installOptionalDevice(optDevice['compactDescr'], slotIdx)
-
-    return histVehDescr
-
-
-def getCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef):
-    if battleDef is not None:
-        histVehDescr = getHistoricalCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr, battleDef)
-        return histVehDescr.makeCompactDescr()
-    else:
-        return getIGRCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr)
+def getCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr):
+    return getIGRCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr)
 
 
 def getFairPlayViolationName(violationsMask):
@@ -343,6 +308,8 @@ def parseVersion(version):
 
 def isValidClientVersion(clientVersion, serverVersion):
     if clientVersion != serverVersion:
+        if clientVersion is None or serverVersion is None:
+            return False
         clientParsedVersion = parseVersion(clientVersion)
         serverParsedVersion = parseVersion(serverVersion)
         if clientParsedVersion is None or serverParsedVersion is None:

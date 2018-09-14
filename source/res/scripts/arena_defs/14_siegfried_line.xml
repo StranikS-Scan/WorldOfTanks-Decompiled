@@ -1,0 +1,89 @@
+<14_siegfried_line.xml>
+  <name>	#arenas:14_siegfried_line/name	</name>
+  <description>	#arenas:14_siegfried_line/description	</description>
+  <geometry>	spaces/14_siegfried_line	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/14_siegfried_line/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <loadingMusic>	/music/intro/euro_city	</loadingMusic>
+  <wwloadingMusic>	music_euro_city	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	255.799973 -439.829987	</position1>
+        </team1>
+        <team2>
+          <position1>	283.845825 434.601959	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-157.925 -383.466	</position>
+          <position>	179.000 -422.600	</position>
+        </team1>
+        <team2>
+          <position>	-143.236 387.372	</position>
+          <position>	106.586 409.052	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	307.199005 42.860947	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	444.353 209.906	</position>
+          <position>	261.879 -97.97	</position>
+        </team1>
+        <team2>
+          <position>	-233.664 384.832	</position>
+          <position>	-260.158 -334.038	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	317.609314 42.661865	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	158.534 248.794	</position>
+        </team1>
+        <team2>
+          <position>	240.942 -397.861	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-69.269 4.459	</position1>
+          <position2>	307.199 42.861	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</14_siegfried_line.xml>

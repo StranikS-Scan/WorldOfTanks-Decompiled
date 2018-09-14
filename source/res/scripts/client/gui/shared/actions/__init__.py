@@ -1,12 +1,13 @@
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
-from ConnectionManager import connectionManager
+from ConnectionManager import connectionManager, CONNECTION_METHOD
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
 from gui.app_loader import g_appLoader
+from gui.login import g_loginManager
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LoginEventEx, GUICommonEvent
 from gui.shared.actions.chains import ActionsChain
@@ -143,24 +144,30 @@ class ConnectToPeriphery(Action):
     def __doConnect(self):
         login, token2 = self.__credentials
         self.__addHandlers()
-        connectionManager.connect(getHostURL(self.__host, token2), login, '', self.__host.keyPath, token2=token2)
+        connectionManager.initiateConnection({'login': login,
+         'token2': token2,
+         'auth_method': CONNECTION_METHOD.TOKEN2,
+         'session': BigWorld.wg_cpsalt(g_loginManager.getPreference('session')),
+         'temporary': str(int(not g_loginManager.getPreference('remember_user')))}, '', getHostURL(self.__host, token2))
 
     def __addHandlers(self):
         g_eventBus.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.connectionStatusCallbacks += self.__onConnectionStatus
+        connectionManager.onConnected += self.__onConnected
+        connectionManager.onRejected += self.__onRejected
 
     def __removeHandlers(self):
         g_eventBus.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
-        connectionManager.connectionStatusCallbacks -= self.__onConnectionStatus
+        connectionManager.onConnected -= self.__onConnected
+        connectionManager.onRejected -= self.__onRejected
 
-    def __onConnectionStatus(self, stage, status, serverMsg, isAutoRegister):
+    def __onConnected(self):
         self.__removeHandlers()
-        if stage == 1 and status == 'LOGGED_ON':
-            self._completed = True
-            LOG_DEBUG('Connect action. Player login to periphery')
-        else:
-            LOG_DEBUG('Connect action. Player can not login to periphery')
-            self._completed = False
+        self._completed = True
+        self._running = False
+
+    def __onRejected(self, status, responseData):
+        self.__removeHandlers()
+        self._completed = False
         self._running = False
 
     def __onLoginQueueClosed(self, _):

@@ -8,7 +8,7 @@ from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
-from gui.shared.utils.gui_items import formatPrice, VehicleItem
+from gui.shared.formatters import formatPrice
 from helpers import i18n
 
 class ModuleProcessor(ItemProcessor):
@@ -309,7 +309,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         additionalMessages = []
         removedItems = []
         for eqKd in ctx.get('incompatibleEqs', []):
-            item = VehicleItem(compactDescr=eqKd)
+            item = g_itemsCache.items.getItemByCD(eqKd)
             removedItems.append(item.name)
 
         if removedItems:
@@ -454,7 +454,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         removedItems = []
         if ctx:
             for eqKd in ctx.get('incompatibleEqs', []):
-                item = VehicleItem(compactDescr=eqKd)
+                item = g_itemsCache.items.getItemByCD(eqKd)
                 removedItems.append(item.name)
 
         if removedItems:

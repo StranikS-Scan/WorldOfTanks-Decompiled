@@ -5,7 +5,6 @@ import ResMgr
 import BattleReplay
 from functools import partial
 from debug_utils import *
-from Vehicle import Vehicle
 import SoundGroups
 import FMOD
 

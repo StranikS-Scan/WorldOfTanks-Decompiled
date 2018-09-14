@@ -84,7 +84,7 @@ class _AccountClubProfile(object):
     def getState(self):
         return self.__state
 
-    def resync(self, firstInit = False, forceResync = False):
+    def resync(self, firstInit = False, forceResync = False, callback = None):
         if not isClubsEnabled():
             LOG_DEBUG('Clubs is not enabled on this server. Skip profile resync.')
             return
@@ -103,7 +103,7 @@ class _AccountClubProfile(object):
                 LOG_DEBUG('Club profile resync already in progress')
                 return
             self._waitForSync |= _SYNC_TYPE.ALL
-            self.__sendRequest(club_ctx.GetPrivateProfileCtx(), callback=partial(self.__onAccountProfileReceived, _SYNC_TYPE.ALL))
+            self.__sendRequest(club_ctx.GetPrivateProfileCtx(), callback=partial(self.__onAccountProfileReceived, _SYNC_TYPE.ALL, callback))
             return
 
     def syncClubs(self):
@@ -239,7 +239,7 @@ class _AccountClubProfile(object):
                 for uniqueID, invite in invites.iteritems():
                     if uniqueID not in prevInvites:
                         added.append(invite)
-                    elif invite.getStatus() != prevInvites[uniqueID].getStatus():
+                    elif invite.getStatus() != prevInvites[uniqueID].getStatus() or invite.getUpdatingTime() != prevInvites[uniqueID].getUpdatingTime():
                         changed.append(invite)
 
                 for uniqueID, invite in prevInvites.iteritems():
@@ -290,7 +290,7 @@ class _AccountClubProfile(object):
             LOG_ERROR('Invalid clubs controller instance', eventType, args, kwargs)
         return
 
-    def __onAccountProfileReceived(self, flags, result):
+    def __onAccountProfileReceived(self, flags, callback, result):
         LOG_DEBUG('Clubs account profile has been received', flags, result)
         self._waitForSync ^= flags
         if result.isSuccess():
@@ -308,11 +308,14 @@ class _AccountClubProfile(object):
                     isRestrsChanged = False
                 self._isSynced = True
                 self.__state.update(self, self)
+                if callback is not None:
+                    callback()
                 if isRestrsChanged:
                     self.__notify('onAccountClubRestrictionsChanged')
         else:
             self._clear()
         self.__loadResyncCallback()
+        return
 
     def __onMyClubSyncCompleted(self, callback, clubDbID, result):
         if result.isSuccess():
@@ -361,8 +364,7 @@ class ClubsController(subscriptions.ClubsListeners):
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         g_clientUpdateManager.addCallbacks({'cache.relatedToClubs': self.__onSpaAttrChanged,
          'cache.eSportSeasonState': self.__onSeasonStateChanged})
-        self._accountProfile.resync(firstInit=True)
-        self._seasonsCache.start()
+        self._accountProfile.resync(firstInit=True, callback=lambda : self._seasonsCache.start())
         self._availabilityCtrl.start()
         return
 

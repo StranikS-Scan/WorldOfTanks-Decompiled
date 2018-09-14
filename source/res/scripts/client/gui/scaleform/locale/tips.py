@@ -8,6 +8,7 @@ class TIPS(object):
     TECHNICALADVICE = '#tips:technicalAdvice'
     SECURITY = '#tips:security'
     BECAREFUL = '#tips:beCareful'
+    HOWTOPLAY = '#tips:howToPlay'
     TIP0_PAYATTENTION_TACTICS_0_50_EXCEPT_7_ALL_ALL_ALL = '#tips:tip0/payAttention/tactics/0_50/except_7/all/all/all'
     TIP1 = '#tips:tip1'
     TIP2 = '#tips:tip2'
@@ -188,3 +189,4 @@ class TIPS(object):
     TIP177_FOLLOWTHERULES_RULES_100_INFINITY_EXCEPT_7_ALL_ALL_ALL = '#tips:tip177/followTheRules/rules/100_infinity/except_7/all/all/all'
     TIP178_FOLLOWTHERULES_RULES_100_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip178/followTheRules/rules/100_infinity/all/all/all/all'
     TIP179_BECAREFUL_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip179/beCareful/security/0_infinity/all/all/all/all'
+    SANDBOX01 = '#tips:sandbox01'

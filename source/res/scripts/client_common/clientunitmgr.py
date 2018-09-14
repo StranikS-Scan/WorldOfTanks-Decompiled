@@ -56,9 +56,9 @@ class ClientUnitMgr(object):
             if unitIdx in self.units:
                 self.units[unitIdx].destroy()
             self.units[unitIdx] = unit
-            self.onUnitJoined(self.id, self.unitIdx)
             if 'battleID' in unit._extras:
                 self.battleID = unit._extras['battleID']
+            self.onUnitJoined(self.id, self.unitIdx)
         if packedOps:
             unit = self.units.get(unitIdx)
             if unit:

@@ -10,7 +10,8 @@ class QUESTS_ALIASES(object):
     PERSONAL_WELCOME_VIEW_LINKAGE = 'QuestsPersonalWelcomeViewUI'
     SEASONS_VIEW_ALIAS = 'QuestsSeasonsView'
     SEASONS_VIEW_LINKAGE = 'QuestsSeasonsViewUI'
-    TILE_CHAINS_VIEW_ALIAS = 'QuestsTileChainsView'
+    RANDOM_TILE_CHAINS_VIEW_ALIAS = 'RandomQuestsTileChainsView'
+    FALLOUT_TILE_CHAINS_VIEW_ALIAS = 'FalloutQuestsTileChainsView'
     TILE_CHAINS_VIEW_LINKAGE = 'QuestsTileChainsViewUI'
     COMMON_QUESTS_VIEW_ALIAS = 'CommonQuestsView'
     COMMON_QUESTS_VIEW_LINKAGE = 'CurrentTab_UI'
@@ -22,6 +23,12 @@ class QUESTS_ALIASES(object):
     FREE_SLOTS_AND_FREE_QUESTS = 'freeSlotsAndFreeQuests'
     FIRST_RUN = 'firstRun'
     EMPTY = 'empty'
+    SEASON_VIEW_TAB_RANDOM = 'seasonViewTabRandom'
+    SEASON_VIEW_TAB_FALLOUT = 'seasonViewTabFallout'
+    QUEST_TASKS_PROGRESS_RANDOM = 'QuestsProgressUI'
+    QUEST_TASKS_PROGRESS_FALLOUT = 'QuestsProgressFalloutUI'
+    QUEST_TASKS_PROGRESS_LINKAGES = [QUEST_TASKS_PROGRESS_RANDOM, QUEST_TASKS_PROGRESS_FALLOUT]
+    QUESTS_CONTENT_TABS_PY_ALIAS = 'questsContentTabs'
     RENDERER_TYPE_BLOCK_TITLE = 1
     RENDERER_TYPE_QUEST = 2
     TUTORIAL_HANGAR_QUEST_DETAILS_LINKAGE = 'TutorialHangarDetailsBlockUI'

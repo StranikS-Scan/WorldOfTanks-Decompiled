@@ -22,6 +22,9 @@ class SfQuestsProxy(SfLobbyProxy):
     def getViewSettings(self):
         return settings.QUESTS_VIEW_SETTINGS
 
+    def getViewsAliases(self):
+        return settings.WINDOW_ALIAS_MAP
+
     def invokeCommand(self, command):
         self._commands.invoke(None, command)
         return

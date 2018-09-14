@@ -5,7 +5,7 @@ import Math
 from Math import Vector3, Matrix
 import BigWorld
 from AvatarInputHandler import mathUtils, AimingSystems
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler.aims import createAim
 import GUI
 import Keys
@@ -283,6 +283,12 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__basisMProv = _VehicleBounder()
         self.__entityPicker = _VehiclePicker()
         return
+
+    def getReasonsAffectCameraDirectly(self):
+        return ()
+
+    def applyImpulse(self, position, impulse, reason = 1):
+        pass
 
     def create(self):
         pass

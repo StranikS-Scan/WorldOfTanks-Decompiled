@@ -2,7 +2,7 @@
 import time
 from constants import PREBATTLE_CACHE_KEY, PREBATTLE_COMPANY_DIVISION_NAMES
 from constants import PREBATTLE_TYPE
-from gui.prb_control import getPrebattleAutoInvites
+from gui.prb_control.prb_getters import getPrebattleAutoInvites
 from gui.prb_control.items.prb_items import PlayerPrbInfo
 from helpers.time_utils import makeLocalServerTime
 from messenger.ext import passCensor

@@ -1,0 +1,531 @@
+<hetzer.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	42	</forward>
+    <backward>	11	</backward>
+  </speedLimits>
+  <repairCost>	4.75	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G09_Hetzer/Hetzer_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	8	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	40	</armor_9>
+      <armor_10>	8	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	11600	</weight>
+    <maxHealth>	216	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 32.00 0.38 1.00 0.05 0.29	</pitchParams>
+      <rollParams>	1.00 0.26 32.00 0.38 1.00 0.05 0.29	</rollParams>
+      <sensitivityToImpulse>	0.7	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.383503 0.705388 1.36755	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G09_Hetzer/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.486654 0.801169 1.82527	</rayStart>
+        <rayEnd>	-0.486654 0.453466 1.62752	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	1.13585 0.941984 0.580543	</rayStart>
+        <rayEnd>	0.839748 0.673058 0.580543	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	-1.13603 0.941793 0.638343	</rayStart>
+        <rayEnd>	-0.839922 0.672864 0.638343	</rayEnd>
+        <rayUp>	-0.0048435 0.994667 0.103025	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Hetzer_Ausf_A>
+      <userString>	#germany_vehicles:Hetzer_Ausf_A	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1950.0	</price>
+      <unlocks>
+        <chassis>	Hetzer_Ausf_B	  <cost>	1025	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	16800	</maxLoad>
+      <terrainResistance>	1.3 1.6 2.9	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.16	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.425	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.425	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.35	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.105	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.31	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.35	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.105	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.31	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.7291 0.0635	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G09_Hetzer/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.06156 1.38262	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.442290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.093650 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.253960	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Hetzer_Ausf_A>
+    <Hetzer_Ausf_B>
+      <userString>	#germany_vehicles:Hetzer_Ausf_B	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4370.0	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	2500	</weight>
+      <maxLoad>	18500	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.34	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.16	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.425	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.425	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.35	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.105	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.31	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.35	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.105	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.31	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.7291 0.0635	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G09_Hetzer/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.06156 1.38262	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.452630 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.093650 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.253960	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Hetzer_Ausf_B>
+  </chassis>
+  <turrets0>
+    <Hetzer_0>
+      <userString>	#germany_vehicles:Hetzer_0	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	40	</armor_1>
+        <armor_2>	40	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	0	</weight>
+      <maxHealth>	54	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	260	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_StuK_40_L43>	shared	  <unlocks>
+            <gun>	_75mm_PaK_39_L48	  <cost>	3400	</cost>
+            </gun>
+            <vehicle>	StuG_40_AusfG	  <cost>	12435	</cost>
+            </vehicle>
+            <gun>	_105mm_StuH42_L28	  <cost>	3800	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	3.9	</reloadTime>
+          <maxAmmo>	40	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-5 15	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G09_Hetzer/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_StuK_40_L43>
+        <_75mm_PaK_39_L48>	shared	  <reloadTime>	3.9	</reloadTime>
+          <maxAmmo>	40	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-5 15	</turretYawLimits>
+          <effects>	shot_medium	</effects>
+          <models>
+            <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G09_Hetzer/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_PaK_39_L48>
+        <_105mm_StuH42_L28>	shared	  <maxAmmo>	20	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	8.6	</reloadTime>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	55	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-5 15	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G09_Hetzer/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G09_Hetzer/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_StuH42_L28>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G09_Hetzer/normal/lod0/turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G09_Hetzer/crash/lod0/turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G09_Hetzer/crash/lod0/turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G09_Hetzer/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	2.74 2.74 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Hetzer_0>
+  </turrets0>
+  <engines>
+    <Praga_TN_100>	shared	  <unlocks>
+        <engine>	Praga_TNPS	  <cost>	120	</cost>
+        </engine>
+      </unlocks>
+    </Praga_TN_100>
+    <Praga_TNPS>	shared	  <unlocks>
+        <engine>	Scania_Vabis1664	  <cost>	400	</cost>
+        </engine>
+      </unlocks>
+    </Praga_TNPS>
+    <Scania_Vabis1664>	shared	  <unlocks>
+        <engine>	Tatra_V-103	  <cost>	850	</cost>
+        </engine>
+      </unlocks>
+    </Scania_Vabis1664>
+    <Tatra_V-103>	shared	</Tatra_V-103>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG37>	shared	  <unlocks>
+        <radio>	FuG10	  <cost>	3600.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG37>
+    <FuG10>	shared	  <unlocks>
+        <radio>	FuG11	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG10>
+    <FuG11>	shared	</FuG11>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</hetzer.xml>

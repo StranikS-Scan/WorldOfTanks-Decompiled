@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyListView.py
 from adisp import process
+from constants import PREBATTLE_TYPE
 from gui.prb_control.prb_helpers import PrbListener
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
@@ -78,7 +79,7 @@ class CompanyListView(CompanyListMeta, PrbListener):
 
     @process
     def __requestRoster(self, prbID):
-        yield self.prbDispatcher.sendPrbRequest(prb_ctx.GetPrbRosterCtx(prbID))
+        yield self.prbDispatcher.sendPrbRequest(prb_ctx.GetPrbRosterCtx(prbID, PREBATTLE_TYPE.COMPANY))
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.PREBATTLES_LIST:

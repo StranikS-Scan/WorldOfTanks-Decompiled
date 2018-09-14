@@ -5,10 +5,13 @@ import zlib
 import cPickle as pickle
 from collections import defaultdict
 import BigWorld
+from PlayerEvents import g_playerEvents
 import clubs_quests
-from Event import Event
+from Event import Event, EventManager
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA
+from potapov_quests import _POTAPOV_QUEST_XML_PATH
+from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
@@ -17,13 +20,13 @@ from gui.LobbyContext import g_lobbyContext
 from gui.shared import events
 from gui.server_events import caches as quests_caches
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
-from gui.server_events.PQController import PQController
+from gui.server_events.PQController import RandomPQController, FalloutPQController
 from gui.server_events.CompanyBattleController import CompanyBattleController
-from gui.server_events.event_items import EventBattles, HistoricalBattle, createQuest, createAction, FalloutConfig
+from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig
 from gui.server_events.event_items import CompanyBattles, ClubsQuest
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
-from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
 
 def _defaultQuestMaker(qID, qData, progress):
@@ -32,6 +35,38 @@ def _defaultQuestMaker(qID, qData, progress):
 
 def _clubsQuestMaker(qID, qData, progress, seasonID, questDescr):
     return ClubsQuest(seasonID, questDescr, progress.getQuestProgress(qID))
+
+
+class _PotapovComposer(object):
+
+    def __init__(self, random, fallout):
+        super(_PotapovComposer, self).__init__()
+        self.__composedObjects = [random, fallout]
+
+    def getQuests(self):
+        return self.__composeDict('getQuests')
+
+    def getTiles(self):
+        return self.__composeDict('getTiles')
+
+    def getSelectedQuests(self):
+        return self.__composeDict('getSelectedQuests')
+
+    def hasQuestsForReward(self):
+        return any((obj.hasQuestsForReward() for obj in self.__composedObjects))
+
+    def hasQuestsForSelect(self):
+        return any((obj.hasQuestsForSelect() for obj in self.__composedObjects))
+
+    def getNextTankwomanIDs(self, *args):
+        return self.__composedObjects[0].getNextTankwomanIDs(*args)
+
+    def __composeDict(self, getter):
+        result = {}
+        for obj in self.__composedObjects:
+            result.update(getattr(obj, getter)())
+
+        return result
 
 
 class _EventsCache(object):
@@ -43,32 +78,47 @@ class _EventsCache(object):
     SYSTEM_QUESTS = (EVENT_TYPE.REF_SYSTEM_QUEST,)
 
     def __init__(self):
-        self.__progress = QuestsProgressRequester()
         self.__waitForSync = False
         self.__invalidateCbID = None
         self.__cache = defaultdict(dict)
+        self.__potapovHidden = {}
         self.__actionsCache = defaultdict(lambda : defaultdict(dict))
         self.__questsDossierBonuses = defaultdict(set)
-        self.__potapov = PQController(self)
+        self.__random = RandomPQController()
+        self.__fallout = FalloutPQController()
+        self.__potapovComposer = _PotapovComposer(self.__random, self.__fallout)
+        self.__questsProgress = QuestsProgressRequester()
         self.__companies = CompanyBattleController(self)
-        self.onSyncStarted = Event()
-        self.onSyncCompleted = Event()
+        self.__em = EventManager()
+        self.onSyncStarted = Event(self.__em)
+        self.onSyncCompleted = Event(self.__em)
+        self.onSelectedQuestsChanged = Event(self.__em)
+        self.onSlotsCountChanged = Event(self.__em)
+        self.onProgressUpdated = Event(self.__em)
+        self.__lockedQuestIds = {}
         return
 
     def init(self):
-        self.__potapov.init()
+        self.__random.init()
+        self.__fallout.init()
+
+    def fini(self):
+        self.__fallout.fini()
+        self.__random.fini()
+        self.__em.clear()
+        self.__clearInvalidateCallback()
 
     def start(self):
         self.__companies.start()
+        self.__lockedQuestIds = BigWorld.player().potapovQuestsLock
+        g_playerEvents.onPQLocksChanged += self.__onLockedQuestsChanged
 
-    def fini(self):
-        self.__potapov.fini()
-        self.onSyncStarted.clear()
-        self.onSyncCompleted.clear()
-        self.__clearInvalidateCallback()
+    def stop(self):
+        g_playerEvents.onPQLocksChanged -= self.__onLockedQuestsChanged
+        self.__companies.stop()
 
     def clear(self):
-        self.__companies.stop()
+        self.stop()
         quests_caches.clearNavInfo()
 
     @property
@@ -76,16 +126,46 @@ class _EventsCache(object):
         return self.__waitForSync
 
     @property
+    def falloutQuestsProgress(self):
+        return self.__fallout.questsProgress
+
+    @property
+    def randomQuestsProgress(self):
+        return self.__random.questsProgress
+
+    @property
+    def random(self):
+        return self.__random
+
+    @property
+    def fallout(self):
+        return self.__fallout
+
+    @property
     def questsProgress(self):
-        return self.__progress
+        return self.__questsProgress
 
     @property
     def potapov(self):
-        return self.__potapov
+        return self.__potapovComposer
 
     @property
     def companies(self):
         return self.__companies
+
+    def getLockedQuestTypes(self):
+        questIDs = set()
+        result = set()
+        allQuests = self.potapov.getQuests()
+        for lockedList in self.__lockedQuestIds.values():
+            if lockedList is not None:
+                questIDs.update(lockedList)
+
+        for questID in questIDs:
+            if questID in allQuests:
+                result.add(allQuests[questID].getMajorTag())
+
+        return result
 
     @async
     @process
@@ -93,12 +173,15 @@ class _EventsCache(object):
         if diff is not None:
             if diff.get('eventsData', {}).get(EVENT_CLIENT_DATA.INGAME_EVENTS):
                 self.__companies.setNotificators()
-        yield self.__progress.request()
+        yield self.falloutQuestsProgress.request()
+        yield self.randomQuestsProgress.request()
+        yield self.__questsProgress.request()
         isNeedToInvalidate = True
         isNeedToClearItemsCaches = False
 
         def _cbWrapper(*args):
-            self.__potapov.update(diff)
+            self.__random.update(self, diff)
+            self.__fallout.update(self, diff)
             callback(*args)
 
         if diff is not None:
@@ -184,20 +267,6 @@ class _EventsCache(object):
 
     def getFutureEvents(self):
         return self.getEvents(lambda q: q.getStartTimeLeft() > 0)
-
-    def getHistoricalBattles(self, hideExpired = True, filterFunc = None):
-        battles = self.__getHistoricalBattlesData()
-        filterFunc = filterFunc or (lambda a: True)
-        result = {}
-        for bID, bData in battles.iteritems():
-            b = self._makeHistoricalBattle(bID, bData)
-            if hideExpired and b.isOutOfDate():
-                continue
-            if not filterFunc(b):
-                continue
-            result[bID] = b
-
-        return result
 
     def getCompanyBattles(self):
         battle = self.__getCompanyBattlesData()
@@ -360,7 +429,7 @@ class _EventsCache(object):
         storage = self.__cache['quests']
         if qID in storage:
             return storage[qID]
-        q = storage[qID] = maker(qID, qData, self.__progress, **kwargs)
+        q = storage[qID] = maker(qID, qData, self.__questsProgress, **kwargs)
         return q
 
     def _makeAction(self, aID, aData):
@@ -369,13 +438,6 @@ class _EventsCache(object):
             return storage[aID]
         a = storage[aID] = createAction(aData.get('type', 0), aID, aData)
         return a
-
-    def _makeHistoricalBattle(self, bID, bData):
-        storage = self.__cache['historicalBattles']
-        if bID in storage:
-            return storage[bID]
-        b = storage[bID] = HistoricalBattle(bID, bData)
-        return b
 
     @classmethod
     def _makeQuestsRelations(cls, quests):
@@ -462,14 +524,6 @@ class _EventsCache(object):
                 startTime = timeLeftInfo[0]
             invalidateTimeLeft = min(invalidateTimeLeft, startTime)
 
-        for hb in self.getHistoricalBattles().itervalues():
-            timeLeftInfo = hb.getNearestActivityTimeLeft()
-            if timeLeftInfo is None:
-                startTime = hb.getFinishTimeLeft()
-            else:
-                startTime = timeLeftInfo[0]
-            invalidateTimeLeft = min(invalidateTimeLeft, startTime)
-
         if invalidateTimeLeft != sys.maxint:
             self.__loadInvalidateCallback(invalidateTimeLeft)
         self.__waitForSync = False
@@ -515,9 +569,6 @@ class _EventsCache(object):
     def __getCompanyBattlesData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventCompanies', {})
 
-    def __getHistoricalBattlesData(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.HISTORICAL_BATTLES)
-
     def __getFallout(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.FALLOUT)
 
@@ -525,6 +576,7 @@ class _EventsCache(object):
         questsData = self.__getQuestsData()
         questsData.update(self.__getFortQuestsData())
         questsData.update(self.__getPersonalQuestsData())
+        questsData.update(self.__getPotapovHiddenQuests())
         for qID, qData in questsData.iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
@@ -549,6 +601,17 @@ class _EventsCache(object):
         self.__actionsCache.clear()
         for storage in self.__cache.itervalues():
             storage.clear()
+
+    def __getPotapovHiddenQuests(self):
+        if not self.__potapovHidden:
+            xmlPath = _POTAPOV_QUEST_XML_PATH + '/tiles.xml'
+            for quest in readQuestsFromFile(xmlPath, EVENT_TYPE.TOKEN_QUEST):
+                self.__potapovHidden[quest[0]] = quest[3]
+
+        return self.__potapovHidden.copy()
+
+    def __onLockedQuestsChanged(self):
+        self.__lockedQuestIds = BigWorld.player().potapovQuestsLock
 
 
 g_eventsCache = _EventsCache()

@@ -1,13 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_cm_handlers.py
-import BigWorld
-import constants
+from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
+from gui.clans.contexts import CreateInviteCtx
+from gui.clans import formatters as clans_fmts
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import i18n
-from adisp import process
 from gui import SystemMessages
+from gui.clans.clan_controller import g_clanCtrl
 from gui.LobbyContext import g_lobbyContext
-from gui.prb_control.context import unit_ctx, SendInvitesCtx
+from gui.prb_control.context import SendInvitesCtx, PrebattleAction
 from gui.prb_control.prb_helpers import prbDispatcherProperty, prbFunctionalProperty
 from gui.shared import g_itemsCache, event_dispatcher as shared_events, utils
 from gui.Scaleform.locale.MENU import MENU
@@ -15,6 +17,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
+from helpers.i18n import makeString
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
@@ -23,6 +26,7 @@ from messenger.storage import storage_getter
 class USER(object):
     INFO = 'userInfo'
     CLAN_INFO = 'clanInfo'
+    SEND_CLAN_INVITE = 'sendClanInvite'
     CREATE_PRIVATE_CHANNEL = 'createPrivateChannel'
     ADD_TO_FRIENDS = 'addToFriends'
     ADD_TO_FRIENDS_AGAIN = 'addToFriendsAgain'
@@ -73,30 +77,40 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return self.prbDispatcher.getFunctionalCollection().canSendInvite(self.databaseID)
 
     def isSquadCreator(self):
-        return self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.isCreator()
+        return self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.isCreator()
 
     def showUserInfo(self):
 
         def onDossierReceived(databaseID, userName):
             shared_events.showProfileWindow(databaseID, userName)
 
-        self.__receiveProfile(successCallback=onDossierReceived)
+        shared_events.requestProfile(self.databaseID, self.userName, successCallback=onDossierReceived)
+
+    def showClanInfo(self):
+        if not g_lobbyContext.getServerSettings().clanProfile.isEnabled():
+            SystemMessages.pushMessage(makeString(SYSTEM_MESSAGES.CLANS_ISCLANPROFILEDISABLED), type=SystemMessages.SM_TYPE.Error)
+            return
+
+        def onDossierReceived(databaseID, _):
+            clanID, _ = g_itemsCache.items.getClanInfo(databaseID)
+            if clanID != 0:
+                shared_events.showClanProfileWindow(clanID)
+            else:
+                from gui import DialogsInterface
+                key = 'clan data is not available'
+                DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': key}))
+
+        shared_events.requestProfile(self.databaseID, self.userName, successCallback=onDossierReceived)
 
     @process
-    def __receiveProfile(self, successCallback):
-        databaseID = self.databaseID
-        userName = self.userName
-        userDossier, _, isHidden = yield g_itemsCache.items.requestUserDossier(databaseID)
-        if userDossier is None:
-            if isHidden:
-                key = 'messenger/userInfoHidden'
-            else:
-                key = 'messenger/userInfoNotAvailable'
-            from gui import DialogsInterface
-            DialogsInterface.showI18nInfoDialog(key, lambda result: None, I18nInfoDialogMeta(key, messageCtx={'userName': userName}))
+    def sendClanInvite(self):
+        profile = g_clanCtrl.getAccountProfile()
+        context = CreateInviteCtx(profile.getClanDbID(), [self.databaseID])
+        result = yield g_clanCtrl.sendRequest(context, allowDelay=True)
+        if result.isSuccess():
+            SystemMessages.pushMessage(clans_fmts.getAppSentSysMsg(profile.getClanName(), profile.getClanAbbrev()))
         else:
-            successCallback(databaseID, userName)
-        return
+            SystemMessages.pushMessage(clans_fmts.getInvitesNotSentSysMsg([self.userName or '']), type=SystemMessages.SM_TYPE.Error)
 
     def createPrivateChannel(self):
         self.proto.contacts.createPrivateChannel(self.databaseID, self.userName)
@@ -125,12 +139,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def copyToClipboard(self):
         utils.copyToClipboard(self.userName)
 
-    @process
     def createSquad(self):
-        user = self.usersStorage.getUser(self.databaseID)
-        result = yield self.prbDispatcher.create(unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[self.databaseID], isForced=True))
-        if result:
-            self.__showInviteMessage(user)
+        self.prbDispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.SQUAD, accountsToInvite=(self.databaseID,)))
 
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
@@ -140,8 +150,16 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 self.__showInviteMessage(user)
                 break
 
+    def getOptions(self, ctx = None):
+        if not self._getUseCmInfo().isCurrentPlayer:
+            return self._generateOptions(ctx)
+        else:
+            return None
+
     def _getHandlers(self):
         return {USER.INFO: 'showUserInfo',
+         USER.CLAN_INFO: 'showClanInfo',
+         USER.SEND_CLAN_INVITE: 'sendClanInvite',
          USER.CREATE_PRIVATE_CHANNEL: 'createPrivateChannel',
          USER.ADD_TO_FRIENDS: 'addFriend',
          USER.REMOVE_FROM_FRIENDS: 'removeFriend',
@@ -168,15 +186,17 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def _getUseCmInfo(self):
         return UserContextMenuInfo(self.databaseID, self.userName)
 
-    def getOptions(self, ctx = None):
-        if not self._getUseCmInfo().isCurrentPlayer:
-            return self._generateOptions(ctx)
-        else:
-            return None
-
     def _generateOptions(self, ctx = None):
         userCMInfo = self._getUseCmInfo()
+        if ctx is not None and not userCMInfo.hasClan:
+            try:
+                clanAbbrev = ctx.clanAbbrev
+                userCMInfo.hasClan = bool(clanAbbrev)
+            except:
+                LOG_DEBUG('ctx has no property "clanAbbrev"')
+
         options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
+        options = self._addClanProfileInfo(options, userCMInfo)
         options = self._addFriendshipInfo(options, userCMInfo)
         options = self._addChannelInfo(options, userCMInfo)
         options.append(self._makeItem(USER.COPY_TO_CLIPBOARD, MENU.contextmenu(USER.COPY_TO_CLIPBOARD)))
@@ -190,6 +210,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         options = self._addRejectFriendshipInfo(options, userCMInfo)
         options = self._addRemoveFromGroupInfo(options, userCMInfo)
         options = self._addRemoveFriendInfo(options, userCMInfo)
+        options = self._addInviteClanInfo(options, userCMInfo)
         return options
 
     def _addIgnoreInfo(self, options, userCMInfo):
@@ -212,7 +233,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
     def _addSquadInfo(self, options, isIgnored):
         if not isIgnored and not self.isSquadCreator():
-            options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD)))
+            canCreate = self.prbDispatcher.getFunctionalCollection().canCreateSquad()
+            options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):
@@ -241,6 +263,18 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
         return options
 
     def _addClubInfo(self, options, userCMInfo):
+        return options
+
+    def _addClanProfileInfo(self, options, userCMInfo):
+        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and userCMInfo.hasClan:
+            options.append(self._makeItem(USER.CLAN_INFO, MENU.contextmenu(USER.CLAN_INFO), optInitData={'enabled': g_clanCtrl.isAvailable()}))
+        return options
+
+    def _addInviteClanInfo(self, options, userCMInfo):
+        if g_lobbyContext.getServerSettings().clanProfile.isEnabled() and not userCMInfo.hasClan:
+            profile = g_clanCtrl.getAccountProfile()
+            if profile.isInClan() and profile.getMyClanPermissions().canHandleClanInvites():
+                options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': g_clanCtrl.isAvailable()}))
         return options
 
     @classmethod
@@ -327,6 +361,7 @@ class UserContextMenuInfo(object):
         self.isFriend = False
         self.isIgnored = False
         self.isMuted = False
+        self.hasClan = False
         self.displayName = userName
         self.isOnline = False
         self.isCurrentPlayer = False
@@ -337,6 +372,7 @@ class UserContextMenuInfo(object):
             self.displayName = self.user.getFullName()
             self.isOnline = self.user.isOnline()
             self.isCurrentPlayer = self.user.isCurrentPlayer()
+            self.hasClan = self.user.getClanInfo().isInClan()
         super(UserContextMenuInfo, self).__init__()
         return
 

@@ -32,7 +32,7 @@ class PrebattleWindow(PrebattleWindowMeta, PrbListener):
     def __init__(self, prbName = 'prebattle'):
         super(PrebattleWindow, self).__init__()
         self.__prbName = prbName
-        self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getPrbType())
+        self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getEntityType())
 
     def onFocusIn(self, alias):
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED, {'clientID': self.__clientID}))
@@ -250,7 +250,7 @@ class PrebattleWindow(PrebattleWindowMeta, PrbListener):
             if controller is None:
                 LOG_ERROR('Channel controller is not defined', ctx)
                 return
-            if prbType is self.prbFunctional.getPrbType():
+            if prbType is self.prbFunctional.getEntityType():
                 chat = self.chat
                 if chat is not None:
                     controller.setView(chat)

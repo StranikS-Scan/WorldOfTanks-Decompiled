@@ -1,0 +1,157 @@
+<resources.xml>
+  <system>
+    <loadingScreenGUI>	gui/loading_screen.gui	</loadingScreenGUI>
+    <engineConfigXML>	engine_config.xml	</engineConfigXML>
+    <scriptsConfigXML>	scripts_config.xml	</scriptsConfigXML>
+    <notFoundBmp>	system/maps/notfound.dds	</notFoundBmp>
+    <blackBmp>	system/maps/col_black.dds	</blackBmp>
+    <whiteBmp>	system/maps/col_white.dds	</whiteBmp>
+    <defaultNorms>	system/maps/default_norms.dds	</defaultNorms>
+    <nullBmp>	system/maps/aid_null.dds	</nullBmp>
+    <decalsConfig>	decals_config.xml	</decalsConfig>
+    <colorCorrectionMap>	system/maps/void_cch.dds	</colorCorrectionMap>
+    <REMTexture>	system/maps/REM.dds	</REMTexture>
+    <PMREMTexture>	system/maps/PMREM.dds	</PMREMTexture>
+    <invFilmicTexture>	system/maps/inv_table_float_R32.dds	</invFilmicTexture>
+    <emptyTerrainTextureBmp>	helpers/maps/aid_builder.dds	</emptyTerrainTextureBmp>
+    <stippleMap>	system/maps/stipple.dds	</stippleMap>
+    <notFoundModel>	helpers/props/standin.model	</notFoundModel>
+    <notFoundMeshPSModel>	helpers/props/mesh_particles_standin.model	</notFoundMeshPSModel>
+    <fontRoot>	system/fonts/	</fontRoot>
+    <defaultFontName>	default_medium.font	</defaultFontName>
+    <consoleFonts>
+      <font>	system_tiny.font	</font>
+      <font>	system_small.font	</font>
+      <font>	system_medium.font	</font>
+      <font>	system_large.font	</font>
+    </consoleFonts>
+    <loadingScreen>	system/maps/loading_screen.dds	</loadingScreen>
+    <geometricsMaterial>	system/materials/geometrics.mfm	</geometricsMaterial>
+    <ashesMaterial>	system/materials/ashes.mfm	</ashesMaterial>
+    <goboMaterial>	system/materials/gobo.mfm	</goboMaterial>
+    <minimapMaterial>	system/materials/minimap.mfm	</minimapMaterial>
+    <shaderIncludePaths>	shaders/std_effects/;shaders/terrain;shaders/post_processing	</shaderIncludePaths>
+    <defaultShaderPath>	shaders/std_effects/	</defaultShaderPath>
+    <defaultMfmPath>	materials/template_mfms	</defaultMfmPath>
+    <defaultLightsPath>	helpers/lights	</defaultLightsPath>
+    <terrain2>	system/data/terrain2.xml	</terrain2>
+    <lightOnlyEffect>	shaders/std_effects/lightonly.fx	</lightOnlyEffect>
+    <defaultFloorTexture>	helpers/maps/system/default.dds	</defaultFloorTexture>
+    <decalEffect>	shaders/decal/decal.fx	</decalEffect>
+    <textureDetailLevels>	system/data/texture_detail_levels.xml	</textureDetailLevels>
+    <bloom>
+      <downSample>	shaders/bloom/down_sample.fx	</downSample>
+      <colourScale>	shaders/bloom/colour_scale.fx	</colourScale>
+      <gaussianBlur>	shaders/bloom/gaussian_blur.fx	</gaussianBlur>
+      <transfer>	shaders/bloom/transfer.fx	</transfer>
+      <downSampleColourScale>	shaders/bloom/down_sample_and_colour_scale.fx	</downSampleColourScale>
+    </bloom>
+    <dxenum>	system/data/dxenum.xml	</dxenum>
+    <shadowsXML>	system/data/shadows.xml	</shadowsXML>
+    <speedTreeXML>	system/data/speedtree.xml	</speedTreeXML>
+    <speedTree_v6>	system/data/speedtree_v6.xml	</speedTree_v6>
+    <colorGradingXML>	system/data/color_grading.xml	</colorGradingXML>
+    <meshParticles>
+      <solid>	shaders/std_effects/mesh_particle.fx	</solid>
+      <additive>	shaders/std_effects/mesh_particle_add.fx	</additive>
+      <blended>	shaders/std_effects/mesh_particle_alpha.fx	</blended>
+    </meshParticles>
+    <spriteParticles>
+      <default>	shaders/std_effects/sprite_particle.fx	</default>
+      <shimmer>	shaders/std_effects/shimmer_sprite_particle.fx	</shimmer>
+    </spriteParticles>
+    <graphicsSettingsXML>	system/data/graphics_settings.xml	</graphicsSettingsXML>
+    <graphicsSettingsPresets>	system/data/graphics_settings_presets.xml	</graphicsSettingsPresets>
+    <autoConfigSettings>	system/data/auto_config_settings.xml	</autoConfigSettings>
+  </system>
+  <environment>
+    <materialKinds>	system/data/material_kinds.xml	</materialKinds>
+    <floraXML>	system/data/flora.xml	</floraXML>
+    <skyXML>	system/data/sky.xml	</skyXML>
+    <splodgeMaterial>	system/materials/splodge.mfm	</splodgeMaterial>
+    <floraMaterial>	system/materials/flora.mfm	</floraMaterial>
+    <floraMaterialMRT>	system/materials/flora_mrt.mfm	</floraMaterialMRT>
+    <floraShadowMaterial>	system/materials/flora_shadows.mfm	</floraShadowMaterial>
+    <wgFloraWithShadowMaterial>	system/materials/wg_flora_with_shadows.mfm	</wgFloraWithShadowMaterial>
+    <sunFlareMaterial>	system/materials/fx_sun_flare.mfm	</sunFlareMaterial>
+    <sunSplitMaterial>	system/materials/fx_sun_split.mfm	</sunSplitMaterial>
+    <skyDomeMaterial>	system/materials/sky_dome.mfm	</skyDomeMaterial>
+    <skyDomeVisual>	system/models/fx_skydome.visual	</skyDomeVisual>
+    <ZBufferOccluderFX>	shaders/environment/z_buffer_occluder.fx	</ZBufferOccluderFX>
+    <billboardMaterial>	system/materials/billboard.mfm	</billboardMaterial>
+    <billboardVisual>	system/models/fx_billboard.visual	</billboardVisual>
+    <fogGradientBmpName>	system/maps/gradient.dds	</fogGradientBmpName>
+    <rainBmpName>	system/maps/rain_dash.dds	</rainBmpName>
+    <rainSplashParticles>	particles/rain_splashes.xml	</rainSplashParticles>
+    <sunBmpName>	system/maps/sun.dds	</sunBmpName>
+    <sunMaterial>	system/materials/sun.mfm	</sunMaterial>
+    <moonMaskBmpName>	system/maps/moon_opacity.dds	</moonMaskBmpName>
+    <moonBmpName>	system/maps/moon.dds	</moonBmpName>
+    <moonMaterial>	system/materials/moon.mfm	</moonMaterial>
+    <sunFlareXML>	system/data/fx_sun.xml	</sunFlareXML>
+    <sunVisibilityTestXML>	system/data/fx_sun_visibility_test.xml	</sunVisibilityTestXML>
+    <moonFlareXML>	system/data/fx_moon.xml	</moonFlareXML>
+    <waterReflectBmpName>	system/maps/ref_bwclouds.dds	</waterReflectBmpName>
+    <waterNormalMap>	system/maps/waves2.dds	</waterNormalMap>
+    <waterScreenFadeMap>	system/maps/fadetoblack.dds	</waterScreenFadeMap>
+    <waterSimCookieMap>	system/maps/water_cookie.dds	</waterSimCookieMap>
+    <waterNullSimMap>	system/maps/null_sim.dds	</waterNullSimMap>
+    <waterEdgeMap>	system/maps/edge_foam3.dds	</waterEdgeMap>
+    <waterFoamMap>	system/maps/foam.dds	</waterFoamMap>
+    <waterEffect>	shaders/water/water.fx	</waterEffect>
+    <waterSimEffect>	shaders/water/simulation.fx	</waterSimEffect>
+    <waterMaskEffect>	shaders/water/water_mask.fx	</waterMaskEffect>
+    <lightningBmpName>	system/maps/fx_arc.dds	</lightningBmpName>
+    <terrainTextureSpacing>	10.0	</terrainTextureSpacing>
+    <defaultEditorSpace>	helpers/spaces/pe	</defaultEditorSpace>
+    <chunkParticleStagger>	50	</chunkParticleStagger>
+    <cubeMap>
+      <size>	256	</size>
+      <numFaceUpdatesPerFrame>	1	</numFaceUpdatesPerFrame>
+    </cubeMap>
+  </environment>
+  <dummy>
+    <characterModel>	helpers/props/standin.model	</characterModel>
+    <cData>	helpers/blank.cdata	</cData>
+  </dummy>
+  <selectionfx>
+    <portal>	resources/shaders/portal.fx	</portal>
+    <terrain>	resources/shaders/terrain2.fx	</terrain>
+    <prefix>	resources/shaders/selection	</prefix>
+    <geometrics>	resources/shaders/geometrics_selection.fx	</geometrics>
+  </selectionfx>
+  <exporter>
+    <defaultMaterial>	materials/template_mfms/lightonly.mfm	</defaultMaterial>
+  </exporter>
+  <editor>
+    <textureDetailLevels>	helpers/tools_texture_details.xml	</textureDetailLevels>
+    <pointerModel>	resources/models/pointer.model	</pointerModel>
+    <positionGizmo>	helpers/models/position_gizmo.model	</positionGizmo>
+    <positionGizmoObLock>	helpers/models/position_gizmo2.model	</positionGizmoObLock>
+    <positionGizmoTrLock>	helpers/models/position_gizmo3.model	</positionGizmoTrLock>
+    <scaleGizmo>	helpers/models/scale_gizmo.model	</scaleGizmo>
+    <scaleGizmoUV>	helpers/models/scale_gizmo_uv.model	</scaleGizmoUV>
+    <radiusGizmo>	helpers/models/radius_gizmo.model	</radiusGizmo>
+    <radiusGizmoSmall>	helpers/models/radius_gizmo_small.model	</radiusGizmoSmall>
+    <rotationGizmo>	helpers/models/rotate_gizmo.model	</rotationGizmo>
+    <graphLinkGizmo>	helpers/models/graph_link.model	</graphLinkGizmo>
+    <graphLinkDragGizmo>	helpers/models/graph_link_drag.model	</graphLinkDragGizmo>
+    <graphAddGizmo>	helpers/models/graph_add.model	</graphAddGizmo>
+    <linkShader>	resources/shaders/patrol_path.fx	</linkShader>
+    <chunkLinkShader>	resources/shaders/transparent_patrol_path.fx	</chunkLinkShader>
+    <directionalTexture>	resources/materials/patrol_path.dds	</directionalTexture>
+    <noDirectionLinkTexture>	resources/materials/patrol_path_entity.dds	</noDirectionLinkTexture>
+    <chunkLinkTexture>	resources/materials/patrol_path_chunk.dds	</chunkLinkTexture>
+    <entityModel>	resources/models/entity.model	</entityModel>
+    <entityModelLegacy>	helpers/props/standin.model	</entityModelLegacy>
+    <girthSettings>	helpers/girths.xml	</girthSettings>
+  </editor>
+  <shaderPaths>
+    <path>	resources/effects/	</path>
+    <path>	resources/materials/	</path>
+    <path>	resources/models/	</path>
+    <path>	resources/shaders/	</path>
+    <path>	system/materials/	</path>
+    <path>	shaders/	</path>
+  </shaderPaths>
+</resources.xml>

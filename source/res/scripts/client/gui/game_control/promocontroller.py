@@ -129,7 +129,7 @@ class PromoController(Controller):
     @async
     @process
     def __showPromoBrowser(self, promoUrl, promoTitle, browserID = None, isAsync = True, callback = None):
-        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, background=gc_constants.BROWSER.PROMO_BACKGROUND, isDefault=False, showCloseBtn=True)
+        browserID = yield self._getBrowserController().load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True)
         callback(browserID)
 
     @classmethod

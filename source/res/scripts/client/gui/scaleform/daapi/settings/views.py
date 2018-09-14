@@ -103,3 +103,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MINI_CLIENT_LINKED = 'linkedMiniClientComponent'
     SWITCH_PERIPHERY_WINDOW = 'switchPeripheryWindow'
     FORT_WELCOME_INFO = 'fortWelcomeInfo'
+    SANDBOX_QUEUE_DIALOG = 'sandboxQueueDialog'
+    CUSTOMIZATION_PURCHASE_WINDOW = 'CustomizationBuyWindow'
+    CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
+    CUSTOMIZATION_PURCHASES_POPOVER = 'customizationPurchasesPopover'

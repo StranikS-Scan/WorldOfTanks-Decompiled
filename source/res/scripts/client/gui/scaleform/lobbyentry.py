@@ -4,7 +4,6 @@ from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
 from gui.Scaleform.framework.managers.event_logging import EventLogManager
 from gui.Scaleform.managers.context_menu import ContextMenuManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
-from gui.Scaleform.daapi.business_layer import BusinessHandler
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.application import App
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
@@ -20,9 +19,7 @@ from gui.shared import EVENT_BUS_SCOPE
 class LobbyEntry(App):
 
     def __init__(self, appNS):
-        businessHandler = BusinessHandler()
-        businessHandler.create()
-        super(LobbyEntry, self).__init__(appNS, businessHandler)
+        super(LobbyEntry, self).__init__(appNS)
 
     def _createManagers(self):
         super(LobbyEntry, self)._createManagers()
@@ -38,7 +35,7 @@ class LobbyEntry(App):
         self._tweenMgr = TweenManager()
         self._gameInputMgr = GameInputMgr()
         self._cacheMgr = CacheManager()
-        self._tutorialMgr = TutorialManager(True, 'gui/tutorial-lobby-gui.xml')
+        self._tutorialMgr = TutorialManager(self.proxy, True, 'gui/tutorial-lobby-gui.xml')
 
     def _loadCursor(self):
         self._containerMgr.load(VIEW_ALIAS.CURSOR)

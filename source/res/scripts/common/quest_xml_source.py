@@ -218,7 +218,7 @@ class Source(object):
                 raise Exception, 'Fort quest must contain "stronghold" in its id.'
         elif FORT_QUEST_SUFFIX in id:
             raise Exception, 'Quest must not contain "stronghold" in its id.'
-        tOption = curTime > time.localtime()
+        tOption = curTime > time.gmtime()
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
          'serverOnly': questSection.readBool('serverOnly', False),
@@ -312,6 +312,7 @@ class Source(object):
              'whileEnemyFullHealth': self.__readCondition_true,
              'allInSpecifiedClasses': self.__readCondition_true,
              'enemyIsNotSpotted': self.__readCondition_true,
+             'whileEnemyWithFlag': self.__readCondition_true,
              'installedModules': self.__readBattleResultsConditionList,
              'guns': self.__readCondition_installedModules,
              'engines': self.__readCondition_installedModules,
@@ -320,7 +321,6 @@ class Source(object):
              'radios': self.__readCondition_installedModules,
              'optionalDevice': self.__readCondition_installedModules,
              'correspondedCamouflage': self.__readCondition_true,
-             'historicalBattleIDs': self.__readCondition_set,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
@@ -329,6 +329,7 @@ class Source(object):
              'compareWithMaxHealth': self.__readCondition_true,
              'plus': self.__readBattleResultsConditionList,
              'exceptUs': self.__readCondition_true,
+             'compareWithDeathCount': self.__readCondition_true,
              'mapCamouflageKind': self.__readBattleFilter_CamouflageKind,
              'bonusTypes': self.__readBattleFilter_BonusTypes,
              'geometryNames': self.__readBattleFilter_GeometryNames,
@@ -478,7 +479,7 @@ class Source(object):
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
-        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names():
+        if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names():
             raise Exception, "Unsupported battle result variable '%s'" % name
         node.addChild(name)
 

@@ -320,7 +320,7 @@ class TankmanDescr(object):
             yield (skillName, level)
 
     def efficiencyOnVehicle(self, vehicleDescr):
-        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescr.type.historicalModelOf)
+        _, nationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehicleDescr.type.compactDescr)
         if not nationID == self.nationID:
             raise AssertionError
             factor = 1.0

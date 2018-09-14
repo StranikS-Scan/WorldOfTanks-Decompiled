@@ -25,7 +25,8 @@ class QuestsLadderTab(QuestsCurrentTab):
             result.append(events_helpers.getEventInfo(e, svrEvents))
 
         self.as_setQuestsDataS({'quests': result,
-         'isSortable': False})
+         'isSortable': False,
+         'totalTasks': len(svrEvents)})
 
     def _filterFunc(self, a):
         return not self._hideCompleted or not a.isCompleted()

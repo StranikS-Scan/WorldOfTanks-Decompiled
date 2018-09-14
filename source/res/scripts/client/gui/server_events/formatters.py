@@ -13,6 +13,8 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.server_events import caches
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
+from constants import ARENA_BONUS_TYPE
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 
 class DISCOUNT_TYPE(CONST_CONTAINER):
     PERCENT = 'percent'
@@ -342,6 +344,17 @@ def packTopLevelContainer(title = '', note = '', subBlocks = None, isOpened = Tr
      'showDone': showDone})
 
 
+def packMotiveContainer(title = '', note = '', subBlocks = None, isOpened = True, isResizable = False, current = None, total = None, showDone = False):
+    return UiElement({'linkage': 'ResizableContent_UI',
+     'headerTitle': title,
+     'headerHtmlPart': note,
+     'headerProgress': _packProgress(current, total),
+     'containerElements': subBlocks or [],
+     'isOpened': isOpened,
+     'isResizable': isResizable,
+     'showDone': showDone})
+
+
 def packContainer(title = '', subBlocks = None, isOpened = True, isResizable = False, current = None, total = None, value = None, relation = None, showDone = False):
     if value is not None:
         title = '%s: %s' % (title, _formatRelation(value, relation))
@@ -394,11 +407,25 @@ def packTextBlock(label, value = None, relation = None, questID = None, isAvaila
     return UiElement(blockData, 'label')
 
 
+def packSimpleBonusesBlock(bonusesList):
+    data = {'linkage': 'QuestTextAwardBlockUI',
+     'items': bonusesList,
+     'separator': ', ',
+     'ellipsis': '..'}
+    return UiElement(data)
+
+
 def packVehiclesBonusBlock(label, questID):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,
      'questID': questID}
     return UiElement(blockData, 'label')
+
+
+def packIconAwardBonusBlock(awards):
+    blockData = {'linkage': 'QuestIconAwardsBlockUI',
+     'awards': awards}
+    return UiElement(blockData)
 
 
 def packTextCondition(label, value = None, relation = None, current = None, total = None, isCompleted = False):
@@ -420,21 +447,13 @@ def packTextCondition(label, value = None, relation = None, current = None, tota
 
 
 def packBonusTypeElement(bonusType):
+    if bonusType in (ARENA_BONUS_TYPE.SANDBOX, ARENA_BONUS_TYPE.RATED_SANDBOX):
+        bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
     return _packIconTextElement(label=i18n.makeString('#menu:bonusType/%d' % bonusType), icon='../maps/icons/battleTypes/%d.png' % bonusType)
 
 
 def packFormationElement(formationName):
     return _packIconTextElement(label=i18n.makeString('#quests:details/conditions/formation/%s' % formationName), icon='../maps/icons/formation/%s.png' % formationName)
-
-
-def packHistoricalBattleElement(battleID):
-    from gui.server_events import g_eventsCache
-    battles = g_eventsCache.getHistoricalBattles()
-    if battleID in battles:
-        battleName = battles[battleID].getUserName()
-    else:
-        battleName = str(battleID)
-    return _packIconTextElement(label=battleName)
 
 
 def packAchieveElement(achieveRecordID):
@@ -469,6 +488,19 @@ def packSeparator(label, needAlign = False):
     return UiElement({'linkage': 'ConditionSeparator_UI',
      'text': label,
      'needAlign': needAlign})
+
+
+def packQuestDetailsSeparator(leftPadding = 0, rightPadding = 0, topPadding = 0, bottomPadding = 0):
+    return UiElement({'linkage': 'QuestDetailsSeparatorBlockUI',
+     'leftPadding': leftPadding,
+     'rightPadding': rightPadding,
+     'topPadding': topPadding,
+     'bottomPadding': bottomPadding})
+
+
+def packQuestDetailsSpacing(spacing = 0):
+    return UiElement({'linkage': 'QuestDetailsSpacingBlockUI',
+     'spacing': spacing})
 
 
 def packCustomizations(list):

@@ -3,6 +3,9 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class FortMainViewMeta(BaseDAAPIComponent):
 
+    def onClanProfileClick(self):
+        self._printOverrideError('onClanProfileClick')
+
     def onStatsClick(self):
         self._printOverrideError('onStatsClick')
 

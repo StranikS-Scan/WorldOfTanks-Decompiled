@@ -55,6 +55,7 @@ class GAME(CONST_CONTAINER):
     SHOW_DATE_MESSAGE = 'showDateMessage'
     SHOW_TIME_MESSAGE = 'showTimeMessage'
     INVITES_FROM_FRIENDS = 'invitesFromFriendsOnly'
+    RECEIVE_CLAN_INVITES_NOTIFICATIONS = 'receiveClanInvitesNotifications'
     RECEIVE_INVITES_IN_BATTLE = 'receiveInvitesInBattle'
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'

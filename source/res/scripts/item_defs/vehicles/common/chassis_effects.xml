@@ -1,0 +1,337 @@
+<chassis_effects.xml>
+  <decals>
+    <bufferPrefs>
+      <smallTank>
+        <lifeTime>	6	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </smallTank>
+      <mediumTank>
+        <lifeTime>	7	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </mediumTank>
+      <largeTank>
+        <lifeTime>	8	</lifeTime>
+        <trianglesCount>	10000	</trianglesCount>
+      </largeTank>
+    </bufferPrefs>
+    <textureSets>
+      <ussr_01>
+        <default>
+          <AM>	maps/fx/ussr03_ground_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr03_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/ussr03_snow_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr03_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/ussr03_sand_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr03_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/ussr03_stone_AM.dds	</AM>
+          <ANM>	maps/fx/ussr03_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr03_stone_GMM.dds	</GMM>
+        </stone>
+      </ussr_01>
+      <ussr_02>
+        <default>
+          <AM>	maps/fx/ussr02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr02_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/ussr02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr02_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/ussr02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr02_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/ussr02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/ussr02_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/ussr02_stone_GMM.dds	</GMM>
+        </stone>
+      </ussr_02>
+      <germany_01>
+        <default>
+          <AM>	maps/fx/german01_ground_AM.dds	</AM>
+          <ANM>	maps/fx/german01_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/german01_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/german01_snow_AM.dds	</AM>
+          <ANM>	maps/fx/german01_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/german01_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/german01_sand_AM.dds	</AM>
+          <ANM>	maps/fx/german01_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/german01_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/german01_stone_AM.dds	</AM>
+          <ANM>	maps/fx/german01_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/german01_stone_GMM.dds	</GMM>
+        </stone>
+      </germany_01>
+      <germany_02>
+        <default>
+          <AM>	maps/fx/german02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/german02_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/german02_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/german02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/german02_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/german02_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/german02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/german02_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/german02_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/german02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/german02_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/german02_stone_GMM.dds	</GMM>
+        </stone>
+      </germany_02>
+      <germany_typ_205>
+        <default>
+          <AM>	maps/fx/Typ_205_ground_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/Typ_205_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/Typ_205_snow_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/Typ_205_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/Typ_205_sand_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/Typ_205_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/Typ_205_stone_AM.dds	</AM>
+          <ANM>	maps/fx/Typ_205_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/Typ_205_stone_GMM.dds	</GMM>
+        </stone>
+      </germany_typ_205>
+      <usa_01>
+        <default>
+          <AM>	maps/fx/usa01_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/usa01_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa01_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/usa01_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa01_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/usa01_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa01_stone_AM.dds	</AM>
+          <ANM>	maps/fx/usa01_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/usa01_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_01>
+      <usa_02>
+        <default>
+          <AM>	maps/fx/usa02_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/usa02_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa02_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/usa02_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa02_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/usa02_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa02_stone_AM.dds	</AM>
+          <ANM>	maps/fx/usa02_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/usa02_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_02>
+      <usa_03>
+        <default>
+          <AM>	maps/fx/usa03_right_ground_AM.dds  ;  maps/fx/usa03_left_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_ground_NM.dds ;  maps/fx/usa03_left_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/usa03_right_ground_GMM.dds ;    maps/fx/usa03_left_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usa03_right_snow_AM.dds  ;   maps/fx/usa03_left_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_snow_NM.dds  ;  maps/fx/usa03_left_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/usa03_right_snow_GMM.dds  ;  maps/fx/usa03_left_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usa03_right_sand_AM.dds    ;   maps/fx/usa03_left_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_right_sand_NM.dds    ;   maps/fx/usa03_left_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/usa03_right_sand_GMM.dds  ;   maps/fx/usa03_left_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usa03_right_stone_AM.dds   ;  maps/fx/usa03_left_stone_AM.dds	</AM>
+          <ANM>	maps/fx/usa03_stone_NM.dds   ;  maps/fx/usa03_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/usa03_right_stone_GMM.dds   ;     maps/fx/usa03_left_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_03>
+      <usa_T95>
+        <default>
+          <AM>	maps/fx/usaT95_ground_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_ground_NM.dds	</ANM>
+          <GMM>	maps/fx/usaT95_ground_GMM.dds	</GMM>
+        </default>
+        <snow>
+          <AM>	maps/fx/usaT95_snow_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_snow_NM.dds	</ANM>
+          <GMM>	maps/fx/usaT95_snow_GMM.dds	</GMM>
+        </snow>
+        <sand>
+          <AM>	maps/fx/usaT95_sand_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_sand_NM.dds	</ANM>
+          <GMM>	maps/fx/usaT95_sand_GMM.dds	</GMM>
+        </sand>
+        <stone>
+          <AM>	maps/fx/usaT95_stone_AM.dds	</AM>
+          <ANM>	maps/fx/usaT95_stone_NM.dds	</ANM>
+          <GMM>	maps/fx/usaT95_stone_GMM.dds	</GMM>
+        </stone>
+      </usa_T95>
+    </textureSets>
+  </decals>
+  <particles>
+    <smallTankDust>
+      <ground>	particles/Tank/ground_dust_small.xml	</ground>
+      <snow>	particles/Tank/snow_dust_small.xml	</snow>
+      <sand>	particles/Tank/sand_dust_small.xml	</sand>
+      <stone>	particles/Tank/stone_dust_small.xml	</stone>
+      <default>	particles/Tank/ground_dust_small.xml	</default>
+    </smallTankDust>
+    <smallTankMud>
+      <ground>
+        <left>	particles/Tank/ground_trail_small_l.xml	</left>
+        <right>	particles/Tank/ground_trail_small_r.xml	</right>
+        <leftFront>	particles/Tank/ground_trail_small_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/ground_trail_small_r_front.xml	</rightFront>
+      </ground>
+      <snow>
+        <left>	particles/Tank/snow_trail_small_l.xml	</left>
+        <right>	particles/Tank/snow_trail_small_r.xml	</right>
+        <leftFront>	particles/Tank/snow_trail_small_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/snow_trail_small_r_front.xml	</rightFront>
+      </snow>
+      <sand>
+        <left>	particles/Tank/sand_trail_small_l.xml	</left>
+        <right>	particles/Tank/sand_trail_small_r.xml	</right>
+        <leftFront>	particles/Tank/sand_trail_small_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/sand_trail_small_r_front.xml	</rightFront>
+      </sand>
+      <stone>
+        <left>	particles/Tank/stone_trail_small_l.xml	</left>
+        <right>	particles/Tank/stone_trail_small_r.xml	</right>
+        <leftFront>	particles/Tank/stone_trail_small_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/stone_trail_small_r_front.xml	</rightFront>
+      </stone>
+      <water>
+        <left>	particles/Tank/water_trail_small_l.xml	</left>
+        <right>	particles/Tank/water_trail_small_r.xml	</right>
+        <leftFront>	particles/Tank/water_trail_small_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/water_trail_small_r_front.xml	</rightFront>
+      </water>
+    </smallTankMud>
+    <mediumTankDust>
+      <ground>	particles/Tank/ground_dust_medium.xml	</ground>
+      <snow>	particles/Tank/snow_dust_medium.xml	</snow>
+      <sand>	particles/Tank/sand_dust_medium.xml	</sand>
+      <stone>	particles/Tank/stone_dust_medium.xml	</stone>
+      <default>	particles/Tank/ground_dust_medium.xml	</default>
+    </mediumTankDust>
+    <mediumTankMud>
+      <ground>
+        <left>	particles/Tank/ground_trail_medium_l.xml	</left>
+        <right>	particles/Tank/ground_trail_medium_r.xml	</right>
+        <leftFront>	particles/Tank/ground_trail_medium_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/ground_trail_medium_r_front.xml	</rightFront>
+      </ground>
+      <snow>
+        <left>	particles/Tank/snow_trail_medium_l.xml	</left>
+        <right>	particles/Tank/snow_trail_medium_r.xml	</right>
+        <leftFront>	particles/Tank/snow_trail_medium_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/snow_trail_medium_r_front.xml	</rightFront>
+      </snow>
+      <sand>
+        <left>	particles/Tank/sand_trail_medium_l.xml	</left>
+        <right>	particles/Tank/sand_trail_medium_r.xml	</right>
+        <leftFront>	particles/Tank/sand_trail_medium_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/sand_trail_medium_r_front.xml	</rightFront>
+      </sand>
+      <stone>
+        <left>	particles/Tank/stone_trail_medium_l.xml	</left>
+        <right>	particles/Tank/stone_trail_medium_r.xml	</right>
+        <leftFront>	particles/Tank/stone_trail_medium_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/stone_trail_medium_r_front.xml	</rightFront>
+      </stone>
+      <water>
+        <left>	particles/Tank/water_trail_medium_l.xml	</left>
+        <right>	particles/Tank/water_trail_medium_r.xml	</right>
+        <leftFront>	particles/Tank/water_trail_medium_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/water_trail_medium_r_front.xml	</rightFront>
+      </water>
+    </mediumTankMud>
+    <largeTankDust>
+      <ground>	particles/Tank/ground_dust_large.xml	</ground>
+      <snow>	particles/Tank/snow_dust_large.xml	</snow>
+      <sand>	particles/Tank/sand_dust_large.xml	</sand>
+      <stone>	particles/Tank/stone_dust_large.xml	</stone>
+      <default>	particles/Tank/ground_dust_large.xml	</default>
+    </largeTankDust>
+    <largeTankMud>
+      <ground>
+        <left>	particles/Tank/ground_trail_large_l.xml	</left>
+        <right>	particles/Tank/ground_trail_large_r.xml	</right>
+        <leftFront>	particles/Tank/ground_trail_large_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/ground_trail_large_r_front.xml	</rightFront>
+      </ground>
+      <snow>
+        <left>	particles/Tank/snow_trail_large_l.xml	</left>
+        <right>	particles/Tank/snow_trail_large_r.xml	</right>
+        <leftFront>	particles/Tank/snow_trail_large_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/snow_trail_large_r_front.xml	</rightFront>
+      </snow>
+      <sand>
+        <left>	particles/Tank/sand_trail_large_l.xml	</left>
+        <right>	particles/Tank/sand_trail_large_r.xml	</right>
+        <leftFront>	particles/Tank/sand_trail_large_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/sand_trail_large_r_front.xml	</rightFront>
+      </sand>
+      <stone>
+        <left>	particles/Tank/stone_trail_large_l.xml	</left>
+        <right>	particles/Tank/stone_trail_large_r.xml	</right>
+        <leftFront>	particles/Tank/stone_trail_large_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/stone_trail_large_r_front.xml	</rightFront>
+      </stone>
+      <water>
+        <left>	particles/Tank/water_trail_large_l.xml	</left>
+        <right>	particles/Tank/water_trail_large_r.xml	</right>
+        <leftFront>	particles/Tank/water_trail_large_l_front.xml	</leftFront>
+        <rightFront>	particles/Tank/water_trail_large_r_front.xml	</rightFront>
+      </water>
+    </largeTankMud>
+  </particles>
+</chassis_effects.xml>

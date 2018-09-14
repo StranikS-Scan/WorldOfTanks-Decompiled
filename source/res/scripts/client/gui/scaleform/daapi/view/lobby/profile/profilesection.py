@@ -78,6 +78,8 @@ class ProfileSection(ProfileSectionMeta):
             data = accountDossier.getCompanyStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.CLAN:
             data = accountDossier.getGlobalMapStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT:
+            data = accountDossier.getFalloutStats()
         else:
             raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
         return data

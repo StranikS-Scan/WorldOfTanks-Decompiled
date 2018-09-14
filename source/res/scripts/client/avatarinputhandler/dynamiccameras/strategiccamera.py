@@ -9,7 +9,7 @@ import random
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler import cameras
 from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
 from AvatarInputHandler.Oscillator import Oscillator

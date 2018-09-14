@@ -146,6 +146,9 @@ class AS3_AS2_AppFactory(IAppFactory):
             self.__apps[appNS] = None
 
         g_windowsStoredData.stop()
+        if self.__importer is not None:
+            self.__importer.unload()
+            self.__importer = None
         return
 
     def goToIntroVideo(self, appNS):

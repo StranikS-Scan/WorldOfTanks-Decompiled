@@ -1,0 +1,49 @@
+<regular_4_2_9.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_2_9_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <attackReason>	2	</attackReason>
+              <lvlDiff>	1	</lvlDiff>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	7	</count>
+        </item>
+        <item>	1019	  <count>	7	</count>
+        </item>
+        <item>	507	  <count>	7	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_2_9_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <attackReason>	2	</attackReason>
+              <lvlDiff>	1	</lvlDiff>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+            <win></win>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_2_9.xml>

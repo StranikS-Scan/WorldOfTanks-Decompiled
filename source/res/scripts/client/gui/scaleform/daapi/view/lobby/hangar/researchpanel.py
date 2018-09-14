@@ -1,14 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ResearchPanel.py
 from CurrentVehicle import g_currentVehicle
-from adisp import process
 from debug_utils import LOG_ERROR
+from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from helpers.i18n import makeString
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.utils.requesters import DeprecatedStatsRequester
 
 class ResearchPanel(ResearchPanelMeta):
 
@@ -24,17 +21,13 @@ class ResearchPanel(ResearchPanelMeta):
 
     def goToResearch(self):
         if g_currentVehicle.isPresent():
-            exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
-            loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={'rootCD': g_currentVehicle.item.intCD,
-             'exit': exitEvent})
-            self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+            shared_events.showResearchView(g_currentVehicle.item.intCD)
         else:
             LOG_ERROR('Current vehicle is not preset')
 
-    @process
     def onCurrentVehicleChanged(self):
         if g_currentVehicle.isPresent():
-            xps = yield DeprecatedStatsRequester().getVehicleTypeExperiences()
+            xps = g_itemsCache.items.stats.vehiclesXPs
             xp = xps.get(g_currentVehicle.item.intCD, 0)
             isElite = g_currentVehicle.item.isElite
             vTypeId = g_currentVehicle.item.type
@@ -46,8 +39,6 @@ class ResearchPanel(ResearchPanelMeta):
             self.as_updateCurrentVehicleS(g_currentVehicle.item.userName, vTypeId, vDescription, xp, isElite, g_currentVehicle.item.isPremiumIGR)
         else:
             self.as_updateCurrentVehicleS('', '', '', 0, False, False)
-            yield lambda callback = None: callback
-        return
 
     def onVehicleTypeXPChanged(self, xps):
         if g_currentVehicle.isPresent():

@@ -1,8 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/Battle.py
 import weakref
 import BigWorld
+import FMOD
 import GUI
 import Math
+import SoundGroups
 import VOIP
 import constants
 import BattleReplay
@@ -10,6 +12,8 @@ import CommandMapping
 from ConnectionManager import connectionManager
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
+from gui.Scaleform.daapi.view.battle.gas_attack import GasAttackPlugin
+from gui.Scaleform.daapi.view.battle.repair_timer import RepairTimerPlugin
 from gui.Scaleform.daapi.view.battle.resource_points import ResourcePointsPlugin
 from gui.Scaleform.daapi.view.battle.respawn_view import RespawnViewPlugin
 from gui.Scaleform.daapi.view.battle.PlayersPanelsSwitcher import PlayersPanelsSwitcher
@@ -28,6 +32,7 @@ from gui.Scaleform.daapi.view.battle.teams_bases_panel import TeamBasesPanel
 from gui.Scaleform.daapi.view.battle.markers import MarkersManager
 from gui.Scaleform.daapi.view.lobby.ReportBug import makeHyperLink, reportBugOpenConfirm
 from gui.Scaleform.locale.ARENAS import ARENAS
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MENU import MENU
 import gui
 from gui.battle_control import g_sessionProvider
@@ -36,6 +41,7 @@ from gui.battle_control.battle_arena_ctrl import battleArenaControllerFactory
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.shared.utils.plugins import PluginsCollection
 from messenger import MessengerEntry, g_settings
@@ -56,12 +62,34 @@ from gui.Scaleform.Minimap import Minimap
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
 from gui.Scaleform.ingame_help import IngameHelp
 from gui.Scaleform import SCALEFORM_SWF_PATH
-from gui.battle_control.arena_info import isEventBattle, getArenaIcon, hasFlags, hasRespawns, hasResourcePoints, getIsMultiteam
+from gui.battle_control.arena_info import isEventBattle, getArenaIcon, hasFlags, hasRespawns, hasResourcePoints, getIsMultiteam, hasRepairPoints, isFalloutBattle, hasGasAttack
 from gui.battle_control import avatar_getter
 
 def _isVehicleEntity(entity):
     import Vehicle
     return isinstance(entity, Vehicle.Vehicle)
+
+
+def _getQuestsTipData(arena, arenaDP):
+    pqTipData = [None] * 3
+    serverSettings = g_lobbyContext.getServerSettings()
+    isPQEnabled = serverSettings is not None and serverSettings.isPotapovQuestEnabled()
+    if isPQEnabled and (arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT or isFalloutBattle()):
+        vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID())
+        if isFalloutBattle():
+            pQuests = vehInfo.player.getFalloutPotapovQuests()
+        else:
+            pQuests = vehInfo.player.getRandomPotapovQuests()
+        if len(pQuests):
+            quest = pQuests[0]
+            pqTipData = [quest.getUserName(), _getQuestConditionsMessage(INGAME_GUI.POTAPOVQUESTS_TIP_MAINHEADER, quest.getUserMainCondition()), _getQuestConditionsMessage(INGAME_GUI.POTAPOVQUESTS_TIP_ADDITIONALHEADER, quest.getUserAddCondition())]
+        else:
+            pqTipData = [i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE if isFalloutBattle() else INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_VEHICLETYPE), None, None]
+    return pqTipData
+
+
+def _getQuestConditionsMessage(header, text):
+    return i18n.makeString(text_styles.middleTitle(header) + '\n' + text_styles.main(text))
 
 
 _CONTOUR_ICONS_MASK = '../maps/icons/vehicle/contour/%(unicName)s.png'
@@ -89,8 +117,13 @@ class Battle(BattleWindow):
     indicators = property(lambda self: self.__indicators)
     VEHICLE_DESTROY_TIMER = {'ALL': 'all',
      constants.VEHICLE_MISC_STATUS.VEHICLE_DROWN_WARNING: 'drown',
-     constants.VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED: 'overturn',
-     constants.VEHICLE_MISC_STATUS.IN_DEATH_ZONE: 'death_zone'}
+     constants.VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED: 'overturn'}
+    VEHICLE_DEATHZONE_TIMER = {'ALL': 'all',
+     constants.DEATH_ZONES.STATIC: 'death_zone',
+     constants.DEATH_ZONES.GAS_ATTACK: 'gas_attack'}
+    VEHICLE_DEATHZONE_TIMER_SOUND = {constants.DEATH_ZONES.GAS_ATTACK: ({'warning': 'fallout_gaz_sphere_warning',
+                                         'critical': 'fallout_gaz_sphere_timer'}, {'warning': '/GUI/fallout/fallout_gaz_sphere_warning',
+                                         'critical': '/GUI/fallout/fallout_gaz_sphere_timer'})}
     DENUNCIATIONS = {'bot': constants.DENUNCIATION.BOT,
      'flood': constants.DENUNCIATION.FLOOD,
      'offend': constants.DENUNCIATION.OFFEND,
@@ -102,6 +135,8 @@ class Battle(BattleWindow):
     __stateHandlers = {VEHICLE_VIEW_STATE.FIRE: '_setFireInVehicle',
      VEHICLE_VIEW_STATE.SHOW_DESTROY_TIMER: '_showVehicleTimer',
      VEHICLE_VIEW_STATE.HIDE_DESTROY_TIMER: '_hideVehicleTimer',
+     VEHICLE_VIEW_STATE.SHOW_DEATHZONE_TIMER: 'showDeathzoneTimer',
+     VEHICLE_VIEW_STATE.HIDE_DEATHZONE_TIMER: 'hideDeathzoneTimer',
      VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY: '_showSixthSenseIndicator'}
 
     def __init__(self, appNS):
@@ -112,11 +147,22 @@ class Battle(BattleWindow):
         plugins = {}
         if hasFlags():
             plugins['flagNotification'] = FlagNotificationPlugin
-        if hasRespawns() and not BattleReplay.g_replayCtrl.isPlaying:
+        if hasRepairPoints():
+            plugins['repairTimer'] = RepairTimerPlugin
+        if hasRespawns() and (constants.IS_DEVELOPMENT or not BattleReplay.g_replayCtrl.isPlaying):
             plugins['respawnView'] = RespawnViewPlugin
         if hasResourcePoints():
             plugins['resources'] = ResourcePointsPlugin
+        if hasGasAttack():
+            plugins['gasAttack'] = GasAttackPlugin
         self.__plugins.addPlugins(plugins)
+        self.__timerSounds = {}
+        for timer, sounds in self.VEHICLE_DEATHZONE_TIMER_SOUND.iteritems():
+            self.__timerSounds[timer] = {}
+            for level, sound in sounds[FMOD.enabled].iteritems():
+                self.__timerSounds[timer][level] = SoundGroups.g_instance.getSound2D(sound)
+
+        self.__timerSound = None
         BattleWindow.__init__(self, 'battle.swf')
         self.__isHelpWindowShown = False
         self.__cameraMode = None
@@ -195,6 +241,7 @@ class Battle(BattleWindow):
             self.__arenaCtrl.invalidateGUI(not g_sessionProvider.getCtx().isPlayerObserver())
             g_sessionProvider.getVehicleStateCtrl().switchToAnother(id)
             self._hideVehicleTimer('ALL')
+            self.hideDeathzoneTimer('ALL')
             self.__vErrorsPanel.clear()
             self.__vMsgsPanel.clear()
             aim = BigWorld.player().inputHandler.aim
@@ -225,6 +272,7 @@ class Battle(BattleWindow):
             self.__vErrorsPanel.clear()
             self.__vMsgsPanel.clear()
             self._hideVehicleTimer('ALL')
+            self.hideDeathzoneTimer('ALL')
             aim = BigWorld.player().inputHandler.aim
             if aim is not None:
                 aim.updateAmmoState(True)
@@ -248,6 +296,31 @@ class Battle(BattleWindow):
     def _hideVehicleTimer(self, code):
         LOG_DEBUG('hide vehicles destroy timer', code)
         self.call('destroyTimer.hide', [self.VEHICLE_DESTROY_TIMER[code]])
+
+    def showDeathzoneTimer(self, value):
+        zoneID, time, warnLvl = value
+        if self.__timerSound is not None:
+            self.__timerSound.stop()
+            self.__timerSound = None
+        sound = self.__timerSounds.get(zoneID, {}).get(warnLvl)
+        if sound is not None:
+            self.__timerSound = sound
+            self.__timerSound.play()
+        msg = '#fallout:gasAttackTimer/%s' % warnLvl
+        LOG_DEBUG('show vehicles deathzone timer', zoneID, time, warnLvl, msg)
+        self.call('destroyTimer.show', [self.VEHICLE_DEATHZONE_TIMER[zoneID],
+         time,
+         warnLvl,
+         msg])
+        return
+
+    def hideDeathzoneTimer(self, zoneID):
+        if self.__timerSound is not None:
+            self.__timerSound.stop()
+            self.__timerSound = None
+        LOG_DEBUG('hide vehicles deathzone timer', zoneID)
+        self.call('destroyTimer.hide', [self.VEHICLE_DEATHZONE_TIMER[zoneID]])
+        return
 
     def _showSixthSenseIndicator(self, isShow):
         self.call('sixthSenseIndicator.show', [isShow])
@@ -351,11 +424,7 @@ class Battle(BattleWindow):
         g_sessionProvider.addArenaCtrl(self.__arenaCtrl)
         self.updateFlagsColor()
         self.movie.setFocussed(SCALEFORM_SWF_PATH)
-        self.call('battle.initDynamicSquad', self.__getDynamicSquadsInitParams())
-        if self.__arena.period == constants.ARENA_PERIOD.BATTLE:
-            self.call('players_panel.setState', [g_settingsCore.getSetting('ppState')])
-        else:
-            self.call('players_panel.setState', ['large'])
+        self.call('battle.initDynamicSquad', self.__getDynamicSquadsInitParams(disableAlly=BattleReplay.g_replayCtrl.isPlaying))
         self.call('sixthSenseIndicator.setDuration', [GUI_SETTINGS.sixthSenseDuration])
         g_tankActiveCamouflage[player.vehicleTypeDescriptor.type.compactDescr] = self.__arena.arenaType.vehicleCamouflageKind
         keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
@@ -375,6 +444,10 @@ class Battle(BattleWindow):
         ctrl = g_sessionProvider.getVehicleStateCtrl()
         ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+        player = BigWorld.player()
+        if player and player.inputHandler:
+            player.inputHandler.onPostmortemVehicleChanged -= self.onPostmortemVehicleChanged
+            player.inputHandler.onCameraChanged -= self.onCameraChanged
         if self.colorManager:
             self.colorManager.dispossessUI()
         voice = VoiceChatInterface.g_instance
@@ -389,6 +462,9 @@ class Battle(BattleWindow):
         if self.movingText is not None:
             self.movingText.dispossessUI()
             self.movingText = None
+        if self.__timerSound is not None:
+            self.__timerSound.stop()
+            self.__timerSound = None
         if self.__soundManager is not None:
             self.__soundManager.dispossessUI()
             self.__soundManager = None
@@ -564,8 +640,10 @@ class Battle(BattleWindow):
     def reportBug(self, _):
         reportBugOpenConfirm(g_sessionProvider.getArenaDP().getVehicleInfo().player.accountDBID)
 
-    def __getDynamicSquadsInitParams(self):
-        return [self.__arena.guiType == constants.ARENA_GUI_TYPE.RANDOM, False]
+    def __getDynamicSquadsInitParams(self, disableAlly = False, disableEnemy = True):
+        isAllyEnabled = self.__arena.guiType == constants.ARENA_GUI_TYPE.RANDOM and not disableAlly
+        isEnemyEnabled = not disableEnemy
+        return [isAllyEnabled, isEnemyEnabled]
 
     def __populateData(self, isMutlipleTeams = False):
         arena = avatar_getter.getArena()
@@ -609,27 +687,21 @@ class Battle(BattleWindow):
                     winText = i18n.makeString('#arenas:type/%s/description' % arenaSubType)
             arenaData.append(winText)
             arenaData.append(typeEvent)
-            vehInfo = arenaDP.getVehicleInfo(arenaDP.getPlayerVehicleID())
-            pqTipData = [None] * 3
-            pQuests = vehInfo.player.getPotapovQuests()
-            serverSettings = g_lobbyContext.getServerSettings()
-            isPQEnabled = serverSettings is not None and serverSettings.isPotapovQuestEnabled()
-            if isPQEnabled and (arena.guiType == constants.ARENA_GUI_TYPE.RANDOM or arena.guiType == constants.ARENA_GUI_TYPE.TRAINING and constants.IS_DEVELOPMENT):
-                if len(pQuests):
-                    quest = pQuests[0]
-                    pqTipData = [quest.getUserName(), quest.getUserMainCondition(), quest.getUserAddCondition()]
-                else:
-                    pqTipData = [i18n.makeString('#ingame_gui:potapovQuests/tip'), None, None]
-            arenaData.extend(pqTipData)
+            arenaData.extend(_getQuestsTipData(arena, arenaDP))
             arenaData.extend([getArenaIcon(_SMALL_MAP_SOURCE)])
         self.__callEx('arenaData', arenaData)
-        return
 
     def __onRecreateDevice(self, scale = None):
         params = list(GUI.screenResolution())
         params.append(g_settingsCore.interfaceScale.get())
         self.call('Stage.Update', params)
         self.__markersManager.updateMarkersScale()
+
+    def invalidateGUI(self):
+        arenaCtrl = getattr(self, '_Battle__arenaCtrl', None)
+        if arenaCtrl is not None:
+            arenaCtrl.invalidateGUI()
+        return
 
     def __callEx(self, funcName, args = None):
         self.call('battle.' + funcName, args)
@@ -670,6 +742,10 @@ class Battle(BattleWindow):
     def getPlayerNameLength(self, isEnemy):
         panel = self.rightPlayersPanel if isEnemy else self.leftPlayersPanel
         return panel.getPlayerNameLength()
+
+    def getVehicleNameLength(self, isEnemy):
+        panel = self.rightPlayersPanel if isEnemy else self.leftPlayersPanel
+        return panel.getVehicleNameLength()
 
 
 class VehicleDamageInfoPanel(object):

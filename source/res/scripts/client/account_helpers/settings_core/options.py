@@ -18,6 +18,7 @@ import VOIP
 import Settings
 import SoundGroups
 import ArenaType
+from constants import CONTENT_TYPE
 from gui.GraphicsPresets import GraphicsPresets
 from gui.app_loader.decorators import sf_lobby
 from helpers import isPlayerAccount, isPlayerAvatar
@@ -38,7 +39,8 @@ from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from shared_utils import CONST_CONTAINER
 from gui import GUI_SETTINGS
-from gui.shared.utils import graphics, sound, functions
+from gui.clans.clan_controller import g_clanCtrl
+from gui.shared.utils import graphics, functions
 from gui.shared.utils.graphics import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
 from gui.Scaleform import VoiceChatInterface
@@ -47,6 +49,7 @@ from gui.battle_control import g_sessionProvider
 from ConnectionManager import connectionManager
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.shared.formatters import icons
+import FMOD
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -73,6 +76,9 @@ class ISetting(object):
 
     def getApplyMethod(self, value):
         return APPLY_METHOD.NORMAL
+
+    def isEqual(self, value):
+        raise NotImplementedError
 
 
 class SettingAbstract(ISetting):
@@ -150,6 +156,9 @@ class SettingAbstract(ISetting):
     def refresh(self):
         self.setSystemValue(self.get())
 
+    def isEqual(self, value):
+        return self.get() == value
+
 
 class SettingsContainer(ISetting):
 
@@ -224,6 +233,11 @@ class SettingsContainer(ISetting):
         settings = self.__filter(self.indices.keys(), names)
         for _ in self.__forEach(settings, lambda n, p: p.refresh()):
             pass
+
+    def isEqual(self, values):
+        settings = self.__filter(self.indices.keys(), values.keys())
+        equality = self.__forEach(settings, lambda n, p: p.isEqual(values[n]))
+        return False not in equality
 
 
 class ReadOnlySetting(SettingAbstract):
@@ -676,6 +690,18 @@ class MessengerDateTimeSetting(MessengerSetting):
 
     def getDumpValue(self):
         return super(MessengerDateTimeSetting, self)._get()
+
+
+class ClansSetting(MessengerSetting):
+
+    def _get(self):
+        if g_clanCtrl.isEnabled():
+            return super(ClansSetting, self)._get()
+        else:
+            return None
+
+    def getDefaultValue(self):
+        return True
 
 
 class GameplaySetting(StorageAccountSetting):
@@ -1535,6 +1561,9 @@ class FOVSetting(RegularSetting):
         if not BigWorld.wg_preferencesExistedAtStartup():
             self.apply((95, 80, 100))
 
+    def isEqual(self, value):
+        return self._get() == tuple(value)
+
 
 class StaticFOVSetting(UserPrefsFloatSetting):
 
@@ -1787,7 +1816,8 @@ class FPSPerfomancerSetting(StorageDumpSetting):
 
 
 class AltVoicesSetting(StorageDumpSetting):
-    ALT_VOICES_PREVIEW = itertools.cycle(('sound_mode_preview01', 'sound_mode_preview02', 'sound_mode_preview03'))
+    if FMOD.enabled:
+        ALT_VOICES_PREVIEW = itertools.cycle(('sound_mode_preview01', 'sound_mode_preview02', 'sound_mode_preview03'))
     DEFAULT_IDX = 0
     PREVIEW_SOUNDS_COUNT = 3
 
@@ -1816,14 +1846,8 @@ class AltVoicesSetting(StorageDumpSetting):
             sndPath = sndMgr.sounds.getEffectSound(next(self.ALT_VOICES_PREVIEW))
             if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
                 g = functions.rnd_choice(*nations.AVAILABLE_NAMES)
-
-                def onBeforePlayCB(snd):
-                    SoundGroups.g_instance.soundModes.setCurrentNation(next(g))
-
-                self.__previewSound = sound.SoundSequence([sndPath] * self.PREVIEW_SOUNDS_COUNT, beforePlayCB=onBeforePlayCB)
-            else:
-                self.__previewSound = sound.Sound(sndPath)
-            self.__previewSound.play()
+                SoundGroups.g_instance.soundModes.setCurrentNation(next(g))
+            SoundGroups.g_instance.playSound2D(sndPath)
             return True
         return False
 
@@ -2022,9 +2046,9 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
 
 class GraphicsQualityNote(SettingAbstract):
     note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>')
-    _GRAPHICS_QUALITY_TYPES = {1: note,
-     4: note,
-     5: note}
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note,
+     CONTENT_TYPE.TUTORIAL: note,
+     CONTENT_TYPE.SANDBOX: note}
 
     def _get(self):
         return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')

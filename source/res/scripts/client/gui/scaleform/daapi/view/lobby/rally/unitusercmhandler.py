@@ -42,7 +42,7 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
         return option
 
     def _addSquadInfo(self, options, isIgnored):
-        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.SQUAD or not self.unitFunctional.isCreator():
+        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.SQUAD or not self.unitFunctional.isCreator():
             return super(UnitUserCMHandler, self)._addSquadInfo(options, isIgnored)
         return options
 

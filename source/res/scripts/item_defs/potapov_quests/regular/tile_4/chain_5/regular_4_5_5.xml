@@ -1,0 +1,51 @@
+<regular_4_5_5.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_5_5_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+              <compareWithMaxHealth></compareWithMaxHealth>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	7	</count>
+        </item>
+        <item>	1019	  <count>	7	</count>
+        </item>
+        <item>	507	  <count>	7	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_5_5_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	10	</greaterOrEqual>
+              <compareWithMaxHealth></compareWithMaxHealth>
+            </results>
+            <results>
+              <key>	kills	</key>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_5_5.xml>

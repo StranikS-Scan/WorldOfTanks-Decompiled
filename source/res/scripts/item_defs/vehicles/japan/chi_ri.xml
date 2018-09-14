@@ -1,0 +1,779 @@
+<chi_ri.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	42	</forward>
+    <backward>	18	</backward>
+  </speedLimits>
+  <repairCost>	7.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/japan/J11_Chi_Ri/Chi_Ri_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	75	</armor_1>
+      <armor_2>	75	</armor_2>
+      <armor_3>	35	</armor_3>
+      <armor_4>	35	</armor_4>
+      <armor_5>	50	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	35	</armor_7>
+      <armor_8>	12	</armor_8>
+      <armor_9>	35	</armor_9>
+      <armor_10>	35	</armor_10>
+      <armor_11>	20	</armor_11>
+      <armor_12>	75	</armor_12>
+      <armor_13>	20	</armor_13>
+      <armor_14>	50	</armor_14>
+      <armor_15>	0	</armor_15>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	13796	</weight>
+    <maxHealth>	920	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.52	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <gasoline>	gas	</gasoline>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.00623 0.629199 0.31068	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.183945 0.317259 2.44466	</rayStart>
+        <rayEnd>	0.183945 0.216728 2.0575	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_Chi_Ri>
+      <userString>	#japan_vehicles:Chassis_Chi_Ri	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	12000	</price>
+      <unlocks>
+        <chassis>	Chassis_Chi_Ri_2	  <cost>	8800	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11600	</weight>
+      <maxLoad>	42300	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.4	</terrainResistance>
+      <brakeForce>	31500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.62	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.407536	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.180839	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.360329	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.304201	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.407536	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.180839	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.360329	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.304201	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 1.12964 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.20819 2.47563	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.307380 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.694460 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.407390	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Chi_Ri>
+    <Chassis_Chi_Ri_2>
+      <userString>	#japan_vehicles:Chassis_Chi_Ri_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	19500	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11600	</weight>
+      <maxLoad>	44800	</maxLoad>
+      <terrainResistance>	1 1.1 2.2	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.65	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.407536	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.180839	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.360329	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.304201	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.407536	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.180839	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.360329	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.304201	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 1.12964 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.20819 2.47563	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.301390 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.694460 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.407390	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Chi_Ri_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Chi_Ri>
+      <userString>	#japan_vehicles:Turret_1_Chi_Ri	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	13000	</price>
+      <armor>
+        <armor_1>	75	</armor_1>
+        <armor_2>	95	</armor_2>
+        <armor_3>	50	</armor_3>
+        <armor_4>	50	</armor_4>
+        <armor_5>	75	</armor_5>
+        <armor_6>	35	</armor_6>
+        <armor_7>	150	</armor_7>
+        <armor_8>	75	</armor_8>
+        <armor_9>	35	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	20	</armor_11>
+        <armor_12>	20	</armor_12>
+        <armor_13>	20	</armor_13>
+        <armor_14>	20	</armor_14>
+        <armor_15>	0	</armor_15>
+        <armor_16>	75	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	230	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_Type5>	shared	  <maxAmmo>	97	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_Gun_Type5_M1	  <cost>	5400	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.402778 10 0.416667 3 0.583333 3 0.597222 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	4.7	</reloadTime>
+          <models>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0027001 0.000000 1.43	</rayStart>
+              <rayEnd>	-0.521097 -0.447693 1.43345	</rayEnd>
+              <rayUp>	0.069 0.069 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_Gun_Type5>
+        <_75mm_Gun_Type5_M1>	shared	  <maxAmmo>	97	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_Chi_Ri	  <cost>	10200	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.402778 10 0.416667 3 0.583333 3 0.597222 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0027001 0.000000 1.43	</rayStart>
+              <rayEnd>	-0.658335 -0.00589539 1.47753	</rayEnd>
+              <rayUp>	0.067 0.067 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_Gun_Type5_M1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.002889 0.378106 0.985872	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.983218 0.615581 0.34122	</rayStart>
+          <rayEnd>	-0.629489 0.567206 0.160845	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.983218 0.615581 0.34122	</rayStart>
+          <rayEnd>	0.629489 0.567206 0.160845	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-0.905959 0.458374 -1.12037	</rayStart>
+          <rayEnd>	-0.517956 0.401914 -1.04121	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.905959 0.458374 -1.12037	</rayStart>
+          <rayEnd>	0.517956 0.401914 -1.04121	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.981 -0.037 1.000 0.000 0.574 0.125 1.000 0.624 0.403 0.500 0.064 0.500 0.079 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_Chi_Ri>
+    <Turret_2_Chi_Ri>
+      <userString>	#japan_vehicles:Turret_2_Chi_Ri	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21000	</price>
+      <unlocks>
+        <gun>	_75mm_Gun_Type5_M1_auto	  <cost>	5800	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	75	</armor_1>
+        <armor_2>	95	</armor_2>
+        <armor_3>	50	</armor_3>
+        <armor_4>	50	</armor_4>
+        <armor_5>	75	</armor_5>
+        <armor_6>	35	</armor_6>
+        <armor_7>	150	</armor_7>
+        <armor_8>	75	</armor_8>
+        <armor_9>	40	</armor_9>
+        <armor_10>	35	</armor_10>
+        <armor_11>	20	</armor_11>
+        <armor_12>	20	</armor_12>
+        <armor_13>	20	</armor_13>
+        <armor_14>	20	</armor_14>
+        <armor_15>	0	</armor_15>
+        <armor_16>	75	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	13752	</weight>
+      <maxHealth>	330	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.839	</invisibilityFactor>
+      <guns>
+        <_75mm_Gun_Type5>	shared	  <maxAmmo>	105	</maxAmmo>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.411111 10 0.425 2 0.575 2 0.588889 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0115446 -0.0330916 1.43	</rayStart>
+              <rayEnd>	-0.511954 -0.480166 1.46547	</rayEnd>
+              <rayUp>	0.067 0.067 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_Gun_Type5>
+        <_75mm_Gun_Type5_M1>	shared	  <maxAmmo>	105	</maxAmmo>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.411111 10 0.425 2 0.575 2 0.588889 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0115446 -0.0330916 1.43	</rayStart>
+              <rayEnd>	-0.522118 -0.488963 1.45395	</rayEnd>
+              <rayUp>	0.0675 0.0675 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_Gun_Type5_M1>
+        <_75mm_Gun_Type5_M1_auto>	shared	  <maxAmmo>	105	</maxAmmo>
+          <unlocks>
+            <vehicle>	STA_1	  <cost>	111000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.411111 10 0.425 2 0.575 2 0.588889 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	10	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	60	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0115446 -0.0330916 1.43	</rayStart>
+              <rayEnd>	-0.536527 -0.508383 1.45337	</rayEnd>
+              <rayUp>	0.0675 0.0675 1	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_Gun_Type5_M1_auto>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J11_Chi_Ri/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/japan/J11_Chi_Ri/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/japan/J11_Chi_Ri/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J11_Chi_Ri/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.094393 0.382215 0.960595	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.914466 0.602328 0.637926	</rayStart>
+          <rayEnd>	-0.603932 0.498381 0.408227	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.998332 0.531331 -1.69731	</rayStart>
+          <rayEnd>	-0.618488 0.432128 -1.62064	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.96	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.998332 0.531331 -1.69731	</rayStart>
+          <rayEnd>	0.618488 0.432128 -1.62064	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.96	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.914466 0.602328 0.637926	</rayStart>
+          <rayEnd>	0.603932 0.498381 0.408227	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.973 -0.068 1.021 0.000 0.578 0.104 1.000 0.723 0.474 0.500 0.220 0.500 0.033 0.000 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_2_Chi_Ri>
+  </turrets0>
+  <engines>
+    <_Type4_V12_Kakyuu>	shared	  <unlocks>
+        <engine>	_Type98_V12	  <cost>	11000	</cost>
+        </engine>
+      </unlocks>
+    </_Type4_V12_Kakyuu>
+    <_Type98_V12>	shared	</_Type98_V12>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <_Hei>	shared	  <unlocks>
+        <radio>	_Type96_Bo	  <cost>	1400	</cost>
+        </radio>
+      </unlocks>
+    </_Hei>
+    <_Type96_Bo>	shared	  <unlocks>
+        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </_Type96_Bo>
+    <_Type3_Otsu>	shared	  <unlocks>
+        <radio>	_Type3_Ko	  <cost>	9300	</cost>
+        </radio>
+      </unlocks>
+    </_Type3_Otsu>
+    <_Type3_Ko>	shared	</_Type3_Ko>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	japanese_sun	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.921569	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</chi_ri.xml>

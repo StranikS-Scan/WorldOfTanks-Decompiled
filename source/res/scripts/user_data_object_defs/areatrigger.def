@@ -1,0 +1,18 @@
+<areatrigger.def>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+    </name>
+    <radius>
+      <Type>	FLOAT	</Type>
+      <Editable>	False	</Editable>
+    </radius>
+    <exitInterval>
+      <Type>	FLOAT	</Type>
+      <Editable>	True	</Editable>
+      <Default>	1.0	</Default>
+    </exitInterval>
+  </Properties>
+</areatrigger.def>

@@ -8,7 +8,7 @@ import math
 import random
 import weakref
 from AvatarInputHandler import mathUtils, cameras
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, AccelerationSmoother
 from AvatarInputHandler.AimingSystems.ArcadeAimingSystem import ArcadeAimingSystem
 from AvatarInputHandler.Oscillator import Oscillator, CompoundOscillator
@@ -64,7 +64,10 @@ class _InputInertia(object):
 
 
 class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
-    REASONS_AFFECT_CAMERA_DIRECTLY = (ImpulseReason.MY_SHOT, ImpulseReason.OTHER_SHOT, ImpulseReason.VEHICLE_EXPLOSION)
+    REASONS_AFFECT_CAMERA_DIRECTLY = (ImpulseReason.MY_SHOT,
+     ImpulseReason.OTHER_SHOT,
+     ImpulseReason.VEHICLE_EXPLOSION,
+     ImpulseReason.HE_EXPLOSION)
     _DYNAMIC_ENABLED = True
 
     @staticmethod
@@ -117,6 +120,17 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__dynamicCfg = CameraDynamicConfig()
         self.__accelerationSmoother = None
         self.__readCfg(dataSec)
+        self.__cam = None
+        self.__aim = None
+        self.__onChangeControlMode = None
+        self.__aimingSystem = None
+        self.__curSense = 0
+        self.__curScrollSense = 0
+        self.__postmortemMode = False
+        self.__modelsToCollideWith = []
+        self.__focalPointDist = 1.0
+        self.__autoUpdateDxDyDz = Vector3(0.0)
+        self.__defaultAimOffset = (0.0, 0.0)
         if aim is None:
             return
         else:
@@ -124,15 +138,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
             self.__cam = BigWorld.HomingCamera()
             aimOffset = self.__aim.offset()
             self.__cam.aimPointClipCoords = Vector2(aimOffset)
-            self.__curSense = 0
-            self.__curScrollSense = 0
             self.__defaultAimOffset = (aimOffset[0], aimOffset[1])
-            self.__postmortemMode = False
-            self.__modelsToCollideWith = []
-            self.__onChangeControlMode = None
-            self.__aimingSystem = None
-            self.__focalPointDist = 1.0
-            self.__autoUpdateDxDyDz = Vector3(0.0)
             return
 
     def create(self, pivotPos, onChangeControlMode = None, postmortemMode = False):
@@ -173,6 +179,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__aimingSystem = None
         return
 
+    def __del__(self):
+        if self.__cam is not None:
+            self.destroy()
+        return
+
     def getPivotSettings(self):
         return self.__aimingSystem.getPivotSettings()
 
@@ -183,8 +194,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         modelsDesc = vehicleAppearance.modelsDesc
         self.__modelsToCollideWith.append(modelsDesc['hull']['model'])
         self.__modelsToCollideWith.append(modelsDesc['turret']['model'])
-        if BigWorld.camera() == self.__cam:
-            self.__setModelsToCollideWith(self.__modelsToCollideWith)
+        self.__setModelsToCollideWith(self.__modelsToCollideWith)
 
     def removeVehicleToCollideWith(self, vehicleAppearance):
         modelsDesc = vehicleAppearance.modelsDesc
@@ -193,8 +203,11 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
                 if existingModel is model:
                     self.__modelsToCollideWith.remove(model)
 
-        if BigWorld.camera() == self.__cam:
-            self.__setModelsToCollideWith(self.__modelsToCollideWith)
+        self.__setModelsToCollideWith(self.__modelsToCollideWith)
+
+    def clearVehicleToCollideWith(self):
+        self.__modelsToCollideWith = []
+        self.__setModelsToCollideWith(self.__modelsToCollideWith)
 
     def __setModelsToCollideWith(self, models):
         self.__cam.setModelsToCollideWith(models)
@@ -524,7 +537,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         impulse.normalise()
         if reason == ImpulseReason.OTHER_SHOT and distance <= self.__dynamicCfg['maxShotImpulseDistance']:
             impulse *= impulseValue / distance
-        elif reason == ImpulseReason.SPLASH:
+        elif reason == ImpulseReason.SPLASH or reason == ImpulseReason.HE_EXPLOSION:
             impulse *= impulseValue / distance
         elif reason == ImpulseReason.VEHICLE_EXPLOSION and distance <= self.__dynamicCfg['maxExplosionImpulseDistance']:
             impulse *= impulseValue / distance

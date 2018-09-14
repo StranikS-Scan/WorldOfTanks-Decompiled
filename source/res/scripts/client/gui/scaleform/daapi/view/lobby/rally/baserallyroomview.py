@@ -13,7 +13,7 @@ from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT, REQUEST_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG, REQUEST_TYPE
 from gui.shared import events
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -63,13 +63,14 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     @process
     def canBeClosed(self, callback):
-        meta = self.unitFunctional.getConfirmDialogMeta(FUNCTIONAL_EXIT.INTRO_UNIT)
+        ctx = unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.SWITCH, entityType=self.unitFunctional.getEntityType())
+        meta = self.unitFunctional.getConfirmDialogMeta(ctx)
         if meta:
             isConfirmed = yield DialogsInterface.showDialog(meta)
         else:
             isConfirmed = yield lambda callback: callback(True)
         if isConfirmed:
-            isConfirmed = yield self.prbDispatcher.leave(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.INTRO_UNIT))
+            isConfirmed = yield self.prbDispatcher.leave(ctx)
         callback(isConfirmed)
 
     @process
@@ -257,7 +258,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
     def _updateVehiclesLabel(self, minVal, maxVal):
         vehicleLvl = text_styles.main(i18n.makeString(CYBERSPORT.WINDOW_UNIT_RANGEVALUE, minVal=minVal, maxVal=maxVal))
         vehicleLbl = text_styles.standard(i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMVEHICLESLBL, levelsRange=vehicleLvl))
-        self.as_setVehiclesTitleS(vehicleLbl)
+        self.as_setVehiclesTitleS(vehicleLbl, {})
 
     def _closeSendInvitesWindow(self):
         self._destroyRelatedView(ViewTypes.WINDOW, PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)

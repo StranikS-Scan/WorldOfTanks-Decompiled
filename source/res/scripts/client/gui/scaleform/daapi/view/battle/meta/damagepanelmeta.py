@@ -45,6 +45,9 @@ class DamagePanelMeta(BattleComponentMeta):
     def as_setCrewDeactivatedS(self):
         self._flashObject.as_setCrewDeactivated()
 
+    def as_showGasCrewDestroyedS(self, params):
+        self._flashObject.as_showGasCrewDestroyed(params)
+
     def as_showS(self, isShow):
         self._flashObject.as_show(isShow)
 
@@ -53,3 +56,6 @@ class DamagePanelMeta(BattleComponentMeta):
 
     def as_resetS(self):
         self._flashObject.as_reset()
+
+    def as_hideGasAtackInfoS(self):
+        self._flashObject.as_hideGasAtackInfo()

@@ -93,9 +93,10 @@ class NotificationsCollection(object):
             LOG_ERROR('Type of notification not found', typeID)
         return result
 
-    def getListIterator(self):
+    def getListIterator(self, typesRange = None):
         notifications = []
-        for typeID in NOTIFICATION_TYPE.RANGE:
+        typesRange = typesRange or NOTIFICATION_TYPE.RANGE
+        for typeID in typesRange:
             notifications.extend(self.__received[typeID])
 
         for item in sorted(notifications):

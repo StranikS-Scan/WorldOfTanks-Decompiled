@@ -6,8 +6,7 @@ from gui.Scaleform.daapi.view.meta.CompanyRoomMeta import CompanyRoomMeta
 from gui.Scaleform.genConsts.COMPANY_ALIASES import COMPANY_ALIASES
 from gui.Scaleform.locale.PREBATTLE import PREBATTLE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control import getMaxSizeLimits, getTotalLevelLimits
-from gui.prb_control import formatters, getClassLevelLimits
+from gui.prb_control import formatters, prb_getters
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
@@ -159,10 +158,10 @@ class CompanyRoomView(CompanyRoomMeta):
     def __setLimits(self, rosters, teamLimits):
         settings = self.prbFunctional.getSettings()
         self.__selectedDivision = settings[PREBATTLE_SETTING_NAME.DIVISION]
-        totalLimit = getTotalLevelLimits(teamLimits)
+        totalLimit = prb_getters.getTotalLevelLimits(teamLimits)
         totalLevel = 0
         playersCount = 0
-        classesLimit = dict(map(lambda vehClass: (vehClass, [0, getClassLevelLimits(teamLimits, vehClass)]), VEHICLE_CLASS_TAGS))
+        classesLimit = dict(map(lambda vehClass: (vehClass, [0, prb_getters.getClassLevelLimits(teamLimits, vehClass)]), VEHICLE_CLASS_TAGS))
         invalidVehs = []
         if PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in rosters:
             for playerInfo in rosters[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1]:
@@ -170,7 +169,7 @@ class CompanyRoomView(CompanyRoomMeta):
                 if playerInfo.isReady():
                     playersCount += 1
 
-        maxPlayerCount = getMaxSizeLimits(teamLimits)[0]
+        maxPlayerCount = prb_getters.getMaxSizeLimits(teamLimits)[0]
         classesLimits = map(self.__makeClassLimitItem, classesLimit.iteritems())
         mixMax = self.__makeMinMaxString(totalLevel, totalLimit)
         self.__makeHeaderData(classesLimits, mixMax, maxPlayerCount)

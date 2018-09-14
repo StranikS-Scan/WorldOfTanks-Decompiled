@@ -43,11 +43,20 @@ class PlayerCtxStorage(SimpleCachedStorage):
             return self.__clanInfo.role
         return 0
 
+    def setClanInfo(self, clanInfo):
+        self.__clanInfo = clanInfo
+        self.onClanInfoChanged()
+
     def setMyClubName(self, clubName):
         self.__clubName = clubName
 
     def getMyClubName(self):
         return self.__clubName
+
+    def setAccountAttrs(self, accAttrs):
+        if self.__accAttrs ^ accAttrs:
+            self.__accAttrs = accAttrs
+            self.onAccountAttrsChanged()
 
     def isGameAdmin(self):
         return self.__accAttrs & ACCOUNT_ATTR.ADMIN != 0
@@ -98,12 +107,3 @@ class PlayerCtxStorage(SimpleCachedStorage):
         lastVoipUri = data.pop(0)
         if type(lastVoipUri) is types.StringType:
             self.__cachedItems['lastVoipUri'] = lastVoipUri
-
-    def _setAccountAttrs(self, accAttrs):
-        if self.__accAttrs ^ accAttrs:
-            self.__accAttrs = accAttrs
-            self.onAccountAttrsChanged()
-
-    def _setClanInfo(self, clanInfo):
-        self.__clanInfo = clanInfo
-        self.onClanInfoChanged()

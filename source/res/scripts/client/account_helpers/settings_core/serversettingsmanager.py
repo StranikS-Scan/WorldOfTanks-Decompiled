@@ -28,10 +28,11 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     CONTACTS = 'CONTACTS'
     FALLOUT = 'FALLOUT'
     TUTORIAL = 'TUTORIAL'
+    ONCE_ONLY_HINTS = 'ONCE_ONLY_HINTS'
 
 
 class ServerSettingsManager(object):
-    __version = 15
+    __version = 17
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -59,7 +60,8 @@ class ServerSettingsManager(object):
                               GAME.SHOW_VEH_MODELS_ON_MAP: Offset(29, 1610612736)}),
      SETTINGS_SECTIONS.GAME_EXTENDED: Section(masks={GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS: 0,
                                        GAME.CHAT_CONTACTS_LIST_ONLY: 1,
-                                       GAME.RECEIVE_INVITES_IN_BATTLE: 2}, offsets={}),
+                                       GAME.RECEIVE_INVITES_IN_BATTLE: 2,
+                                       GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS: 3}, offsets={}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -107,7 +109,10 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
                                   CONTACTS.SHOW_OTHERS_CATEGORY: 1}, offsets={}),
-     SETTINGS_SECTIONS.FALLOUT: Section(masks={'isEnabled': 3}, offsets={'falloutBattleType': Offset(0, 3)}),
+     SETTINGS_SECTIONS.FALLOUT: Section(masks={'isEnabled': 3,
+                                 'isAutomatch': 4,
+                                 'hasVehicleLvl8': 5,
+                                 'hasVehicleLvl10': 6}, offsets={'falloutBattleType': Offset(0, 3)}),
      SETTINGS_SECTIONS.TUTORIAL: Section(masks={TUTORIAL.CUSTOMIZATION: 0,
                                   TUTORIAL.TECHNICAL_MAINTENANCE: 1,
                                   TUTORIAL.PERSONAL_CASE: 2,
@@ -116,7 +121,8 @@ class ServerSettingsManager(object):
                                   TUTORIAL.MEDKIT_USED: 6,
                                   TUTORIAL.REPAIRKIT_USED: 8,
                                   TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
-                                  TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={})}
+                                  TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
+     SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -208,6 +214,15 @@ class ServerSettingsManager(object):
             return self._extractValue(key, storedValue, default, masks, offsets)
         else:
             return default
+
+    def getOnceOnlyHintsSetting(self, key, default = None):
+        return self._getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, key, default)
+
+    def getOnceOnlyHintsSettings(self):
+        return self.getSection(SETTINGS_SECTIONS.ONCE_ONLY_HINTS)
+
+    def setOnceOnlyHintsSettings(self, settings):
+        self._setSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, settings)
 
     def _buildAimSettings(self, settings):
         settingToServer = {}

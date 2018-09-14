@@ -5,7 +5,8 @@ from gui.Scaleform.daapi.view.dialogs import I18nDialogMeta, I18nInfoDialogMeta,
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.prb_control.settings import FUNCTIONAL_EXIT, CTRL_ENTITY_TYPE
+from gui.prb_control.formatters.messages import makeEntityI18nKey
+from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.events import ShowDialogEvent
 from gui.Scaleform.framework.ScopeTemplates import VIEW_SCOPE, WINDOW_SCOPE, SimpleScope
 _P_TYPE = PREBATTLE_TYPE
@@ -18,36 +19,24 @@ _VIEW_SCOPES = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): SimpleScope(PREBATTLE_ALIASES.SQU
  (_C_TYPE.UNIT, _P_TYPE.FORT_BATTLE): SimpleScope(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_VIEW_PY, VIEW_SCOPE),
  (_C_TYPE.PREBATTLE, _P_TYPE.CLAN): SimpleScope(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, WINDOW_SCOPE),
  (_C_TYPE.PREBATTLE, _P_TYPE.TOURNAMENT): SimpleScope(PREBATTLE_ALIASES.BATTLE_SESSION_ROOM_WINDOW_PY, WINDOW_SCOPE),
- (_C_TYPE.PREBATTLE, _P_TYPE.TRAINING): SimpleScope(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, VIEW_SCOPE),
- (_C_TYPE.PREQUEUE, _Q_TYPE.HISTORICAL): SimpleScope(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY, WINDOW_SCOPE)}
-
-def makeI18nKey(ctrlType, entityType, prefix):
-    if ctrlType in [_C_TYPE.PREBATTLE, _C_TYPE.UNIT]:
-        if entityType == _P_TYPE.SQUAD:
-            name = 'squad'
-        else:
-            name = 'rally'
-    else:
-        name = 'rally'
-    return '{0}/{1}'.format(name, prefix)
-
+ (_C_TYPE.PREBATTLE, _P_TYPE.TRAINING): SimpleScope(PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, VIEW_SCOPE)}
 
 class _RallyInfoDialogMeta(I18nInfoDialogMeta):
 
     def __init__(self, ctrlType, entityType, prefix):
-        super(_RallyInfoDialogMeta, self).__init__(makeI18nKey(ctrlType, entityType, prefix))
+        super(_RallyInfoDialogMeta, self).__init__(makeEntityI18nKey(ctrlType, entityType, prefix))
 
 
 class _RallyConfirmDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, ctrlType, entityType, prefix, titleCtx = None, messageCtx = None, focusedID = None):
-        super(_RallyConfirmDialogMeta, self).__init__(makeI18nKey(ctrlType, entityType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
+        super(_RallyConfirmDialogMeta, self).__init__(makeEntityI18nKey(ctrlType, entityType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
 
 
 class UnitConfirmDialogMeta(I18nConfirmDialogMeta):
 
     def __init__(self, prbType, prefix, titleCtx = None, messageCtx = None, focusedID = None):
-        super(UnitConfirmDialogMeta, self).__init__(makeI18nKey(_C_TYPE.UNIT, prbType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
+        super(UnitConfirmDialogMeta, self).__init__(makeEntityI18nKey(_C_TYPE.UNIT, prbType, prefix), titleCtx=titleCtx, messageCtx=messageCtx, focusedID=focusedID)
 
 
 class _RallyScopeDialogMeta(I18nDialogMeta):
@@ -87,49 +76,63 @@ class RallyScopeConfirmDialogMeta(_RallyScopeDialogMeta):
         super(RallyScopeConfirmDialogMeta, self).__init__(ctrlType, entityType, _RallyConfirmDialogMeta(ctrlType, entityType, prefix))
 
 
-_EXIT_TO_PREFIX = {FUNCTIONAL_EXIT.SWITCH: 'goToAnother',
- FUNCTIONAL_EXIT.RANDOM: 'goToAnother',
- FUNCTIONAL_EXIT.SQUAD: 'goToSquad',
- FUNCTIONAL_EXIT.BATTLE_TUTORIAL: 'goToBattleTutorial',
- FUNCTIONAL_EXIT.INTRO_PREBATTLE: 'goToIntro',
- FUNCTIONAL_EXIT.INTRO_UNIT: 'goToIntro',
- FUNCTIONAL_EXIT.COMPANY_EXPIRED: 'companyTimeFinished'}
-_DEFAULT_PREFIX = 'leave'
+_ENTITY_TO_ANOTHER_PREFIX = {(_C_TYPE.PREQUEUE, _Q_TYPE.RANDOMS): ('', 'goToAnother'),
+ (_C_TYPE.PREQUEUE, _Q_TYPE.EVENT_BATTLES): ('', 'goToAnother'),
+ (_C_TYPE.PREQUEUE, _Q_TYPE.SANDBOX): ('', 'goToAnother'),
+ (_C_TYPE.PREQUEUE, _Q_TYPE.TUTORIAL): ('', 'goToBattleTutorial'),
+ (_C_TYPE.PREBATTLE, _P_TYPE.TRAINING): ('', 'goToAnother'),
+ (_C_TYPE.PREBATTLE, _P_TYPE.COMPANY): ('goToIntro', 'goToAnother'),
+ (_C_TYPE.PREBATTLE, _P_TYPE.CLAN): ('', 'goToAnother'),
+ (_C_TYPE.PREBATTLE, _P_TYPE.TOURNAMENT): ('', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.UNIT): ('goToIntro', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.CLUBS): ('goToIntro', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.SORTIE): ('goToIntro', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.FORT_BATTLE): ('goToIntro', 'goToAnother'),
+ (_C_TYPE.UNIT, _P_TYPE.SQUAD): ('goToSquad', 'goToSquad')}
+_DEFAULT_CONFIRM = 'leave'
 
-def _createLeaveRallyMeta(funcExit, ctrlType, entityType):
-    if funcExit in _EXIT_TO_PREFIX:
-        prefix = _EXIT_TO_PREFIX[funcExit]
+def _createLeaveRallyMeta(unlockCtx, leftCtrlType, leftEntityType):
+    key = (unlockCtx.getCtrlType(), unlockCtx.getEntityType())
+    if key in _ENTITY_TO_ANOTHER_PREFIX:
+        switch, another = _ENTITY_TO_ANOTHER_PREFIX[key]
+        if switch and unlockCtx.hasFlags(FUNCTIONAL_FLAG.SWITCH):
+            prefix = switch
+        else:
+            prefix = another
     else:
-        prefix = _DEFAULT_PREFIX
-    if funcExit == FUNCTIONAL_EXIT.COMPANY_EXPIRED:
-        return RallyScopeInfoDialogMeta(ctrlType, entityType, prefix)
-    return RallyScopeConfirmDialogMeta(ctrlType, entityType, prefix)
+        prefix = _DEFAULT_CONFIRM
+    return RallyScopeConfirmDialogMeta(leftCtrlType, leftEntityType, prefix)
 
 
-def _createLeaveIntroMeta(funcExit, ctrlType, entityType):
-    if funcExit == FUNCTIONAL_EXIT.SQUAD:
-        return RallyScopeConfirmDialogMeta(ctrlType, entityType, _EXIT_TO_PREFIX[funcExit])
-    elif funcExit == FUNCTIONAL_EXIT.COMPANY_EXPIRED:
-        return RallyScopeInfoDialogMeta(ctrlType, entityType, _EXIT_TO_PREFIX[funcExit])
+_INTRO_TO_ANOTHER_PREFIX = {(_C_TYPE.UNIT, _P_TYPE.SQUAD): 'goToSquad'}
+
+def _createLeaveIntroMeta(unlockCtx, leftCtrlType, leftEntityType):
+    key = (unlockCtx.getCtrlType(), unlockCtx.getEntityType())
+    if key in _INTRO_TO_ANOTHER_PREFIX:
+        return RallyScopeConfirmDialogMeta(leftCtrlType, leftEntityType, _INTRO_TO_ANOTHER_PREFIX[key])
     else:
         return None
 
 
-def createPrbIntroLeaveMeta(funcExit, prbType):
-    return _createLeaveIntroMeta(funcExit, _C_TYPE.PREBATTLE, prbType)
+def createPrbIntroLeaveMeta(unlockCtx, leftPrbType):
+    return _createLeaveIntroMeta(unlockCtx, _C_TYPE.PREBATTLE, leftPrbType)
 
 
-def createPrbLeaveMeta(funcExit, prbType):
-    return _createLeaveRallyMeta(funcExit, _C_TYPE.PREBATTLE, prbType)
+def createPrbLeaveMeta(unlockCtx, leftPrbType):
+    return _createLeaveRallyMeta(unlockCtx, _C_TYPE.PREBATTLE, leftPrbType)
 
 
-def createUnitIntroLeaveMeta(funcExit, prbType):
-    return _createLeaveIntroMeta(funcExit, _C_TYPE.UNIT, prbType)
+def createUnitIntroLeaveMeta(unlockCtx, leftPrbType):
+    return _createLeaveIntroMeta(unlockCtx, _C_TYPE.UNIT, leftPrbType)
 
 
-def createUnitLeaveMeta(funcExit, prbType):
-    return _createLeaveRallyMeta(funcExit, _C_TYPE.UNIT, prbType)
+def createUnitLeaveMeta(unlockCtx, leftPrbType):
+    return _createLeaveRallyMeta(unlockCtx, _C_TYPE.UNIT, leftPrbType)
 
 
-def createLeavePreQueueMeta(funcExit, queueType):
-    return _createLeaveRallyMeta(funcExit, _C_TYPE.UNIT, queueType)
+def createLeavePreQueueMeta(unlockCtx, leftQueueType):
+    return _createLeaveRallyMeta(unlockCtx, _C_TYPE.PREQUEUE, leftQueueType)
+
+
+def createCompanyExpariedMeta():
+    return RallyScopeInfoDialogMeta(_C_TYPE.PREBATTLE, _P_TYPE.COMPANY, 'companyTimeFinished')

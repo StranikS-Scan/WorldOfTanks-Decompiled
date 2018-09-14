@@ -2,27 +2,20 @@
 import operator
 import time
 from abc import ABCMeta
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
+from debug_utils import LOG_CURRENT_EXCEPTION
 import nations
 import constants
-import ResMgr
-import BigWorld
-import ArenaType
 from ConnectionManager import connectionManager
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from potapov_quests import PQ_STATE as _PQS
-from account_shared import AmmoIterator, getHistoricalCustomizedVehCompDescr
-from helpers import getLocalizedData, i18n, time_utils, getClientLanguage
+from potapov_quests import PQ_STATE as _PQS, PQ_BRANCH
+from helpers import getLocalizedData, i18n, time_utils
 from predefined_hosts import g_preDefinedHosts
-from shared_utils import findFirst, CONST_CONTAINER
-from gui import makeHtmlString
+from shared_utils import findFirst
 from gui.shared import g_itemsCache
-from gui.shared.utils.functions import getAbsoluteUrl
 from gui.server_events.bonuses import getBonusObj
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
@@ -329,196 +322,6 @@ class Action(ServerEventAbstract):
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
 
-class HistoricalBattle(ServerEventAbstract):
-    ICONS_FOLDER = 'gui/maps/icons/historicalBattles/'
-    ICONS_FORMAT = '%s.png'
-    ICONS_MASK = '../maps/icons/historicalBattles/%s.png'
-    MAP_ICONS_MASK = '../maps/icons/map/stats/%(prefix)s%(geometryName)s.png'
-
-    class SIDES(CONST_CONTAINER):
-        A = 'A'
-        B = 'B'
-
-    def getUserName(self):
-        return getLocalizedData(self._data['localized_data'], 'title')
-
-    def getDescription(self):
-        return getLocalizedData(self._data['localized_data'], 'shortDescr')
-
-    def getLongDescription(self):
-        return getLocalizedData(self._data['localized_data'], 'longDescr')
-
-    def getSideUserName(self, side):
-        return getLocalizedData(self._data['localized_data'], 'sideNames').get(side)
-
-    def getDescriptionUrl(self):
-        histNote = self._data.get('urls', {}).get('histNote')
-        if histNote is not None:
-            return histNote % {'langID': getClientLanguage()}
-        else:
-            return
-
-    def getIcon(self):
-        iconID = self._data.get('backgroundName', 'default')
-        icon = self.ICONS_MASK % iconID
-        if self.ICONS_FORMAT % iconID not in ResMgr.openSection(self.ICONS_FOLDER).keys():
-            icon = self.ICONS_MASK % 'default'
-        return icon
-
-    def isFuture(self):
-        return self.getStartTimeLeft() > 0
-
-    def getDatesInfo(self):
-        return '%(startDate)s - %(endDate)s' % {'startDate': self.getStartDate(),
-         'endDate': self.getFinishDate()}
-
-    def getStartDate(self):
-        return BigWorld.wg_getShortDateFormat(self.getStartTime())
-
-    def getFinishDate(self):
-        return BigWorld.wg_getShortDateFormat(self.getFinishTime())
-
-    def getArenaTypeID(self):
-        return self._data['arenaTypeID']
-
-    def getArenaType(self):
-        return ArenaType.g_cache[self.getArenaTypeID()]
-
-    def getMapName(self):
-        return i18n.makeString('#arenas:%s/name' % self.getArenaType().geometryName)
-
-    def getMapInfo(self):
-        arenaType = self.getArenaType()
-        battleType = i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName)
-        defTeam = self.SIDES.A
-        assaultTeam = self.SIDES.B
-        additionalInfo = ''
-        if arenaType.gameplayName == 'assault':
-            if self._data['arenaTeam1'] == self.SIDES.B:
-                defTeam, assaultTeam = assaultTeam, defTeam
-            additionalInfo = i18n.makeString('#historical_battles:map/assaultInfo', defTeam=self.getSideUserName(defTeam), assaultTeam=self.getSideUserName(assaultTeam))
-        return '<b>%s</b>\n%s' % (battleType, additionalInfo)
-
-    def getMapIcon(self):
-        return self.MAP_ICONS_MASK % {'geometryName': self.getArenaType().geometryName,
-         'prefix': ''}
-
-    def getTeamRoster(self, side):
-        result = []
-        for intCD, team in self._data['vehSides'].iteritems():
-            if team == side:
-                result.append(intCD)
-
-        return result
-
-    def getVehiclesData(self):
-        return self._data['vehicles']
-
-    def getVehicleData(self, intCD):
-        return self._data['vehicles'].get(intCD)
-
-    def canParticipateWith(self, vehicleCompDescr):
-        return vehicleCompDescr in self._data['vehicles']
-
-    def getShellsLayout(self, intCD):
-        vehicleData = self._data['vehicles'].get(intCD)
-        if vehicleData is None:
-            return tuple()
-        else:
-            return map(lambda data: (g_itemsCache.items.getItemByCD(data[0]), data[1]), AmmoIterator(vehicleData['ammoList']))
-
-    def getShellsLayoutPrice(self, intCD):
-        vehicleData = self._data['vehicles'].get(intCD)
-        if vehicleData is None:
-            return tuple()
-        else:
-            shellsLayout = vehicleData['ammoList']
-
-            def calculateLayout(isBoughtForCredits):
-                goldPrice = 0
-                creditsPrice = 0
-                for shellCompDescr, count in AmmoIterator(shellsLayout):
-                    if not shellCompDescr or not count:
-                        continue
-                    shell = g_itemsCache.items.getItemByCD(shellCompDescr)
-                    if shell.buyPrice[1] and not isBoughtForCredits:
-                        goldPrice += shell.buyPrice[1] * count
-                    elif shell.buyPrice[1] and isBoughtForCredits:
-                        creditsPrice += shell.buyPrice[1] * count * g_itemsCache.items.shop.exchangeRateForShellsAndEqs
-                    elif shell.buyPrice[0]:
-                        creditsPrice += shell.buyPrice[0] * count
-
-                return (creditsPrice, goldPrice)
-
-            forCredits = calculateLayout(True)
-            forGold = calculateLayout(False)
-            if forCredits != forGold:
-                return [calculateLayout(False), calculateLayout(True)]
-            return [calculateLayout(True)]
-            return
-
-    def getShellsLayoutPriceStatus(self, intCD):
-        userCredits = g_itemsCache.items.stats.credits
-        userGold = g_itemsCache.items.stats.gold
-        result = []
-        for c, g in self.getShellsLayoutPrice(intCD):
-            result.append((userGold >= g, userCredits >= c))
-
-        return result
-
-    def getShellsLayoutFormatedPrice(self, intCD, colorManager, checkMoney = True, joinString = False):
-        userCredits = g_itemsCache.items.stats.credits
-        userGold = g_itemsCache.items.stats.gold
-        creditsColor = colorManager.getColorScheme('textColorCredits').get('rgb')
-        goldColor = colorManager.getColorScheme('textColorGold').get('rgb')
-        errorColor = colorManager.getColorScheme('textColorError').get('rgb')
-        result = []
-        for c, g in self.getShellsLayoutPrice(intCD):
-            priceLabel = ''
-            if g:
-                params = {'value': BigWorld.wg_getGoldFormat(g),
-                 'color': goldColor if not checkMoney or userGold >= g else errorColor,
-                 'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2)}
-                priceLabel += makeHtmlString('html_templates:lobby/historicalBattles/ammoStatus', 'priceLabel', params)
-            if c:
-                params = {'value': BigWorld.wg_getIntegralFormat(c),
-                 'color': creditsColor if not checkMoney or userCredits >= c else errorColor,
-                 'icon': getAbsoluteUrl(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_2)}
-                priceLabel += makeHtmlString('html_templates:lobby/historicalBattles/ammoStatus', 'priceLabel', params)
-            result.append(priceLabel)
-
-        if joinString:
-            return i18n.makeString('#historical_battles:ammoPreset/priceConcat').join(result)
-        return result
-
-    def getModules(self, vehicle):
-        vehicleData = self._data['vehicles'].get(vehicle.intCD)
-        if vehicleData is None:
-            return
-        else:
-            vDescr = self.getVehicleModifiedDescr(vehicle)
-            result = OrderedDict()
-            for guiItemType in GUI_ITEM_TYPE.VEHICLE_MODULES:
-                if guiItemType == GUI_ITEM_TYPE.TURRET and not vehicle.hasTurrets:
-                    continue
-                itemDescr, _ = vDescr.getComponentsByType(GUI_ITEM_TYPE_NAMES[guiItemType])
-                result[guiItemType] = g_itemsCache.items.getItemByCD(itemDescr['compactDescr'])
-
-            return result
-
-    def getVehicleModifiedDescr(self, vehicle):
-        updatedVehDescr = vehicle.descriptor
-        if self.canParticipateWith(vehicle.intCD):
-            from gui import game_control
-            igrRoomType = game_control.g_instance.igr.getRoomType()
-            igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
-            updatedVehDescr = getHistoricalCustomizedVehCompDescr(igrLayout, vehicle.invID, igrRoomType, updatedVehDescr.makeCompactDescr(), self._data)
-        return updatedVehDescr
-
-    def __cmp__(self, other):
-        return cmp(self.getStartTime(), other.getStartTime())
-
-
 class PQSeason(object):
 
     def __init__(self, seasonID, info):
@@ -545,7 +348,7 @@ class PQSeason(object):
     def isUnlocked(self):
         return self.__isUnlocked
 
-    def updateProgress(self, eventsCache):
+    def updateProgress(self):
         for tile in self.__tiles.itervalues():
             if tile.isUnlocked():
                 self.__isUnlocked = True
@@ -591,6 +394,16 @@ class PQTile(object):
             return findFirst(None, firstQuest.getVehicleClasses())
         else:
             return
+
+    def getChainMajorTag(self, chainID):
+        firstQuest = findFirst(None, self.__quests.get(chainID, {}).itervalues())
+        if firstQuest is not None:
+            return firstQuest.getMajorTag()
+        else:
+            return
+
+    def getChainSortKey(self, chainID):
+        return self.getChainMajorTag(chainID)
 
     def getChainTotalTokensCount(self, chainID, isMainBonuses = None):
         result = 0
@@ -792,6 +605,12 @@ class PotapovQuest(Quest):
     def getVehMinLevel(self):
         return self.__pqType.minLevel
 
+    def getQuestBranch(self):
+        return self.__pqType.branch
+
+    def getQuestBranchName(self):
+        return PQ_BRANCH.TYPE_TO_NAME[self.getQuestBranch()]
+
     def isUnlocked(self):
         return self.__pqProgress is not None and self.__pqProgress.unlocked
 
@@ -812,6 +631,9 @@ class PotapovQuest(Quest):
 
     def getVehicleClasses(self):
         return set(self.__pqType.vehClasses)
+
+    def getMajorTag(self):
+        return self.__pqType.getMajorTag()
 
     def isMainCompleted(self, isRewardReceived = None):
         if isRewardReceived is True:
@@ -855,8 +677,8 @@ class PotapovQuest(Quest):
     def needToGetReward(self):
         return self.__checkForStates(*_PQS.NEED_GET_REWARD)
 
-    def updateProgress(self, eventsCache):
-        self.__pqProgress = eventsCache.questsProgress.getPotapovQuestProgress(self.__pqType, self._id)
+    def updateProgress(self, questsProgress):
+        self.__pqProgress = questsProgress.getPotapovQuestProgress(self.__pqType, self._id)
 
     def getBonuses(self, bonusName = None, isMain = None):
         if isMain is None:
@@ -961,8 +783,13 @@ class FalloutConfig(namedtuple('FalloutConfig', ['allowedVehicles',
         from gui.shared import g_itemsCache
         result = []
         for v in self.allowedVehicles:
-            item = g_itemsCache.items.getItemByCD(v)
-            if item.isInInventory:
+            try:
+                item = g_itemsCache.items.getItemByCD(v)
+            except KeyError:
+                LOG_CURRENT_EXCEPTION()
+                item = None
+
+            if item is not None and item.isInInventory:
                 result.append(item)
 
         return sorted(result)

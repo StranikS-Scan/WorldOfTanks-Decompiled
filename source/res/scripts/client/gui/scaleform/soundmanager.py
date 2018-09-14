@@ -3,7 +3,7 @@ from debug_utils import *
 import ResMgr
 from items import _xml
 from gui.Scaleform.windows import UIInterface
-from gui.shared.utils.sound import Sound
+import SoundGroups
 import Vibroeffects
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
 
@@ -112,13 +112,13 @@ class SoundManager(UIInterface):
             if type(scope) != str:
                 LOG_ERROR('Invalid soundpath under key: %s', dictPath)
                 return
-            Sound(scope).play()
+            SoundGroups.g_instance.playSound2D(scope)
             return
 
     def playEffectSound(self, effectName):
         sound = self.sounds.getEffectSound(effectName)
         if sound is not None:
-            Sound(sound).play()
+            SoundGroups.g_instance.playSound2D(sound)
         return
 
     def onButtonEvent(self, callbackID, state, type, id):
@@ -130,6 +130,6 @@ class SoundManager(UIInterface):
     def tryPlaySnd(self, sndType, state, type, id):
         sound = self.__soundEvents.get(sndType, SoundSettings()).getSoundName(type, id, state)
         if sound:
-            Sound(sound).play()
+            SoundGroups.g_instance.playSound2D(sound)
             if state == 'press':
                 Vibroeffects.VibroManager.g_instance.playButtonClickEffect(type)

@@ -1,0 +1,48 @@
+<regular_2_2_5.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_2_5_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <distance>	0	</distance>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	2	</count>
+        </item>
+        <item>	1019	  <count>	2	</count>
+        </item>
+        <item>	507	  <count>	2	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_2_5_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <distance>	0	</distance>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleKills>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_2_2_5.xml>

@@ -1,0 +1,44 @@
+<regular_3_3_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <rammingInfo>	stayedAlive	</rammingInfo>
+              <attackReason>	2	</attackReason>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <rammingInfo>	stayedAlive	</rammingInfo>
+              <attackReason>	2	</attackReason>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+            <win></win>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_3_11.xml>

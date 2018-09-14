@@ -8,6 +8,7 @@ from gui.shared import events
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortBuildingComponentMeta import FortBuildingComponentMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.shared.events import FortEvent
 
 class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHelper):
 
@@ -37,8 +38,8 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         self.destroy()
 
     def onTransportingRequest(self, exportFrom, importTo):
-        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_ALIAS, ctx={'fromId': exportFrom,
-         'toId': importTo}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(FortEvent.REQUEST_TRANSPORTATION, ctx={'fromId': exportFrom,
+         'toId': importTo}), EVENT_BUS_SCOPE.FORT)
 
     def requestBuildingProcess(self, direction, position):
         self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_ALIAS, ctx={'buildingDirection': direction,

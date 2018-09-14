@@ -1,0 +1,29 @@
+<59_asia_great_wall.xml>
+  <name>	#arenas:59_asia_great_wall/name	</name>
+  <description>	#arenas:59_asia_great_wall/description	</description>
+  <geometry>	spaces/59_asia_great_wall	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/59_asia_great_wall/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
+  <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-339.279358 387.912476	</position1>
+        </team1>
+        <team2>
+          <position1>	396.877350 -377.398773	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</59_asia_great_wall.xml>

@@ -282,6 +282,22 @@ class DestructiblesCache():
             else:
                 raise Exception, "Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename'))
 
+    def _getEffect(self, effectName, effectCategory, needLogErrors = True):
+        if not effectName:
+            if needLogErrors:
+                LOG_WARNING('Failed to read %s name in %s' % (effectName, effectCategory))
+            return
+        elif string.lower(effectName) == 'none':
+            return
+        effects = self.__effects[effectCategory]
+        effect = effects.get(effectName)
+        if effect is None:
+            if needLogErrors:
+                LOG_ERROR('Destructibles effect %s is not found' % effectName)
+            return
+        else:
+            return effect
+
 
 def _parseFragileMaterialName(matName, filename):
     try:

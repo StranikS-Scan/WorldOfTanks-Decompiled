@@ -165,6 +165,7 @@ class FORTIFICATIONS(object):
     FORTTRANSPORTCONFIRMATIONWINDOW_CANCELBUTTON = '#fortifications:FortTransportConfirmationWindow/cancelButton'
     BUILDINGS_BUILDINGTOOLTIP_STRENGTH = '#fortifications:Buildings/buildingTooltip/strength'
     BUILDINGS_BUILDINGTOOLTIP_STORE = '#fortifications:Buildings/buildingTooltip/store'
+    BUILDINGS_BUILDINGTOOLTIP_COMPENSATION = '#fortifications:Buildings/buildingTooltip/compensation'
     BUILDINGS_BUILDINGTOOLTIP_ORDER = '#fortifications:Buildings/buildingTooltip/order'
     BUILDINGS_TROWELLABEL = '#fortifications:Buildings/trowelLabel'
     BUILDINGS_BUILDINGNAME_UNKNOWN = '#fortifications:Buildings/buildingName/unknown'

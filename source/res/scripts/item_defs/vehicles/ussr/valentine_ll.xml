@@ -1,0 +1,338 @@
+<valentine_ll.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	32	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <repairCost>	4.2	</repairCost>
+  <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R31_Valentine_LL/Valentine_LL_CM.DDS	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	20	</armor_8>
+      <armor_9>	17	</armor_9>
+      <armor_10>	10	</armor_10>
+      <armor_11>	7	</armor_11>
+      <armor_12>	55	</armor_12>
+      <armor_13>	0	</armor_13>
+      <armor_14>	40	</armor_14>
+      <armor_15>	20	</armor_15>
+    </armor>
+    <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
+    <weight>	8300	</weight>
+    <maxHealth>	304	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R31_Valentine_LL/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R31_Valentine_LL/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R31_Valentine_LL/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.42 1.00 0.06 0.38	</pitchParams>
+      <rollParams>	1.00 0.26 36.00 0.42 1.00 0.06 0.38	</rollParams>
+      <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.004731 0.48032 0.648006	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/russian/R31_Valentine_LL/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.262381 0.301577 2.17955	</rayStart>
+        <rayEnd>	0.262381 0.301577 1.77955	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.2	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <ValentineMK_I>
+      <userString>	#ussr_vehicles:ValentineMK_I	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4510	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	16850	</maxLoad>
+      <terrainResistance>	0.91 1.03 1.94	</terrainResistance>
+      <brakeForce>	37500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R31_Valentine_LL/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R31_Valentine_LL/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R31_Valentine_LL/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.4 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.06	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L5	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R5	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.251361	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.251361	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.13059	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.334206	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.314683	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.13059	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.334206	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R31_Valentine_LL/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.0967 1.52204	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.585310 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.783750	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </ValentineMK_I>
+  </chassis>
+  <turrets0>
+    <Valentine_LL>
+      <userString>	#ussr_vehicles:Valentine_LL	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	8160	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	65	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	65	</armor_3>
+        <armor_4>	65	</armor_4>
+        <armor_5>	125	</armor_5>
+        <armor_6>	65	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	15	</armor_8>
+        <armor_9>	7	</armor_9>
+        <armor_10>	0	</armor_10>
+        <armor_11>	95	</armor_11>
+        <armor_12>	15	</armor_12>
+        <armor_13>	30	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	76	</maxHealth>
+      <rotationSpeed>	48.13	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_45mm_20KL>	shared	  <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	61	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	20	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/russian/R31_Valentine_LL/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R31_Valentine_LL/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R31_Valentine_LL/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/russian/R31_Valentine_LL/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_45mm_20KL>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R31_Valentine_LL/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R31_Valentine_LL/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R31_Valentine_LL/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/russian/R31_Valentine_LL/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.004731 0.279887 0.552927	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.858623 0.375877 -0.38697	</rayStart>
+          <rayEnd>	-0.485897 0.375877 -0.241807	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.915991 0.321818 0.187145	</rayStart>
+          <rayEnd>	0.525804 0.321818 0.0991232	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.52	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.943 -0.030 1.000 0.000 0.525 0.239 0.829 0.542 0.473 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+    </Valentine_LL>
+  </turrets0>
+  <engines>
+    <AEC_A190>	shared	</AEC_A190>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <Mk19R>	shared	</Mk19R>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</valentine_ll.xml>

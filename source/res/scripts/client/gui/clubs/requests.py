@@ -1,10 +1,8 @@
 # Embedded file name: scripts/client/gui/clubs/requests.py
 import weakref
-from collections import namedtuple
-from debug_utils import LOG_WARNING, LOG_ERROR
-from ids_generators import Int32IDGenerator
+from debug_utils import LOG_WARNING
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
-from gui.shared.utils.requesters.abstract import RequestsByIDProcessor
+from gui.shared.utils.requesters.abstract import ClientRequestsByIDProcessor
 from gui.shared.utils.requesters.RequestsController import RequestsController
 from gui.clubs import formatters as club_fmts
 from gui.clubs.items import OtherPlayerClubInfo
@@ -28,34 +26,10 @@ class ClubCooldownManager(RequestCooldownManager):
         return DEFAULT_COOLDOWN
 
 
-class ClubRequester(RequestsByIDProcessor):
-
-    class _Response(namedtuple('_Response', ['code', 'errStr', 'data'])):
-
-        def isSuccess(self):
-            return self.code == 0
-
-    def __init__(self):
-        super(ClubRequester, self).__init__(Int32IDGenerator())
+class ClubRequester(ClientRequestsByIDProcessor):
 
     def getSender(self):
-        return getClientClubsMgr()
-
-    def _doCall(self, method, *args, **kwargs):
-        requestID = self._idsGenerator.next()
-
-        def _callback(code, errStr, data):
-            ctx = self._requests.get(requestID)
-            self._onResponseReceived(requestID, self._makeResponse(code, errStr, data, ctx))
-
-        method(callback=_callback, *args, **kwargs)
-        return requestID
-
-    def _makeResponse(self, code = 0, errMsg = '', data = None, ctx = None):
-        response = self._Response(code, errMsg, data)
-        if not response.isSuccess():
-            LOG_WARNING('Club request error', ctx, response)
-        return response
+        return self._sender or getClientClubsMgr()
 
 
 class ClubRequestsController(RequestsController):

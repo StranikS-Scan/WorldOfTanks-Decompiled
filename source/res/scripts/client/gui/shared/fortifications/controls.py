@@ -199,6 +199,18 @@ class NoFortController(_FortController):
     def request(self, ctx, callback = None):
         self._failChecking('Has been invoked NoFortController.request', ctx, callback)
 
+    def init(self, clan, listeners, prevController = None):
+        super(NoFortController, self).init(clan, listeners, prevController)
+        self._sortiesCurfewCtrl = SortiesCurfewController()
+        self._sortiesCurfewCtrl.start()
+
+    def fini(self, clearCache = True):
+        if self._sortiesCurfewCtrl:
+            self._sortiesCurfewCtrl.stop()
+            self._sortiesCurfewCtrl = None
+        super(NoFortController, self).fini(clearCache)
+        return
+
 
 class CenterUnavailableController(_FortController):
 

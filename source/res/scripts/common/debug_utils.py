@@ -1,9 +1,12 @@
 # Embedded file name: scripts/common/debug_utils.py
 import sys
+import BigWorld
+import excepthook
+from functools import wraps
 from collections import defaultdict
 from warnings import warn_explicit
-import BigWorld
-from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM
+from traceback import format_exception
+from constants import IS_CLIENT, IS_CELLAPP, IS_BASEAPP, CURRENT_REALM, IS_DEVELOPMENT
 _src_file_trim_to = ('res/wot/scripts/', len('res/wot/scripts/'))
 _g_logMapping = {}
 
@@ -83,6 +86,7 @@ def init():
      'ERROR': BigWorld.logError,
      'CRITICAL': BigWorld.logCritical,
      'HACK': BigWorld.logHack}
+    excepthook.init(not IS_CLIENT and _logLevel < LOG_LEVEL.SVR_RELEASE, _src_file_trim_to)
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
@@ -103,9 +107,13 @@ def CRITICAL_ERROR(msg, *kargs):
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_CURRENT_EXCEPTION():
-    from traceback import format_exc
-    msg = _makeMsgHeader(sys._getframe(1)) + '\n' + format_exc()
+    msg = _makeMsgHeader(sys._getframe(1)) + '\n'
+    etype, value, tb = sys.exc_info()
+    msg += ''.join(format_exception(etype, value, tb, None))
     BigWorld.logError('EXCEPTION', msg, None)
+    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, None, None, etype, value, tb)
+    if extMsg:
+        BigWorld.logError('EXCEPTION', extMsg, None)
     return
 
 
@@ -128,6 +136,11 @@ def LOG_WRAPPED_CURRENT_EXCEPTION(wrapperName, orgName, orgSource, orgLineno):
     list = format_exception_only(etype, value)
     for ln in list:
         sys.stderr.write(ln.replace(wrapperName, orgName))
+
+    extMsg = excepthook.extendedTracebackAsString(_src_file_trim_to, wrapperName, orgName, etype, value, tb)
+    if extMsg:
+        BigWorld.logError('EXCEPTION', extMsg, None)
+    return
 
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
@@ -258,6 +271,11 @@ def LOG_SVAN_DEV(fmt, *args):
 @_LogWrapper(LOG_LEVEL.DEV)
 def LOG_AQ(msg, *kargs):
     _doLog('MRAQ', msg, kargs)
+
+
+@_LogWrapper(LOG_LEVEL.DEV)
+def LOG_SDS_DEV(msg, *kargs):
+    _doLog('SDS', msg, kargs)
 
 
 @_LogWrapper(LOG_LEVEL.CT)
@@ -437,6 +455,29 @@ def verify(expression):
         raise expression or AssertionError
     except AssertionError:
         LOG_CURRENT_EXCEPTION()
+
+
+def traceCalls(func):
+    if not IS_DEVELOPMENT:
+        return func
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        LOG_DEBUG_DEV('%s.%s' % (func.im_class.__name__, func.im_func.__name__), args, kwargs)
+        returned = func(*args, **kwargs)
+        if returned is not None:
+            LOG_DEBUG_DEV('%s.%s returned:' % (func.im_class.__name__, func.im_func.__name__), returned)
+        return returned
+
+    return wrapper
+
+
+def traceMethodCalls(obj, *names):
+    if not IS_DEVELOPMENT:
+        return
+    for name in names:
+        func = getattr(obj, name)
+        setattr(obj, name, traceCalls(func))
 
 
 init()

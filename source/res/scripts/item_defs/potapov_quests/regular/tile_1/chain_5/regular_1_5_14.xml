@@ -1,0 +1,63 @@
+<regular_1_5_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <and>
+              <vehicleDamage>
+                <classes>	heavyTank AT-SPG	</classes>
+                <greaterOrEqual>	2000	</greaterOrEqual>
+              </vehicleDamage>
+            </and>
+            <unit>
+              <and>
+                <unitVehicleDamage>
+                  <classes>	heavyTank AT-SPG	</classes>
+                  <greaterOrEqual>	2000	</greaterOrEqual>
+                </unitVehicleDamage>
+              </and>
+            </unit>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <and>
+                <vehicleDamage>
+                  <classes>	heavyTank AT-SPG	</classes>
+                  <greaterOrEqual>	2000	</greaterOrEqual>
+                </vehicleDamage>
+              </and>
+              <unit>
+                <and>
+                  <unitVehicleDamage>
+                    <classes>	heavyTank AT-SPG	</classes>
+                    <greaterOrEqual>	2000	</greaterOrEqual>
+                  </unitVehicleDamage>
+                </and>
+              </unit>
+            </or>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	40000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_5_14.xml>

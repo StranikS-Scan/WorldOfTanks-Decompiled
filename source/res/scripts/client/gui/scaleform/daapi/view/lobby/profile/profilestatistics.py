@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatistic
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
+ PROFILE_DROPDOWN_KEYS.FALLOUT: 'fallout',
  PROFILE_DROPDOWN_KEYS.HISTORICAL: 'historical',
  PROFILE_DROPDOWN_KEYS.TEAM: 'team7x7',
  PROFILE_DROPDOWN_KEYS.STATICTEAM: 'team7x7',
@@ -46,6 +47,7 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
 
     def _setInitData(self, battlesType, accountDossier = None):
         dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
+         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM),
          self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM),
@@ -61,7 +63,9 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
                 for seasonID, _ in accountDossier.getRated7x7Seasons().iteritems():
                     if seasonID in completedSeasons:
                         sID = _packProviderType(PROFILE_DROPDOWN_KEYS.STATICTEAM, seasonID)
-                        seasonItems.append(self._dataProviderEntry(sID, self.clubsCtrl.getSeasonUserName(seasonID)))
+                        seasonUserName = self.clubsCtrl.getSeasonUserName(seasonID)
+                        if seasonUserName:
+                            seasonItems.append(self._dataProviderEntry(sID, seasonUserName))
 
         seasonIndex = 0
         for idx, season in enumerate(seasonItems):

@@ -4,7 +4,8 @@ from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from gui import game_control
-from gui.shared import events
+from gui.server_events.events_dispatcher import showEventsWindow
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.server_events import g_eventsCache, isPotapovQuestEnabled, settings as quest_settings
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -25,7 +26,7 @@ class QuestsControl(QuestsControlMeta):
 
     def _populate(self):
         super(QuestsControl, self)._populate()
-        g_eventsCache.potapov.onProgressUpdated += self.__onQuestsUpdated
+        g_eventsCache.onProgressUpdated += self.__onQuestsUpdated
         game_control.g_instance.igr.onIgrTypeChanged += self.__onQuestsUpdated
         g_clientUpdateManager.addCallbacks({'quests': self.__onQuestsUpdated,
          'cache.eventsData': self.__onQuestsUpdated})
@@ -34,11 +35,11 @@ class QuestsControl(QuestsControlMeta):
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onQuestsUpdated
-        g_eventsCache.potapov.onProgressUpdated -= self.__onQuestsUpdated
+        g_eventsCache.onProgressUpdated -= self.__onQuestsUpdated
         super(QuestsControl, self)._dispose()
 
     def showQuestsWindow(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EVENTS_WINDOW))
+        showEventsWindow()
 
     def __onQuestsUpdated(self, *args):
         svrEvents = g_eventsCache.getEvents()
@@ -60,4 +61,4 @@ class QuestsControl(QuestsControlMeta):
         if len(premiumIgrVehiclesQuests):
             storedValue = AccountSettings.getFilter(IGR_PROMO)
             if not storedValue['wasShown']:
-                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW))
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW), EVENT_BUS_SCOPE.LOBBY)

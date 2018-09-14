@@ -2,8 +2,8 @@
 
 
 class QUEST_TASK_FILTERS_TYPES(object):
-    ALL = 'all'
-    COMPLETED = 'completed'
-    IN_PROGRESS = 'inProgress'
-    UNAVAILABLE = 'unavailable'
-    NEED_RECEIVE_AWARD = 'needReceiveAward'
+    ALL = 0
+    COMPLETED = 1
+    IN_PROGRESS = 2
+    UNAVAILABLE = 3
+    NEED_RECEIVE_AWARD = 4

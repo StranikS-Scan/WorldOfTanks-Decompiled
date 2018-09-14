@@ -5,7 +5,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.Crew import Crew
 from gui.Scaleform.daapi.view.meta.CrewOperationsPopOverMeta import CrewOperationsPopOverMeta
 from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
-from gui.shared import g_itemsCache
+from gui.shared import g_itemsCache, EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
@@ -20,7 +20,7 @@ OPERATION_DROP_IN_BARRACK = 'dropInBarrack'
 
 class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, _ = None):
         super(CrewOperationsPopOver, self).__init__()
 
     def _populate(self):
@@ -131,7 +131,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def invokeOperation(self, operationName):
         if operationName == OPERATION_RETRAIN:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.RETRAIN_CREW))
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.RETRAIN_CREW), EVENT_BUS_SCOPE.LOBBY)
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
         else:

@@ -1,0 +1,59 @@
+<101_dday.xml>
+  <name>	#arenas:101_dday/name	</name>
+  <description>	#arenas:101_dday/description	</description>
+  <geometry>	spaces/101_dday	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.0 -500.0	</bottomLeft>
+    <upperRight>	600.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/101_dday/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <loadingMusic>	/music/intro/euro_village	</loadingMusic>
+  <wwloadingMusic>	music_euro_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	149.997192 -403.440826	</position1>
+        </team1>
+        <team2>
+          <position1>	149.662521 400.386627	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities>
+    <scenario>
+      <startTime>	15.000000 30.000000	</startTime>
+      <possibility>	95.000000	</possibility>
+      <period>	180.000000	</period>
+      <trajectories>
+        <warplane>
+          <preset>	Dday_paratrooper_airplane	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	Dday_air_defence	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	23.700001 23.700001	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</101_dday.xml>

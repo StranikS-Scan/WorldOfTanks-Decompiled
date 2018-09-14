@@ -1,0 +1,71 @@
+<07_lakeville.xml>
+  <name>	#arenas:07_lakeville/name	</name>
+  <description>	#arenas:07_lakeville/description	</description>
+  <geometry>	spaces/07_lakeville	</geometry>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/07_lakeville/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_spring_01	</ambientSound>
+  <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-169.513458 319.351288	</position1>
+        </team1>
+        <team2>
+          <position1>	-169.513443 -319.048615	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-169.513458 319.351288	</position>
+        </team1>
+        <team2>
+          <position>	-169.513443 -319.048615	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	258.899963 -4.200012	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	304.153 -279.054	</position>
+        </team1>
+        <team2>
+          <position>	322.875 247.673	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-265.064 -289.331	</position1>
+          <position2>	224.682 -204.587	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</07_lakeville.xml>

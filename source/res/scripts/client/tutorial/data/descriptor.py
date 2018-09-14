@@ -129,3 +129,9 @@ class DescriptorData(object):
 
     def isItemsRevertIfStop(self, reason):
         return reason in self.__itemsRevertSR
+
+    def getChapterByIdx(self, idx):
+        if idx < len(self.__contents):
+            return self.__contents[idx]
+        else:
+            return None

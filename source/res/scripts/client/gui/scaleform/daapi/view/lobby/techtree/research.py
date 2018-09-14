@@ -17,10 +17,11 @@ from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 
 class RESEARCH_HINT_ID(object):
-    ALONE = 'researchAlone'
+    PREMIUM = 'researchAlone'
     TOP = 'researchTop'
     ROOT = 'researchRoot'
     BASE = 'researchBase'
+    IGR_OR_FALLOUT = 'researchIgrFallout'
 
 
 class Research(ResearchMeta):
@@ -129,11 +130,15 @@ class Research(ResearchMeta):
         rootCD = self._data.getRootCD()
         hasParents = len(g_techTreeDP.getTopLevel(rootCD))
         hasChildren = len(g_techTreeDP.getNextLevel(rootCD))
+        vehicle = g_itemsCache.items.getItemByCD(rootCD)
         if hasParents and hasChildren:
             return RESEARCH_HINT_ID.BASE
         elif hasParents:
             return RESEARCH_HINT_ID.TOP
         elif hasChildren:
             return RESEARCH_HINT_ID.ROOT
+        elif vehicle is not None and vehicle.isPremium:
+            return RESEARCH_HINT_ID.PREMIUM
         else:
-            return RESEARCH_HINT_ID.ALONE
+            return RESEARCH_HINT_ID.IGR_OR_FALLOUT
+            return

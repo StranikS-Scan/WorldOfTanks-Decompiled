@@ -216,9 +216,6 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def clanInfo(self):
-        """
-        @return: clan info
-        """
         return self.getCacheValue('clanInfo', set())
 
     @property

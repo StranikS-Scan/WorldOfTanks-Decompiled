@@ -1,0 +1,61 @@
+<103_ruinberg_winter.xml>
+  <name>	#arenas:103_ruinberg_winter/name	</name>
+  <description>	#arenas:103_ruinberg_winter/description	</description>
+  <geometry>	spaces/103_ruinberg_winter	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/103_ruinberg_winter/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/euro_city	</loadingMusic>
+  <wwloadingMusic>	music_euro_city	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_winter_01	</ambientSound>
+  <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-66.399994 306.100006	</position1>
+        </team1>
+        <team2>
+          <position1>	-82.900002 -290.899994	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <controlPoint>	-337.060547 -48.506908	</controlPoint>
+      <teamSpawnPoints>
+        <team1>
+          <position>	64 333	</position>
+        </team1>
+        <team2>
+          <position>	270 -330	</position>
+        </team2>
+      </teamSpawnPoints>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	320.434 334.328	</position>
+        </team1>
+        <team2>
+          <position>	-336.217 -48.082	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-66.4 306.100	</position1>
+          <position2>	218.304 -88.969	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</103_ruinberg_winter.xml>

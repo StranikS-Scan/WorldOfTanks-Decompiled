@@ -7,7 +7,9 @@ from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleType
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.Scaleform.locale.ARENAS import ARENAS
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import isStartingScriptDone
@@ -26,10 +28,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def getTooltipData(self, itemData):
         if itemData is None:
             return ''
-        elif itemData == PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE:
+        elif itemData == PREBATTLE_ACTION_NAME.RANDOM_QUEUE:
             return TOOLTIPS.BATTLETYPES_STANDART
-        elif itemData == PREBATTLE_ACTION_NAME.HISTORICAL:
-            return TOOLTIPS.BATTLETYPES_HISTORICAL
         elif itemData == PREBATTLE_ACTION_NAME.UNIT:
             return TOOLTIPS.BATTLETYPES_UNIT
         elif itemData == PREBATTLE_ACTION_NAME.COMPANY:
@@ -51,6 +51,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                     return TOOLTIPS.BATTLETYPES_BATTLETUTORIAL
                 if itemData == PREBATTLE_ACTION_NAME.FALLOUT:
                     return TOOLTIPS.BATTLETYPES_FALLOUT
+                if itemData == PREBATTLE_ACTION_NAME.SANDBOX:
+                    return makeTooltip(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_100_THEPIT_NAME), map2=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))
             return ''
 
     def demoClick(self):
@@ -58,7 +60,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         if demonstratorWindow is not None:
             demonstratorWindow.onWindowClose()
         else:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.DEMONSTRATOR_WINDOW))
+            self.fireEvent(LoadViewEvent(VIEW_ALIAS.DEMONSTRATOR_WINDOW), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def update(self):

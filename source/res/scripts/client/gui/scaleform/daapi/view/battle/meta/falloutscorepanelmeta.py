@@ -11,3 +11,9 @@ class FalloutScorePanelMeta(BattleComponentMeta):
 
     def as_onSettingsChanged(self):
         self._flashObject.as_onSettingsChanged()
+
+    def as_playScoreHighlightAnim(self, isWinner):
+        self._flashObject.as_playScoreHighlightAnim(isWinner)
+
+    def as_stopScoreHighlightAnim(self):
+        self._flashObject.as_stopScoreHighlightAnim()

@@ -51,7 +51,7 @@ class Trigger(TutorialProxyHolder, IHasID):
                 else:
                     LOG_ERROR('Trigger not found', triggerID)
 
-        if len(effects):
+        if effects and self._tutorial is not None:
             self._tutorial.storeEffectsInQueue(effects, benefit=benefit)
         self.isRunning = False
         return

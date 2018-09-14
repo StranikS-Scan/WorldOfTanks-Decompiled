@@ -1,0 +1,35 @@
+<37_caucasus.xml>
+  <name>	#arenas:37_caucasus/name	</name>
+  <description>	#arenas:37_caucasus/description	</description>
+  <geometry>	spaces/37_caucasus	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/37_caucasus/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <batchingEnabled>	0	</batchingEnabled>
+  <umbraEnabled>	1	</umbraEnabled>
+  <loadingMusic>	/music/intro/Intro_kavkaz	</loadingMusic>
+  <wwloadingMusic>	music_kavkaz	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-376.743073 371.289215	</position1>
+        </team1>
+        <team2>
+          <position1>	345.804749 -399.466736	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</37_caucasus.xml>

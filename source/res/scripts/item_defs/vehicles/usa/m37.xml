@@ -1,0 +1,505 @@
+<m37.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56.3	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <repairCost>	8.86	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A17_M37/M37_CM.DDS	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	12.7	</armor_1>
+      <armor_2>	12.7	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	12.7	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	12.7	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	9518	</weight>
+    <maxHealth>	144	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A17_M37/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A17_M37/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A17_M37/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 36.00 0.38 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.30 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.83	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.133949 0.577125 0.992825	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A17_M37/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-1.22516 0.918176 1.01734	</rayStart>
+        <rayEnd>	-1.09456 0.916534 0.639262	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.45888 0.68516 -0.654535	</rayStart>
+        <rayEnd>	-1.37888 0.68516 -0.654535	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.71887 0.647613 0.431243	</rayStart>
+        <rayEnd>	-1.11888 0.647613 0.431242	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.71887 0.647613 0.431243	</rayStart>
+        <rayEnd>	1.11888 0.647613 0.431242	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	1.45888 0.68516 -0.654535	</rayStart>
+        <rayEnd>	1.37888 0.68516 -0.654535	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <T85E1>
+      <userString>	#usa_vehicles:T85E1	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1380	</price>
+      <unlocks>
+        <chassis>	T85E2	  <cost>	1050	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	21000	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	19000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	25	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A17_M37/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A17_M37/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A17_M37/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.28	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.914225 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A17_M37/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.23407 1.48331	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.078960 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.371340 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.636580	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T85E1>
+    <T85E2>
+      <userString>	#usa_vehicles:T85E2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	3900	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	23000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	21000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A17_M37/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A17_M37/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A17_M37/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.5	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.28	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.339556	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.288634	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.164957	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.308681	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 0.914225 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A17_M37/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.23407 1.48331	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.093650 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.371340 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.636580	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T85E2>
+  </chassis>
+  <turrets0>
+    <M37D1>
+      <ceilless>	true	</ceilless>
+      <userString>	#usa_vehicles:M37D1	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	50	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	36	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Howitzer_M3>	shared	  <reloadTime>	15	</reloadTime>
+          <maxAmmo>	126	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -42.8 1 -42.8	</minPitch>
+            <maxPitch>	0 10.5 1 10.5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_Howitzer_M4	  <cost>	3900	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionRadius>	0.82	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.48	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-25.4 26.3	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A17_M37/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A17_M37/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A17_M37/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A17_M37/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Howitzer_M3>
+        <_105mm_Howitzer_M4>	shared	  <maxAmmo>	126	</maxAmmo>
+          <reloadTime>	15	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -42.8 1 -42.8	</minPitch>
+            <maxPitch>	0 10.5 1 10.5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	A18_M41	  <cost>	13150	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.8	</shotDispersionRadius>
+          <aimingTime>	5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.44	</turretRotation>
+            <afterShot>	6	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-25.4 26.3	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A17_M37/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A17_M37/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A17_M37/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A17_M37/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+        </_105mm_Howitzer_M4>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A17_M37/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A17_M37/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A17_M37/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A17_M37/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.019467 0.297126 -0.036049	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.060 0.035 0.912 -0.000 1.039 -0.029 0.321 0.100 0.209 0.500 0.000 0.500 0.393 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </M37D1>
+  </turrets0>
+  <engines>
+    <Continental_W-670>	shared	  <unlocks>
+        <engine>	Twin_Cadillac_series_44T4	  <cost>	820	</cost>
+        </engine>
+      </unlocks>
+    </Continental_W-670>
+    <Twin_Cadillac_series_44T4>	shared	</Twin_Cadillac_series_44T4>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <SCR_510>	shared	  <unlocks>
+        <radio>	SCR_610	  <cost>	1480	</cost>
+        </radio>
+      </unlocks>
+    </SCR_510>
+    <SCR_610>	shared	  <unlocks>
+        <radio>	SCR_619	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_610>
+    <SCR_619>	shared	</SCR_619>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</m37.xml>

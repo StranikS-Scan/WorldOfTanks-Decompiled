@@ -1,0 +1,83 @@
+<battle-descriptor.xml>
+  <gui>	gui/tutorial-battle-gui.xml	</gui>
+  <initial-chapter>	VehicleControl	</initial-chapter>
+  <behavior-if-stopping>
+    <items-revert>
+      <reason>	CRITICAL_ERROR	</reason>
+    </items-revert>
+  </behavior-if-stopping>
+  <chapters>
+    <chapter>
+      <title>	_(#battle_tutorial:chapters/vehicle-control/title)	</title>
+      <description>	_(#battle_tutorial:chapters/vehicle-control/description)	</description>
+      <chapter-id>	VehicleControl	</chapter-id>
+      <bonus>
+        <id>	3	</id>
+        <values>
+          <credits>
+            <asInt>	1500	</asInt>
+          </credits>
+          <freeXP>
+            <asInt>	75	</asInt>
+          </freeXP>
+        </values>
+      </bonus>
+      <file-path>	scripts/tutorial_docs/vehicle-control.xml	</file-path>
+      <shared-scene>	scripts/tutorial_docs/battle-shared-scene.xml	</shared-scene>
+    </chapter>
+    <chapter>
+      <title>	_(#battle_tutorial:chapters/destroy-bot-1/title)	</title>
+      <description>	_(#battle_tutorial:chapters/destroy-bot-1/description)	</description>
+      <chapter-id>	DestroyBot1	</chapter-id>
+      <bonus>
+        <id>	4	</id>
+        <values>
+          <credits>
+            <asInt>	1500	</asInt>
+          </credits>
+          <freeXP>
+            <asInt>	75	</asInt>
+          </freeXP>
+        </values>
+      </bonus>
+      <file-path>	scripts/tutorial_docs/destroy-bot-1.xml	</file-path>
+      <shared-scene>	scripts/tutorial_docs/battle-shared-scene.xml	</shared-scene>
+    </chapter>
+    <chapter>
+      <title>	_(#battle_tutorial:chapters/destroy-bot-2/title)	</title>
+      <description>	_(#battle_tutorial:chapters/destroy-bot-2/description)	</description>
+      <chapter-id>	DestroyBot2	</chapter-id>
+      <bonus>
+        <id>	5	</id>
+        <values>
+          <credits>
+            <asInt>	1500	</asInt>
+          </credits>
+          <freeXP>
+            <asInt>	75	</asInt>
+          </freeXP>
+        </values>
+      </bonus>
+      <file-path>	scripts/tutorial_docs/destroy-bot-2.xml	</file-path>
+      <shared-scene>	scripts/tutorial_docs/battle-shared-scene.xml	</shared-scene>
+    </chapter>
+    <chapter>
+      <title>	_(#battle_tutorial:chapters/destroy-bot-3/title)	</title>
+      <description>	_(#battle_tutorial:chapters/destroy-bot-3/description)	</description>
+      <chapter-id>	DestroyBot3	</chapter-id>
+      <bonus>
+        <id>	6	</id>
+        <values>
+          <credits>
+            <asInt>	1500	</asInt>
+          </credits>
+          <freeXP>
+            <asInt>	75	</asInt>
+          </freeXP>
+        </values>
+      </bonus>
+      <file-path>	scripts/tutorial_docs/destroy-bot-3.xml	</file-path>
+      <shared-scene>	scripts/tutorial_docs/battle-shared-scene.xml	</shared-scene>
+    </chapter>
+  </chapters>
+</battle-descriptor.xml>

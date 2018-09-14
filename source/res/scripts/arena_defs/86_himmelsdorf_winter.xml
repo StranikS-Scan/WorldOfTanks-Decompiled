@@ -1,0 +1,65 @@
+<86_himmelsdorf_winter.xml>
+  <name>	#arenas:86_himmelsdorf_winter/name	</name>
+  <description>	#arenas:86_himmelsdorf_winter/description	</description>
+  <geometry>	spaces/86_himmelsdorf_winter	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/86_himmelsdorf_winter/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_winter_02	</ambientSound>
+  <wwambientSound>	ambient_wind_winter_02	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	2.504584 -252.600204	</position1>
+        </team1>
+        <team2>
+          <position1>	69.099899 348.999969	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	361.126 349.303	</position>
+        </team1>
+        <team2>
+          <position>	355.252 -243.459	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-223.100113 64.999939	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-123.776 356.640	</position>
+        </team1>
+        <team2>
+          <position>	374.261 -241.209	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-216.614029 11.042587	</position1>
+          <position2>	103.040977 335.699005	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+</86_himmelsdorf_winter.xml>

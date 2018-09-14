@@ -1,0 +1,373 @@
+<chain-2.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <clear-scene></clear-scene>
+        <set-var>	SelectedVehicle	</set-var>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	ResearchButtonHint	  <condition>
+            <active>	VehicleResearchButtonOnScene	</active>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <effect-not-triggered>	ResearchButtonHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	BuyVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-none></is-none>
+            </var>
+            <effect-not-triggered>	BuyVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <either>
+              <effect-triggered>	UnlockItemHint	</effect-triggered>
+              <effect-triggered>	BuyItemHint	</effect-triggered>
+              <effect-triggered>	NoItemToBuyHint	</effect-triggered>
+              <effect-triggered>	PremiumVehicleHint	</effect-triggered>
+            </either>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	VehicleResearchButton	  <on-scene-effects>
+            <activate>	VehicleResearchButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	VehicleResearchButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	Research	  <gui-items>
+        <gui-item>	ResearchRootNode	  <on-scene-effects>
+            <activate>	ResearchRootNodeOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	ResearchRootNodeOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	ResearchItemNode	  <on-scene-effects>
+            <activate>	ResearchItemNodeOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	ResearchItemNodeOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+      <post-effects>
+        <inactivate>	ResearchItemNodeOnScene	</inactivate>
+        <inactivate>	UnlockItemClicked	</inactivate>
+        <inactivate>	BuyItemClicked	</inactivate>
+        <inactivate>	ItemUnlocked	</inactivate>
+        <inactivate>	ItemIsInstalled	</inactivate>
+        <inactivate>	ShowCongratulation	</inactivate>
+        <run-trigger>	ItemUnlockedTrigger	</run-trigger>
+        <run-trigger>	ItemInstalledTrigger	</run-trigger>
+        <run-trigger>	BonusTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <set-var>	NextToBuyItemCD	  <condition>
+            <effect-not-triggered>	NextToBuyItemCD	</effect-not-triggered>
+            <game-item>	SelectedVehicleID	  <not-premium></not-premium>
+            </game-item>
+          </condition>
+        </set-var>
+        <set-var>	NextToUnlockItemCD	  <condition>
+            <effect-not-triggered>	NextToUnlockItemCD	</effect-not-triggered>
+            <game-item>	SelectedVehicleID	  <not-premium></not-premium>
+            </game-item>
+            <var>	NextToFindItemID	  <is-none></is-none>
+            </var>
+          </condition>
+        </set-var>
+        <run-trigger>	SimpleDialogTrigger	  <condition>
+            <effect-not-triggered>	SimpleDialogTrigger	</effect-not-triggered>
+            <game-item>	SelectedVehicleID	  <not-premium></not-premium>
+            </game-item>
+            <var>	NextToFindItemID	  <is-not-none></is-not-none>
+            </var>
+          </condition>
+        </run-trigger>
+        <set-gui-item-criteria>	ResearchRootNodeCriteria	  <condition>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <inactive>	ResearchRootNodeOnScene	</inactive>
+          </condition>
+        </set-gui-item-criteria>
+        <set-gui-item-criteria>	NextToFindItemCriteria	  <condition>
+            <var>	NextToFindItemID	  <is-not-none></is-not-none>
+            </var>
+            <inactive>	ResearchItemNodeOnScene	</inactive>
+          </condition>
+        </set-gui-item-criteria>
+        <show-hint>	UnlockItemHint	  <condition>
+            <active>	ResearchItemNodeOnScene	</active>
+            <inactive>	UnlockItemClicked	</inactive>
+            <game-item>	NextToFindItemID	  <not-unlocked></not-unlocked>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	BuyItemHint	  <condition>
+            <active>	ResearchItemNodeOnScene	</active>
+            <inactive>	BuyItemClicked	</inactive>
+            <game-item>	NextToFindItemID	  <unlocked></unlocked>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	NoItemToBuyHint	  <condition>
+            <active>	ResearchRootNodeOnScene	</active>
+            <var>	NextToFindItemID	  <is-none></is-none>
+            </var>
+            <game-item>	SelectedVehicleID	  <not-premium></not-premium>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	PremiumVehicleHint	  <condition>
+            <active>	ResearchRootNodeOnScene	</active>
+            <game-item>	SelectedVehicleID	  <premium></premium>
+            </game-item>
+          </condition>
+        </show-hint>
+        <activate>	ShowCongratulation	  <condition>
+            <active>	ItemIsInstalled	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </activate>
+        <request-bonus>
+          <condition>
+            <active>	ItemIsInstalled	</active>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <active>	ItemIsInstalled	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </show-award-window>
+        <refuse-training>
+          <condition>
+            <active>	ItemIsInstalled	</active>
+            <active>	BonusReceived	</active>
+            <active>	ShowCongratulation	</active>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <game-attribute>	SelectedVehicle	  <var-ref>	SelectedVehicleID	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+    <game-attribute>	NextToUnlockItemCD	  <var-ref>	NextToFindItemID	</var-ref>
+      <name>	NextToUnlockItemCD	</name>
+      <args>	SelectedVehicleID	</args>
+    </game-attribute>
+    <game-attribute>	NextToBuyItemCD	  <var-ref>	NextToFindItemID	</var-ref>
+      <name>	NextToBuyItemCD	</name>
+      <args>	SelectedVehicleID	</args>
+    </game-attribute>
+    <gui-item-criteria>	ResearchRootNodeCriteria	  <item-id>	ResearchRootNodeID	</item-id>
+      <value>	id=$SelectedVehicleID$	</value>
+      <cached>	False	</cached>
+    </gui-item-criteria>
+    <gui-item-criteria>	NextToFindItemCriteria	  <item-id>	ResearchItemNodeID	</item-id>
+      <value>	id=$NextToFindItemID$	</value>
+      <cached>	False	</cached>
+    </gui-item-criteria>
+    <hint>	BuyVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	BuyVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	ResearchButtonHint	  <item-id>	VehicleResearchButton	</item-id>
+      <text>	_(#tutorial:chain2/hint/goToResearch)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	VehicleResearchButton	  <effects>
+            <activate>	VehicleResearchButtonClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	VehicleResearchButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	VehicleResearchButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	UnlockItemHint	  <item-id>	ResearchItemNode	</item-id>
+      <text>	_(#tutorial:chain2/hint/unlockItem)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	ResearchItemNode	  <effects>
+            <activate>	UnlockItemClicked	</activate>
+            <close-hint>	UnlockItemHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	ResearchItemNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	ResearchItemNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BuyItemHint	  <item-id>	ResearchItemNode	</item-id>
+      <text>	_(#tutorial:chain2/hint/buyItem)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	ResearchItemNode	  <effects>
+            <activate>	BuyItemClicked	</activate>
+            <close-hint>	BuyItemHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	ResearchItemNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	ResearchItemNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	NoItemToBuyHint	  <item-id>	ResearchRootNode	</item-id>
+      <text>	_(#tutorial:chain2/hint/noItemsToBuy)	</text>
+      <padding>
+        <left>	175	</left>
+        <top>	-212	</top>
+        <right>	-518	</right>
+        <bottom>	-234	</bottom>
+      </padding>
+      <actions>
+        <click>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	PremiumVehicleHint	  <item-id>	ResearchRootNode	</item-id>
+      <text>	_(#tutorial:chain2/hint/noItemsToUnlock)	</text>
+      <padding>
+        <left>	175	</left>
+        <top>	-212	</top>
+        <right>	-518	</right>
+        <bottom>	-234	</bottom>
+      </padding>
+      <actions>
+        <click>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	ResearchRootNode	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <simple-window>	CongratulationWindow	  <type>	awardWindow	</type>
+      <var-ref>	ChapterVar	</var-ref>
+      <description>	_(#tutorial:tutorialQuest/awardWindow/description/quest3)	</description>
+    </simple-window>
+  </has-id>
+  <triggers>
+    <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
+      <on-effects></on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	ItemUnlockedTrigger	  <type>	unlocked	</type>
+      <validate-var>	NextToFindItemID	</validate-var>
+      <validate-update-only></validate-update-only>
+      <on-effects>
+        <activate>	ItemUnlocked	</activate>
+      </on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	ItemInstalledTrigger	  <type>	installed	</type>
+      <validate-var>	NextToFindItemID	</validate-var>
+      <validate-update-only></validate-update-only>
+      <vehicle-var>	SelectedVehicleID	</vehicle-var>
+      <on-effects>
+        <activate>	ItemIsInstalled	</activate>
+      </on-effects>
+      <off-effects>
+        <refuse-training></refuse-training>
+      </off-effects>
+    </trigger>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	BonusReceived	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain/hint/buyVehicle)	</asString>
+    </var-set>
+  </vars>
+</chain-2.xml>

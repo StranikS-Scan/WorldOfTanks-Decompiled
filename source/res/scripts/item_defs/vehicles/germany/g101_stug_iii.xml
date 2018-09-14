@@ -1,0 +1,581 @@
+<g101_stug_iii.xml>
+  <crew>
+    <commander></commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	5.50	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G101_StuG_III/StuG_III_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	25	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	50	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	16	</armor_10>
+      <armor_11>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_11>
+      <armor_12>	10	</armor_12>
+      <armor_13>	15	</armor_13>
+      <armor_14>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+      <armor_15>	30	</armor_15>
+      <armor_16>	30	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14960	</weight>
+    <maxHealth>	208	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.139781 0.544163 1.12004	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G101_StuG_III/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.691199 0.386913 1.83485	</rayStart>
+        <rayEnd>	0.691209 0.325018 1.43967	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.26086 0.586076 0.646609	</rayStart>
+        <rayEnd>	-0.905824 0.401822 0.646609	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	1.2676 0.581736 -0.0687234	</rayStart>
+        <rayEnd>	0.91531 0.39228 -0.0687234	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.75	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	0.00597128 0.184059 2.6796	</rayStart>
+        <rayEnd>	0.00597128 -0.13119 2.43339	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.53	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	1.26086 0.586076 0.646609	</rayStart>
+        <rayEnd>	0.905824 0.401822 0.646609	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_G101_StuG_III>
+      <userString>	#germany_vehicles:Chassis_G101_StuG_III	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800	</price>
+      <unlocks>
+        <chassis>	Chassis_G101_StuG_III_2	  <cost>	1115	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5350	</weight>
+      <maxLoad>	24000	</maxLoad>
+      <terrainResistance>	1.3 1.7 2.9	</terrainResistance>
+      <brakeForce>	24000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.05	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.435001	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.162277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.370484	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.435001	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.162277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.370484	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.08884 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.25706 1.49473	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.131040 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.633260 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.679970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_G101_StuG_III>
+    <Chassis_G101_StuG_III_2>
+      <userString>	#germany_vehicles:Chassis_G101_StuG_III_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4740	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5350	</weight>
+      <maxLoad>	26500	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
+      <brakeForce>	27000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.05	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.435001	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.162277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.370484	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.435001	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.162277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.370484	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.255	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <hullPosition>	0.000000 1.08884 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.25706 1.49473	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.144520 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.633260 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.679970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_G101_StuG_III_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_G101_StuG_III>
+      <userString>	#germany_vehicles:Turret_1_G101_StuG_III	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	52	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_StuK_37_L24>	shared	  <unlocks>
+            <gun>	_75mm_StuK_40_L43	  <cost>	2140	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-12 12	</turretYawLimits>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <models>
+            <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_75mm_StuK_37_L24>
+        <_75mm_StuK_40_L43>	shared	  <reloadTime>	3.9	</reloadTime>
+          <unlocks>
+            <gun>	_75mm_PaK_39_L48	  <cost>	3400	</cost>
+            </gun>
+            <vehicle>	StuG_40_AusfG	  <cost>	12640	</cost>
+            </vehicle>
+            <gun>	_105mm_StuH42_L28	  <cost>	3800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.8	</aimingTime>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_StuK_40_L43>
+        <_75mm_PaK_39_L48>	shared	  <reloadTime>	3.9	</reloadTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_PaK_39_L48>
+        <_105mm_StuH42_L28>	shared	  <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <maxAmmo>	28	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <reloadTime>	9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_StuH42_L28>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G101_StuG_III/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G101_StuG_III/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.008068 0.000871 -0.10535	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <turretRotatorSoundManual></turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_G101_StuG_III>
+  </turrets0>
+  <engines>
+    <Maybach_HL_108TR>	shared	  <unlocks>
+        <engine>	Maybach_HL_120_TR	  <cost>	710	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_108TR>
+    <Maybach_HL_120_TR>	shared	  <unlocks>
+        <engine>	Maybach_HL_120_TRM	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_120_TR>
+    <Maybach_HL_120_TRM>	shared	</Maybach_HL_120_TRM>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	</FuG7>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g101_stug_iii.xml>

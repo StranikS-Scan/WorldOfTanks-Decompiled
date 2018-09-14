@@ -1,0 +1,74 @@
+<regular_4_3_14.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_14_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <unit>
+              <and>
+                <unitVehicleKills>
+                  <greaterOrEqual>	8	</greaterOrEqual>
+                </unitVehicleKills>
+              </and>
+            </unit>
+            <and>
+              <vehicleKills>
+                <greaterOrEqual>	8	</greaterOrEqual>
+              </vehicleKills>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+        <item>	7929	  <count>	1	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_3_14_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleKills>
+                    <greaterOrEqual>	8	</greaterOrEqual>
+                  </unitVehicleKills>
+                </and>
+              </unit>
+              <and>
+                <vehicleKills>
+                  <greaterOrEqual>	8	</greaterOrEqual>
+                </vehicleKills>
+              </and>
+            </or>
+            <or>
+              <unit>
+                <and>
+                  <unitVehicleDamage>
+                    <greaterOrEqual>	4000	</greaterOrEqual>
+                  </unitVehicleDamage>
+                </and>
+              </unit>
+              <and>
+                <vehicleDamage>
+                  <greaterOrEqual>	4000	</greaterOrEqual>
+                </vehicleDamage>
+              </and>
+            </or>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	2	</premium>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_4_3_14.xml>

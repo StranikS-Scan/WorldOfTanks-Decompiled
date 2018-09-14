@@ -13,6 +13,14 @@ class TutorialConfirmRefuseDialog(TutorialDialog):
     def setStartOnNextLogin(self, value):
         self._cache.setStartOnNextLogin(value)
 
+    def _populate(self):
+        super(TutorialConfirmRefuseDialog, self)._populate()
+        data = self._content
+        self.as_setContentS({'title': data['title'],
+         'message': data['message'],
+         'checkBoxLabel': data['checkBoxLabel'],
+         'doStartOnNextLogin': data['doStartOnNextLogin']})
+
 
 class TutorialBattleStatisticWindow(TutorialWindow, TutorialBattleStatisticMeta):
 

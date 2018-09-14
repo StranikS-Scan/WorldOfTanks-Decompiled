@@ -3,8 +3,8 @@ import ResMgr
 from Vibroeffects import VibroManager
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.abstract.SoundManagerMeta import SoundManagerMeta
-from gui.shared.utils.sound import Sound
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
+import SoundGroups
 
 class SoundManager(SoundManagerMeta):
 
@@ -26,7 +26,7 @@ class SoundManager(SoundManagerMeta):
     def playControlSound(self, state, type, id):
         sound = self.sounds.getControlSound(type, state, id)
         if sound is not None:
-            Sound(sound).play()
+            SoundGroups.g_instance.playSound2D(sound)
             if state == 'press':
                 VibroManager.g_instance.playButtonClickEffect(type)
         return
@@ -34,5 +34,5 @@ class SoundManager(SoundManagerMeta):
     def playEffectSound(self, effectName):
         sound = self.sounds.getEffectSound(effectName)
         if sound is not None:
-            Sound(sound).play()
+            SoundGroups.g_instance.playSound2D(sound)
         return

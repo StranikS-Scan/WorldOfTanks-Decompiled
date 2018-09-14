@@ -60,7 +60,7 @@ class DictPacker(object):
         l = [None] * len(metaData)
         for index, metaEntry in enumerate(metaData):
             try:
-                name, transportType, default, packer = metaEntry
+                name, transportType, default, packer, aggFunc = metaEntry
                 default = copy.deepcopy(default)
                 v = dataDict.get(name, default)
                 if v is None:
@@ -84,7 +84,7 @@ class DictPacker(object):
         ret = {}
         for index, meta in enumerate(self._metaData):
             val = dataList[index]
-            name, _, default, packer = meta
+            name, _, default, packer, aggFunc = meta
             default = copy.deepcopy(default)
             if val is None:
                 val = default
@@ -122,10 +122,10 @@ class SimpleDictPacker(object):
 
 
 class MetaEntry(object):
-    __slots__ = ('name', 'transportType', 'default', 'packer')
+    __slots__ = ('name', 'transportType', 'default', 'packer', 'aggFunc')
 
     def __init__(self, *data):
-        self.name, self.transportType, default, self.packer = data
+        self.name, self.transportType, default, self.packer, self.aggFunc = data
         self.default = copy.deepcopy(default)
 
 

@@ -37,7 +37,7 @@ def getCompletedPotapovQuestsCount(seasonID, vehClasses):
         return quest.isFullCompleted() and len(vehClasses & quest.getVehicleClasses())
 
     result = 0
-    for tile in g_eventsCache.potapov.getSeasons()[seasonID].getTiles().itervalues():
+    for tile in g_eventsCache.random.getSeasons()[seasonID].getTiles().itervalues():
         result += len(tile.getQuestsByFilter(_filter))
 
     return result

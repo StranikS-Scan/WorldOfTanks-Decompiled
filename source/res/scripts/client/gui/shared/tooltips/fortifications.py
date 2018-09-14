@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import icons, text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -12,6 +12,27 @@ def _packTimeLimitsBlock(block, limits):
     for limit in limits:
         text = i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT, startTime=limit.startTime, endTime=limit.endTime)
         block.append(formatters.packImageTextBlockData(title=text_styles.error(text), txtOffset=textOffset))
+
+
+class FortPopoverDefResTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(FortPopoverDefResTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
+        self._setContentMargin(top=15, left=19, bottom=21, right=22)
+        self._setMargins(afterBlock=14)
+        self._setWidth(380)
+        self._descr = TOOLTIPS.FORTIFICATION_POPOVER_DEFRESPROGRESS_BODY
+
+    def _packBlocks(self, compensationValue):
+        title = TOOLTIPS.FORTIFICATION_POPOVER_DEFRESPROGRESS_HEADER
+        items = super(FortPopoverDefResTooltipData, self)._packBlocks()
+        items.append(formatters.packTitleDescBlock(text_styles.highTitle(title), desc=text_styles.main(self._descr)))
+        if compensationValue is not None:
+            blocksGap = 12
+            compensationHeader = text_styles.main(TOOLTIPS.FORTIFICATION_POPOVER_DEFRESPROGRESS_COMPENSATION_HEADER) + text_styles.alert('+' + compensationValue) + icons.nut()
+            compensationBody = text_styles.standard(TOOLTIPS.FORTIFICATION_POPOVER_DEFRESPROGRESS_COMPENSATION_BODY)
+            items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.concatStylesToMultiLine(compensationHeader, compensationBody))], blocksGap, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        return items
 
 
 class FortListViewTooltipData(BlocksTooltipData):

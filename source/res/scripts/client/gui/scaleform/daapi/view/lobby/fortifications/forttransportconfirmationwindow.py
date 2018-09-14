@@ -2,6 +2,7 @@
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications import FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -20,10 +21,10 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
 
     def __init__(self, ctx = None):
         super(FortTransportConfirmationWindow, self).__init__()
-        self.addListener(events.FortEvent.CLOSE_TRANSPORT_CONFIRM_WINDOW, self.__forcedCloseWindow, scope=FortifiedWindowScopes.FORT_MAIN_SCOPE)
         self.__fromId = ctx.get('fromId')
         self.__toId = ctx.get('toId')
         self.__isInTutorial = self._isTutorial()
+        self.__disposeRequestReceived = False
 
     def _populate(self):
         super(FortTransportConfirmationWindow, self)._populate()
@@ -31,21 +32,9 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
         self._update()
         g_fortSoundController.playNextStepTransport()
 
-    def __forcedCloseWindow(self, _):
-        BigWorld.callback(0.2, self.__destoryCallback)
-
-    def __destoryCallback(self):
-        self.destroy()
-
     def _dispose(self):
-        self.removeListener(events.FortEvent.CLOSE_TRANSPORT_CONFIRM_WINDOW, self.__forcedCloseWindow, scope=FortifiedWindowScopes.FORT_MAIN_SCOPE)
         self.stopFortListening()
-        ctrl = self.fortCtrl
-        if ctrl is not None and ctrl.getFort() is not None:
-            self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED,
-             'isInTutorial': self.__isInTutorial}), scope=EVENT_BUS_SCOPE.FORT)
         super(FortTransportConfirmationWindow, self)._dispose()
-        return
 
     def _update(self):
         prefix = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_MAXTRANSPORTINGSIZELABEL)
@@ -77,13 +66,13 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
         if buildingTypeID in (self.getServerBuildId(), self.getServerBuildId(False)) and reason == BUILDING_UPDATE_REASON.DELETED:
-            self.destroy()
+            self.__changeStateAndDestroy()
 
     def onWindowClose(self):
-        self.destroy()
+        self.__changeStateAndDestroy()
 
     def onCancel(self):
-        self.destroy()
+        self.__changeStateAndDestroy()
 
     def onTransporting(self, size):
         g_fortSoundController.playStartTransport()
@@ -97,10 +86,9 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
                 fromBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId())
                 toBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId(False))
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
-            self.destroy()
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ERRORS_EVENT_COOLDOWN, type=SystemMessages.SM_TYPE.Error)
-            self.destroy()
+        self.__changeStateAndDestroy()
 
     def getTransportingSize(self):
         fromBuild = self.getBuildDescr()
@@ -117,3 +105,14 @@ class FortTransportConfirmationWindow(FortTransportConfirmationWindowMeta, FortV
 
     def getServerBuildId(self, isSource = True):
         return self.getBuildingIDbyUID(self.__fromId if isSource else self.__toId)
+
+    def __forcedCloseWindow(self, _):
+        self.__disposeRequestReceived = True
+
+    def __changeStateAndDestroy(self):
+        ctrl = self.fortCtrl
+        if ctrl is not None and ctrl.getFort() is not None:
+            self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED,
+             'isInTutorial': self.__isInTutorial}), scope=EVENT_BUS_SCOPE.FORT)
+        self.destroy()
+        return

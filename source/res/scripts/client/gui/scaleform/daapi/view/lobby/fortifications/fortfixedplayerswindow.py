@@ -16,7 +16,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import icons, text_styles
 from gui.shared.fortifications.context import AttachCtx
-from gui.shared.utils.functions import getClanRoleString
+from gui.clans.formatters import getClanRoleString
 from helpers import i18n
 from shared_utils import findFirst
 

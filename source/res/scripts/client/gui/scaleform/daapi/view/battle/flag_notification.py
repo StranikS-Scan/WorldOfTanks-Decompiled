@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/flag_notification.py
 import weakref
-import SoundGroups
 from debug_utils import LOG_ERROR
 from gui.battle_control import g_sessionProvider
 from gui.shared.utils.plugins import IPlugin
@@ -21,20 +20,16 @@ class _FlagNotification(object):
         self.__flashObject = weakref.proxy(battleUI.movie.flagNotification.instance)
         self.__notificationsByType = {_NOTIFICATION_TYPE.FLAG_CAPTURED: {'type': 'flagCaptured',
                                             'title': i18n.makeString('#ingame_gui:flagNotification/flagCaptured'),
-                                            'message': i18n.makeString('#ingame_gui:flagNotification/flagInbase'),
-                                            'sound': '/GUI/fallout/capture_flag'},
+                                            'message': i18n.makeString('#ingame_gui:flagNotification/flagInbase')},
          _NOTIFICATION_TYPE.FLAG_DELIVERED: {'type': 'flagDelivered',
                                              'title': i18n.makeString('#ingame_gui:flagNotification/flagDelivered'),
-                                             'message': '',
-                                             'sound': '/GUI/fallout/delivery flag'},
+                                             'message': ''},
          _NOTIFICATION_TYPE.FLAG_ABSORBED: {'type': 'flagDelivered',
                                             'title': i18n.makeString('#ingame_gui:flagNotification/flagAbsorbed'),
-                                            'message': '',
-                                            'sound': '/GUI/fallout/delivery flag'},
+                                            'message': ''},
          _NOTIFICATION_TYPE.FLAG_DROPPED: {'type': 'flagDropped',
                                            'title': None,
-                                           'message': None,
-                                           'sound': None}}
+                                           'message': None}}
         return
 
     def destroy(self):
@@ -62,12 +57,8 @@ class _FlagNotification(object):
         if typeID in self.__notificationsByType:
             notifications = self.__notificationsByType[typeID]
             self.__showMsg(notifications['type'], notifications['title'], notifications['message'])
-            sound = notifications['sound']
-            if sound is not None:
-                SoundGroups.g_instance.playSound2D(sound)
         else:
             LOG_ERROR('No such msgType: ', typeID)
-        return
 
     def __showMsg(self, type, title, msg):
         if self.__flashObject is not None:
@@ -92,7 +83,7 @@ class FlagNotificationPlugin(IPlugin):
 
     def start(self):
         super(FlagNotificationPlugin, self).start()
-        self._parentObj.movie.loadFlagNotification()
+        self._parentObj.movie.falloutItems.as_loadFlagNotification()
 
     def stop(self):
         g_sessionProvider.getNotificationsCtrl().stop()

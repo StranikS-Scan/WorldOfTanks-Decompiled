@@ -10,7 +10,7 @@ from gui.prb_control.context import prb_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.items import prb_items
 from gui.prb_control.prb_helpers import PrbListener
-from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import int2roman
 from messenger import g_settings
@@ -27,7 +27,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
     def __init__(self, prbName = 'prebattle'):
         super(BasePrebattleRoomView, self).__init__()
         self.__prbName = prbName
-        self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getPrbType())
+        self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getEntityType())
 
     def onSourceLoaded(self):
         if self.prbFunctional and not self.prbFunctional.hasEntity():
@@ -48,7 +48,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
             self.as_toggleReadyBtnS(not value)
 
     def requestToLeave(self):
-        self.prbDispatcher.doLeaveAction(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.INTRO_PREBATTLE))
+        self.prbDispatcher.doLeaveAction(prb_ctx.LeavePrbCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.SWITCH))
 
     def showPrebattleSendInvitesWindow(self):
         if self.canSendInvite():

@@ -5,9 +5,9 @@ from ConnectionManager import connectionManager
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import game_control, GUI_SETTINGS
+from gui.shared import g_itemsCache
 from helpers import i18n
 from gui.SystemMessages import SM_TYPE, BaseSystemMessages
-from gui.shared.utils.requesters import DeprecatedStatsRequester
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from PlayerEvents import g_playerEvents
 from MemoryCriticalController import g_critMemHandler
@@ -81,9 +81,8 @@ class SystemMessagesInterface(BaseSystemMessages):
     def __onConnected(self):
         self.pushI18nMessage('#system_messages:connected', connectionManager.serverUserName, type=SM_TYPE.GameGreeting)
 
-    @process
     def __checkPremiumAccountExpiry(self, ctx = None):
-        expiryUTCTime = yield DeprecatedStatsRequester().getPremiumExpiryTime()
+        expiryUTCTime = g_itemsCache.items.stats.premiumExpiryTime
         delta = account_helpers.getPremiumExpiryDelta(expiryUTCTime)
         if delta.days == 0 and expiryUTCTime and not self.__expirationShown:
             self.proto.serviceChannel.pushClientMessage(expiryUTCTime, SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG)

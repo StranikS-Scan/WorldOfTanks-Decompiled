@@ -1,10 +1,10 @@
 # Embedded file name: scripts/common/bonus_readers.py
+import time
+import items
+import calendar
 from account_shared import validateCustomizationItem
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, DictBlockBuilder, ListBlockBuilder, BinarySetDossierBlockBuilder
-import items
 from items import vehicles, tankmen
-import time
-from debug_utils import *
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
@@ -18,7 +18,7 @@ def readUTC(section, field, default = None):
             raise Exception, 'Wrong timeData'
         if timeData != '':
             timeData = time.strptime(timeData, '%d.%m.%Y %H:%M')
-            timeData = int(time.mktime(timeData))
+            timeData = int(calendar.timegm(timeData))
         else:
             if default is None:
                 raise Exception, 'Wrong default'

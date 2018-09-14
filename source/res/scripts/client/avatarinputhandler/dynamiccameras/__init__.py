@@ -58,7 +58,8 @@ class CameraDynamicConfig(dict):
      ImpulseReason.SPLASH: 'splash',
      ImpulseReason.COLLISION: 'collision',
      ImpulseReason.VEHICLE_EXPLOSION: 'vehicleExplosion',
-     ImpulseReason.PROJECTILE_HIT: 'projectileHit'}
+     ImpulseReason.PROJECTILE_HIT: 'projectileHit',
+     ImpulseReason.HE_EXPLOSION: 'vehicleExplosion'}
 
     def readImpulsesConfig(self, rootDataSec):
         self.__readReasonProjection('impulseSensitivities', rootDataSec)

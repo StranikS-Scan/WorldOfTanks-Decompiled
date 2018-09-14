@@ -1,0 +1,472 @@
+<a103_t71e1_igr.xml>
+  <crew>
+    <commander>	radioman
+			loader	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	64.4	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <repairCost>	8.1	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	25.4	</armor_1>
+      <armor_2>	25.4	</armor_2>
+      <armor_3>	22.2	</armor_3>
+      <armor_4>	19.1	</armor_4>
+      <armor_5>	12.7	</armor_5>
+      <armor_6>	25.4	</armor_6>
+      <armor_7>	22.2	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	9.5	</armor_9>
+      <armor_10>	19.1	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	9.5	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7925	</weight>
+    <maxHealth>	672	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A103_T71E1/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000331 0.596224 -0.171596	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/american/A103_T71E1/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.753694 0.459265 1.51529	</rayStart>
+        <rayEnd>	0.703712 0.291793 1.41806	</rayEnd>
+        <rayUp>	-0.11772 0.0308183 -0.992568	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.435142 0.354125 1.85988	</rayStart>
+        <rayEnd>	-0.385226 0.186584 1.76273	</rayEnd>
+        <rayUp>	0.132538 0.0340335 -0.990593	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_T71_2_IGR>
+      <userString>	#igr_vehicles:Chassis_T71_IGR	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	4500	</weight>
+      <maxLoad>	20000	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.5	</terrainResistance>
+      <brakeForce>	34000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	56	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A103_T71E1/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.03	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.324023	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.291824	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.126363	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.286109	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.324023	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.291824	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.126363	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.286109	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.886209 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/american/A103_T71E1/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.28071 1.48582	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.973590 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.050570 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.857260	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A103_T71E1/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A103_T71E1/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/american/A103_T71E1/track/left.track	</left>
+        <right>	vehicles/american/A103_T71E1/track/right.track	</right>
+        <segmentLength>	0.124	</segmentLength>
+        <segmentOffset>	0.153	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0486543	</minOffset>
+          <maxOffset>	0.104555	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0507246	</minOffset>
+          <maxOffset>	0.100414	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.0008	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.141	</maxAmplitude>
+        <maxOffset>	0.000000	</maxOffset>
+        <gravity>	249	</gravity>
+        <elasticity>	2058	</elasticity>
+        <damping>	2.95	</damping>
+        <forwardElastK>	1.58	</forwardElastK>
+        <backwardElastK>	3	</backwardElastK>
+        <offset>	-0.062	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <elasticity>	1192	</elasticity>
+          <forwardElastK>	0.61	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <elasticity>	1192	</elasticity>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <elasticity>	1288	</elasticity>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <elasticity>	1288	</elasticity>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.59	</forwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.39	</forwardElastK>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.59	</forwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.39	</forwardElastK>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+        </node>
+      </trackNodes>
+    </Chassis_T71_2_IGR>
+  </chassis>
+  <turrets0>
+    <Turret_1_T71_IGR>
+      <userString>	#igr_vehicles:Turret_1_T71_IGR	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	17400.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	22.2	</armor_1>
+        <armor_3>	22.2	</armor_3>
+        <armor_4>	22.2	</armor_4>
+        <armor_5>	12.7	</armor_5>
+        <armor_6>	22.2	</armor_6>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	168	</maxHealth>
+      <rotationSpeed>	42	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_Gun_T185_IGR>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 7 0.353005 7 0.416667 5 0.583333 5 0.646995 7 1 7	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	22.2	</armor_1>
+            <armor_2>	22.2	</armor_2>
+            <armor_3>	22.2	</armor_3>
+            <armor_4>	22.2	</armor_4>
+            <armor_5>	12.7	</armor_5>
+            <armor_6>	22.2	</armor_6>
+            <armor_7>	22.2	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	22.2	</armor_9>
+            <armor_11>	22.2	</armor_11>
+            <armor_12>	25.4	</armor_12>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	20	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <clip>
+            <count>	6	</count>
+            <rate>	30	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A103_T71E1/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/american/A103_T71E1/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 0.0174983 2.99931	</rayStart>
+              <rayEnd>	-0.414085 -0.0980266 2.99756	</rayEnd>
+              <rayUp>	0.078 0.074 3	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.7 0.7 0.23 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_T185_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A103_T71E1/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/american/A103_T71E1/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000331 0.411451 0.002765	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.25047 0.237326 -0.362313	</rayStart>
+          <rayEnd>	-0.883703 0.18835 -0.210392	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.25047 0.237326 -0.362313	</rayStart>
+          <rayEnd>	0.883703 0.18835 -0.210392	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.053 0.085 0.947 0.000 1.175 0.039 0.561 0.535 0.639 0.500 0.000 0.500 0.428 0.062 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.67 0.445 0.000000 0.29	</tiling>
+      </camouflage>
+    </Turret_1_T71_IGR>
+  </turrets0>
+  <engines>
+    <Continental_AOI-628-2_IGR>	shared	</Continental_AOI-628-2_IGR>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <AN-ARC-27_IGR>	shared	</AN-ARC-27_IGR>
+  </radios>
+  <effects>
+    <collision>	collision	</collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a103_t71e1_igr.xml>

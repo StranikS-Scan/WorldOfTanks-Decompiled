@@ -1,0 +1,53 @@
+<regular_3_4_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	innerModuleDestrCount	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	innerModuleDestrCount	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isAnyOurCrittedInnerModules	</key>
+              <equal>	0	</equal>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_4_2.xml>

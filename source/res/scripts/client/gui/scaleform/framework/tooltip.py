@@ -65,15 +65,17 @@ class ToolTip(ToolTipMgrMeta):
         return
 
     def __genComplexToolTip(self, tooltipId, stateType, tooltipType):
-        if not len(tooltipId):
+        if tooltipId is None or not len(tooltipId):
             return
-        tooltipIsKey = tooltipId[0] == '#'
-        if tooltipIsKey:
-            tooltipData = self.__getToolTipFromKey(tooltipId, stateType)
         else:
-            tooltipData = self.__getToolTipFromText(tooltipId, stateType)
-        if len(tooltipData):
-            self.as_showS(tooltipData, self.__getDefaultTooltipType())
+            tooltipIsKey = tooltipId[0] == '#'
+            if tooltipIsKey:
+                tooltipData = self.__getToolTipFromKey(tooltipId, stateType)
+            else:
+                tooltipData = self.__getToolTipFromText(tooltipId, stateType)
+            if len(tooltipData):
+                self.as_showS(tooltipData, self.__getDefaultTooltipType())
+            return
 
     def __getToolTipFromKey(self, tooltipId, stateType):
         result = ''

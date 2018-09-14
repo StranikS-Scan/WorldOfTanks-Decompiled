@@ -1,0 +1,32 @@
+<artilleryequipment.def>
+  <Domain>	BASE	</Domain>
+  <Domain>	CLIENT	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <yaw>
+      <Type>	FLOAT	</Type>
+      <Editable>	false	</Editable>
+      <EditorCalculated>	true	</EditorCalculated>
+    </yaw>
+    <pitch>
+      <Type>	FLOAT	</Type>
+      <Editable>	false	</Editable>
+      <EditorCalculated>	true	</EditorCalculated>
+    </pitch>
+    <speed>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </speed>
+    <gravity>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </gravity>
+    <maxDist>
+      <Type>	FLOAT	</Type>
+      <Editable>	true	</Editable>
+    </maxDist>
+  </Properties>
+</artilleryequipment.def>

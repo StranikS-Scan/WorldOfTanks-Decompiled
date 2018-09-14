@@ -172,11 +172,11 @@ class TweenManager(TweenManagerMeta):
 
         if _AbstractTween.SCALE_X in result and _AbstractTween.SCALE_Y not in result:
             result[_AbstractTween.SCALE_Y] = startData[_AbstractTween.SCALE_Y]
-        if _AbstractTween.SCALE_Y not in result and (_AbstractTween.SCALE_X in result) == False:
+        if _AbstractTween.SCALE_Y in result and _AbstractTween.SCALE_X not in result:
             result[_AbstractTween.SCALE_X] = startData[_AbstractTween.SCALE_X]
-        if _AbstractTween.Y in result and (_AbstractTween.X in result) == False:
+        if _AbstractTween.Y in result and _AbstractTween.X not in result:
             result[_AbstractTween.X] = startData[_AbstractTween.X]
-        if _AbstractTween.X not in result and (_AbstractTween.Y in result) == False:
+        if _AbstractTween.X in result and _AbstractTween.Y not in result:
             result[_AbstractTween.Y] = startData[_AbstractTween.Y]
         return result
 

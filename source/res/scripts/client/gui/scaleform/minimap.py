@@ -8,7 +8,8 @@ import Math
 import CommandMapping
 import Keys
 from CTFManager import g_ctfManager
-from constants import REPAIR_POINT_ACTION, RESOURCE_POINT_STATE, FLAG_STATE
+from battleground.gas_attack import gasAttackManager
+from constants import REPAIR_POINT_ACTION, RESOURCE_POINT_STATE, FLAG_STATE, AOI
 from gui.battle_control.avatar_getter import getPlayerVehicleID
 from gui.battle_control.dyn_squad_functional import IDynSquadEntityClient
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -19,13 +20,16 @@ from AvatarInputHandler import mathUtils
 from shared_utils import findFirst
 from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS, FEEDBACK_EVENT_ID, NEUTRAL_TEAM
-from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints, getIsMultiteam
-from gui.shared.utils.sound import Sound
+from gui.battle_control.arena_info import isLowLevelBattle, hasFlags, hasRepairPoints, hasResourcePoints, getIsMultiteam, hasGasAttack
+import FMOD
+import SoundGroups
 from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from helpers.gui_utils import *
 from debug_utils import *
 from account_helpers.AccountSettings import AccountSettings
 from gui.battle_control import vehicle_getter
+from battleground.gas_attack import _getDefaultScenario
+from time import time
 CURSOR_NORMAL = 'cursorNormal'
 CURSOR_NORMAL_WITH_DIRECTION = 'cursorNormalWithDirection'
 CURSOR_STRATEGIC = 'cursorStrategic'
@@ -82,7 +86,7 @@ _CAPTURE_FROZEN_STATE_BY_TEAMS = {True: RESOURCE_POINT_TYPE.OWN_MINING,
 class Minimap(IDynSquadEntityClient):
     __MINIMAP_SIZE = (210, 210)
     __MINIMAP_CELLS = (10, 10)
-    __AOI_ESTIMATE = 450.0
+    __AOI_ESTIMATE = AOI.VEHICLE_CIRCULAR_AOI_RADIUS - 50.0 if AOI.ENABLE_MANUAL_RULES else 450.0
     __AOI_TO_FAR_TIME = 5.0
 
     def __init__(self, parentUI):
@@ -123,7 +127,6 @@ class Minimap(IDynSquadEntityClient):
         self.__ownEntry = {}
         self.__aoiToFarCallbacks = {}
         self.__deadCallbacks = {}
-        self.__sndAttention = Sound('/GUI/notifications_FX/minimap_attention')
         self.__isFirstEnemyNonSPGMarked = False
         self.__isFirstEnemySPGMarkedById = {}
         self.__checkEnemyNonSPGLengthID = None
@@ -136,6 +139,8 @@ class Minimap(IDynSquadEntityClient):
         self.__normalMarkerScale = None
         self.__markerScale = None
         self.__markerIDGenerator = None
+        self.__settingName = 'minimapSize'
+        self.__isShowExtendedInfoActive = False
         self.__updateSettings()
         return
 
@@ -190,6 +195,7 @@ class Minimap(IDynSquadEntityClient):
             g_ctfManager.onFlagCapturedByVehicle += self.__onFlagCapturedByVehicle
             g_ctfManager.onFlagDroppedToGround += self.__onFlagDroppedToGround
             g_ctfManager.onFlagAbsorbed += self.__onFlagAbsorbed
+            g_ctfManager.onFlagRemoved += self.__onFlagRemoved
             g_ctfManager.onCarriedFlagsPositionUpdated += self.__onCarriedFlagsPositionUpdated
             for flagID, flagInfo in g_ctfManager.getFlags():
                 vehicleID = flagInfo['vehicle']
@@ -223,6 +229,10 @@ class Minimap(IDynSquadEntityClient):
                     state = RESOURCE_POINT_TYPE.CONFLICT
                 self.__addResourcePointMarker(pointID, point['minimapPos'], state)
 
+        if hasGasAttack():
+            g_sessionProvider.getGasAttackCtrl().onPreparing += self.__onGasAttackPreparing
+            g_sessionProvider.getGasAttackCtrl().onStarted += self.__onGasAttackStarted
+            self.__initGasAttackArea()
         self.__marks = {}
         if not g_sessionProvider.getCtx().isPlayerObserver():
             mp = player.getOwnVehicleMatrix()
@@ -234,8 +244,8 @@ class Minimap(IDynSquadEntityClient):
             self.__ownEntry['entryName'] = entryName
         self.__resetCamera(MODE_ARCADE)
         self.__isStarted = True
-        for vInfo, guiProps in self.__vehiclesWaitStart.itervalues():
-            self.notifyVehicleStart(vInfo, guiProps)
+        for vProxy, vInfo, guiProps in self.__vehiclesWaitStart.itervalues():
+            self.notifyVehicleStart(vProxy, vInfo, guiProps)
 
         self.__vehiclesWaitStart.clear()
         self.__mapSizeIndex = self.getStoredMinimapSize()
@@ -256,7 +266,7 @@ class Minimap(IDynSquadEntityClient):
         self.__ownUI.entryInvoke(self.__ownEntry['handle'], ('showSector', [math.degrees(yawLimits[0]), math.degrees(yawLimits[1])]))
 
     def __hideSector(self):
-        self.__ownUI.entryInvoke(self.__ownEntry['handle'], ('hideSector', []))
+        self.__ownUI.entryInvoke(self.__ownEntry['handle'], ('hideSector',))
 
     def onScaleMarkers(self, callbackID, scale, normalScale):
         self.__markerScale = scale
@@ -317,10 +327,20 @@ class Minimap(IDynSquadEntityClient):
         return
 
     def getStoredMinimapSize(self):
-        return AccountSettings.getSettings('minimapSize')
+        return AccountSettings.getSettings(self.__settingName)
 
     def storeMinimapSize(self):
-        AccountSettings.setSettings('minimapSize', self.__mapSizeIndex)
+        AccountSettings.setSettings(self.__settingName, self.__mapSizeIndex)
+
+    def useRespawnSize(self):
+        self.storeMinimapSize()
+        self.__settingName = 'minimapRespawnSize'
+        self.__parentUI.call('minimap.setupSize', [self.getStoredMinimapSize()])
+
+    def useNormalSize(self):
+        self.storeMinimapSize()
+        self.__settingName = 'minimapSize'
+        self.__parentUI.call('minimap.setupSize', [self.getStoredMinimapSize()])
 
     def getStoredMinimapAlpha(self):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -328,7 +348,7 @@ class Minimap(IDynSquadEntityClient):
 
     def setupMinimapSettings(self, diff = None):
         from account_helpers.settings_core import settings_constants
-        if diff is None or 'minimapSize' in diff:
+        if diff is None or self.__settingName in diff:
             self.__parentUI.call('minimap.setupSize', [self.getStoredMinimapSize()])
         if diff is None or settings_constants.GAME.MINIMAP_ALPHA in diff:
             self.__parentUI.call('minimap.setupAlpha', [self.getStoredMinimapAlpha()])
@@ -410,10 +430,21 @@ class Minimap(IDynSquadEntityClient):
                       'cooldown',
                       '',
                       0]))
-                    self.__ownUI.entryInvoke(newPointCooldown.handle, ('setVisible', [False]))
+                    self.__entrySetActive(newPointCooldown.handle, False)
                     repairData[index] = (newPoint, newPointCooldown)
 
             self.__parentUI.call('minimap.entryInited', [])
+
+    def updateGasAtackArea(self, radius):
+        self.__parentUI.call('minimap.gasAtackUpdate', [radius])
+
+    def initGasAtackArea(self, mapWidth, mapHeight, xPos, yPos, radius, safeZoneRadius):
+        self.__parentUI.call('minimap.gasAtackInit', [mapWidth,
+         mapHeight,
+         xPos,
+         yPos,
+         radius,
+         safeZoneRadius])
 
     def onSetSize(self, calbackID, index):
         self.__mapSizeIndex = int(index)
@@ -456,6 +487,7 @@ class Minimap(IDynSquadEntityClient):
                 g_ctfManager.onFlagCapturedByVehicle -= self.__onFlagCapturedByVehicle
                 g_ctfManager.onFlagDroppedToGround -= self.__onFlagDroppedToGround
                 g_ctfManager.onFlagAbsorbed -= self.__onFlagAbsorbed
+                g_ctfManager.onFlagRemoved -= self.__onFlagRemoved
                 g_ctfManager.onCarriedFlagsPositionUpdated -= self.__onCarriedFlagsPositionUpdated
             if hasRepairPoints():
                 g_sessionProvider.getRepairCtrl().onRepairPointStateChanged -= self.__onRepairPointStateChanged
@@ -465,6 +497,9 @@ class Minimap(IDynSquadEntityClient):
                 g_ctfManager.onResPointCaptured -= self.__onResPointCaptured
                 g_ctfManager.onResPointCapturedLocked -= self.__onResPointCapturedLocked
                 g_ctfManager.onResPointBlocked -= self.__onResPointBlocked
+            if hasGasAttack():
+                g_sessionProvider.getGasAttackCtrl().onPreparing -= self.__onGasAttackPreparing
+                g_sessionProvider.getGasAttackCtrl().onStarted -= self.__onGasAttackStarted
             self.__marks = None
             self.__backMarkers.clear()
             setattr(self.__parentUI.component, 'minimap', None)
@@ -473,6 +508,7 @@ class Minimap(IDynSquadEntityClient):
             self.storeMinimapSize()
             self.__parentUI = None
             g_repeatKeyHandlers.remove(self.handleRepeatKeyEvent)
+            self.__ownUI = None
             return
 
     def prerequisites(self):
@@ -497,46 +533,51 @@ class Minimap(IDynSquadEntityClient):
                 location = entries[vehicleID]['location']
                 if location == VehicleLocation.AOI:
                     ownPos = Math.Matrix(BigWorld.camera().invViewMatrix).translation
-                    entryPos = Math.Matrix(entries[vehicleID]['matrix']).translation
-                    inAoI = bool(abs(ownPos.x - entryPos.x) < self.__AOI_ESTIMATE and abs(ownPos.z - entryPos.z) < self.__AOI_ESTIMATE)
+                    entryMatitx = entries[vehicleID]['matrix']
+                    entryPos = Math.Matrix(entryMatitx).translation
+                    if AOI.ENABLE_MANUAL_RULES:
+                        inAoI = (ownPos.x - entryPos.x) ** 2 + (ownPos.z - entryPos.z) ** 2 < self.__AOI_ESTIMATE ** 2
+                    else:
+                        inAoI = bool(abs(ownPos.x - entryPos.x) < self.__AOI_ESTIMATE and abs(ownPos.z - entryPos.z) < self.__AOI_ESTIMATE)
                     guiProps = g_sessionProvider.getCtx().getPlayerGuiProps(vehicleID, vInfo.team)
-                    if self.__permanentNamesShow or self.__onAltNamesShow:
-                        battleCtx = g_sessionProvider.getCtx()
-                        if not battleCtx.isObserver(self.__playerVehicleID):
-                            if entries[vehicleID]['matrix'] is not None:
-                                if type(entries[vehicleID]['matrix']) == Math.WGTranslationOnlyMP:
-                                    self.__addEntryLit(vInfo, guiProps, Math.Matrix(entries[vehicleID]['matrix'].source), not self.__onAltNamesShow)
-                                else:
-                                    mp = Math.WGTranslationOnlyMP()
-                                    mp.source = Math.Matrix(entries[vehicleID]['matrix'])
-                                    self.__addEntryLit(vInfo, guiProps, mp, not self.__onAltNamesShow)
                     self.__delEntry(vehicleID)
+                    self.__delEntryLit(vehicleID)
                     if not inAoI:
                         self.__addEntry(vInfo, guiProps, VehicleLocation.AOI_TO_FAR, False)
+                    elif self.__permanentNamesShow or self.__onAltNamesShow:
+                        battleCtx = g_sessionProvider.getCtx()
+                        if not battleCtx.isObserver(self.__playerVehicleID):
+                            if type(entryMatitx) == Math.WGTranslationOnlyMP:
+                                self.__addEntryLit(vInfo, guiProps, Math.Matrix(entryMatitx.source), not self.__onAltNamesShow or self.__isShowExtendedInfoActive)
+                            else:
+                                mp = Math.WGTranslationOnlyMP()
+                                mp.source = Math.Matrix(entryMatitx)
+                                self.__addEntryLit(vInfo, guiProps, mp, not self.__onAltNamesShow or self.__isShowExtendedInfoActive)
                 else:
                     LOG_DEBUG('notifyVehicleOnStop, unknown minimap entry location', location)
             return
 
-    def notifyVehicleStart(self, vInfo, guiProps):
+    def notifyVehicleStart(self, vProxy, vInfo, guiProps):
         vehicleID = vInfo.vehicleID
         if not self.__isStarted:
-            self.__vehiclesWaitStart[vehicleID] = (vInfo, guiProps)
+            self.__vehiclesWaitStart[vehicleID] = (vProxy, vInfo, guiProps)
             return
         if vehicleID == self.__playerVehicleID:
             return
-        if not vInfo.isAlive():
+        if not vProxy.isAlive():
             return
         entries = self.__entries
         doMark = True
         if vehicleID in entries:
             doMark = False
             self.__delEntry(vehicleID)
-        self.__addEntry(vInfo, guiProps, VehicleLocation.AOI, doMark)
         self.__delEntryLit(vehicleID)
         self.__delCarriedFlagMarker(vehicleID)
+        self.__addEntry(vInfo, guiProps, VehicleLocation.AOI, doMark)
 
     def _playAttention(self, _):
-        self.__sndAttention.play()
+        if FMOD.enabled:
+            SoundGroups.g_instance.playSound2D('/GUI/notifications_FX/minimap_attention')
 
     def markCell(self, cellIndexes, duration):
         if not self.__isStarted:
@@ -630,15 +671,15 @@ class Minimap(IDynSquadEntityClient):
 
     def __onVehicleRemoved(self, vehicleID):
         if vehicleID in self.__entries:
-            self.__delEntry(id)
-        self.__delEntryLit(id)
+            self.__delEntry(vehicleID)
+        self.__delEntryLit(vehicleID)
 
     def __onVehicleKilled(self, victimId, *args):
-        self.__delEntryLit(victimId)
         if victimId in self.__entries:
             entry = self.__delEntry(victimId)
             if GUI_SETTINGS.showMinimapDeath:
                 self.__addDeadEntry(entry, victimId)
+        self.__delEntryLit(victimId)
 
     def __onFarPosUpdated(self):
         entries = self.__entries
@@ -655,8 +696,10 @@ class Minimap(IDynSquadEntityClient):
                     entry['matrix'].source.setTranslate(pos)
                 elif location == VehicleLocation.AOI_TO_FAR:
                     self.__delEntry(vehicleID)
+                    self.__delEntryLit(vehicleID)
                     self.__addEntry(vInfo, getPlayerGuiProps(vehicleID, vInfo.team), VehicleLocation.FAR, False)
             elif vInfo.isAlive():
+                self.__delEntryLit(vehicleID)
                 self.__addEntry(vInfo, getPlayerGuiProps(vehicleID, vInfo.team), VehicleLocation.FAR, True)
 
         for vehicleID in set(entries).difference(set(arena.positions)):
@@ -666,7 +709,7 @@ class Minimap(IDynSquadEntityClient):
                     if hasattr(entries[vehicleID]['matrix'], 'source'):
                         vInfo = getVehicleInfo(vehicleID)
                         guiProps = getPlayerGuiProps(vehicleID, vInfo.team)
-                        self.__addEntryLit(vInfo, guiProps, entries[vehicleID]['matrix'].source, not self.__onAltNamesShow)
+                        self.__addEntryLit(vInfo, guiProps, entries[vehicleID]['matrix'].source, not self.__onAltNamesShow or self.__isShowExtendedInfoActive)
                 self.__delEntry(vehicleID)
 
     def __validateEntries(self):
@@ -820,13 +863,13 @@ class Minimap(IDynSquadEntityClient):
               '',
               vName]))
             if not visible:
-                self.__ownUI.entryInvoke(entry['handle'], ('setVisible', [visible]))
+                self.__entrySetActive(entry['handle'], visible)
             if self.__markerScale is None:
                 self.__parentUI.call('minimap.entryInited', [])
             return
 
-    def __delEntryLit(self, id):
-        entry = self.__entrieLits.pop(id, None)
+    def __delEntryLit(self, vehicleID):
+        entry = self.__entrieLits.pop(vehicleID, None)
         if entry is not None:
             self.__ownUI.delEntry(entry['handle'])
         return
@@ -856,7 +899,7 @@ class Minimap(IDynSquadEntityClient):
               indexNumber,
               '']))
             if not isVisible:
-                self.__ownUI.entryInvoke(entry['handle'], ('setVisible', [False]))
+                self.__entrySetActive(entry['handle'], False)
             if self.__markerScale is None:
                 self.__parentUI.call('minimap.entryInited', [])
             return
@@ -894,7 +937,7 @@ class Minimap(IDynSquadEntityClient):
             markMarker = ''
             if not guiProps.isFriend:
                 if doMark and not g_sessionProvider.getCtx().isPlayerObserver():
-                    if 'SPG' in classTag:
+                    if classTag == 'SPG':
                         if vehicleID not in self.__isFirstEnemySPGMarkedById:
                             self.__isFirstEnemySPGMarkedById[vehicleID] = False
                         isFirstEnemySPGMarked = self.__isFirstEnemySPGMarkedById[vehicleID]
@@ -1087,6 +1130,8 @@ class Minimap(IDynSquadEntityClient):
         self.__onAltNamesShow = valueName == setting.OPTIONS.ALT
         self.__showDirectionLine = g_settingsCore.getSetting(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
         self.__showSectorLine = g_settingsCore.getSetting(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
+        for entry in self.__entrieLits.values():
+            self.__entrySetActive(entry['handle'], self.__permanentNamesShow)
 
     def __onEquipmentMarkerShown(self, item, pos, dir, time):
         markerType = MARKER_TYPE.CONSUMABLE
@@ -1107,7 +1152,11 @@ class Minimap(IDynSquadEntityClient):
 
     def __handleShowExtendedInfo(self, event):
         if not self.__permanentNamesShow and self.__onAltNamesShow:
+            for entry in self.__entrieLits.values():
+                self.__entrySetActive(entry['handle'], event.ctx['isDown'])
+
             self.showVehicleNames(event.ctx['isDown'])
+            self.__isShowExtendedInfoActive = event.ctx['isDown']
 
     def __handleMinimapCmd(self, event):
         self.handleKey(event.ctx['key'])
@@ -1145,6 +1194,16 @@ class Minimap(IDynSquadEntityClient):
         self.__delCarriedFlagMarker(vehicleID)
         if vehicleID == self.__playerVehicleID:
             self.__toggleFlagCaptureAnimation(False)
+
+    def __onFlagRemoved(self, flagID, flagTeam, vehicleID):
+        flagType = self.__getFlagMarkerType(flagID, flagTeam)
+        self.__delFlagMarker(flagID, flagType)
+        if vehicleID is not None:
+            self.__updateVehicleFlagState(vehicleID)
+            self.__delCarriedFlagMarker(vehicleID)
+            if vehicleID == self.__playerVehicleID:
+                self.__toggleFlagCaptureAnimation(False)
+        return
 
     def __onCarriedFlagsPositionUpdated(self, flagIDs):
         for flagID in flagIDs:
@@ -1232,10 +1291,22 @@ class Minimap(IDynSquadEntityClient):
             if self.__isTeamPlayer and point['team'] in (NEUTRAL_TEAM, self.__playerTeam):
                 captureUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ALLY_CAPTURE)
                 captureEntry = self.__entrieMarkers.get(captureUniqueID)
-                self.__ownUI.entryInvoke(captureEntry['handle'], ('setVisible', [not isCarried]))
+                self.__entrySetActive(captureEntry['handle'], not isCarried)
                 captureAnumationUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ALLY_CAPTURE_ANIMATION)
                 captureAnimationEntry = self.__entrieMarkers.get(captureAnumationUniqueID)
-                self.__ownUI.entryInvoke(captureAnimationEntry['handle'], ('setVisible', [isCarried]))
+                self.__entrySetActive(captureAnimationEntry['handle'], isCarried)
+
+    def __delFlagCaptureMarkers(self):
+        if hasFlags():
+            for pointIndex, point in enumerate(self.__cfg['flagAbsorptionPoints']):
+                if self.__isTeamPlayer and point['team'] in (NEUTRAL_TEAM, self.__playerTeam):
+                    captureUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ALLY_CAPTURE)
+                    self.__delEntryMarker(captureUniqueID)
+                    captureAnumationUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ALLY_CAPTURE_ANIMATION)
+                    self.__delEntryMarker(captureAnumationUniqueID)
+                else:
+                    captureUniqueID = self.__makeFlagUniqueID(pointIndex, FLAG_TYPE.ENEMY_CAPTURE)
+                    self.__delEntryMarker(captureUniqueID)
 
     def __getFlagMarkerType(self, flagID, flagTeam = 0):
         if flagTeam > 0:
@@ -1251,11 +1322,19 @@ class Minimap(IDynSquadEntityClient):
         if action in (REPAIR_POINT_ACTION.START_REPAIR, REPAIR_POINT_ACTION.COMPLETE_REPAIR, REPAIR_POINT_ACTION.BECOME_READY):
             point, pointCooldown = self.__points['repair'][repairPointID]
             pointVisible, pointCooldownVisible = (True, False) if action != REPAIR_POINT_ACTION.COMPLETE_REPAIR else (False, True)
-            self.__ownUI.entryInvoke(point.handle, ('setVisible', [pointVisible]))
-            self.__ownUI.entryInvoke(pointCooldown.handle, ('setVisible', [pointCooldownVisible]))
+            self.__entrySetActive(point.handle, pointVisible)
+            self.__entrySetActive(pointCooldown.handle, pointCooldownVisible)
+        elif action == REPAIR_POINT_ACTION.BECOME_DISABLED:
+            point, pointCooldown = self.__points['repair'][repairPointID]
+            self.__entrySetActive(point.handle, False)
+            self.__entrySetActive(pointCooldown.handle, False)
 
-    def __onMinimapVehicleAdded(self, vInfo, guiProps):
-        self.notifyVehicleStart(vInfo, guiProps)
+    def __entrySetActive(self, entryHandle, visible):
+        self.__ownUI.entrySetActive(entryHandle, visible)
+        self.__ownUI.entryInvoke(entryHandle, ('resumeAnimation' if visible else 'stopAnimation',))
+
+    def __onMinimapVehicleAdded(self, vProxy, vInfo, guiProps):
+        self.notifyVehicleStart(vProxy, vInfo, guiProps)
 
     def __onMinimapVehicleRemoved(self, vehicleID):
         self.notifyVehicleStop(vehicleID)
@@ -1301,6 +1380,21 @@ class Minimap(IDynSquadEntityClient):
 
     def __onResPointBlocked(self, pointID):
         self.__setResourcePointState(pointID, RESOURCE_POINT_TYPE.CONFLICT)
+
+    def __onGasAttackPreparing(self, state):
+        self.__delFlagCaptureMarkers()
+
+    def __onGasAttackStarted(self, state):
+        self.__delFlagCaptureMarkers()
+
+    def __initGasAttackArea(self):
+        _, settings = _getDefaultScenario()
+        bottomLeft, upperRight = BigWorld.player().arena.arenaType.boundingBox
+        arenaWidth = upperRight[0] - bottomLeft[0]
+        arenaHeight = upperRight[1] - bottomLeft[1]
+        shiftX = (upperRight[0] + bottomLeft[0]) / 2
+        shiftY = (upperRight[1] + bottomLeft[1]) / 2
+        self.initGasAtackArea(arenaWidth, arenaHeight, settings.position[0] - shiftX, settings.position[2] - shiftY, settings.startRadius, settings.endRadius)
 
 
 class EntryInfo(object):

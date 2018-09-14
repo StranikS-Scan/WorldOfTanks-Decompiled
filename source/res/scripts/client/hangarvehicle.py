@@ -51,12 +51,15 @@ class HangarVehicle(BigWorld.Entity):
         res.append((vehicleDescr.chassis, m))
         hullOffset = vehicleDescr.chassis['hullPosition']
         m = Math.Matrix()
-        m.setTranslate(-hullOffset)
+        offset = -hullOffset
+        m.setTranslate(offset)
         res.append((vehicleDescr.hull, m))
         m = Math.Matrix()
-        m.setTranslate(-hullOffset - vehicleDescr.hull['turretPositions'][0])
+        offset -= vehicleDescr.hull['turretPositions'][0]
+        m.setTranslate(offset)
         res.append((vehicleDescr.turret, m))
         m = Math.Matrix()
-        m.setTranslate(-vehicleDescr.turret['gunPosition'])
+        offset -= vehicleDescr.turret['gunPosition']
+        m.setTranslate(offset)
         res.append((vehicleDescr.gun, m))
         return res

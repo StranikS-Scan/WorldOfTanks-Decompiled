@@ -52,6 +52,9 @@ class ListPaginator(object):
         self._request(isReset=True)
         return
 
+    def getInitialOffset(self):
+        return self.__initialOffset
+
     def revertOffset(self):
         self._offset = self._prevOffset
 

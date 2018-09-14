@@ -16,9 +16,9 @@ class BattleQueueMeta(View):
         if self._isDAAPIInited():
             return self.flashObject.as_setTimer(textLabel, timeLabel)
 
-    def as_setTypeS(self, type):
+    def as_setTypeInfoS(self, iconLabel, title, description):
         if self._isDAAPIInited():
-            return self.flashObject.as_setType(type)
+            return self.flashObject.as_setTypeInfo(iconLabel, title, description)
 
     def as_setPlayersS(self, text):
         if self._isDAAPIInited():

@@ -12,13 +12,13 @@ from gui.shared.events import ChannelCarouselEvent
 from gui.shared.utils import showInvitationInWindowsBar
 from helpers import i18n
 from gui import SystemMessages
-from gui.prb_control import getPrebattleRosters, getPrebattleSettings, getPrebattleAutoInvites
+from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.items import prb_seqs, prb_items
+from gui.prb_control.items import prb_seqs, prb_items, SelectResult
 from gui.prb_control.functional.default import PrbEntry, PrbFunctional
 from gui.prb_control.functional.interfaces import IPrbListRequester
 from gui.prb_control.settings import REQUEST_TYPE, PREBATTLE_ROSTER, PREBATTLE_ACTION_NAME
-from gui.prb_control.settings import PREBATTLE_SETTING_NAME, FUNCTIONAL_INIT_RESULT
+from gui.prb_control.settings import PREBATTLE_SETTING_NAME, FUNCTIONAL_FLAG
 from gui.prb_control.restrictions.limits import BattleSessionLimits
 from gui.prb_control.restrictions.permissions import BattleSessionPrbPermissions
 from prebattle_shared import decodeRoster
@@ -90,7 +90,7 @@ class AutoInvitesRequester(IPrbListRequester):
         self.__fetchList()
 
     def getItem(self, prbID):
-        return prb_seqs.AutoInviteItem(prbID, **getPrebattleAutoInvites().get(prbID, {}))
+        return prb_seqs.AutoInviteItem(prbID, **prb_getters.getPrebattleAutoInvites().get(prbID, {}))
 
     def __pe_onPrbAutoInvitesChanged(self):
         self.__fetchList()
@@ -142,11 +142,11 @@ class AutoInvitesNotifier(object):
 
     @classmethod
     def hasInvite(cls, prbID):
-        return prbID in getPrebattleAutoInvites()
+        return prbID in prb_getters.getPrebattleAutoInvites()
 
     @classmethod
     def getInvite(cls, prbID):
-        return prb_seqs.AutoInviteItem(prbID, **getPrebattleAutoInvites().get(prbID, {}))
+        return prb_seqs.AutoInviteItem(prbID, **prb_getters.getPrebattleAutoInvites().get(prbID, {}))
 
     def canAcceptInvite(self, invite):
         result = True
@@ -193,9 +193,9 @@ class BattleSessionFunctional(PrbFunctional):
     def init(self, clientPrb = None, ctx = None):
         result = super(BattleSessionFunctional, self).init(clientPrb=clientPrb)
         g_eventDispatcher.loadHangar()
-        g_eventDispatcher.loadBattleSessionWindow(self.getPrbType())
-        result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_WINDOW)
-        result = FUNCTIONAL_INIT_RESULT.addIfNot(result, FUNCTIONAL_INIT_RESULT.LOAD_PAGE)
+        g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
+        result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_WINDOW)
+        result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
         g_eventBus.addListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventDispatcher.updateUI()
         return result
@@ -204,7 +204,7 @@ class BattleSessionFunctional(PrbFunctional):
         return True
 
     def fini(self, clientPrb = None, woEvents = False):
-        prbType = self.getPrbType()
+        prbType = self.getEntityType()
         super(BattleSessionFunctional, self).fini(clientPrb=clientPrb, woEvents=woEvents)
         if not woEvents:
             g_eventDispatcher.unloadBattleSessionWindow(prbType)
@@ -212,17 +212,18 @@ class BattleSessionFunctional(PrbFunctional):
             g_eventDispatcher.removeSpecBattleFromCarousel(prbType)
         g_eventDispatcher.updateUI()
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        return FUNCTIONAL_FLAG.UNDEFINED
 
     @vehicleAmmoCheck
     def setPlayerState(self, ctx, callback = None):
         super(BattleSessionFunctional, self).setPlayerState(ctx, callback)
 
-    def showGUI(self):
-        g_eventDispatcher.loadBattleSessionWindow(self.getPrbType())
+    def showGUI(self, ctx = None):
+        g_eventDispatcher.loadBattleSessionWindow(self.getEntityType())
 
     def getRosters(self, keys = None):
-        rosters = getPrebattleRosters()
-        prbRosters = PREBATTLE_ROSTER.getRange(self.getPrbType(), self.getPlayerTeam())
+        rosters = prb_getters.getPrebattleRosters()
+        prbRosters = PREBATTLE_ROSTER.getRange(self.getEntityType(), self.getPlayerTeam())
         result = dict(((r, []) for r in prbRosters))
         for roster in prbRosters:
             if roster in rosters:
@@ -231,7 +232,7 @@ class BattleSessionFunctional(PrbFunctional):
         return result
 
     def getTeamLimits(self):
-        return getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
+        return prb_getters.getPrebattleSettings().getTeamLimits(self.getPlayerTeam())
 
     def canPlayerDoAction(self):
         isValid, notValidReason = True, ''
@@ -244,7 +245,7 @@ class BattleSessionFunctional(PrbFunctional):
             isValid = False
         return (isValid, notValidReason)
 
-    def doAction(self, action = None, dispatcher = None):
+    def doAction(self, action = None):
         if self.getPlayerInfo().isReady():
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
         else:
@@ -256,7 +257,7 @@ class BattleSessionFunctional(PrbFunctional):
         if action.actionName == PREBATTLE_ACTION_NAME.SPEC_BATTLE:
             g_eventDispatcher.showBattleSessionWindow()
             result = True
-        return result
+        return SelectResult(result, None)
 
     def prb_onSettingUpdated(self, settingName):
         super(BattleSessionFunctional, self).prb_onSettingUpdated(settingName)
@@ -276,4 +277,4 @@ class BattleSessionFunctional(PrbFunctional):
         g_eventDispatcher.updateUI()
 
     def __handleCarouselInited(self, _):
-        g_eventDispatcher.addSpecBattleToCarousel(self.getPrbType())
+        g_eventDispatcher.addSpecBattleToCarousel(self.getEntityType())

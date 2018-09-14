@@ -1,0 +1,664 @@
+<ch06_renault_nc31.xml>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	25	</forward>
+    <backward>	8	</backward>
+  </speedLimits>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/chinese/Ch06_Renault_NC31/Renault_NC31_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	16	</armor_1>
+      <armor_2>	16	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	16	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_7>	0	</armor_7>
+      <armor_8>	8	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4923	</weight>
+    <maxHealth>	80	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 32.00 0.38 1.00 0.05 0.29	</pitchParams>
+      <rollParams>	1.00 0.26 32.00 0.38 1.00 0.05 0.29	</rollParams>
+      <sensitivityToImpulse>	0.67	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.002452 0.655486 0.583497	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0044005 0.0948903 2.16416	</rayStart>
+        <rayEnd>	-0.00440085 -0.103662 1.81692	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.681167 0.241851 0.4307	</rayStart>
+        <rayEnd>	-0.281168 0.241851 0.4307	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.58	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	0.681167 0.241851 0.4307	</rayStart>
+        <rayEnd>	0.281168 0.241851 0.4307	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.58	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_Ch06_Renault_NC31>
+      <userString>	#china_vehicles:Chassis_Ch06_Renault_NC31	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <unlocks>
+        <chassis>	Chassis_Ch06_Renault_NC31_2	  <cost>	90	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	800	</weight>
+      <maxLoad>	6600	</maxLoad>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <brakeForce>	6000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.36	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.23	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.401136	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.159209	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.447108	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.159209	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.401136	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.159209	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.447108	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.159209	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.964166 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.726021 1.20625	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.536350 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.446250 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.583750	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch06_Renault_NC31>
+    <Chassis_Ch06_Renault_NC31_2>
+      <userString>	#china_vehicles:Chassis_Ch06_Renault_NC31_2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	450	</price>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	800	</weight>
+      <maxLoad>	8600	</maxLoad>
+      <terrainResistance>	1 1.2 2.1	</terrainResistance>
+      <brakeForce>	6600	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.48 0.36	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.23	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.401136	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.159209	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R2	</name>
+          <radius>	0.447108	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.159209	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.401136	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.159209	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L2	</name>
+          <radius>	0.447108	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.159209	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.964166 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.726021 1.20625	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.507610 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.446250 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.583750	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Ch06_Renault_NC31_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Ch06_Renault_NC31>
+      <userString>	#china_vehicles:Turret_1_Ch06_Renault_NC31	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <armor>
+        <armor_1>	16	</armor_1>
+        <armor_2>	8	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	14	</armor_4>
+        <armor_5>	16	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	8	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	170	</weight>
+      <maxHealth>	20	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	250	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_APX_SA18>	shared	  <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_13.2mm_Hotchkiss_mle._1930	  <cost>	30	</cost>
+            </gun>
+            <vehicle>	Ch07_Vickers_MkE_Type_BT26	  <cost>	150	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_37mm_APX_SA18>
+        <_13.2mm_Hotchkiss_mle._1930>	shared	  <maxAmmo>	720	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 10 0.422449 10 0.486111 0 0.513889 0 0.577551 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_Ch06_Renault_NC31	  <cost>	40	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.58	</shotDispersionRadius>
+          <reloadTime>	5.8	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	1.3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+        </_13.2mm_Hotchkiss_mle._1930>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.235125 0.430947	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.681706 0.291455 -0.00569651	</rayStart>
+          <rayEnd>	-0.290933 0.206037 -0.00569651	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.681706 0.291455 -0.00569651	</rayStart>
+          <rayEnd>	0.290933 0.206037 -0.00569651	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.033 -0.006 1.003 0.000 0.462 0.116 0.565 0.492 0.550 0.500 0.210 0.500 0.237 0.486 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+    </Turret_1_Ch06_Renault_NC31>
+    <Turret_2_Ch06_Renault_NC31>
+      <userString>	#china_vehicles:Turret_2_Ch06_Renault_NC31	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <unlocks>
+        <gun>	_37mm_KwK_L46	  <cost>	35	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	22	</armor_1>
+        <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_2>
+        <armor_3>	22	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	22	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	16	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	200	</weight>
+      <maxHealth>	30	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_APX_SA18>	shared	  <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+        </_37mm_APX_SA18>
+        <_13.2mm_Hotchkiss_mle._1930>	shared	  <maxAmmo>	720	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 10 0.422449 10 0.486111 0 0.513889 0 0.577551 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.58	</shotDispersionRadius>
+          <reloadTime>	5.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	1.2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+        </_13.2mm_Hotchkiss_mle._1930>
+        <_37mm_KwK_L46>	shared	  <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	22	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <maxAmmo>	150	</maxAmmo>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_KwK_L46>
+      </guns>
+      <models>
+        <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.235125 0.452628	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.703636 0.252736 0.0579587	</rayStart>
+          <rayEnd>	-0.318991 0.174399 -0.018926	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.703636 0.252736 0.0579587	</rayStart>
+          <rayEnd>	0.318991 0.174399 -0.018926	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.021 1.000 0.000 0.489 0.149 0.500 0.441 0.500 0.500 0.117 0.500 0.234 0.426 0.277	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
+      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.97 0.595 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Ch06_Renault_NC31>
+  </turrets0>
+  <engines>
+    <_Renault_M26_27>	shared	  <unlocks>
+        <engine>	_Renault_62CV	  <cost>	35	</cost>
+        </engine>
+      </unlocks>
+    </_Renault_M26_27>
+    <_Renault_62CV>	shared	  <unlocks>
+        <engine>	_Renault_NC	  <cost>	40	</cost>
+        </engine>
+      </unlocks>
+    </_Renault_62CV>
+    <_Renault_NC>	shared	</_Renault_NC>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Fanions_de_signaux>	shared	  <unlocks>
+        <radio>	ER_52	  <cost>	100.0	</cost>
+        </radio>
+      </unlocks>
+    </Fanions_de_signaux>
+    <ER_52>	shared	</ER_52>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	china_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</ch06_renault_nc31.xml>

@@ -1,8 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/respawn_view.py
 import BigWorld
-import constants
-from gui.battle_control.arena_info import getClientArena, hasResourcePoints
-from gui.battle_control.avatar_getter import getPlayerVehicleID
+from gui.battle_control.arena_info import hasResourcePoints, getIsMultiteam, hasFlags
+from gui.Scaleform.daapi.view.fallout_info_panel_helper import getCosts
 from gui.shared.utils.plugins import IPlugin
 import nations
 from helpers import i18n, time_utils
@@ -12,16 +11,18 @@ from shared_utils import findFirst
 from gui.Scaleform.daapi.view.battle.meta.BattleRespawnViewMeta import BattleRespawnViewMeta
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import g_sessionProvider
-from gui.shared.formatters.text_styles import standard, main, statInfo
+from gui.shared.formatters.text_styles import standard, main, statInfo, warning
 from gui.shared.gui_items.Vehicle import getIconPath
-from gui.Scaleform.daapi.view.fallout_info_panel_helper import getHelpText
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.Scaleform.locale.FALLOUT import FALLOUT
+from helpers.i18n import makeString
 _FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
 _VEHICLE_TYPE_TEMPLATE = '../maps/icons/vehicleTypes/%s.png'
 _VEHICLE_TYPE_ELITE_TEMPLATE = '../maps/icons/vehicleTypes/elite/%s.png'
 _VEHICLE_LEVEL_TEMPLATE = '../maps/icons/levels/tank_level_%d.png'
 _CALLBACK_NAME = 'battle.onLoadRespawnView'
-_MUST_TOP_ELEMENTS = ('fragCorrelationBar', 'battleTimer', 'debugPanel')
+_HTML_TEMPLATE_FALLOUT_INFO_KEY = 'html_templates:battle/falloutSingleInfo'
+_HTML_TEMPLATE_GARAGE_KEY = 'html_templates:battle/garage'
 
 class _BattleRespawnView(BattleRespawnViewMeta):
 
@@ -30,15 +31,39 @@ class _BattleRespawnView(BattleRespawnViewMeta):
         self.__proxy = proxy
         self.__selectedVehicleID = None
         self.__igrVehicleFormat = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {})
+        self.__disabled = False
         return
 
     def start(self, vehsList):
         self._populate(self.__proxy.getMember('_level0.battleRespawnView').getInstance())
         slotsData = self.__getSlotsData(vehsList)
         generalData = self.__getGeneralData()
-        arenaType = BigWorld.player().arena.arenaType
-        helpText = getHelpText(arenaType)
+        helpText = self.__getHelpText()
         self.as_initializeS(generalData, slotsData, helpText)
+
+    def __getHelpText(self):
+        arena = BigWorld.player().arena
+        arenaType = arena.arenaType
+        isSolo = len(list(g_sessionProvider.getArenaDP().getVehiclesIterator())) == 1
+        plusStr = makeString(FALLOUT.INFOPANEL_SINGLEHELPTEXT_PLUS)
+        isMultiteam = getIsMultiteam(arenaType)
+        headerStr = makeHtmlString(_HTML_TEMPLATE_FALLOUT_INFO_KEY, 'header', makeString(FALLOUT.INFOPANEL_SECRETWIN_HEAD))
+        additionalBlockTemplate = makeHtmlString(_HTML_TEMPLATE_FALLOUT_INFO_KEY, 'winPoints')
+        costKill, costFlags, costDamage = getCosts(arenaType, isSolo, True)
+        helpStr = ''
+        if hasFlags(arenaType, arena.bonusType) and len(costFlags) > 0:
+            costFlags = list(costFlags)[0]
+            helpStr = self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGCAPTURE, warning(plusStr + str(costFlags)))
+            if isMultiteam and isSolo:
+                helpStr = self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGDESTROY, warning(plusStr + str(costFlags)))
+        helpStr += self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_KILL, warning(plusStr + str(costKill)))
+        damageDealt, points = costDamage
+        points = warning(plusStr + str(points))
+        helpStr += additionalBlockTemplate % makeString(FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_DAMAGE, points=points, damageDealt=damageDealt)
+        return headerStr + helpStr
+
+    def __getAdditionalBlockStr(self, template, localeKey, params):
+        return template % makeString(localeKey, params)
 
     def destroy(self):
         self.__proxy = None
@@ -65,8 +90,19 @@ class _BattleRespawnView(BattleRespawnViewMeta):
         slots = self.__getSlotsStatesData(vehsList, cooldowns)
         self.as_respawnViewUpdateTimerS(mainTimer, slots)
 
+    def showGasAttackInfo(self, vehsList, cooldowns):
+        self.__disabled = True
+        self.__selectedVehicleID = None
+        slotsStatesData = self.__getSlotsStatesData(vehsList, cooldowns)
+        self.as_updateRespawnViewS('', slotsStatesData)
+        self.as_showGasAtackMode()
+        return
+
     def py_vehicleSelected(self, vehicleID):
         g_sessionProvider.getRespawnsCtrl().chooseVehicleForRespawn(vehicleID)
+
+    def onPostmortemBtnClickS(self):
+        self.hide()
 
     def __showRespawnView(self, vehsList, cooldowns):
         vehicleName = self.__getSelectedVehicle(vehsList)
@@ -85,12 +121,15 @@ class _BattleRespawnView(BattleRespawnViewMeta):
             nationID, _ = v.type.id
             classTag = tuple(VEHICLE_CLASS_TAGS & v.type.tags)[0]
             isElite = False
+            premiumTags = frozenset([VEHICLE_TAGS.PREMIUM])
+            isPremium = bool(v.type.tags & premiumTags)
             result.append({'vehicleID': v.intCD,
              'vehicleName': self.__getVehicleName(v),
              'flagIcon': _FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
              'vehicleIcon': getIconPath(v.type.name),
              'vehicleType': _VEHICLE_TYPE_ELITE_TEMPLATE % classTag if isElite else _VEHICLE_TYPE_TEMPLATE % classTag,
              'isElite': isElite,
+             'isPremium': isPremium,
              'vehicleLevel': _VEHICLE_LEVEL_TEMPLATE % v.type.level})
 
         return result
@@ -101,7 +140,11 @@ class _BattleRespawnView(BattleRespawnViewMeta):
         else:
             helpPanelMode = 'flags'
         return {'titleMsg': "<font face='$FieldFont' size='32' color='#F4EFE8'>%s</font><font size='4'><br><br></font>%s" % (i18n.makeString(INGAME_GUI.RESPAWNVIEW_TITLE), standard(i18n.makeString(INGAME_GUI.RESPAWNVIEW_ADDITIONALTIP))),
-         'helpPanelMode': helpPanelMode}
+         'helpPanelMode': helpPanelMode,
+         'topInfoStr': '',
+         'respawnInfoStr': '',
+         'isPostmortemViewBtnEnabled': False,
+         'postmortemBtnLbl': FALLOUT.INFOPANEL_GARAGE_POSTMORTEMBTNLBL}
 
     def __getSlotsStatesData(self, vehsList, cooldowns):
         result = []
@@ -110,9 +153,11 @@ class _BattleRespawnView(BattleRespawnViewMeta):
             cooldownTime = cooldowns.get(compactDescr, 0)
             cooldownStr = None
             cooldown = cooldownTime - BigWorld.serverTime()
-            enabled = cooldown <= 0
+            enabled = cooldown <= 0 and not self.__disabled
             if not enabled:
-                if cooldownTime > g_sessionProvider.getPeriodCtrl().getEndTime():
+                if self.__disabled:
+                    cooldownStr = i18n.makeString('#ingame_gui:respawnView/disabledLbl')
+                elif cooldownTime > g_sessionProvider.getPeriodCtrl().getEndTime():
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/destroyedLbl')
                 else:
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/cooldownLbl', time=time_utils.getTimeLeftFormat(cooldown))
@@ -154,7 +199,7 @@ class RespawnViewPlugin(IPlugin):
 
     def start(self):
         super(RespawnViewPlugin, self).start()
-        self._parentObj.movie.preinitializeRespawnView(_MUST_TOP_ELEMENTS)
+        self._parentObj.movie.falloutItems.as_preinitializeRespawnView()
 
     def stop(self):
         g_sessionProvider.getRespawnsCtrl().stop()

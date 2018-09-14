@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/server_events/settings.py
 import time
 from gui.shared import utils, events, g_eventBus
+_LAST_PQ_INTRO_VERSION = 'fallout'
 
 class _PQSettings(utils.SettingRecord):
 
@@ -82,12 +83,13 @@ def updateCommonEventsSettings(svrEvents):
 
 def isNeedToShowPQIntro(pqCtrl):
     settings = get()
-    if not settings.potapov.introShown:
+    isShown = _LAST_PQ_INTRO_VERSION == settings.potapov.introShown
+    if not isShown:
         for q in pqCtrl.getQuests().itervalues():
             if q.hasProgress():
                 return False
 
-    return not settings.potapov.introShown
+    return not isShown
 
 
 def _updatePQSettings(**kwargs):
@@ -97,7 +99,7 @@ def _updatePQSettings(**kwargs):
 
 
 def markPQIntroAsShown():
-    _updatePQSettings(introShown=True)
+    _updatePQSettings(introShown=_LAST_PQ_INTRO_VERSION)
 
 
 def isPQTileNew(tileID, pqSettings = None):

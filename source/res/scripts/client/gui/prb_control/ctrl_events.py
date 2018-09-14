@@ -2,6 +2,7 @@
 import Event
 
 class _PrbCtrlEvents(object):
+    __slots__ = ('__eManager', 'onPrebattleIntroModeJoined', 'onPrebattleIntroModeLeft', 'onUnitIntroModeLeft', 'onPrebattleInited', 'onUnitIntroModeJoined', 'onPreQueueFunctionalCreated', 'onPreQueueFunctionalDestroyed', 'onPreQueueFunctionalChanged', 'onVehicleClientStateChanged')
 
     def __init__(self):
         super(_PrbCtrlEvents, self).__init__()
@@ -15,6 +16,7 @@ class _PrbCtrlEvents(object):
         self.onPreQueueFunctionalCreated = Event.Event(self.__eManager)
         self.onPreQueueFunctionalDestroyed = Event.Event(self.__eManager)
         self.onPreQueueFunctionalChanged = Event.Event(self.__eManager)
+        self.onVehicleClientStateChanged = Event.Event(self.__eManager)
 
     def clear(self):
         self.__eManager.clear()

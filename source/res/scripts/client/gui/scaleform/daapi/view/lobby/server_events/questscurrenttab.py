@@ -22,7 +22,7 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         QUESTS = 2
 
     def getSortedTableData(self, tableData):
-        return formatters.packVehiclesList(*quest_caches.sortVehTable(tableData.tableID, tableData.buttonID, tableData.sortingDirection, int(tableData.nation), int(tableData.vehType), int(tableData.level), tableData.cbSelected, tableData.isAction))
+        return events_helpers.getSortedTableData(tableData)
 
     def _selectQuest(self, questID):
         quests = self._getEvents()
@@ -85,7 +85,8 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
             result.append(formatters.packGroupBlock(QUESTS.QUESTS_TITLE_UNGOUPEDACTIONS))
             result.extend(ungroupedActions)
         self.as_setQuestsDataS({'quests': result,
-         'isSortable': True})
+         'isSortable': True,
+         'totalTasks': len(svrEvents)})
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -115,8 +116,8 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
         return svrEvent.getType() == constants.EVENT_TYPE.ACTION
 
     @classmethod
-    def _isClubQuest(cls, svrEvent):
-        return svrEvent.getType() == constants.EVENT_TYPE.CLUBS_QUEST
+    def _isAvailableQuestForTab(cls, svrEvent):
+        return svrEvent.getType() not in (constants.EVENT_TYPE.MOTIVE_QUEST, constants.EVENT_TYPE.CLUBS_QUEST)
 
     @classmethod
     def _sortFunc(cls, a, b):
@@ -136,7 +137,7 @@ class QuestsCurrentTab(QuestsCurrentTabMeta):
             return False
         if self.__filterType == self.FILTER_TYPE.QUESTS and not self._isQuest(a):
             return False
-        return (not self._hideCompleted or not a.isCompleted()) and not self._isClubQuest(a)
+        return (not self._hideCompleted or not a.isCompleted()) and self._isAvailableQuestForTab(a)
 
     def _applyFilters(self, quests):
         return filter(self._filterFunc, self.__applySort(quests))

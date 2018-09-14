@@ -7,6 +7,7 @@ from constants import IS_CLIENT, IS_BASEAPP, IS_CELLAPP, IS_WEB, IS_DEVELOPMENT
 from functools import partial
 if IS_CLIENT:
     from helpers import i18n
+    import FMOD
 elif IS_WEB:
     from web_stubs import *
 

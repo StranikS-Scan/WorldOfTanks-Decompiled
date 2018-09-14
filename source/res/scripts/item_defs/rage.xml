@@ -1,0 +1,41 @@
+<rage.xml>
+  <ragePointsLimit>	500	</ragePointsLimit>
+  <equipments>
+    <equipment>
+      <name>	artillery_fallout	</name>
+      <costInRagePoints>	250	</costInRagePoints>
+    </equipment>
+    <equipment>
+      <name>	bomber_fallout	</name>
+      <costInRagePoints>	500	</costInRagePoints>
+    </equipment>
+  </equipments>
+  <team>
+    <vehicle>
+      <damageFactor>	0.13	</damageFactor>
+      <ragePointsForKill>	40	</ragePointsForKill>
+    </vehicle>
+    <equipment>
+      <damageFactor>	0.13	</damageFactor>
+      <ragePointsForKill>	40	</ragePointsForKill>
+    </equipment>
+    <ragePointsForFlagPickup>	10	</ragePointsForFlagPickup>
+    <ragePointsForFlagCapture>	60	</ragePointsForFlagCapture>
+    <ragePointsForOneResource>	3	</ragePointsForOneResource>
+    <deathPenalty>	0	</deathPenalty>
+  </team>
+  <solo>
+    <vehicle>
+      <damageFactor>	0.13	</damageFactor>
+      <ragePointsForKill>	40	</ragePointsForKill>
+    </vehicle>
+    <equipment>
+      <damageFactor>	0.13	</damageFactor>
+      <ragePointsForKill>	40	</ragePointsForKill>
+    </equipment>
+    <ragePointsForFlagPickup>	10	</ragePointsForFlagPickup>
+    <ragePointsForFlagCapture>	30	</ragePointsForFlagCapture>
+    <ragePointsForOneResource>	3	</ragePointsForOneResource>
+    <deathPenalty>	0	</deathPenalty>
+  </solo>
+</rage.xml>

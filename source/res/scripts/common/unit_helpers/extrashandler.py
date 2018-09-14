@@ -28,7 +28,7 @@ class EmptyExtrasHandler(object):
 
 class FortBattleExtrasHandler(EmptyExtrasHandler):
 
-    def __init__(self, unit):
+    def __init__(self, unit = None):
         self._unit = unit
         from unit_helpers.MsgProcessor import FortBattleMgrMsgProcessor
         self._processor = FortBattleMgrMsgProcessor(unit)

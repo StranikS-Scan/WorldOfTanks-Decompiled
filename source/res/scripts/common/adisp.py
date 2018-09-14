@@ -107,7 +107,6 @@ class CallbackDispatcher(object):
         try:
             self.call(self.g.next())
         except StopIteration:
-            from debug_utils import LOG_DEBUG
             self.stepCallback(True)
 
     def call(self, callers):

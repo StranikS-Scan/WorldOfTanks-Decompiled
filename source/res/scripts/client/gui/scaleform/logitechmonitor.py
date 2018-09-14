@@ -11,8 +11,7 @@ from gui.battle_control import g_sessionProvider
 from gui.battle_control.battle_period_ctrl import getTimeLevel
 from items.vehicles import getVehicleType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.utils.requesters import DeprecatedStatsRequester
+from gui.shared import EVENT_BUS_SCOPE, g_itemsCache
 from CurrentVehicle import g_currentVehicle
 from helpers import i18n, isPlayerAccount
 from gui.shared.utils.functions import getArenaSubTypeName
@@ -166,9 +165,8 @@ class _StatsScreen(_LogitechScreen):
     def onVehicleChange(self):
         self.uiHolder.call('logitech.setMonoText', [g_currentVehicle.item.userName + '\r\n' + i18n.makeString(g_currentVehicle.getHangarMessage()[1])])
 
-    @process
     def onLoaded(self):
-        dossier = yield DeprecatedStatsRequester().getAccountDossier()
+        dossier = g_itemsCache.items.stats.accountDossier
         self.call('logitech.setStatsData', getDossierTotalBlocksSummary(dossier, isCompact=True))
 
 

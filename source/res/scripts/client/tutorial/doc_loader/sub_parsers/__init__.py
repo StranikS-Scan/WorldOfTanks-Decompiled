@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/__init__.py
+from collections import namedtuple
 from items import _xml, vehicles
 from helpers.html import translation
 import nations
@@ -237,6 +238,11 @@ def _readShowWindowSection(xmlCtx, section, _, conditions):
     return effects.HasTargetEffect(windowID, _EFFECT_TYPE.SHOW_WINDOW, conditions=conditions)
 
 
+def _readShowAwardWindowSection(xmlCtx, section, _, conditions):
+    windowID = parseID(xmlCtx, section, 'Specify a window ID')
+    return effects.HasTargetEffect(windowID, _EFFECT_TYPE.SHOW_AWARD_WINDOW, conditions=conditions)
+
+
 def _readShowMessageSection(xmlCtx, section, _, conditions):
     messageID = parseID(xmlCtx, section, 'Specify a message ID')
     return effects.HasTargetEffect(messageID, _EFFECT_TYPE.SHOW_MESSAGE, conditions=conditions)
@@ -310,6 +316,7 @@ _BASE_EFFECT_TAGS = {'activate': _readActivateEffectSection,
  'close-hint': _readCloseHintSection,
  'show-dialog': _readShowDialogSection,
  'show-window': _readShowWindowSection,
+ 'show-award-window': _readShowAwardWindowSection,
  'show-message': _readShowMessageSection,
  'play-music': _readPlayMusicSection,
  'set-gui-item-criteria': _readGuiItemCriteria,
@@ -556,6 +563,19 @@ def _parseWindow(xmlCtx, section, flags):
     return window
 
 
+def _parseSimpleWindow(xmlCtx, section, flags):
+    windowID = parseID(xmlCtx, section, 'Specify a window ID')
+    windowType = _xml.readString(xmlCtx, section, 'type')
+    content = {}
+    parser = _WINDOW_SUB_PARERS.get(windowType)
+    if parser is not None:
+        window = parser(xmlCtx, section, flags, windowID, windowType, content)
+    else:
+        window = None
+        LOG_ERROR('Type of window is not supported: ', windowType)
+    return window
+
+
 def _parseMessage(xmlCtx, section, _):
     messageID = parseID(xmlCtx, section, 'Specify a message ID')
     guiType = _xml.readString(xmlCtx, section, 'type')
@@ -647,6 +667,7 @@ def _readGameAttribute(xmlCtx, section, _):
 
 _BASE_ENTITY_PARERS = {'dialog': _parseDialog,
  'window': _parseWindow,
+ 'simple-window': _parseSimpleWindow,
  'message': _parseMessage,
  'player-cmd': _readPlayerCommand,
  'query': _readQuery,
@@ -687,9 +708,6 @@ def readValues(section):
 
 
 def readQuestAwardWindowSection(xmlCtx, section, _, windowID, windowType, content):
-    bSec = _xml.getSubsection(xmlCtx, section, 'buttons')
-    content['nextID'] = _xml.readString(xmlCtx, bSec, 'next')
-    content['closeID'] = _xml.readString(xmlCtx, bSec, 'close')
     content['description'] = translation(section.readString('description'))
     content['header'] = translation(section.readString('header'))
     content['bgImage'] = section.readString('image')
@@ -697,3 +715,34 @@ def readQuestAwardWindowSection(xmlCtx, section, _, windowID, windowType, conten
     if 'var-ref' in section.keys():
         varRef = _xml.readString(xmlCtx, section, 'var-ref')
     return chapter.PopUp(windowID, windowType, content, varRef, forcedQuery=True)
+
+
+_AVAILABLE_DIRECTIONS = ('L', 'T', 'R', 'B')
+_ArrowProps = namedtuple('_ArrowProps', ('direction', 'loop'))
+_Padding = namedtuple('_Padding', ('left', 'top', 'right', 'bottom'))
+
+def parseHint(xmlCtx, section):
+    sectionInfo = dict()
+    sectionInfo['hintID'] = parseID(xmlCtx, section, 'Specify a hint ID')
+    if 'item-id' in section.keys():
+        sectionInfo['itemID'] = parseID(xmlCtx, section['item-id'], 'Specify a item ID')
+    else:
+        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a item ID')
+        return
+    tags = section.keys()
+    sectionInfo['text'] = translation(_xml.readString(xmlCtx, section, 'text'))
+    if 'arrow' in tags:
+        subSec = section['arrow']
+        direction = _xml.readString(xmlCtx, subSec, 'direction')
+        if direction not in _AVAILABLE_DIRECTIONS:
+            _xml.raiseWrongXml(xmlCtx, section, 'Arrow direction {} is invalid.'.format(direction))
+        sectionInfo['arrow'] = _ArrowProps(direction, _xml.readBool(xmlCtx, subSec, 'loop'))
+    else:
+        sectionInfo['arrow'] = None
+    if 'padding' in tags:
+        subSec = section['padding']
+        sectionInfo['padding'] = _Padding(_xml.readFloat(xmlCtx, subSec, 'left'), _xml.readFloat(xmlCtx, subSec, 'top'), _xml.readFloat(xmlCtx, subSec, 'right'), _xml.readFloat(xmlCtx, subSec, 'bottom'))
+    else:
+        sectionInfo['padding'] = None
+    sectionInfo['hasBox'] = section.readBool('has-box', True)
+    return sectionInfo

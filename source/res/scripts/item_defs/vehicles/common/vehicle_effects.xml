@@ -1,0 +1,2570 @@
+<vehicle_effects.xml>
+  <empty></empty>
+  <groundCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_ground.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </groundCollisionLight>
+  <groundCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_ground.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </groundCollisionHeavy>
+  <sandCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_sand.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </sandCollisionLight>
+  <sandCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_sand.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </sandCollisionHeavy>
+  <snowCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_snow.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </snowCollisionLight>
+  <snowCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_snow.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </snowCollisionHeavy>
+  <stoneCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Tank/tank_collision_light_stone.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </stoneCollisionLight>
+  <stoneCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
+          <file>	particles/Tank/tank_collision_stone.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </stoneCollisionHeavy>
+  <woodCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_wood.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </woodCollisionLight>
+  <woodCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_wood.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </woodCollisionHeavy>
+  <metalCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </metalCollisionLight>
+  <metalCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/heavy_hit	</sound>
+          <wwsound>	com_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </metalCollisionHeavy>
+  <waterCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_water.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/water_hit_light	</sound>
+          <wwsound>	water_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </waterCollisionLight>
+  <waterCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_water.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/water_hit_large	</sound>
+          <wwsound>	water_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </waterCollisionHeavy>
+  <collision>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/common_tank/light_hit	</sound>
+          <wwsound>	com_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+    <variant2>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/objects/fuel_barrel/fuel_barrel_mid	</sound>
+          <wwsound>	obj_fuel_barrel_mid	</wwsound>
+        </sound>
+      </effects>
+    </variant2>
+  </collision>
+  <collisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_01.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/contact_tanks	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/contact_tanks	</soundNPC>
+          <wwsoundPC>	phys_friction_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_friction_npc	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </collisionLight>
+  <collisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	tanks/npc/tanks_physics/collision/collision_light	</sound>
+          <wwsound>	phys_coll_light_npc	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	tanks/npc/tanks_physics/collision/after_collision	</sound>
+          <wwsound>	phys_friction_after_coll_npc	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </collisionHeavy>
+  <collisionHeavy1>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/collision_light	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/collision_light	</soundNPC>
+          <wwsoundPC>	phys_coll_light_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_light_npc	</wwsoundNPC>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/after_collision	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/after_collision	</soundNPC>
+          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </collisionHeavy1>
+  <collisionHeavy2>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/collision_mid	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/collision_mid	</soundNPC>
+          <wwsoundPC>	phys_coll_med_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_med_npc	</wwsoundNPC>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/after_collision	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/after_collision	</soundNPC>
+          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </collisionHeavy2>
+  <collisionHeavy3>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_02.xml	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/collision_heavy	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/collision_heavy	</soundNPC>
+          <wwsoundPC>	phys_coll_heavy_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_coll_heavy_npc	</wwsoundNPC>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <soundPC>	/tanks/pc/tanks_physics/collision/after_collision	</soundPC>
+          <soundNPC>	/tanks/npc/tanks_physics/collision/after_collision	</soundNPC>
+          <wwsoundPC>	phys_friction_after_coll_pc	</wwsoundPC>
+          <wwsoundNPC>	phys_friction_after_coll_npc	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </collisionHeavy3>
+  <rammingCollisionLight>
+    <variant1>
+      <timeline>
+        <impact>	2.0	</impact>
+      </timeline>
+      <effects>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/ramming/light_ramming	</sound>
+          <wwsound>	phys_coll_ramming_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </rammingCollisionLight>
+  <rammingCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impact>	2.0	</impact>
+      </timeline>
+      <effects>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/tanks/tanks_physics/ramming/heavy_ramming	</sound>
+          <wwsound>	phys_coll_ramming_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </rammingCollisionHeavy>
+  <smallDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/destruction_small_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_s	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallDestruction>
+  <smallFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_small_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_small	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_small	</soundNPC>
+          <wwsoundPC>	flaming_engine_small_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_small_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </smallFlaming>
+  <smallAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/turret_detach_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallAmmoBayExplosion>
+  <smallAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/burnup_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/burnup_ammo/burnup_ammo_s	</sound>
+          <wwsound>	expl_burnup_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallAmmoBayBurnOff>
+  <smallFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/fuel_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_s	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallFuelExplosion>
+  <smallCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/death_crew_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/crew_death/crew_death_s	</sound>
+          <wwsound>	expl_crew_death_s	</wwsound>
+        </sound>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_small.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </smallCrewDeath>
+  <smallRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/ram_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/ram_destr/ram_destr_s	</sound>
+          <wwsound>	expl_ram_death	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallRammingDestruction>
+  <smallSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/sink_small.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/submersion_death/tank_submersion_death	</sound>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </smallSubmersionDeath>
+  <mediumDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/destruction_medium_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_m	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumDestruction>
+  <mediumFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_medium_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </mediumFlaming>
+  <mediumAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/turret_detach_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumAmmoBayExplosion>
+  <mediumAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/burnup_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/burnup_ammo/burnup_ammo_m	</sound>
+          <wwsound>	expl_burnup_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumAmmoBayBurnOff>
+  <mediumFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/fuel_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_m	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumFuelExplosion>
+  <mediumCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/death_crew_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/crew_death/crew_death_m	</sound>
+          <wwsound>	expl_crew_death_m	</wwsound>
+        </sound>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_small.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </mediumCrewDeath>
+  <mediumRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/ram_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/ram_destr/ram_destr_m	</sound>
+          <wwsound>	expl_ram_death	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumRammingDestruction>
+  <mediumSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/sink_medium.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/submersion_death/tank_submersion_death	</sound>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </mediumSubmersionDeath>
+  <largeDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/destruction_large_01.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_l	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_large	</sound>
+          <wwsound>	burning_tank_large	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeDestruction>
+  <largeFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_large_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_large	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_large	</soundNPC>
+          <wwsoundPC>	flaming_engine_large_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_large_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </largeFlaming>
+  <largeAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/turret_detach_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeAmmoBayExplosion>
+  <largeAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/burnup_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/burnup_ammo/burnup_ammo_l	</sound>
+          <wwsound>	expl_burnup_ammo	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_large	</sound>
+          <wwsound>	burning_tank_large	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeAmmoBayBurnOff>
+  <largeFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/fuel_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_l	</sound>
+          <wwsound>	expl_fuel	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_large	</sound>
+          <wwsound>	burning_tank_large	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeFuelExplosion>
+  <largeCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/death_crew_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/crew_death/crew_death_l	</sound>
+          <wwsound>	expl_crew_death_l	</wwsound>
+        </sound>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_white_large.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </largeCrewDeath>
+  <largeRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/ram_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/ram_destr/ram_destr_l	</sound>
+          <wwsound>	expl_ram_death	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_large	</sound>
+          <wwsound>	burning_tank_large	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeRammingDestruction>
+  <largeSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/sink_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/submersion_death/tank_submersion_death	</sound>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </largeSubmersionDeath>
+  <emptyDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyDestruction>
+  <emptyFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyFlaming>
+  <emptyAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyAmmoBayExplosion>
+  <emptyAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyAmmoBayBurnOff>
+  <emptyFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyFuelExplosion>
+  <emptyCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyCrewDeath>
+  <emptyRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptyRammingDestruction>
+  <emptySubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/empty.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </variant1>
+  </emptySubmersionDeath>
+  <dominationLargeDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/destruction_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_l	</sound>
+          <wwsound>	expl_fuel_l	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_domination_large	</sound>
+          <wwsound>	tank_burning_domination_large	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeDestruction>
+  <dominationLargeFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_domination_large_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_medium	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_medium	</soundNPC>
+          <wwsoundPC>	tank_flaming_medium	</wwsoundPC>
+          <wwsoundNPC>	tank_flaming_medium	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+    <variant2>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/Tank/destruction/flaming_domination_large_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <soundPC>	/tanks/pc/tank_flaming/tank_flaming_large	</soundPC>
+          <soundNPC>	/tanks/npc/tank_flaming/tank_flaming_large	</soundNPC>
+          <wwsoundPC>	tank_flaming_large	</wwsoundPC>
+          <wwsoundNPC>	tank_flaming_large	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant2>
+  </dominationLargeFlaming>
+  <dominationLargeAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/turret_detach_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo_m	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeAmmoBayExplosion>
+  <dominationLargeAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/burnup_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/burnup_ammo/burnup_ammo_l	</sound>
+          <wwsound>	expl_burnup_ammo_l	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeAmmoBayBurnOff>
+  <dominationLargeFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/fuel_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/explosions/expl_fuel/expl_fuel_l	</sound>
+          <wwsound>	expl_ammo_l	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_domination_large	</sound>
+          <wwsound>	expl_burnup_ammo_l	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeFuelExplosion>
+  <dominationLargeCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	explosion	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/death_crew_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/crew_death/crew_death_l	</sound>
+          <wwsound>	expl_crew_death_l	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </dominationLargeCrewDeath>
+  <dominationLargeRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	death	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/ram_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <sound>	/explosions/ram_destr/ram_destr_l	</sound>
+          <wwsound>	expl_ram_death	</wwsound>
+        </sound>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+      </effects>
+    </variant1>
+  </dominationLargeRammingDestruction>
+  <dominationLargeSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/Tank/destruction/sink_domination_large.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <sound>	/explosions/submersion_death/tank_submersion_death	</sound>
+          <wwsound>	tank_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </dominationLargeSubmersionDeath>
+  <explosionCandle1>
+    <variant1>
+      <timeline>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <impactEnd>	5.0	</impactEnd>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/explosion_turret_01.xml	</file>
+          <position>	HP_turretJoint	</position>
+          <force>	1	</force>
+        </pixie>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_small_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_small	</sound>
+          <wwsound>	burning_tank_small	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/flame/flame	</sound>
+          <wwsound>	TEST_EVENT	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </explosionCandle1>
+  <explosionCandle2>
+    <variant1>
+      <timeline>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <impactEnd>	5.0	</impactEnd>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/explosion_turret_02.xml	</file>
+          <position>	HP_turretJoint	</position>
+          <force>	1	</force>
+        </pixie>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_m	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/flame/flame	</sound>
+          <wwsound>	TEST_EVENT	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </explosionCandle2>
+  <explosionCandle3>
+    <variant1>
+      <timeline>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <impactEnd>	5.0	</impactEnd>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/explosion_turret_03.xml	</file>
+          <position>	HP_turretJoint	</position>
+          <force>	1	</force>
+        </pixie>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_medium_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_medium_02.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_medium	</sound>
+          <wwsound>	burning_tank_medium	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_l	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/flame/flame	</sound>
+          <wwsound>	TEST_EVENT	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </explosionCandle3>
+  <explosionCandle4>
+    <variant1>
+      <timeline>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <impactEnd>	5.0	</impactEnd>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/explosion_turret_04.xml	</file>
+          <position>	HP_turretJoint	</position>
+          <force>	1	</force>
+        </pixie>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	0 0 0 0	</color>
+            </stage>
+            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <decal>
+          <startKey>	static	</startKey>
+          <groupName>	slow	</groupName>
+          <texName>	explosion_ground_AM	</texName>
+          <bumpTexName>	explosion_ground_NM	</bumpTexName>
+          <smTexName>	explosion_stone_NO_GMM	</smTexName>
+          <size>	12 12	</size>
+          <randomYaw>	true	</randomYaw>
+        </decal>
+        <pixie>
+          <startKey>	static	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <file>	particles/Tank/destruction/smoke_dead_large_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <pixie>
+          <startKey>	flaming	</startKey>
+          <endKey>	waitChangeBurnSound	</endKey>
+          <file>	particles/Tank/destruction/fire_dead_large_01.xml	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	flaming	</startKey>
+          <sound>	/tanks/tank_burning/tank_burning_large	</sound>
+          <wwsound>	burning_tank_large	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/explosions/expl_ammo/expl_ammo_l	</sound>
+          <wwsound>	expl_ammo	</wwsound>
+        </sound>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/flame/flame	</sound>
+          <wwsound>	TEST_EVENT	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </explosionCandle4>
+  <fullDestruction>
+    <variant1>
+      <timeline>
+        <effectEnd>	10.0	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/destruction/destruction_full.xml	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <sound>	/explosions/explosions/destruction_full/destruction_full_m	</sound>
+          <wwsound>	expl_ammo_l	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </fullDestruction>
+</vehicle_effects.xml>

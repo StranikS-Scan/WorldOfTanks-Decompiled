@@ -2,10 +2,9 @@
 from collections import defaultdict
 import weakref
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, PREBATTLE_COMPANY_DIVISION, FALLOUT_BATTLE_TYPE
+from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
 from gui.game_control import getFalloutCtrl
-from gui.prb_control import getClassLevelLimits, getTotalLevelLimits
-from gui.prb_control import getPrebattleRosters, getMaxSizeLimits
+from gui.prb_control import prb_getters
 from gui.prb_control.restrictions.interfaces import IVehicleLimit, ITeamLimit
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION, UNIT_RESTRICTION
 from gui.prb_control.items import unit_items
@@ -17,7 +16,7 @@ from prebattle_shared import isTeamValid, isVehicleValid
 class VehicleIsValid(IVehicleLimit):
 
     def check(self, teamLimits):
-        if g_currentVehicle.isFalloutOnly():
+        if g_currentVehicle.isFalloutOnly() and not getFalloutCtrl().isSelected():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_FALLOUT_ONLY)
         if not g_currentVehicle.isReadyToFight():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
@@ -116,7 +115,7 @@ class MaxCount(ITeamLimit):
                 key = PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1
             else:
                 key = PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM2
-        maxCount = getMaxSizeLimits(teamLimits)[index]
+        maxCount = prb_getters.getMaxSizeLimits(teamLimits)[index]
         if key in rosters and len(rosters[key]) >= maxCount:
             return (False, PREBATTLE_RESTRICTION.LIMIT_MAX_COUNT)
         return (True, '')
@@ -125,7 +124,7 @@ class MaxCount(ITeamLimit):
 class TotalMaxCount(ITeamLimit):
 
     def check(self, rosters, team, teamLimits):
-        maxCount = sum(getMaxSizeLimits(teamLimits))
+        maxCount = sum(prb_getters.getMaxSizeLimits(teamLimits))
         result, restriction = True, ''
         if team is 1:
             keys = [PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1, PREBATTLE_ROSTER.UNASSIGNED_IN_TEAM1]
@@ -148,7 +147,7 @@ class VehiclesLevelLimit(ITeamLimit):
         assignedRosters = rosters.get(team, {})
         totalLevel, classLevels = self.__calculate(assignedRosters)
         for classTag in VEHICLE_CLASS_TAGS:
-            minLevel, maxLevel = getClassLevelLimits(teamLimits, classTag)
+            minLevel, maxLevel = prb_getters.getClassLevelLimits(teamLimits, classTag)
             currentLevel = classLevels[classTag]
             vClassTags = PREBATTLE_RESTRICTION.getVehClassTags()
             if not (minLevel <= currentLevel <= maxLevel or currentLevel == 0):
@@ -159,7 +158,7 @@ class VehiclesLevelLimit(ITeamLimit):
                     notValidReason = PREBATTLE_RESTRICTION.LIMIT_CLASSES
 
         if isValid:
-            minLevel, maxLevel = getTotalLevelLimits(teamLimits)
+            minLevel, maxLevel = prb_getters.getTotalLevelLimits(teamLimits)
             if not minLevel <= totalLevel <= maxLevel:
                 isValid = False
                 notValidReason = PREBATTLE_RESTRICTION.LIMIT_TOTAL_LEVEL
@@ -215,7 +214,7 @@ class LimitsCollection(object):
             team = self.__functional.getPlayerTeam()
         settings = self.__functional.getSettings()
         teamLimits = settings.getTeamLimits(team)
-        rosters = getPrebattleRosters()
+        rosters = prb_getters.getPrebattleRosters()
         for limit in self.__teamLimits:
             result, errorCode = limit.check(rosters, team, teamLimits)
             if not result:
@@ -225,7 +224,7 @@ class LimitsCollection(object):
 
     def isTeamsValid(self):
         settings = self.__functional.getSettings()
-        rosters = getPrebattleRosters()
+        rosters = prb_getters.getPrebattleRosters()
         for team in [1, 2]:
             teamLimits = settings.getTeamLimits(team)
             for limit in self.__teamLimits:
@@ -237,7 +236,7 @@ class LimitsCollection(object):
 
     def isMaxCountValid(self, team, assigned):
         settings = self.__functional.getSettings()
-        rosters = getPrebattleRosters()
+        rosters = prb_getters.getPrebattleRosters()
         return MaxCount(assigned=assigned).check(rosters, team, settings.getTeamLimits(team))
 
     def _getFunctional(self):
@@ -342,7 +341,7 @@ class _UnitActionValidator(object):
                 return (False, UNIT_RESTRICTION.VEHICLE_RENT_IS_OVER)
             if vehicle.isInBattle:
                 return (False, UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE)
-            if vehicle.isFalloutOnly():
+            if vehicle.isFalloutOnly() and not getFalloutCtrl().isSelected():
                 return (False, UNIT_RESTRICTION.VEHICLE_WRONG_MODE)
             return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
         return (True, UNIT_RESTRICTION.UNDEFINED)
@@ -512,7 +511,7 @@ class FalloutSquadActionValidator(SquadActionValidator):
     def validateVehicles(self, vInfo, flags):
         from gui.shared.gui_items.Vehicle import Vehicle
         if vInfo.isEmpty():
-            return (False, UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED)
+            return (False, UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN)
         else:
             for vehicle in vInfo.getVehicles():
                 if vehicle is None:
@@ -543,8 +542,14 @@ class FalloutSquadActionValidator(SquadActionValidator):
 
     def _validateSlots(self, stats, flags, slots):
         if self.__falloutCtrl.getBattleType() == FALLOUT_BATTLE_TYPE.MULTITEAM:
+            emptySlots = 0
+            readySlots = 0
             for slotInfo in slots:
-                if slotInfo.player is None or not slotInfo.player.isReady:
-                    return (False, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
+                if slotInfo.player is None:
+                    emptySlots += 1
+                elif slotInfo.player.isReady:
+                    readySlots += 1
 
+            if emptySlots > 1 or readySlots < 2:
+                return (False, UNIT_RESTRICTION.FALLOUT_NOT_ENOUGH_PLAYERS)
         return (True, UNIT_RESTRICTION.UNDEFINED)

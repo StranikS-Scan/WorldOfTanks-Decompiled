@@ -1,0 +1,1220 @@
+<f70_sarl42.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	16	</backward>
+  </speedLimits>
+  <repairCost>	4.0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	40	</armor_1>
+      <armor_2>	40	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	20	</armor_11>
+      <armor_12>	20	</armor_12>
+      <armor_13>	40	</armor_13>
+      <armor_14>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_5 armor_9	</primaryArmor>
+    <weight>	9640	</weight>
+    <maxHealth>	248	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F70_SARL42/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.0042 0.691525 0.72596	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/french/F70_SARL42/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.38532 0.546986 1.98368	</rayStart>
+        <rayEnd>	0.385229 0.171663 1.84536	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0261783 0.374629 2.4461	</rayStart>
+        <rayEnd>	-0.026172 0.000880286 2.30358	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.6	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.17404 0.632674 1.21177	</rayStart>
+        <rayEnd>	0.798833 0.52762 1.12131	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.55	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <camouflage>
+      <exclusionMask></exclusionMask>
+      <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_SARL42>
+      <userString>	#france_vehicles:Chassis_SARL42	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1600	</price>
+      <unlocks>
+        <chassis>	Chassis_SARL42_2	  <cost>	1050	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	6500	</weight>
+      <maxLoad>	20200	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F70_SARL42/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	254	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.319008	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0852182	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.0852183	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.160883	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	10	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.319008	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0852182	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.0852183	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.160883	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	10	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.858475 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.944202 1.70122	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.213170 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.009590 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.669500	</row2>
+            <row3>	0.000000 0.000000 -0.000046	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F70_SARL42/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F70_SARL42/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F70_SARL42/track/left.track	</left>
+        <right>	vehicles/french/F70_SARL42/track/right.track	</right>
+        <segmentLength>	0.104	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0131	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxOffset>	0.265	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.25	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.25	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <camouflage>
+        <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Chassis_SARL42>
+    <Chassis_SARL42_2>
+      <userString>	#france_vehicles:Chassis_SARL42_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4300	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	6500	</weight>
+      <maxLoad>	24300	</maxLoad>
+      <terrainResistance>	1 1.1 2	</terrainResistance>
+      <brakeForce>	24000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F70_SARL42/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	254	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.319008	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0852182	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.0852183	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.160883	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	10	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.319008	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0852182	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.0852183	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.160883	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	10	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <wwsoundPC>	vehicles_treads_pc_2	</wwsoundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundNPC>	vehicles_treads_npc_2	</wwsoundNPC>
+      <hullPosition>	0.000000 0.858475 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.944202 1.70122	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.250980 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.009590 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.366910	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F70_SARL42/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F70_SARL42/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F70_SARL42/track/left.track	</left>
+        <right>	vehicles/french/F70_SARL42/track/right.track	</right>
+        <segmentLength>	0.104	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0131	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxOffset>	0.265	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.25	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.72	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.25	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_SARL42_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_SARL42>
+      <userString>	#france_vehicles:Turret_1_SARL42	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <armor>
+        <armor_1>	40	</armor_1>
+        <armor_2>	40	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	40	</armor_11>
+        <armor_12>	40	</armor_12>
+        <armor_13>	20	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_5 armor_7	</primaryArmor>
+      <weight>	2800	</weight>
+      <maxHealth>	62	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+          <unlocks>
+            <gun>	_47mm_SA37	  <cost>	450	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.159833 0.00350186 0.571461	</rayStart>
+              <rayEnd>	0.232109 -0.0136643 0.565275	</rayEnd>
+              <rayUp>	0.05 0.046 2	</rayUp>
+              <size>	0.15	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	0.94 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA35>
+        <_47mm_SA37>	shared	  <maxAmmo>	69	</maxAmmo>
+          <unlocks>
+            <gun>	_47mm_SA37_ameliore	  <cost>	2400	</cost>
+            </gun>
+            <turret>	Turret_2_SARL42	  <cost>	1180	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.157612 0.00511763 1.11258	</rayStart>
+              <rayEnd>	0.228128 -0.0157391 1.10754	</rayEnd>
+              <rayUp>	0.053 0.048 2	</rayUp>
+              <size>	0.2	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	0.91 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA37>
+        <_47mm_SA37_ameliore>	shared	  <maxAmmo>	69	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.157612 0.00511763 1.10881	</rayStart>
+              <rayEnd>	0.0866414 -0.00822059 1.10377	</rayEnd>
+              <rayUp>	0.051 0.047 4	</rayUp>
+              <size>	0.2	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	0.76 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA37_ameliore>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F70_SARL42/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F70_SARL42/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.0042 0.4277 0.95884	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.05118 0.524998 -0.118626	</rayStart>
+          <rayEnd>	-0.651192 0.523631 -0.118626	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.05118 0.524998 -0.118626	</rayStart>
+          <rayEnd>	0.651192 0.523631 -0.118626	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <physicsShape>	0.965 -0.035 1.023 -0.023 0.653 0.231 0.405 0.301 0.500 0.587 0.000 0.500 0.000 0.000 0.295	</physicsShape>
+      <camouflage>
+        <exclusionMask></exclusionMask>
+        <tiling>	0.79 0.43 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_SARL42>
+    <Turret_2_SARL42>
+      <userString>	#france_vehicles:Turret_2_SARL42	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4800	</price>
+      <unlocks>
+        <gun>	_75mm_SA32	  <cost>	800	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	40	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_11>	40	</armor_11>
+        <armor_12>	40	</armor_12>
+        <armor_13>	30	</armor_13>
+        <armor_14>	20	</armor_14>
+        <armor_15>	20	</armor_15>
+        <armor_16>	30	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_7 armor_5	</primaryArmor>
+      <weight>	3500	</weight>
+      <maxHealth>	102	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.704	</invisibilityFactor>
+      <guns>
+        <_47mm_SA35>	shared	  <maxAmmo>	118	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000127804 0.000094 0.653626	</rayStart>
+              <rayEnd>	-0.0643252 -0.0712425 0.64744	</rayEnd>
+              <rayUp>	0.05 0.046 2	</rayUp>
+              <size>	0.15	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	1.18 0.475 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA35>
+        <_47mm_SA37>	shared	  <maxAmmo>	69	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000119272 0.000093 1.16667	</rayStart>
+              <rayEnd>	0.0613871 -0.0379581 1.16163	</rayEnd>
+              <rayUp>	0.052 0.048 3	</rayUp>
+              <size>	0.2	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	1 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA37>
+        <_47mm_SA37_ameliore>	shared	  <maxAmmo>	69	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	15	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000119272 0.000093 1.13156	</rayStart>
+              <rayEnd>	0.0649832 -0.0794808 1.12652	</rayEnd>
+              <rayUp>	0.053 0.049 3	</rayUp>
+              <size>	0.2	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	1 0.55 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_47mm_SA37_ameliore>
+        <_75mm_SA32>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_Long_44	  <cost>	2700	</cost>
+            </gun>
+            <vehicle>	F11_Renault_G1R	  <cost>	13550	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	5.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.1	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000446605 0.000093 1.04629	</rayStart>
+              <rayEnd>	0.0531026 -0.00867023 1.04456	</rayEnd>
+              <rayUp>	0.068 0.066 4	</rayUp>
+              <size>	0.28	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	0.97 0.46 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_SA32>
+        <_75mm_Long_44>	shared	  <maxAmmo>	30	</maxAmmo>
+          <armor>
+            <armor_1>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+            <maxPitch>	0 10 0.458333 10 0.461111 9 0.469444 9 0.472222 10 0.527778 10 0.530556 9 0.538889 9 0.541667 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	5.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000004 0.000069 1.49662	</rayStart>
+              <rayEnd>	-0.0339622 -0.0235502 1.49634	</rayEnd>
+              <rayUp>	0.0675 0.0675 4	</rayUp>
+              <size>	0.3	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <exclusionMask></exclusionMask>
+            <tiling>	1 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Long_44>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F70_SARL42/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/french/F70_SARL42/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/french/F70_SARL42/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/french/F70_SARL42/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.0042 0.5168 0.97264	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.76426 0.375383 0.197896	</rayStart>
+          <rayEnd>	-0.705152 0.375383 0.197896	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.76426 0.375383 0.197896	</rayStart>
+          <rayEnd>	0.705152 0.375383 0.197896	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	turret_electric_traverse_03	</wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <physicsShape>	0.988 0.000 1.000 0.000 0.827 0.116 0.728 0.587 0.500 0.500 0.000 0.500 0.000 0.000 0.514	</physicsShape>
+      <camouflage>
+        <exclusionMask></exclusionMask>
+        <tiling>	0.94 0.46 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_SARL42>
+  </turrets0>
+  <engines>
+    <Hispano_219CV_V8>	shared	  <unlocks>
+        <engine>	Somua_230_V8	  <cost>	1050	</cost>
+        </engine>
+      </unlocks>
+    </Hispano_219CV_V8>
+    <Somua_230_V8>	shared	</Somua_230_V8>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <ER_28>	shared	  <unlocks>
+        <radio>	ER_29	  <cost>	630	</cost>
+        </radio>
+      </unlocks>
+    </ER_28>
+    <ER_29>	shared	  <unlocks>
+        <radio>	ER_26_ter	  <cost>	3100	</cost>
+        </radio>
+      </unlocks>
+    </ER_29>
+    <ER_26_ter>	shared	  <unlocks>
+        <radio>	ER_27	  <cost>	7100	</cost>
+        </radio>
+      </unlocks>
+    </ER_26_ter>
+    <ER_27>	shared	</ER_27>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f70_sarl42.xml>

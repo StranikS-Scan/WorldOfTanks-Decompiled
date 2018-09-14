@@ -1,5 +1,4 @@
 # Embedded file name: scripts/common/clubs_settings.py
-import time
 import ResMgr
 from debug_utils import LOG_ERROR, LOG_DEBUG
 _CONFIG_FILE = 'scripts/item_defs/clubs_settings.xml'
@@ -18,13 +17,6 @@ class ClubsSettings:
 
 
 g_cache = None
-
-def __asDate(date):
-    try:
-        return int(time.mktime(time.strptime(date, '%d.%m.%Y %H:%M')))
-    except:
-        raise Exception, 'Bad date format of %s' % (date,)
-
 
 def init():
     global g_cache

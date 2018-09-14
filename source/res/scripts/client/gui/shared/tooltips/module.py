@@ -8,7 +8,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.tooltips import ToolTipDataField, getComplexStatus, getUnlockPrice, ToolTipParameterField, ToolTipData, ToolTipAttrField, ToolTipMethodCheckField, TOOLTIP_TYPE
 from gui.shared.utils import ItemsParameters, GUN_CAN_BE_CLIP, GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, CLIP_ICON_PATH
 from helpers.i18n import makeString
-from gui.shared.utils.gui_items import InventoryVehicle
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import i18n
 
 class ModuleStatusField(ToolTipDataField):
@@ -47,14 +47,14 @@ class ModuleStatusField(ToolTipDataField):
             vehicle.eqs = list(currentVehicleEqs)
         inventoryVehicles = g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
         installedVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))[:self._tooltip.MAX_INSTALLED_LIST_LEN]
-        messageLvl = InventoryVehicle.STATE_LEVEL.WARNING
+        messageLvl = Vehicle.VEHICLE_STATE_LEVEL.WARNING
         tooltipHeader = ''
         tooltipText = ''
         if not isFit:
             reason = reason.replace(' ', '_')
             tooltipHeader, tooltipText = getComplexStatus('#tooltips:moduleFits/%s' % reason)
             if reason == 'credit_error' or reason == 'gold_error':
-                messageLvl = InventoryVehicle.STATE_LEVEL.CRITICAL
+                messageLvl = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             elif reason == 'not_with_installed_equipment':
                 if vehicle is not None:
                     conflictEqs = module.getConflictedEquipments(vehicle)
@@ -73,7 +73,7 @@ class ModuleStatusField(ToolTipDataField):
         vehicle = configuration.vehicle
         node = configuration.node
 
-        def status(header = None, text = None, level = InventoryVehicle.STATE_LEVEL.WARNING):
+        def status(header = None, text = None, level = Vehicle.VEHICLE_STATE_LEVEL.WARNING):
             if header is not None or text is not None:
                 return {'header': header,
                  'text': text,
@@ -83,7 +83,7 @@ class ModuleStatusField(ToolTipDataField):
                 return
 
         header, text = (None, None)
-        level = InventoryVehicle.STATE_LEVEL.WARNING
+        level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
         nodeState = int(node.state)
         statusTemplate = '#tooltips:researchPage/module/status/%s'
         parentCD = vehicle.intCD if vehicle is not None else None
@@ -95,12 +95,12 @@ class ModuleStatusField(ToolTipDataField):
                 header, text = getComplexStatus(statusTemplate % 'parentModuleIsLocked')
             elif need > 0:
                 header, text = getComplexStatus(statusTemplate % 'notEnoughXP')
-                level = InventoryVehicle.STATE_LEVEL.CRITICAL
+                level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             return status(header, text, level)
         elif not vehicle.isInInventory:
             header, text = getComplexStatus(statusTemplate % 'needToBuyTank')
             text %= {'vehiclename': vehicle.userName}
-            return status(header, text, InventoryVehicle.STATE_LEVEL.WARNING)
+            return status(header, text, Vehicle.VEHICLE_STATE_LEVEL.WARNING)
         elif nodeState & NODE_STATE.INSTALLED:
             return status()
         else:

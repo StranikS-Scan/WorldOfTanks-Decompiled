@@ -3,54 +3,47 @@ from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_TYPE, OBSERVER_VEH_INVENTORY_ID
 from constants import PREBATTLE_COMMENT_MAX_LENGTH, PREBATTLE_COMPANY_DIVISION
 from external_strings_utils import truncate_utf8
-from gui.prb_control import getPrebattleType, getPrebattleID
-from gui.prb_control import getPrebattleTypeName
+from gui.prb_control import prb_getters
 from gui.prb_control import settings as prb_settings
 from gui.prb_control.context import PrbCtrlRequestCtx
 from gui.shared.utils.decorators import ReprInjector
+__all__ = ('JoinModeCtx', 'TrainingSettingsCtx', 'CompanySettingsCtx', 'JoinTrainingCtx', 'JoinCompanyCtx', 'LeavePrbCtx', 'AssignPrbCtx', 'SetTeamStateCtx', 'SetPlayerStateCtx', 'SwapTeamsCtx', 'ChangeOpenedCtx', 'ChangeCommentCtx', 'ChangeDivisionCtx', 'ChangeArenaVoipCtx', 'KickPlayerCtx', 'RequestCompaniesCtx', 'GetPrbRosterCtx')
 _REQUEST_TYPE = prb_settings.REQUEST_TYPE
 _CTRL_ENTITY_TYPE = prb_settings.CTRL_ENTITY_TYPE
+_FUNCTIONAL_FLAG = prb_settings.FUNCTIONAL_FLAG
 
 class _PrbRequestCtx(PrbCtrlRequestCtx):
+    __slots__ = ()
 
-    def getCtrlType(self):
-        return _CTRL_ENTITY_TYPE.PREBATTLE
-
-    def getPrbType(self):
-        return getPrebattleType()
+    def __init__(self, **kwargs):
+        super(_PrbRequestCtx, self).__init__(ctrlType=_CTRL_ENTITY_TYPE.PREBATTLE, **kwargs)
 
     def getPrbTypeName(self):
-        return getPrebattleTypeName(self.getPrbType())
+        return prb_getters.getPrebattleTypeName(self.getEntityType())
 
 
-@ReprInjector.withParent(('__prbType', 'prbType'))
+@ReprInjector.withParent()
 
 class JoinModeCtx(_PrbRequestCtx):
+    __slots__ = ()
 
-    def __init__(self, prbType, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SWITCH):
-        super(JoinModeCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
-        self.__prbType = prbType
+    def __init__(self, prbType, waitingID = '', flags = _FUNCTIONAL_FLAG.UNDEFINED):
+        super(JoinModeCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=flags)
 
     def getID(self):
         return 0
 
-    def getPrbType(self):
-        return self.__prbType
 
+@ReprInjector.withParent(('isOpened', 'isOpened'), ('getComment', 'comment'))
 
-@ReprInjector.withParent(('__isOpened', 'isOpened'), ('__comment', 'comment'), ('_isRequestToCreate', 'create'))
+class _TeamSettingsCtx(_PrbRequestCtx):
+    __slots__ = ('__isOpened', '__comment', '_isRequestToCreate')
 
-class TeamSettingsCtx(_PrbRequestCtx):
-
-    def __init__(self, waitingID = '', isOpened = True, comment = '', isRequestToCreate = True, funcExit = prb_settings.FUNCTIONAL_EXIT.PREBATTLE):
-        super(TeamSettingsCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
+    def __init__(self, prbType, waitingID = '', isOpened = True, comment = '', isRequestToCreate = True, flags = _FUNCTIONAL_FLAG.UNDEFINED):
+        super(_TeamSettingsCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=flags)
         self.__isOpened = isOpened
         self.__comment = truncate_utf8(comment, PREBATTLE_COMMENT_MAX_LENGTH)
-        self.__isForced = False
         self._isRequestToCreate = isRequestToCreate
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.COMPANY
 
     def getRequestType(self):
         if self._isRequestToCreate:
@@ -93,19 +86,17 @@ class TeamSettingsCtx(_PrbRequestCtx):
 
 @ReprInjector.simple(('getWaitingID', 'waitingID'), ('isOpened', 'isOpen'), ('getComment', 'comment'), ('__arenaTypeID', 'arenaTypeID'), ('__roundLen', 'roundLen'), ('_isRequestToCreate', 'isRequestToCreate'))
 
-class TrainingSettingsCtx(TeamSettingsCtx):
+class TrainingSettingsCtx(_TeamSettingsCtx):
+    __slots__ = ('__arenaTypeID', '__roundLen')
 
-    def __init__(self, waitingID = '', isOpened = True, comment = '', isRequestToCreate = True, arenaTypeID = 0, roundLen = 900):
-        super(TrainingSettingsCtx, self).__init__(waitingID=waitingID, isOpened=isOpened, comment=comment, isRequestToCreate=isRequestToCreate)
+    def __init__(self, waitingID = '', isOpened = True, comment = '', isRequestToCreate = True, arenaTypeID = 0, roundLen = 900, flags = _FUNCTIONAL_FLAG.SWITCH):
+        super(TrainingSettingsCtx, self).__init__(PREBATTLE_TYPE.TRAINING, waitingID=waitingID, isOpened=isOpened, comment=comment, isRequestToCreate=isRequestToCreate, flags=flags)
         self.__arenaTypeID = arenaTypeID
         self.__roundLen = int(roundLen)
 
     @classmethod
     def fetch(cls, settings):
         return TrainingSettingsCtx(isOpened=settings['isOpened'], comment=settings['comment'], isRequestToCreate=False, arenaTypeID=settings['arenaTypeID'], roundLen=settings['roundLength'])
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.TRAINING
 
     def getArenaTypeID(self):
         return self.__arenaTypeID
@@ -131,14 +122,12 @@ class TrainingSettingsCtx(TeamSettingsCtx):
 
 @ReprInjector.simple(('getWaitingID', 'waitingID'), 'isOpened', ('getComment', 'comment'), ('__division', 'division'), ('_isRequestToCreate', 'isRequestToCreate'))
 
-class CompanySettingsCtx(TeamSettingsCtx):
+class CompanySettingsCtx(_TeamSettingsCtx):
+    __slots__ = ('__division',)
 
-    def __init__(self, waitingID = '', isOpened = True, comment = '', division = PREBATTLE_COMPANY_DIVISION.CHAMPION, isRequestToCreate = True):
-        super(CompanySettingsCtx, self).__init__(waitingID, isOpened, comment, isRequestToCreate)
+    def __init__(self, waitingID = '', isOpened = True, comment = '', division = PREBATTLE_COMPANY_DIVISION.CHAMPION, isRequestToCreate = True, flags = _FUNCTIONAL_FLAG.SWITCH):
+        super(CompanySettingsCtx, self).__init__(PREBATTLE_TYPE.COMPANY, waitingID, isOpened, comment, isRequestToCreate, flags)
         self.__division = division
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.COMPANY
 
     def getDivision(self):
         return self.__division
@@ -153,11 +142,11 @@ class CompanySettingsCtx(TeamSettingsCtx):
 @ReprInjector.withParent(('__prbID', 'id'), ('__prbType', 'type'))
 
 class _JoinPrbCtx(_PrbRequestCtx):
+    __slots__ = ('__prbID',)
 
-    def __init__(self, prbID, prbType, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.NO_FUNC):
-        super(_JoinPrbCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
+    def __init__(self, prbID, prbType, waitingID = '', flags = _FUNCTIONAL_FLAG.UNDEFINED):
+        super(_JoinPrbCtx, self).__init__(entityType=int(prbType), waitingID=waitingID, flags=flags)
         self.__prbID = int(prbID)
-        self.__prbType = int(prbType)
 
     def getID(self):
         return self.__prbID
@@ -165,54 +154,56 @@ class _JoinPrbCtx(_PrbRequestCtx):
     def getRequestType(self):
         return _REQUEST_TYPE.JOIN
 
-    def getPrbType(self):
-        return self.__prbType
 
-
-@ReprInjector.simple(('getID', 'prbID'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('getID', 'prbID'), ('getWaitingID', 'waitingID'), ('getFlagsToStrings', 'flags'))
 
 class JoinTrainingCtx(_JoinPrbCtx):
+    __slots__ = ()
 
-    def __init__(self, prbID, waitingID = ''):
-        super(JoinTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.TRAINING, waitingID, prb_settings.FUNCTIONAL_EXIT.PREBATTLE)
+    def __init__(self, prbID, waitingID = '', flags = _FUNCTIONAL_FLAG.SWITCH):
+        super(JoinTrainingCtx, self).__init__(prbID, PREBATTLE_TYPE.TRAINING, waitingID=waitingID, flags=flags)
 
 
 @ReprInjector.simple(('getID', 'prbID'), ('getWaitingID', 'waitingID'))
 
 class JoinCompanyCtx(_JoinPrbCtx):
+    __slots__ = ()
 
-    def __init__(self, prbID, waitingID = ''):
-        super(JoinCompanyCtx, self).__init__(prbID, PREBATTLE_TYPE.COMPANY, waitingID, prb_settings.FUNCTIONAL_EXIT.PREBATTLE)
+    def __init__(self, prbID, waitingID = '', flags = _FUNCTIONAL_FLAG.SWITCH):
+        super(JoinCompanyCtx, self).__init__(prbID, PREBATTLE_TYPE.COMPANY, waitingID=waitingID, flags=flags)
 
 
-@ReprInjector.simple(('getID', 'prbID'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'), ('getFuncExit', 'exit'))
+@ReprInjector.simple(('getID', 'prbID'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'), ('getFlagsToStrings', 'flags'))
 
 class LeavePrbCtx(_PrbRequestCtx):
+    __slots__ = ()
 
-    def __init__(self, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.NO_FUNC):
-        super(LeavePrbCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
+    def __init__(self, waitingID = '', flags = _FUNCTIONAL_FLAG.UNDEFINED):
+        super(LeavePrbCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID, flags=flags)
 
     def getRequestType(self):
         return _REQUEST_TYPE.LEAVE
 
     def getID(self):
-        return getPrebattleID()
+        return prb_getters.getPrebattleID()
 
 
-@ReprInjector.simple(('getID', 'prbID'), ('getPrbType', 'type'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('getID', 'prbID'), ('getPrbTypeName', 'type'), ('getWaitingID', 'waitingID'))
 
 class JoinBattleSessionCtx(_JoinPrbCtx):
+    __slots__ = ()
 
-    def __init__(self, prbID, prbType, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SWITCH):
-        super(JoinBattleSessionCtx, self).__init__(prbID, prbType, waitingID, funcExit)
+    def __init__(self, prbID, prbType, waitingID = '', flags = _FUNCTIONAL_FLAG.UNDEFINED):
+        super(JoinBattleSessionCtx, self).__init__(prbID, prbType, waitingID=waitingID, flags=flags)
 
 
 @ReprInjector.simple(('__pID', 'pID'), ('__roster', 'roster'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'))
 
 class AssignPrbCtx(_PrbRequestCtx):
+    __slots__ = ('__pID', '__roster')
 
     def __init__(self, pID, roster, waitingID = ''):
-        super(AssignPrbCtx, self).__init__(waitingID=waitingID)
+        super(AssignPrbCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__pID = pID
         self.__roster = roster
 
@@ -229,9 +220,10 @@ class AssignPrbCtx(_PrbRequestCtx):
 @ReprInjector.simple(('__team', 'team'), ('__isReadyState', 'isReadyState'), 'getPrbTypeName', ('getWaitingID', 'waitingID'), ('__isForced', 'isForced'), ('__gamePlayMask', 'gamePlayMask'))
 
 class SetTeamStateCtx(_PrbRequestCtx):
+    __slots__ = ('__team', '__isReadyState', '__gamePlayMask')
 
     def __init__(self, team, isReadyState, waitingID = '', isForced = True, gamePlayMask = 0):
-        super(SetTeamStateCtx, self).__init__(waitingID=waitingID, isForced=isForced)
+        super(SetTeamStateCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID, isForced=isForced)
         self.__team = team
         self.__isReadyState = isReadyState
         self.__gamePlayMask = gamePlayMask
@@ -252,9 +244,10 @@ class SetTeamStateCtx(_PrbRequestCtx):
 @ReprInjector.simple(('getVehicleInventoryID', 'vInventoryID'), ('__isReadyState', 'isReadyState'), ('getWaitingID', 'waitingID'))
 
 class SetPlayerStateCtx(_PrbRequestCtx):
+    __slots__ = ('__isReadyState',)
 
     def __init__(self, isReadyState, waitingID = ''):
-        super(SetPlayerStateCtx, self).__init__(waitingID=waitingID)
+        super(SetPlayerStateCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__isReadyState = isReadyState
 
     def doVehicleValidation(self):
@@ -271,6 +264,10 @@ class SetPlayerStateCtx(_PrbRequestCtx):
 
 
 class SwapTeamsCtx(_PrbRequestCtx):
+    __slots__ = ()
+
+    def __init__(self, **kwargs):
+        super(SwapTeamsCtx, self).__init__(entityType=prb_getters.getPrebattleType(), **kwargs)
 
     def getRequestType(self):
         return _REQUEST_TYPE.SWAP_TEAMS
@@ -279,9 +276,10 @@ class SwapTeamsCtx(_PrbRequestCtx):
 @ReprInjector.simple(('__channels', 'channels'), ('getWaitingID', 'waitingID'))
 
 class ChangeArenaVoipCtx(_PrbRequestCtx):
+    __slots__ = ('__channels',)
 
     def __init__(self, channels, waitingID = ''):
-        super(ChangeArenaVoipCtx, self).__init__(waitingID=waitingID)
+        super(ChangeArenaVoipCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__channels = int(channels)
 
     def getChannels(self):
@@ -294,6 +292,7 @@ class ChangeArenaVoipCtx(_PrbRequestCtx):
 @ReprInjector.simple(('__isObserver', 'isObserver'), ('getWaitingID', 'waitingID'))
 
 class SetPlayerObserverStateCtx(SetPlayerStateCtx):
+    __slots__ = ('__isObserver',)
 
     def __init__(self, isObserver, isReadyState, waitingID = ''):
         super(SetPlayerObserverStateCtx, self).__init__(isReadyState, waitingID)
@@ -315,9 +314,10 @@ class SetPlayerObserverStateCtx(SetPlayerStateCtx):
 @ReprInjector.simple(('__isOpened', 'isOpened'), ('getWaitingID', 'waitingID'))
 
 class ChangeOpenedCtx(_PrbRequestCtx):
+    __slots__ = ('__isOpened',)
 
     def __init__(self, isOpened, waitingID = ''):
-        super(ChangeOpenedCtx, self).__init__(waitingID=waitingID)
+        super(ChangeOpenedCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__isOpened = isOpened
 
     def isOpened(self):
@@ -333,9 +333,10 @@ class ChangeOpenedCtx(_PrbRequestCtx):
 @ReprInjector.simple(('__comment', 'comment'), ('getWaitingID', 'waitingID'))
 
 class ChangeCommentCtx(_PrbRequestCtx):
+    __slots__ = ('__comment',)
 
     def __init__(self, comment, waitingID = ''):
-        super(ChangeCommentCtx, self).__init__(waitingID=waitingID)
+        super(ChangeCommentCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__comment = truncate_utf8(comment, PREBATTLE_COMMENT_MAX_LENGTH)
 
     def getComment(self):
@@ -351,9 +352,10 @@ class ChangeCommentCtx(_PrbRequestCtx):
 @ReprInjector.simple(('__division', 'division'), ('getWaitingID', 'waitingID'))
 
 class ChangeDivisionCtx(_PrbRequestCtx):
+    __slots__ = ('__division',)
 
     def __init__(self, division, waitingID = ''):
-        super(ChangeDivisionCtx, self).__init__(waitingID=waitingID)
+        super(ChangeDivisionCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__division = int(division)
 
     def getDivision(self):
@@ -369,9 +371,10 @@ class ChangeDivisionCtx(_PrbRequestCtx):
 @ReprInjector.withParent(('__pID', 'pID'))
 
 class KickPlayerCtx(_PrbRequestCtx):
+    __slots__ = ('__pID',)
 
     def __init__(self, pID, waitingID = ''):
-        super(KickPlayerCtx, self).__init__(waitingID=waitingID)
+        super(KickPlayerCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
         self.__pID = pID
 
     def getPlayerID(self):
@@ -381,25 +384,22 @@ class KickPlayerCtx(_PrbRequestCtx):
         return _REQUEST_TYPE.KICK
 
 
-class RequestPrebattlesCtx(_PrbRequestCtx):
-
-    def getRequestType(self):
-        return _REQUEST_TYPE.PREBATTLES_LIST
-
-
 @ReprInjector.simple('isNotInBattle', 'division', 'creatorMask')
 
-class RequestCompaniesCtx(RequestPrebattlesCtx):
+class RequestCompaniesCtx(_PrbRequestCtx):
     __slots__ = ('isNotInBattle', 'division', 'creatorMask')
 
     def __init__(self, isNotInBattle = False, division = 0, creatorMask = '', waitingID = ''):
-        super(RequestCompaniesCtx, self).__init__(waitingID=waitingID)
+        super(RequestCompaniesCtx, self).__init__(entityType=PREBATTLE_TYPE.COMPANY, waitingID=waitingID)
         self.isNotInBattle = isNotInBattle
         self.creatorMask = creatorMask
         if division in PREBATTLE_COMPANY_DIVISION.RANGE:
             self.division = division
         else:
             self.division = 0
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.PREBATTLES_LIST
 
     def byDivision(self):
         return self.division in PREBATTLE_COMPANY_DIVISION.RANGE
@@ -411,9 +411,10 @@ class RequestCompaniesCtx(RequestPrebattlesCtx):
 @ReprInjector.simple(('__prbID', 'prbID'), ('getWaitingID', 'waitingID'))
 
 class GetPrbRosterCtx(_PrbRequestCtx):
+    __slots__ = ('__prbID',)
 
-    def __init__(self, prbID, waitingID = ''):
-        super(GetPrbRosterCtx, self).__init__(waitingID=waitingID)
+    def __init__(self, prbID, prbType, waitingID = ''):
+        super(GetPrbRosterCtx, self).__init__(entityType=prbType, waitingID=waitingID)
         self.__prbID = prbID
 
     def getPrbID(self):
@@ -421,6 +422,3 @@ class GetPrbRosterCtx(_PrbRequestCtx):
 
     def getRequestType(self):
         return _REQUEST_TYPE.GET_ROSTER
-
-
-__all__ = ('JoinModeCtx', 'TeamSettingsCtx', 'TrainingSettingsCtx', 'CompanySettingsCtx', 'JoinTrainingCtx', 'JoinCompanyCtx', 'LeavePrbCtx', 'AssignPrbCtx', 'SetTeamStateCtx', 'SetPlayerStateCtx', 'SwapTeamsCtx', 'ChangeOpenedCtx', 'ChangeCommentCtx', 'ChangeDivisionCtx', 'ChangeArenaVoipCtx', 'KickPlayerCtx', 'RequestPrebattlesCtx', 'RequestCompaniesCtx', 'GetPrbRosterCtx')

@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.battle import FALLOUT_SCORE_PANEL
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from gui.battle_control import g_sessionProvider
-from gui.battle_control.arena_info import getArenaType
+from gui.battle_control.arena_info import getArenaType, hasGasAttack
 from gui.battle_control.avatar_getter import getPlayerVehicleID, getPlayerName
 from helpers import i18n
 _TEAM_PROPS = {'tf_width': 140,
@@ -186,6 +186,18 @@ class _MultiteamFalloutPanel(_FalloutScorePanel):
 
     def __init__(self, proxy, ctxType):
         super(_MultiteamFalloutPanel, self).__init__(proxy, ctxType)
+        self.__hasGasAttack = hasGasAttack()
+        self.__allyScore = 0
+        self.__enemyScore = 0
+        if self.__hasGasAttack:
+            g_sessionProvider.getGasAttackCtrl().onPreparing += self.__onGasAttackPreparing
+            g_sessionProvider.getGasAttackCtrl().onStarted += self.__onGasAttackStarted
+
+    def destroy(self):
+        if self.__hasGasAttack:
+            g_sessionProvider.getGasAttackCtrl().onPreparing -= self.__onGasAttackPreparing
+            g_sessionProvider.getGasAttackCtrl().onStarted -= self.__onGasAttackStarted
+        super(_MultiteamFalloutPanel, self).destroy()
 
     def _makeData(self):
         arenaDP = g_sessionProvider.getArenaDP()
@@ -217,7 +229,19 @@ class _MultiteamFalloutPanel(_FalloutScorePanel):
             playerName = i18n.makeString(INGAME_GUI.SCOREPANEL_MYSQUADLBL)
         else:
             playerName = getPlayerName()
+        self.__allyScore = allyScore
+        self.__enemyScore = enemyScore
         self.as_setDataS(self._contextType, self._maxScore, 0, allyScore, enemyScore, playerName, enemyName, _TEAM_PROPS)
+
+    def __onGasAttackPreparing(self, state):
+        if self.__allyScore != self.__enemyScore:
+            self.as_playScoreHighlightAnim(self.__allyScore > self.__enemyScore)
+        else:
+            self.as_playScoreHighlightAnim(True)
+            self.as_playScoreHighlightAnim(False)
+
+    def __onGasAttackStarted(self, state):
+        self.as_stopScoreHighlightAnim()
 
 
 def scorePanelFactory(parentUI, isEvent = False, isMutlipleTeams = False):

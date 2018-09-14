@@ -1,0 +1,569 @@
+<quests-shared-scene.xml>
+  <runtime-effects>
+    <show-hint>	TankAcademyButtonHint	  <condition>
+        <active>	TankAcademyButtonOnScene	</active>
+        <active>	PlayerHasTankmanDiscount	</active>
+      </condition>
+    </show-hint>
+    <show-hint>	QuestsControlHint	  <condition>
+        <active>	QuestsControlOnScene	</active>
+        <active>	ShowQuestsControlHint	</active>
+        <inactive>	LobbyMenuOnScene	</inactive>
+      </condition>
+    </show-hint>
+    <show-hint>	ResearchHelpButtonHint	  <condition>
+        <active>	ShowResearchHint	</active>
+        <active>	ResearchHelpButtonOnScene	</active>
+      </condition>
+    </show-hint>
+    <show-hint>	TechTreeHelpButtonHint	  <condition>
+        <active>	ShowTechTreeHint	</active>
+        <active>	TechTreeHelpButtonOnScene	</active>
+      </condition>
+    </show-hint>
+    <show-hint>	PersonalCaseHelpButtonHint	  <condition>
+        <active>	ShowPersonalCaseHint	</active>
+        <active>	PersonalCaseHelpButtonOnScene	</active>
+      </condition>
+    </show-hint>
+    <show-hint>	TechnicalMaintenanceHelpButtonHint	  <condition>
+        <active>	ShowTechnicalMaintenanceHint	</active>
+        <active>	TechnicalMaintenanceHelpButtonOnScene	</active>
+      </condition>
+    </show-hint>
+    <show-hint>	CustomizationHelpButtonHint	  <condition>
+        <active>	ShowCustomizationHint	</active>
+        <active>	CustomizationHelpButtonOnScene	</active>
+      </condition>
+    </show-hint>
+    <activate>	Bonus1Received	  <condition>
+        <bonus-received>	TutorialQuest_1	</bonus-received>
+      </condition>
+    </activate>
+    <request-bonus>	TutorialQuest_1	  <condition>
+        <active>	BattleBonusesReceived	</active>
+        <bonus-not-received>	TutorialQuest_1	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <request-bonus>	TutorialQuest_2	  <condition>
+        <active>	RandomBattlesCountComplete	</active>
+        <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus2Received	  <condition>
+        <bonus-received>	TutorialQuest_2	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward2	  <condition>
+        <active>	RandomBattlesCountComplete	</active>
+        <active>	Bonus2Received	</active>
+        <inactive>	CloseChapter2	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow2	  <condition>
+        <active>	ShowAward2	</active>
+        <effect-not-triggered>	TutorialAwardWindow2	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_2	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_3	  <condition>
+        <active>	ModuleInstalled	</active>
+        <bonus-not-received>	TutorialQuest_3	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus3Received	  <condition>
+        <bonus-received>	TutorialQuest_3	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward3	  <condition>
+        <active>	ModuleInstalled	</active>
+        <active>	Bonus3Received	</active>
+        <inactive>	CloseChapter3	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow3	  <condition>
+        <active>	ShowAward3	</active>
+        <effect-not-triggered>	TutorialAwardWindow3	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_3	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_4	  <condition>
+        <active>	Vehicle2LvlBought	</active>
+        <bonus-not-received>	TutorialQuest_4	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus4Received	  <condition>
+        <bonus-received>	TutorialQuest_4	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward4	  <condition>
+        <active>	Vehicle2LvlBought	</active>
+        <active>	Bonus4Received	</active>
+        <inactive>	CloseChapter4	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow4	  <condition>
+        <active>	ShowAward4	</active>
+        <effect-not-triggered>	TutorialAwardWindow4	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_4	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_5	  <condition>
+        <active>	SlotBought	</active>
+        <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus5Received	  <condition>
+        <bonus-received>	TutorialQuest_5	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward5	  <condition>
+        <active>	SlotBought	</active>
+        <active>	Bonus5Received	</active>
+        <inactive>	CloseChapter5	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow5	  <condition>
+        <active>	ShowAward5	</active>
+        <effect-not-triggered>	TutorialAwardWindow5	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_5	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_6	  <condition>
+        <active>	VehicleBattlesComplete	</active>
+        <bonus-not-received>	TutorialQuest_6	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus6Received	  <condition>
+        <bonus-received>	TutorialQuest_6	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward6	  <condition>
+        <active>	VehicleBattlesComplete	</active>
+        <active>	Bonus6Received	</active>
+        <inactive>	CloseChapter6	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow6	  <condition>
+        <active>	ShowAward6	</active>
+        <effect-not-triggered>	TutorialAwardWindow6	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_6	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_7	  <condition>
+        <active>	XpExchanged	</active>
+        <bonus-not-received>	TutorialQuest_7	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus7Received	  <condition>
+        <bonus-received>	TutorialQuest_7	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward7	  <condition>
+        <active>	XpExchanged	</active>
+        <active>	Bonus7Received	</active>
+        <inactive>	CloseChapter7	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow7	  <condition>
+        <active>	ShowAward7	</active>
+        <effect-not-triggered>	TutorialAwardWindow7	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_7	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_8	  <condition>
+        <active>	Vehicle3LvlBought	</active>
+        <bonus-not-received>	TutorialQuest_8	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus8Received	  <condition>
+        <bonus-received>	TutorialQuest_8	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward8	  <condition>
+        <active>	Vehicle3LvlBought	</active>
+        <active>	Bonus8Received	</active>
+        <inactive>	CloseChapter8	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow8	  <condition>
+        <active>	ShowAward8	</active>
+        <effect-not-triggered>	TutorialAwardWindow8	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_8	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_9	  <condition>
+        <active>	PremiumDiscountUsed	</active>
+        <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus9Received	  <condition>
+        <bonus-received>	TutorialQuest_9	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward9	  <condition>
+        <active>	PremiumDiscountUsed	</active>
+        <active>	Bonus9Received	</active>
+        <inactive>	CloseChapter9	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow9	  <condition>
+        <active>	ShowAward9	</active>
+        <effect-not-triggered>	TutorialAwardWindow9	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_9	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_10	  <condition>
+        <active>	Vehicle4LvlBought	</active>
+        <bonus-not-received>	TutorialQuest_10	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus10Received	  <condition>
+        <bonus-received>	TutorialQuest_10	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward10	  <condition>
+        <active>	Vehicle4LvlBought	</active>
+        <active>	Bonus10Received	</active>
+        <inactive>	CloseChapter10	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow10	  <condition>
+        <active>	ShowAward10	</active>
+        <effect-not-triggered>	TutorialAwardWindow10	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_10	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_11	  <condition>
+        <active>	MedKitUsed	</active>
+        <bonus-not-received>	TutorialQuest_11	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus11Received	  <condition>
+        <bonus-received>	TutorialQuest_11	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward11	  <condition>
+        <active>	MedKitUsed	</active>
+        <active>	Bonus11Received	</active>
+        <inactive>	CloseChapter11	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow11	  <condition>
+        <active>	ShowAward11	</active>
+        <effect-not-triggered>	TutorialAwardWindow11	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_11	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_12	  <condition>
+        <active>	RepairKitUsed	</active>
+        <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus12Received	  <condition>
+        <bonus-received>	TutorialQuest_12	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward12	  <condition>
+        <active>	RepairKitUsed	</active>
+        <active>	Bonus12Received	</active>
+        <inactive>	CloseChapter11	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow12	  <condition>
+        <active>	ShowAward12	</active>
+        <effect-not-triggered>	TutorialAwardWindow12	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_12	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_13	  <condition>
+        <active>	FireExtinguisherUsed	</active>
+        <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus13Received	  <condition>
+        <bonus-received>	TutorialQuest_13	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward13	  <condition>
+        <active>	FireExtinguisherUsed	</active>
+        <active>	Bonus13Received	</active>
+        <inactive>	CloseChapter13	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow13	  <condition>
+        <active>	ShowAward13	</active>
+        <effect-not-triggered>	TutorialAwardWindow13	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_13	</effect-triggered>
+      </condition>
+    </show-award-window>
+    <request-bonus>	TutorialQuest_14	  <condition>
+        <active>	OptionalDeviceInstalled	</active>
+        <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <activate>	Bonus14Received	  <condition>
+        <bonus-received>	TutorialQuest_14	</bonus-received>
+      </condition>
+    </activate>
+    <activate>	ShowAward14	  <condition>
+        <active>	OptionalDeviceInstalled	</active>
+        <active>	Bonus14Received	</active>
+        <inactive>	CloseChapter14	</inactive>
+      </condition>
+    </activate>
+    <show-award-window>	TutorialAwardWindow14	  <condition>
+        <active>	ShowAward14	</active>
+        <effect-not-triggered>	TutorialAwardWindow14	</effect-not-triggered>
+        <effect-triggered>	TutorialQuest_14	</effect-triggered>
+      </condition>
+    </show-award-window>
+  </runtime-effects>
+  <gui-items>
+    <gui-item>	LobbyMenu	  <on-scene-effects>
+        <activate>	LobbyMenuOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	LobbyMenuOnScene	</inactivate>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	QuestsControl	  <on-scene-effects>
+        <activate>	QuestsControlOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	QuestsControlOnScene	</inactivate>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	ResearchHelpButton	  <on-scene-effects>
+        <run-trigger>	ResearchHelpButtonTrigger	</run-trigger>
+        <activate>	ResearchHelpButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	ResearchHelpButtonOnScene	</inactivate>
+        <save-setting>	ResearchHintSetting	  <condition>
+            <effect-triggered>	ResearchHelpButtonHint	</effect-triggered>
+          </condition>
+        </save-setting>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	TechTreeHelpButton	  <on-scene-effects>
+        <run-trigger>	TechTreeHelpButtonTrigger	</run-trigger>
+        <activate>	TechTreeHelpButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	TechTreeHelpButtonOnScene	</inactivate>
+        <save-setting>	TechTreeHintSetting	  <condition>
+            <effect-triggered>	TechTreeHelpButtonHint	</effect-triggered>
+          </condition>
+        </save-setting>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	PersonalCaseHelpButton	  <on-scene-effects>
+        <run-trigger>	PersonalCaseHelpButtonTrigger	</run-trigger>
+        <activate>	PersonalCaseHelpButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	PersonalCaseHelpButtonOnScene	</inactivate>
+        <save-setting>	PersonalCaseHintSetting	  <condition>
+            <effect-triggered>	PersonalCaseHelpButtonHint	</effect-triggered>
+          </condition>
+        </save-setting>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	TechnicalMaintenanceHelpButton	  <on-scene-effects>
+        <run-trigger>	TechnicalMaintenanceHelpButtonTrigger	</run-trigger>
+        <activate>	TechnicalMaintenanceHelpButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	TechnicalMaintenanceHelpButtonOnScene	</inactivate>
+        <save-setting>	TechnicalMaintenanceHintSetting	  <condition>
+            <effect-triggered>	TechnicalMaintenanceHelpButtonHint	</effect-triggered>
+          </condition>
+        </save-setting>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	CustomizationHelpButton	  <on-scene-effects>
+        <run-trigger>	CustomizationHelpButtonTrigger	</run-trigger>
+        <activate>	CustomizationHelpButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	CustomizationHelpButtonOnScene	</inactivate>
+        <save-setting>	CustomizationHintSetting	  <condition>
+            <effect-triggered>	CustomizationHelpButtonHint	</effect-triggered>
+          </condition>
+        </save-setting>
+      </not-on-scene-effects>
+    </gui-item>
+    <gui-item>	TankAcademyButton	  <on-scene-effects>
+        <activate>	TankAcademyButtonOnScene	</activate>
+      </on-scene-effects>
+      <not-on-scene-effects>
+        <inactivate>	TankAcademyButtonOnScene	</inactivate>
+      </not-on-scene-effects>
+    </gui-item>
+  </gui-items>
+  <post-effects>
+    <save-setting>	TutorialStartSetting	  <condition>
+        <bonus-not-received>	TutorialQuest_Initial	</bonus-not-received>
+      </condition>
+    </save-setting>
+    <request-bonus>	TutorialQuest_Initial	  <condition>
+        <bonus-not-received>	TutorialQuest_Initial	</bonus-not-received>
+      </condition>
+    </request-bonus>
+    <run-trigger>	InvalidateFlagsBonusTrigger	</run-trigger>
+    <run-trigger>	BattleTutorialBonusesTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_1	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <run-trigger>	QueueTrigger	</run-trigger>
+    <run-trigger>	RandomBattlesCountTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_2	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter2	  <condition>
+        <bonus-received>	TutorialQuest_2	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	InstallModuleTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_3	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter3	  <condition>
+        <bonus-received>	TutorialQuest_3	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	BuyVehicleTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_4	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter4	  <condition>
+        <bonus-received>	TutorialQuest_4	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	BuySlotTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter5	  <condition>
+        <bonus-received>	TutorialQuest_5	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	VehicleBattlesTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_6	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter6	  <condition>
+        <bonus-received>	TutorialQuest_6	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	xpExchangeTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_7	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter7	  <condition>
+        <bonus-received>	TutorialQuest_7	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	BuyVehicle3LvlTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_8	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter8	  <condition>
+        <bonus-received>	TutorialQuest_8	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	PremiumDiscountTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter9	  <condition>
+        <bonus-received>	TutorialQuest_9	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	BuyVehicle4LvlTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_10	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter10	  <condition>
+        <bonus-received>	TutorialQuest_10	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	MedKitInstallTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_11	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <run-trigger>	MedKitUsedTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_11	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter11	  <condition>
+        <bonus-received>	TutorialQuest_11	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	RepairKitInstallTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <run-trigger>	RepairKitUsedTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_12	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter12	  <condition>
+        <bonus-received>	TutorialQuest_12	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	FireExtinguisherInstallTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <run-trigger>	FireExtinguisherUsedTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_13	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter13	  <condition>
+        <bonus-received>	TutorialQuest_13	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	OptionalDeviceInstallTrigger	  <condition>
+        <bonus-not-received>	TutorialQuest_14	</bonus-not-received>
+      </condition>
+    </run-trigger>
+    <activate>	CloseChapter14	  <condition>
+        <bonus-received>	TutorialQuest_14	</bonus-received>
+      </condition>
+    </activate>
+    <run-trigger>	TankamAcademyDiscountTrigger	</run-trigger>
+    <run-trigger>	AwardWindow2ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow2CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow3ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow3CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow3ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow3CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow4ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow4CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow5ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow5CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow5ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow5CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow6ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow6CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow7ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow7CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow8ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow8CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow9ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow9CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow10ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow10CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow11ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow11CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow12ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow12CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow13ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow13CloseTrigger	</run-trigger>
+    <run-trigger>	AwardWindow14ProcessTrigger	</run-trigger>
+    <run-trigger>	AwardWindow14CloseTrigger	</run-trigger>
+  </post-effects>
+  <vars></vars>
+</quests-shared-scene.xml>

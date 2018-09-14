@@ -75,10 +75,12 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         return info
 
     def updateTrainingRoom(self, arena, roundLength, isPrivate, comment):
-        settings = TrainingSettingsCtx()
+        if self.__isCreateRequest:
+            settings = TrainingSettingsCtx(isRequestToCreate=True)
+        else:
+            settings = TrainingSettingsCtx(isRequestToCreate=False)
         settings.setArenaTypeID(arena)
         settings.setRoundLen(roundLength * 60)
         settings.setOpened(not isPrivate)
         settings.setComment(comment)
-        settings._isRequestToCreate = self.__isCreateRequest
         self.fireEvent(events.TrainingSettingsEvent(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, ctx={'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)

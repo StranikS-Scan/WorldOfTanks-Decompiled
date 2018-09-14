@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/context.py
 from constants import REQUEST_COOLDOWN, PREBATTLE_TYPE
 from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control import getUnitIdx, settings as prb_settings
+from gui.prb_control import settings as prb_settings
+from gui.prb_control.prb_getters import getUnitIdx
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import RequestCtx
@@ -414,9 +415,10 @@ class AttackCtx(FortRequestCtx):
 @ReprInjector.withParent(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'))
 
 class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):
+    __slots__ = ('__battleID', '__slotIdx', '__isUpdateExpected')
 
-    def __init__(self, battleID, slotIdx = -1, waitingID = '', isUpdateExpected = False):
-        super(CreateOrJoinFortBattleCtx, self).__init__(waitingID=waitingID, funcExit=prb_settings.FUNCTIONAL_EXIT.UNIT, isForced=True)
+    def __init__(self, battleID, slotIdx = -1, waitingID = '', isUpdateExpected = False, flags = prb_settings.FUNCTIONAL_FLAG.UNDEFINED):
+        super(CreateOrJoinFortBattleCtx, self).__init__(ctrlType=prb_settings.CTRL_ENTITY_TYPE.UNIT, entityType=PREBATTLE_TYPE.FORT_BATTLE, waitingID=waitingID, flags=flags, isForced=True)
         self.__battleID = battleID
         self.__slotIdx = slotIdx
         self.__isUpdateExpected = isUpdateExpected
@@ -426,12 +428,6 @@ class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):
 
     def getCooldown(self):
         return REQUEST_COOLDOWN.CALL_FORT_METHOD
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.FORT_BATTLE
-
-    def getCtrlType(self):
-        return prb_settings.CTRL_ENTITY_TYPE.UNIT
 
     def getUnitIdx(self):
         return getUnitIdx()

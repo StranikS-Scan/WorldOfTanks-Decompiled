@@ -138,12 +138,16 @@ class CyberSportUnitView(CyberSportUnitMeta):
 
     def _updateLabels(self, functional):
         _, unit = functional.getUnit()
-        slotsBusy = len(unit.getMembers())
-        slotsBusy = text_styles.main(str(slotsBusy))
-        maxSlots = unit.getMaxSlotCount()
-        teamLbl = i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMMEMBERS, current=slotsBusy, max=str(maxSlots))
-        teamLbl = text_styles.standard(teamLbl)
-        self.as_setPlayerCountLblS(teamLbl)
+        if unit is None:
+            return
+        else:
+            slotsBusy = len(unit.getMembers())
+            slotsBusy = text_styles.main(str(slotsBusy))
+            maxSlots = unit.getMaxSlotCount()
+            teamLbl = i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMMEMBERS, current=slotsBusy, max=str(maxSlots))
+            teamLbl = text_styles.standard(teamLbl)
+            self.as_setPlayerCountLblS(teamLbl)
+            return
 
     def _setActionButtonState(self):
         self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))

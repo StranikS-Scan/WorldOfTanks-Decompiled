@@ -1,9 +1,8 @@
 # Embedded file name: scripts/client/gui/prb_control/functional/FunctionalCollection.py
-import types
 from debug_utils import LOG_ERROR
-from gui.prb_control.items import FunctionalState, PlayerDecorator
+from gui.prb_control.items import FunctionalState, PlayerDecorator, SelectResult
 from gui.prb_control.restrictions.interfaces import IGUIPermissions
-from gui.prb_control.settings import FUNCTIONAL_ORDER
+from gui.prb_control.settings import FUNCTIONAL_ORDER, FUNCTIONAL_FLAG
 
 class FunctionalCollection(object):
 
@@ -30,13 +29,11 @@ class FunctionalCollection(object):
             result = self.__items[ctrlType]
         return result
 
-    def setItem(self, ctrlType, item, initParams = None):
+    def setItem(self, ctrlType, item, initCtx = None):
         if ctrlType in self.__items:
             self.__items[ctrlType].fini()
         self.__items[ctrlType] = item
-        if initParams is None or type(initParams) is not types.DictType:
-            initParams = {}
-        return item.init(**initParams)
+        return item.init(ctx=initCtx)
 
     def addListener(self, listener):
         for item in self.__items.itervalues():
@@ -52,6 +49,26 @@ class FunctionalCollection(object):
                 return True
 
         return False
+
+    def getFunctionalFlags(self):
+        result = FUNCTIONAL_FLAG.UNDEFINED
+        for item in self.__items.itervalues():
+            result |= item.getFunctionalFlags()
+
+        return result
+
+    def setFunctionalFlags(self, ctrlType, flags):
+        if ctrlType in self.__items:
+            item = self.__items[ctrlType]
+            item.setFunctionalFlags(flags)
+
+    def getConfirmDialogMeta(self, ctrlType, ctx):
+        item = self.getItem(ctrlType)
+        if item is not None:
+            meta = item.getConfirmDialogMeta(ctx)
+        else:
+            meta = None
+        return meta
 
     def getState(self, factories):
         result = None
@@ -109,23 +126,23 @@ class FunctionalCollection(object):
             if item and item.exitFromQueue():
                 return
 
-    def doAction(self, dispatcher, action, factories):
+    def doAction(self, factories, action = None):
         result = False
         state = self.getState(factories)
         if state.hasModalEntity:
-            order = [state.ctrlTypeID]
+            order = (state.ctrlTypeID,)
         else:
             order = FUNCTIONAL_ORDER.ACTION
         for ctrlType in order:
             item = self.getItem(ctrlType)
-            if item and item.doAction(action=action, dispatcher=dispatcher):
+            if item and item.doAction(action=action):
                 result = True
                 break
 
         return result
 
     def doSelectAction(self, action):
-        result = False
+        result = SelectResult()
         for item in self.__items.itervalues():
             if item and item.hasEntity():
                 result = item.doSelectAction(action)
@@ -151,9 +168,16 @@ class FunctionalCollection(object):
             if item and ctx:
                 yield (item, ctx)
 
-    def canSendInvite(self, playerDBID):
+    def canSendInvite(self, _):
         for func in self.getIterator():
             if func.getPermissions().canSendInvite():
+                return True
+
+        return False
+
+    def canCreateSquad(self):
+        for func in self.getIterator():
+            if func.getPermissions().canCreateSquad():
                 return True
 
         return False

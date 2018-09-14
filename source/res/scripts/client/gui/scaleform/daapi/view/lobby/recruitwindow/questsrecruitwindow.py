@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/QuestsRecruitWindow.py
 import nations
-from debug_utils import LOG_DEBUG
 from items import tankmen
 from gui import SystemMessages
 from gui.shared.utils import decorators

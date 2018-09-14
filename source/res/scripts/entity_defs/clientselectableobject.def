@@ -1,0 +1,24 @@
+<clientselectableobject.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+  </Volatile>
+  <Properties>
+    <modelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </modelName>
+    <selectionId>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </selectionId>
+    <mouseOverSoundName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </mouseOverSoundName>
+  </Properties>
+  <ClientMethods></ClientMethods>
+</clientselectableobject.def>

@@ -51,7 +51,7 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         return
 
     def onUnitFunctionalInited(self):
-        self.unitFunctional.setPrbType(PREBATTLE_TYPE.CLUBS)
+        self.unitFunctional.setEntityType(PREBATTLE_TYPE.CLUBS)
 
     def getPyDataProvider(self):
         return ClubsDataProvider()
@@ -122,8 +122,8 @@ class CyberSportClubsListView(CyberSportUnitsListMeta, UnitListener, ClubListene
         super(CyberSportClubsListView, self)._populate()
         self.startUnitListening()
         self.startClubListening()
-        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
-            self.unitFunctional.setPrbType(PREBATTLE_TYPE.CLUBS)
+        if self.unitFunctional.getEntityType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setEntityType(PREBATTLE_TYPE.CLUBS)
         paginator = self.unitFunctional.getClubsPaginator()
         paginator.onListUpdated += self.__onClubsListUpdated
         finder = self.unitFunctional.getClubsFinder()

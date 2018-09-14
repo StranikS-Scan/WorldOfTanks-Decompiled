@@ -2,7 +2,9 @@
 from notification.AlertController import AlertController
 from notification.LayoutController import LayoutController
 from notification.NotificationsModel import NotificationsModel
+from notification.NotificationVisibilityController import NotificationVisibilityController
 from notification.actions_handlers import NotificationsActionsHandlers
+from notification.settings import NOTIFICATION_TYPE
 
 class _NotificationMVC:
 
@@ -10,6 +12,8 @@ class _NotificationMVC:
         self.__model = None
         self.__alertsController = None
         self.__layoutController = None
+        self.__visibilityController = None
+        self.__actionsHandlers = None
         self.__actionsHandlers = None
         return
 
@@ -18,6 +22,8 @@ class _NotificationMVC:
         self.__actionsHandlers = NotificationsActionsHandlers()
         self.__alertsController = AlertController(self.__model)
         self.__layoutController = LayoutController(self.__model)
+        self.__visibilityController = NotificationVisibilityController(self.__model)
+        self.__visibilityController.registerNotifications((NOTIFICATION_TYPE.CLUB_INVITE,))
 
     def getModel(self):
         return self.__model
@@ -32,10 +38,12 @@ class _NotificationMVC:
         self.__alertsController.cleanUp()
         self.__layoutController.cleanUp()
         self.__actionsHandlers.cleanUp()
+        self.__visibilityController.cleanUp()
         self.__model.cleanUp()
         self.__alertsController = None
         self.__layoutController = None
         self.__actionsHandlers = None
+        self.__visibilityController = None
         self.__model = None
         return
 

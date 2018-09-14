@@ -13,7 +13,6 @@ G = 9.81
 COHESION = 1.3
 CONTACT_COHESION = 0.9
 GRAVITY_FACTOR = 1.25
-GRAVITY_FACTOR_2 = 1.0
 WEIGHT_SCALE = 0.001
 GRAVITY_FACTOR_SCALED = GRAVITY_FACTOR * WEIGHT_SCALE
 FORWARD_FRICTION = 0.07
@@ -93,7 +92,7 @@ _STRAFE_THRESHOLD = 0.005
 _SIMULATION_Y_BOUND = 1000.0
 FREEZE_ANG_ACCEL_EPSILON = 0.05
 FREEZE_ACCEL_EPSILON = 0.05
-FREEZE_VEL_EPSILON = 0.05
+FREEZE_VEL_EPSILON = 0.15
 FREEZE_ANG_VEL_EPSILON = 0.05
 WIDTH_LONG = 6.2
 WIDTH_VERY_LONG = 7.0
@@ -175,16 +174,19 @@ CLIMB_TANG = 1.0
 STAB_DAMP_MP = 5.0
 STAB_EPSILON_AMBIT = 2.0
 STAB_EPSILON_PERIOD = 4.0
-AFT_CHAMFER_FRACTION = 0.25
-AUX_CLEARANCE = 0.65
-TANK_BOARD_ANGLE = 0.0
-TERRAIN_BOARD_ANGLE = 5.0
-MOUNTAIN_ACC_FACTOR = 0.75
-CLUTCH_DISABLE_TIME_FACTOR = 2.0
 g_confUpdaters = []
 g_xphysicsOverrides = {}
+
+def _cosDeg(angle):
+    return math.cos(math.radians(angle))
+
+
+def _sinDeg(angle):
+    return math.sin(math.radians(angle))
+
+
 g_defaultXPhysicsCfg = {'gravity': 9.81,
- 'wheelRestitution': 0.2,
+ 'wheelRestitution': 0.9,
  'wheelPenetration': 0.02,
  'chokerPressSpeed': 10000.0,
  'bodyHeight': 1.0,
@@ -198,23 +200,64 @@ g_defaultXPhysicsCfg = {'gravity': 9.81,
  'comFrictionYOffs': 0.7,
  'sideFrictionConstantRatio': 0.0,
  'smplBkMaxSpeed': 5.5,
- 'pushStop': 0.0,
- 'pushInContact': 0.5,
- 'WV_Scale': 35.0,
+ 'pushStop': 0.3,
+ 'pushInContact': 1.0,
+ 'WV_Scale': 0.0,
  'WV_Ko': 0.09,
  'WV_Exp_K': 3.0,
  'WV_Vo': 20.0,
- 'WV_Exp_V': 3.0}
-_g_lastCfg = None
-
-def NNN(WV_Scale = 35.0, WV_Ko = 0.09, WV_Exp_K = 3.0, WV_Vo = 20.0, WV_Exp_V = 3.0):
-    g_defaultXPhysicsCfg.update({'WV_Scale': WV_Scale,
-     'WV_Ko': WV_Ko,
-     'WV_Exp_K': WV_Exp_K,
-     'WV_Vo': WV_Vo,
-     'WV_Exp_V': WV_Exp_V})
-    updateConf()
-
+ 'WV_Exp_V': 3.0,
+ 'wheelRadius': 0.4,
+ 'slopeFrictionFactor': 1.5,
+ 'slopeFrictionTiltCos': math.cos(math.radians(15.0)),
+ 'slopeFrictionSurfaceSin': math.sin(math.radians(30.0)),
+ 'trackGaugeFactor': 0.96,
+ 'smplMinRPM': 300.0,
+ 'wheelFwdInertiaFactor': 3.0,
+ 'slopeResistTerrain': (9, _cosDeg(15.0), _sinDeg(31.0)),
+ 'slopeResistStaticObject': (9, _cosDeg(15.0), _sinDeg(27.0)),
+ 'slopeResistDynamicObject': (9, _cosDeg(15.0), _sinDeg(31.0)),
+ 'slopeGripLngTerrain': (_cosDeg(28.0),
+                         1.0,
+                         _cosDeg(35.0),
+                         0.3),
+ 'slopeGripSdwTerrain': (_cosDeg(28.0),
+                         1.0,
+                         _cosDeg(35.0),
+                         0.3),
+ 'slopeGripLngStaticObject': (_cosDeg(22.0),
+                              1.0,
+                              _cosDeg(26.0),
+                              0.2),
+ 'slopeGripSdwStaticObject': (_cosDeg(22.0),
+                              1.0,
+                              _cosDeg(26.0),
+                              0.2),
+ 'slopeGripLngDynamicObject': (_cosDeg(28.0),
+                               1.0,
+                               _cosDeg(35.0),
+                               0.3),
+ 'slopeGripSdwDynamicObject': (_cosDeg(28.0),
+                               1.0,
+                               _cosDeg(35.0),
+                               0.3),
+ 'mountainAccFactor': 0.95,
+ 'clutchDisableTimeFactor': 2.0,
+ 'gearSwitchStep': 1.46,
+ 'switchHysteresis': 1.0,
+ 'trackToBeLockedDelay': 0.3,
+ 'pushVelocityMin': 1.0,
+ 'pushVelocityMax': 5.0,
+ 'pushRotFixedPeriod': 0.2,
+ 'pushRotGrowPeriod': 2.0,
+ 'rotationChoker': 1.0,
+ 'shape': {'terrAftChamferFraction': 0.5,
+           'terrFrontChamferFraction': 0.5,
+           'terrBoardAngle': 0.0,
+           'tankAftChamferFraction': 0.25,
+           'tankFrontChamferFraction': 0.25,
+           'tankBoardAngle': 0.0,
+           'auxClearance': 0.8}}
 
 def init():
     updateCommonConf()
@@ -285,14 +328,7 @@ def computeRotationalCohesion(rotSpeedLimit, mass, length, width, enginePower):
     return (rotSpeedLimit * inertia / ANG_ACCELERATION_TIME + enginePower / rotSpeedLimit) / mg
 
 
-def configureXPhysics(physics, baseCfg, typeDesc, mode):
-    global AUX_CLEARANCE
-    global TERRAIN_BOARD_ANGLE
-    global TANK_BOARD_ANGLE
-    global MOUNTAIN_ACC_FACTOR
-    global CLUTCH_DISABLE_TIME_FACTOR
-    global _g_lastCfg
-    global AFT_CHAMFER_FRACTION
+def configureXPhysics(physics, baseCfg, typeDesc, mode, useSimplifiedGearbox, gravityFactor):
     cfg = copy.copy(g_defaultXPhysicsCfg)
     if baseCfg:
         engCfg = baseCfg['engines'].get(typeDesc.engine['name'])
@@ -314,8 +350,8 @@ def configureXPhysics(physics, baseCfg, typeDesc, mode):
     sizeZ = bmax[2] - bmin[2]
     hullCenter = (bmin + bmax) * 0.5
     cfg['hullSize'] = Math.Vector3((sizeX, cfg['bodyHeight'], sizeZ))
-    cfg['gravity'] = cfg['gravity'] * GRAVITY_FACTOR_2
-    cfg['engineTorque'] = tuple(((arg, val * GRAVITY_FACTOR_2) for arg, val in cfg['engineTorque']))
+    cfg['gravity'] = cfg['gravity'] * gravityFactor
+    cfg['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engineTorque']))
     offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
     turretMin, turretMax, _ = typeDesc.turret['hitTester'].bbox
@@ -329,18 +365,27 @@ def configureXPhysics(physics, baseCfg, typeDesc, mode):
     turretBoxSizeX = turretMax[0] - turretMin[0]
     cfg['turretTopWidth'] = turretBoxSizeX * 0.7
     cfg['pushHB'] = cfg.get('pushDiag', 0.0)
-    cfg['shape'] = {'aftChamferFraction': AFT_CHAMFER_FRACTION,
-     'auxClearance': AUX_CLEARANCE,
-     'tankBoardAngle': TANK_BOARD_ANGLE,
-     'terrainBoardAngle': TERRAIN_BOARD_ANGLE}
-    cfg['mountainAccFactor'] = MOUNTAIN_ACC_FACTOR
-    cfg['clutchDisableTimeFactor'] = CLUTCH_DISABLE_TIME_FACTOR
+    cfg['smplEngJoinRatio'] = 0.020000000000000004 / cfg['wheelRadius']
+    if 'useSimplifiedGearbox' not in cfg:
+        cfg['useSimplifiedGearbox'] = useSimplifiedGearbox
+    applyRotationAndPowerFactors(cfg)
     if not physics.configure(cfg):
         LOG_ERROR('configureXPhysics: configure failed')
-    _g_lastCfg = cfg
     comz = 0.0 if IS_CLIENT else physics.hullCOMZ
     physics.centerOfMass = Math.Vector3((0.0, cfg['clearance'] + cfg['bodyHeight'] * 0.5 + cfg['hullCOMShiftY'], comz))
     return cfg
+
+
+def applyRotationAndPowerFactors(cfg):
+    try:
+        cfg['smplEnginePower'] = cfg['smplEnginePower'] * cfg['powerFactor']
+        cfg['angVelocityFactor'] = cfg['angVelocityFactor'] * cfg['rotationFactor']
+        arm = cfg['hullSize'][0]
+        cfg['smplRotSpeed'] = arm * cfg['angVelocityFactor0'] * cfg['rotationFactor']
+        cfg['wPushedRot'] = cfg['wPushedRot'] * cfg['rotationFactor']
+        cfg['wPushedDiag'] = cfg['wPushedDiag'] * cfg['rotationFactor']
+    except:
+        LOG_CURRENT_EXCEPTION()
 
 
 def initVehiclePhysics(physics, typeDesc, forcedCfg = None, saveTransform = False):
@@ -348,7 +393,9 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg = None, saveTransform = Fals
     if USE_DETAILED_PHYSICS and not IS_CLIENT:
         if forcedCfg:
             mode = forcedCfg['mode']
+            useSimplifiedGearbox = forcedCfg['useSimplifiedGearbox']
             baseCfg = forcedCfg
+            gravityFactor = forcedCfg['gravityFactor']
         elif typeDesc.type.xphysics:
             if DETAILED_PHYSICS_MODE == 0:
                 mode = typeDesc.type.xphysics['mode']
@@ -358,10 +405,14 @@ def initVehiclePhysics(physics, typeDesc, forcedCfg = None, saveTransform = Fals
                 baseCfg = typeDesc.type.xphysics['detailed']
             else:
                 baseCfg = typeDesc.type.xphysics['simplified']
+            useSimplifiedGearbox = typeDesc.type.xphysics['useSimplifiedGearbox']
+            gravityFactor = baseCfg['gravityFactor']
         else:
             baseCfg = None
             mode = 1
-        cfg = configureXPhysics(physics, baseCfg, typeDesc, mode)
+            useSimplifiedGearbox = True
+            gravityFactor = 1.0
+        cfg = configureXPhysics(physics, baseCfg, typeDesc, mode, useSimplifiedGearbox, gravityFactor)
     if hasattr(physics, 'detailedPhysicsEnabled') and not IS_CLIENT:
         if physics.detailedPhysicsEnabled != USE_DETAILED_PHYSICS:
             if saveTransform:
@@ -738,7 +789,7 @@ def decodeTrackScrolling(code):
     return (decodeRestrictedValueFromUint((code & 255), 8, *TRACK_SCROLL_LIMITS), decodeRestrictedValueFromUint((code >> 8), 8, *TRACK_SCROLL_LIMITS))
 
 
-MAX_NORMALISED_RPM = 1.1
+MAX_NORMALISED_RPM = 1.2
 
 def encodeNormalisedRPM(normalRPM):
     return encodeRestrictedValueToUint(normalRPM, 8, 0.0, MAX_NORMALISED_RPM)

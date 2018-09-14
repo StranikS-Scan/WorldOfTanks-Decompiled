@@ -1,0 +1,87 @@
+<fallout_5_2_15.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_15_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <results>
+              <key>	xp	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	15000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	achievements:tankwomenProgress	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+        </dossier>
+        <token>
+          <id>	token:pt:final:s2:t5	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	2	</limit>
+        </token>
+        <berths>	1	</berths>
+        <tankmen>
+          <tman1>
+            <isPremium>	true	</isPremium>
+            <isFemale>	true	</isFemale>
+            <role>	commander	</role>
+            <roleLevel>	100	</roleLevel>
+            <freeXP>	210063	</freeXP>
+            <fnGroupID>	1	</fnGroupID>
+            <lnGroupID>	1	</lnGroupID>
+            <iGroupID>	1	</iGroupID>
+            <nationID>	0	</nationID>
+            <vehicleTypeID>	0	</vehicleTypeID>
+            <freeSkills>	brotherhood	</freeSkills>
+          </tman1>
+        </tankmen>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_2_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	winPoints	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <results>
+              <key>	xp	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	15000	</greaterOrEqual>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</fallout_5_2_15.xml>

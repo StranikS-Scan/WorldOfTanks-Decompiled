@@ -7,18 +7,22 @@ from adisp import process
 from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 import fortified_regions
+from gui.clans.clan_controller import g_clanCtrl
+from gui.shared import event_dispatcher as shared_events
 from shared_utils import CONST_CONTAINER
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects, FortifiedWindowScopes
+from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.context.unit_ctx import JoinModeCtx
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.settings import UNIT_MODE_FLAGS
+from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.clans.clan_helpers import ClanListener
 from gui.shared import events, g_eventBus
 from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
@@ -46,7 +50,7 @@ def _checkBattleConsumesIntro(fort):
     AccountSettings.setSettings('fortSettings', settings)
 
 
-class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
+class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     class DIR_BATTLE_TYPE(CONST_CONTAINER):
         ATTACK = 'attack'
@@ -73,6 +77,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
         self.__fortSettings = dict(AccountSettings.getSettings('fortSettings'))
         self.__defenceHourArrowVisible = False
         self.__intelligenceArrowVisible = False
+        self.__isInTransportationRequest = False
         if 'showDefHourArrow' not in self.__fortSettings:
             self.__fortSettings['showDefHourArrow'] = True
         return
@@ -142,7 +147,9 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
         super(FortMainViewComponent, self)._populate()
         self.addListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
+        self.addListener(events.FortEvent.REQUEST_TRANSPORTATION, self.__onTransportationRequested, scope=EVENT_BUS_SCOPE.FORT)
         self.startFortListening()
+        self.startClanListening()
         self.updateData()
         setHangarVisibility(isVisible=False)
         self.as_setTutorialArrowVisibilityS(FORTIFICATION_ALIASES.TUTORIAL_ARROW_DEFENCE, False)
@@ -150,8 +157,11 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
         FortMainViewComponent.tryShowFortRosterIntroWindow()
 
     def _dispose(self):
+        self.removeListener(events.FortEvent.REQUEST_TRANSPORTATION, self.__onTransportationRequested, scope=EVENT_BUS_SCOPE.FORT)
         setHangarVisibility(isVisible=True)
+        self.app.containerManager.onViewAddedToContainer -= self.__onViewAdddedToContainer
         super(FortMainViewComponent, self)._dispose()
+        self.stopFortListening()
         self.stopFortListening()
         self.removeListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
@@ -169,6 +179,10 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
 
     def onCreateDirectionClick(self, dirId):
         self.__requestToCreate(dirId)
+
+    def onClanStateChanged(self, oldStateID, newStateID):
+        self.__currentMode = FortificationEffects.NONE_STATE
+        self.__refreshCurrentMode()
 
     @process
     def __requestToCreate(self, dirId):
@@ -206,10 +220,11 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
             self.__refreshCurrentMode()
 
     def onLeaveTransportingClick(self):
-        g_fortSoundController.playExitTransport()
-        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.NONE}), scope=EVENT_BUS_SCOPE.FORT)
-        self.fireEvent(events.FortEvent(events.FortEvent.CLOSE_TRANSPORT_CONFIRM_WINDOW, ctx=None), scope=FortifiedWindowScopes.FORT_MAIN_SCOPE)
-        return
+        if not self.__isInTransportationRequest:
+            g_fortSoundController.playExitTransport()
+            self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.NONE}), scope=EVENT_BUS_SCOPE.FORT)
+        else:
+            LOG_DEBUG('attempt to leave transporting mode while Transporting window been requested.')
 
     def onLeaveBuildDirectionClick(self):
         self.__refreshCurrentMode()
@@ -282,6 +297,12 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
     def onViewReady(self):
         g_eventBus.handleEvent(events.FortEvent(events.FortEvent.VIEW_LOADED), scope=EVENT_BUS_SCOPE.FORT)
 
+    def onClanProfileClick(self):
+        if self.clansCtrl.isEnabled():
+            shared_events.showClanProfileWindow(g_clanCtrl.getAccountProfile().getClanDbID())
+        else:
+            LOG_ERROR("Couldn't invoke Clan Profile Window. Functionality is Unavailable!")
+
     def _getCustomData(self):
         fort = self.fortCtrl.getFort()
         level = fort.level
@@ -296,6 +317,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
          'levelTitle': i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_LEVELSLBL, buildLevel=levelTxt),
          'defResText': defResPrefix + fort_formatters.getDefRes(defResQuantity, True),
          'disabledTransporting': disabledTransporting,
+         'clanProfileBtnLbl': CLANS.FORT_HEADER_CLANPROFILEBTNLBL,
          'orderSelectorVO': {'isSelected': AccountSettings.getFilter(ORDERS_FILTER)['isSelected'],
                              'icon': RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_AIM}}
 
@@ -342,7 +364,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
             else:
                 g_fortSoundController.setTransportingMode(False)
             LOG_DEBUG('%s -> %s' % (self.__currentMode, mode))
-            state = FortificationEffects.STATES[self.__currentMode][mode].copy()
+            state = FortificationEffects.getStates()[self.__currentMode][mode].copy()
             STATE_TEXTS_KEY = 'stateTexts'
             if not self.fortCtrl.getPermissions().canTransport():
                 state['transportToggle'] = FortificationEffects.INVISIBLE
@@ -372,7 +394,8 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
     def __joinToSortie(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            yield dispatcher.join(JoinModeCtx(PREBATTLE_TYPE.SORTIE, modeFlags=UNIT_MODE_FLAGS.SHOW_LIST))
+            flags = FUNCTIONAL_FLAG.SHOW_ENTITIES_BROWSER | FUNCTIONAL_FLAG.SWITCH
+            yield dispatcher.join(JoinModeCtx(PREBATTLE_TYPE.SORTIE, flags=flags))
         else:
             LOG_ERROR('Prebattle dispatcher is not defined')
         return
@@ -395,3 +418,13 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper):
         minRegionLevel = fortified_regions.g_cache.defenceConditions.minRegionLevel
         isBaseLevelEnough = baseLevel >= minRegionLevel
         return isClanMembersEnough and isBaseLevelEnough
+
+    def __onTransportationRequested(self, event):
+        self.__isInTransportationRequest = True
+        self.app.containerManager.onViewAddedToContainer += self.__onViewAdddedToContainer
+        self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_ALIAS, ctx=event.ctx.copy()), EVENT_BUS_SCOPE.LOBBY)
+
+    def __onViewAdddedToContainer(self, _, pyEntity):
+        if pyEntity.alias == FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_ALIAS:
+            self.__isInTransportationRequest = False
+            self.app.containerManager.onViewAddedToContainer -= self.__onViewAdddedToContainer

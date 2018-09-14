@@ -1,44 +1,28 @@
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/chains.py
-from collections import namedtuple
-from helpers.html import translation
 from items import _xml
 from tutorial.control.chains import triggers
 from tutorial.data import chapter, effects
 from tutorial.doc_loader import sub_parsers
 from tutorial.doc_loader.sub_parsers import lobby
-_AVAILABLE_DIRECTIONS = ('L', 'T', 'R', 'B')
-_ArrowProps = namedtuple('_ArrowProps', ('direction', 'loop'))
-_Padding = namedtuple('_Padding', ('left', 'top', 'right', 'bottom'))
 
-def _readHintSection(xmlCtx, section, flags):
-    hintID = sub_parsers.parseID(xmlCtx, section, 'Specify a hint ID')
-    if 'item-id' in section.keys():
-        itemID = sub_parsers.parseID(xmlCtx, section['item-id'], 'Specify a item ID')
-    else:
-        _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a item ID')
-        return
-    tags = section.keys()
-    text = translation(_xml.readString(xmlCtx, section, 'text'))
-    if 'arrow' in tags:
-        subSec = section['arrow']
-        direction = _xml.readString(xmlCtx, subSec, 'direction')
-        if direction not in _AVAILABLE_DIRECTIONS:
-            _xml.raiseWrongXml(xmlCtx, section, 'Arrow direction {} is invalid.'.format(direction))
-        arrow = _ArrowProps(direction, _xml.readBool(xmlCtx, subSec, 'loop'))
-    else:
-        arrow = None
-    if 'padding' in tags:
-        subSec = section['padding']
-        padding = _Padding(_xml.readFloat(xmlCtx, subSec, 'left'), _xml.readFloat(xmlCtx, subSec, 'top'), _xml.readFloat(xmlCtx, subSec, 'right'), _xml.readFloat(xmlCtx, subSec, 'bottom'))
-    else:
-        padding = None
-    hint = chapter.ChainHint(hintID, itemID, text, section.readBool('has-box', True), arrow, padding)
+def readHintSection(xmlCtx, section, flags):
+    sectionInfo = sub_parsers.parseHint(xmlCtx, section)
+    hint = chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'])
     hint.setActions(sub_parsers.parseActions(xmlCtx, _xml.getSubsection(xmlCtx, section, 'actions'), flags))
     return hint
 
 
+def readFightBtnDisableTriggerSection(xmlCtx, section, _, triggerID):
+    return triggers.FightButtonDisabledTrigger(triggerID)
+
+
 def _readSwitchToRandomSection(xmlCtx, section, flags, conditions):
     return effects.SimpleEffect(effects.EFFECT_TYPE.ENTER_QUEUE, conditions=conditions)
+
+
+def readShowUnlockedChapterSection(xmlCtx, section, flags, conditions):
+    targetID = section.asString
+    return effects.HasTargetEffect(targetID, effects.EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER, conditions=conditions)
 
 
 def _readSimpleDialogTriggerSection(xmlCtx, section, chapter, triggerID):
@@ -53,16 +37,20 @@ def _readVehicleRequiredLevelTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.CurrentVehicleRequiredLevelTrigger, validateUpdateOnly='validate-update-only' in section.keys())
 
 
-def _readTankmanPriceDiscountTriggerSection(xmlCtx, section, _, triggerID):
+def readTankmanPriceDiscountTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TankmanPriceDiscountTrigger, validateUpdateOnly='validate-update-only' in section.keys())
 
 
-def _readPremiumVehiclesTriggerSection(xmlCtx, section, _, triggerID):
-    return triggers.CurrentPremiumVehicleTrigger(triggerID)
+def _readRentedVehiclesTriggerSection(xmlCtx, section, _, triggerID):
+    return triggers.RentedVehicleTrigger(triggerID)
 
 
 def _readMaintenanceStateTrigger(xmlCtx, section, _, triggerID):
     return triggers.CurrentVehicleMaintenanceStateTrigger(triggerID)
+
+
+def _readNeedChangeCurrentVehicleTrigger(xmlCtx, section, _, triggerID):
+    return triggers.CurrentVehicleNeedChangeTrigger(triggerID)
 
 
 def _readOptionalDevicesStateTrigger(xmlCtx, section, _, triggerID):
@@ -73,13 +61,22 @@ def _readLockedStateTrigger(xmlCtx, section, _, triggerID):
     return triggers.CurrentVehicleLockedTrigger(triggerID)
 
 
+def readIsInSandBoxPreQueueTriggerSection(xmlCtx, section, chapter, triggerID):
+    return triggers.IsInSandBoxPreQueueTrigger(triggerID)
+
+
+def readIsInSandBoxOrRandomPreQueueTriggerSection(xmlCtx, section, chapter, triggerID):
+    return triggers.IsInSandBoxOrRandomPreQueueTrigger(triggerID)
+
+
 def readQueueTrigger(xmlCtx, section, _, triggerID):
     return triggers.QueueTrigger(triggerID)
 
 
 def init():
-    sub_parsers.setEntitiesParsers({'hint': _readHintSection})
-    sub_parsers.setEffectsParsers({'switch-to-random': _readSwitchToRandomSection})
+    sub_parsers.setEntitiesParsers({'hint': readHintSection})
+    sub_parsers.setEffectsParsers({'switch-to-random': _readSwitchToRandomSection,
+     'show-unlocked-chapter': readShowUnlockedChapterSection})
     sub_parsers.setTriggersParsers({'simpleDialog': _readSimpleDialogTriggerSection,
      'unlocked': lobby.readItemUnlockedTriggerSection,
      'inventory': lobby.readInventoryItemTriggerSection,
@@ -92,9 +89,13 @@ def init():
      'bonus': lobby.readBonusTriggerSection,
      'buyNextLevelVehicle': _readBuyNextLevelVehicleTriggerSection,
      'vehicleRequiredLevel': _readVehicleRequiredLevelTriggerSection,
-     'tankmanDiscount': _readTankmanPriceDiscountTriggerSection,
-     'premiumVehicles': _readPremiumVehiclesTriggerSection,
+     'tankmanDiscount': readTankmanPriceDiscountTriggerSection,
+     'rentedVehicles': _readRentedVehiclesTriggerSection,
      'maintenanceState': _readMaintenanceStateTrigger,
      'optionalDevicesState': _readOptionalDevicesStateTrigger,
-     'lockedState': _readLockedStateTrigger})
+     'lockedState': _readLockedStateTrigger,
+     'isInSandbox': readIsInSandBoxPreQueueTriggerSection,
+     'isInSandboxOrRandom': readIsInSandBoxOrRandomPreQueueTriggerSection,
+     'fightBtn': readFightBtnDisableTriggerSection,
+     'needChangeCurrentVehicle': _readNeedChangeCurrentVehicleTrigger})
     sub_parsers.setWindowsParsers({'awardWindow': sub_parsers.readQuestAwardWindowSection})

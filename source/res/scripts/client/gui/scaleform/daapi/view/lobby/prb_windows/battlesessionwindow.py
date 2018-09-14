@@ -5,8 +5,7 @@ import nations
 from adisp import process
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils import functions
-from gui import prb_control
-from gui.prb_control import formatters
+from gui.prb_control import formatters, prb_getters
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME
 from gui.Scaleform.locale.MENU import MENU
@@ -143,8 +142,8 @@ class BattleSessionWindow(BattleSessionWindowMeta):
             self.__sessionName = '%s\n%s' % (self.__sessionName, description)
 
     def __updateCommonRequirements(self, teamLimits, rosters):
-        minTotalLvl, maxTotalLvl = prb_control.getTotalLevelLimits(teamLimits)
-        playersMaxCount = prb_control.getMaxSizeLimits(teamLimits)[0]
+        minTotalLvl, maxTotalLvl = prb_getters.getTotalLevelLimits(teamLimits)
+        playersMaxCount = prb_getters.getMaxSizeLimits(teamLimits)[0]
         totalLvl = 0
         playersCount = 0
         for roster, players in rosters.iteritems():
@@ -162,7 +161,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
     def __updateLimits(self, teamLimits, rosters):
         levelLimits = {}
         for className in constants.VEHICLE_CLASSES:
-            classLvlLimits = prb_control.getClassLevelLimits(teamLimits, className)
+            classLvlLimits = prb_getters.getClassLevelLimits(teamLimits, className)
             levelLimits[className] = {'minLevel': classLvlLimits[0],
              'maxLevel': classLvlLimits[1],
              'maxCurLevel': 0}
@@ -182,7 +181,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
                 strlevelLimits[className] = self.__makeMinMaxString(levelLimits[className])
 
         self.as_setClassesLimitsS(strlevelLimits, classesLimitsAreIdentical)
-        nationsLimits = prb_control.getNationsLimits(teamLimits)
+        nationsLimits = prb_getters.getNationsLimits(teamLimits)
         nationsLimitsResult = None
         if nationsLimits is not None and len(nationsLimits) != len(nations.AVAILABLE_NAMES):
             nationsLimitsResult = []

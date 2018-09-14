@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+from constants import ARENA_BONUS_TYPE
 import dossiers2
 import nations
 import constants
@@ -128,8 +129,11 @@ class REQ_CRITERIA(object):
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
         IS_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
         ELITE = RequestCriteria(PredicateCondition(lambda item: item.isElite))
+        FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena == ARENA_BONUS_TYPE.EVENT_BATTLES))
+        ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -405,7 +409,7 @@ class ItemsRequester(object):
         container = self.__itemsCache[GUI_ITEM_TYPE.VEHICLE_DOSSIER]
         dossier = container.get((int(databaseID), vehTypeCompDescr))
         if dossier is None:
-            LOG_WARNING("Trying to get empty user vehicle' dossier", vehTypeCompDescr, databaseID)
+            LOG_WARNING('Vehicle dossier for this user is empty', vehTypeCompDescr, databaseID)
             return
         else:
             return VehicleDossier(dossier, vehTypeCompDescr, playerDBID=databaseID)

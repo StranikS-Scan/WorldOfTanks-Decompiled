@@ -1,0 +1,70 @@
+<13_erlenberg.xml>
+  <name>	#arenas:13_erlenberg/name	</name>
+  <description>	#arenas:13_erlenberg/description	</description>
+  <geometry>	spaces/13_erlenberg	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/13_erlenberg/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_winter_01	</ambientSound>
+  <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	152.892 -405.200	</position1>
+        </team1>
+        <team2>
+          <position1>	-125.1 402.900	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-87.503 404.509	</position>
+        </team1>
+        <team2>
+          <position>	76.002 -373.689	</position>
+          <position>	-105.753 -373.689	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	81.029938 432.753021	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-82.4 382.500	</position>
+        </team1>
+        <team2>
+          <position>	96.700 -383.200	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-21.000046 -3.300049	</controlPoint>
+    </domination>
+  </gameplayTypes>
+</13_erlenberg.xml>

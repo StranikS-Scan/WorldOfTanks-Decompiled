@@ -23,6 +23,9 @@ class SfChainsProxy(SfLobbyProxy):
     def getViewSettings(self):
         return settings.CHAINS_VIEW_SETTINGS
 
+    def getViewsAliases(self):
+        return settings.WINDOW_ALIAS_MAP
+
     def invokeCommand(self, command):
         self._commands.invoke(None, command)
         return

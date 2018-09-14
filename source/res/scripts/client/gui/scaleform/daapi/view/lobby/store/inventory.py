@@ -5,7 +5,6 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import getNationIndex, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
@@ -13,11 +12,9 @@ from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
-from gui.shared import g_itemsCache, REQ_CRITERIA
-from gui.shared.utils.gui_items import InventoryVehicle
+from gui.shared import g_itemsCache, REQ_CRITERIA, event_dispatcher as shared_event_dispatcher
 from adisp import process
 from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
@@ -55,7 +52,7 @@ class Inventory(InventoryMeta):
         dataCompactId = int(data.id)
         item = g_itemsCache.items.getItemByCD(dataCompactId)
         if ITEM_TYPE_INDICES[item.itemTypeName] == vehicles._VEHICLE:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(item.invID)}))
+            shared_event_dispatcher.showVehicleSellDialog(int(item.invID))
         else:
             self.__sellItem(item.intCD)
 
@@ -238,7 +235,7 @@ class Inventory(InventoryMeta):
     def itemWrapper(self, packedItem):
         module, inventoryCount, vehicleCount, disable, statusMessage, isEnabledBuyingGoldShellsForCredits, isEnabledBuyingGoldEqsForCredits, extraModuleInfo = packedItem
         credits, gold = g_itemsCache.items.stats.money
-        statusLevel = InventoryVehicle.STATE_LEVEL.INFO
+        statusLevel = Vehicle.VEHICLE_STATE_LEVEL.INFO
         inventoryId = None
         isRented = False
         rentLeftTimeStr = ''
@@ -246,7 +243,8 @@ class Inventory(InventoryMeta):
             statusLevel = module.getState()[1]
             if module.isRented:
                 isRented = True
-                rentLeftTimeStr = RentLeftFormatter(module.rentInfo, module.isPremiumIGR).getRentTimeLeftStr()
+                formatter = RentLeftFormatter(module.rentInfo, module.isPremiumIGR)
+                rentLeftTimeStr = formatter.getRentLeftStr('#tooltips:vehicle/rentLeft/%s', formatter=lambda key, countType, count, _ = None: ''.join([makeString(key % countType), ': ', str(count)]))
             if module.isInInventory:
                 inventoryId = module.invID
         name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName

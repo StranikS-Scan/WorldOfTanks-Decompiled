@@ -101,6 +101,7 @@ class BattleAvailabilityController(Notifiable):
         self._update()
 
     def stop(self):
+        self.clearNotification()
         self.onStatusChanged.clear()
         self.__periods = None
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -254,8 +255,8 @@ class SortiesCurfewController(BattleAvailabilityController):
         return True
 
     def _onChanged(self, diff = None):
-        if diff and 'forbiddenSortieHours' in diff:
-            self._update(diff['forbiddenSortieHours'])
+        if diff and ('forbiddenSortieHours' in diff or 'forbiddenSortiePeripheryIDs' in diff):
+            self._update(diff.get('forbiddenSortieHours'))
             LOG_DEBUG('Sorties settings changed:', diff)
 
     def _calcStatus(self, hours = None):

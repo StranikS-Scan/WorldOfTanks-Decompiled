@@ -5,7 +5,7 @@ import Math
 from Math import Vector2, Vector3
 import functools
 import math
-from AvatarInputHandler.CallbackDelayer import CallbackDelayer
+from helpers.CallbackDelayer import CallbackDelayer
 import BombersWing
 import Flock
 from constants import IS_DEVELOPMENT

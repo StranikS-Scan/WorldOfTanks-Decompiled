@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/prb_control/factories/ControlFactory.py
 from debug_utils import LOG_DEBUG
 from gui.prb_control.items import PlayerDecorator
-from gui.prb_control.settings import FUNCTIONAL_EXIT
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 
 class ControlFactory(object):
 
@@ -14,7 +14,7 @@ class ControlFactory(object):
     def createEntryByAction(self, action):
         raise NotImplementedError()
 
-    def createFunctional(self, dispatcher, ctx):
+    def createFunctional(self, ctx):
         raise NotImplementedError()
 
     def createPlayerInfo(self, functional):
@@ -23,13 +23,11 @@ class ControlFactory(object):
     def createStateEntity(self, functional):
         raise NotImplementedError()
 
-    def createLeaveCtx(self, funcExit = FUNCTIONAL_EXIT.NO_FUNC):
+    def createLeaveCtx(self, flags = FUNCTIONAL_FLAG.UNDEFINED):
         raise NotImplementedError()
 
-    def getLeaveCtxByAction(self, action):
-        raise NotImplementedError()
-
-    def _createEntryByAction(self, action, available):
+    @staticmethod
+    def _createEntryByAction(action, available):
         result = None
         if action in available:
             clazz, args = available[action]

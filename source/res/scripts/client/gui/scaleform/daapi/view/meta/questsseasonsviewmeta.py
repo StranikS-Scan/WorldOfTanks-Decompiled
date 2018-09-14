@@ -3,7 +3,7 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class QuestsSeasonsViewMeta(BaseDAAPIComponent):
 
-    def onShowAwardsClick(self, seasonID):
+    def onShowAwardsClick(self):
         self._printOverrideError('onShowAwardsClick')
 
     def onTileClick(self, tileID):
@@ -11,6 +11,10 @@ class QuestsSeasonsViewMeta(BaseDAAPIComponent):
 
     def onSlotClick(self, slotID):
         self._printOverrideError('onSlotClick')
+
+    def as_setDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setData(data)
 
     def as_setSeasonsDataS(self, data):
         if self._isDAAPIInited():

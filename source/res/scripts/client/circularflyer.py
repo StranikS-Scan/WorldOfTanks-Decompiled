@@ -60,7 +60,7 @@ class CircularFlyer(BigWorld.UserDataObject):
                     pixieNode = self.__model.node(self.pixieHardPoint)
                     pixieNode.attach(resourceRefs[self.pixieName])
                 if self.soundName != '':
-                    self.__sound = SoundGroups.g_instance.playSoundModel(self.__model, self.soundName)
+                    self.__sound = SoundGroups.g_instance.getSound3D(self.__modelMatrix, self.soundName)
             except:
                 LOG_CURRENT_EXCEPTION()
                 self.__model = None

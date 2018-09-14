@@ -118,7 +118,9 @@ class PackageImporter(object):
 
         return
 
-    def unload(self, seq):
+    def unload(self, seq = None):
+        if seq is None:
+            seq = self._handlers.keys()
         isLoaded = self.isPackageLoaded
         clearSettings = g_entitiesFactories.clearSettings
         for path in seq:
@@ -131,6 +133,8 @@ class PackageImporter(object):
             aliases = self._aliases.pop(path)
             if aliases:
                 clearSettings(aliases)
+
+        return
 
     def _loadPackage(self, path):
         if self.isPackageLoaded(path):

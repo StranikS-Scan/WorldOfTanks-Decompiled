@@ -1,6 +1,6 @@
 # Embedded file name: scripts/common/arena_achievements.py
 from dossiers2.custom.records import RECORD_DB_IDS
-ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit')
+ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'sauronEye')
 ACHIEVEMENTS_WITH_REWARD = set([ RECORD_DB_IDS['achievements', name] for name in ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'heroesOfRassenay', 'medalFadin', 'medalNikolas', 'medalPascucci', 'medalLehvaslaiho', 'medalRadleyWalters', 'medalHalonen', 'medalDumitru', 'medalDeLanglade', 'medalOrlik', 'medalOskin', 'medalLafayettePool', 'medalBurda', 'medalTamadaYoshio', 'medalBrothersInArms', 'medalCrucialContribution', 'huntsman', 'medalStark', 'medalGore') ])
 INBATTLE_SERIES = ('sniper', 'killing', 'piercing')
 INBATTLE_SERIES_INDICES = dict(((x[1], x[0]) for x in enumerate(INBATTLE_SERIES)))
@@ -97,4 +97,16 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6},
  'bonecrusher': {'minCrits': 5},
  'charmed': {'minVehs': 4},
  'tacticalAdvantage': {'maxLevel': 7},
- 'secretOperations': {'minGroupLen': 2}}
+ 'secretOperations': {'minGroupLen': 2},
+ 'shoulderToShoulder': {'minKills': 12,
+                        'minDamageDealt': 30000},
+ 'aloneInTheField': {'minDamageDealt': 10000},
+ 'fallenFlags': {'minFlags': 4},
+ 'effectiveSupport': {'minDamageDealt': 2000},
+ 'falloutDieHard': {'minKills': 5,
+                    'minDamageDealt': 10000},
+ 'predator': {'minKills': 5},
+ 'champion': {'minKills': 5,
+              'minDamageDealt': 10000,
+              'minFlagsCapture': 3},
+ 'bannerman': {'minFlagsCapture': 4}}

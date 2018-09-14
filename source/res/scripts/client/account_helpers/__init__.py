@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/account_helpers/__init__.py
 import datetime
 import BigWorld
+from constants import ACCOUNT_ATTR
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
-import constants
 from shared_utils.account_helpers import BattleResultsCache, ClientClubs
 from shared_utils.account_helpers import ClientInvitations
 from gui import GUI_SETTINGS
@@ -13,19 +13,27 @@ def __checkAccountAttr(attrs, attrID):
 
 
 def isPremiumAccount(attrs):
-    return __checkAccountAttr(attrs, constants.ACCOUNT_ATTR.PREMIUM)
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.PREMIUM)
 
 
 def isMoneyTransfer(attrs):
-    return __checkAccountAttr(attrs, constants.ACCOUNT_ATTR.TRADING)
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.TRADING)
 
 
 def isDemonstrator(attrs):
-    return __checkAccountAttr(attrs, constants.ACCOUNT_ATTR.ARENA_CHANGE)
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.ARENA_CHANGE)
 
 
 def isRoamingEnabled(attrs):
-    return __checkAccountAttr(attrs, constants.ACCOUNT_ATTR.ROAMING)
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.ROAMING)
+
+
+def isOutOfWallet(attrs):
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.OUT_OF_SESSION_WALLET)
+
+
+def isClanEnabled(attrs):
+    return __checkAccountAttr(attrs, ACCOUNT_ATTR.CLAN)
 
 
 def getPremiumExpiryDelta(expiryTime):

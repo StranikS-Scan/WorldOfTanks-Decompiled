@@ -3,7 +3,7 @@ import cPickle
 import types
 import math
 import ResMgr
-from operator import methodcaller, itemgetter, attrgetter
+from operator import methodcaller, itemgetter
 import BigWorld
 import constants
 import ArenaType
@@ -12,15 +12,18 @@ from shared_utils import findFirst, CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.clans import formatters as clans_fmts
+from gui.clans.clan_controller import g_clanCtrl
+from gui.clans.items import formatField
 from gui.clubs import formatters as club_fmts
 from gui.clubs.ClubsController import g_clubsCtrl
 from gui.clubs.settings import getLadderChevron256x256, getPointsToNextDivision
-from gui.prb_control import getBattleID
-from gui.shared.economics import getPremiumCostActionPrc
+from gui.prb_control.prb_getters import getBattleID
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, getLevelIconPath
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
+from gui.shared.view_helpers import UsersInfoHelper
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.tooltips import efficiency
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName, makeContactStatusDescription
@@ -37,7 +40,6 @@ from gui import g_htmlTemplates, makeHtmlString, game_control
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
-from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVO
 from gui.prb_control.items.unit_items import SupportedRosterSettings
@@ -360,20 +362,8 @@ class HistoricalAmmoTooltipData(ToolTipBaseData):
         super(HistoricalAmmoTooltipData, self).__init__(context, TOOLTIP_TYPE.HISTORICAL_AMMO)
 
     def getDisplayableData(self, battleID, vehicleID):
-        battle = g_eventsCache.getHistoricalBattles().get(battleID)
-        shellsItems = battle.getShellsLayout(int(vehicleID))
-        priceString = battle.getShellsLayoutFormatedPrice(int(vehicleID), self.app.colorManager, True, True)
-        data = {'price': priceString,
+        return {'price': '0',
          'shells': []}
-        shells = data['shells']
-        for shell, count in shellsItems:
-            shells.append({'id': str(shell.intCD),
-             'type': shell.type,
-             'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-             'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
-             'count': count})
-
-        return data
 
 
 class HistoricalModulesTooltipData(ToolTipBaseData):
@@ -382,22 +372,9 @@ class HistoricalModulesTooltipData(ToolTipBaseData):
         super(HistoricalModulesTooltipData, self).__init__(context, TOOLTIP_TYPE.HISTORICAL_MODULES)
 
     def getDisplayableData(self, battleID):
-        templatePath = 'html_templates:lobby/historicalBattles/tooltips'
-        template = 'moduleLabel'
         vehicle = g_currentVehicle.item
-        battle = g_eventsCache.getHistoricalBattles().get(battleID)
-        modules = battle.getModules(vehicle)
-        data = {}
-        if modules is not None:
-            modulesData = []
-            for item in modules.itervalues():
-                modulesData.append({'type': item.itemTypeName,
-                 'label': makeHtmlString(templatePath, template, {'type': item.userType,
-                           'name': item.userName})})
-
-            data = {'tankName': vehicle.userName,
-             'modules': modulesData}
-        return data
+        return {'tankName': vehicle.userName,
+         'modules': []}
 
 
 class SettingsControlTooltipData(ToolTipBaseData):
@@ -488,14 +465,14 @@ class CustomizationItemTooltipData(ToolTipBaseData):
             typeText = ms(VEHICLE_CUSTOMIZATION.CAMOUFLAGE) + ' ' + ms(CAMOUFLAGES_KIND_TEXTS[item['kind']])
             descriptionText = text_styles.standard(ms(item['description'] + '/description'))
         elif type == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            groupName, _, _, _, emblemName, _, _, allow, deny = item
+            groupName, _, _, _, emblemName, _, _, _, allow, deny = item
             groups, _, _ = vehicles.g_cache.playerEmblems()
             _, group, _, _, _, _ = groups.get(groupName)
             headerText = emblemName
             typeText = ms(VEHICLE_CUSTOMIZATION.EMBLEM) + ' ' + ms(group)
             descriptionText = ''
         elif type == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            groupName, _, _, _, inscriptionName, _, _, allow, deny = item
+            groupName, _, _, _, inscriptionName, _, _, _, allow, deny = item
             groups = vehicles.g_cache.customization(nationId).get('inscriptionGroups', {})
             _, group, _, _, _ = groups.get(groupName)
             headerText = inscriptionName
@@ -548,6 +525,40 @@ class CustomizationItemTooltipData(ToolTipBaseData):
         elif not timeLeft:
             result = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_INFINITY)
         return result
+
+
+class ClanCommonInfoTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ClanCommonInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.CLAN_PROFILE)
+        self.__usersInfoHelper = UsersInfoHelper()
+
+    def getDisplayableData(self, clanDBID):
+        data = g_clanCtrl.getClanCommonData(clanDBID)
+        if data is None:
+            return {}
+        else:
+            rating = formatField(getter=data.getRating, formatter=BigWorld.wg_getIntegralFormat)
+            count = formatField(getter=data.getBattlesCount, formatter=BigWorld.wg_getIntegralFormat)
+            wins = formatField(getter=data.getWinsRatio, formatter=lambda value: BigWorld.wg_getNiceNumberFormat(value) + '%')
+            exp = formatField(getter=data.getAvgExp, formatter=BigWorld.wg_getIntegralFormat)
+            statValues = text_styles.stats('\n'.join((rating,
+             count,
+             wins,
+             exp)))
+            abbrev = formatField(getter=data.getAbbrev)
+            name = formatField(getter=data.getName)
+            motto = formatField(getter=data.getMotto)
+            userName = '{} {}'.format(self.__usersInfoHelper.getUserName(data.getLeaderDbID()), clans_fmts.getClanAbbrevString(abbrev))
+            isActive = text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_NO))
+            if data.isActive():
+                isActive = text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_YES))
+            return {'clanName': i18n.makeString(TOOLTIPS.CLANCOMMONINFO_CLANNAME, clanAbbrev=abbrev, clanName=name),
+             'slogan': text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_SLOGAN, slogan=text_styles.standard(motto))),
+             'statValues': statValues,
+             'statDescriptions': text_styles.concatStylesToMultiLine(text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATRATING)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATBATTLESCOUNT)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATWINSPERCENT)), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_STATAVGEXP))),
+             'bottomInfoText': text_styles.concatStylesToMultiLine(text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_COMMANDER, commanderName=text_styles.stats(userName))), text_styles.main(i18n.makeString(TOOLTIPS.CLANCOMMONINFO_ACTIVITY, activity=text_styles.standard(isActive)))),
+             'isClanActive': data.isActive()}
 
 
 class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):

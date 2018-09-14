@@ -17,7 +17,7 @@ _GUI_SLOTS_PROPS = {'slotsCount': MAX_ACTIVE_BOOSTERS_COUNT,
  'paddings': 64,
  'groupPadding': 18,
  'ySlotPosition': 5,
- 'offsetSlot': 3,
+ 'offsetSlot': 13,
  'useOnlyLeftBtn': True}
 ADD_BOOSTER_ID = 'add'
 _ADD_AVAILABLE_BOOSTER_ID = 'addAvailable'

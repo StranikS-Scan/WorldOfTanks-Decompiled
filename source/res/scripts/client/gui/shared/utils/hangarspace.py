@@ -131,6 +131,7 @@ class _HangarSpace(object):
             if self.__lastUpdatedVehicle is not None:
                 self.updateVehicle(self.__lastUpdatedVehicle)
             game_control.g_instance.gameSession.onPremiumNotify += self.onPremiumChanged
+        self.playHangarMusic()
         return
 
     def refreshSpace(self, isPremium, forceRefresh = False):
@@ -177,18 +178,14 @@ class _HangarSpace(object):
             vehCompDescr = vehicles.stripCustomizationFromVehicleCompactDescr(vehCompDescr, True, True, False)[0]
         return vehicles.VehicleDescr(compactDescr=vehCompDescr)
 
-    def updateVehicle(self, vehicle, historicalBattle = None):
+    def updateVehicle(self, vehicle):
         if self.__inited:
             Waiting.show('loadHangarSpaceVehicle', True)
-            historicalBattleDef = None
-            if historicalBattle is not None and historicalBattle.canParticipateWith(vehicle.intCD):
-                historicalBattleDef = historicalBattle.getData()
             igrRoomType = game_control.g_instance.igr.getRoomType()
             igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
-            updatedVehCompactDescr = getCustomizedVehCompDescr(igrLayout, vehicle.invID, igrRoomType, vehicle.descriptor.makeCompactDescr(), historicalBattleDef)
+            updatedVehCompactDescr = getCustomizedVehCompDescr(igrLayout, vehicle.invID, igrRoomType, vehicle.descriptor.makeCompactDescr())
             self.__space.recreateVehicle(self._stripVehCompDescrIfRoaming(updatedVehCompactDescr), vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
-        return
 
     def removeVehicle(self):
         if self.__inited:
@@ -197,6 +194,11 @@ class _HangarSpace(object):
                 self.__space.removeVehicle()
             self.__changeDone()
             self.__lastUpdatedVehicle = None
+        return
+
+    def playHangarMusic(self, restart = False):
+        if self.__space is not None:
+            self.__space.playHangarMusic(restart)
         return
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):

@@ -123,7 +123,7 @@ class VehicleProgressHelper(object):
 
     def __getAvgBattles2NewSkill(self, avgTmanXp, tman):
         if avgTmanXp > 0:
-            return int(math.ceil(tman.getNextSkillXpCost() / float(avgTmanXp)))
+            return max(1, math.ceil(tman.getNextSkillXpCost() / avgTmanXp))
         return 0
 
     def __makeTankmanDescription(self, tankman):
@@ -139,7 +139,7 @@ class VehicleProgressHelper(object):
     def __makeTankmanVO(self, tman, avgBattles2NewSkill):
         prediction = ''
         if avgBattles2NewSkill > 0:
-            prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=avgBattles2NewSkill)
+            prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=BigWorld.wg_getIntegralFormat(avgBattles2NewSkill))
         return {'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
          'description': self.__makeTankmanDescription(tman),
          'tankmenIcon': Tankman.getSmallIconPath(tman.nationID, tman.descriptor.iconID),

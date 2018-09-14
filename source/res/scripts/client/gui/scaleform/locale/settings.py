@@ -226,6 +226,7 @@ class SETTINGS(object):
     CHAT_RECEIVEFRIENDSHIPREQUEST = '#settings:chat/receiveFriendshipRequest'
     CHAT_RECEIVEINVITESINBATTLE = '#settings:chat/receiveInvitesInBattle'
     CHAT_INVITESFROMFRIENDSONLY = '#settings:chat/invitesFromFriendsOnly'
+    CHAT_RECEIVECLANINVITESNOTIFICATIONS = '#settings:chat/receiveClanInvitesNotifications'
     CHAT_CHATCONTACTSLISTONLY = '#settings:chat/chatContactsListOnly'
     CHAT_STORERECEIVERINBATTLE = '#settings:chat/storeReceiverInBattle'
     CHAT_DISABLEBATTLECHAT = '#settings:chat/disableBattleChat'

@@ -3,8 +3,12 @@ import random
 from collections import namedtuple
 import BigWorld
 import constants
+from constants import EVENT_TYPE
+from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
+from gui.shared.utils.functions import makeTooltip
 import potapov_quests
 from helpers import i18n
+from potapov_quests import PQ_BRANCH
 from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.server_events import g_eventsCache
@@ -12,11 +16,14 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, packRibbonInfo
 from gui.shared.formatters import text_styles
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 _BG_IMG_BY_VEH_TYPE = {'lightTank': RES_ICONS.MAPS_ICONS_QUESTS_LTAWARDBACK,
  'mediumTank': RES_ICONS.MAPS_ICONS_QUESTS_MTAWARDBACK,
  'heavyTank': RES_ICONS.MAPS_ICONS_QUESTS_HTAWARDBACK,
  'AT-SPG': RES_ICONS.MAPS_ICONS_QUESTS_AT_SPGAWARDBACK,
  'SPG': RES_ICONS.MAPS_ICONS_QUESTS_SPGAWARDBACK}
+_BG_IMG_FALLOUT = {'classic': RES_ICONS.MAPS_ICONS_QUESTS_CLASSICFALLOUTAWARDBACK,
+ 'multiteam': RES_ICONS.MAPS_ICONS_QUESTS_MULTITEAMFALLOUTAWARDBACK}
 
 def _getNextQuestInTileByID(questID):
     quests = g_eventsCache.potapov.getQuests()
@@ -170,23 +177,24 @@ class TankwomanAward(AwardAbstract):
 class FormattedAward(AwardAbstract):
 
     class _BonusFormatter(object):
-        _BonusFmt = namedtuple('_BonusFmt', 'icon value')
+        _BonusFmt = namedtuple('_BonusFmt', 'icon value tooltip bonusVO')
 
         def __call__(self, bonus):
             return []
 
     class _SimpleFormatter(_BonusFormatter):
 
-        def __init__(self, icon):
+        def __init__(self, icon, tooltip = ''):
             self._icon = icon
+            self._tooltip = tooltip
 
         def __call__(self, bonus):
-            return [self._BonusFmt(self._icon, BigWorld.wg_getIntegralFormat(bonus.getValue()))]
+            return [self._BonusFmt(self._icon, BigWorld.wg_getIntegralFormat(bonus.getValue()), self._tooltip, None)]
 
     class _SimpleNoValueFormatter(_SimpleFormatter):
 
         def __call__(self, bonus):
-            return [self._BonusFmt(self._icon, '')]
+            return [self._BonusFmt(self._icon, '', self._tooltip, None)]
 
     class _ItemsFormatter(_BonusFormatter):
 
@@ -194,22 +202,70 @@ class FormattedAward(AwardAbstract):
             result = []
             for item, count in bonus.getItems().iteritems():
                 if item is not None and count:
-                    result.append(self._BonusFmt(item.icon, BigWorld.wg_getIntegralFormat(count)))
+                    tooltip = makeTooltip(header=item.userName, body=item.fullDescription)
+                    result.append(self._BonusFmt(item.icon, BigWorld.wg_getIntegralFormat(count), tooltip, None))
 
             return result
 
+    class _BoostersFormatter(_BonusFormatter):
+
+        def __call__(self, bonus):
+            result = []
+            for booster, count in bonus.getBoosters().iteritems():
+                if booster is not None and count:
+                    tooltip = makeTooltip(header=booster.userName, body=booster.description)
+                    result.append(self._BonusFmt('', BigWorld.wg_getIntegralFormat(count), tooltip, self.__makeBoosterVO(booster)))
+
+            return result
+
+        @staticmethod
+        def __makeBoosterVO(booster):
+            return {'icon': booster.icon,
+             'showCount': False,
+             'qualityIconSrc': booster.getQualityIcon(),
+             'slotLinkage': BOOSTER_CONSTANTS.SLOT_UI,
+             'showLeftTime': False}
+
     def __init__(self):
-        self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG),
-         'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1),
-         'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG),
-         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG),
-         'items': self._ItemsFormatter()}
+        self._formatters = {'gold': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICONBIG, tooltip=TOOLTIPS.AWARDITEM_GOLD),
+         'credits': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG_1, tooltip=TOOLTIPS.AWARDITEM_CREDITS),
+         'freeXP': self._SimpleFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_FREEXPICONBIG, tooltip=TOOLTIPS.AWARDITEM_FREEXP),
+         'premium': self._SimpleNoValueFormatter(RES_ICONS.MAPS_ICONS_LIBRARY_PREMDAYICONBIG, tooltip=TOOLTIPS.AWARDITEM_PREMDAYS),
+         'items': self._ItemsFormatter(),
+         'goodies': self._BoostersFormatter()}
 
     def clear(self):
-        if self._formatters is not None:
-            self._formatters.clear()
-            self._formatters = None
-        return
+        self._formatters.clear()
+
+    def getRibbonInfo(self):
+        awards, strAwards = self._getMainAwards(self._getBonuses())
+        if strAwards or awards:
+            return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awardBonusStrText=strAwards, awards=awards)
+        else:
+            return None
+
+    def _getBonuses(self):
+        return []
+
+    def _getMainAwards(self, bonuses):
+        awards = []
+        strAwardsList = []
+        strAwards = ''
+        for b in bonuses:
+            formatter = self._formatters.get(b.getName(), None)
+            if callable(formatter):
+                for bonus in formatter(b):
+                    awards.append({'value': bonus.value,
+                     'itemSource': bonus.icon,
+                     'tooltip': bonus.tooltip,
+                     'boosterVO': bonus.bonusVO})
+
+            else:
+                strAwardsList.append(text_styles.warning(b.format()))
+
+        if len(strAwardsList):
+            strAwards = ', '.join(strAwardsList)
+        return (awards, strAwards)
 
 
 class RegularAward(FormattedAward):
@@ -225,10 +281,12 @@ class RegularAward(FormattedAward):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TASKCOMPLETE)
 
     def getBackgroundImage(self):
-        vehType = findFirst(None, self.__potapovQuest.getVehicleClasses())
-        if vehType in _BG_IMG_BY_VEH_TYPE:
-            return _BG_IMG_BY_VEH_TYPE[vehType]
+        if self.__potapovQuest.getQuestBranch() == PQ_BRANCH.FALLOUT:
+            return _BG_IMG_FALLOUT[self.__potapovQuest.getMajorTag()]
         else:
+            vehType = findFirst(None, self.__potapovQuest.getVehicleClasses())
+            if vehType in _BG_IMG_BY_VEH_TYPE:
+                return _BG_IMG_BY_VEH_TYPE[vehType]
             return random.choice(_BG_IMG_BY_VEH_TYPE.values())
 
     def getAwardImage(self):
@@ -266,7 +324,8 @@ class RegularAward(FormattedAward):
 
     def getRibbonInfo(self):
         if self.__isMainReward:
-            return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awards=self.__getMainRewards())
+            awards, awardBonusStrText = self._getMainAwards(self._getBonuses())
+            return packRibbonInfo(awardForCompleteText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDFORCOMLETE), awards=awards, awardBonusStrText=awardBonusStrText)
         else:
             return packRibbonInfo(awardReceivedText=i18n.makeString(MENU.AWARDWINDOW_QUESTS_TASKCOMPLETE_AWARDRECIEVED))
 
@@ -277,12 +336,5 @@ class RegularAward(FormattedAward):
             quests_events.showEventsWindow(nextQuestID, constants.EVENT_TYPE.POTAPOV_QUEST)
         return
 
-    def __getMainRewards(self):
-        result = []
-        for b in self.__potapovQuest.getBonuses(isMain=True):
-            formatter = self._formatters.get(b.getName(), lambda *args: [])
-            for bonus in formatter(b):
-                result.append({'itemSource': bonus.icon,
-                 'value': bonus.value})
-
-        return result
+    def _getBonuses(self):
+        return self.__potapovQuest.getBonuses(isMain=True)

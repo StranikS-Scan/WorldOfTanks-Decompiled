@@ -163,8 +163,8 @@ class ResourcePointsPlugin(IPlugin):
 
     def start(self):
         super(ResourcePointsPlugin, self).start()
-        self._parentObj.movie.loadResourceIndicator()
-        self._parentObj.movie.loadResourcePointsPanel()
+        self._parentObj.movie.falloutItems.as_loadResourceIndicator()
+        self._parentObj.movie.falloutItems.as_loadResourcePointsPanel()
 
     def stop(self):
         self.__cancelUpdateCallback()

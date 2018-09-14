@@ -104,6 +104,9 @@ class IControlMode(object):
     def onMinimapClicked(self, worldPos):
         pass
 
+    def onSwitchViewpoint(self, vehicleID, cameraPos):
+        pass
+
     def isSelfVehicle(self):
         return True
 
@@ -171,6 +174,7 @@ class _GunControlMode(IControlMode):
         self._gunMarker.destroy()
         self._aih = None
         self._cam.destroy()
+        self._cam = None
         if self._aim is not None:
             self._aim.destroy()
         return
@@ -500,11 +504,14 @@ class ArcadeControlMode(_GunControlMode):
         self._aim = aims.createAim(dataSection.readString('aim'))
         self._cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], self._aim)
         self.__mouseVehicleRotator = _MouseVehicleRotator()
-        self.__canShot = False
         self.__isArenaStarted = False
         self.__sightOffset = list(self._aim.offset())
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.IS_DEVELOPMENT)
         self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.IS_DEVELOPMENT
+
+    @property
+    def curVehicleID(self):
+        return BigWorld.player().playerVehicleID
 
     def create(self):
         self._cam.create(_ARCADE_CAM_PIVOT_POS, self.onChangeControlModeByScroll)
@@ -620,7 +627,7 @@ class ArcadeControlMode(_GunControlMode):
 
     def __activateAlternateMode(self, pos = None, bByScroll = False):
         ownVehicle = BigWorld.entity(BigWorld.player().playerVehicleID)
-        if ownVehicle is not None and ownVehicle.isStarted and ownVehicle.appearance.isUnderwater:
+        if ownVehicle is not None and ownVehicle.isStarted and ownVehicle.appearance.isUnderwater or BigWorld.player().isGunLocked:
             return
         elif self._aih.isSPG and not bByScroll:
             self._cam.update(0, 0, 0, False, False)
@@ -637,7 +644,7 @@ class ArcadeControlMode(_GunControlMode):
                         pos = Math.Matrix(self._gunMarker.matrixProvider()).applyToOrigin()
             self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
             return
-        elif not (self._aih.isSPG or BigWorld.player().isGunLocked):
+        elif not self._aih.isSPG:
             self._cam.update(0, 0, 0, False, False)
             if BattleReplay.isPlaying() and BigWorld.player().isGunLocked:
                 mode = BattleReplay.g_replayCtrl.getControlMode()
@@ -977,16 +984,11 @@ class PostMortemControlMode(IControlMode):
         self.__aih = weakref.proxy(avatarInputHandler)
         self.__aim = aims.createAim('postmortem')
         self.__cam = ArcadeCamera.ArcadeCamera(dataSection['camera'], self.__aim)
-        self.__vIDs = list()
-        self.__curIndex = -1
         self.__curVehicleID = None
         self.__selfVehicleID = None
         self.__isEnabled = False
-        self.__cbIDWaitForCameraTarget = None
         self.__postmortemDelay = None
         self.__isObserverMode = False
-        self.__isBackwardSwitching = False
-        self.__isSortingModeInited = False
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.IS_DEVELOPMENT)
         return
 
@@ -1001,6 +1003,7 @@ class PostMortemControlMode(IControlMode):
     def destroy(self):
         self.disable()
         self.__aim.destroy()
+        self.__cam.destroy()
         self.__cam = None
         return
 
@@ -1014,30 +1017,35 @@ class PostMortemControlMode(IControlMode):
             self.__selfVehicleID = player.playerVehicleID
             self.__isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags
         self.__cam.enable(None, False, args.get('postmortemParams'))
+        self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
         self.__aim.enable()
         self.__connectToArena()
         _setCameraFluency(self.__cam.camera, self.__CAM_FLUENCY)
         self.__isEnabled = True
-        if self.__isObserverMode:
-            self.__switchToVehicle(-1)
-            return
-        else:
+        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged += self.__onMatrixBound
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            if self.__isObserverMode:
+                vehicleID = args.get('vehicleID')
+                if vehicleID is None:
+                    self.__switchViewpoint(False)
+                else:
+                    self.__fakeSwitchToVehicle(vehicleID)
+                return
             if PostMortemControlMode.getIsPostmortemDelayEnabled() and bool(args.get('bPostmortemDelay')):
                 self.__postmortemDelay = PostmortemDelay(self.__cam, self.__onPostmortemDelayStop)
                 self.__postmortemDelay.start()
             else:
                 self.__switchToVehicle(None)
-            g_postProcessing.enable('postmortem')
-            return
+        g_postProcessing.enable('postmortem')
+        return
 
     def disable(self):
+        BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onMatrixBound
         self.__destroyPostmortemDelay()
-        self.__waitForCameraTargetCancel()
         self.__isEnabled = False
         self.__aim.disable()
         self.__disconnectFromArena()
         self.__cam.disable()
-        self.__curIndex = -1
         self.__curVehicleID = None
         self.__selfVehicleID = None
         g_postProcessing.disable()
@@ -1054,12 +1062,10 @@ class PostMortemControlMode(IControlMode):
                 self.__aih.onControlModeChanged('video', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
                 return True
             if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown:
-                self._setSortingMode(True)
-                self.__switchToVehicle(-1, True)
+                self.__switchViewpoint(True)
                 return True
             if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown:
-                self._setSortingMode(False)
-                self.__switchToVehicle(-1, False)
+                self.__switchViewpoint(False)
                 return True
             if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
              CommandMapping.CMD_CM_CAMERA_ROTATE_RIGHT,
@@ -1096,7 +1102,7 @@ class PostMortemControlMode(IControlMode):
         self.__aim.onRecreateDevice()
 
     def selectPlayer(self, vehId):
-        self.__switchToVehicle(vehId, False)
+        self.__switchToVehicle(vehId)
 
     def getAim(self):
         return self.__aim
@@ -1111,93 +1117,60 @@ class PostMortemControlMode(IControlMode):
         return
 
     def __onPostmortemDelayStop(self):
+        self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
         self.__destroyPostmortemDelay()
         self.__switchToVehicle(None)
         return
 
-    def __switchToVehicle(self, toId = None, toPrevious = False):
+    def __fakeSwitchToVehicle(self, vehicleID):
         if self.__postmortemDelay is not None:
             return
         else:
-            player = BigWorld.player()
-            replayCtrl = BattleReplay.g_replayCtrl
-            self.__waitForCameraTargetCancel()
-            if toId == None and not self.__isObserverMode:
-                self.__curIndex = self.__vIDs.index(player.playerVehicleID)
-            elif toId >= 0:
-                if toId in self.__vIDs:
-                    self.__curIndex = self.__vIDs.index(toId)
-                else:
-                    self.__curIndex = 0
-            else:
-                if toPrevious:
-                    self.__curIndex -= 1
-                    if self.__curIndex < 0:
-                        self.__curIndex = len(self.__vIDs) - 1
-                else:
-                    self.__curIndex += 1
-                    if self.__curIndex >= len(self.__vIDs):
-                        self.__curIndex = 0
-                if self.__isObserverMode and len(self.__vIDs) > 0 and self.__vIDs[self.__curIndex] == player.playerVehicleID:
-                    self.__curIndex += -1 if toPrevious else 1
-                    if self.__curIndex < 0:
-                        self.__curIndex = len(self.__vIDs) - 1
-                    elif self.__curIndex >= len(self.__vIDs):
-                        self.__curIndex = 0
-            if replayCtrl.isPlaying:
-                self.__curVehicleID = replayCtrl.playerVehicleID
-            else:
-                newVehicleID = None
-                if len(self.__vIDs) == 0:
-                    newVehicleID = player.playerVehicleID
-                else:
-                    newVehicleID = self.__vIDs[self.__curIndex]
-                if self.__isObserverMode:
-                    if self.__curVehicleID != player.playerVehicleID and newVehicleID == player.playerVehicleID:
-                        return
-                prevVehicleAppearance = None
-                if self.__curVehicleID is not None:
-                    prevVehicleAppearance = getattr(BigWorld.entity(self.__curVehicleID), 'appearance', None)
-                if prevVehicleAppearance is not None:
-                    self.__cam.removeVehicleToCollideWith(prevVehicleAppearance)
-                self.__curVehicleID = newVehicleID
-            player.positionControl.bindToVehicle(True, self.__curVehicleID)
-            self.__aim.changeVehicle(self.__curVehicleID)
-            self.__aih.onPostmortemVehicleChanged(self.__curVehicleID)
-            if self.__isObserverMode:
-                if self.__cam.vehicleMProv is None:
-                    self.__cam.vehicleMProv = player.getOwnVehicleMatrix()
-            if self.__curVehicleID != player.playerVehicleID and BigWorld.entity(self.__curVehicleID) is None and not replayCtrl.isPlaying and not self.__isObserverMode and player.arena.positions.get(self.__curVehicleID) is None:
-                self.__switchToVehicle(-1, toPrevious)
-                return
-            self.__cbIDWaitForCameraTarget = BigWorld.callback(0.0, self.__waitForCameraTarget)
-            if not replayCtrl.isPlaying:
-                self.__cam.vehicleMProv = Math.Matrix(self.__cam.vehicleMProv)
+            self.__doPreBind()
+            self.onSwitchViewpoint(vehicleID, Math.Vector3(0.0, 0.0, 0.0))
             return
 
-    def __onVehicleAdded(self, vehicleID):
-        player = BigWorld.player()
-        vDesc = player.arena.vehicles[vehicleID]
-        isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
-        if (vDesc['team'] == player.team or isPlayerObserver) and vDesc['isAlive']:
-            self.__updateVIDsList()
+    def __switchViewpoint(self, toPrevious, vehicleID = None):
+        if not isinstance(toPrevious, bool):
+            raise AssertionError
+            return self.__postmortemDelay is not None and None
+        else:
+            self.__doPreBind()
+            if vehicleID is None:
+                BigWorld.player().positionControl.switchViewpoint(toPrevious)
+            else:
+                self.onSwitchViewpoint(vehicleID, Math.Vector3(0.0, 0.0, 0.0))
+            return
+
+    def __switchToVehicle(self, toId = None):
+        if self.__postmortemDelay is not None:
+            return
+        else:
+            raise not toId or isinstance(toId, int) and toId >= 0 or AssertionError
+            self.__doPreBind()
+            BigWorld.player().positionControl.bindToVehicle(vehicleID=toId)
+            return
+
+    def __doPreBind(self):
+        if self.__curVehicleID is not None:
+            prevVehicleAppearance = getattr(BigWorld.entity(self.__curVehicleID), 'appearance', None)
+            if prevVehicleAppearance is not None:
+                self.__cam.removeVehicleToCollideWith(prevVehicleAppearance)
+            else:
+                LOG_ERROR('Possible memory leak! Cannot find current vehicle with id %s, erasing all collision models instead!' % self.__curVehicleID)
+                self.__cam.clearVehicleToCollideWith()
         return
 
-    def __onVehicleRespawn(self, vehicleID):
+    def onSwitchViewpoint(self, vehicleID, cameraPos):
         player = BigWorld.player()
-        vDesc = player.arena.vehicles[vehicleID]
-        isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
-        if vDesc['team'] == player.team or isPlayerObserver:
-            self.__updateVIDsList(True)
-        return
-
-    def __onVehicleKilled(self, victimID, *args):
-        player = BigWorld.player()
-        vDesc = player.arena.vehicles[victimID]
-        isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
-        if not isPlayerObserver:
-            if vDesc['team'] == player.team and not vDesc['isAlive']:
-                self.__delAndAdjustIDs(victimID)
+        replayCtrl = BattleReplay.g_replayCtrl
+        self.__curVehicleID = vehicleID if vehicleID != -1 else self.__selfVehicleID
+        self.__aim.changeVehicle(self.__curVehicleID)
+        self.__aih.onPostmortemVehicleChanged(self.__curVehicleID)
+        if self.__curVehicleID in BigWorld.entities.keys():
+            self.__aih.onCameraChanged('postmortem', self.__curVehicleID)
+        if self.__curVehicleID != player.playerVehicleID and self.__curVehicleID is not None and BigWorld.entity(self.__curVehicleID) is None and not replayCtrl.isPlaying and not self.__isObserverMode and player.arena.positions.get(self.__curVehicleID) is None:
+            self.__switchViewpoint(False)
         return
 
     def __onPeriodChange(self, period, *args):
@@ -1206,8 +1179,6 @@ class PostMortemControlMode(IControlMode):
         elif self.__isObserverMode:
             return
         else:
-            self.__vIDs = list()
-            self.__vIDs.append(BigWorld.player().playerVehicleID)
             self.__switchToVehicle(None)
             return
 
@@ -1216,138 +1187,30 @@ class PostMortemControlMode(IControlMode):
             self.__switchToVehicle(None)
         return
 
-    def _setSortingMode(self, isBackward):
-        if not self.__isSortingModeInited:
-            self.__isBackwardSwitching = isBackward
-            self.__isSortingModeInited = True
-            self.__updateVIDsList()
-
-    def _playerComparator(self, vData1, vData2):
-        playerTeam = BigWorld.player().team
-        if vData1.team == playerTeam and vData2.team != playerTeam:
-            return -1
-        if vData1.team != playerTeam and vData2.team == playerTeam:
-            return 1
-        res = cmp(vData2.isAlive, vData1.isAlive)
-        if res:
-            return res
-        squad1, squad2 = vData2.isSquadMan, vData1.isSquadMan
-        if self.__isBackwardSwitching:
-            squad1, squad2 = squad2, squad1
-        res = cmp(squad1, squad2)
-        if res:
-            return res
-        res = cmp(vData2.level, vData1.level)
-        if res:
-            return res
-        res = cmp(VEHICLE_BATTLE_TYPES_ORDER_INDICES[vData1.type], VEHICLE_BATTLE_TYPES_ORDER_INDICES[vData2.type])
-        if res:
-            return res
-        res = cmp(vData1.vehicleName, vData2.vehicleName)
-        if res:
-            return res
-        res = cmp(vData1.playerName, vData2.playerName)
-        if res:
-            return res
-        return 0
-
-    def __updateVIDsList(self, respawned = False):
-        player = BigWorld.player()
-        isPlayerObserver = player.vehicleTypeDescriptor is not None and 'observer' in player.vehicleTypeDescriptor.type.tags
-        data = []
-        for vID, desc in player.arena.vehicles.items():
-            isAlive = desc['isAlive'] or respawned
-            canPlayerSeeVehicle = (desc['team'] == player.team or isPlayerObserver) and isAlive
-            if canPlayerSeeVehicle or vID == player.playerVehicleID and not isAlive:
-                vehicleType = desc['vehicleType'].type
-                if 'observer' not in vehicleType.tags:
-                    data.append(self.OBSERVE_VEH_DATA(isAlive, vehicleType.level, set(VEHICLE_CLASS_TAGS.intersection(vehicleType.tags)).pop(), vehicleType.shortUserString, desc['name'], g_sessionProvider.getCtx().isSquadMan(vID=vID), vID, desc['team']))
-
-        self.__vIDs = []
-        for item in sorted(data, cmp=self._playerComparator):
-            self.__vIDs.append(item.id)
-
-        return
-
     def __connectToArena(self):
         player = BigWorld.player()
-        player.arena.onVehicleAdded += self.__onVehicleAdded
-        player.arena.onVehicleWillRespawn += self.__onVehicleRespawn
-        player.arena.onVehicleKilled += self.__onVehicleKilled
         player.arena.onPeriodChange += self.__onPeriodChange
         player.onVehicleLeaveWorld += self.__onVehicleLeaveWorld
-        self.__updateVIDsList()
 
     def __disconnectFromArena(self):
         player = BigWorld.player()
-        player.arena.onVehicleAdded -= self.__onVehicleAdded
-        player.arena.onVehicleWillRespawn -= self.__onVehicleRespawn
-        player.arena.onVehicleKilled -= self.__onVehicleKilled
         player.arena.onPeriodChange -= self.__onPeriodChange
         player.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
 
-    def __delAndAdjustIDs(self, id):
-        if id == BigWorld.player().playerVehicleID:
-            self.__updateVIDsList()
-            return
-        index = 0
-        for item in self.__vIDs:
-            if item == id:
-                del self.__vIDs[index]
-                if index <= self.__curIndex:
-                    self.__curIndex -= 1
-                break
-            index += 1
-
-    def __prepareNextVehicle(self, curNextIndex):
-        player = BigWorld.player()
-        curVPos = player.position
-        nextIndex = curNextIndex
-        curLen = 0
-        for index in range(curNextIndex, len(self.__vIDs)):
-            v = BigWorld.entity(self.__vIDs[index])
-            p = player.arena.positions.get(self.__vIDs[index], None)
-            if v is not None or p is not None:
-                pos = v.position if v is not None else p
-                tmpLen = curVPos.flatDistTo(pos)
-                if tmpLen < curLen or curLen == 0.0:
-                    curLen = tmpLen
-                    nextIndex = index
-
-        _swap(self.__vIDs, curNextIndex, nextIndex)
-        return
-
-    def __waitForCameraTarget(self):
-        self.__cbIDWaitForCameraTarget = None
-        targetMProv = self.__cam.vehicleMProv
-        targetPos = Math.Matrix(targetMProv).translation
-        groundPos = Math.Vector3(targetPos)
-        colRes = BigWorld.wg_collideSegment(BigWorld.player().spaceID, (groundPos.x, 1000.0, groundPos.z), (groundPos.x, -1000.0, groundPos.z), 128)
-        if colRes is None:
-            self.__cbIDWaitForCameraTarget = BigWorld.callback(0.1, self.__waitForCameraTarget)
+    def __onMatrixBound(self, isStatic):
+        if isStatic:
             return
         else:
-            groundPos.y = colRes[0].y
-            vehicle = BigWorld.entity(self.__curVehicleID)
-            if vehicle is None:
-                targetMProv = Math.Matrix()
-                targetMProv.setTranslate(groundPos)
-                self.__cam.vehicleMProv = targetMProv
-                self.__cbIDWaitForCameraTarget = BigWorld.callback(0.1, self.__waitForCameraTarget)
+            vehicle = BigWorld.player().vehicle
+            if vehicle is None or self.__curVehicleID != vehicle.id:
                 return
+            self.__cam.addVehicleToCollideWith(vehicle.appearance)
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setPlayerVehicleID(self.__curVehicleID)
-            self.__cam.vehicleMProv = vehicle.matrix
-            self.__cam.addVehicleToCollideWith(vehicle.appearance)
+            self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
             self.__aih.onCameraChanged('postmortem', self.__curVehicleID)
             return
-
-    def __waitForCameraTargetCancel(self):
-        if self.__cbIDWaitForCameraTarget is not None:
-            BigWorld.cancelCallback(self.__cbIDWaitForCameraTarget)
-            self.__cbIDWaitForCameraTarget = None
-        return
 
     def isSelfVehicle(self):
         return self.__curVehicleID == self.__selfVehicleID

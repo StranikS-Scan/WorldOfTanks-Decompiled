@@ -454,7 +454,7 @@ class GetClubsContendersCtx(ClubRequestCtx):
 class JoinClubBattleCtx(PrbCtrlRequestCtx):
 
     def __init__(self, clubDbID, joinTime, allowDelay = True, waitingID = '', isUpdateExpected = False):
-        super(JoinClubBattleCtx, self).__init__(waitingID=waitingID, funcExit=prb_settings.FUNCTIONAL_EXIT.UNIT)
+        super(JoinClubBattleCtx, self).__init__(ctrlType=prb_settings.CTRL_ENTITY_TYPE.UNIT, entityType=PREBATTLE_TYPE.CLUBS, waitingID=waitingID, flags=prb_settings.FUNCTIONAL_FLAG.SWITCH)
         self.__clubDbID = clubDbID
         self.__joinTime = joinTime
         self.__isUpdateExpected = isUpdateExpected
@@ -471,12 +471,6 @@ class JoinClubBattleCtx(PrbCtrlRequestCtx):
 
     def getCooldown(self):
         return REQUEST_COOLDOWN.CLUBS_ANY_CMD_COOLDOWN
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.CLUBS
-
-    def getCtrlType(self):
-        return prb_settings.CTRL_ENTITY_TYPE.UNIT
 
     def getRequestType(self):
         return CLUB_REQUEST_TYPE.JOIN_UNIT

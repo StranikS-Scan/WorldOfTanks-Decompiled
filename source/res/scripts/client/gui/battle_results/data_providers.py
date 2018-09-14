@@ -121,8 +121,8 @@ class _AsyncPostBattleResultsDataProvider(AbstractRequester):
     def wasInBattle(self, playerDBID):
         return playerDBID in self.__players
 
-    def getPlayerData(self, playerDbID):
-        return self.__players.get(playerDbID, _PlayerData(playerDbID))
+    def getPlayerData(self, playerDbID, botName):
+        return self.__players.get(playerDbID, _PlayerData(dbID=playerDbID, name=botName or results_fmts.getUnknownPlayerName()))
 
     def getVehicles(self):
         return self.__vehicles

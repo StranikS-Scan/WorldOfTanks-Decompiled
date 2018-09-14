@@ -8,3 +8,7 @@ def showFortBattleRoomWindow():
 
 def showBattleConsumesIntro():
     g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_COMBAT_RESERVES_INTRO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
+
+
+def loadFortView():
+    g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORTIFICATIONS_VIEW_ALIAS), EVENT_BUS_SCOPE.LOBBY)

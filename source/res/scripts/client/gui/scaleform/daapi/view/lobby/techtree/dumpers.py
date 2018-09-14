@@ -1,16 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/dumpers.py
-from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
 import gui
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.locale.MENU import MENU
-from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.tooltips import getItemActionTooltipData, getItemRentActionTooltipData
+from gui.shared.tooltips import getItemActionTooltipData
+from gui.shared.tooltips import getItemRentActionTooltipData
 from gui.shared.utils import CLIP_ICON_PATH
-from gui.shared.utils.gui_items import InventoryVehicle
-from gui.server_events import g_eventsCache
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import i18n, html
 from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
@@ -32,7 +29,8 @@ class _BaseDumper(object):
     def dump(self, data):
         return {}
 
-    def _getRentStatus(self, item):
+    @staticmethod
+    def _getRentStatus(item):
         status = ''
         statusLevel = ''
         if item.isRented:
@@ -41,10 +39,10 @@ class _BaseDumper(object):
                     status = i18n.makeString('#menu:currentVehicleStatus/igrRentalIsOver')
                 else:
                     status = i18n.makeString('#menu:currentVehicleStatus/rentalIsOver')
-                statusLevel = InventoryVehicle.STATE_LEVEL.CRITICAL
+                statusLevel = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
             elif not item.isPremiumIGR:
                 status = RentLeftFormatter(item.rentInfo).getRentLeftStr()
-                statusLevel = InventoryVehicle.STATE_LEVEL.RENTED
+                statusLevel = Vehicle.VEHICLE_STATE_LEVEL.RENTED
         return (status, statusLevel)
 
 
@@ -89,25 +87,14 @@ class ResearchItemsObjDumper(_BaseDumper):
             nation = None
 
         globalData = self._cache['global']
-        item = data.getRootItem()
-        historicalBattleID = -1
         warningMessage = None
-        if data.preQueueFunctional.getQueueType() == QUEUE_TYPE.HISTORICAL:
-            selectedVehicleID = data.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.SELECTED_VEHICLE_ID)
-            if item.intCD == selectedVehicleID:
-                battleID = data.preQueueFunctional.getSetting(PREQUEUE_SETTING_NAME.BATTLE_ID)
-                historicalBattle = g_eventsCache.getHistoricalBattles().get(battleID)
-                if historicalBattle is not None and historicalBattle.canParticipateWith(item.intCD):
-                    historicalBattleID = battleID
-                    warnText = i18n.makeString(MENU.RESEARCH_STATUS_HISTORICALMODULES)
-                    warningMessage = gui.makeHtmlString('html_templates:lobby/research', 'warningMessage', {'text': warnText})
         globalData.update({'enableInstallItems': data.isInstallItemsEnabled(),
          'statusString': data.getRootStatusString(),
          'extraInfo': self._getExtraInfo(data),
          'freeXP': data.getUnlockStats().freeXP,
          'hasNationTree': nation in techtree_dp.g_techTreeDP.getAvailableNations(),
          'warningMessage': warningMessage,
-         'historicalBattleID': historicalBattleID})
+         'historicalBattleID': -1})
         return
 
     def _getExtraInfo(self, data):

@@ -1,0 +1,139 @@
+<01_karelia.xml>
+  <name>	#arenas:01_karelia/name	</name>
+  <description>	#arenas:01_karelia/description	</description>
+  <geometry>	spaces/01_karelia	</geometry>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/01_karelia/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
+  <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	397.532227 402.584412	</position1>
+        </team1>
+        <team2>
+          <position1>	-401.340332 -399.975006	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2>
+          <position>	45.721 -424.924	</position>
+          <position>	287.086 -271.999	</position>
+          <position>	448.251 -37.818	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-278.805054 213.265259	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+    <fallout6>
+      <winPoints>	MANY_FLAGS_15x15	</winPoints>
+      <maxPlayersInTeam>	15	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1>
+          <position>	278 309	</position>
+        </team1>
+        <team2>
+          <position>	-300 -284	</position>
+        </team2>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	187.978394 37.800835 315.659607	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	316.732452 36.019302 198.276855	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-312.358246 37.899734 -183.549988	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-193.239670 36.508980 -312.215210	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-324.217163 31.397688 43.922562	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	5C5A8D17.48124360.B25942B2.D1C49230	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-64.237488 21.932003 -425.839783	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	0B7341A3.4EFA2E84.3B4DCBBE.6899C236	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	364.717255 25.009453 66.091949	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	444732EE.40F24E08.A24F81B1.3036B384	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-33.116196 29.853025 332.289368	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	6923CA19.410EB13D.69D11ABF.F4A17434	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-5.664955 19.589954 13.250324	</position>
+        <guid>	66D27C49.44297C0F.BE12E997.1E565E1B	</guid>
+      </repairPoint>
+    </fallout6>
+  </gameplayTypes>
+  <mapActivities>
+    <warplane>
+      <preset>	karelia_lightning_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	karelia_lightning_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	30.000000 30.000000	</startTime>
+      <period>	110.000000	</period>
+    </warplane>
+  </mapActivities>
+</01_karelia.xml>

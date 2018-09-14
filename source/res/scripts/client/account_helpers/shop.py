@@ -199,15 +199,6 @@ class Shop(object):
     def getFreeXPToTManXPRate(self, callback):
         self.__getValue('freeXPToTManXPRate', callback)
 
-    def ebankVCoinExchangeRate(self, callback):
-        self.__getValue('ebank/vcoinExchangeRate', callback)
-
-    def ebankMinTransactionValue(self, callback):
-        self.__getValue('ebank/vcoinMinTransactionValue', callback)
-
-    def ebankMaxTransactionValue(self, callback):
-        self.__getValue('ebank/vcoinMaxTransactionValue', callback)
-
     def getFreeXPConversion(self, callback):
         self.__getValue('freeXPConversion', callback)
 

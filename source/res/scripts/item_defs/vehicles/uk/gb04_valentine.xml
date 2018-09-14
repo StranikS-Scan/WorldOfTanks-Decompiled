@@ -1,0 +1,709 @@
+<gb04_valentine.xml>
+  <crew>
+    <commander>	gunner
+			radioman	</commander>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	24	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	4.17	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB04_Valentine/Valentine_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	7	</armor_6>
+      <armor_7>	60	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	17	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	40	</armor_11>
+      <armor_12>	20	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
+    <weight>	9087	</weight>
+    <maxHealth>	248	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 37.00 0.34 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.28 37.00 0.34 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.76	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.007229 0.49301 0.674881	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB04_Valentine/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.279745 0.324203 2.20735	</rayStart>
+        <rayEnd>	0.279745 0.324202 1.80735	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.2	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB04_Valentine>
+      <userString>	#gb_vehicles:Chassis_GB04_Valentine	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1420.0	</price>
+      <unlocks>
+        <chassis>	Chassis_GB04_Valentine_2	  <cost>	1200	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3200	</weight>
+      <maxLoad>	16500	</maxLoad>
+      <terrainResistance>	1 1.3 2	</terrainResistance>
+      <brakeForce>	14500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.34 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.12	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.317189	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127028	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.3283	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.253197	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R5	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308989	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127028	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.328932	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.307657	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.253197	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L5	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.547730 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.764450	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB04_Valentine>
+    <Chassis_GB04_Valentine_2>
+      <userString>	#gb_vehicles:Chassis_GB04_Valentine_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4700	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3200	</weight>
+      <maxLoad>	20000	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.8	</terrainResistance>
+      <brakeForce>	17000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.34 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.12	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.317189	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127028	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.3283	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.253197	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R5	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.308989	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127028	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.328932	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.307657	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.253197	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L5	</name>
+          <radius>	0.306381	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.546690 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.764450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB04_Valentine_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB04_Valentine>
+      <userString>	#gb_vehicles:Turret_1_GB04_Valentine	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1880.0	</price>
+      <unlocks>
+        <turret>	Turret_2_GB04_Valentine	  <cost>	1200	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	65	</armor_1>
+        <armor_2>	45	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	65	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	60	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	15	</armor_9>
+        <armor_10>	10	</armor_10>
+        <armor_11>	10	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2750	</weight>
+      <maxHealth>	62	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 15 0.339116 15 0.402778 4 0.597222 4 0.660884 15 1 15	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_2pdr_Gun_Mk_X>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB04_Valentine/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000007 0.302635 0.5624	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-0.921404 0.257753 -0.109398	</rayStart>
+          <rayEnd>	-0.524339 0.257753 -0.0610873	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.898413 0.442673 0.261786	</rayStart>
+          <rayEnd>	0.50679 0.442673 0.180357	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.893 0.000 1.000 0.000 0.520 0.264 0.736 0.589 0.463 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
+      <camouflage>
+        <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_GB04_Valentine>
+    <Turret_2_GB04_Valentine>
+      <userString>	#gb_vehicles:Turret_2_GB04_Valentine	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4500	</price>
+      <unlocks>
+        <gun>	QF_6_pounder_Mk_III	  <cost>	1500	</cost>
+        </gun>
+        <gun>	QF_6_pounder_Mk_V	  <cost>	3700	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	65	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	65	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	50	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	10	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4530	</weight>
+      <maxHealth>	92	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+        </_2pdr_Gun_Mk_X>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_04.model	</collisionModel>
+          </hitTester>
+          <camouflage>
+            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III>
+        <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_Gun_Mk_V	  <cost>	4000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModel>
+          </hitTester>
+        </QF_6_pounder_Mk_V>
+        <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 8 0.339116 8 0.402778 3 0.597222 3 0.660884 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	30	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	6.6	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_06.model	</collisionModel>
+          </hitTester>
+        </_75mm_Gun_Mk_V>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB04_Valentine/collision/Turret_02.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.000013 0.23939 0.729812	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.846563 0.443774 0.387436	</rayStart>
+          <rayEnd>	-0.49764 0.443774 0.191855	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.764595 0.493885 -0.529807	</rayStart>
+          <rayEnd>	-0.427682 0.493885 -0.314193	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.52	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.010 -0.055 1.000 0.000 0.507 0.258 0.780 0.600 0.597 0.500 0.036 0.500 0.078 0.000 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
+    </Turret_2_GB04_Valentine>
+  </turrets0>
+  <engines>
+    <AEC_A189>	shared	  <unlocks>
+        <engine>	AEC_A1909	  <cost>	180	</cost>
+        </engine>
+      </unlocks>
+    </AEC_A189>
+    <AEC_A1909>	shared	  <unlocks>
+        <engine>	GMC_6-71_Mk10	  <cost>	700	</cost>
+        </engine>
+      </unlocks>
+    </AEC_A1909>
+    <GMC_6-71_Mk10>	shared	  <unlocks>
+        <engine>	GMC_6-71_Mk11	  <cost>	800	</cost>
+        </engine>
+      </unlocks>
+    </GMC_6-71_Mk10>
+    <GMC_6-71_Mk11>	shared	  <unlocks>
+        <vehicle>	GB44_Archer	  <cost>	19340	</cost>
+        </vehicle>
+      </unlocks>
+    </GMC_6-71_Mk11>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <N11>	shared	  <unlocks>
+        <radio>	N9	  <cost>	610	</cost>
+        </radio>
+      </unlocks>
+    </N11>
+    <N9>	shared	  <unlocks>
+        <radio>	N19Mk1	  <cost>	1480	</cost>
+        </radio>
+      </unlocks>
+    </N9>
+    <N19Mk1>	shared	  <unlocks>
+        <vehicle>	GB28_Bishop	  <cost>	19600	</cost>
+        </vehicle>
+        <radio>	N19Mk2	  <cost>	3600	</cost>
+        </radio>
+      </unlocks>
+    </N19Mk1>
+    <N19Mk2>	shared	</N19Mk2>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb04_valentine.xml>

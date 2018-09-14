@@ -1,14 +1,14 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/functional.py
 import collections
-import BigWorld
 import MusicController
 import ResMgr
 from adisp import process
-from gui import game_control
+from constants import QUEUE_TYPE
+from gui.prb_control.context import pre_queue_ctx
+from gui.prb_control.functional.battle_tutorial import TutorialPreQueueEntry
 from helpers.i18n import makeString as _ms
 from gui.game_control import getBrowserCtrl
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.settings import FUNCTIONAL_EXIT
 from tutorial.control import TutorialProxyHolder
 from tutorial.control.context import GLOBAL_VAR, GlobalStorage
 from tutorial.control.functional import FunctionalEffect
@@ -24,51 +24,45 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
     def triggerEffect(self):
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            self._doEffect(dispatcher)
+            state = dispatcher.getFunctionalState()
+            if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
+                self._doEffect(dispatcher)
+            else:
+                self._doSelect(dispatcher)
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
+            self._tutorial.refuse()
         return
 
     @process
+    def _doSelect(self, dispatcher):
+        result = yield dispatcher.select(TutorialPreQueueEntry())
+        if result:
+            self._doEffect(dispatcher)
+
+    @process
     def _doEffect(self, dispatcher):
-        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL, True)
+        result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.QueueCtx())
         if not result:
             self._tutorial.refuse()
-            return
-        else:
-            enqueue = getattr(BigWorld.player(), 'enqueueTutorial', None)
-            if enqueue is None:
-                LOG_ERROR('BigWorld.player().enqueueTutorial not found')
-                return
-            activate = self._tutorial.getFlags().activateFlag
-            flagID = self._effect.getTargetID()
-            refuse = self._tutorial.refuse
-
-            def enterToQueue(result):
-                if result:
-                    activate(flagID)
-                    enqueue()
-                else:
-                    refuse()
-
-            captcha = game_control.g_instance.captcha
-            if captcha.isCaptchaRequired():
-                captcha.showCaptcha(enterToQueue)
-            else:
-                enterToQueue(True)
-            return
 
 
 class FunctionalExitQueueEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        dequeue = getattr(BigWorld.player(), 'dequeueTutorial', None)
-        if dequeue is not None and callable(dequeue):
-            self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
-            dequeue()
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            self._doEffect(dispatcher)
         else:
-            LOG_ERROR('BigWorld.player().dequeueTutorial not found')
+            LOG_WARNING('Prebattle dispatcher is not defined')
+        self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
         return
+
+    @process
+    def _doEffect(self, dispatcher):
+        result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.DequeueCtx())
+        if result:
+            self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
 
 
 class ContentChangedEvent(TutorialProxyHolder):
@@ -168,7 +162,13 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
     def triggerEffect(self):
         descriptor = getBattleDescriptor()
         if descriptor is not None and descriptor.areAllBonusesReceived(self._bonuses.getCompleted()):
-            self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL).write()
+            self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
+        self._cache.setAfterBattle(False).write()
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            dispatcher.doLeaveAction(pre_queue_ctx.LeavePreQueueCtx())
+        else:
+            LOG_WARNING('Prebattle dispatcher is not defined')
         self._tutorial.refuse()
         return
 

@@ -6,8 +6,6 @@ from DossierRequester import DossierRequester
 from ItemsRequester import ItemsRequester, REQ_CRITERIA
 from TokenRequester import TokenRequester
 from TokenResponse import TokenResponse
-from deprecated.VehicleItemsRequester import VehicleItemsRequester
-from deprecated.StatsRequester import StatsRequester as DeprecatedStatsRequester
 from abstract import RequestCtx
 from abstract import DataRequestCtx
 from abstract import RequestsByIDProcessor
@@ -20,8 +18,6 @@ __all__ = ['ShopRequester',
  'TokenRequester',
  'TokenResponse',
  'REQ_CRITERIA',
- 'DeprecatedStatsRequester',
- 'VehicleItemsRequester',
  'RequestCtx',
  'DataRequestCtx',
  'RequestsByIDProcessor',

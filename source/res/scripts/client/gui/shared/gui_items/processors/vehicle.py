@@ -10,7 +10,7 @@ from shared_utils import findFirst
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.utils.gui_items import formatPrice
+from gui.shared.formatters import formatPrice
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):

@@ -1,0 +1,182 @@
+<04_himmelsdorf.xml>
+  <name>	#arenas:04_himmelsdorf/name	</name>
+  <description>	#arenas:04_himmelsdorf/description	</description>
+  <geometry>	spaces/04_himmelsdorf	</geometry>
+  <boundingBox>
+    <bottomLeft>	-300.0 -300.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/04_himmelsdorf/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <loadingMusic>	/music/intro/Intro_Himmelsdorf	</loadingMusic>
+  <ambientSound>	/wind/wind/wind_spring_01	</ambientSound>
+  <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	2.499999 -252.600143	</position1>
+        </team1>
+        <team2>
+          <position1>	69.099930 348.999969	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	361.126 349.303	</position>
+        </team1>
+        <team2>
+          <position>	355.252 -243.459	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-223.100128 64.999931	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-123.776 356.640	</position>
+        </team1>
+        <team2>
+          <position>	374.261 -241.209	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-214.138672 18.497744	</position1>
+          <position2>	103.040794 335.699524	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+    <fallout4>
+      <winPoints>	RESOURCE_10x10_FULL	</winPoints>
+      <maxPlayersInTeam>	10	</maxPlayersInTeam>
+      <roundLength>	900	</roundLength>
+      <repairPoint>
+        <cooldown>	300.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-99.452911 1.100063 47.415936	</position>
+        <guid>	A82CB065.49D1ACDA.EEF43B97.31961BA7	</guid>
+      </repairPoint>
+      <resourcePoint>
+        <position>	-224.839020 1.100058 52.842987	</position>
+        <radius>	20.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	15	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	4C830F81.4B75DA6C.DE07D6A0.0CCFBD10	</guid>
+      </resourcePoint>
+      <resourcePoint>
+        <position>	39.342823 1.601001 41.364395	</position>
+        <radius>	20.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	15	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	CA4EAF49.445600D8.4E45E48B.0D96DB69	</guid>
+      </resourcePoint>
+      <resourcePoint>
+        <position>	177.862930 1.100062 31.429993	</position>
+        <radius>	11.000000	</radius>
+        <startDelay>	0.000000	</startDelay>
+        <cooldown>	100.000000	</cooldown>
+        <damageLockTime>	10.000000	</damageLockTime>
+        <amount>	15	</amount>
+        <absorptionSpeed>	1.000000	</absorptionSpeed>
+        <reuseCount>	100	</reuseCount>
+        <team>	0	</team>
+        <guid>	FE23D48C.4CF47F45.311F2DB0.C8C879C1	</guid>
+      </resourcePoint>
+    </fallout4>
+    <fallout6>
+      <winPoints>	MANY_FLAGS_10x10	</winPoints>
+      <maxPlayersInTeam>	10	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team2>
+          <position1>	2.499999 -252.600189	</position1>
+        </team2>
+        <team1>
+          <position1>	69.099907 348.999969	</position1>
+        </team1>
+      </teamSpawnPoints>
+      <flagSpawnPoint>
+        <position>	70.677963 1.120027 319.895996	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	8.527996 1.099993 320.174988	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	40.179985 1.089991 -215.783035	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagSpawnPoint>
+        <position>	-35.567001 1.089976 -215.820038	</position>
+        <team>	0	</team>
+        <flagType>	0	</flagType>
+      </flagSpawnPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	229.234985 1.087483 -243.160034	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	D829F5F4.4A26D7A0.9856F0B7.6C45331B	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	1	</team>
+        <position>	-178.850983 1.087475 -197.173996	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	9610862E.42E6EC84.5A7B0FAF.C75EFE0F	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	239.859985 1.137548 290.691956	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	B1B1C7C3.43F56A39.DF41D39E.651108D3	</guid>
+      </flagAbsorptionPoint>
+      <flagAbsorptionPoint>
+        <team>	2	</team>
+        <position>	-124.770012 1.087513 341.667999	</position>
+        <radius>	15.000000	</radius>
+        <applyOverlay>	false	</applyOverlay>
+        <guid>	AB93BBE1.4FE29B36.52D31B87.7F4633A1	</guid>
+      </flagAbsorptionPoint>
+      <repairPoint>
+        <cooldown>	120.000000	</cooldown>
+        <repairTime>	5.000000	</repairTime>
+        <radius>	15.000000	</radius>
+        <repairFlags>	127	</repairFlags>
+        <position>	-99.452995 1.100058 47.415985	</position>
+        <guid>	96725E9A.4A11C1B3.74B376A2.6A3D5D95	</guid>
+      </repairPoint>
+    </fallout6>
+  </gameplayTypes>
+</04_himmelsdorf.xml>

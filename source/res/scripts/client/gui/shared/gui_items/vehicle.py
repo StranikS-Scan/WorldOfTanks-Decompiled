@@ -5,8 +5,9 @@ from operator import itemgetter
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from constants import WIN_XP_FACTOR_MODE
+from gui.prb_control import prb_getters
 from shared_utils import findFirst, CONST_CONTAINER
-from gui import prb_control, makeHtmlString
+from gui import makeHtmlString
 from gui.shared.economics import calcRentPackages, getActionPrc
 from helpers import i18n, time_utils
 from items import vehicles, tankmen, getTypeInfoByName
@@ -16,7 +17,6 @@ from gui.shared.gui_items import CLAN_LOCK, HasStrCD, FittingItem, GUI_ITEM_TYPE
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleChassis, VehicleEngine, VehicleRadio, VehicleFuelTank, VehicleTurret, VehicleGun
 from gui.shared.gui_items.artefacts import Equipment, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.utils.gui_items import findVehicleArmorMinMax
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 
 class VEHICLE_CLASS_NAME(CONST_CONTAINER):
@@ -91,6 +91,8 @@ class Vehicle(FittingItem, HasStrCD):
         FALLOUT_MAX = 'fallout_max'
         FALLOUT_REQUIRED = 'fallout_required'
         FALLOUT_BROKEN = 'fallout_broken'
+        UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
+        CUSTOM = (NOT_SUITABLE, UNSUITABLE_TO_QUEUE)
 
     CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED,
      VEHICLE_STATE.CREW_NOT_FULL,
@@ -100,7 +102,8 @@ class Vehicle(FittingItem, HasStrCD):
      VEHICLE_STATE.FALLOUT_MAX,
      VEHICLE_STATE.FALLOUT_REQUIRED,
      VEHICLE_STATE.FALLOUT_BROKEN,
-     VEHICLE_STATE.FALLOUT_ONLY]
+     VEHICLE_STATE.FALLOUT_ONLY,
+     VEHICLE_STATE.UNSUITABLE_TO_QUEUE]
     GROUP_STATES = [VEHICLE_STATE.GROUP_IS_NOT_READY,
      VEHICLE_STATE.FALLOUT_MIN,
      VEHICLE_STATE.FALLOUT_MAX,
@@ -111,6 +114,7 @@ class Vehicle(FittingItem, HasStrCD):
         CRITICAL = 'critical'
         INFO = 'info'
         WARNING = 'warning'
+        RENTED = 'rented'
 
     def __init__(self, strCompactDescr = None, inventoryID = -1, typeCompDescr = None, proxy = None):
         if strCompactDescr is not None:
@@ -133,7 +137,7 @@ class Vehicle(FittingItem, HasStrCD):
         self.hasRentPackages = False
         self.isDisabledForBuy = False
         invData = dict()
-        if proxy is not None and proxy.isSynced():
+        if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced():
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
             if invDataTmp is not None:
                 invData = invDataTmp
@@ -152,7 +156,7 @@ class Vehicle(FittingItem, HasStrCD):
         if data is not None:
             self.rentInfo = RentalInfoProvider(isRented=True, *data)
         self.settings = invData.get('settings', 0)
-        self.lock = invData.get('lock', 0)
+        self.lock = invData.get('lock', (0, 0))
         self.repairCost, self.health = invData.get('repair', (0, 0))
         self.gun = VehicleGun(vehDescr.gun['compactDescr'], proxy, vehDescr.gun)
         self.turret = VehicleTurret(vehDescr.turret['compactDescr'], proxy, vehDescr.turret)
@@ -177,6 +181,7 @@ class Vehicle(FittingItem, HasStrCD):
         self.crew = self._buildCrew(crewList, proxy)
         self.lastCrew = invData.get('lastCrew')
         self.rentPackages = calcRentPackages(self, proxy)
+        self.__customState = ''
         return
 
     @property
@@ -425,7 +430,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells)) >= self.ammoMaxSize
+        return sum((s.count for s in self.shells)) >= self.ammoMaxSize * self.NOT_FULL_AMMO_MULTIPLIER
 
     @property
     def hasShells(self):
@@ -444,7 +449,6 @@ class Vehicle(FittingItem, HasStrCD):
         return Vehicle.VEHICLE_STATE.UNDAMAGED
 
     def getState(self, isCurrnentPlayer = True):
-        from gui.game_control import g_instance
         ms = self.modelState
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
@@ -452,7 +456,7 @@ class Vehicle(FittingItem, HasStrCD):
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER
             if self.isPremiumIGR:
                 ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER
-        elif self.isPremiumIGR and g_instance.igr.getRoomType() != constants.IGR_TYPE.PREMIUM:
+        elif self.isDisabledInPremIGR:
             ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
         elif self.isInPrebattle:
             ms = Vehicle.VEHICLE_STATE.IN_PREBATTLE
@@ -461,7 +465,19 @@ class Vehicle(FittingItem, HasStrCD):
         elif self.isDisabledInRoaming:
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
         ms = self.__checkUndamagedState(ms, isCurrnentPlayer)
+        if ms in Vehicle.CAN_SELL_STATES and self.__customState:
+            ms = self.__customState
         return (ms, self.__getStateLevel(ms))
+
+    def setCustomState(self, state):
+        raise state in Vehicle.VEHICLE_STATE.CUSTOM or AssertionError('State is not valid')
+        self.__customState = state
+
+    def getCustomState(self):
+        return self.__customState
+
+    def clearCustomState(self):
+        self.__customState = ''
 
     def __checkUndamagedState(self, state, isCurrnentPlayer = True):
         if state == Vehicle.VEHICLE_STATE.UNDAMAGED and isCurrnentPlayer:
@@ -474,7 +490,7 @@ class Vehicle(FittingItem, HasStrCD):
                 return groupState
             if not self.isAmmoFull:
                 return Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
-            if self.isFalloutOnly():
+            if self.isFalloutOnly() and not self.__isFalloutEnabled():
                 return Vehicle.VEHICLE_STATE.FALLOUT_ONLY
         return state
 
@@ -484,17 +500,17 @@ class Vehicle(FittingItem, HasStrCD):
         return g_eventsCache.getEventVehicles()
 
     @classmethod
-    def __getFalloutSelectedVehicles(cls):
+    def __getFalloutSelectedVehInvIDs(cls):
         from gui.game_control import getFalloutCtrl
         if Vehicle.__isFalloutEnabled():
-            return getFalloutCtrl().getSelectedVehicles()
+            return getFalloutCtrl().getSelectedSlots()
         return ()
 
     @classmethod
-    def __getFalloutAvailableVehicles(cls):
+    def __getFalloutAvailableVehIDs(cls):
         from gui.game_control import getFalloutCtrl
         if Vehicle.__isFalloutEnabled():
-            return getFalloutCtrl().getConfig().getAllowedVehicles()
+            return getFalloutCtrl().getConfig().allowedVehicles
         return ()
 
     @classmethod
@@ -503,28 +519,27 @@ class Vehicle(FittingItem, HasStrCD):
         return getFalloutCtrl().isSelected()
 
     def isFalloutOnly(self):
-        return self.isOnlyForEventBattles and not self.__isFalloutEnabled()
+        return self.isOnlyForEventBattles
 
     def isGroupReady(self):
         from gui.game_control import getFalloutCtrl
         falloutCtrl = getFalloutCtrl()
         if not falloutCtrl.isSelected():
             return (True, '')
-        else:
-            selectedVehicles = falloutCtrl.getSelectedVehicles()
-            selectedVehiclesCount = len(selectedVehicles)
-            config = falloutCtrl.getConfig()
-            if findFirst(lambda v: v.level == config.vehicleLevelRequired, selectedVehicles) is None:
-                return (False, Vehicle.VEHICLE_STATE.FALLOUT_REQUIRED)
-            if selectedVehiclesCount < config.minVehiclesPerPlayer:
-                return (False, Vehicle.VEHICLE_STATE.FALLOUT_MIN)
-            if selectedVehiclesCount > config.maxVehiclesPerPlayer:
-                return (False, Vehicle.VEHICLE_STATE.FALLOUT_MAX)
-            for v in falloutCtrl.getSelectedVehicles():
-                if v.isBroken or not v.isCrewFull or v.isInBattle or v.rentalIsOver:
-                    return (False, Vehicle.VEHICLE_STATE.FALLOUT_BROKEN)
+        selectedVehicles = falloutCtrl.getSelectedVehicles()
+        selectedVehiclesCount = len(selectedVehicles)
+        config = falloutCtrl.getConfig()
+        if falloutCtrl.mustSelectRequiredVehicle():
+            return (False, Vehicle.VEHICLE_STATE.FALLOUT_REQUIRED)
+        if selectedVehiclesCount < config.minVehiclesPerPlayer:
+            return (False, Vehicle.VEHICLE_STATE.FALLOUT_MIN)
+        if selectedVehiclesCount > config.maxVehiclesPerPlayer:
+            return (False, Vehicle.VEHICLE_STATE.FALLOUT_MAX)
+        for v in selectedVehicles:
+            if v.isBroken or not v.isCrewFull or v.isInBattle or v.rentalIsOver or v.isDisabledInPremIGR:
+                return (False, Vehicle.VEHICLE_STATE.FALLOUT_BROKEN)
 
-            return (True, '')
+        return (True, '')
 
     def __getStateLevel(self, state):
         if state in (Vehicle.VEHICLE_STATE.CREW_NOT_FULL,
@@ -534,9 +549,10 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER,
-         Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS):
+         Vehicle.VEHICLE_STATE.AMMO_NOT_FULL_EVENTS,
+         Vehicle.VEHICLE_STATE.NOT_SUITABLE):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-        if state in [Vehicle.VEHICLE_STATE.UNDAMAGED]:
+        if state in (Vehicle.VEHICLE_STATE.UNDAMAGED,):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
         return Vehicle.VEHICLE_STATE_LEVEL.WARNING
 
@@ -570,11 +586,11 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isFalloutSelected(self):
-        return self in Vehicle.__getFalloutSelectedVehicles()
+        return self.invID in self.__getFalloutSelectedVehInvIDs()
 
     @property
     def isFalloutAvailable(self):
-        return self in Vehicle.__getFalloutAvailableVehicles()
+        return self.intCD in self.__getFalloutAvailableVehIDs()
 
     @property
     def isDisabledInRoaming(self):
@@ -586,8 +602,8 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isDisabledInPremIGR(self):
-        st, _ = self.getState()
-        return st == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
+        from gui.game_control import g_instance
+        return self.isPremiumIGR and g_instance.igr.getRoomType() != constants.IGR_TYPE.PREMIUM
 
     @property
     def name(self):
@@ -633,23 +649,31 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isLocked(self):
-        return self.lock != LOCK_REASON.NONE
+        return self.lock[0] != LOCK_REASON.NONE
 
     @property
     def isInBattle(self):
-        return self.lock == LOCK_REASON.ON_ARENA
+        return self.lock[0] == LOCK_REASON.ON_ARENA
 
     @property
     def isInPrebattle(self):
-        return self.lock in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
+        return self.lock[0] in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
 
     @property
     def isAwaitingBattle(self):
-        return self.lock == LOCK_REASON.IN_QUEUE
+        return self.lock[0] == LOCK_REASON.IN_QUEUE
 
     @property
     def isInUnit(self):
-        return self.lock in (LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
+        return self.lock[0] in (LOCK_REASON.UNIT, LOCK_REASON.UNIT_CLUB)
+
+    @property
+    def typeOfLockingArena(self):
+        if not self.isLocked:
+            return None
+        else:
+            return self.lock[1]
+            return None
 
     @property
     def isBroken(self):
@@ -669,9 +693,9 @@ class Vehicle(FittingItem, HasStrCD):
         return _checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     def hasLockMode(self):
-        isBS = prb_control.isBattleSession()
+        isBS = prb_getters.isBattleSession()
         if isBS:
-            isBSVehicleLockMode = bool(prb_control.getPrebattleSettings()[PREBATTLE_SETTING_NAME.VEHICLE_LOCK_MODE])
+            isBSVehicleLockMode = bool(prb_getters.getPrebattleSettings()[PREBATTLE_SETTING_NAME.VEHICLE_LOCK_MODE])
             if isBSVehicleLockMode and self.clanLock > 0:
                 return True
         return False
@@ -679,7 +703,7 @@ class Vehicle(FittingItem, HasStrCD):
     def isReadyToPrebattle(self, checkForRent = True):
         if checkForRent and self.rentalIsOver:
             return False
-        if self.isFalloutOnly():
+        if self.isFalloutOnly() and not self.__isFalloutEnabled():
             return False
         if not self.isGroupReady()[0]:
             return False
@@ -692,7 +716,7 @@ class Vehicle(FittingItem, HasStrCD):
     def isReadyToFight(self):
         if self.rentalIsOver:
             return False
-        if self.isFalloutOnly():
+        if self.isFalloutOnly() and not self.__isFalloutEnabled():
             return False
         if not self.isGroupReady()[0]:
             return False
@@ -811,7 +835,7 @@ class Vehicle(FittingItem, HasStrCD):
             return self.descriptor.type.id == other.descriptor.type.id
 
     def __repr__(self):
-        return 'Vehicle<id:%d, intCD:%d, nation:%d, lock:%d>' % (self.invID,
+        return 'Vehicle<id:%d, intCD:%d, nation:%d, lock:%s>' % (self.invID,
          self.intCD,
          self.nationID,
          self.lock)
@@ -902,3 +926,25 @@ def _checkForTags(vTags, tags):
     if not hasattr(tags, '__iter__'):
         tags = (tags,)
     return bool(vTags & frozenset(tags))
+
+
+def findVehicleArmorMinMax(vd):
+
+    def findComponentArmorMinMax(armor, minMax):
+        for value in armor:
+            if value != 0:
+                if minMax is None:
+                    minMax = [value, value]
+                else:
+                    minMax[0] = min(minMax[0], value)
+                    minMax[1] = max(minMax[1], value)
+
+        return minMax
+
+    minMax = None
+    minMax = findComponentArmorMinMax(vd.hull['primaryArmor'], minMax)
+    for turrets in vd.type.turrets:
+        for turret in turrets:
+            minMax = findComponentArmorMinMax(turret['primaryArmor'], minMax)
+
+    return minMax

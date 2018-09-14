@@ -24,6 +24,8 @@ class _Listener(object):
 
     def __init__(self):
         super(_Listener, self).__init__()
+        self._page = None
+        return
 
     def __del__(self):
         LOG_DEBUG('Listener deleted:', self.__class__.__name__)

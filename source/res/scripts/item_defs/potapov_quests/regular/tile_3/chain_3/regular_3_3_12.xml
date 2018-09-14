@@ -1,0 +1,46 @@
+<regular_3_3_12.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_12_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <fireStarted></fireStarted>
+              <greaterOrEqual>	2	</greaterOrEqual>
+              <eventCount></eventCount>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_12_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <fireStarted></fireStarted>
+              <greaterOrEqual>	2	</greaterOrEqual>
+              <eventCount></eventCount>
+            </vehicleDamage>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_3_3_12.xml>

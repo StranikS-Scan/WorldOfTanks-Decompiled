@@ -11,10 +11,19 @@ if IS_CLIENT:
 elif IS_WEB:
     from web_stubs import *
 _POTAPOV_QUEST_XML_PATH = ITEM_DEFS_PATH + 'potapov_quests/'
-_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(VEHICLE_CLASS_TAGS)
+_FALLOUT_BATTLE_TAGS = frozenset(('classic', 'multiteam'))
+_ALLOWED_TAG_NAMES = ('initial', 'final') + tuple(_FALLOUT_BATTLE_TAGS) + tuple(VEHICLE_CLASS_TAGS)
 g_cache = None
 g_tileCache = None
 g_seasonCache = None
+
+class PQ_BRANCH:
+    REGULAR = 0
+    FALLOUT = 1
+    NAME_TO_TYPE = {'regular': REGULAR,
+     'fallout': FALLOUT}
+    TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
+
 
 class PQ_STATE:
     NONE = 0
@@ -182,6 +191,9 @@ class PQCache(object):
             raise Exception('Invalid potapov quest name (%s)' % (uniqueQuestID,))
         return self.__questUniqueIDToPotapovQuestID[uniqueQuestID]
 
+    def branchByPotapovQuestID(self, potapovQuestID):
+        return PQ_BRANCH.TYPE_TO_NAME[self.questByPotapovQuestID(potapovQuestID).branch]
+
     def __iter__(self):
         return self.__questUniqueIDToPotapovQuestID.iteritems()
 
@@ -206,16 +218,17 @@ class PQCache(object):
             potapovQuestID = _xml.readInt(ctx, qsection, 'id', 0, 1023)
             if potapovQuestID in idToQuest:
                 _xml.raiseWrongXml(ctx, 'id', 'is not unique')
-            _, tileID, chainID, internalID = splitted
+            questBranchName, tileID, chainID, internalID = splitted
             tileInfo = g_tileCache.getTileInfo(int(tileID))
             if 1 <= chainID <= tileInfo['chainsCount']:
                 _xml.raiseWrongXml(ctx, '', 'quest chainID must be between 1 and %s' % tileInfo['chainsCount'])
             if 1 <= internalID <= tileInfo['questsInChain']:
-                _xml.raiseWrongXml(ctx, '', 'quest internalID must be between 1 and 15')
+                _xml.raiseWrongXml(ctx, '', 'quest internalID must be between 1 and %s' % tileInfo['chainsCount'])
             minLevel = _xml.readInt(ctx, qsection, 'minLevel', 1, 10)
             maxLevel = _xml.readInt(ctx, qsection, 'maxLevel', minLevel, 10)
             basicInfo = {'name': qname,
              'id': potapovQuestID,
+             'branch': PQ_BRANCH.NAME_TO_TYPE[questBranchName],
              'tileID': int(tileID),
              'chainID': int(chainID),
              'internalID': int(internalID),
@@ -227,9 +240,13 @@ class PQCache(object):
                 raise Exception, 'Unexpected value for rewardByDemand'
             basicInfo['rewardByDemand'] = rewardByDemand
             tags = _readTags(ctx, qsection, 'tags')
-            if 0 == len(tags & VEHICLE_CLASS_TAGS):
-                _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle class tag is not specified')
             basicInfo['tags'] = tags
+            if questBranchName == 'regular':
+                if 0 == len(tags & VEHICLE_CLASS_TAGS):
+                    _xml.raiseWrongXml(ctx, 'tags', 'quest vehicle class is not specified')
+            if questBranchName == 'fallout':
+                if 0 == len(tags & _FALLOUT_BATTLE_TAGS):
+                    _xml.raiseWrongXml(ctx, 'tags', 'quest fallout type is not specified')
             if IS_CLIENT or IS_WEB:
                 basicInfo['userString'] = i18n.makeString(qsection.readString('userString'))
                 basicInfo['description'] = i18n.makeString(qsection.readString('description'))
@@ -237,6 +254,8 @@ class PQCache(object):
                 basicInfo['condition_main'] = i18n.makeString(qsection.readString('condition_main'))
                 basicInfo['condition_add'] = i18n.makeString(qsection.readString('condition_add'))
             questPath = ''.join([_POTAPOV_QUEST_XML_PATH,
+             '/',
+             questBranchName,
              '/tile_',
              tileID,
              '/chain_',
@@ -283,7 +302,7 @@ class PQCache(object):
 
 
 class PQType(object):
-    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'vehClasses', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'mainQuestID', 'addQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'description', 'advice', 'conditionMain', 'conditionAdd', 'minLevel', 'maxLevel', 'rewardByDemand')
+    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'vehClasses', 'falloutTypes', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'mainQuestID', 'addQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'description', 'advice', 'conditionMain', 'conditionAdd', 'minLevel', 'maxLevel', 'rewardByDemand')
 
     def __init__(self, basicInfo):
         self.id = basicInfo['id']
@@ -293,9 +312,13 @@ class PQType(object):
         vehClasses = list(tags & VEHICLE_CLASS_TAGS)
         vehClasses.sort()
         self.vehClasses = tuple(vehClasses)
+        falloutTypes = list(tags & _FALLOUT_BATTLE_TAGS)
+        falloutTypes.sort()
+        self.falloutTypes = tuple(falloutTypes)
         self.minLevel = basicInfo['minLevel']
         self.maxLevel = basicInfo['maxLevel']
         self.rewardByDemand = basicInfo['rewardByDemand']
+        self.branch = basicInfo['branch']
         self.tileID = basicInfo['tileID']
         self.chainID = basicInfo['chainID']
         self.internalID = basicInfo['internalID']
@@ -310,6 +333,13 @@ class PQType(object):
             self.advice = basicInfo['advice']
             self.conditionMain = basicInfo['condition_main']
             self.conditionAdd = basicInfo['condition_add']
+
+    def getMajorTag(self):
+        if self.branch == PQ_BRANCH.REGULAR:
+            return self.vehClasses[0]
+        if self.branch == PQ_BRANCH.FALLOUT:
+            return self.falloutTypes[0]
+        raise Exception, 'wrong potapov quest branch: %i' % self.branch
 
     def maySelectQuest(self, unlockedQuests):
         return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0

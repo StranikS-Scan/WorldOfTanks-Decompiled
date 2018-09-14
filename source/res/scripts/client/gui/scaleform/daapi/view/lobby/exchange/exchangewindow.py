@@ -15,7 +15,9 @@ class ExchangeWindow(ExchangeWindowMeta):
         stats = g_itemsCache.items.stats
         self.as_setPrimaryCurrencyS(stats.actualGold)
         self.as_setSecondaryCurrencyS(stats.actualCredits)
-        self.as_exchangeRateS(g_itemsCache.items.shop.defaults.exchangeRate, g_itemsCache.items.shop.exchangeRate)
+        self.as_exchangeRateS({'value': g_itemsCache.items.shop.defaults.exchangeRate,
+         'actionValue': g_itemsCache.items.shop.exchangeRate,
+         'actionMode': True})
         self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
 
     @decorators.process('transferMoney')
@@ -33,7 +35,9 @@ class ExchangeWindow(ExchangeWindowMeta):
         g_itemsCache.onSyncCompleted += self.__setExchangeRateCallBack
 
     def __setExchangeRateCallBack(self, *args):
-        self.as_exchangeRateS(g_itemsCache.items.shop.defaults.exchangeRate, g_itemsCache.items.shop.exchangeRate)
+        self.as_exchangeRateS({'value': g_itemsCache.items.shop.defaults.exchangeRate,
+         'actionValue': g_itemsCache.items.shop.exchangeRate,
+         'actionMode': True})
 
     def __setCreditsCallBack(self, credits):
         self.as_setSecondaryCurrencyS(credits)

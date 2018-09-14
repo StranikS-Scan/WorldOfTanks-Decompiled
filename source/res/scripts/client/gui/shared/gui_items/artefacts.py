@@ -36,6 +36,10 @@ class Equipment(VehicleArtefact):
         return (buyPrice[0] + buyPrice[1] * proxy.exchangeRateForShellsAndEqs, buyPrice[1])
 
     @property
+    def icon(self):
+        return '../maps/icons/artefact/%s.png' % super(Equipment, self).icon
+
+    @property
     def tags(self):
         return self.descriptor.tags
 
@@ -90,7 +94,7 @@ class Equipment(VehicleArtefact):
             return conflictEqs
 
     def getGUIEmblemID(self):
-        return self.name
+        return super(Equipment, self).icon
 
 
 class OptionalDevice(VehicleArtefact):

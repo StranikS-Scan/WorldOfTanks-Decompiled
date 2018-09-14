@@ -66,6 +66,6 @@ class BaseRallyRoomViewMeta(BaseRallyView):
         if self._isDAAPIInited():
             return self.flashObject.as_highlightSlots(slotsIdx)
 
-    def as_setVehiclesTitleS(self, value):
+    def as_setVehiclesTitleS(self, value, tooltip):
         if self._isDAAPIInited():
-            return self.flashObject.as_setVehiclesTitle(value)
+            return self.flashObject.as_setVehiclesTitle(value, tooltip)

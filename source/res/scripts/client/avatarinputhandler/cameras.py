@@ -11,6 +11,7 @@ class ImpulseReason:
     COLLISION = 4
     VEHICLE_EXPLOSION = 5
     PROJECTILE_HIT = 6
+    HE_EXPLOSION = 7
 
 
 class ICamera(object):

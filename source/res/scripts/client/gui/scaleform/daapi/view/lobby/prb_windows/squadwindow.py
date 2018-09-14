@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/SquadWindow.py
 from constants import PREBATTLE_TYPE
-from gui.prb_control.settings import FUNCTIONAL_EXIT
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.Scaleform.daapi.view.meta.SquadWindowMeta import SquadWindowMeta
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
@@ -22,7 +22,7 @@ class SquadWindow(SquadWindowMeta):
         return PREBATTLE_TYPE.SQUAD
 
     def onWindowClose(self):
-        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', funcExit=FUNCTIONAL_EXIT.NO_FUNC))
+        self.prbDispatcher.doLeaveAction(unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.UNDEFINED))
 
     def onWindowMinimize(self):
         self.destroy()

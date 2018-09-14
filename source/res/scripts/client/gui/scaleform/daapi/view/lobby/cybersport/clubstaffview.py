@@ -131,6 +131,11 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
         if club:
             self.as_updateStaffDataS(self.__packStaffData(club))
 
+    def onClubApplicantsChanged(self, applicants):
+        club = self.clubsCtrl.getClub(self._clubDbID)
+        if club:
+            self.as_setStaticHeaderDataS(self.__packStaticHeaderData(club))
+
     @process
     def assignOfficer(self, memberDbID, userName):
         isOk = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('staticFormation/staffView/promoteConfirmation', messageCtx={'userName': userName}))
@@ -267,7 +272,7 @@ class ClubStaffView(StaticFormationStaffViewMeta, UsersInfoHelper, ClubPage):
             lblStaffedText = ''
         return {'lblTitleText': text_styles.highTitle(CYBERSPORT.STATICFORMATION_STAFFVIEW_TITLE_TEXT),
          'lblDescriptionText': text_styles.standard(_ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_DESCRIPTION_OTHER_TEXT, clubName=club.getUserName())),
-         'btnRecruitmentText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTBTN_TEXT),
+         'btnRecruitmentText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_RECRUITMENTBTN_TEXT, count=len(club.getApplicants(onlyActive=True))),
          'btnRecruitmentTooltip': TOOLTIPS.STATICFORMATIONSTAFFVIEW_RECRUITMENTBTN,
          'btnInviteText': _ms(CYBERSPORT.STATICFORMATION_STAFFVIEW_INVITEBTN_TEXT),
          'btnRemoveText': btnDestroyText,

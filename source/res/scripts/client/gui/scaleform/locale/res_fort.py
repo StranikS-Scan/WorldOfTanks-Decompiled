@@ -130,5 +130,6 @@ class RES_FORT(object):
     MAPS_FORT_BUILDINGS_SMALL_WARSCHOOL_BUILDING_LEVEL2 = '../maps/fort/buildings/small/warSchool_building_level2.png'
     MAPS_FORT_BUILDINGS_SMALL_WARSCHOOL_BUILDING_LEVEL3 = '../maps/fort/buildings/small/warSchool_building_level3.png'
     MAPS_FORT_CHAMPIONROSTERINTRO = '../maps/fort/championRosterIntro.png'
+    MAPS_FORT_CLANPROFILEFORTBG = '../maps/fort/clanProfileFortBg.png'
     MAPS_FORT_FORTLANDSCAPE = '../maps/fort/fortLandscape.png'
     MAPS_FORT_PERIODDEFENCEWINDOW = '../maps/fort/periodDefenceWindow.png'

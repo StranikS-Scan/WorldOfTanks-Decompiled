@@ -1,0 +1,53 @@
+<regular_1_5_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isNotSpotted	</key>
+              <equal>	1	</equal>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	isNotSpotted	</key>
+              <equal>	1	</equal>
+            </results>
+            <isAlive></isAlive>
+            <vehicleKills>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_5_2.xml>

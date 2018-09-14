@@ -3,14 +3,14 @@ import time
 import weakref
 import BigWorld
 from PlayerEvents import g_playerEvents
-from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE
+from UnitBase import UNIT_ERROR, UNIT_SLOT
 from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
-from gui import prb_control, SystemMessages, game_control
+from gui import SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.prb_control import getClientUnitMgr, getClientUnitBrowser, getBattleID
+from gui.prb_control import prb_getters
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.formatters import messages
 from gui.prb_control.functional import interfaces
@@ -34,7 +34,7 @@ class UnitRequestProcessor(object):
         self.__functional = functional
 
     def init(self):
-        unitMgr = getClientUnitMgr()
+        unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitResponseReceived += self.unitMgr_onUnitResponseReceived
             unitMgr.onUnitErrorReceived += self.unitMgr_onUnitErrorReceived
@@ -42,7 +42,7 @@ class UnitRequestProcessor(object):
             LOG_ERROR('Unit manager is not defined')
 
     def fini(self):
-        unitMgr = getClientUnitMgr()
+        unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitResponseReceived -= self.unitMgr_onUnitResponseReceived
             unitMgr.onUnitErrorReceived -= self.unitMgr_onUnitErrorReceived
@@ -59,7 +59,7 @@ class UnitRequestProcessor(object):
             ctx.startProcessing()
 
     def doRawRequest(self, methodName, *args, **kwargs):
-        unitMgr = prb_control.getClientUnitMgr()
+        unitMgr = prb_getters.getClientUnitMgr()
         method = getattr(unitMgr, methodName)
         if callable(method):
             method(*args, **kwargs)
@@ -76,7 +76,7 @@ class UnitRequestProcessor(object):
                 listener.onUnitErrorReceived(errorCode)
 
     def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
-        unitMgr = prb_control.getClientUnitMgr()
+        unitMgr = prb_getters.getClientUnitMgr()
         result = False
         method = getattr(unitMgr, methodName)
         if callable(method):
@@ -111,7 +111,7 @@ class UnitRequestProcessor(object):
 
 
 def _getUnitFromBrowser(unitIdx):
-    unitBrowser = getClientUnitBrowser()
+    unitBrowser = prb_getters.getClientUnitBrowser()
     if unitBrowser:
         results = unitBrowser.results
     else:
@@ -181,7 +181,7 @@ class UnitAutoSearchHandler(object):
         self.__lastErrorCode = UNIT_ERROR.OK
 
     def init(self):
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             browser.onSearchSuccessReceived += self.unitBrowser_onSearchSuccessReceived
             browser.onErrorReceived += self.unitBrowser_onErrorReceived
@@ -192,7 +192,7 @@ class UnitAutoSearchHandler(object):
         g_playerEvents.onEnqueuedUnitAssembler += self.pe_onEnqueuedUnitAssembler
 
     def fini(self):
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             browser.onSearchSuccessReceived -= self.unitBrowser_onSearchSuccessReceived
             browser.onErrorReceived -= self.unitBrowser_onErrorReceived
@@ -206,14 +206,14 @@ class UnitAutoSearchHandler(object):
 
     def initEvents(self, listener):
         if self.__hasResult:
-            browser = getClientUnitBrowser()
+            browser = prb_getters.getClientUnitBrowser()
             if browser:
                 acceptDelta = self.getAcceptDelta(browser._acceptDeadlineUTC)
                 if acceptDelta > 0:
                     LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta)
                     listener.onUnitAutoSearchSuccess(acceptDelta)
         elif self.__isInSearch:
-            g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
+            g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getEntityType(), True)
             listener.onUnitAutoSearchStarted(self.getTimeLeftInSearch())
 
     def isInSearch(self):
@@ -236,7 +236,7 @@ class UnitAutoSearchHandler(object):
             LOG_ERROR('Auto search already started.')
             return False
         else:
-            browser = getClientUnitBrowser()
+            browser = prb_getters.getClientUnitBrowser()
             if browser:
                 if vTypeDescrs is not None:
                     self.__vTypeDescrs = vTypeDescrs
@@ -252,7 +252,7 @@ class UnitAutoSearchHandler(object):
             LOG_DEBUG('Auto search did not start. Exits form search forced.')
             self.__exitFromQueue()
             return True
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             self.__lastErrorCode = UNIT_ERROR.OK
             browser.stopSearch()
@@ -265,7 +265,7 @@ class UnitAutoSearchHandler(object):
             LOG_ERROR('First, sends request for search.')
             return False
         else:
-            browser = getClientUnitBrowser()
+            browser = prb_getters.getClientUnitBrowser()
             if browser:
                 self.__lastErrorCode = UNIT_ERROR.OK
                 browser.acceptSearch()
@@ -278,7 +278,7 @@ class UnitAutoSearchHandler(object):
             LOG_ERROR('First, sends request for search.')
             return False
         else:
-            browser = getClientUnitBrowser()
+            browser = prb_getters.getClientUnitBrowser()
             if browser:
                 self.__lastErrorCode = UNIT_ERROR.OK
                 browser.declineSearch()
@@ -296,21 +296,21 @@ class UnitAutoSearchHandler(object):
     def pe_onEnqueuedUnitAssembler(self):
         self.__isInSearch = True
         self.__startSearchTime = BigWorld.time()
-        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), True)
+        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getEntityType(), True)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchStarted(0)
         else:
-            g_eventDispatcher.showUnitWindow(self.__functional.getPrbType())
+            g_eventDispatcher.showUnitWindow(self.__functional.getEntityType())
 
     def unitBrowser_onSearchSuccessReceived(self, unitMgrID, acceptDeadlineUTC):
         self.__hasResult = True
         acceptDelta = self.getAcceptDelta(acceptDeadlineUTC)
         LOG_DEBUG('onUnitAutoSearchSuccess', acceptDelta, acceptDeadlineUTC)
-        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getPrbType(), False)
+        g_eventDispatcher.setUnitProgressInCarousel(self.__functional.getEntityType(), False)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchSuccess(acceptDelta)
         else:
-            g_eventDispatcher.showUnitWindow(self.__functional.getPrbType())
+            g_eventDispatcher.showUnitWindow(self.__functional.getEntityType())
 
     def unitBrowser_onErrorReceived(self, errorCode, _):
         self.__isInSearch = False
@@ -324,7 +324,7 @@ class UnitAutoSearchHandler(object):
         self.__lastErrorCode = UNIT_ERROR.OK
         self.__hasResult = False
         self.__startSearchTime = 0
-        prbType = self.__functional.getPrbType()
+        prbType = self.__functional.getEntityType()
         g_eventDispatcher.setUnitProgressInCarousel(prbType, False)
         for listener in self.__functional.getListenersIterator():
             listener.onUnitAutoSearchFinished()
@@ -405,7 +405,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
         if self.__isSubscribed:
             return
         self.__isSubscribed = True
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             self.__cooldown.process(REQUEST_TYPE.UNITS_LIST)
             self.__handlers = {REQUEST_TYPE.UNITS_RECENTER: self.__recenter,
@@ -420,7 +420,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
 
     def unsubscribe(self):
         self.__handlers.clear()
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             if self.__isSubscribed:
                 browser.unsubscribe()
@@ -443,7 +443,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
             return
         if self.__cooldown.isInProcess(REQUEST_TYPE.UNITS_LIST):
             self.__cooldown.fireEvent(REQUEST_TYPE.UNITS_LIST)
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             self.__unitBrowser_onUnitsListReceived(browser.results)
         return
@@ -460,7 +460,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
         LOG_DEBUG('Request list of units', kwargs)
         self.__cooldown.process(REQUEST_TYPE.UNITS_LIST)
         self.__cache.clear()
-        browser = getClientUnitBrowser()
+        browser = prb_getters.getClientUnitBrowser()
         if browser:
             if 'req' in kwargs:
                 req = kwargs['req']
@@ -575,12 +575,12 @@ class FortBattlesScheduler(UnitScheduler, FortListener):
             self.stopNotification()
 
     def onFortBattleChanged(self, cache, item, battleItem):
-        if getBattleID() == battleItem.getID():
+        if prb_getters.getBattleID() == battleItem.getID():
             self.startNotification()
 
     def _getFortBattleTimer(self):
         if self.fortState.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
-            fortBattle = self.fortCtrl.getFort().getBattle(getBattleID())
+            fortBattle = self.fortCtrl.getFort().getBattle(prb_getters.getBattleID())
             if fortBattle is not None:
                 return fortBattle.getRoundStartTimeLeft()
         return 0
@@ -588,7 +588,7 @@ class FortBattlesScheduler(UnitScheduler, FortListener):
     def _showWindow(self):
         pInfo = self._unitFunc.getPlayerInfo()
         if pInfo.isInSlot and not pInfo.isReady:
-            g_eventDispatcher.showUnitWindow(self._unitFunc.getPrbType())
+            g_eventDispatcher.showUnitWindow(self._unitFunc.getEntityType())
 
 
 class SortiesScheduler(UnitScheduler, FortListener):
@@ -631,7 +631,7 @@ class SortiesScheduler(UnitScheduler, FortListener):
 
 
 def createUnitScheduler(unit):
-    unitPrbtype = unit.getPrbType()
+    unitPrbtype = unit.getEntityType()
     if unitPrbtype == PREBATTLE_TYPE.FORT_BATTLE:
         return FortBattlesScheduler(unit)
     if unitPrbtype == PREBATTLE_TYPE.SORTIE:

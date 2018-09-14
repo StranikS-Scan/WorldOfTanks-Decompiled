@@ -28,7 +28,9 @@ class QuestsControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_WINDOW: quests_func.ShowSharedWindowEffect,
          EFFECT_TYPE.SAVE_TUTORIAL_SETTING: quests_func.SaveTutorialSettingEffect,
          EFFECT_TYPE.SAVE_ACCOUNT_SETTING: quests_func.SaveAccountSettingEffect,
-         EFFECT_TYPE.RUN_TRIGGER: quests_func.QuestsFunctionalRunTriggerEffect}
+         EFFECT_TYPE.RUN_TRIGGER: quests_func.QuestsFunctionalRunTriggerEffect,
+         EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER: chains_func.FunctionalShowUnlockedChapter,
+         EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow}
         _queries = {'awardWindow': queries.AwardWindowContentQuery}
         ControlsFactory.__init__(self, effects, _queries)
 

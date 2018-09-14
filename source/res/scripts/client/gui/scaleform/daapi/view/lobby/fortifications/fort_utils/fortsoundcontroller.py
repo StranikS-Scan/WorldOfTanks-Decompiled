@@ -3,11 +3,16 @@ import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 import MusicController
 import SoundGroups
+import FMOD
 from constants import FORT_BUILDING_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+if FMOD.enabled:
+    PARAM_NAME_BUILDING_NUMBER = 'buildings_number'
+    PARAM_NAME_TRANSPORT_MODE = 'transport_mode'
+    PARAM_NAME_DEFENCE_PERIOD = 'defence_period'
 
 class _FortSoundController(FortViewHelper):
 
@@ -18,15 +23,17 @@ class _FortSoundController(FortViewHelper):
     def init(self):
         SoundGroups.g_instance.onVolumeChanged += self.__onVolumeChanged
         self.startFortListening()
-        BigWorld.wg_setCategoryVolume('hangar_v2', 0.0)
+        if FMOD.enabled:
+            BigWorld.wg_setCategoryVolume('hangar_v2', 0.0)
         MusicController.g_musicController.stop()
-        params = {'buildings_number': 0,
-         'transport_mode': 0,
-         'defence_period': 0}
+        params = {PARAM_NAME_BUILDING_NUMBER: 0,
+         PARAM_NAME_TRANSPORT_MODE: 0,
+         PARAM_NAME_DEFENCE_PERIOD: 0}
         MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY_FORT, params)
 
     def fini(self):
-        BigWorld.wg_setCategoryVolume('hangar_v2', SoundGroups.g_instance.getVolume('ambient'))
+        if FMOD.enabled:
+            BigWorld.wg_setCategoryVolume('hangar_v2', SoundGroups.g_instance.getVolume('ambient'))
         MusicController.g_musicController.stop()
         MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
         MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
@@ -49,15 +56,15 @@ class _FortSoundController(FortViewHelper):
         self.setDefencePeriodMode()
 
     def setTransportingMode(self, enabled):
-        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, 'transport_mode', int(enabled))
+        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, PARAM_NAME_TRANSPORT_MODE, int(enabled))
 
     def setBuildingsMode(self):
         fort = self.fortCtrl.getFort()
-        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, 'buildings_number', len(fort.getBuildingsCompleted(FORT_BUILDING_TYPE.MILITARY_BASE)))
+        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, PARAM_NAME_BUILDING_NUMBER, len(fort.getBuildingsCompleted(FORT_BUILDING_TYPE.MILITARY_BASE)))
 
     def setDefencePeriodMode(self):
         fort = self.fortCtrl.getFort()
-        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, 'defence_period', int(fort.isOnDefenceHour()))
+        MusicController.g_musicController.setEventParam(MusicController.AMBIENT_EVENT_LOBBY_FORT, PARAM_NAME_DEFENCE_PERIOD, int(fort.isOnDefenceHour()))
 
     def playCreateFort(self):
         self.__playSound(SoundEffectsId.FORT_CREATE)
@@ -139,7 +146,8 @@ class _FortSoundController(FortViewHelper):
 
     def __onVolumeChanged(self, categoryName, volume):
         if categoryName == 'ambient':
-            BigWorld.wg_setCategoryVolume('hangar_v2', 0)
+            if FMOD.enabled:
+                BigWorld.wg_setCategoryVolume('hangar_v2', 0)
 
 
 g_fortSoundController = _FortSoundController()

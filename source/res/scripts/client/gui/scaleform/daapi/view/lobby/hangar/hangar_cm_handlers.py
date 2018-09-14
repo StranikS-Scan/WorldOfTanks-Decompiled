@@ -3,7 +3,6 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
@@ -12,7 +11,7 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 from gui.shared import event_dispatcher as shared_events
-from gui.shared.utils import functions, decorators
+from gui.shared.utils import decorators
 
 class CREW(object):
     PERSONAL_CASE = 'personalCase'
@@ -49,8 +48,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
          CREW.UNLOAD: 'unloadTankman'})
 
     def showPersonalCase(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PERSONAL_CASE, functions.getViewName(VIEW_ALIAS.PERSONAL_CASE, self._tankmanID), {'tankmanID': self._tankmanID,
-         'page': 0}))
+        shared_events.showPersonalCase(self._tankmanID, 0, EVENT_BUS_SCOPE.LOBBY)
 
     @decorators.process('unloading')
     def unloadTankman(self):

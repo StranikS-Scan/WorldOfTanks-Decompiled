@@ -5,12 +5,11 @@ from debug_utils import *
 import weakref
 import VehicleEffects
 from VehicleEffects import VehicleTrailEffects, VehicleExhaustEffects
-from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE
+from constants import IS_DEVELOPMENT, ARENA_GUI_TYPE, VEHICLE_PHYSICS_MODE
 import constants
 import vehicle_extras
 from OcclusionDecal import OcclusionDecal
 from ShadowForwardDecal import ShadowForwardDecal
-import helpers
 from helpers import bound_effects, DecalMap, isPlayerAvatar, newFakeModel
 from helpers.EffectsList import EffectsListPlayer, SpecialKeyPointNames
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
@@ -62,7 +61,6 @@ _MIN_DEPTH_FOR_HEAVY_SPLASH = 0.5
 _ALLOW_LAMP_LIGHTS = False
 MAX_DISTANCE = 500
 _ENABLE_SOUND_DEBUG = False
-_ENABLE_NEW_ENGINE_SOUND = False
 _MATKIND_COUNT = 3
 _E_SOUND_RPM = 0
 _E_SOUND_LOAD = 1
@@ -88,6 +86,11 @@ _M_SOUND_SNOW = 8
 _M_SOUND_SAND = 9
 _M_SOUND_WATER = 10
 _M_SOUND_MAX = 11
+_M_SOUND_SPEED_ABS = 11
+_M_SOUND_ROT_SPEED = 12
+_M_SOUND_SLIDE_FRICT = 13
+_E_SOUND_SPEED_SCROLL = 14
+_M_SOUND_NEW_MAX = 15
 _EFFECT_MATERIALS_HARDNESS = {'ground': (0.1, _M_SOUND_GROUND),
  'stone': (1.0, _M_SOUND_STONE),
  'wood': (0.5, _M_SOUND_WOOD),
@@ -104,6 +107,11 @@ class VehicleAppearance(object):
     waterHeight = property(lambda self: self.__waterHeight)
     detailedEngineState = property(lambda self: self.__detailedEngineState)
     frameTimeStamp = 0
+    engineMode = property(lambda self: self.__engineMode)
+    physicLoad = property(lambda self: self.__physicLoad)
+    rightTrackScroll = property(lambda self: self.__rightTrackScroll)
+    leftTrackScroll = property(lambda self: self.__leftTrackScroll)
+    destroyedState = property(lambda self: self.__currentDamageState.model == 'destroyed')
 
     def __init__(self):
         self.__vt = None
@@ -183,16 +191,15 @@ class VehicleAppearance(object):
         self.__chassisShadowForwardDecal = ShadowForwardDecal()
         self.__splodge = None
         self.__vehicleStickers = None
+        self.__physicLoad = 0.0
         self.onModelChanged = Event()
-        if _ENABLE_NEW_ENGINE_SOUND:
-            self.__engineSoundParams = [None] * _E_SOUND_NEW_MAX
-        else:
-            self.__engineSoundParams = [None] * _E_SOUND_MAX
-        self.__movementSoundParams = [None] * _M_SOUND_MAX
         self.__speedInfo = Math.Vector4(0.0, 0.0, 0.0, 0.0)
         self.__wasOnSoftTerrain = False
         self.__vehicleMatrixProv = None
         self.__typeDesc = None
+        self.__leftTrackScroll = 0.0
+        self.__rightTrackScroll = 0.0
+        self.__isEngineSoundMutedByLOD = False
         return
 
     def prerequisites(self, vehicle):
@@ -231,6 +238,8 @@ class VehicleAppearance(object):
             return
         else:
             vehicle = self.__vehicle
+            self.__detailedEngineState.destroy()
+            vehicle.removeEdge()
             self.__vehicle = None
             self.__vehicleMatrixProv = None
             self.__typeDesc = None
@@ -314,13 +323,19 @@ class VehicleAppearance(object):
         self.__maxClimbAngle = math.acos(typeDesc.physics['minPlaneNormalY'])
         self.setupGunMatrixTargets()
         self.__createGunRecoil()
-        self.__createExhaust()
         self.__fashion = BigWorld.WGVehicleFashion()
 
     def start(self, vehicle, prereqs = None):
         self.__vehicle = vehicle
         player = BigWorld.player()
         modelsDesc = self.modelsDesc
+        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            self.__createExhaust()
+            self.__engineSoundParams = [None] * _E_SOUND_MAX
+            self.__movementSoundParams = [None] * _M_SOUND_MAX
+        else:
+            self.__engineSoundParams = [None] * _E_SOUND_NEW_MAX
+            self.__movementSoundParams = [None] * _M_SOUND_NEW_MAX
         if prereqs is None:
             self.__typeDesc.chassis['hitTester'].loadBspModel()
             self.__typeDesc.hull['hitTester'].loadBspModel()
@@ -330,6 +345,7 @@ class VehicleAppearance(object):
             self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
         self.__originalFilter = vehicle.filter
         vehicle.filter = self.__filter
+        vehicle.filter.enableNewPhysics(False)
         self.__createStickers(prereqs)
         _setupVehicleFashion(self, self.__fashion, self.__vehicle)
         currentModelState = self.__currentDamageState.model
@@ -377,8 +393,7 @@ class VehicleAppearance(object):
             self.__invalidateLoading = False
             self.__fetchModels(self.__currentDamageState.model)
         if vehicle.isAlive():
-            fakeModel = helpers.newFakeModel()
-            modelsDesc['hull']['model'].node('HP_Fire_1').attach(fakeModel)
+            modelsDesc['hull']['model'].node('HP_Fire_1')
             if self.__vehicle.isPlayer:
                 if self.__typeDesc.engine['soundPC'] != '':
                     event = self.__typeDesc.engine['soundPC']
@@ -397,23 +412,15 @@ class VehicleAppearance(object):
                     eventC = self.__typeDesc.chassis['soundNPC']
                 else:
                     eventC = self.__typeDesc.chassis['sound']
-            self.__engineSound = SoundGroups.g_instance.getSound3D(fakeModel, event)
+            self.__engineSound = SoundGroups.g_instance.getSound3D(modelsDesc['hull']['model'].node('HP_Fire_1'), event)
             if self.__engineSound is None:
-                self.__engineSound = SoundGroups.g_instance.getSound3D(modelsDesc['hull']['model'], event)
+                self.__engineSound = SoundGroups.g_instance.getSound3D(modelsDesc['hull']['model'].root, event)
             if self.__engineSound:
                 self.__engineSound.play()
                 self.__engineSoundParams[_E_SOUND_RPM] = self.__engineSound.paramID('RPM')
                 self.__engineSoundParams[_E_SOUND_SUBMERTION] = self.__engineSound.paramID('submersion')
                 self.__engineSoundParams[_E_SOUND_LOAD] = self.__engineSound.paramID('engine_load')
-                if _ENABLE_NEW_ENGINE_SOUND:
-                    self.__engineSoundParams[_E_SOUND_SPEED_ABS] = self.__engineSound.paramID('speed_abs')
-                    self.__engineSoundParams[_E_SOUND_SPEED_REL] = self.__engineSound.paramID('speed_rel')
-                    self.__engineSoundParams[_E_SOUND_ROT_SPEED_ABS] = self.__engineSound.paramID('rot_speed_abs')
-                    self.__engineSoundParams[_E_SOUND_ROT_SPEED_REL] = self.__engineSound.paramID('rot_speed_rel')
-                    self.__engineSoundParams[_E_SOUND_GEAR_NUM] = self.__engineSound.paramID('gear_num')
-                    self.__engineSoundParams[_E_SOUND_ACC_ABS] = self.__engineSound.paramID('acc_abs')
-                    self.__engineSoundParams[_E_SOUND_PHYSIC_LOAD] = self.__engineSound.paramID('physic_load')
-            self.__movementSound = SoundGroups.g_instance.getSound3D(modelsDesc['turret']['model'], eventC)
+            self.__movementSound = SoundGroups.g_instance.getSound3D(modelsDesc['turret']['model'].root, eventC)
             if self.__movementSound:
                 self.__movementSound.play()
                 self.__movementSoundParams[_M_SOUND_FLYING] = self.__movementSound.paramID('flying')
@@ -447,6 +454,12 @@ class VehicleAppearance(object):
         self.__periodicTimerID = BigWorld.callback(_PERIODIC_TIME, self.__onPeriodicTimer)
         self.__periodicTimerIDEngine = BigWorld.callback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
         return
+
+    def set_gear(self, gear, prev):
+        pass
+
+    def set_normalisedRPMPacked(self, rpm, prev):
+        pass
 
     def showStickers(self, show):
         self.__vehicleStickers.show = show
@@ -483,7 +496,7 @@ class VehicleAppearance(object):
     def onVehicleHealthChanged(self):
         vehicle = self.__vehicle
         if not vehicle.isAlive():
-            BigWorld.wgDelEdgeDetectEntity(vehicle)
+            vehicle.removeEdge()
             if vehicle.health > 0:
                 self.changeEngineMode((0, 0))
             elif self.__engineSound is not None:
@@ -527,31 +540,33 @@ class VehicleAppearance(object):
 
     def changeEngineMode(self, mode, forceSwinging = False):
         self.__engineMode = mode
-        self.__updateExhaust()
+        self.__detailedEngineState.setMode(self.__engineMode[0])
+        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            self.__updateExhaust()
+            if forceSwinging:
+                flags = mode[1]
+                prevFlags = self.__swingMoveFlags
+                fashion = self.fashion
+                moveMask = 3
+                rotMask = 12
+                if flags & moveMask ^ prevFlags & moveMask:
+                    swingPeriod = 2.0
+                    if flags & 1:
+                        fashion.accelSwingingDirection = -1
+                    elif flags & 2:
+                        fashion.accelSwingingDirection = 1
+                    else:
+                        fashion.accelSwingingDirection = 0
+                elif not flags & moveMask and flags & rotMask ^ prevFlags & rotMask:
+                    swingPeriod = 1.0
+                    fashion.accelSwingingDirection = 0
+                else:
+                    swingPeriod = 0.0
+                if swingPeriod > fashion.accelSwingingPeriod:
+                    fashion.accelSwingingPeriod = swingPeriod
+                self.__swingMoveFlags = flags
         if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        if forceSwinging:
-            flags = mode[1]
-            prevFlags = self.__swingMoveFlags
-            fashion = self.fashion
-            moveMask = 3
-            rotMask = 12
-            if flags & moveMask ^ prevFlags & moveMask:
-                swingPeriod = 2.0
-                if flags & 1:
-                    fashion.accelSwingingDirection = -1
-                elif flags & 2:
-                    fashion.accelSwingingDirection = 1
-                else:
-                    fashion.accelSwingingDirection = 0
-            elif not flags & moveMask and flags & rotMask ^ prevFlags & rotMask:
-                swingPeriod = 1.0
-                fashion.accelSwingingDirection = 0
-            else:
-                swingPeriod = 0.0
-            if swingPeriod > fashion.accelSwingingPeriod:
-                fashion.accelSwingingPeriod = swingPeriod
-            self.__swingMoveFlags = flags
 
     def stopSwinging(self):
         self.fashion.accelSwingingPeriod = 0.0
@@ -573,8 +588,8 @@ class VehicleAppearance(object):
         self.__crashedTracksCtrl.addTrack(isLeft)
         if not self.__vehicle.isEnteringWorld:
             sound = self.__trackSounds[0 if isLeft else 1]
-            if sound is not None and sound[1] is not None:
-                sound[1].play()
+            if sound is not None:
+                sound.play()
         return
 
     def delCrashedTrack(self, isLeft):
@@ -586,7 +601,7 @@ class VehicleAppearance(object):
         self.__loadingProgress = 0
         for name, desc in self.modelsDesc.iteritems():
             desc['_fetchedState'] = modelState
-            BigWorld.fetchModel(desc['_stateFunc'](self.__vehicle, modelState), partial(self.__onModelLoaded, name, modelState))
+            BigWorld.fetchModel(desc['_stateFunc'](self.__vehicle, modelState), partial(self.__onModelLoaded, name, modelState, self.modelsDesc))
 
     def __attemptToSetupModels(self):
         self.__loadingProgress += 1
@@ -655,13 +670,17 @@ class VehicleAppearance(object):
             except:
                 LOG_CURRENT_EXCEPTION()
 
-            self.__attachExhaust(True)
+            if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+                self.__attachExhaust(True)
             gun['model'].wg_gunRecoil = self.__gunRecoil
             self.__createLampLights()
             self.__gunFireNode = gun['model'].node('HP_gunFire')
             self.__setupHavok()
+            if vehicle.isPlayer:
+                vehicle.drawEdge(0, 1, True)
         else:
-            self.__destroyExhaust()
+            if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+                self.__destroyExhaust()
             self.__attachStickers(items.vehicles.g_cache.commonConfig['miscParams']['damageStickerAlpha'], True)
         self.__updateCamouflage()
         self.__updateRepaint()
@@ -834,6 +853,7 @@ class VehicleAppearance(object):
 
     def __updateRepaint(self):
         if not hasattr(self.__vehicle.typeDescriptor.type, 'repaintParameters'):
+            LOG_DEBUG("vehicle.typeDescriptor.type has no 'repaintParameters' defined")
             return
         else:
             repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale = RepaintParams.getRepaintParams(self.__vehicle.typeDescriptor)
@@ -909,6 +929,10 @@ class VehicleAppearance(object):
                 self.__stopEffects()
         return
 
+    def updateTracksScroll(self, leftScroll, rightScroll):
+        self.__leftTrackScroll = leftScroll
+        self.__rightTrackScroll = rightScroll
+
     def __onPeriodicTimer(self):
         timeStamp = BigWorld.wg_getFrameTimestamp()
         if VehicleAppearance.frameTimeStamp >= timeStamp:
@@ -941,9 +965,10 @@ class VehicleAppearance(object):
                 self.__updateCurrTerrainMatKinds()
                 self.__updateMovementSounds()
                 self.__updateEffectsLOD()
+                vehicle.filter.placingOnGround = not self.__fashion.suspensionWorking
                 self.__trailEffects.update()
                 self.__updateExhaust()
-                vehicle.filter.placingOnGround = not self.__fashion.suspensionWorking
+                self.__vehicle.filter.placingOnGround = not self.__fashion.suspensionWorking
             except:
                 LOG_CURRENT_EXCEPTION()
 
@@ -962,10 +987,11 @@ class VehicleAppearance(object):
             if gearNum == 0:
                 rpm = 0.0
             self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_RPM], clamp(0.0, 1.0, rpm))
-            engineLoad = self.__engineMode[0]
-            if self.__engineMode[0] == 3:
+            engineMode = self.__detailedEngineState.mode
+            engineLoad = engineMode
+            if engineMode == 3:
                 engineLoad = 2
-            elif self.__engineMode[0] == 2:
+            elif engineMode == 2:
                 engineLoad = 3
             self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_LOAD], engineLoad)
             self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_SUBMERTION], 1.0 if self.__isUnderWater and self.__engineMode[0] > 0 else 0.0)
@@ -975,50 +1001,6 @@ class VehicleAppearance(object):
                 self.__vt.addValue2('RPM', rpm)
                 self.__vt.addValue2('engine_load', engineLoad)
                 self.__vt.addValue2('submersion', self.__isUnderWater)
-            if _ENABLE_NEW_ENGINE_SOUND:
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_SPEED_ABS], clamp(-10, 30, speed))
-                if speed > 0:
-                    relativeSpeed = speed / self.__typeDesc.physics['speedLimits'][0]
-                else:
-                    relativeSpeed = speed / self.__typeDesc.physics['speedLimits'][1]
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_SPEED_REL], clamp(-1.0, 1.0, relativeSpeed))
-                rotationSpeed = self.__speedInfo[1]
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_ROT_SPEED_ABS], clamp(-1.0, 1.0, rotationSpeed))
-                roatationRelSpeed = rotationSpeed / self.__typeDesc.physics['rotationSpeedLimit']
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_ROT_SPEED_REL], clamp(-1.0, 1.0, roatationRelSpeed))
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_GEAR_NUM], clamp(0.0, 4.0, gearNum))
-                accelerationAbs = 0.0
-                if self.__prevVelocity is not None and self.__prevTime is not None:
-                    accelerationAbs = (speed - self.__prevVelocity) / (BigWorld.time() - self.__prevTime)
-                    accelerationAbs = clamp(-1.5, 1.5, accelerationAbs)
-                self.__prevVelocity = speed
-                self.__prevTime = BigWorld.time()
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_ACC_ABS], accelerationAbs)
-                if self.__engineMode[0] >= 2:
-                    absRelSpeed = abs(relativeSpeed)
-                    if absRelSpeed > 0.01:
-                        k_mg = -abs(self.__vehicle.pitch) / self.__maxClimbAngle if relativeSpeed * self.__vehicle.pitch > 0.0 else abs(self.__vehicle.pitch) / self.__maxClimbAngle
-                        physicLoad = (1.0 + k_mg) * 0.5
-                        if relativeSpeed > 0.0:
-                            speedImpactK = 1.0 / 0.33
-                        else:
-                            speedImpactK = 1.0 / 0.9
-                        speedImpact = clamp(0.01, 1.0, absRelSpeed * speedImpactK)
-                        speedImpact = clamp(0.0, 2.0, 1.0 / speedImpact)
-                        physicLoad = clamp(0.0, 1.0, physicLoad * speedImpact)
-                    else:
-                        physicLoad = 1.0
-                else:
-                    physicLoad = self.__engineMode[0] - 1
-                self.__engineSound.setParameter(self.__engineSoundParams[_E_SOUND_PHYSIC_LOAD], physicLoad)
-                if self.__vt is not None:
-                    self.__vt.addValue2('speed_abs', speed)
-                    self.__vt.addValue2('speed_rel', relativeSpeed)
-                    self.__vt.addValue2('rot_speed_abs', rotationSpeed)
-                    self.__vt.addValue2('rot_speed_rel', roatationRelSpeed)
-                    self.__vt.addValue2('gear', gearNum)
-                    self.__vt.addValue2('acc_abs', accelerationAbs)
-                    self.__vt.addValue2('physic_load', physicLoad)
             self.__periodicTimerIDEngine = BigWorld.callback(_PERIODIC_TIME_ENGINE, self.__onPeriodicTimerEngine)
         except:
             LOG_CURRENT_EXCEPTION()
@@ -1113,12 +1095,14 @@ class VehicleAppearance(object):
 
             self.__movementSound.setParameter(self.__movementSoundParams[_M_SOUND_HARDNESS], hardness / _MATKIND_COUNT)
             strafeParam = self.__movementSoundParams[_M_SOUND_FRICTION]
+            frictionValue = 0.0
             if strafeParam > -1:
                 angPart = min(abs(filter.angularSpeed) * _FRICTION_ANG_FACTOR, _FRICTION_ANG_BOUND)
                 strafePart = min(abs(filter.strafeSpeed) * _FRICTION_STRAFE_FACTOR, _FRICTION_STRAFE_BOUND)
                 frictionValue = max(angPart, strafePart)
                 self.__movementSound.setParameter(strafeParam, frictionValue)
             roughnessParam = self.__movementSoundParams[_M_SOUND_ROUGHNESS]
+            roughness = 0.0
             if roughnessParam > -1:
                 speed = self.__speedInfo[2]
                 rds = _ROUGHNESS_DECREASE_SPEEDS
@@ -1131,28 +1115,29 @@ class VehicleAppearance(object):
                 else:
                     surfaceCurvature = fashion.suspCompressionRate
                 roughness = (surfaceCurvature * 2.0 * speedFraction - subs) * decFactor
-                self.__movementSound.setParameter(roughnessParam, 0 if roughness <= 0.0 else (roughness if roughness <= 1.0 else 1.0))
-            if self.__vt is not None and _ENABLE_TRACKS_SOUND_DEBUG:
-                self.__vt.addValue2('friction', strafeParam.value if strafeParam is not None else -1)
-                self.__vt.addValue2('roughness', roughnessParam.value if roughnessParam is not None else -1)
+                roughness = 0 if roughness <= 0.0 else (roughness if roughness <= 1.0 else 1.0)
+                self.__movementSound.setParameter(roughnessParam, roughness)
+            if self.__vt is not None:
+                self.__vt.addValue2('friction', frictionValue)
+                self.__vt.addValue2('roughness', roughness)
             return
 
     def __updateEffectsLOD(self):
-        enableExhaust = self.__distanceFromPlayer <= _LOD_DISTANCE_EXHAUST
-        if enableExhaust != self.__exhaustEffects.enabled:
-            self.__exhaustEffects.enable(enableExhaust and not self.__isUnderWater)
+        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            enableExhaust = self.__distanceFromPlayer <= _LOD_DISTANCE_EXHAUST
+            if enableExhaust != self.__exhaustEffects.enabled:
+                self.__exhaustEffects.enable(enableExhaust and not self.__isUnderWater)
         enableTrails = self.__distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.wg_isVehicleDustEnabled()
         self.__trailEffects.enable(enableTrails)
 
     def __setupTrailParticles(self):
-        self.__trailEffects = VehicleTrailEffects(self.__vehicle)
+        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            self.__trailEffects = VehicleTrailEffects(self.__vehicle)
 
     def __setupTrackDamageSounds(self):
         for i in xrange(2):
             try:
-                fakeModel = helpers.newFakeModel()
-                self.__trailEffects.getTrackCenterNode(i).attach(fakeModel)
-                self.__trackSounds[i] = (fakeModel, SoundGroups.g_instance.getSound3D(fakeModel, '/tanks/tank_breakdown/hit_treads'))
+                self.__trackSounds[i] = SoundGroups.g_instance.getSound3D(self.__trailEffects.getTrackCenterNode(i), '/tanks/tank_breakdown/hit_treads')
             except:
                 self.__trackSounds[i] = None
                 LOG_CURRENT_EXCEPTION()
@@ -1160,10 +1145,6 @@ class VehicleAppearance(object):
         return
 
     def __destroyTrackDamageSounds(self):
-        for i in xrange(2):
-            if self.__trackSounds[i] is not None:
-                self.__trailEffects.getTrackCenterNode(i).detach(self.__trackSounds[i][0])
-
         self.__trackSounds = [None, None]
         return
 
@@ -1222,8 +1203,8 @@ class VehicleAppearance(object):
             self.__vibrationsCtrl.update(vehicle, crashedTrackCtrl.isLeftTrackBroken(), crashedTrackCtrl.isRightTrackBroken())
             return
 
-    def __onModelLoaded(self, name, state, model):
-        if self.modelsDesc is None:
+    def __onModelLoaded(self, name, state, desc, model):
+        if self.modelsDesc is None or self.modelsDesc != desc:
             return
         else:
             desc = self.modelsDesc[name]
@@ -1305,7 +1286,7 @@ class VehicleAppearance(object):
     def __attachExhaust(self, attach):
         if attach:
             hullModel = self.modelsDesc['hull']['model']
-            self.__exhaustEffects.attach(hullModel, self.__typeDesc.hull['exhaust'])
+            self.__exhaustEffects.attach(hullModel, self.__vehicle.typeDescriptor.hull['exhaust'])
         else:
             self.__exhaustEffects.detach()
 
@@ -1313,8 +1294,9 @@ class VehicleAppearance(object):
         self.__exhaustEffects.destroy()
 
     def __updateExhaust(self):
-        if self.__exhaustEffects.enabled == self.__isUnderWater:
-            self.__exhaustEffects.enable(not self.__isUnderWater)
+        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
+            if self.__exhaustEffects.enabled == self.__isUnderWater:
+                self.__exhaustEffects.enable(not self.__isUnderWater)
         self.__exhaustEffects.changeExhaust(self.__engineMode[0], self.detailedEngineState.rpm)
 
     def __createGunRecoil(self):
@@ -1327,8 +1309,6 @@ class VehicleAppearance(object):
 
     def __createStickers(self, prereqs):
         insigniaRank = self.__vehicle.publicInfo['marksOnGun']
-        if BigWorld.player().arenaGuiType == ARENA_GUI_TYPE.HISTORICAL:
-            insigniaRank = 0
         self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank)
         clanID = BigWorld.player().arena.vehicles[self.__vehicle.id]['clanDBID']
         self.__vehicleStickers.setClanID(clanID)
@@ -1508,6 +1488,27 @@ class VehicleAppearance(object):
         self.turretMatrix.target = target.turretMatrix
         self.gunMatrix.target = target.gunMatrix
         return
+
+    def assembleStipple(self):
+        if self.__currentDamageState.model == 'destroyed':
+            return
+        try:
+            turretMatrix = Math.Matrix()
+            gunMatrix = Math.Matrix()
+            turret = self.modelsDesc['turret']
+            hull = self.modelsDesc['hull']
+            gun = self.modelsDesc['gun']
+            turret['_node'].detach(turret['model'])
+            gun['_node'].detach(gun['model'])
+            turretJointName = self.__typeDesc.hull['turretHardPoints'][0]
+            turretMatrix.set(self.turretMatrix)
+            turret['_node'] = hull['model'].node(turretJointName, turretMatrix)
+            turret['_node'].attach(turret['model'])
+            gunMatrix.set(self.gunMatrix)
+            gun['_node'] = turret['model'].node('HP_gunJoint', gunMatrix)
+            gun['_node'].attach(gun['model'])
+        except:
+            LOG_ERROR('Can not assemble stipple model for %s.' % self.__typeDesc.name)
 
 
 class StippleManager():

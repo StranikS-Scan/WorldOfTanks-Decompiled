@@ -289,6 +289,8 @@ class ContactsManager(ClientEventsHandler):
                 if not self.usersStorage.isGroupExists(exclude):
                     return (False, ClientContactError(CONTACT_ERROR_ID.GROUP_NOT_FOUND, exclude))
                 groups.discard(exclude)
+            if contact.getGroups() == groups:
+                return (True, None)
             jid = contact.getJID()
             self.__cooldown.process(CLIENT_ACTION_ID.CHANGE_GROUP)
             return self.__addTasks(CLIENT_ACTION_ID.CHANGE_GROUP, jid, roster_tasks.ChangeRosterItemGroupsTask(jid, contact.getName(), groups, {exclude} if exclude else None))

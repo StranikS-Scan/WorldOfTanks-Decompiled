@@ -1,0 +1,329 @@
+<gb33_sentinel_ac_i.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60.4	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	3.0	</repairCost>
+  <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/british/GB33_Sentinel_AC_I/Sentinel_AC_I_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	65	</armor_1>
+      <armor_2>	45	</armor_2>
+      <armor_3>	45	</armor_3>
+      <armor_4>	45	</armor_4>
+      <armor_5>	22.2	</armor_5>
+      <armor_6>	15.9	</armor_6>
+      <armor_7>	25.4	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	45	</armor_9>
+      <armor_10>	55	</armor_10>
+      <armor_11>	38.1	</armor_11>
+      <armor_12>	55	</armor_12>
+      <armor_13>	38.1	</armor_13>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	17521	</weight>
+    <maxHealth>	296	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	69	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 37.00 0.34 1.00 0.05 0.33	</pitchParams>
+      <rollParams>	1.00 0.28 37.00 0.34 1.00 0.05 0.33	</rollParams>
+      <sensitivityToImpulse>	0.76	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.731323 0.147557	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.295043 0.236267 2.99613	</rayStart>
+        <rayEnd>	-0.295043 -0.141847 2.53028	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0276729 0.502281 2.65828	</rayStart>
+        <rayEnd>	-0.0276729 -0.0221836 2.36685	</rayEnd>
+        <rayUp>	0.121653 -0.00413189 -0.992564	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+  </hull>
+  <chassis>
+    <Chassis_GB33_Sentinel_AC_I>
+      <userString>	#gb_vehicles:Chassis_GB33_Sentinel_AC_I	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	6250.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	5000	</weight>
+      <maxLoad>	31000	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.2	</terrainResistance>
+      <brakeForce>	28000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.46 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.78	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352835	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.120424	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.302514	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.270284	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352835	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.120424	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.302514	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.270284	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.13809 1.79622	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.277240 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.355910 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.639400	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_GB33_Sentinel_AC_I>
+  </chassis>
+  <turrets0>
+    <Turret_1_GB33_Sentinel_AC_I>
+      <userString>	#gb_vehicles:Turret_1_GB33_Sentinel_AC_I	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	8160	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	65	</armor_1>
+        <armor_2>	45	</armor_2>
+        <armor_3>	45	</armor_3>
+        <armor_4>	65	</armor_4>
+        <armor_5>	25.4	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	31.8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	65	</armor_9>
+        <armor_10>	38.1	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_4	</primaryArmor>
+      <weight>	4000	</weight>
+      <maxHealth>	74	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_Gun_Mk_X_A>	shared	  <maxAmmo>	130	</maxAmmo>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+        </_2pdr_Gun_Mk_X_A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/british/GB33_Sentinel_AC_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/british/GB33_Sentinel_AC_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/british/GB33_Sentinel_AC_I/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000000 0.393711 0.708066	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.987607 0.70433 -0.504111	</rayStart>
+          <rayEnd>	-0.812315 0.700836 -0.407879	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.04803 0.837625 -0.161584	</rayStart>
+          <rayEnd>	0.67859 0.36486 -0.161584	</rayEnd>
+          <rayUp>	-0.78795 0.615739 -0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.148 -0.230 0.928 -0.000 0.565 0.145 0.247 0.632 0.456 0.500 0.015 0.500 0.000 0.100 0.000	</physicsShape>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
+    </Turret_1_GB33_Sentinel_AC_I>
+  </turrets0>
+  <engines>
+    <Cadillac_75_x_3>	shared	</Cadillac_75_x_3>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <N19Mk2_Aust>	shared	</N19Mk2_Aust>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	britain_color	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</gb33_sentinel_ac_i.xml>

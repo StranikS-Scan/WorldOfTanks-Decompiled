@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumWindow.py
-import sys
 import BigWorld
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -67,13 +66,17 @@ class PremiumWindow(PremiumWindowMeta):
     @process('loadStats')
     def __premiumBuyRequest(self, days, cost):
         wasPremium = g_itemsCache.items.stats.isPremium
-        result = yield PremiumAccountBuyer(days, cost, self._arenaUniqueID).request()
+        arenaUniqueID = self._arenaUniqueID
+        result = yield PremiumAccountBuyer(days, cost, arenaUniqueID).request()
+        if not result.success and result.auxData and result.auxData.get('errStr', '') in ('Battle not in cache', 'Not supported'):
+            arenaUniqueID = 0
+            result = yield PremiumAccountBuyer(days, cost, arenaUniqueID, withoutBenefits=True).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             becomePremium = g_itemsCache.items.stats.isPremium and not wasPremium
             self.onWindowClose()
-            self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.PREMIUM_BOUGHT, ctx={'arenaUniqueID': self._arenaUniqueID,
+            self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.PREMIUM_BOUGHT, ctx={'arenaUniqueID': arenaUniqueID,
              'becomePremium': becomePremium}))
 
     def __populateData(self):

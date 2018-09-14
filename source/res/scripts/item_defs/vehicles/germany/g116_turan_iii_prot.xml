@@ -1,0 +1,520 @@
+<g116_turan_iii_prot.xml>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	25	</armor_2>
+      <armor_3>	25	</armor_3>
+      <armor_4>	25	</armor_4>
+      <armor_5>	13	</armor_5>
+      <armor_6>	13	</armor_6>
+      <armor_7>	35	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7309	</weight>
+    <maxHealth>	456	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G116_Turan_III_prot/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G116_Turan_III_prot/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G116_Turan_III_prot/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.009293 0.560031 0.55409	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/german/G116_Turan_III_prot/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.593651 0.446677 1.96112	</rayStart>
+        <rayEnd>	0.593723 0.387231 1.77015	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	4 4 0.48 0.82	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_G116_Turan_III_prot>
+      <userString>	#germany_vehicles:Chassis_G116_Turan_III_prot	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	7000	</weight>
+      <maxLoad>	23000	</maxLoad>
+      <terrainResistance>	1 1.2 1.8	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G116_Turan_III_prot/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G116_Turan_III_prot/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G116_Turan_III_prot/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.15	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.334274	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.180215	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127275	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.344097	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.202942	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.334274	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.180215	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127275	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.344097	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.202942	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.00264 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/german/G116_Turan_III_prot/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	0.980754 1.63793	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.777950 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.556350 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.323480	</row2>
+            <row3>	0.000000 0.000000 0.000031	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0420945	</minOffset>
+          <maxOffset>	0.0441478	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0441478	</minOffset>
+          <maxOffset>	0.0400411	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G116_Turan_III_prot/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G116_Turan_III_prot/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G116_Turan_III_prot/track/left.track	</left>
+        <right>	vehicles/german/G116_Turan_III_prot/track/right.track	</right>
+        <segmentLength>	0.105	</segmentLength>
+        <segmentOffset>	0.075	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0167	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1203	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.96	</backwardElastK>
+          <offset>	-0.036	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+      </trackNodes>
+    </Chassis_G116_Turan_III_prot>
+  </chassis>
+  <turrets0>
+    <Turret_1_G116_Turan_III_prot>
+      <guns>
+        <_75mm_43_M_L43>	shared	  <maxAmmo>	32	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.397222 10 0.4 9.8 0.402778 9.6 0.405556 9.4 0.408333 9.2 0.411111 9 0.413889 8.7 0.416667 8.4 0.419444 8.2 0.422222 8 0.425 7.8 0.427778 7.6 0.430556 7.4 0.433333 7.2 0.436111 7 0.438889 6.8 0.45 6.8 0.452778 6 0.455556 5.5 0.461111 5.5 0.463889 6 0.466667 7.3 0.486111 7.3 0.488889 7.5 0.491667 8 0.533333 8 0.536111 6 0.538889 5.5 0.541667 5.5 0.544444 6 0.547222 7 0.558333 7 0.563889 7.2 0.572222 7.8 0.575 8.2 0.577778 9.6 0.580556 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch></minPitch>
+            <maxPitch></maxPitch>
+          </pitchLimits>
+          <reloadTime>	4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/german/G116_Turan_III_prot/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G116_Turan_III_prot/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G116_Turan_III_prot/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/german/G116_Turan_III_prot/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000065 -0.00116285 2.42872	</rayStart>
+              <rayEnd>	0.0315257 -0.00439812 2.42712	</rayEnd>
+              <rayUp>	0.072 0.069 4	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.6 0.76	</tiling>
+          </camouflage>
+        </_75mm_43_M_L43>
+      </guns>
+      <userString>	#germany_vehicles:Turret_1_G116_Turan_III_prot	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	75	</armor_1>
+        <armor_2>	75	</armor_2>
+        <armor_3>	35	</armor_3>
+        <armor_4>	55	</armor_4>
+        <armor_5>	13	</armor_5>
+        <armor_6>	13	</armor_6>
+        <armor_7>	35	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	55	</armor_9>
+        <armor_10>	35	</armor_10>
+        <armor_11>	60	</armor_11>
+        <armor_12>	35	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4000	</weight>
+      <maxHealth>	114	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <models>
+        <undamaged>	vehicles/german/G116_Turan_III_prot/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G116_Turan_III_prot/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G116_Turan_III_prot/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/german/G116_Turan_III_prot/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	0.000257 0.374332 0.545186	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.645859 0.527787 -1.13778	</rayStart>
+          <rayEnd>	-0.460153 0.493459 -1.07194	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.645859 0.527787 -1.13778	</rayStart>
+          <rayEnd>	0.460153 0.493459 -1.07194	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.914949 0.401337 0.358141	</rayStart>
+          <rayEnd>	-0.727604 0.359149 0.302267	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.558	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.914949 0.401337 0.358141	</rayStart>
+          <rayEnd>	0.727604 0.359149 0.302267	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.558	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.000 0.000 0.995 0.000 0.640 0.079 1.000 0.645 0.393 0.500 0.148 0.500 0.150 0.241 0.315	</physicsShape>
+      <camouflage>
+        <tiling>	2.32 2.32 0.15 0.35	</tiling>
+      </camouflage>
+    </Turret_1_G116_Turan_III_prot>
+  </turrets0>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <repairCost>	3.50	</repairCost>
+  <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <engines>
+    <Weiss_Manfred_V_8H>	shared	</Weiss_Manfred_V_8H>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <R_4_T>	shared	</R_4_T>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g116_turan_iii_prot.xml>

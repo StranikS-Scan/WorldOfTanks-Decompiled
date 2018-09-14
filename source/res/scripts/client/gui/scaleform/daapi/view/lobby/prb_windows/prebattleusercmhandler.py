@@ -12,7 +12,7 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
     def __init__(self, cmProxy, ctx = None):
         super(PrebattleUserCMHandler, self).__init__(cmProxy, ctx)
         self._isCreator = self.prbFunctional.isCreator()
-        self._isSquad = self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD
+        self._isSquad = self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD
         self.startPrbListening()
 
     def fini(self):
@@ -46,7 +46,7 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         return handlers
 
     def _isAppealsEnabled(self):
-        return self._getDenunciationsLeft() > 0 and not self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD
+        return self._getDenunciationsLeft() > 0 and not self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD
 
     def _canKickPlayer(self):
         playerInfo = self.prbFunctional.getPlayerInfoByDbID(self.databaseID)

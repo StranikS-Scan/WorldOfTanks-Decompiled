@@ -13,7 +13,7 @@ from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.app_loader.decorators import sf_lobby
-from gui.prb_control.settings import CTRL_ENTITY_TYPE
+from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE, utils
 from gui.shared.events import ChannelManagementEvent, PreBattleChannelEvent
 from messenger.ext import channel_num_gen
@@ -91,9 +91,9 @@ class EventDispatcher(object):
     def loadBattleSessionList(self):
         self._fireShowEvent(PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY)
 
-    def loadUnit(self, prbType, modeFlags = 0):
+    def loadUnit(self, prbType, flags = FUNCTIONAL_FLAG.UNDEFINED):
         self.__addUnitToCarousel(prbType)
-        self.showUnitWindow(prbType, modeFlags)
+        self.showUnitWindow(prbType, flags)
 
     def loadSquad(self, ctx = None, isTeamReady = False):
         self.__addSquadToCarousel(isTeamReady)
@@ -109,17 +109,15 @@ class EventDispatcher(object):
         self.removeUnitFromCarousel(prbType)
         self.loadPreArenaUnit(prbType, modeFlags)
 
-    def loadUnitFromPreArenaUnit(self, prbType, modeFlags = 0):
+    def loadUnitFromPreArenaUnit(self, prbType):
         self.loadHangar()
-        self.loadUnit(prbType, modeFlags)
+        self.loadUnit(prbType)
 
-    def loadHistoryBattles(self):
-        self.addHistoryBattlesToCarousel()
-        self.showHistoryBattlesWindow()
+    def loadSandboxQueue(self):
+        self._fireShowEvent(VIEW_ALIAS.SANDBOX_QUEUE_DIALOG)
 
-    def unloadHistoryBattles(self):
-        self._closeHistoryBattlesWindow()
-        self.removeHistoryBattlesFromCarousel()
+    def startOffbattleTutorial(self):
+        g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='OFFBATTLE', reloadIfRun=True, restoreIfRun=True, isStopForced=True), scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def unloadBattleSessionWindow(self, prbType):
         self._closeBattleSessionWindow()
@@ -143,6 +141,9 @@ class EventDispatcher(object):
         self._fireHideEvent(events.HideWindowEvent.HIDE_COMPANY_WINDOW)
         self.removeCompanyFromCarousel()
         self.requestToDestroyPrbChannel(PREBATTLE_TYPE.COMPANY)
+
+    def unloadSandboxQueue(self):
+        self._fireHideEvent(events.HideWindowEvent.HIDE_SANDBOX_QUEUE_DIALOG)
 
     def removeTrainingFromCarousel(self, isList = True):
         clientType = SPECIAL_CLIENT_WINDOWS.TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.TRAINING_ROOM
@@ -213,24 +214,12 @@ class EventDispatcher(object):
         currCarouselItemCtx = _defCarouselItemCtx._replace(label=LAZY_CHANNEL.SPECIAL_BATTLES, order=channel_num_gen.getOrder4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES), isNotified=True, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.BATTLE_SESSION_LIST_WINDOW_PY}, openHandler=self.loadBattleSessionList)
         self._fireEvent(ChannelManagementEvent(clientID, PreBattleChannelEvent.REQUEST_TO_ADD, currCarouselItemCtx._asdict()))
 
-    def addHistoryBattlesToCarousel(self):
-        from gui.Scaleform.locale.HISTORICAL_BATTLES import HISTORICAL_BATTLES
-        clientID = channel_num_gen.getClientID4PreQueue(QUEUE_TYPE.HISTORICAL)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'addHistoryBattlesToCarousel')
-            return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=HISTORICAL_BATTLES.WINDOW_MAIN_TITLE, criteria={POP_UP_CRITERIA.VIEW_ALIAS: PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY}, openHandler=self.showHistoryBattlesWindow)
-        self._handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
-
     def removeSpecBattleFromCarousel(self, prbType):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
             LOG_ERROR('Client ID not found', '_removeSpecBattleFromCarousel')
             return
         self._handleRemoveRequest(clientID)
-
-    def showHistoryBattlesWindow(self):
-        self._fireShowEvent(PREBATTLE_ALIASES.HISTORICAL_BATTLES_LIST_WINDOW_PY)
 
     def removeSpecBattlesFromCarousel(self):
         clientID = channel_num_gen.getClientID4LazyChannel(LAZY_CHANNEL.SPECIAL_BATTLES)
@@ -239,10 +228,10 @@ class EventDispatcher(object):
             return
         self._fireEvent(ChannelManagementEvent(clientID, PreBattleChannelEvent.REQUEST_TO_REMOVE))
 
-    def showUnitWindow(self, prbType, modeFlags = 0, ctx = None):
+    def showUnitWindow(self, prbType, flags = FUNCTIONAL_FLAG.UNDEFINED):
         if prbType in (PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE):
             from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-            self._fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS, ctx={'modeFlags': modeFlags}))
+            self._fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_WINDOW_ALIAS, ctx={'flags': flags}))
         else:
             self._fireShowEvent(CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY)
 
@@ -250,7 +239,7 @@ class EventDispatcher(object):
         self._fireShowEvent(CYBER_SPORT_ALIASES.CS_RESPAWN_PY)
 
     def showSwitchPeripheryWindow(self, ctx):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, ctx=ctx))
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SWITCH_PERIPHERY_WINDOW, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def removeUnitFromCarousel(self, prbType):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
@@ -274,13 +263,6 @@ class EventDispatcher(object):
 
     def hideUnitProgressInCarousel(self, prbType):
         self._showUnitProgress(prbType, False)
-
-    def removeHistoryBattlesFromCarousel(self):
-        clientID = channel_num_gen.getClientID4PreQueue(QUEUE_TYPE.HISTORICAL)
-        if not clientID:
-            LOG_ERROR('Client ID not found', 'removeHistoryBattlesFromCarousel')
-            return
-        self._handleRemoveRequest(clientID)
 
     def requestToDestroyPrbChannel(self, prbType):
         self._fireEvent(events.MessengerEvent(events.MessengerEvent.PRB_CHANNEL_CTRL_REQUEST_DESTROY, {'prbType': prbType}))
@@ -321,16 +303,11 @@ class EventDispatcher(object):
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def loadFallout(self):
-        from gui.game_control import getFalloutCtrl
-        getFalloutCtrl().setEnabled(True)
         self.addFalloutToCarousel()
-        self._fireShowEvent(FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW)
 
     def unloadFallout(self):
         self.removeFalloutFromCarousel()
         self._fireHideEvent(events.HideWindowEvent.HIDE_FALLOUT_WINDOW)
-        from gui.game_control import getFalloutCtrl
-        getFalloutCtrl().setEnabled(False)
 
     def addFalloutToCarousel(self):
         clientID = channel_num_gen.getClientID4PreQueue(QUEUE_TYPE.EVENT_BATTLES)
@@ -366,9 +343,6 @@ class EventDispatcher(object):
             if functional:
                 functional.doAction()
         return
-
-    def _closeHistoryBattlesWindow(self):
-        self._fireHideEvent(events.HideWindowEvent.HIDE_HISTORICAL_BATTLES_WINDOW)
 
     def _fireEvent(self, event, scope = EVENT_BUS_SCOPE.LOBBY):
         g_eventBus.handleEvent(event, scope)

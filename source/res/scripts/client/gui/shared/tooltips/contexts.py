@@ -4,6 +4,7 @@ import gui
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle
 from collections import namedtuple
+from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from shared_utils import findFirst
 from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache
@@ -179,7 +180,7 @@ class PotapovQuestsTileContext(ToolTipContext):
         super(PotapovQuestsTileContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return g_eventsCache.potapov.getTiles().get(tileID)
+        return events_helpers.getPotapovQuestsCache().getTiles().get(tileID)
 
 
 class QuestContext(ToolTipContext):
@@ -413,6 +414,12 @@ class FortificationContext(ToolTipContext):
         super(FortificationContext, self).__init__(TOOLTIP_COMPONENT.FORTIFICATIONS, fieldsToExclude)
 
 
+class ClanProfileFortBuildingContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(ClanProfileFortBuildingContext, self).__init__(TOOLTIP_COMPONENT.CLAN_PROFILE, fieldsToExclude)
+
+
 class CustomizationContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude = None):
@@ -459,3 +466,13 @@ class HangarTutorialContext(ToolTipContext):
 
 class FortSortieLimitContext(FortificationContext):
     pass
+
+
+class FortPopoverDefResProgressContext(FortificationContext):
+    pass
+
+
+class TechCustomizationContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(TechCustomizationContext, self).__init__(TOOLTIP_COMPONENT.TECH_CUSTOMIZATION, fieldsToExclude)

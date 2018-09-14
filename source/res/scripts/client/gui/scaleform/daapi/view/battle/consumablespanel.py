@@ -16,6 +16,7 @@ from gui.shared.events import GameEvent
 from gui.shared.utils.key_mapping import getScaleformKey
 from gui.shared.utils.plugins import PluginsCollection, IPlugin
 from helpers import i18n
+import SoundGroups
 PANEL_MAX_LENGTH = 12
 AMMO_START_IDX = 0
 AMMO_END_IDX = 2
@@ -150,6 +151,7 @@ class ConsumablesPanel(object):
         eqCtrl = g_sessionProvider.getEquipmentsCtrl()
         eqCtrl.onEquipmentAdded += self.__onEquipmentAdded
         eqCtrl.onEquipmentUpdated += self.__onEquipmentUpdated
+        eqCtrl.onEquipmentCooldownInPercent += self.__onEquipmentCooldownInPercent
         optDevicesCtrl = g_sessionProvider.getOptDevicesCtrl()
         optDevicesCtrl.onOptionalDeviceAdded += self.__onOptionalDeviceAdded
         optDevicesCtrl.onOptionalDeviceUpdated += self.__onOptionalDeviceUpdated
@@ -171,6 +173,7 @@ class ConsumablesPanel(object):
         eqCtrl = g_sessionProvider.getEquipmentsCtrl()
         eqCtrl.onEquipmentAdded -= self.__onEquipmentAdded
         eqCtrl.onEquipmentUpdated -= self.__onEquipmentUpdated
+        eqCtrl.onEquipmentCooldownInPercent -= self.__onEquipmentCooldownInPercent
         optDevicesCtrl = g_sessionProvider.getOptDevicesCtrl()
         optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
         optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
@@ -334,21 +337,27 @@ class ConsumablesPanel(object):
     def __onEquipmentUpdated(self, intCD, item):
         if intCD in self.__cds:
             idx = self.__cds.index(intCD)
+            quantity = item.getQuantity()
+            currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
             if item.isAvatar():
-                self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), item.getQuantity(), item.getTimeRemaining(), maxTime)
+                self.__flashObject.setItemTimeQuantityInSlot(self.__cds.index(intCD), quantity, currentTime, maxTime)
                 self.__updateOrderSlot(idx, item)
             else:
-                self.__flashObject.setItemTimeQuantityInSlot(idx, item.getQuantity(), item.getTimeRemaining(), maxTime)
+                self.__flashObject.setItemTimeQuantityInSlot(idx, quantity, currentTime, maxTime)
                 self.onPopUpClosed()
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
+
+    def __onEquipmentCooldownInPercent(self, intCD, percent):
+        if intCD in self.__cds:
+            self.__flashObject.setCoolDownPosAsPercent(self.__cds.index(intCD), percent)
 
     def __addEquipmentSlot(self, intCD, item):
         idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
-        iconPath = descriptor.icon[0]
+        iconPath = '../maps/icons/artefact/%s.png' % descriptor.icon[0]
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
         tag = item.getTag()
         if tag:
@@ -368,7 +377,7 @@ class ConsumablesPanel(object):
         idx = self.__genNextIdx(ORDERS_FULL_MASK, ORDERS_START_IDX)
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
-        iconPath = descriptor.icon[0]
+        iconPath = '../maps/icons/artefact/%s.png' % descriptor.icon[0]
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
         bwKey, sfKey = self.__genKey(idx)
         self.__keys[bwKey] = partial(self.__handleEquipmentPressed, intCD)

@@ -1,0 +1,204 @@
+<chain-1.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects>
+        <clear-scene></clear-scene>
+        <run-trigger>	FightBtnDisableTrigger	</run-trigger>
+        <run-trigger>	InSandBoxOrRandomPreQueueTrigger	</run-trigger>
+        <set-var>	SelectedVehicle	</set-var>
+      </post-effects>
+      <runtime-effects>
+        <run-trigger>	NeedChangeVehicleTrigger	  <condition>
+            <active>	FightBtnDisabled	</active>
+          </condition>
+        </run-trigger>
+        <show-hint>	BattleSelectorHint	  <condition>
+            <active>	BattleSelectorHintOnScene	</active>
+            <inactive>	InSandboxOrRandom	</inactive>
+          </condition>
+        </show-hint>
+        <show-hint>	BattleButtonHint	  <condition>
+            <active>	BattleButtonOnScene	</active>
+            <active>	InSandboxOrRandom	</active>
+            <inactive>	FightBtnDisabled	</inactive>
+          </condition>
+        </show-hint>
+        <show-hint>	BuyVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-none></is-none>
+            </var>
+            <active>	InSandboxOrRandom	</active>
+            <effect-not-triggered>	BuyVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <show-hint>	ChangeVehicleHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <var>	SelectedVehicleID	  <is-not-none></is-not-none>
+            </var>
+            <active>	FightBtnDisabled	</active>
+            <active>	NeedChangeCurrentVehicle	</active>
+            <active>	InSandboxOrRandom	</active>
+            <effect-not-triggered>	ChangeVehicleHint	</effect-not-triggered>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <active>	FightBtnDisabled	</active>
+            <inactive>	NeedChangeCurrentVehicle	</inactive>
+            <active>	InSandboxOrRandom	</active>
+            <effect-triggered>	NeedChangeVehicleTrigger	</effect-triggered>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	FightButton	  <on-scene-effects>
+            <activate>	BattleButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	BattleButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	BattleSelectorBar	  <on-scene-effects>
+            <activate>	BattleSelectorHintOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	BattleSelectorHintOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	BuyVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	BuyVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	ChangeVehicleHint	  <item-id>	TankCarousel	</item-id>
+      <text>	ChangeVehicleText	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BattleButtonHint	  <item-id>	FightButton	</item-id>
+      <text>	_(#tutorial:chain1/hint/goToBattle)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	FightButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	FightButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	FightButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	BattleSelectorHint	  <item-id>	BattleSelectorBar	</item-id>
+      <text>	_(#tutorial:chain/hint/changeToPveOrRandom)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	False	</loop>
+      </arrow>
+      <actions>
+        <click>	BattleSelectorBar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	BattleSelectorBar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	BattleSelectorBar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <game-attribute>	SelectedVehicle	  <var-ref>	SelectedVehicleID	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+  </has-id>
+  <triggers>
+    <trigger>	FightBtnDisableTrigger	  <type>	fightBtn	</type>
+      <on-effects>
+        <activate>	FightBtnDisabled	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	FightBtnDisabled	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	NeedChangeVehicleTrigger	  <type>	needChangeCurrentVehicle	</type>
+      <on-effects>
+        <activate>	NeedChangeCurrentVehicle	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	NeedChangeCurrentVehicle	</inactivate>
+      </off-effects>
+    </trigger>
+    <trigger>	InSandBoxOrRandomPreQueueTrigger	  <type>	isInSandboxOrRandom	</type>
+      <on-effects>
+        <activate>	InSandboxOrRandom	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	InSandboxOrRandom	</inactivate>
+      </off-effects>
+    </trigger>
+  </triggers>
+  <vars>
+    <var-set>	ChangeVehicleText	  <asString>	_(#tutorial:chain/hint/changeVehicle)	</asString>
+    </var-set>
+    <var-set>	BuyVehicleText	  <asString>	_(#tutorial:chain/hint/buyVehicle)	</asString>
+    </var-set>
+  </vars>
+</chain-1.xml>

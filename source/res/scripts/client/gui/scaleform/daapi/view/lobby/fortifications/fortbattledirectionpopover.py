@@ -5,7 +5,7 @@ import BigWorld
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_formatters import getDivisionIcon
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control import getBattleID
+from gui.prb_control.prb_getters import getBattleID
 from gui.prb_control.prb_helpers import prbPeripheriesHandlerProperty, prbDispatcherProperty
 from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
@@ -37,7 +37,7 @@ class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper)
 
     def requestToJoin(self, battleID):
         currentBattleID = getBattleID()
-        if currentBattleID == battleID:
+        if currentBattleID == battleID and self.prbDispatcher.getUnitFunctional().hasEntity():
             fort_events.showFortBattleRoomWindow()
         else:
             battle = self.fortCtrl.getFort().getBattle(battleID)

@@ -2,21 +2,24 @@
 from constants import PREBATTLE_TYPE
 from account_helpers import gameplay_ctx
 from external_strings_utils import truncate_utf8
-from gui.prb_control import getUnitIdx, settings as prb_settings, getUnitMgrID
+from gui.prb_control import prb_getters, settings as prb_settings
 from gui.prb_control.context import PrbCtrlRequestCtx
-from gui.prb_control.settings import UNIT_MODE_FLAGS
 from gui.shared.utils.decorators import ReprInjector
+__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx', 'ChangeDivisionCtx', 'SetEventVehiclesCtx', 'ChangeEventSquadTypeCtx')
 _CTRL_ENTITY_TYPE = prb_settings.CTRL_ENTITY_TYPE
 _REQUEST_TYPE = prb_settings.REQUEST_TYPE
-_FUNCTIONAL_EXIT = prb_settings.FUNCTIONAL_EXIT
+_FUNCTIONAL_FLAG = prb_settings.FUNCTIONAL_FLAG
+_UNDEFINED = _FUNCTIONAL_FLAG.UNDEFINED
+_SWITCH = _FUNCTIONAL_FLAG.SWITCH
 
 class _UnitRequestCtx(PrbCtrlRequestCtx):
+    __slots__ = ()
 
-    def getCtrlType(self):
-        return _CTRL_ENTITY_TYPE.UNIT
+    def __init__(self, **kwargs):
+        super(_UnitRequestCtx, self).__init__(ctrlType=_CTRL_ENTITY_TYPE.UNIT, **kwargs)
 
     def getUnitIdx(self):
-        return getUnitIdx()
+        return prb_getters.getUnitIdx()
 
     def getCooldown(self):
         return 5.0
@@ -25,14 +28,11 @@ class _UnitRequestCtx(PrbCtrlRequestCtx):
 @ReprInjector.simple(('__prbType', 'prbType'), ('getRosterID', 'rosterID'), ('getWaitingID', 'waitingID'))
 
 class CreateUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__rosterID',)
 
-    def __init__(self, prbType, waitingID = '', rosterID = 0):
-        super(CreateUnitCtx, self).__init__(waitingID=waitingID, funcExit=_FUNCTIONAL_EXIT.UNIT)
-        self.__prbType = prbType
+    def __init__(self, prbType, flags = _UNDEFINED, waitingID = '', rosterID = 0):
+        super(CreateUnitCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=flags)
         self.__rosterID = rosterID
-
-    def getPrbType(self):
-        return self.__prbType
 
     def getRequestType(self):
         return _REQUEST_TYPE.CREATE
@@ -44,37 +44,27 @@ class CreateUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__prbType', 'prbType'), ('getID', 'unitMgrID'), ('getWaitingID', 'waitingID'))
 
 class JoinModeCtx(_UnitRequestCtx):
+    __slots__ = ()
 
-    def __init__(self, prbType, modeFlags = UNIT_MODE_FLAGS.UNDEFINED, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SWITCH):
-        super(JoinModeCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
-        self.__prbType = prbType
-        self.__modeFlags = modeFlags
+    def __init__(self, prbType, waitingID = '', flags = _UNDEFINED):
+        super(JoinModeCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=flags)
 
     def getID(self):
-        return getUnitMgrID()
-
-    def getPrbType(self):
-        return self.__prbType
-
-    def getModeFlags(self):
-        return self.__modeFlags
+        return prb_getters.getUnitMgrID()
 
 
-@ReprInjector.simple(('__prbType', 'prbType'), ('__unitMgrID', 'unitMgrID'), ('__slotIdx', 'slotIdx'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent(('__unitMgrID', 'unitMgrID'), ('__slotIdx', 'slotIdx'))
 
 class JoinUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__unitMgrID', '__slotIdx')
 
     def __init__(self, unitMgrID, prbType, slotIdx = None, waitingID = ''):
-        super(JoinUnitCtx, self).__init__(waitingID=waitingID, funcExit=_FUNCTIONAL_EXIT.UNIT)
+        super(JoinUnitCtx, self).__init__(entityType=prbType, waitingID=waitingID, flags=_SWITCH)
         self.__unitMgrID = unitMgrID
-        self.__prbType = prbType
         self.__slotIdx = slotIdx
 
     def getRequestType(self):
         return _REQUEST_TYPE.JOIN
-
-    def getPrbType(self):
-        return self.__prbType
 
     def getID(self):
         return self.__unitMgrID
@@ -83,23 +73,24 @@ class JoinUnitCtx(_UnitRequestCtx):
         return self.__slotIdx
 
 
-@ReprInjector.simple(('getID', 'unitIdx'), ('getFuncExit', 'exit'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('getID', 'unitIdx'), ('getFlagsToStrings', 'flags'), ('getWaitingID', 'waitingID'))
 
 class LeaveUnitCtx(_UnitRequestCtx):
 
-    def __init__(self, waitingID = '', funcExit = _FUNCTIONAL_EXIT.NO_FUNC):
-        super(LeaveUnitCtx, self).__init__(waitingID=waitingID, funcExit=funcExit)
+    def __init__(self, waitingID = '', flags = _UNDEFINED, entityType = 0):
+        super(LeaveUnitCtx, self).__init__(waitingID=waitingID, flags=flags, entityType=entityType)
 
     def getRequestType(self):
         return _REQUEST_TYPE.LEAVE
 
     def getID(self):
-        return getUnitIdx()
+        return prb_getters.getUnitIdx()
 
 
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isLocked', 'isLocked'), ('getWaitingID', 'waitingID'))
 
 class LockUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__isLocked',)
 
     def __init__(self, isLocked = True, waitingID = ''):
         super(LockUnitCtx, self).__init__(waitingID=waitingID)
@@ -115,6 +106,7 @@ class LockUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__slotIdx', 'slotIdx'), ('__isClosed', 'isClosed'), ('getWaitingID', 'waitingID'))
 
 class CloseSlotCtx(_UnitRequestCtx):
+    __slots__ = ('__slotIdx', '__isClosed')
 
     def __init__(self, slotIdx, isClosed = True, waitingID = ''):
         super(CloseSlotCtx, self).__init__(waitingID=waitingID)
@@ -134,6 +126,7 @@ class CloseSlotCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__vehTypeCD', 'vTypeCD'), ('__vehInvID', 'vehInvID'), ('getWaitingID', 'waitingID'))
 
 class SetVehicleUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__vehTypeCD', '__vehInvID', 'setReady')
 
     def __init__(self, vTypeCD = 0, vehInvID = 0, waitingID = ''):
         super(SetVehicleUnitCtx, self).__init__(waitingID=waitingID)
@@ -154,6 +147,7 @@ class SetVehicleUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isOpened', 'isOpened'), ('getWaitingID', 'waitingID'))
 
 class ChangeOpenedUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__isOpened',)
 
     def __init__(self, isOpened, waitingID = ''):
         super(ChangeOpenedUnitCtx, self).__init__(waitingID=waitingID)
@@ -169,6 +163,7 @@ class ChangeOpenedUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__comment', 'comment'), ('getWaitingID', 'waitingID'))
 
 class ChangeCommentUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__comment',)
 
     def __init__(self, comment, waitingID = ''):
         super(ChangeCommentUnitCtx, self).__init__(waitingID=waitingID)
@@ -181,12 +176,13 @@ class ChangeCommentUnitCtx(_UnitRequestCtx):
         return self.__comment
 
     def isCommentChanged(self, unit):
-        return self.__comment != unit._strComment
+        return self.__comment != unit.getComment()
 
 
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isReady', 'isReady'), ('getWaitingID', 'waitingID'))
 
 class SetReadyUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__isReady', 'resetVehicle')
 
     def __init__(self, isReady = True, waitingID = ''):
         super(SetReadyUnitCtx, self).__init__(waitingID=waitingID)
@@ -203,6 +199,7 @@ class SetReadyUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__pID', 'pID'), ('__slotIdx', 'slotIdx'), ('getWaitingID', 'waitingID'))
 
 class AssignUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__pID', '__slotIdx')
 
     def __init__(self, pID, slotIdx, waitingID = ''):
         super(AssignUnitCtx, self).__init__(waitingID=waitingID)
@@ -222,6 +219,7 @@ class AssignUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getActionName', 'action'), ('__vehTypes', 'vehTypes'), ('getWaitingID', 'waitingID'))
 
 class AutoSearchUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__action', '__vehTypes')
 
     def __init__(self, waitingID = '', action = 1, vehTypes = None):
         super(AutoSearchUnitCtx, self).__init__(waitingID=waitingID)
@@ -247,6 +245,7 @@ class AutoSearchUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getWaitingID', 'waitingID'))
 
 class AcceptSearchUnitCtx(_UnitRequestCtx):
+    __slots__ = ()
 
     def getRequestType(self):
         return _REQUEST_TYPE.ACCEPT_SEARCH
@@ -255,6 +254,7 @@ class AcceptSearchUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getWaitingID', 'waitingID'))
 
 class DeclineSearchUnitCtx(_UnitRequestCtx):
+    __slots__ = ()
 
     def getRequestType(self):
         return _REQUEST_TYPE.DECLINE_SEARCH
@@ -263,6 +263,7 @@ class DeclineSearchUnitCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getActionName', 'action'), ('getWaitingID', 'waitingID'), ('getGamePlayMask', 'mask'))
 
 class BattleQueueUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__action', '__vehTypes', 'selectVehInvID')
 
     def __init__(self, waitingID = '', action = 1, vehTypes = None):
         super(BattleQueueUnitCtx, self).__init__(waitingID=waitingID)
@@ -311,6 +312,7 @@ class RosterSlotCtx(object):
 @ReprInjector.simple(('__items', 'rostersSlots'), ('getWaitingID', 'waitingID'))
 
 class SetRostersSlotsCtx(_UnitRequestCtx):
+    __slots__ = ('__items',)
 
     def __init__(self, waitingID = ''):
         super(SetRostersSlotsCtx, self).__init__(waitingID=waitingID)
@@ -329,6 +331,7 @@ class SetRostersSlotsCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__databaseID', 'databaseID'), ('getWaitingID', 'waitingID'))
 
 class KickPlayerCtx(_UnitRequestCtx):
+    __slots__ = ('__databaseID',)
 
     def __init__(self, databaseID, waitingID = ''):
         super(KickPlayerCtx, self).__init__(waitingID=waitingID)
@@ -344,6 +347,7 @@ class KickPlayerCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__databaseID', 'databaseID'), ('getWaitingID', 'waitingID'))
 
 class GiveLeadershipCtx(_UnitRequestCtx):
+    __slots__ = ('__databaseID',)
 
     def __init__(self, databaseID, waitingID = ''):
         super(GiveLeadershipCtx, self).__init__(waitingID=waitingID)
@@ -359,6 +363,7 @@ class GiveLeadershipCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isRated', 'isRated'), ('getWaitingID', 'waitingID'))
 
 class ChangeRatedUnitCtx(_UnitRequestCtx):
+    __slots__ = ('__isRated',)
 
     def __init__(self, isRated, waitingID = ''):
         super(ChangeRatedUnitCtx, self).__init__(waitingID=waitingID)
@@ -371,19 +376,17 @@ class ChangeRatedUnitCtx(_UnitRequestCtx):
         return self.__isRated
 
 
-@ReprInjector.simple(('getWaitingID', 'waitingID'), ('getFuncExit', 'funcExit'))
+@ReprInjector.simple(('getWaitingID', 'waitingID'), ('getFlagsToStrings', 'flags'))
 
 class SquadSettingsCtx(_UnitRequestCtx):
+    __slots__ = ('__accountsToInvite',)
 
-    def __init__(self, waitingID = '', funcExit = prb_settings.FUNCTIONAL_EXIT.SQUAD, accountsToInvite = None, isForced = False):
-        super(SquadSettingsCtx, self).__init__(waitingID=waitingID, funcExit=funcExit, isForced=isForced)
+    def __init__(self, waitingID = '', flags = prb_settings.FUNCTIONAL_FLAG.UNDEFINED, accountsToInvite = None, isForced = False):
+        super(SquadSettingsCtx, self).__init__(entityType=PREBATTLE_TYPE.SQUAD, waitingID=waitingID, flags=flags, isForced=isForced)
         self.__accountsToInvite = accountsToInvite or []
 
     def getID(self):
         return 0
-
-    def getPrbType(self):
-        return PREBATTLE_TYPE.SQUAD
 
     def getRequestType(self):
         return _REQUEST_TYPE.CREATE
@@ -395,6 +398,7 @@ class SquadSettingsCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__division', 'division'), ('getWaitingID', 'waitingID'))
 
 class ChangeDivisionCtx(_UnitRequestCtx):
+    __slots__ = ('__divisionID',)
 
     def __init__(self, divisionID, waitingID = ''):
         super(ChangeDivisionCtx, self).__init__(waitingID=waitingID)
@@ -410,6 +414,7 @@ class ChangeDivisionCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__vehsList', 'vehsList'), ('getWaitingID', 'waitingID'))
 
 class SetEventVehiclesCtx(_UnitRequestCtx):
+    __slots__ = ('__vehsList',)
 
     def __init__(self, vehsList, waitingID = ''):
         super(SetEventVehiclesCtx, self).__init__(waitingID=waitingID)
@@ -428,6 +433,7 @@ class SetEventVehiclesCtx(_UnitRequestCtx):
 @ReprInjector.simple(('getUnitIdx', 'unitIdx'), ('__isReady', 'isReady'), ('getWaitingID', 'waitingID'))
 
 class SetReadyEventSquadCtx(_UnitRequestCtx):
+    __slots__ = ('__isReady',)
 
     def __init__(self, isReady = True, waitingID = ''):
         super(SetReadyEventSquadCtx, self).__init__(waitingID=waitingID)
@@ -443,6 +449,7 @@ class SetReadyEventSquadCtx(_UnitRequestCtx):
 @ReprInjector.simple(('__eventType', 'eventType'), ('getWaitingID', 'waitingID'))
 
 class ChangeEventSquadTypeCtx(_UnitRequestCtx):
+    __slots__ = ('__eventType',)
 
     def __init__(self, eventType = True, waitingID = ''):
         super(ChangeEventSquadTypeCtx, self).__init__(waitingID=waitingID)
@@ -453,6 +460,3 @@ class ChangeEventSquadTypeCtx(_UnitRequestCtx):
 
     def getRequestType(self):
         return _REQUEST_TYPE.CHANGE_ES_TYPE
-
-
-__all__ = ('CreateUnitCtx', 'JoinModeCtx', 'JoinUnitCtx', 'LeaveUnitCtx', 'LockUnitCtx', 'CloseSlotCtx', 'SetVehicleUnitCtx', 'ChangeOpenedUnitCtx', 'ChangeCommentUnitCtx', 'SetReadyUnitCtx', 'AssignUnitCtx', 'AutoSearchUnitCtx', 'AcceptSearchUnitCtx', 'DeclineSearchUnitCtx', 'BattleQueueUnitCtx', 'RosterSlotCtx', 'SetRostersSlotsCtx', 'KickPlayerCtx', 'ChangeRatedUnitCtx', 'SquadSettingsCtx', 'ChangeDivisionCtx', 'SetEventVehiclesCtx', 'ChangeEventSquadTypeCtx')

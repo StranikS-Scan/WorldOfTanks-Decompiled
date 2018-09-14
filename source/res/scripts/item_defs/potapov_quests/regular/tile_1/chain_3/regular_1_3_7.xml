@@ -1,0 +1,46 @@
+<regular_1_3_7.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_7_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	1	</count>
+        </item>
+        <item>	1019	  <count>	1	</count>
+        </item>
+        <item>	507	  <count>	1	</count>
+        </item>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_3_7_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	35000	</credits>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</regular_1_3_7.xml>

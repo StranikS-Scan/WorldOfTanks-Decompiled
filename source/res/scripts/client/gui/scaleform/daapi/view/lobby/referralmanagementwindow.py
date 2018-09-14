@@ -150,7 +150,7 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
                  'fullName': user.getFullName(),
                  'userName': user.getName(),
                  'clanAbbrev': user.getClanAbbrev()}
-                canInviteToSquad = self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
+                canInviteToSquad = self.prbFunctional.getEntityType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
                 btnEnabled = canInviteToSquad or False
                 btnTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL
             else:
@@ -228,7 +228,7 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
                         totalProgress = (currentCompletedStep + 1) * oneStepWeight
                     xpForNextStep = nextStepXP - currentCompletedStepXP
                     xpFromPrevStep = currentXP - currentCompletedStepXP
-                    stepProgress = float(xpFromPrevStep) / xpForNextStep
+                    stepProgress = float(xpFromPrevStep) / xpForNextStep if xpFromPrevStep else 0.0
                     totalStepProgress = stepProgress * oneStepWeight
                     progress = totalProgress + totalStepProgress
             else:
@@ -256,9 +256,9 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
 
     @process
     def __inviteOrCreateSquad(self, referralID):
-        if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getPrbType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite():
+        if self.prbFunctional.getEntityType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite():
             user = self.usersStorage.getUser(referralID)
-            if self.prbFunctional.getPrbType() == PREBATTLE_TYPE.NONE:
+            if self.prbFunctional.getEntityType() == PREBATTLE_TYPE.NONE:
                 result = yield self.prbDispatcher.create(unit_ctx.SquadSettingsCtx(waitingID='prebattle/create', accountsToInvite=[referralID], isForced=True))
             else:
                 result = yield self.prbDispatcher.sendUnitRequest(SendInvitesCtx([referralID], ''))

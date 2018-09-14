@@ -1,0 +1,88 @@
+<11_murovanka.xml>
+  <name>	#arenas:11_murovanka/name	</name>
+  <description>	#arenas:11_murovanka/description	</description>
+  <geometry>	spaces/11_murovanka	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/11_murovanka/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <loadingMusic>	/music/intro/rus_village	</loadingMusic>
+  <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
+  <ambientSound>	/wind/wind/wind_autumn_01	</ambientSound>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-55.000046 417.300	</position1>
+        </team1>
+        <team2>
+          <position1>	-55.000050 -407.199	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	169.306 314.553	</position>
+        </team1>
+        <team2>
+          <position>	144.26 -259.666	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	-349.723114 6.166060	</controlPoint>
+    </domination>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-101.549 -428.606	</position>
+        </team1>
+        <team2>
+          <position>	-27.412 293.698	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-379.173 5.872	</position1>
+          <position2>	131.785 -307.999	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+  <mapActivities>
+    <warplane>
+      <preset>	murovanka_lightning_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	murovanka_lightning_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	35.000000 35.000000	</startTime>
+      <period>	80.000000	</period>
+    </warplane>
+  </mapActivities>
+</11_murovanka.xml>

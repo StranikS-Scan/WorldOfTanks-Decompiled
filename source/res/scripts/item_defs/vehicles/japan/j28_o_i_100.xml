@@ -1,0 +1,853 @@
+<j28_o_i_100.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	25	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <repairCost>	5.80	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	175	</armor_1>
+      <armor_2>	150	</armor_2>
+      <armor_3>	70	</armor_3>
+      <armor_4>	150	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	35	</armor_9>
+      <armor_10>	175	</armor_10>
+      <armor_11>	75	</armor_11>
+      <armor_12>	150	</armor_12>
+      <armor_13>	105	</armor_13>
+      <armor_14>	75	</armor_14>
+      <armor_15>	17.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	51838	</weight>
+    <maxHealth>	1240	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 36.00 0.34 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.20 36.00 0.34 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.08	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.006047 1.32755 -0.478268	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModel>	vehicles/japan/J28_O_I_100/collision/Hull.model	</collisionModel>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.514858 0.320216 4.25579	</rayStart>
+        <rayEnd>	0.514858 0.220216 4.08258	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <camouflage>
+      <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_J28_O_I_100>
+      <userString>	#japan_vehicles:Chassis_J28_O_I_100	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <unlocks>
+        <chassis>	Chassis_J28_O_I_100_2	  <cost>	10800	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <weight>	28000	</weight>
+      <maxLoad>	100500	</maxLoad>
+      <terrainResistance>	1.3 1.4 2	</terrainResistance>
+      <brakeForce>	72000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	16	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.75	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352822	</radius>
+          <syncAngle>	31.4942	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.154305	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.611401	</radius>
+          <syncAngle>	18.9473	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.348555	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352822	</radius>
+          <syncAngle>	31.4942	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.154305	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.611401	</radius>
+          <syncAngle>	18.9473	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.348555	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.36195 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.70148 3.3633	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.061680 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.612870 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.800960	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J28_O_I_100/track/O_I_100_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J28_O_I_100/track/O_I_100_track.model	</segmentModelRight>
+        <left>	vehicles/japan/J28_O_I_100/track/left.track	</left>
+        <right>	vehicles/japan/J28_O_I_100/track/right.track	</right>
+        <segmentLength>	0.167	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0055	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	-0.01	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	537	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.118	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <offset>	-0.118	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_J28_O_I_100>
+    <Chassis_J28_O_I_100_2>
+      <userString>	#japan_vehicles:Chassis_J28_O_I_100_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	29200	</price>
+      <armor>
+        <leftTrack>	40	</leftTrack>
+        <rightTrack>	40	</rightTrack>
+      </armor>
+      <weight>	28000	</weight>
+      <maxLoad>	105500	</maxLoad>
+      <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
+      <brakeForce>	72000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.5 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.75	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352822	</radius>
+          <syncAngle>	31.4942	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.154305	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.611401	</radius>
+          <syncAngle>	18.9473	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.348555	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352822	</radius>
+          <syncAngle>	31.4942	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.154305	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.611401	</radius>
+          <syncAngle>	18.9473	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.348555	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
+      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.36195 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModel>
+      </hitTester>
+      <topRightCarryingPoint>	1.70148 3.3633	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.061680 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.612870 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.800960	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/japan/J28_O_I_100/track/O_I_100_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/japan/J28_O_I_100/track/O_I_100_track.model	</segmentModelRight>
+        <left>	vehicles/japan/J28_O_I_100/track/left.track	</left>
+        <right>	vehicles/japan/J28_O_I_100/track/right.track	</right>
+        <segmentLength>	0.167	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0055	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	-0.01	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	537	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.13	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <offset>	-0.13	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_J28_O_I_100_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_J28_O_I_100>
+      <userString>	#japan_vehicles:Turret_1_J28_O_I_100	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	200	</armor_1>
+        <armor_2>	220	</armor_2>
+        <armor_3>	150	</armor_3>
+        <armor_4>	150	</armor_4>
+        <armor_5>	60	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	150	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	150	</armor_9>
+        <armor_10>	200	</armor_10>
+        <armor_11>	150	</armor_11>
+        <armor_12>	70	</armor_12>
+        <armor_13>	70	</armor_13>
+        <armor_14>	100	</armor_14>
+        <armor_15>	150	</armor_15>
+        <armor_16>	70	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	17000	</weight>
+      <maxHealth>	310	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Cannon_Type92>	shared	  <maxAmmo>	100	</maxAmmo>
+          <unlocks>
+            <gun>	_105mm_Experimental_Tank_Gun	  <cost>	16200	</cost>
+            </gun>
+            <gun>	_150mm_Howitzer_Type96	  <cost>	14750	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.0166667 10 0.0194444 9 0.0222222 8.8 0.025 8.8 0.0277778 9.5 0.0416667 9.5 0.0444444 10 0.95 10 0.952778 9.5 0.972222 9.5 0.975 9 0.977778 8.8 0.980556 9 0.983333 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	11	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.2	</aimingTime>
+          <recoil>
+            <lodDist>	MEDIUM	</lodDist>
+            <amplitude>	0.4	</amplitude>
+            <backoffTime>	0.15	</backoffTime>
+            <returnTime>	0.52	</returnTime>
+          </recoil>
+          <models>
+            <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_01.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000087 0.00442479 0.590014	</rayStart>
+              <rayEnd>	0.0328831 0.010715 0.590014	</rayEnd>
+              <rayUp>	0.136 0.136 4	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_105mm_Cannon_Type92>
+        <_105mm_Experimental_Tank_Gun>	shared	  <maxAmmo>	100	</maxAmmo>
+          <unlocks>
+            <vehicle>	J27_O_I_120	  <cost>	110200	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.0166667 10 0.0194444 9 0.0222222 8.8 0.025 8.8 0.0277778 9.5 0.0416667 9.5 0.0444444 10 0.95 10 0.952778 9.5 0.975 9 0.977778 8.8 0.980556 9 0.983333 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_02.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000160329 0.00453851 1.55007	</rayStart>
+              <rayEnd>	0.0223676 -0.0277636 1.54059	</rayEnd>
+              <rayUp>	0.137 0.113 4	</rayUp>
+              <size>	0.5	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_105mm_Experimental_Tank_Gun>
+        <_150mm_Howitzer_Type96>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	60	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.00277778 10 0.00416667 7 0.00555556 6 0.00833333 6 0.0111111 5 0.0472222 5 0.05 6 0.0722222 6 0.0777778 7 0.0805556 8 0.0833333 10 0.916667 10 0.919444 7 0.927778 6 0.944444 6 0.947222 5 0.963889 5 0.966667 6 0.994444 6 0.997222 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.56	</shotDispersionRadius>
+          <reloadTime>	23	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.5	</aimingTime>
+          <models>
+            <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_03.model	</collisionModel>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000190563 0.00446696 0.696467	</rayStart>
+              <rayEnd>	0.0814316 0.00891253 0.679069	</rayEnd>
+              <rayUp>	0.208 0.158 4	</rayUp>
+              <size>	0.55	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_150mm_Howitzer_Type96>
+      </guns>
+      <models>
+        <undamaged>	vehicles/japan/J28_O_I_100/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/japan/J28_O_I_100/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Turret_01.model	</collisionModel>
+      </hitTester>
+      <gunPosition>	-0.006047 0.680627 1.3452	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.03584 0.591393 0.839715	</rayStart>
+          <rayEnd>	-0.879256 0.555558 0.720565	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.03584 0.591393 0.839715	</rayStart>
+          <rayEnd>	0.879256 0.555558 0.720565	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-0.944593 0.596102 -1.25047	</rayStart>
+          <rayEnd>	-0.856099 0.577349 -1.20784	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.8	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.944593 0.596102 -1.25047	</rayStart>
+          <rayEnd>	0.856099 0.577349 -1.20784	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.8	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
+      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
+      <physicsShape>	0.974 -0.099 1.015 0.000 0.805 -0.029 0.706 0.606 0.428 0.500 0.157 0.500 0.117 0.668 0.000	</physicsShape>
+    </Turret_1_J28_O_I_100>
+  </turrets0>
+  <engines>
+    <_Type98_V12_x2_1100>	shared	  <unlocks>
+        <engine>	_Type98_V12_x2_1200	  <cost>	27500	</cost>
+        </engine>
+      </unlocks>
+    </_Type98_V12_x2_1100>
+    <_Type98_V12_x2_1200>	shared	</_Type98_V12_x2_1200>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <_Type94_Hei>	shared	  <unlocks>
+        <radio>	_Type96_Bo	  <cost>	1400	</cost>
+        </radio>
+      </unlocks>
+    </_Type94_Hei>
+    <_Type96_Bo>	shared	  <unlocks>
+        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
+        </radio>
+      </unlocks>
+    </_Type96_Bo>
+    <_Type3_Otsu>	shared	</_Type3_Otsu>
+  </radios>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	japanese_sun	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</j28_o_i_100.xml>

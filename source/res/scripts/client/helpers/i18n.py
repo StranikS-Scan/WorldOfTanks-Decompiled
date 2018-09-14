@@ -8,9 +8,13 @@ from collections import defaultdict
 from encodings import utf_8
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 
+def _getTextPath(baseLoc):
+    locator = baseLoc + '/.text_locator'
+    return convert(BigWorld.wg_resolveFileName(locator)[:-len(locator)])
+
+
 def _getTranslator(domain):
-    path = convert(BigWorld.wg_resolveFileName('text')[:-5])
-    return gettext.translation(domain, path, languages=['text'])
+    return gettext.translation(domain, _getTextPath('text'), languages=['text'])
 
 
 class _TranslatorsCache(defaultdict):

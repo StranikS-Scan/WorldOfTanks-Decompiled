@@ -9,6 +9,13 @@
     <forward>	25	</forward>
     <backward>	8	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.158	</moving>
+    <still>	0.21	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.315	</firePenalty>
+  </invisibility>
   <repairCost>	0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -56,7 +63,8 @@
       <turret>	0.000000 0.955805 0.432193	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/czech/Cz06_Kolohousenka/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -207,13 +215,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.748318 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz06_Kolohousenka/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.686305 1.41062	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -396,6 +403,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.413889 10 0.416667 9.4 0.419444 9 0.422222 8.6 0.425 8.2 0.427778 7.8 0.430556 7.4 0.433333 7 0.566667 7 0.569444 7.4 0.572222 7.8 0.575 8.2 0.577778 8.6 0.580556 9 0.583333 9.4 0.586111 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
@@ -410,7 +418,8 @@
             <exploded>	vehicles/czech/Cz06_Kolohousenka/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.49 0.25 1 1	</tiling>
@@ -439,6 +448,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.413889 10 0.416667 9.4 0.419444 9 0.422222 8.6 0.425 8.2 0.427778 7.8 0.430556 7.4 0.433333 7 0.566667 7 0.569444 7.4 0.572222 7.8 0.575 8.2 0.577778 8.6 0.580556 9 0.583333 9.4 0.586111 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	3.1	</reloadTime>
           <shotDispersionFactors>
@@ -453,7 +463,8 @@
             <exploded>	vehicles/czech/Cz06_Kolohousenka/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.55 0.25 1 1	</tiling>
@@ -466,7 +477,8 @@
         <exploded>	vehicles/czech/Cz06_Kolohousenka/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz06_Kolohousenka/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz06_Kolohousenka/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz06_Kolohousenka/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.007968 0.202378 0.436731	</gunPosition>
       <emblemSlots>
@@ -487,9 +499,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.311 0.550 0.650 0.500 0.589 0.500 0.230 0.500 0.227 0.550 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.28 0.28 1 1	</tiling>
@@ -505,6 +515,19 @@
   <radios>
     <Radiostanice_vz_29>	shared	</Radiostanice_vz_29>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Cz06_Kolohousenka>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Cz06_Kolohousenka>
+    </chassis>
+    <engines>
+      <Hanomag_WD_50PS>
+        <bravo>	13.21601	</bravo>
+      </Hanomag_WD_50PS>
+    </engines>
+    <armour>	0.866094825	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

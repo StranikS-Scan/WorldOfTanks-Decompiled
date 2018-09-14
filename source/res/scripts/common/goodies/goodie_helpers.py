@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_helpers.py
+from copy import deepcopy
 from collections import namedtuple
 from debug_utils import LOG_ERROR
 from Goodies import GoodieException
@@ -58,8 +59,10 @@ class NamedGoodieData(GoodieData):
 
 
 def loadDefinitions(d):
-    goodies = {}
-    for uid, d in d.iteritems():
+    goodies = {'goodies': {},
+     'prices': deepcopy(d['prices']),
+     'notInShop': deepcopy(d['notInShop'])}
+    for uid, d in d['goodies'].iteritems():
         v_variety, v_target, v_enabled, v_lifetime, v_useby, v_limit, v_autostart, v_condition, v_resource = d
         if v_condition is not None:
             condition = _CONDITIONS.get(v_condition[0])(v_condition[1])
@@ -71,7 +74,7 @@ def loadDefinitions(d):
             value = GoodieValue.percent(v_resource[1])
         else:
             value = GoodieValue.absolute(v_resource[1])
-        goodies[uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
+        goodies['goodies'][uid] = GoodieDefinition(uid=uid, variety=v_variety, target=target, enabled=v_enabled, lifetime=v_lifetime, useby=v_useby, counter=v_limit, autostart=v_autostart, resource=resource, value=value, condition=condition)
 
     return goodies
 
@@ -103,3 +106,34 @@ def loadPdata(pdataGoodies, goodies, logID):
             goodies.load(uid, goodie[0], goodie[1], goodie[2])
         except GoodieException as detail:
             LOG_ERROR('Cannot load a goodie', detail, logID)
+
+
+def calcDefaultPrice(default, actual):
+    result = {}
+    defaultPrices = default['prices']
+    actualPrices = actual['prices']
+    for goodieID, defaultPrice in defaultPrices.iteritems():
+        actualPrice = actualPrices.get(goodieID, None)
+        if actualPrice is None:
+            continue
+        changedCredits = changedGold = 0
+        if defaultPrice[0] > actualPrice[0]:
+            changedCredits = defaultPrice[0] - actualPrice[0]
+        if defaultPrice[1] > actualPrice[1]:
+            changedGold = defaultPrice[1] - actualPrice[1]
+        if changedCredits or changedGold:
+            result[goodieID] = (changedCredits, changedGold)
+
+    return result
+
+
+def wipe(goodies, pdata, leaveGold):
+    if leaveGold:
+        for goodieID in pdata['goodies'].keys():
+            price = goodies['prices'].get(goodieID, None)
+            if price is not None and price[0] != 0:
+                del pdata['goodies'][goodieID]
+
+    else:
+        pdata['goodies'].clear()
+    return

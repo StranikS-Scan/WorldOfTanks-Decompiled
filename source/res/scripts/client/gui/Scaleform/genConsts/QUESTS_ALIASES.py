@@ -3,6 +3,12 @@
 
 
 class QUESTS_ALIASES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TAB_PERSONAL_QUESTS = 'tabPersonalQuests'
     TAB_COMMON_QUESTS = 'tabCommonQuests'
     TAB_LADDER_QUESTS = 'tabLadderQuests'

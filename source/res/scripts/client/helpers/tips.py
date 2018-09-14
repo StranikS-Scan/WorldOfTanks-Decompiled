@@ -6,7 +6,7 @@ from collections import defaultdict, namedtuple
 from constants import ARENA_GUI_TYPE
 import constants
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_control import arena_info
+from gui.battle_control import g_sessionProvider
 from gui.shared.utils.functions import rnd_choice_loop
 from helpers import i18n
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -78,15 +78,30 @@ class RandomTipsCriteria(_TipsCriteria):
         return tip
 
 
+_SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
+
 class SandboxTipsCriteria(_TipsCriteria):
 
     def find(self):
-        sandbox = 'sandbox01'
-        type = arena_info.getArenaType()
-        if type is not None:
-            if type.geometryName == '10_hills':
-                sandbox = 'sandbox02'
-        return _FoundTip(i18n.makeString('#tips:howToPlay'), i18n.makeString('#tips:%s' % sandbox), TIPS_IMAGE_SOURCE % sandbox)
+        playerBaseYPos = enemyBaseYPos = 0
+        arenaDP = g_sessionProvider.getCtx().getArenaDP()
+        playerTeam = 1
+        if arenaDP is not None:
+            playerTeam = arenaDP.getNumberOfTeam()
+        visitor = g_sessionProvider.arenaVisitor
+        positions = visitor.type.getTeamBasePositionsIterator()
+        for team, position, number in positions:
+            if team == playerTeam:
+                playerBaseYPos = position[2]
+            enemyBaseYPos = position[2]
+
+        geometryName = visitor.type.getGeometryName()
+        if geometryName in _SANDBOX_GEOMETRY_INDEX:
+            geometryIndex = _SANDBOX_GEOMETRY_INDEX.index(geometryName)
+        else:
+            geometryIndex = 0
+        positionIndex = 0 if playerBaseYPos < enemyBaseYPos else 1
+        return _FoundTip(i18n.makeString('#tips:howToPlay'), i18n.makeString('#tips:sandbox%s' % geometryIndex), TIPS_IMAGE_SOURCE % ('sandbox' + str(geometryIndex) + str(positionIndex)))
 
 
 class EventTipsCriteria(_TipsCriteria):
@@ -95,10 +110,10 @@ class EventTipsCriteria(_TipsCriteria):
         return _FoundTip(i18n.makeString('#tips:eventTitle'), i18n.makeString('#tips:eventMessage'), TIPS_IMAGE_SOURCE % 'event')
 
 
-def getTipsCriteria(arena):
-    if arena_info.isInSandboxBattle(arena):
+def getTipsCriteria(arenaVisitor):
+    if arenaVisitor.gui.isSandboxBattle():
         return SandboxTipsCriteria()
-    elif arena_info.isEventBattle(arena):
+    elif arenaVisitor.gui.isEventBattle():
         return EventTipsCriteria()
     else:
         return RandomTipsCriteria()

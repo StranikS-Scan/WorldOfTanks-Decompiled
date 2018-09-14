@@ -11,6 +11,13 @@
     <forward>	0.000001	</forward>
     <backward>	0.000001	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.107	</moving>
+    <still>	0.214	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.321	</firePenalty>
+  </invisibility>
   <repairCost>	6.57	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.000154 1.0552 -0.166347	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G02_Hummel/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G02_Hummel/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -352,13 +360,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.02225 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G02_Hummel/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G02_Hummel/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.26711 1.78935	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -413,6 +420,7 @@
             <maxPitch>	0.0 3.0 1.0 3.0	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.76	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.48	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -420,7 +428,8 @@
           </shotDispersionFactors>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <hitTester>
-            <collisionModel>	vehicles/german/G02_Hummel/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G02_Hummel/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <models>
             <undamaged>	vehicles/german/G02_Hummel/normal/lod0/Gun_03.model	</undamaged>
@@ -449,15 +458,14 @@
         <exploded>	vehicles/german/G02_Hummel/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G02_Hummel/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G02_Hummel/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G02_Hummel/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.002121 0.662594 -0.136024	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.798 0.234 1.000 0.000 1.000 0.000 0.500 0.023 0.471 0.500 0.268 0.500 0.649 0.082 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_1_Env_Artillery>
   </turrets0>
   <engines>
@@ -469,6 +477,18 @@
   <radios>
     <Development_Radio>	shared	</Development_Radio>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Env_Artillery>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Env_Artillery>
+    </chassis>
+    <engines>
+      <Development_Engine>
+        <bravo>	142.733	</bravo>
+      </Development_Engine>
+    </engines>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

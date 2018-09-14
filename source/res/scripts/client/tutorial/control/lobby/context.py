@@ -4,7 +4,6 @@ import BigWorld
 from AccountCommands import RES_TUTORIAL_DISABLED
 from tutorial.control import context
 from tutorial.logger import LOG_ERROR, LOG_REQUEST
-from tutorial.settings import TUTORIAL_STOP_REASON
 
 class LobbyBonusesRequester(context.BonusesRequester):
 
@@ -50,7 +49,7 @@ class LobbyBonusesRequester(context.BonusesRequester):
             if self._tutorial is not None and not self._tutorial.isStopped():
                 self._gui.showI18nMessage(errorKey, msgType='Error')
                 self._gui.hideWaiting()
-                self._tutorial.stop(reason=TUTORIAL_STOP_REASON.CRITICAL_ERROR)
+                self._tutorial.stop()
             return
         else:
             LOG_REQUEST('Player has been received bonuses', bonusID)

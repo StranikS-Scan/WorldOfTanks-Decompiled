@@ -8,6 +8,13 @@
     <forward>	31	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.229	</moving>
+    <still>	0.305	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.458	</firePenalty>
+  </invisibility>
   <repairCost>	2.60	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.710468 0.001022	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G36_PzII_J/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G36_PzII_J/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G36_PzII_J/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -168,13 +176,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.861908 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G36_PzII_J/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G36_PzII_J/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G36_PzII_J/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.18588 0.911538	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -392,6 +399,7 @@
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	1.2	</afterShot>
@@ -415,7 +423,8 @@
             <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G36_PzII_J/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G36_PzII_J/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G36_PzII_J/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
@@ -428,7 +437,8 @@
         <exploded>	vehicles/german/G36_PzII_J/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G36_PzII_J/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G36_PzII_J/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G36_PzII_J/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.203255 0.716321	</gunPosition>
       <emblemSlots>
@@ -464,9 +474,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.942 -0.021 1.026 0.000 0.463 0.263 0.996 0.478 0.198 0.500 0.237 0.500 0.055 0.100 0.168	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.12 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -481,6 +489,19 @@
   <radios>
     <FuG6>	shared	</FuG6>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <PzII_ausf_J>
+        <alpha>	0.1288	</alpha>
+      </PzII_ausf_J>
+    </chassis>
+    <engines>
+      <Maybach_HL45P>
+        <bravo>	42.29124	</bravo>
+      </Maybach_HL45P>
+    </engines>
+    <armour>	0.85509112	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

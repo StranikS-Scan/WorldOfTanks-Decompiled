@@ -8,6 +8,7 @@ from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core import SettingsCore
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.shared.utils import graphics
+from debug_utils import LOG_DEBUG, LOG_NOTE
 STATISTICS_VERSION = '0.0.2'
 
 class _STATISTICS_STATE:
@@ -21,6 +22,42 @@ class _HARDWARE_SCORE_PARAMS:
     PARAM_CPU_SCORE = 4
 
 
+class HANGAR_LOADING_STATE:
+    LOGIN = 0
+    CONNECTED = 1
+    SHOW_GUI = 2
+    QUESTS_SYNC = 3
+    USER_SERVER_SETTINGS_SYNC = 4
+    START_LOADING_SPACE = 5
+    START_LOADING_VEHICLE = 6
+    FINISH_LOADING_VEHICLE = 7
+    FINISH_LOADING_SPACE = 8
+    HANGAR_READY = 9
+    START_LOADING_TUTORIAL = 10
+    FINISH_LOADING_TUTORIAL = 11
+    DISCONNECTED = 12
+    COUNT = 13
+
+
+_HANGAR_LOADING_STATES_PREFIX = 'HANGAR LOADING STATE'
+_HANGAR_LOADING_STATES = ['LOGIN',
+ 'CONNECTED',
+ 'SHOW GUI',
+ 'QUESTS SYNC',
+ 'USS SYNC',
+ 'SPACE LOADING START',
+ 'VEHICLE LOADING START',
+ 'VEHICLE LOADING END',
+ 'SPACE LOADING END',
+ 'HANGAR READY',
+ 'TUTORIAL LOADING START',
+ 'TUTORIAL LOADING END',
+ 'DISCONNECTED']
+_HANGAR_LOADING_STATES_IDS = [HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE,
+ HANGAR_LOADING_STATE.FINISH_LOADING_SPACE,
+ HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL,
+ HANGAR_LOADING_STATE.HANGAR_READY]
+
 class StatisticsCollector:
     avrPing = property(lambda self: 0 if self.__framesTotal is 0 else self.__avrPing / self.__framesTotal)
     lagPercentage = property(lambda self: 0 if self.__framesTotal is 0 else self.__framesWithLags * 100 / self.__framesTotal)
@@ -31,6 +68,9 @@ class StatisticsCollector:
         self.__hangarLoaded = False
         self.__invalidStats = 0
         self.reset()
+        self.__loadingStates = [0.0] * HANGAR_LOADING_STATE.COUNT
+        self.__loadingInitialState = HANGAR_LOADING_STATE.LOGIN
+        self.__hangarLoadingTime = 0.0
         from ConnectionManager import connectionManager
         connectionManager.onDisconnected += self.__onClientDisconnected
 
@@ -45,7 +85,10 @@ class StatisticsCollector:
             BigWorld.enableBattleFPSCounter(False)
             SettingsCore.g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
             from gui.battle_control import g_sessionProvider
-            g_sessionProvider.getDrrScaleCtrl().onDRRChanged -= self.__onDRRChanged
+            ctrl = g_sessionProvider.shared.drrScale
+            if ctrl is not None:
+                ctrl.onDRRChanged -= self.__onDRRChanged
+        return
 
     def reset(self):
         self.__invalidStats = 0
@@ -64,10 +107,13 @@ class StatisticsCollector:
             BigWorld.enableBattleFPSCounter(True)
             SettingsCore.g_settingsCore.onSettingsChanged += self.__onSettingsChanged
             from gui.battle_control import g_sessionProvider
-            g_sessionProvider.getDrrScaleCtrl().onDRRChanged += self.__onDRRChanged
+            ctrl = g_sessionProvider.shared.drrScale
+            if ctrl is not None:
+                ctrl.onDRRChanged += self.__onDRRChanged
             self.__state = _STATISTICS_STATE.IN_PROGRESS
             self.__updateFunc = self.__updateBattle
             self.__updateFunc(fpsInfo, ping, isLagging)
+        return
 
     def __updateBattle(self, fpsInfo, ping, isLagging):
         if self.__state == _STATISTICS_STATE.IN_PROGRESS:
@@ -103,6 +149,7 @@ class StatisticsCollector:
                 ret['invalidStats'] |= self.__invalidStats
                 ret['contentType'] = ResMgr.activeContentType()
                 ret['soundQuality'] = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES].readInt('LQ_render', 0)
+                ret['hangarLoadingTime'] = self.__hangarLoadingTime
         if andStop is True or not proceed:
             self.stop()
         return ret
@@ -144,6 +191,29 @@ class StatisticsCollector:
 
     def __onDRRChanged(self):
         self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_DRR_SCALE_CHANGED
+
+    def noteHangarLoadingState(self, state, initialState=False, showSummaryNow=False):
+        if state < 0 or state > HANGAR_LOADING_STATE.COUNT:
+            LOG_DEBUG('Unknown hangar loading state: {0}'.format(state))
+            return
+        if initialState:
+            self.__loadingStates = [0] * HANGAR_LOADING_STATE.COUNT
+            self.__loadingInitialState = state
+        if self.__loadingStates[state] != 0.0:
+            return
+        exactTime = BigWorld.timeExact()
+        stateName = '{0}: {1}'.format(_HANGAR_LOADING_STATES_PREFIX, _HANGAR_LOADING_STATES[state])
+        LOG_NOTE('{0} - {1}'.format(stateName, exactTime))
+        self.__loadingStates[state] = exactTime
+        BigWorld.addUPLMessage(stateName)
+        if showSummaryNow:
+            reportHeader = _HANGAR_LOADING_STATES_PREFIX + ': SUMMARY'
+            stopWatch = HANGAR_LOADING_STATE.HANGAR_READY
+            if self.__loadingStates[HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL] != 0.0:
+                stopWatch = HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL
+                reportHeader += ' (With Tutorial stage) '
+            self.__hangarLoadingTime = self.__loadingStates[stopWatch] - self.__loadingStates[self.__loadingInitialState]
+            LOG_NOTE(reportHeader + ' TOTAL = ' + str(self.__hangarLoadingTime))
 
 
 g_statistics = StatisticsCollector()

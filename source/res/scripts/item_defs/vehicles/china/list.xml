@@ -44,7 +44,7 @@
     <userString>	#china_vehicles:Ch04_T34_1	</userString>
     <description>	#china_vehicles:Ch04_T34_1_descr	</description>
     <price>	1400000	</price>
-    <tags>	mediumTank enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user	</tags>
+    <tags>	mediumTank enhancedSuspension_Christie_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	7	</level>
   </Ch04_T34_1>
   <Ch06_Renault_NC31>
@@ -111,7 +111,7 @@
     <userString>	#china_vehicles:Ch16_WZ_131	</userString>
     <description>	#china_vehicles:Ch16_WZ_131_descr	</description>
     <price>	1350000	</price>
-    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	7	</level>
   </Ch16_WZ_131>
   <Ch10_IS2>
@@ -135,7 +135,7 @@
     <userString>	#china_vehicles:Ch19_121	</userString>
     <description>	#china_vehicles:Ch19_121_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank enhancedTorsions3t_user largeCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user largeCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </Ch19_121>
   <Ch08_Type97_Chi_Ha>
@@ -176,7 +176,7 @@
     <userString>	#china_vehicles:Ch22_113	</userString>
     <description>	#china_vehicles:Ch22_113_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	10	</level>
   </Ch22_113>
   <Ch25_121_mod_1971B>
@@ -223,8 +223,9 @@
     <id>	252	</id>
     <userString>	#china_vehicles:Ch23_112	</userString>
     <description>	#china_vehicles:Ch23_112_descr	</description>
-    <price>	12250	  <gold></gold>
+    <price>	10500	  <gold></gold>
     </price>
+    <notInShop>	true	</notInShop>
     <tags>	heavyTank enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
     <level>	8	</level>
   </Ch23_112>
@@ -241,7 +242,6 @@
     <id>	151	</id>
     <userString>	#igr_vehicles:Ch17_WZ131_1_WZ132_IGR	</userString>
     <description>	#igr_vehicles:Ch17_WZ131_1_WZ132_IGR_descr	</description>
-    <shortUserString>	#igr_vehicles:Ch17_WZ131_1_WZ132_IGR_short	</shortUserString>
     <price>	1	</price>
     <tags>	lightTank scout enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret	</tags>
     <level>	8	</level>
@@ -259,7 +259,7 @@
     <userString>	#igr_vehicles:Ch19_121_IGR	</userString>
     <description>	#igr_vehicles:Ch19_121_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	mediumTank enhancedTorsions3t_user largeCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret	</tags>
+    <tags>	mediumTank enhancedTorsions3t_user largeCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user premiumIGR secret HD	</tags>
     <level>	10	</level>
   </Ch19_121_IGR>
   <Ch06_Renault_NC31_bot>

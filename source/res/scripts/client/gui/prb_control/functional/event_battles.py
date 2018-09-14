@@ -8,7 +8,6 @@ from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.functional import prequeue
 from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.prb_control.storage import prequeue_storage_getter
 
 class EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
 
@@ -18,6 +17,7 @@ class EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
         g_playerEvents.onEnqueueEventBattlesFailure += functional.onEnqueueError
         g_playerEvents.onKickedFromEventBattles += functional.onKickedFromQueue
         g_playerEvents.onKickedFromArena += functional.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure += functional.onArenaJoinFailure
 
     def unsubscribe(self, functional):
         g_playerEvents.onEnqueuedEventBattles -= functional.onEnqueued
@@ -25,6 +25,7 @@ class EventBattlesEventsSubscriber(prequeue.PlayersEventsSubscriber):
         g_playerEvents.onEnqueueEventBattlesFailure -= functional.onEnqueueError
         g_playerEvents.onKickedFromEventBattles -= functional.onKickedFromQueue
         g_playerEvents.onKickedFromArena -= functional.onKickedFromArena
+        g_playerEvents.onArenaJoinFailure -= functional.onArenaJoinFailure
 
 
 class EventBattlesQueueFunctional(prequeue.AccountQueueFunctional):

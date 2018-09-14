@@ -23,11 +23,6 @@ class UtilsManager(UtilsManagerMeta):
     def registerTextManager(self, flashObject):
         self._textMgr.setFlashObject(flashObject)
 
-    def _populate(self):
-        super(UtilsManager, self)._populate()
-        settings = GUI_SETTINGS.imageCache
-        self.as_setImageCacheSettingsS(settings['maxSize'], settings['minSize'])
-
     def destroy(self):
         self.__unregisterMrgs()
         super(UtilsManagerMeta, self).destroy()

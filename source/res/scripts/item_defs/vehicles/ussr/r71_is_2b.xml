@@ -9,6 +9,13 @@
     <forward>	34	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.07	</moving>
+    <still>	0.139	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.209	</firePenalty>
+  </invisibility>
   <repairCost>	5.0	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.546021 0.627803	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R71_IS_2_Berlin/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R71_IS_2_Berlin/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R71_IS_2_Berlin/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -315,13 +323,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.972175 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R71_IS_2_Berlin/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R71_IS_2_Berlin/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R71_IS_2_Berlin/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.20344 2.23724	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -398,13 +405,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.366894 6 0.430556 2 0.569444 2 0.633106 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R71_IS_2_Berlin/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R71_IS_2_Berlin/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R71_IS_2_Berlin/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R71_IS_2_Berlin/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R71_IS_2_Berlin/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R71_IS_2_Berlin/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -427,7 +436,8 @@
         <exploded>	vehicles/russian/R71_IS_2_Berlin/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R71_IS_2_Berlin/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R71_IS_2_Berlin/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R71_IS_2_Berlin/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.002338 0.474646 1.3079	</gunPosition>
       <emblemSlots>
@@ -449,9 +459,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.048 0.000 0.602 -0.013 0.566 0.243 0.421 0.524 0.177 0.410 0.198 0.534 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -466,6 +474,19 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R71_IS_2B>
+        <alpha>	0.08855	</alpha>
+      </Chassis_R71_IS_2B>
+    </chassis>
+    <engines>
+      <V-2IS_B>
+        <bravo>	158.5922	</bravo>
+      </V-2IS_B>
+    </engines>
+    <armour>	1.194832217	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

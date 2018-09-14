@@ -4,7 +4,7 @@ import types
 import time
 from functools import partial
 import BigWorld
-from CurrentVehicle import g_currentVehicle
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from adisp import async, process
 from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -271,7 +271,10 @@ class _PrebattleDispatcher(ListenersCollection):
     def canPlayerDoAction(self):
         canDo, restriction = self.__collection.canPlayerDoAction(False)
         if canDo:
-            if not g_currentVehicle.isReadyToFight():
+            if g_currentPreviewVehicle.isPresent():
+                canDo = False
+                restriction = PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT
+            elif not g_currentVehicle.isReadyToFight():
                 if not g_currentVehicle.isPresent():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT
@@ -358,6 +361,7 @@ class _PrebattleDispatcher(ListenersCollection):
         return result
 
     def pe_onArenaJoinFailure(self, errorCode, _):
+        self.__collection.reset()
         SystemMessages.pushMessage(messages.getJoinFailureMessage(errorCode), type=SystemMessages.SM_TYPE.Error)
 
     def pe_onKickedFromArena(self, reasonCode):
@@ -427,9 +431,6 @@ class _PrebattleDispatcher(ListenersCollection):
         if roomType != IGR_TYPE.PREMIUM:
             if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
                 self.__collection.reset()
-
-    def captcha_onCaptchaInputCanceled(self):
-        self.__requestCtx.stopProcessing(False)
 
     def ctrl_onPrebattleIntroModeJoined(self, prbType, isLeaving):
         flags = self.__requestCtx.getFlags()
@@ -540,14 +541,12 @@ class _PrebattleDispatcher(ListenersCollection):
         g_playerEvents.onKickedFromArena += self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged += self.pe_onPrebattleAutoInvitesChanged
         gameSession = game_control.g_instance.gameSession
-        captchaCtrl = game_control.g_instance.captcha
         rentCtr = game_control.g_instance.rentals
         igrCtr = game_control.g_instance.igr
         if gameSession.lastBanMsg is not None:
             self.gs_onTillBanNotification(*gameSession.lastBanMsg)
         gameSession.onTimeTillBan += self.gs_onTillBanNotification
         rentCtr.onRentChangeNotify += self.rc_onRentChange
-        captchaCtrl.onCaptchaInputCanceled += self.captcha_onCaptchaInputCanceled
         igrCtr.onIgrTypeChanged += self.igr_onRoomChange
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
@@ -590,7 +589,6 @@ class _PrebattleDispatcher(ListenersCollection):
         g_playerEvents.onArenaJoinFailure -= self.pe_onArenaJoinFailure
         g_playerEvents.onKickedFromArena -= self.pe_onKickedFromArena
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.pe_onPrebattleAutoInvitesChanged
-        game_control.g_instance.captcha.onCaptchaInputCanceled -= self.captcha_onCaptchaInputCanceled
         game_control.g_instance.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
         game_control.g_instance.rentals.onRentChangeNotify -= self.rc_onRentChange
         game_control.g_instance.igr.onIgrTypeChanged -= self.igr_onRoomChange

@@ -3,6 +3,12 @@
 
 
 class RES_LOGIN(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MAPS_LOGIN_LOGIN_BG = '../maps/login/__login_bg.png'
     MAPS_LOGIN_BACK_11_WITHOUT_SPARKS = '../maps/login/back_11_without_sparks.png'
     MAPS_LOGIN_BACK_13_WITHOUT_SPARKS = '../maps/login/back_13_without_sparks.png'
@@ -34,6 +40,8 @@ class RES_LOGIN(object):
     MAPS_LOGIN_BACK_39_WITHOUT_SPARKS = '../maps/login/back_39_without_sparks.png'
     MAPS_LOGIN_BACK_40_WITHOUT_SPARKS = '../maps/login/back_40_without_sparks.png'
     MAPS_LOGIN_BACK_41_WITHOUT_SPARKS = '../maps/login/back_41_without_sparks.png'
+    MAPS_LOGIN_BACK_42_WITHOUT_SPARKS = '../maps/login/back_42_without_sparks.png'
+    MAPS_LOGIN_BACK_43_WITHOUT_SPARKS = '../maps/login/back_43_without_sparks.png'
     MAPS_LOGIN_BACK_4_WITHOUT_SPARKS = '../maps/login/back_4_without_sparks.png'
     MAPS_LOGIN_BACK_5_WITHOUT_SPARKS = '../maps/login/back_5_without_sparks.png'
     MAPS_LOGIN_BACK_8_WITHOUT_SPARKS = '../maps/login/back_8_without_sparks.png'

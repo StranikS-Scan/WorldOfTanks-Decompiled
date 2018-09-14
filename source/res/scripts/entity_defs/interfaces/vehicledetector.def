@@ -1,0 +1,16 @@
+<vehicledetector.def>
+  <TempProperties>
+    <_vehicleDetector></_vehicleDetector>
+  </TempProperties>
+  <CellMethods>
+    <vehicleDetector_setupVehicleDetector>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </vehicleDetector_setupVehicleDetector>
+    <vehicleDetector_removeVehicleDetector>
+      <Arg>	UINT16	</Arg>
+    </vehicleDetector_removeVehicleDetector>
+  </CellMethods>
+</vehicledetector.def>

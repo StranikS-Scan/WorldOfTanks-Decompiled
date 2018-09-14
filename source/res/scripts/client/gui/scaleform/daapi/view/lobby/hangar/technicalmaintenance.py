@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.tooltips import getItemActionTooltipData
+from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleLayoutProcessor, VehicleRepairer, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor
+from gui.shared.money import Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
 from gui.shared import events, g_itemsCache, event_dispatcher as shared_events
@@ -96,23 +97,20 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         if vehicle.isAutoEquip != equip:
             yield VehicleAutoEquipProcessor(vehicle, equip).request()
 
-    def showModuleInfo(self, moduleId):
-        if moduleId is None:
-            return LOG_ERROR('There is error while attempting to show module info window: ', str(moduleId))
-        else:
-            shared_events.showModuleInfo(moduleId, g_currentVehicle.item.descriptor)
-            return
+    def showModuleInfo(self, itemCD):
+        if itemCD is not None and int(itemCD) > 0:
+            shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
+        return
 
     def populateTechnicalMaintenance(self):
-        credits, gold = g_itemsCache.items.stats.money
+        money = g_itemsCache.items.stats.money
         goldShellsForCredits = g_itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
-        data = {'gold': gold,
-         'credits': credits}
+        data = {'gold': money.gold,
+         'credits': money.credits}
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
             casseteCount = vehicle.descriptor.gun['clip'][0]
             casseteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % casseteCount
-            data.update({'isMoonEvent': vehicle.isOnlyForEventBattles})
             data.update({'vehicleId': str(vehicle.intCD),
              'repairCost': vehicle.repairCost,
              'maxRepairCost': vehicle.descriptor.getMaxRepairCost(),
@@ -130,7 +128,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 defaultPrice = shell.defaultAltPrice
                 action = None
                 if price != defaultPrice:
-                    action = getItemActionTooltipData(shell)
+                    action = packItemActionTooltipData(shell)
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
@@ -144,8 +142,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                  'ammoName': shell.longUserNameAbbr,
                  'tableName': shell.getShortInfo(vehicle, True),
                  'maxAmmo': vehicle.gun.maxAmmo,
-                 'userCredits': {'credits': credits,
-                                 'gold': gold},
+                 'userCredits': money.toDict(),
                  'actionPriceData': action})
 
         self.as_setDataS(data)
@@ -167,7 +164,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         items = g_itemsCache.items
         goldEqsForCredits = items.shop.isEnabledBuyingGoldEqsForCredits
         vehicle = g_currentVehicle.item
-        credits, gold = g_itemsCache.items.stats.money
+        money = g_itemsCache.items.stats.money
         installedItems = list(vehicle.eqs)
         currencies = [None, None, None]
         selectedItems = [None, None, None]
@@ -189,12 +186,12 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             index = None
             if module in selectedItems:
                 index = selectedItems.index(module)
-                priceCurrency = currencies[index] or 'credits'
+                priceCurrency = currencies[index] or Currency.CREDITS
             else:
                 priceCurrency = module.getBuyPriceCurrency()
             action = None
             if price != defaultPrice:
-                action = getItemActionTooltipData(module)
+                action = packItemActionTooltipData(module)
             modules.append({'id': str(module.intCD),
              'name': module.userName,
              'desc': module.fullDescription,
@@ -209,8 +206,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'count': module.inventoryCount,
              'fits': fits,
              'goldEqsForCredits': goldEqsForCredits,
-             'userCredits': {'credits': credits,
-                             'gold': gold},
+             'userCredits': money.toDict(),
              'actionPriceData': action,
              'moduleLabel': module.getGUIEmblemID()})
 
@@ -233,14 +229,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         shellsLayout = []
         eqsLayout = []
         for shell in shells:
-            buyGoldShellForCredits = shell.goldShellsForCredits and shell.prices[1] > 0 and shell.currency == 'credits'
+            buyGoldShellForCredits = shell.goldShellsForCredits and shell.prices[1] > 0 and shell.currency == Currency.CREDITS
             shellsLayout.append(int(shell.id) if not buyGoldShellForCredits else -int(shell.id))
             shellsLayout.append(int(shell.userCount))
 
         for ei in equipment:
             if ei is not None:
                 intCD = int(ei.id)
-                buyGoldEqForCredits = ei.goldEqsForCredits and ei.prices[1] > 0 and ei.currency == 'credits'
+                buyGoldEqForCredits = ei.goldEqsForCredits and ei.prices[1] > 0 and ei.currency == Currency.CREDITS
                 eqsLayout.append(intCD if not buyGoldEqForCredits else -intCD)
                 eqsLayout.append(1)
             eqsLayout.append(0)

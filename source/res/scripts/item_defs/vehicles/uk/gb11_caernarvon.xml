@@ -9,6 +9,13 @@
     <forward>	34.3	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.048	</moving>
+    <still>	0.097	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.146	</firePenalty>
+  </invisibility>
   <repairCost>	7.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -91,7 +98,8 @@
       <turret>	0.000000 0.612787 0.54566	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -225,13 +233,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.19472 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.52784 2.46214	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -490,13 +497,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.19472 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.52784 2.46214	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -718,13 +724,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -748,7 +756,8 @@
         <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.02962 0.408285 0.98788	</gunPosition>
       <emblemSlots>
@@ -769,9 +778,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.085 0.122 1.030 0.000 0.463 0.280 0.976 0.723 0.276 0.500 0.165 0.500 0.198 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
       </camouflage>
@@ -834,13 +841,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB11_Caernarvon/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -875,6 +884,7 @@
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -886,7 +896,8 @@
             <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -914,6 +925,7 @@
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	7.8	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -925,7 +937,8 @@
             <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -950,7 +963,8 @@
         <exploded>	vehicles/british/GB11_Caernarvon/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB11_Caernarvon/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.326263 1.25517	</gunPosition>
       <emblemSlots>
@@ -971,9 +985,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.976 -0.037 0.888 0.000 0.470 0.293 0.664 0.710 0.271 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.715 0.475 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1008,6 +1020,28 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB11_Caernarvon>
+        <alpha>	0.12075	</alpha>
+      </Chassis_GB11_Caernarvon>
+      <Chassis_GB11_Caernarvon_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB11_Caernarvon_2>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_MkIV>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV>
+      <Rolls_Royse_Meteor_MkIVC>
+        <bravo>	198.2402	</bravo>
+      </Rolls_Royse_Meteor_MkIVC>
+      <Rolls_Royse_Meteor_M120>
+        <bravo>	214.0994	</bravo>
+      </Rolls_Royse_Meteor_M120>
+    </engines>
+    <armour>	1.027357776	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

@@ -3,6 +3,12 @@
 
 
 class RETRAIN_CREW(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     WINDOW_TITLE = '#retrain_crew:window/title'
     LABEL_CREWMEMBERS = '#retrain_crew:label/crewMembers'
     LABEL_ONTHETECHNICS = '#retrain_crew:label/onTheTechnics'

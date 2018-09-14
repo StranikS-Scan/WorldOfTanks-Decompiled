@@ -3,6 +3,12 @@
 
 
 class RES_COMMON(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MAPS_BG = '../maps/bg.png'
     MAPS_LEGAL_BRANDS = '../maps/legal_brands.png'
     MAPS_LOADING_AWARD = '../maps/loading_award.png'

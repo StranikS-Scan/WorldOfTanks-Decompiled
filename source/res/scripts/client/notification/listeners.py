@@ -9,6 +9,7 @@ from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener
 from gui.clubs.settings import CLIENT_CLUB_STATE
 from gui.clubs.club_helpers import ClubListener
+from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
 from gui.shared.notifications import MsgCustomEvents
 from gui.shared.utils import showInvitationInWindowsBar
@@ -88,11 +89,13 @@ class FortServiceChannelListener(_NotificationListener):
         result = super(FortServiceChannelListener, self).start(model)
         if result:
             g_messengerEvents.serviceChannel.onCustomMessageDataReceived += self.__onMsgReceived
+            g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return result
 
     def stop(self):
         self.__fortInvitesData = None
         g_messengerEvents.serviceChannel.onCustomMessageDataReceived -= self.__onMsgReceived
+        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(FortServiceChannelListener, self).stop()
         return
 
@@ -117,6 +120,23 @@ class FortServiceChannelListener(_NotificationListener):
                             model.updateNotification(NOTIFICATION_TYPE.MESSAGE, storedClientID, formatted, False)
                             del self.__fortInvitesData[battleID]
         return
+
+    def __onServerSettingChanged(self, diff):
+        if 'isFortsEnabled' in diff and not diff['isFortsEnabled']:
+            model = self._model()
+            if model:
+                for battleID in self.__fortInvitesData.keys():
+                    storedClientID = self.__fortInvitesData[battleID]
+                    _, formatted, settings = self.proto.serviceChannel.getMessage(storedClientID)
+                    if formatted and settings:
+                        buttonsStates = {}
+                        buttonsLayout = formatted.get('buttonsLayout', [])
+                        for layout in buttonsLayout:
+                            buttonsStates[layout['type']] = NOTIFICATION_BUTTON_STATE.VISIBLE
+
+                        formatted['buttonsStates'] = buttonsStates
+                        model.updateNotification(NOTIFICATION_TYPE.MESSAGE, storedClientID, formatted, False)
+                        del self.__fortInvitesData[battleID]
 
 
 class PrbInvitesListener(_NotificationListener, GlobalListener):

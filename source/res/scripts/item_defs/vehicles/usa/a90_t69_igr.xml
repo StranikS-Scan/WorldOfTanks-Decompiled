@@ -1,0 +1,399 @@
+<a90_t69_igr.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	51.5	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.167	</moving>
+    <still>	0.222	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.333	</firePenalty>
+  </invisibility>
+  <repairCost>	8.5	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A90_T69/T69_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	101.6	</armor_1>
+      <armor_2>	63.5	</armor_2>
+      <armor_3>	76.2	</armor_3>
+      <armor_4>	38.1	</armor_4>
+      <armor_5>	50.8	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	63.5	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	63.5	</armor_9>
+      <armor_10>	63.5	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	25.4	</armor_12>
+      <armor_13>	101.6	</armor_13>
+      <armor_14>	63.5	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	17332	</weight>
+    <maxHealth>	1080	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A90_T69/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A90_T69/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A90_T69/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 38.00 0.34 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.26 38.00 0.34 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.539006 0.424616	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A90_T69/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A90_T69/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00349473 0.285863 2.78349	</rayStart>
+        <rayEnd>	-0.00349485 -0.0352801 2.54503	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A90_T69/T69_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1 1 0.24 0.58	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_T69_2_IGR>
+      <userString>	#igr_vehicles:Chassis_T69_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	33000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	36560	</maxLoad>
+      <terrainResistance>	1.1 1.2 2.1	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A90_T69/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A90_T69/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A90_T69/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.62	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.311681	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.149739	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.318621	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.3487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.311681	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.149739	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.318621	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.3487	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.08475 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A90_T69/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A90_T69/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.4348 1.62175	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.012400 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.627120 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.162650	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T69_2_IGR>
+  </chassis>
+  <turrets0>
+    <Turret_1_T69_IGR>
+      <userString>	#igr_vehicles:Turret_1_T69_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	46000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	82.6	</armor_1>
+        <armor_2>	69.9	</armor_2>
+        <armor_3>	63.5	</armor_3>
+        <armor_4>	50.8	</armor_4>
+        <armor_5>	101.6	</armor_5>
+        <armor_6>	76.2	</armor_6>
+        <armor_7>	76.2	</armor_7>
+        <armor_8>	25.4	</armor_8>
+        <armor_9>	27.9	</armor_9>
+        <armor_10>	25.4	</armor_10>
+        <armor_11>	0	</armor_11>
+        <armor_12>	152.4	</armor_12>
+        <armor_13>	114.3	</armor_13>
+      </armor>
+      <primaryArmor>	armor_12 armor_7 armor_13	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	270	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_90mm_Gun_T178_IGR>	shared	  <maxAmmo>	40	</maxAmmo>
+          <armor>
+            <armor_1>	177.8	</armor_1>
+            <armor_2>	152.4	</armor_2>
+            <armor_3>	139.7	</armor_3>
+            <armor_4>	25.4	</armor_4>
+            <armor_5>	114.3	</armor_5>
+            <armor_6>	101.6	</armor_6>
+            <armor_7>	88.9	</armor_7>
+            <armor_8>	76.2	</armor_8>
+            <armor_9>	63.5	</armor_9>
+            <armor_10>	50.8	</armor_10>
+            <armor_11>	25.4	</armor_11>
+            <armor_12>	0	</armor_12>
+            <armor_13>	101.6	</armor_13>
+            <armor_14>	76.2	</armor_14>
+            <armor_15>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	76.2	</armor_16>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	27	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
+          <clip>
+            <count>	4	</count>
+            <rate>	30	</rate>
+          </clip>
+          <pitchLimits>
+            <minPitch>	0 -14 1 -14	</minPitch>
+            <maxPitch>	0 9 1 9	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A90_T69/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A90_T69/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A90_T69/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A90_T69/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A90_T69/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00332368 -0.000001 3.06951	</rayStart>
+              <rayEnd>	0.0875754 -0.0953482 3.06695	</rayEnd>
+              <rayUp>	0.103 0.099 1	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.94 0.94 0.06 0.000000	</tiling>
+          </camouflage>
+        </_90mm_Gun_T178_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A90_T69/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A90_T69/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A90_T69/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A90_T69/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A90_T69/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.480338 0.088748	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.14251 0.231247 -1.59341	</rayStart>
+          <rayEnd>	-0.74315 0.20865 -1.5934	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.14251 0.231247 -1.59341	</rayStart>
+          <rayEnd>	0.74315 0.20865 -1.5934	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.14211 0.238441 -0.983196	</rayStart>
+          <rayEnd>	-0.742753 0.215843 -0.983189	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.14211 0.238441 -0.983196	</rayStart>
+          <rayEnd>	0.742753 0.215843 -0.983189	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.457 -0.287 1.000 0.000 1.473 0.149 0.705 0.726 0.245 0.500 0.293 0.500 0.386 0.194 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_T69_IGR>
+  </turrets0>
+  <engines>
+    <Continental_AOSI-895-5_IGR>	shared	</Continental_AOSI-895-5_IGR>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_619_IGR>	shared	</SCR_619_IGR>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_90mm_Gun_T178_IGR>
+        <delta>	1.1093117	</delta>
+      </_90mm_Gun_T178_IGR>
+    </guns>
+    <chassis>
+      <Chassis_T69_2_IGR>
+        <alpha>	0.0966	</alpha>
+      </Chassis_T69_2_IGR>
+    </chassis>
+    <engines>
+      <Continental_AOSI-895-5_IGR>
+        <bravo>	145.3762	</bravo>
+      </Continental_AOSI-895-5_IGR>
+    </engines>
+    <armour>	1.030878528	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision>	collision	</collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a90_t69_igr.xml>

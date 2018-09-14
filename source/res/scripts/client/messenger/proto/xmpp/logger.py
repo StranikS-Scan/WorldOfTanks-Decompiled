@@ -80,7 +80,7 @@ class XMPP_EVENT_LOG(object):
 def sendEventToServer(eventType, host, port, errorCode=0, errorDescr='', tries=1):
     player = BigWorld.player()
     sender = getattr(player, 'logXMPPEvents', None)
-    if not sender or not callable(sender) or not player.isPlayer:
+    if sender is None or not callable(sender) or not player.isPlayer or player.isDestroyed:
         return
     else:
         address = '{0}:{1}'.format(host, port)

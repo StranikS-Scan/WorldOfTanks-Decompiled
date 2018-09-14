@@ -32,7 +32,8 @@ from gui.game_control.controllers import Controller
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
-from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, REQ_CRITERIA, g_eventBus, events
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.utils.transport import z_loads
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.prb_helpers import GlobalListener
@@ -333,7 +334,7 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
         goodies = data.get('goodies', {})
         for boosterID in goodies:
             booster = g_goodiesCache.getBooster(boosterID)
-            if booster is not None:
+            if booster is not None and booster.enabled:
                 shared_events.showBoosterAward(booster)
 
         return
@@ -348,7 +349,7 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
         goodies = ctx[1].data.get('goodies', {})
         for boosterID in goodies:
             booster = g_goodiesCache.getBooster(boosterID)
-            if booster is not None:
+            if booster is not None and booster.enabled:
                 shared_events.showBoosterAward(booster)
 
         return
@@ -520,7 +521,7 @@ class FalloutVehiclesBuyHandler(AwardHandler):
         return self._awardCtrl.canShow() is False or self._shouldBeShown()
 
     def _shouldBeShown(self):
-        return not self.falloutStorage.hasVehicleLvl8() or not self.falloutStorage.hasVehicleLvl10()
+        return g_eventsCache.isFalloutEnabled() and (not self.falloutStorage.hasVehicleLvl8() or not self.falloutStorage.hasVehicleLvl10())
 
     def _showAward(self, ctx=None):
         if self._shouldBeShown():

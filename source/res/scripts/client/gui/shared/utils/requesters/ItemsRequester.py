@@ -124,6 +124,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
         SPECIFIC_BY_INV_ID = staticmethod(lambda invIDs: RequestCriteria(PredicateCondition(lambda item: item.invID in invIDs)))
         SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
+        RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented))
         ACTIVE_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
@@ -135,6 +136,7 @@ class REQ_CRITERIA(object):
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
         LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
+        HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -146,6 +148,7 @@ class REQ_CRITERIA(object):
         NATIVE_TANKS = staticmethod(lambda vehiclesList=[]: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.type.compactDescr in vehiclesList)))
 
     class BOOSTER:
+        ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.count > 0))
         ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
         IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
@@ -155,6 +158,10 @@ class REQ_CRITERIA(object):
 
 class RESEARCH_CRITERIA(object):
     VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT
+
+
+class FALLOUT_QUESTS_CRITERIA(object):
+    TOP_VEHICLE = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10) | ~REQ_CRITERIA.VEHICLE.EVENT
 
 
 class ItemsRequester(object):
@@ -180,6 +187,7 @@ class ItemsRequester(object):
         self.goodies = GoodiesRequester()
         self.shop = ShopRequester(self.goodies)
         self.__itemsCache = defaultdict(dict)
+        self.__vehCustomStateCache = defaultdict(dict)
 
     @async
     @process
@@ -234,6 +242,7 @@ class ItemsRequester(object):
             _, cache = self.__itemsCache.popitem()
             cache.clear()
 
+        self.__vehCustomStateCache.clear()
         self.inventory.clear()
         self.shop.clear()
         self.stats.clear()
@@ -316,6 +325,13 @@ class ItemsRequester(object):
     def getVehicle(self, vehInvID):
         vehInvData = self.inventory.getVehicleData(vehInvID)
         return self.__makeVehicle(vehInvData.descriptor.type.compactDescr, vehInvData) if vehInvData is not None else None
+
+    def getStockVehicle(self, typeCompDescr, useInventory=False):
+        if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
+            proxy = self if useInventory else None
+            return Vehicle(typeCompDescr=typeCompDescr, proxy=proxy)
+        else:
+            return
 
     def getTankman(self, tmanInvID):
         tmanInvData = self.inventory.getTankmanData(tmanInvID)
@@ -445,7 +461,7 @@ class ItemsRequester(object):
             invRes = self.inventory.invalidateItem(itemTypeID, uid)
             if uid in cache:
                 LOG_DEBUG('Item marked as invalid', uid, cache[uid], invRes)
-                del cache[uid]
+                self.__deleteItemFromCache(cache, uid, itemTypeID)
             LOG_DEBUG('No cached item', uid, invRes)
 
     def _invalidateUnlocks(self, unlocked, result):
@@ -460,6 +476,15 @@ class ItemsRequester(object):
                 result[itemTypeID].add(itemCD)
             if itemTypeID != GUI_ITEM_TYPE.FUEL_TANK:
                 LOG_WARNING('Item is not vehicle or module', itemTypeID)
+
+    def __deleteItemFromCache(self, cache, uid, itemTypeID):
+        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            item = cache[uid]
+            if item.isCustomStateSet():
+                self.__vehCustomStateCache[uid] = item.getCustomState()
+            elif uid in self.__vehCustomStateCache:
+                del self.__vehCustomStateCache[uid]
+        del cache[uid]
 
     def __getAccountDossierDescr(self):
         """
@@ -491,7 +516,16 @@ class ItemsRequester(object):
             cls = ItemsRequester.ITEM_TYPES_MAPPING.get(itemTypeIdx)
             if cls is not None:
                 container[uid] = item = cls(*args, **kwargs)
+                self.__restoreItemCustomState(itemTypeIdx, uid, item)
             return item
+
+    def __restoreItemCustomState(self, itemTypeIdx, uid, item):
+        if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
+            prevItem = self.__vehCustomStateCache.get(uid, None)
+            if prevItem:
+                item.setCustomState(prevItem)
+                del self.__vehCustomStateCache[uid]
+        return
 
     def __makeVehicle(self, typeCompDescr, vehInvData=None):
         vehInvData = vehInvData or self.inventory.getItemData(typeCompDescr)

@@ -38,21 +38,11 @@ def isBattleChatEnabled(common=False):
         guiType = arena.guiType
         if guiType is None:
             return result
-        if guiType == constants.ARENA_GUI_TYPE.RANDOM:
+        if guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.FALLOUT_CLASSIC, constants.ARENA_GUI_TYPE.FALLOUT_MULTITEAM):
             result = not g_settings.userPrefs.disableBattleChat
         if result and common:
             result = arena.bonusType != constants.ARENA_BONUS_TYPE.RATED_CYBERSPORT
         return result
-
-
-def getMinimapCellName(cellIdx):
-    from gui.app_loader import g_appLoader
-    battle = g_appLoader.getDefBattleApp()
-    if battle:
-        cellName = battle.minimap.getCellName(cellIdx)
-    else:
-        cellName = 'N/A'
-    return cellName
 
 
 def validateAccountName(name):

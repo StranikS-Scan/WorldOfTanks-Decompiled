@@ -34,7 +34,10 @@ class VehicleTelemetry:
             self.__physicsDebugInfoEnabled = shouldEnable
             return
 
-    DYNAMICS_LOG_DIR = ResMgr.appDirectory() + 'dynamics_log'
+    try:
+        DYNAMICS_LOG_DIR = ResMgr.appDirectory() + 'dynamics_log'
+    except AttributeError:
+        DYNAMICS_LOG_DIR = 'dynamics_log'
 
     def __checkDynLogDir(self):
         if not os.path.exists(VehicleTelemetry.DYNAMICS_LOG_DIR):
@@ -100,7 +103,6 @@ class VehicleTelemetry:
     def __writeHeader(self, name):
         descr = self.avatar.getVehicleAttached().typeDescriptor
         parts = name.split(VehicleTelemetry.NAME_DELIMITER)
-        print parts
         header = VehicleTelemetry.HEADER_TMPL % {'Veh': descr.name,
          'Eng': descr.engine['name'],
          'Css': descr.chassis['name'],

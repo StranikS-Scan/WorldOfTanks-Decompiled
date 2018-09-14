@@ -3,6 +3,12 @@
 
 
 class FORMATION_MEMBER_TYPE(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     OWNER = 1
     OFFICER = 2
     SOLDIER = 3

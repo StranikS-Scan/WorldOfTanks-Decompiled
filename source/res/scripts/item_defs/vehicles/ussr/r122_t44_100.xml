@@ -47,7 +47,8 @@
       <turret>	-0.009684 0.513164 0.001972	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R122_T44_100/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R122_T44_100/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -156,13 +157,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <hullPosition>	0.000000 0.897672 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R122_T44_100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R122_T44_100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.30415 1.86581	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -456,6 +456,7 @@
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	8.1	</reloadTime>
           <shotDispersionFactors>
@@ -470,7 +471,8 @@
             <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R122_T44_100/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R122_T44_100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -493,7 +495,8 @@
         <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R122_T44_100/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R122_T44_100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.025154 0.35855 1.02273	</gunPosition>
       <emblemSlots>
@@ -527,9 +530,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.527 0.133 0.744 0.404 0.500 0.500 0.227 0.500 0.000 0.504 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
@@ -546,6 +547,13 @@
     <forward>	52	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.22	</moving>
+    <still>	0.293	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.44	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -558,6 +566,19 @@
   <radios>
     <_9RSA>	shared	</_9RSA>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R122_T44_100>
+        <alpha>	0.0483	</alpha>
+      </Chassis_R122_T44_100>
+    </chassis>
+    <engines>
+      <V-44>
+        <bravo>	137.4465	</bravo>
+      </V-44>
+    </engines>
+    <armour>	1.048920489	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

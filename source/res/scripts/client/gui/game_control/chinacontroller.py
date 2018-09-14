@@ -17,12 +17,20 @@ class ChinaController(Controller):
             self.showBrowser()
 
     def onDisconnected(self):
-        self.__browserID = None
+        if self.__browserID is not None:
+            self.__browserClosed(self.__browserID)
+        return
+
+    def __browserClosed(self, browserId):
+        if browserId == self.__browserID:
+            self.__browserID = None
+            self._getBrowserController().onBrowserDeleted -= self.__browserClosed
         return
 
     @process
     def showBrowser(self):
         self.__browserID = yield self._getBrowserController().load(title=MENU.BROWSER_WINDOW_TITLE, browserID=self.__browserID)
+        self._getBrowserController().onBrowserDeleted += self.__browserClosed
 
     def _getBrowserController(self):
         return self._proxy.getController(gc_constants.CONTROLLER.BROWSER)

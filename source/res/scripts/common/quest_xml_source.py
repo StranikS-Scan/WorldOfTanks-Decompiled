@@ -8,7 +8,7 @@ import nations
 import ArenaType
 import battle_results_shared
 from debug_utils import LOG_DEBUG
-from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder
+from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import vehicles, tankmen
 from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, FORT_QUEST_SUFFIX
@@ -257,19 +257,18 @@ class Source(object):
         return questSection.readString('groupContent').split()
 
     def __getConditionReaders(self, eventType):
-        condition_readers = {'greater': self.__readCondition_int,
-         'equal': self.__readCondition_int,
-         'less': self.__readCondition_int,
-         'lessOrEqual': self.__readCondition_int,
-         'greaterOrEqual': self.__readCondition_int,
+        condition_readers = {'greater': self.__readCondition_float,
+         'equal': self.__readCondition_float,
+         'less': self.__readCondition_float,
+         'lessOrEqual': self.__readCondition_float,
+         'greaterOrEqual': self.__readCondition_float,
          'and': self.__readBattleResultsConditionList,
          'or': self.__readBattleResultsConditionList,
          'not': self.__readBattleResultsConditionList,
          'token': self.__readBattleResultsConditionList,
          'id': self.__readCondition_string,
          'consume': self.__readCondition_consume,
-         'clanIDs': self.__readClanIds,
-         'inClan': self.__readBattleResultsConditionList,
+         'inClan': self.__readClanIds,
          'vehiclesUnlocked': self.__readBattleResultsConditionList,
          'vehiclesOwned': self.__readBattleResultsConditionList,
          'classes': self.__readVehicleFilter_classes,
@@ -476,7 +475,7 @@ class Source(object):
         if len(records) == 2:
             blockName, rec = records
             for blockBuilder in accountDossierLayout + vehicleDossierLayout:
-                if type(blockBuilder) != StaticSizeBlockBuilder:
+                if type(blockBuilder) not in (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder):
                     continue
                 if blockBuilder.name == blockName:
                     if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer'):
@@ -502,6 +501,9 @@ class Source(object):
 
     def __readCondition_int(self, _, section, node):
         node.addChild(section.asInt)
+
+    def __readCondition_float(self, _, section, node):
+        node.addChild(section.asFloat)
 
     def __readCondition_consume(self, _, section, node):
         node.addChild(section.asInt)

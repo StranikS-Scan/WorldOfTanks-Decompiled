@@ -1,0 +1,551 @@
+<f12_hotchkiss_h35.xml>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	27	</forward>
+    <backward>	11	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.207	</moving>
+    <still>	0.276	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.414	</firePenalty>
+  </invisibility>
+  <repairCost>	4.58	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/french/F12_Hotchkiss_H35/Hotchkiss_H35_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	40	</armor_1>
+      <armor_2>	40	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	12	</armor_7>
+      <armor_8>	12	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	30	</armor_10>
+      <armor_11>	25	</armor_11>
+      <surveyingDevice>	50	</surveyingDevice>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4900	</weight>
+    <maxHealth>	128	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.001331 0.700034 0.011946	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.380853 0.191507 2.03346	</rayStart>
+        <rayEnd>	0.380853 -0.0239385 1.69644	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.22	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.941089 0.678863 0.452965	</rayStart>
+        <rayEnd>	0.392813 0.476163 0.31767	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.6	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F12_Hotchkiss_H35/Hotchkiss_H35_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_Hotchkiss_H35>
+      <userString>	#france_vehicles:Chassis_Hotchkiss_H35	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	250	</price>
+      <unlocks>
+        <chassis>	Chassis_Hotchkiss_H35_2	  <cost>	95	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	9600	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.7	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.32	</vehicleMovement>
+        <vehicleRotation>	0.32	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.32	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.31924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.10731	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.302564	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.216894	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.31924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.10731	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.302564	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.216894	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.681077 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.789801 1.21811	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.580460 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.021620 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.628820	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Hotchkiss_H35>
+    <Chassis_Hotchkiss_H35_2>
+      <userString>	#france_vehicles:Chassis_Hotchkiss_H35_2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	560	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	10500	</maxLoad>
+      <terrainResistance>	1.2 1.3 2.5	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.32	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.31924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.10731	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.302564	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.216894	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.31924	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.10731	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.302564	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.216894	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.681077 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.789801 1.21811	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.575130 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.021620 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.628820	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Hotchkiss_H35_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Hotchkiss_H35>
+      <userString>	#france_vehicles:Turret_1_Hotchkiss_H35	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	450	</price>
+      <notInShop>	true	</notInShop>
+      <unlocks>
+        <gun>	_37mm_SA38	  <cost>	75	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	40	</armor_1>
+        <armor_2>	35	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_6>	12	</armor_6>
+        <armor_7>	12	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	30	</armor_10>
+        <armor_11>	30	</armor_11>
+        <surveyingDevice>	50	</surveyingDevice>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	900	</weight>
+      <maxHealth>	32	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_APX_SA18>	shared	  <maxAmmo>	100	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 16 0.458333 16 0.472222 11 0.527778 11 0.541667 16 1 16	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
+            </gun>
+          </unlocks>
+          <aimingTime>	2	</aimingTime>
+          <armor>
+            <armor_1>	30	</armor_1>
+            <armor_2>	40	</armor_2>
+            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_APX_SA18>
+        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	160	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	30	</armor_1>
+            <armor_2>	40	</armor_2>
+            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <reloadTime>	1.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.5	</aimingTime>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+        </_25mm_Canon_Raccourci_Mle.1934>
+        <_37mm_SA38>	shared	  <maxAmmo>	100	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -13 1 -13	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	F44_Somua_S35	  <cost>	1360	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	30	</armor_1>
+            <armor_2>	40	</armor_2>
+            <armor_3>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <reloadTime>	2.6	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_SA38>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F12_Hotchkiss_H35/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F12_Hotchkiss_H35/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F12_Hotchkiss_H35/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.141263 0.251179 0.414349	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.721458 0.385389 0.143713	</rayStart>
+          <rayEnd>	-0.351857 0.233869 0.122821	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.667384 0.352937 0.228005	</rayStart>
+          <rayEnd>	0.312023 0.246144 0.0786298	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.965 0.000 1.046 0.000 0.578 0.081 0.705 0.292 0.358 0.500 0.358 0.500 0.306 0.662 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_Hotchkiss_H35>
+  </turrets0>
+  <engines>
+    <Hotchkiss_35>	shared	  <unlocks>
+        <engine>	Renault_V4	  <cost>	85	</cost>
+        </engine>
+      </unlocks>
+    </Hotchkiss_35>
+    <Renault_V4>	shared	</Renault_V4>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <ER_52>	shared	</ER_52>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Hotchkiss_H35>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Hotchkiss_H35>
+      <Chassis_Hotchkiss_H35_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Hotchkiss_H35_2>
+    </chassis>
+    <engines>
+      <Hotchkiss_35>
+        <bravo>	19.82402	</bravo>
+      </Hotchkiss_35>
+      <Renault_V4>
+        <bravo>	21.67426	</bravo>
+      </Renault_V4>
+    </engines>
+    <armour>	0.99358596	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.9	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f12_hotchkiss_h35.xml>

@@ -50,6 +50,22 @@ class ValueReplayPacker:
         return value
 
 
+class BunchProxyPacker(object):
+
+    def __init__(self, bunchMetaData):
+        self.__metaData = bunchMetaData
+
+    @property
+    def extMeta(self):
+        return self.__metaData
+
+    def pack(self, bunchOfDicts):
+        return {key:self.__metaData[key][0].pack(value) for key, value in bunchOfDicts.iteritems()}
+
+    def unpack(self, bunchOfLists):
+        return {key:self.__metaData[key][0].unpack(value) for key, value in bunchOfLists.iteritems()}
+
+
 class DictPacker(object):
 
     def __init__(self, *metaData):

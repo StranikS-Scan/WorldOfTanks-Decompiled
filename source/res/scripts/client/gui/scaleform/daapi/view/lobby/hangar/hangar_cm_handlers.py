@@ -1,17 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
+from CurrentVehicle import g_currentVehicle
 from adisp import process
 from debug_utils import LOG_ERROR
-from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
+from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
-from gui.shared import event_dispatcher as shared_events
 from gui.shared.utils import decorators
 
 class CREW(object):
@@ -31,6 +31,7 @@ class MODULE(object):
 
 class VEHICLE(object):
     INFO = 'vehicleInfoEx'
+    PREVIEW = 'preview'
     STATS = 'showVehicleStatistics'
     UNLOCK = 'unlock'
     SELECT = 'selectVehicle'
@@ -182,28 +183,29 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicleWasInBattle = False
         accDossier = g_itemsCache.items.getAccountDossier(None)
         isEventVehicle = vehicle.isOnlyForEventBattles
-        if accDossier:
-            wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
-            if vehicle.intCD in wasInBattleSet:
-                vehicleWasInBattle = True
-        if vehicle is not None:
-            options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
-            if vehicle.isRented:
-                if not vehicle.isPremiumIGR:
-                    money = g_itemsCache.items.stats.money
-                    canBuyOrRent = isEventVehicle
-                    if not isEventVehicle:
+        if vehicle is None:
+            return options
+        else:
+            if accDossier:
+                wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
+                if vehicle.intCD in wasInBattleSet:
+                    vehicleWasInBattle = True
+            if vehicle is not None:
+                options.extend([self._makeItem(VEHICLE.INFO, MENU.contextmenu(VEHICLE.INFO)), self._makeItem(VEHICLE.STATS, MENU.contextmenu(VEHICLE.STATS), {'enabled': vehicleWasInBattle}), self._makeSeparator()])
+                if vehicle.isRented:
+                    if not vehicle.isPremiumIGR:
+                        money = g_itemsCache.items.stats.money
                         canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
-                    options.append(self._makeItem(VEHICLE.BUY, MENU.contextmenu(VEHICLE.BUY), {'enabled': canBuyOrRent}))
-                options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
-            else:
-                options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
-            options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
-            if vehicle.isFavorite:
-                options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
-            else:
-                options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
-        return options
+                        options.append(self._makeItem(VEHICLE.BUY, MENU.contextmenu(VEHICLE.BUY), {'enabled': canBuyOrRent}))
+                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
+                else:
+                    options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
+                options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
+                if vehicle.isFavorite:
+                    options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
+                else:
+                    options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
+            return options
 
     @process
     def __favoriteVehicle(self, isFavorite):

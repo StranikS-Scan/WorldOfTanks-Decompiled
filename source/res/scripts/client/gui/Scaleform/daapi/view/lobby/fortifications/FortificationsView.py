@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortificationsView.py
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -8,10 +9,9 @@ from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper imp
 from gui.Scaleform.daapi.view.meta.FortificationsViewMeta import FortificationsViewMeta
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.WAITING import WAITING
-from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.sounds.ambients import FortEnv
-from gui.ClientUpdateManager import g_clientUpdateManager
 
 class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
     __sound_env__ = FortEnv
@@ -48,7 +48,10 @@ class FortificationsView(LobbySubView, FortificationsViewMeta, FortViewHelper):
             self.__makeWaitingData(showWaiting=False)
 
     def onClientStateChanged(self, state):
-        self.loadView()
+        if state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+            self.__close()
+        else:
+            self.loadView()
 
     def _populate(self):
         g_fortSoundController.init()

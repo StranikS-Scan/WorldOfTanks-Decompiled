@@ -3,6 +3,12 @@
 
 
 class ORDER_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     REQUISITION = 'requisition'
     EVACUATION = 'evacuation'
     HEAVY_TRUCKS = 'heavyTrucks'

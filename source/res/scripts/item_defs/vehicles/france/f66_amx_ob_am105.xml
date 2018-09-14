@@ -1,0 +1,562 @@
+<f66_amx_ob_am105.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.338	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.507	</firePenalty>
+  </invisibility>
+  <repairCost>	7.25	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/french/F66_AMX_Ob_Am105/AMX_Ob_Am105_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	25	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	15	</armor_7>
+      <armor_8>	15	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	0	</armor_11>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	10210	</weight>
+    <maxHealth>	136	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.7	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.00121 0.1183 -0.24897	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.631545 0.456853 1.35702	</rayStart>
+        <rayEnd>	-0.631545 0.0890986 1.19967	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.11169 0.717481 -2.24024	</rayStart>
+        <rayEnd>	-1.07311 0.706898 -2.24031	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	-1.1354 0.705164 -1.58292	</rayStart>
+        <rayEnd>	-1.0583 0.68382 -1.58292	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	1.11169 0.717481 -2.24024	</rayStart>
+        <rayEnd>	1.07311 0.706898 -2.24031	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	1.1354 0.705164 -1.58292	</rayStart>
+        <rayEnd>	1.0583 0.68382 -1.58292	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F66_AMX_Ob_Am105/AMX_Ob_Am105_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_AMX_Ob_Am105>
+      <userString>	#france_vehicles:Chassis_AMX_Ob_Am105	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2100	</price>
+      <unlocks>
+        <chassis>	Chassis_AMX_Ob_Am105_2	  <cost>	1100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	15500	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	14000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	23	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.333012	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.269646	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.343463	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.333012	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.269646	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.343463	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.027 1.35889	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.381150 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.163780	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_AMX_Ob_Am105>
+    <Chassis_AMX_Ob_Am105_2>
+      <userString>	#france_vehicles:Chassis_AMX_Ob_Am105_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4800	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	18600	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	15500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.333012	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.269646	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.343463	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.333012	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.269646	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.343463	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.027 1.35889	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.382850 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.163780	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_AMX_Ob_Am105_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_AMX_Ob_Am105>
+      <ceilless>	true	</ceilless>
+      <userString>	#france_vehicles:Turret_1_AMX_Ob_Am105	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	0	</price>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	34	</maxHealth>
+      <rotationSpeed>	10	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	290	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Canon_de_105_DEFA_4767_mod>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <gun>	Canon_de_105_mle_1930_Schneider_AM	  <cost>	4200	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.77	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.42	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	5.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-30 30	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </Canon_de_105_DEFA_4767_mod>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00121 0.591662 -0.44126	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.051 0.000 1.243 0.090 0.500 0.650 0.500 0.500 0.251 0.500 0.600 0.100 0.847	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+    </Turret_1_AMX_Ob_Am105>
+    <Turret_2_AMX_Ob_Am105>
+      <ceilless>	true	</ceilless>
+      <userString>	#france_vehicles:Turret_2_AMX_Ob_Am105	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	0	</price>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	34	</maxHealth>
+      <rotationSpeed>	10	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	290	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Canon_de_105_mle_1930_Schneider_AM>	shared	  <maxAmmo>	40	</maxAmmo>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.74	</shotDispersionRadius>
+          <reloadTime>	16	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.46	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	5.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 0 1 0	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-30 30	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_main_mb	</effects>
+        </Canon_de_105_mle_1930_Schneider_AM>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F66_AMX_Ob_Am105/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/french/F66_AMX_Ob_Am105/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F66_AMX_Ob_Am105/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F66_AMX_Ob_Am105/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00121 0.541905 -0.308468	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+    </Turret_2_AMX_Ob_Am105>
+  </turrets0>
+  <engines>
+    <AMX_B_270>	shared	  <unlocks>
+        <engine>	MATHIS	  <cost>	1300	</cost>
+        </engine>
+      </unlocks>
+    </AMX_B_270>
+    <MATHIS>	shared	  <unlocks>
+        <vehicle>	F22_AMX_105AM	  <cost>	15220	</cost>
+        </vehicle>
+      </unlocks>
+    </MATHIS>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_Ob_Am105>
+        <alpha>	0.12075	</alpha>
+      </Chassis_AMX_Ob_Am105>
+      <Chassis_AMX_Ob_Am105_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_AMX_Ob_Am105_2>
+    </chassis>
+    <engines>
+      <AMX_B_270>
+        <bravo>	52.86406	</bravo>
+      </AMX_B_270>
+      <MATHIS>
+        <bravo>	66.08007	</bravo>
+      </MATHIS>
+    </engines>
+    <armour>	0.771811084	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f66_amx_ob_am105.xml>

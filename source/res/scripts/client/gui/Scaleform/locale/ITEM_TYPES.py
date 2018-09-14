@@ -3,6 +3,12 @@
 
 
 class ITEM_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     VEHICLE_NAME = '#item_types:vehicle/name'
     VEHICLE_DESC = '#item_types:vehicle/desc'
     VEHICLE_TAGS_LIGHT_TANK_NAME = '#item_types:vehicle/tags/light_tank/name'
@@ -129,6 +135,68 @@ class ITEM_TYPES(object):
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
     MARKER_IGR = '#item_types:marker/igr'
     TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
+    TANKMAN_ROLES_ENUM = (TANKMAN_ROLES_COMMANDER,
+     TANKMAN_ROLES_DRIVER,
+     TANKMAN_ROLES_RADIOMAN,
+     TANKMAN_ROLES_GUNNER,
+     TANKMAN_ROLES_LOADER)
+    TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
+     TANKMAN_SKILLS_REPAIR,
+     TANKMAN_SKILLS_REPAIR_DESCR,
+     TANKMAN_SKILLS_FIRE_FIGHTING,
+     TANKMAN_SKILLS_FIRE_FIGHTING_DESCR,
+     TANKMAN_SKILLS_CAMOUFLAGE,
+     TANKMAN_SKILLS_CAMOUFLAGE_DESCR,
+     TANKMAN_SKILLS_BROTHERHOOD,
+     TANKMAN_SKILLS_BROTHERHOOD_DESCR,
+     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT,
+     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT_DESCR,
+     TANKMAN_SKILLS_BROTHERHOOD_FEMALE,
+     TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR,
+     TANKMAN_SKILLS_COMMANDER_TUTOR,
+     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR,
+     TANKMAN_SKILLS_COMMANDER_EXPERT,
+     TANKMAN_SKILLS_COMMANDER_EXPERT_DESCR,
+     TANKMAN_SKILLS_COMMANDER_UNIVERSALIST,
+     TANKMAN_SKILLS_COMMANDER_UNIVERSALIST_DESCR,
+     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE,
+     TANKMAN_SKILLS_COMMANDER_SIXTHSENSE_DESCR,
+     TANKMAN_SKILLS_COMMANDER_EAGLEEYE,
+     TANKMAN_SKILLS_COMMANDER_EAGLEEYE_DESCR,
+     TANKMAN_SKILLS_DRIVER_TIDYPERSON,
+     TANKMAN_SKILLS_DRIVER_TIDYPERSON_DESCR,
+     TANKMAN_SKILLS_DRIVER_SMOOTHDRIVING,
+     TANKMAN_SKILLS_DRIVER_SMOOTHDRIVING_DESCR,
+     TANKMAN_SKILLS_DRIVER_VIRTUOSO,
+     TANKMAN_SKILLS_DRIVER_VIRTUOSO_DESCR,
+     TANKMAN_SKILLS_DRIVER_BADROADSKING,
+     TANKMAN_SKILLS_DRIVER_BADROADSKING_DESCR,
+     TANKMAN_SKILLS_DRIVER_RAMMINGMASTER,
+     TANKMAN_SKILLS_DRIVER_RAMMINGMASTER_DESCR,
+     TANKMAN_SKILLS_GUNNER_SMOOTHTURRET,
+     TANKMAN_SKILLS_GUNNER_SMOOTHTURRET_DESCR,
+     TANKMAN_SKILLS_GUNNER_GUNSMITH,
+     TANKMAN_SKILLS_GUNNER_GUNSMITH_DESCR,
+     TANKMAN_SKILLS_GUNNER_SNIPER,
+     TANKMAN_SKILLS_GUNNER_SNIPER_DESCR,
+     TANKMAN_SKILLS_GUNNER_WOODHUNTER,
+     TANKMAN_SKILLS_GUNNER_WOODHUNTER_DESCR,
+     TANKMAN_SKILLS_GUNNER_RANCOROUS,
+     TANKMAN_SKILLS_GUNNER_RANCOROUS_DESCR,
+     TANKMAN_SKILLS_LOADER_PEDANT,
+     TANKMAN_SKILLS_LOADER_PEDANT_DESCR,
+     TANKMAN_SKILLS_LOADER_DESPERADO,
+     TANKMAN_SKILLS_LOADER_DESPERADO_DESCR,
+     TANKMAN_SKILLS_LOADER_INTUITION,
+     TANKMAN_SKILLS_LOADER_INTUITION_DESCR,
+     TANKMAN_SKILLS_RADIOMAN_FINDER,
+     TANKMAN_SKILLS_RADIOMAN_FINDER_DESCR,
+     TANKMAN_SKILLS_RADIOMAN_INVENTOR,
+     TANKMAN_SKILLS_RADIOMAN_INVENTOR_DESCR,
+     TANKMAN_SKILLS_RADIOMAN_LASTEFFORT,
+     TANKMAN_SKILLS_RADIOMAN_LASTEFFORT_DESCR,
+     TANKMAN_SKILLS_RADIOMAN_RETRANSMITTER,
+     TANKMAN_SKILLS_RADIOMAN_RETRANSMITTER_DESCR)
     SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
      SHELL_KINDS_ARMOR_PIERCING_CR,
      SHELL_KINDS_ARMOR_PIERCING_HE,
@@ -142,21 +210,55 @@ class ITEM_TYPES(object):
 
     @staticmethod
     def tankman_skills_type(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#item_types:tankman/skills/type/%s' % key
         if outcome not in ITEM_TYPES.TANKMAN_SKILLS_TYPE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
+        return outcome
+
+    @staticmethod
+    def tankman_roles(key):
+        """
+        :param key:
+        :return String:
+        """
+        outcome = '#item_types:tankman/roles/%s' % key
+        if outcome not in ITEM_TYPES.TANKMAN_ROLES_ENUM:
+            raise Exception('locale key "' + outcome + '" was not found')
+        return outcome
+
+    @staticmethod
+    def tankman_skills(key):
+        """
+        :param key:
+        :return String:
+        """
+        outcome = '#item_types:tankman/skills/%s' % key
+        if outcome not in ITEM_TYPES.TANKMAN_SKILLS_ENUM:
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def shell_kinds(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#item_types:shell/kinds/%s' % key
         if outcome not in ITEM_TYPES.SHELL_KINDS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def shell_kindsabbreviation(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#item_types:shell/kindsAbbreviation/%s' % key
         if outcome not in ITEM_TYPES.SHELL_KINDSABBREVIATION_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

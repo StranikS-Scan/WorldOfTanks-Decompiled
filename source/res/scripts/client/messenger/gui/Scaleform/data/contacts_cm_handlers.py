@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_cm_handlers.py
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler
-from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
+from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.shared import events, EVENT_BUS_SCOPE
 from messenger.m_constants import USER_TAG
 
 class CONTACTS_ACTION_ID(object):

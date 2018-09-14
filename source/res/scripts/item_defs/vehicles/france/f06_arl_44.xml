@@ -10,6 +10,13 @@
     <forward>	37	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.019	</moving>
+    <still>	0.038	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.057	</firePenalty>
+  </invisibility>
   <repairCost>	5.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,10 +69,11 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.388594 0.006983	</turret>
+      <turret>	0.000000 0.388616 0.006983	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F06_ARL_44/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -218,13 +226,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.42532 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33982 1.75494	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -273,14 +280,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1311	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -473,13 +477,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.42532 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33982 1.75494	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -528,14 +531,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1311	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -657,6 +657,7 @@
             <gun>	20	</gun>
           </armor>
           <reloadTime>	3.8	</reloadTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -669,7 +670,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -711,6 +713,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -722,7 +725,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -745,7 +749,8 @@
         <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F06_ARL_44/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.506083 1.24583	</gunPosition>
       <emblemSlots>
@@ -781,9 +786,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.931 -0.119 0.967 0.000 0.754 -0.017 0.321 0.000 0.481 0.500 0.198 0.500 0.000 0.013 0.069	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1 1 0.07 0.000000	</tiling>
       </camouflage>
@@ -848,6 +851,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -860,7 +864,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -894,6 +899,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -905,7 +911,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -938,6 +945,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -949,7 +957,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -989,6 +998,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -999,7 +1009,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1034,6 +1045,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1044,7 +1056,8 @@
             <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F06_ARL_44/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1068,7 +1081,8 @@
         <exploded>	vehicles/french/F06_ARL_44/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F06_ARL_44/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F06_ARL_44/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F06_ARL_44/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.516084 1.22583	</gunPosition>
       <emblemSlots>
@@ -1104,9 +1118,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.936 -0.169 1.047 0.000 0.720 -0.017 0.280 0.000 0.367 0.500 0.283 0.500 0.040 1.000 0.123	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1131,6 +1143,30 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_105mm_canon_13TR>
+        <delta>	1.14141414	</delta>
+      </_105mm_canon_13TR>
+    </guns>
+    <chassis>
+      <Chassis_ARL_44>
+        <alpha>	0.13685	</alpha>
+      </Chassis_ARL_44>
+      <Chassis_ARL_44_2>
+        <alpha>	0.1288	</alpha>
+      </Chassis_ARL_44_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_230>
+        <bravo>	151.9842	</bravo>
+      </Maybach_HL_230>
+      <Maybach_HL_230P45>
+        <bravo>	198.2402	</bravo>
+      </Maybach_HL_230P45>
+    </engines>
+    <armour>	0.776419721	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

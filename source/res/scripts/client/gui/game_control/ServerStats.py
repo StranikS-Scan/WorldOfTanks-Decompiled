@@ -5,6 +5,7 @@ import constants
 import Event
 from PlayerEvents import g_playerEvents
 from gui import makeHtmlString
+from gui.shared.formatters import text_styles
 from gui.game_control.controllers import Controller
 
 class ServerStats(Controller):
@@ -40,16 +41,17 @@ class ServerStats(Controller):
         clusterCCU = self.__stats.get('clusterCCU', 0)
         regionCCU = self.__stats.get('regionCCU', 0)
         if regionCCU:
-            clusterUsers = makeHtmlString('html_templates:lobby/serverStats', 'clusterName', {'count': BigWorld.wg_getIntegralFormat(clusterCCU)})
+            clusterUsers = text_styles.stats(BigWorld.wg_getIntegralFormat(clusterCCU))
+            regionUsers = text_styles.main(' / ' + BigWorld.wg_getIntegralFormat(regionCCU))
             if clusterCCU == regionCCU:
                 tooltipType = self.TOOLTIP_TYPE.TYPE_CLUSTER
                 statsStr = clusterUsers
             else:
                 tooltipType = self.TOOLTIP_TYPE.TYPE_FULL
-                statsStr = '%s / %s' % (clusterUsers, BigWorld.wg_getIntegralFormat(regionCCU))
+                statsStr = clusterUsers + regionUsers
         else:
             tooltipType = self.TOOLTIP_TYPE.TYPE_UNAVAILABLE
-            statsStr = '- / -'
+            statsStr = text_styles.main('- / -')
         return (statsStr, tooltipType)
 
     def __stop(self):

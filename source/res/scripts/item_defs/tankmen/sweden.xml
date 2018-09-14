@@ -1,0 +1,476 @@
+<sweden.xml>
+  <ranks>
+    <menig>
+      <userString>	#sweden_tankmen:ranksSW/menig	</userString>
+      <icon>	sweden-1.png	</icon>
+    </menig>
+    <korpral>
+      <userString>	#sweden_tankmen:ranksSW/korpral	</userString>
+      <icon>	sweden-2.png	</icon>
+    </korpral>
+    <furir>
+      <userString>	#sweden_tankmen:ranksSW/furir	</userString>
+      <icon>	sweden-3.png	</icon>
+    </furir>
+    <overfurir>
+      <userString>	#sweden_tankmen:ranksSW/overfurir	</userString>
+      <icon>	sweden-4.png	</icon>
+    </overfurir>
+    <sergeant>
+      <userString>	#sweden_tankmen:ranksSW/sergeant	</userString>
+      <icon>	sweden-5.png	</icon>
+    </sergeant>
+    <fanjunkare>
+      <userString>	#sweden_tankmen:ranksSW/fanjunkare	</userString>
+      <icon>	sweden-6.png	</icon>
+    </fanjunkare>
+    <forvaltare>
+      <userString>	#sweden_tankmen:ranksSW/forvaltare	</userString>
+      <icon>	sweden-7.png	</icon>
+    </forvaltare>
+    <fanrik>
+      <userString>	#sweden_tankmen:ranksSW/fanrik	</userString>
+      <icon>	sweden-8.png	</icon>
+    </fanrik>
+    <lojtnant>
+      <userString>	#sweden_tankmen:ranksSW/lojtnant	</userString>
+      <icon>	sweden-9.png	</icon>
+    </lojtnant>
+    <kapten>
+      <userString>	#sweden_tankmen:ranksSW/kapten	</userString>
+      <icon>	sweden-10.png	</icon>
+    </kapten>
+    <major>
+      <userString>	#sweden_tankmen:ranksSW/major	</userString>
+      <icon>	sweden-11.png	</icon>
+    </major>
+  </ranks>
+  <roleRanks>
+    <commander>	furir overfurir sergeant fanjunkare
+			forvaltare fanrik lojtnant kapten major	</commander>
+    <driver>	korpral furir overfurir sergeant fanjunkare
+			forvaltare fanrik lojtnant kapten	</driver>
+    <gunner>	korpral furir overfurir sergeant fanjunkare
+			forvaltare fanrik lojtnant kapten	</gunner>
+    <radioman>	menig korpral furir overfurir sergeant fanjunkare
+			forvaltare fanrik lojtnant	</radioman>
+    <loader>	menig korpral furir overfurir sergeant fanjunkare
+			forvaltare fanrik lojtnant	</loader>
+  </roleRanks>
+  <normalGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_1>	#sweden_tankmen:names/swn1	</_1>
+        <_2>	#sweden_tankmen:names/swn2	</_2>
+        <_3>	#sweden_tankmen:names/swn3	</_3>
+        <_4>	#sweden_tankmen:names/swn4	</_4>
+        <_5>	#sweden_tankmen:names/swn5	</_5>
+        <_6>	#sweden_tankmen:names/swn6	</_6>
+        <_7>	#sweden_tankmen:names/swn7	</_7>
+        <_8>	#sweden_tankmen:names/swn8	</_8>
+        <_9>	#sweden_tankmen:names/swn9	</_9>
+        <_10>	#sweden_tankmen:names/swn10	</_10>
+        <_11>	#sweden_tankmen:names/swn11	</_11>
+        <_12>	#sweden_tankmen:names/swn12	</_12>
+        <_13>	#sweden_tankmen:names/swn13	</_13>
+        <_14>	#sweden_tankmen:names/swn14	</_14>
+        <_15>	#sweden_tankmen:names/swn15	</_15>
+        <_16>	#sweden_tankmen:names/swn16	</_16>
+        <_17>	#sweden_tankmen:names/swn17	</_17>
+        <_18>	#sweden_tankmen:names/swn18	</_18>
+        <_19>	#sweden_tankmen:names/swn19	</_19>
+        <_20>	#sweden_tankmen:names/swn20	</_20>
+        <_21>	#sweden_tankmen:names/swn21	</_21>
+        <_22>	#sweden_tankmen:names/swn22	</_22>
+        <_23>	#sweden_tankmen:names/swn23	</_23>
+        <_24>	#sweden_tankmen:names/swn24	</_24>
+        <_25>	#sweden_tankmen:names/swn25	</_25>
+        <_26>	#sweden_tankmen:names/swn26	</_26>
+        <_27>	#sweden_tankmen:names/swn27	</_27>
+        <_28>	#sweden_tankmen:names/swn28	</_28>
+        <_29>	#sweden_tankmen:names/swn29	</_29>
+        <_30>	#sweden_tankmen:names/swn30	</_30>
+        <_31>	#sweden_tankmen:names/swn31	</_31>
+        <_32>	#sweden_tankmen:names/swn32	</_32>
+        <_33>	#sweden_tankmen:names/swn33	</_33>
+        <_34>	#sweden_tankmen:names/swn34	</_34>
+        <_35>	#sweden_tankmen:names/swn35	</_35>
+        <_36>	#sweden_tankmen:names/swn36	</_36>
+        <_37>	#sweden_tankmen:names/swn37	</_37>
+        <_38>	#sweden_tankmen:names/swn38	</_38>
+        <_39>	#sweden_tankmen:names/swn39	</_39>
+        <_40>	#sweden_tankmen:names/swn40	</_40>
+        <_41>	#sweden_tankmen:names/swn41	</_41>
+        <_42>	#sweden_tankmen:names/swn42	</_42>
+        <_43>	#sweden_tankmen:names/swn43	</_43>
+        <_44>	#sweden_tankmen:names/swn44	</_44>
+        <_45>	#sweden_tankmen:names/swn45	</_45>
+        <_46>	#sweden_tankmen:names/swn46	</_46>
+        <_47>	#sweden_tankmen:names/swn47	</_47>
+        <_48>	#sweden_tankmen:names/swn48	</_48>
+        <_49>	#sweden_tankmen:names/swn49	</_49>
+        <_50>	#sweden_tankmen:names/swn50	</_50>
+        <_51>	#sweden_tankmen:names/swn51	</_51>
+        <_52>	#sweden_tankmen:names/swn52	</_52>
+        <_53>	#sweden_tankmen:names/swn53	</_53>
+        <_54>	#sweden_tankmen:names/swn54	</_54>
+        <_55>	#sweden_tankmen:names/swn55	</_55>
+        <_56>	#sweden_tankmen:names/swn56	</_56>
+        <_57>	#sweden_tankmen:names/swn57	</_57>
+        <_58>	#sweden_tankmen:names/swn58	</_58>
+        <_59>	#sweden_tankmen:names/swn59	</_59>
+        <_60>	#sweden_tankmen:names/swn60	</_60>
+        <_61>	#sweden_tankmen:names/swn61	</_61>
+        <_62>	#sweden_tankmen:names/swn62	</_62>
+        <_63>	#sweden_tankmen:names/swn63	</_63>
+        <_64>	#sweden_tankmen:names/swn64	</_64>
+        <_65>	#sweden_tankmen:names/swn65	</_65>
+        <_66>	#sweden_tankmen:names/swn66	</_66>
+        <_67>	#sweden_tankmen:names/swn67	</_67>
+        <_68>	#sweden_tankmen:names/swn68	</_68>
+        <_69>	#sweden_tankmen:names/swn69	</_69>
+        <_70>	#sweden_tankmen:names/swn70	</_70>
+        <_71>	#sweden_tankmen:names/swn71	</_71>
+        <_72>	#sweden_tankmen:names/swn72	</_72>
+        <_73>	#sweden_tankmen:names/swn73	</_73>
+        <_74>	#sweden_tankmen:names/swn74	</_74>
+        <_75>	#sweden_tankmen:names/swn75	</_75>
+        <_76>	#sweden_tankmen:names/swn76	</_76>
+        <_77>	#sweden_tankmen:names/swn77	</_77>
+        <_78>	#sweden_tankmen:names/swn78	</_78>
+        <_79>	#sweden_tankmen:names/swn79	</_79>
+        <_80>	#sweden_tankmen:names/swn80	</_80>
+        <_81>	#sweden_tankmen:names/swn81	</_81>
+        <_82>	#sweden_tankmen:names/swn82	</_82>
+        <_83>	#sweden_tankmen:names/swn83	</_83>
+        <_84>	#sweden_tankmen:names/swn84	</_84>
+        <_85>	#sweden_tankmen:names/swn85	</_85>
+        <_86>	#sweden_tankmen:names/swn86	</_86>
+        <_87>	#sweden_tankmen:names/swn87	</_87>
+        <_88>	#sweden_tankmen:names/swn88	</_88>
+        <_89>	#sweden_tankmen:names/swn89	</_89>
+        <_90>	#sweden_tankmen:names/swn90	</_90>
+        <_91>	#sweden_tankmen:names/swn91	</_91>
+        <_92>	#sweden_tankmen:names/swn92	</_92>
+        <_93>	#sweden_tankmen:names/swn93	</_93>
+        <_94>	#sweden_tankmen:names/swn94	</_94>
+        <_95>	#sweden_tankmen:names/swn95	</_95>
+        <_96>	#sweden_tankmen:names/swn96	</_96>
+        <_97>	#sweden_tankmen:names/swn97	</_97>
+        <_98>	#sweden_tankmen:names/swn98	</_98>
+        <_99>	#sweden_tankmen:names/swn99	</_99>
+        <_100>	#sweden_tankmen:names/swn100	</_100>
+        <_101>	#sweden_tankmen:names/swn101	</_101>
+        <_102>	#sweden_tankmen:names/swn102	</_102>
+      </firstNames>
+      <lastNames>
+        <_1>	#sweden_tankmen:names/sw1	</_1>
+        <_2>	#sweden_tankmen:names/sw2	</_2>
+        <_3>	#sweden_tankmen:names/sw3	</_3>
+        <_4>	#sweden_tankmen:names/sw4	</_4>
+        <_5>	#sweden_tankmen:names/sw5	</_5>
+        <_6>	#sweden_tankmen:names/sw6	</_6>
+        <_7>	#sweden_tankmen:names/sw7	</_7>
+        <_8>	#sweden_tankmen:names/sw8	</_8>
+        <_9>	#sweden_tankmen:names/sw9	</_9>
+        <_10>	#sweden_tankmen:names/sw10	</_10>
+        <_11>	#sweden_tankmen:names/sw11	</_11>
+        <_12>	#sweden_tankmen:names/sw12	</_12>
+        <_13>	#sweden_tankmen:names/sw13	</_13>
+        <_14>	#sweden_tankmen:names/sw14	</_14>
+        <_15>	#sweden_tankmen:names/sw15	</_15>
+        <_16>	#sweden_tankmen:names/sw16	</_16>
+        <_17>	#sweden_tankmen:names/sw17	</_17>
+        <_18>	#sweden_tankmen:names/sw18	</_18>
+        <_19>	#sweden_tankmen:names/sw19	</_19>
+        <_20>	#sweden_tankmen:names/sw20	</_20>
+        <_21>	#sweden_tankmen:names/sw21	</_21>
+        <_22>	#sweden_tankmen:names/sw22	</_22>
+        <_23>	#sweden_tankmen:names/sw23	</_23>
+        <_24>	#sweden_tankmen:names/sw24	</_24>
+        <_25>	#sweden_tankmen:names/sw25	</_25>
+        <_26>	#sweden_tankmen:names/sw26	</_26>
+        <_27>	#sweden_tankmen:names/sw27	</_27>
+        <_28>	#sweden_tankmen:names/sw28	</_28>
+        <_29>	#sweden_tankmen:names/sw29	</_29>
+        <_30>	#sweden_tankmen:names/sw30	</_30>
+        <_31>	#sweden_tankmen:names/sw31	</_31>
+        <_32>	#sweden_tankmen:names/sw32	</_32>
+        <_33>	#sweden_tankmen:names/sw33	</_33>
+        <_34>	#sweden_tankmen:names/sw34	</_34>
+        <_35>	#sweden_tankmen:names/sw35	</_35>
+        <_36>	#sweden_tankmen:names/sw36	</_36>
+        <_37>	#sweden_tankmen:names/sw37	</_37>
+        <_38>	#sweden_tankmen:names/sw38	</_38>
+        <_39>	#sweden_tankmen:names/sw39	</_39>
+        <_40>	#sweden_tankmen:names/sw40	</_40>
+        <_41>	#sweden_tankmen:names/sw41	</_41>
+        <_42>	#sweden_tankmen:names/sw42	</_42>
+        <_43>	#sweden_tankmen:names/sw43	</_43>
+        <_44>	#sweden_tankmen:names/sw44	</_44>
+        <_45>	#sweden_tankmen:names/sw45	</_45>
+        <_46>	#sweden_tankmen:names/sw46	</_46>
+        <_47>	#sweden_tankmen:names/sw47	</_47>
+        <_48>	#sweden_tankmen:names/sw48	</_48>
+        <_49>	#sweden_tankmen:names/sw49	</_49>
+        <_50>	#sweden_tankmen:names/sw50	</_50>
+        <_51>	#sweden_tankmen:names/sw51	</_51>
+        <_52>	#sweden_tankmen:names/sw52	</_52>
+        <_53>	#sweden_tankmen:names/sw53	</_53>
+        <_54>	#sweden_tankmen:names/sw54	</_54>
+        <_55>	#sweden_tankmen:names/sw55	</_55>
+        <_56>	#sweden_tankmen:names/sw56	</_56>
+        <_57>	#sweden_tankmen:names/sw57	</_57>
+        <_58>	#sweden_tankmen:names/sw58	</_58>
+        <_59>	#sweden_tankmen:names/sw59	</_59>
+        <_60>	#sweden_tankmen:names/sw60	</_60>
+        <_61>	#sweden_tankmen:names/sw61	</_61>
+        <_62>	#sweden_tankmen:names/sw62	</_62>
+        <_63>	#sweden_tankmen:names/sw63	</_63>
+        <_64>	#sweden_tankmen:names/sw64	</_64>
+        <_65>	#sweden_tankmen:names/sw65	</_65>
+        <_66>	#sweden_tankmen:names/sw66	</_66>
+        <_67>	#sweden_tankmen:names/sw67	</_67>
+        <_68>	#sweden_tankmen:names/sw68	</_68>
+        <_69>	#sweden_tankmen:names/sw69	</_69>
+        <_70>	#sweden_tankmen:names/sw70	</_70>
+        <_71>	#sweden_tankmen:names/sw71	</_71>
+        <_72>	#sweden_tankmen:names/sw72	</_72>
+        <_73>	#sweden_tankmen:names/sw73	</_73>
+        <_74>	#sweden_tankmen:names/sw74	</_74>
+        <_75>	#sweden_tankmen:names/sw75	</_75>
+        <_76>	#sweden_tankmen:names/sw76	</_76>
+        <_77>	#sweden_tankmen:names/sw77	</_77>
+        <_78>	#sweden_tankmen:names/sw78	</_78>
+        <_79>	#sweden_tankmen:names/sw79	</_79>
+        <_80>	#sweden_tankmen:names/sw80	</_80>
+        <_81>	#sweden_tankmen:names/sw81	</_81>
+        <_82>	#sweden_tankmen:names/sw82	</_82>
+        <_83>	#sweden_tankmen:names/sw83	</_83>
+        <_84>	#sweden_tankmen:names/sw84	</_84>
+        <_85>	#sweden_tankmen:names/sw85	</_85>
+        <_86>	#sweden_tankmen:names/sw86	</_86>
+        <_87>	#sweden_tankmen:names/sw87	</_87>
+        <_88>	#sweden_tankmen:names/sw88	</_88>
+        <_89>	#sweden_tankmen:names/sw89	</_89>
+        <_90>	#sweden_tankmen:names/sw90	</_90>
+        <_91>	#sweden_tankmen:names/sw91	</_91>
+        <_92>	#sweden_tankmen:names/sw92	</_92>
+        <_93>	#sweden_tankmen:names/sw93	</_93>
+        <_94>	#sweden_tankmen:names/sw94	</_94>
+        <_95>	#sweden_tankmen:names/sw95	</_95>
+        <_96>	#sweden_tankmen:names/sw96	</_96>
+        <_97>	#sweden_tankmen:names/sw97	</_97>
+        <_98>	#sweden_tankmen:names/sw98	</_98>
+        <_99>	#sweden_tankmen:names/sw99	</_99>
+        <_100>	#sweden_tankmen:names/sw100	</_100>
+        <_101>	#sweden_tankmen:names/sw101	</_101>
+        <_102>	#sweden_tankmen:names/sw102	</_102>
+        <_103>	#sweden_tankmen:names/sw103	</_103>
+        <_104>	#sweden_tankmen:names/sw104	</_104>
+        <_105>	#sweden_tankmen:names/sw105	</_105>
+        <_106>	#sweden_tankmen:names/sw106	</_106>
+        <_107>	#sweden_tankmen:names/sw107	</_107>
+        <_108>	#sweden_tankmen:names/sw108	</_108>
+        <_109>	#sweden_tankmen:names/sw109	</_109>
+        <_110>	#sweden_tankmen:names/sw110	</_110>
+        <_111>	#sweden_tankmen:names/sw111	</_111>
+        <_112>	#sweden_tankmen:names/sw112	</_112>
+        <_113>	#sweden_tankmen:names/sw113	</_113>
+        <_114>	#sweden_tankmen:names/sw114	</_114>
+        <_115>	#sweden_tankmen:names/sw115	</_115>
+        <_116>	#sweden_tankmen:names/sw116	</_116>
+        <_117>	#sweden_tankmen:names/sw117	</_117>
+        <_118>	#sweden_tankmen:names/sw118	</_118>
+        <_119>	#sweden_tankmen:names/sw119	</_119>
+        <_120>	#sweden_tankmen:names/sw120	</_120>
+        <_121>	#sweden_tankmen:names/sw121	</_121>
+        <_122>	#sweden_tankmen:names/sw122	</_122>
+        <_123>	#sweden_tankmen:names/sw123	</_123>
+        <_124>	#sweden_tankmen:names/sw124	</_124>
+        <_125>	#sweden_tankmen:names/sw125	</_125>
+        <_126>	#sweden_tankmen:names/sw126	</_126>
+        <_127>	#sweden_tankmen:names/sw127	</_127>
+        <_128>	#sweden_tankmen:names/sw128	</_128>
+        <_129>	#sweden_tankmen:names/sw129	</_129>
+        <_130>	#sweden_tankmen:names/sw130	</_130>
+        <_131>	#sweden_tankmen:names/sw131	</_131>
+        <_132>	#sweden_tankmen:names/sw132	</_132>
+        <_133>	#sweden_tankmen:names/sw133	</_133>
+        <_134>	#sweden_tankmen:names/sw134	</_134>
+        <_135>	#sweden_tankmen:names/sw135	</_135>
+        <_136>	#sweden_tankmen:names/sw136	</_136>
+        <_137>	#sweden_tankmen:names/sw137	</_137>
+        <_138>	#sweden_tankmen:names/sw138	</_138>
+        <_139>	#sweden_tankmen:names/sw139	</_139>
+        <_140>	#sweden_tankmen:names/sw140	</_140>
+        <_141>	#sweden_tankmen:names/sw141	</_141>
+        <_142>	#sweden_tankmen:names/sw142	</_142>
+        <_143>	#sweden_tankmen:names/sw143	</_143>
+        <_144>	#sweden_tankmen:names/sw144	</_144>
+        <_145>	#sweden_tankmen:names/sw145	</_145>
+      </lastNames>
+      <icons>
+        <_1>	sweden-1.png	</_1>
+        <_2>	sweden-2.png	</_2>
+        <_3>	sweden-3.png	</_3>
+        <_4>	sweden-4.png	</_4>
+        <_5>	sweden-5.png	</_5>
+        <_6>	sweden-6.png	</_6>
+        <_7>	sweden-7.png	</_7>
+        <_8>	sweden-8.png	</_8>
+        <_9>	sweden-9.png	</_9>
+        <_10>	sweden-10.png	</_10>
+        <_11>	sweden-11.png	</_11>
+        <_12>	sweden-12.png	</_12>
+        <_13>	sweden-13.png	</_13>
+        <_14>	sweden-14.png	</_14>
+        <_15>	sweden-15.png	</_15>
+        <_16>	sweden-16.png	</_16>
+        <_17>	sweden-17.png	</_17>
+        <_18>	sweden-18.png	</_18>
+      </icons>
+    </men1>
+  </normalGroups>
+  <premiumGroups>
+    <men1>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_3001>	#sweden_tankmen:names/swn1	</_3001>
+        <_3002>	#sweden_tankmen:names/swn2	</_3002>
+        <_3003>	#sweden_tankmen:names/swn3	</_3003>
+        <_3004>	#sweden_tankmen:names/swn4	</_3004>
+        <_3005>	#sweden_tankmen:names/swn5	</_3005>
+      </firstNames>
+      <lastNames>
+        <_3001>	#sweden_tankmen:names/sw1	</_3001>
+        <_3002>	#sweden_tankmen:names/sw2	</_3002>
+        <_3003>	#sweden_tankmen:names/sw3	</_3003>
+        <_3004>	#sweden_tankmen:names/sw4	</_3004>
+        <_3005>	#sweden_tankmen:names/sw5	</_3005>
+      </lastNames>
+      <icons>
+        <_3001>	sweden-1.png	</_3001>
+        <_3002>	sweden-2.png	</_3002>
+        <_3003>	sweden-3.png	</_3003>
+        <_3004>	sweden-4.png	</_3004>
+        <_3005>	sweden-5.png	</_3005>
+      </icons>
+    </men1>
+    <women1>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	false	</notInShop>
+      <firstNames>
+        <_11001>	#sweden_tankmen:names/swn11001	</_11001>
+        <_11002>	#sweden_tankmen:names/swn11002	</_11002>
+        <_11003>	#sweden_tankmen:names/swn11003	</_11003>
+        <_11004>	#sweden_tankmen:names/swn11004	</_11004>
+        <_11005>	#sweden_tankmen:names/swn11005	</_11005>
+        <_11006>	#sweden_tankmen:names/swn11006	</_11006>
+        <_11007>	#sweden_tankmen:names/swn11007	</_11007>
+        <_11008>	#sweden_tankmen:names/swn11008	</_11008>
+        <_11009>	#sweden_tankmen:names/swn11009	</_11009>
+        <_11010>	#sweden_tankmen:names/swn11010	</_11010>
+        <_11011>	#sweden_tankmen:names/swn11011	</_11011>
+        <_11012>	#sweden_tankmen:names/swn11012	</_11012>
+        <_11013>	#sweden_tankmen:names/swn11013	</_11013>
+        <_11014>	#sweden_tankmen:names/swn11014	</_11014>
+        <_11015>	#sweden_tankmen:names/swn11015	</_11015>
+        <_11016>	#sweden_tankmen:names/swn11016	</_11016>
+        <_11017>	#sweden_tankmen:names/swn11017	</_11017>
+        <_11018>	#sweden_tankmen:names/swn11018	</_11018>
+        <_11019>	#sweden_tankmen:names/swn11019	</_11019>
+        <_11020>	#sweden_tankmen:names/swn11020	</_11020>
+        <_11021>	#sweden_tankmen:names/swn11021	</_11021>
+        <_11022>	#sweden_tankmen:names/swn11022	</_11022>
+        <_11023>	#sweden_tankmen:names/swn11023	</_11023>
+        <_11024>	#sweden_tankmen:names/swn11024	</_11024>
+        <_11025>	#sweden_tankmen:names/swn11025	</_11025>
+        <_11026>	#sweden_tankmen:names/swn11026	</_11026>
+        <_11027>	#sweden_tankmen:names/swn11027	</_11027>
+        <_11028>	#sweden_tankmen:names/swn11028	</_11028>
+        <_11029>	#sweden_tankmen:names/swn11029	</_11029>
+        <_11030>	#sweden_tankmen:names/swn11030	</_11030>
+        <_11031>	#sweden_tankmen:names/swn11031	</_11031>
+        <_11032>	#sweden_tankmen:names/swn11032	</_11032>
+        <_11033>	#sweden_tankmen:names/swn11033	</_11033>
+        <_11034>	#sweden_tankmen:names/swn11034	</_11034>
+        <_11035>	#sweden_tankmen:names/swn11035	</_11035>
+        <_11036>	#sweden_tankmen:names/swn11036	</_11036>
+        <_11037>	#sweden_tankmen:names/swn11037	</_11037>
+        <_11038>	#sweden_tankmen:names/swn11038	</_11038>
+        <_11039>	#sweden_tankmen:names/swn11039	</_11039>
+        <_11040>	#sweden_tankmen:names/swn11040	</_11040>
+        <_11041>	#sweden_tankmen:names/swn11041	</_11041>
+        <_11042>	#sweden_tankmen:names/swn11042	</_11042>
+        <_11043>	#sweden_tankmen:names/swn11043	</_11043>
+        <_11044>	#sweden_tankmen:names/swn11044	</_11044>
+        <_11045>	#sweden_tankmen:names/swn11045	</_11045>
+        <_11046>	#sweden_tankmen:names/swn11046	</_11046>
+        <_11047>	#sweden_tankmen:names/swn11047	</_11047>
+        <_11048>	#sweden_tankmen:names/swn11048	</_11048>
+        <_11049>	#sweden_tankmen:names/swn11049	</_11049>
+        <_11050>	#sweden_tankmen:names/swn11050	</_11050>
+        <_11051>	#sweden_tankmen:names/swn11051	</_11051>
+        <_11052>	#sweden_tankmen:names/swn11052	</_11052>
+        <_11053>	#sweden_tankmen:names/swn11053	</_11053>
+        <_11054>	#sweden_tankmen:names/swn11054	</_11054>
+        <_11055>	#sweden_tankmen:names/swn11055	</_11055>
+        <_11056>	#sweden_tankmen:names/swn11056	</_11056>
+        <_11057>	#sweden_tankmen:names/swn11057	</_11057>
+        <_11058>	#sweden_tankmen:names/swn11058	</_11058>
+        <_11059>	#sweden_tankmen:names/swn11059	</_11059>
+        <_11060>	#sweden_tankmen:names/swn11060	</_11060>
+        <_11061>	#sweden_tankmen:names/swn11061	</_11061>
+        <_11062>	#sweden_tankmen:names/swn11062	</_11062>
+        <_11063>	#sweden_tankmen:names/swn11063	</_11063>
+        <_11064>	#sweden_tankmen:names/swn11064	</_11064>
+        <_11065>	#sweden_tankmen:names/swn11065	</_11065>
+        <_11066>	#sweden_tankmen:names/swn11066	</_11066>
+        <_11067>	#sweden_tankmen:names/swn11067	</_11067>
+        <_11068>	#sweden_tankmen:names/swn11068	</_11068>
+        <_11069>	#sweden_tankmen:names/swn11069	</_11069>
+        <_11070>	#sweden_tankmen:names/swn11070	</_11070>
+        <_11071>	#sweden_tankmen:names/swn11071	</_11071>
+        <_11072>	#sweden_tankmen:names/swn11072	</_11072>
+        <_11073>	#sweden_tankmen:names/swn11073	</_11073>
+        <_11074>	#sweden_tankmen:names/swn11074	</_11074>
+        <_11075>	#sweden_tankmen:names/swn11075	</_11075>
+        <_11076>	#sweden_tankmen:names/swn11076	</_11076>
+        <_11077>	#sweden_tankmen:names/swn11077	</_11077>
+        <_11078>	#sweden_tankmen:names/swn11078	</_11078>
+      </firstNames>
+      <lastNames>
+        <_11001>	#sweden_tankmen:names/sw11001	</_11001>
+        <_11002>	#sweden_tankmen:names/sw11002	</_11002>
+        <_11003>	#sweden_tankmen:names/sw11003	</_11003>
+        <_11004>	#sweden_tankmen:names/sw11004	</_11004>
+        <_11005>	#sweden_tankmen:names/sw11005	</_11005>
+        <_11006>	#sweden_tankmen:names/sw11006	</_11006>
+        <_11007>	#sweden_tankmen:names/sw11007	</_11007>
+        <_11008>	#sweden_tankmen:names/sw11008	</_11008>
+        <_11009>	#sweden_tankmen:names/sw11009	</_11009>
+        <_11010>	#sweden_tankmen:names/sw11010	</_11010>
+        <_11011>	#sweden_tankmen:names/sw11011	</_11011>
+        <_11012>	#sweden_tankmen:names/sw11012	</_11012>
+        <_11013>	#sweden_tankmen:names/sw11013	</_11013>
+        <_11014>	#sweden_tankmen:names/sw11014	</_11014>
+        <_11015>	#sweden_tankmen:names/sw11015	</_11015>
+        <_11016>	#sweden_tankmen:names/sw11016	</_11016>
+        <_11017>	#sweden_tankmen:names/sw11017	</_11017>
+        <_11018>	#sweden_tankmen:names/sw11018	</_11018>
+        <_11019>	#sweden_tankmen:names/sw11019	</_11019>
+        <_11020>	#sweden_tankmen:names/sw11020	</_11020>
+      </lastNames>
+      <icons>
+        <_11001>	sweden-female-1.png	</_11001>
+        <_11002>	sweden-female-2.png	</_11002>
+        <_11003>	sweden-female-3.png	</_11003>
+      </icons>
+    </women1>
+  </premiumGroups>
+</sweden.xml>

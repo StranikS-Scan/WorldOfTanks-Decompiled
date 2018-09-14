@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/lobby/proxy.py
+import weakref
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
@@ -46,6 +47,10 @@ class SfLobbyProxy(GUIProxy):
         addListener(_TEvent.ON_COMPONENT_LOST, self.__onComponentLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(_TEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None:
+            proxy = weakref.proxy(self.app)
+            for _, effect in self.effects.iterEffects():
+                effect.setApplication(proxy)
+
             loader = self.app.loaderManager
             loader.onViewLoadInit += self.__onViewLoadInit
             loader.onViewLoadError += self.__onViewLoadError
@@ -61,9 +66,10 @@ class SfLobbyProxy(GUIProxy):
         self.onGUILoaded()
         return result
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         self.eManager.clear()
         self.effects.stopAll()
+        self.effects.clear()
         if self.app is not None:
             loader = self.app.loaderManager
             loader.onViewLoadInit -= self.__onViewLoadInit
@@ -83,9 +89,13 @@ class SfLobbyProxy(GUIProxy):
         self.effects.stopAll()
 
     def lock(self):
+        from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_TUTORIAL)
         self.showWaiting('update-scene', isSingle=True)
 
     def release(self):
+        from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+        g_statistics.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_TUTORIAL, showSummaryNow=True)
         self.hideWaiting('update-scene')
 
     def loadConfig(self, filePath):
@@ -233,7 +243,9 @@ class SfLobbyProxy(GUIProxy):
             LOG_ERROR('Key targetID is not defined in the event ON_COMPONENT_LOST')
             return
         itemID = event.targetID
-        self.effects.cancel(GUI_EFFECT_NAME.SHOW_HINT, itemID)
+        for effect in self.effects.filterByName([GUI_EFFECT_NAME.SHOW_HINT]):
+            effect.cancel(itemID)
+
         self.onItemLost(itemID)
 
     def __onTriggerActivated(self, event):

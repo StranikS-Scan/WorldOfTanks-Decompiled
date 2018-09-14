@@ -18,6 +18,7 @@ def LOG_BROWSER(msg, *kargs):
 
 class WebBrowser(object):
     hasBrowser = property(lambda self: self.__browser is not None)
+    intializationUrl = property(lambda self: self.__baseUrl)
     baseUrl = property(lambda self: '' if self.__browser is None else self.__baseUrl)
     url = property(lambda self: '' if self.__browser is None else self.__browser.url)
     width = property(lambda self: 0 if self.__browser is None else self.__browser.width)
@@ -25,23 +26,41 @@ class WebBrowser(object):
     isNavigationComplete = property(lambda self: self.__isNavigationComplete)
     isFocused = property(lambda self: self.__isFocused)
     updateInterval = 0.01
+    isSuccessfulLoad = property(lambda self: self.__successfulLoad)
 
-    def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False):
+    def __init__(self, browserID, uiObj, texName, size, url='about:blank', useWhitelisting=False, isFocused=False):
         self.__browserID = browserID
         self.__cbID = None
         self.__baseUrl = url
+        self.__uiObj = uiObj
+        self.__texName = texName
+        self.__browserSize = size
+        self.__startFocused = isFocused
+        self.__useWhitelisting = useWhitelisting
+        self.__browser = None
+        self.__delayedUrls = []
+        self.__isNavigationComplete = False
         self.onLoadStart = Event()
         self.onLoadEnd = Event()
         self.onReadyToShowContent = Event()
         self.onNavigate = Event()
-        LOG_BROWSER('__init__', self.__baseUrl, texName, size)
-        self.__browser = uiObj.movie.createBrowser(texName, '', size[0], size[1])
+        self.onReady = Event()
+        LOG_BROWSER('INIT ', self.__baseUrl, texName, size, self.__browserID)
+        return
+
+    def create(self):
+        LOG_BROWSER('CREATE ', self.__baseUrl, self.__browserID)
+        self.__browser = BigWorld.createBrowser(self.__browserID)
         if self.__browser is None:
+            LOG_BROWSER('create() NO BROWSER WAS CREATED', self.__baseUrl)
             return
         else:
-            self.__ui = weakref.ref(uiObj)
-            self.__keysDown = set()
-            self.__readyToShow = False
+            self.__browser.script = EventListener()
+            self.__browser.script.onLoadStart += self.__onLoadStart
+            self.__browser.script.onLoadEnd += self.__onLoadEnd
+            self.__browser.script.onDOMReady += self.__onReadyToShowContent
+            self.__browser.script.onCursorUpdated += self.__onCursorUpdated
+            self.__browser.script.onReady += self.__onReady
 
             def injectBrowserKeyEvent(me, e):
                 LOG_BROWSER('injectBrowserKeyEvent', (e.key,
@@ -52,14 +71,10 @@ class WebBrowser(object):
                 me.__browser.injectKeyEvent(e)
 
             def injectKeyDown(me, e):
-                if e.key not in me.__keysDown:
-                    me.__keysDown.add(e.key)
-                    injectBrowserKeyEvent(me, e)
+                injectBrowserKeyEvent(me, e)
 
             def injectKeyUp(me, e):
-                if e.key in me.__keysDown:
-                    me.__keysDown.remove(e.key)
-                    injectBrowserKeyEvent(me, e)
+                injectBrowserKeyEvent(me, e)
 
             def resetBit(value, bitMask):
                 return value & ~bitMask
@@ -81,7 +96,7 @@ class WebBrowser(object):
               None,
               None,
               None,
-              lambda me, _: me.__browser.reload(False)),
+              lambda me, _: me.__browser.reload()),
              (Keys.KEY_LSHIFT,
               False,
               None,
@@ -118,23 +133,41 @@ class WebBrowser(object):
               None,
               None,
               lambda me, e: injectKeyUp(me, e)))
-            self.__browser.script = EventListener()
-            self.__browser.script.onLoadStart += self.__onLoadStart
-            self.__browser.script.onLoadEnd += self.__onLoadEnd
-            self.__browser.script.onDOMReady += self.__onReadyToShowContent
-            self.__browser.script.onCursorUpdated += self.__onCursorUpdated
-            self.enableUpdate = True
-            self.__isMouseDown = False
-            self.__isNavigationComplete = False
-            self.__delayedUrls = []
-            self.__isFocused = False
-            self.__isWaitingForUnfocus = False
-            if isFocused:
-                self.focus()
-            g_mgr.addBrowser(self)
-            self.update()
-            self.navigate(url)
             return
+
+    def ready(self):
+        LOG_BROWSER('READY ', self.__baseUrl, self.__browserID)
+        if self.__useWhitelisting:
+            self.__browser.setUrlWhiteList(['about:blank',
+             'http://img.youtube.com',
+             'https://img.youtube.com',
+             'http://www.youtube.com/embed/',
+             'https://www.youtube.com/embed/',
+             'http://worldoftanks.ru',
+             'https://worldoftanks.ru',
+             'http://worldoftanks.eu',
+             'https://worldoftanks.eu',
+             'http://worldoftanks.com',
+             'https://worldoftanks.com',
+             'http://worldoftanks.asia',
+             'https://worldoftanks.asia'])
+        browserSize = self.__browserSize
+        self.__browser.setScaleformRender(self.__uiObj.movie, self.__texName, browserSize[0], browserSize[1])
+        self.__browser.activate(True)
+        self.__browser.focus()
+        self.__browser.loadURL(self.__baseUrl)
+        self.__ui = weakref.ref(self.__uiObj)
+        self.__readyToShow = False
+        self.__successfulLoad = False
+        self.enableUpdate = True
+        self.__isMouseDown = False
+        self.__isFocused = False
+        self.__isWaitingForUnfocus = False
+        if self.__startFocused:
+            self.focus()
+        g_mgr.addBrowser(self)
+        self.update()
+        self.onReady(self.__browser.url)
 
     def __processDelayedNavigation(self):
         if self.__isNavigationComplete and self.__delayedUrls:
@@ -149,7 +182,8 @@ class WebBrowser(object):
             self.__browser.script.onDOMReady -= self.__onReadyToShowContent
             self.__browser.script.onCursorUpdated -= self.__onCursorUpdated
             self.__browser.script = None
-            browserCleanupRoutine(self.__browser)
+            self.__browser.resetScaleformRender(self.__uiObj.movie, self.__texName)
+            BigWorld.removeBrowser(self.__browser)
             self.__browser = None
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
@@ -181,7 +215,7 @@ class WebBrowser(object):
             LOG_BROWSER('refresh - called too soon')
             return
         if self.hasBrowser:
-            self.__browser.reload(ignoreCache)
+            self.__browser.reload()
             self.onNavigate(self.__browser.url)
 
     def navigate(self, url):
@@ -193,6 +227,7 @@ class WebBrowser(object):
     def doNavigate(self, url):
         LOG_BROWSER('doNavigate', url)
         if self.hasBrowser:
+            self.__browser.script.newNavigation()
             self.__browser.loadURL(url)
             self.onNavigate(url)
 
@@ -214,11 +249,6 @@ class WebBrowser(object):
 
     def update(self):
         self.__cbID = BigWorld.callback(self.updateInterval, self.update)
-        if self.hasBrowser and self.enableUpdate:
-            try:
-                self.__browser.updateTexture()
-            except:
-                LOG_CURRENT_EXCEPTION()
 
     def __getBrowserKeyHandler(self, key, isKeyDown, isAltDown, isShiftDown, isCtrlDown):
         from itertools import izip
@@ -243,10 +273,6 @@ class WebBrowser(object):
              event.isAltDown(),
              event.isShiftDown(),
              event.isCtrlDown()))
-        if event.key == Keys.KEY_LEFTMOUSE:
-            if not event.isKeyDown():
-                self.browserUp(0, 0, 0)
-            return False
         if event.key == Keys.KEY_ESCAPE:
             return False
         if event.key == Keys.KEY_RETURN and event.isAltDown():
@@ -268,29 +294,23 @@ class WebBrowser(object):
     def browserDown(self, x, y, z):
         if not (self.hasBrowser and self.enableUpdate):
             return
-        elif self.__isMouseDown:
+        if self.__isMouseDown:
             return
-        else:
-            if not self.isFocused:
-                self.focus()
-                self.__isMouseDown = True
-                self.browserUp(x, y, z)
-                self.browserMove(x, y, z)
+        if not self.isFocused:
+            self.focus()
             self.__isMouseDown = True
-            self.__browser.injectKeyEvent(BigWorld.KeyEvent(Keys.KEY_LEFTMOUSE, 0, 0, None, (x, y)))
-            return
+            self.browserUp(x, y, z)
+            self.browserMove(x, y, z)
+        self.__isMouseDown = True
 
     def browserUp(self, x, y, z):
         if not (self.hasBrowser and self.enableUpdate):
             return
-        elif not self.__isMouseDown:
+        if not self.__isMouseDown:
             return
-        else:
-            self.__isMouseDown = False
-            self.__browser.injectKeyEvent(BigWorld.KeyEvent(Keys.KEY_LEFTMOUSE, -1, 0, None, (x, y)))
-            if self.__isWaitingForUnfocus:
-                self.unfocus()
-            return
+        self.__isMouseDown = False
+        if self.__isWaitingForUnfocus:
+            self.unfocus()
 
     def browserFocusOut(self):
         if self.isFocused and self.__isMouseDown:
@@ -323,16 +343,18 @@ class WebBrowser(object):
             LOG_BROWSER('onLoadStart', self.__browser.url)
             self.onLoadStart(self.__browser.url)
             self.__readyToShow = False
+            self.__successfulLoad = False
 
     def __onLoadEnd(self, url, isLoaded=True):
         if url == self.__browser.url:
             self.__isNavigationComplete = True
+            self.__successfulLoad = isLoaded
             if not self.__processDelayedNavigation():
-                LOG_BROWSER('onLoadEnd', self.__browser.url)
+                LOG_BROWSER('onLoadEnd', self.__browser.url, self.__readyToShow, isLoaded)
                 if self.__readyToShow and isLoaded:
                     self.onReadyToShowContent(self.__browser.url)
                     self.__readyToShow = isLoaded
-                self.onLoadEnd(self.__browser.url, isLoaded)
+            self.onLoadEnd(self.__browser.url, isLoaded)
 
     def __onReadyToShowContent(self, url):
         if url == self.__browser.url:
@@ -345,15 +367,12 @@ class WebBrowser(object):
             if ui:
                 ui.cursorMgr.setCursorForced(self.__browser.script.cursorType)
 
+    def __onReady(self):
+        self.ready()
+
     def executeJavascript(self, script, frame):
         if self.hasBrowser:
             self.__browser.executeJavascript(script, frame)
-
-
-def browserCleanupRoutine(browser):
-    if browser.isLoading:
-        browser.stop()
-        BigWorld.callback(0.5, lambda : browserCleanupRoutine(browser))
 
 
 class EventListener():
@@ -372,7 +391,12 @@ class EventListener():
         self.onLoadEnd = Event()
         self.onCursorUpdated = Event()
         self.onDOMReady = Event()
+        self.onReady = Event()
+        self.__urlFailed = False
         return
+
+    def newNavigation(self):
+        self.__urlFailed = False
 
     def onChangeCursor(self, cursorType):
         self.__cursorType = self.__cursorTypes.get(cursorType) or CursorDelegator.ARROW
@@ -381,20 +405,25 @@ class EventListener():
     def onChangeTitle(self, title):
         LOG_BROWSER('onChangeTitle', title)
 
+    def ready(self):
+        self.onReady()
+
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
             LOG_BROWSER('onBeginLoadingFrame(isMainFrame)', url)
             self.onLoadStart(url)
+            if self.__urlFailed:
+                self.onLoadEnd(url, False)
 
-    def onFailLoadingFrame(self, frameId, isMainFrame, errorCode, errorDesc, url):
+    def onFailLoadingFrame(self, frameId, isMainFrame, url, errorCode, errorDesc):
         if isMainFrame:
             LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorCode, errorDesc)
-            self.onLoadEnd(url, False)
+            self.__urlFailed = True
 
-    def onFinishLoadingFrame(self, frameId, isMainFrame, url):
+    def onFinishLoadingFrame(self, frameId, isMainFrame, url, httpStatusCode):
         if isMainFrame:
-            LOG_BROWSER('onFinishLoadingFrame(isMainFrame)', url)
-            self.onLoadEnd(url)
+            LOG_BROWSER('onFinishLoadingFrame(isMainFrame)', url, httpStatusCode)
+            self.onLoadEnd(url, not self.__urlFailed)
 
     def onDocumentReady(self, url):
         LOG_BROWSER('onDocumentReady', url)
@@ -412,6 +441,12 @@ class EventListener():
         :return: True to block a navigation. Return False to let it continue.
         """
         return False
+
+    def onWhitelistMiss(self, isMainFrame, failedURL):
+        if isMainFrame:
+            LOG_BROWSER('onWhitelistMiss(isMainFrame)', failedURL)
+            self.onLoadStart(failedURL)
+            self.onLoadEnd(failedURL, False)
 
     def onShowCreatedWebView(self, url, isPopup):
         LOG_BROWSER('onShowCreatedWebView', url, isPopup)

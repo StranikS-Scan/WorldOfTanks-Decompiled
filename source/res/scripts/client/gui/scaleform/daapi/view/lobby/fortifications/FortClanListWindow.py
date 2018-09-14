@@ -11,6 +11,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import icons, text_styles
 from gui.clans.formatters import getClanRoleString
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import i18n
 
 class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
@@ -83,3 +84,7 @@ class FortClanListWindow(FortClanListWindowMeta, FortViewHelper):
 
     def onUpdated(self, isFullUpdate):
         self._update()
+
+    def onClientStateChanged(self, state):
+        if state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+            self.onWindowClose()

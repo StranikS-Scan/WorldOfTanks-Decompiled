@@ -331,8 +331,6 @@ class Bomber(Equipment):
         self.modelName = _xml.readString(xmlCtx, section, 'modelName')
         if IS_CLIENT:
             self.soundEvent = _xml.readString(xmlCtx, section, 'wwsoundEvent')
-        else:
-            self.soundEvent = _xml.readString(xmlCtx, section, 'soundEvent')
         self.speed = _xml.readInt(xmlCtx, section, 'speed')
         self.heights = _xml.readTupleOfPositiveInts(xmlCtx, section, 'heights', 2)
         self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
@@ -367,8 +365,6 @@ class _VehicleFilter(object):
             if subsection.name == 'exclude':
                 self.__exclude.append(_readVehicleFilterPattern((xmlCtx, 'exclude'), subsection))
             _xml.raiseWrongXml(xmlCtx, subsection.name, 'should be <include> or <exclude>')
-
-        self.__exclude.append({'vehicle': {'tags': frozenset(['event_battles'])}})
 
     def checkCompatibility(self, vehicleDescr):
         if self.__exclude:

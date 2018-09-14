@@ -4,8 +4,7 @@ from collections import namedtuple
 import struct
 import BigWorld
 import SoundGroups
-from constants import ARENA_GUI_TYPE
-from gui.battle_control import arena_info
+from gui.battle_control import g_sessionProvider
 from tutorial.control import context
 from tutorial.control.context import ClientCtx, GlobalStorage
 from tutorial.logger import LOG_DEBUG, LOG_ERROR, LOG_WARNING
@@ -145,7 +144,7 @@ class ExtendedBattleClientCtx(ClientCtx, namedtuple('ExtendedBattleClientCtx', A
 class BattleStartReqs(context.StartReqs):
 
     def isEnabled(self):
-        return arena_info.getArenaGuiType() == ARENA_GUI_TYPE.TUTORIAL
+        return g_sessionProvider.arenaVisitor.gui.isTutorialBattle()
 
     def prepare(self, ctx):
         clientCtx = BattleClientCtx.fetch()

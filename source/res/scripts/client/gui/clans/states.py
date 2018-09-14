@@ -261,11 +261,12 @@ class ClanAvailableState(_ClanWebState):
                 result = yield super(ClanAvailableState, self).sendRequest(ctx, allowDelay=allowDelay)
             else:
                 result = ClanRequestResponse(ResponseCodes.WGCG_ERROR, 'Simulated WGCG error!', None)
-            if result.code == ResponseCodes.WGCG_ERROR:
+            resultCode = result.code
+            if resultCode == ResponseCodes.WGCG_ERROR:
                 LOG_DEBUG('WGCG error has occurred! The state will be changed to NA.')
                 self._changeState(ClanUnavailableState(self._clanCtrl))
                 callback(result)
-            elif result.code == ResponseCodes.AUTHENTIFICATION_ERROR:
+            elif ctx.getRequestType() != CLAN_REQUESTED_DATA_TYPE.LOGIN and resultCode == ResponseCodes.AUTHENTIFICATION_ERROR:
                 LOG_WARNING('Request requires user to be authenticated. Will try to login and resend the request.', ctx)
                 self.__waitingRequests.append((ctx,
                  callback,

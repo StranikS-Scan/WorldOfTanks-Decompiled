@@ -52,19 +52,19 @@
         <loop>	True	</loop>
       </arrow>
       <actions>
-        <click>	FightButton	  <effects>	&gt;	  <close-hint>	BattleButtonHint	</close-hint>
-            <activate>	ShownBattleButtonHint	</activate>
-            <run-trigger>	FightBtnLoopTrigger	</run-trigger>
+        <click>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
           </effects>
         </click>
-        <click-outside>	FightButton	  <effects>	&gt;	  <close-hint>	BattleButtonHint	</close-hint>
-            <activate>	ShownBattleButtonHint	</activate>
-            <run-trigger>	FightBtnLoopTrigger	</run-trigger>
+        <click-outside>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
           </effects>
         </click-outside>
-        <esc>	FightButton	  <effects>	&gt;	  <close-hint>	BattleButtonHint	</close-hint>
-            <activate>	ShownBattleButtonHint	</activate>
-            <run-trigger>	FightBtnLoopTrigger	</run-trigger>
+        <esc>	FightButton	  <effects>
+            <close-hint>	BattleButtonHint	</close-hint>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
           </effects>
         </esc>
       </actions>

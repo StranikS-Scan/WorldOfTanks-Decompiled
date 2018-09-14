@@ -23,7 +23,7 @@ def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=N
             formattedTime = timeStyle(formattedTime)
         return formattedTime
 
-    if timeLeft > 0:
+    if timeLeft > 0 and timeLeft != float('inf'):
         if timeLeft > time_utils.ONE_DAY:
             result = formatter(localization, 'days', formatTime(time_utils.ONE_DAY), ctx)
         else:

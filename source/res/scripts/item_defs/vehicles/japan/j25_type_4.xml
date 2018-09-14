@@ -8,9 +8,16 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	20	</forward>
+    <forward>	25	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.001	</moving>
+    <still>	0.003	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.005	</firePenalty>
+  </invisibility>
   <repairCost>	8.90	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 1.02122 -0.03484	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J25_Type_4/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -186,13 +194,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.33563 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J25_Type_4/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.51639 3.42226	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -371,7 +378,7 @@
       </armor>
       <weight>	40000	</weight>
       <maxLoad>	165000	</maxLoad>
-      <terrainResistance>	1.3 1.4 2	</terrainResistance>
+      <terrainResistance>	1.1 1.2 1.8	</terrainResistance>
       <brakeForce>	72000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
@@ -465,13 +472,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.33563 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J25_Type_4/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.51639 3.42226	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -694,6 +700,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.380556 10 0.386111 9.6 0.388889 9.3 0.391667 9 0.394444 8.7 0.397222 8.4 0.402778 8 0.405556 7.7 0.416667 6.5 0.419444 6 0.422222 5.8 0.425 5.68889 0.430556 5.3 0.433333 5.1 0.436111 4.8 0.438889 4.6 0.441667 4.4 0.444444 4 0.447222 3.8 0.45 3.6 0.477778 2.8 0.522222 2.8 0.55 3.6 0.552778 3.8 0.555556 4 0.558333 4.4 0.561111 4.6 0.563889 4.8 0.566667 5.1 0.569444 5.3 0.575 5.68889 0.577778 5.8 0.580556 6 0.583333 6.5 0.594444 7.7 0.597222 8 0.602778 8.4 0.605556 8.7 0.608333 9 0.611111 9.3 0.613889 9.6 0.619444 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	16.3	</reloadTime>
           <shotDispersionFactors>
@@ -708,7 +715,8 @@
             <exploded>	vehicles/japan/J25_Type_4/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J25_Type_4/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -737,8 +745,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.377778 10 0.383333 9.5 0.386111 9.1 0.388889 8.8 0.391667 8.4 0.394444 8.1 0.397222 7.8 0.4 7.5 0.402778 7.2 0.405556 6.9 0.408333 6.5 0.411111 6.3 0.413889 6 0.416667 5.7 0.419444 5.5 0.422222 5.2 0.425 5 0.427778 4.8 0.430556 4.5 0.433333 4.1 0.436111 3.8 0.438889 3.6 0.444444 3.2 0.447222 3 0.475 2.3 0.477778 2 0.497222 2 0.502778 2 0.522222 2 0.525 2.3 0.552778 3 0.555556 3.2 0.561111 3.6 0.563889 3.8 0.566667 4.1 0.569444 4.5 0.572222 4.8 0.575 5 0.577778 5.2 0.580556 5.5 0.583333 5.7 0.586111 6 0.588889 6.3 0.591667 6.5 0.594444 6.9 0.597222 7.2 0.6 7.5 0.602778 7.8 0.605556 8.1 0.608333 8.4 0.611111 8.8 0.613889 9.1 0.616667 9.5 0.622222 10 0.925 10 0.927778 9.8 0.930556 9.7 0.933333 9.9 0.936111 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	20.8	</reloadTime>
+          <reloadTime>	19.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -751,7 +760,8 @@
             <exploded>	vehicles/japan/J25_Type_4/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J25_Type_4/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -775,7 +785,8 @@
         <exploded>	vehicles/japan/J25_Type_4/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J25_Type_4/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J25_Type_4/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J25_Type_4/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.406659 1.35334	</gunPosition>
       <emblemSlots>
@@ -810,9 +821,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	1.012 0.000 1.007 0.000 0.818 -0.169 0.881 0.535 0.390 0.500 0.126 0.500 0.075 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
@@ -843,6 +852,25 @@
     </_Type3_Otsu>
     <_Type3_Ko>	shared	</_Type3_Ko>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_J25_Type_4>
+        <alpha>	0.12075	</alpha>
+      </Chassis_J25_Type_4>
+      <Chassis_J25_Type_4_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_J25_Type_4_2>
+    </chassis>
+    <engines>
+      <_Type98_V12_x2_1100>
+        <bravo>	290.7523	</bravo>
+      </_Type98_V12_x2_1100>
+      <_Type98_V12_x2_1200>
+        <bravo>	317.1843	</bravo>
+      </_Type98_V12_x2_1200>
+    </engines>
+    <armour>	1.027497801	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

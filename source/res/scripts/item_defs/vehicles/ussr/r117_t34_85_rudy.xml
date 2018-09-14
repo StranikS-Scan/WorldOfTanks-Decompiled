@@ -9,6 +9,13 @@
     <forward>	54	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.184	</moving>
+    <still>	0.245	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.368	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.738724 0.6248	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R117_T34_85_Rudy/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R117_T34_85_Rudy/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R117_T34_85_Rudy/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R117_T34_85_Rudy/T34_85_Rudy_HangarShadowMap.dds	</hangarShadowTexture>
@@ -163,13 +171,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.821276 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R117_T34_85_Rudy/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R117_T34_85_Rudy/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R117_T34_85_Rudy/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22507 1.90588	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -511,13 +518,15 @@
             <minPitch>	0 -22 1 -22	</minPitch>
             <maxPitch>	0 7 0.427778 7 0.441667 4.2 0.469445 4.2 0.483333 7 0.516667 7 0.530556 4.2 0.558333 4.2 0.572222 7 1 7	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R117_T34_85_Rudy/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R117_T34_85_Rudy/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R117_T34_85_Rudy/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R117_T34_85_Rudy/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R117_T34_85_Rudy/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R117_T34_85_Rudy/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -540,15 +549,14 @@
         <exploded>	vehicles/russian/R117_T34_85_Rudy/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R117_T34_85_Rudy/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R117_T34_85_Rudy/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R117_T34_85_Rudy/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.019345 0.445023 0.978068	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.974 -0.074 1.050 0.000 0.606 -0.009 0.873 0.498 0.448 0.500 0.251 0.500 0.113 0.498 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
       </camouflage>
@@ -563,6 +571,19 @@
   <radios>
     <_9RM_O>	shared	</_9RM_O>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R117_T34_85_Rudy>
+        <alpha>	0.0805	</alpha>
+      </Chassis_R117_T34_85_Rudy>
+    </chassis>
+    <engines>
+      <V-2-34_B>
+        <bravo>	132.1601	</bravo>
+      </V-2-34_B>
+    </engines>
+    <armour>	1.103647443	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

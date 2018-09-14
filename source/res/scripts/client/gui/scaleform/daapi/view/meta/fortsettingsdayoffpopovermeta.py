@@ -3,18 +3,48 @@
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 
 class FortSettingsDayoffPopoverMeta(SmartPopOverView):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends SmartPopOverView
+    null
+    """
 
     def onApply(self, dayOff):
+        """
+        :param dayOff:
+        :return :
+        """
         self._printOverrideError('onApply')
 
     def as_setDescriptionsTextS(self, descriptionText, dayOffText):
+        """
+        :param descriptionText:
+        :param dayOffText:
+        :return :
+        """
         return self.flashObject.as_setDescriptionsText(descriptionText, dayOffText) if self._isDAAPIInited() else None
 
     def as_setButtonsTextS(self, applyButtonText, cancelButtonText):
+        """
+        :param applyButtonText:
+        :param cancelButtonText:
+        :return :
+        """
         return self.flashObject.as_setButtonsText(applyButtonText, cancelButtonText) if self._isDAAPIInited() else None
 
     def as_setButtonsTooltipsS(self, enabledApplyButtonTooltip, disabledApplyButtonTooltip):
+        """
+        :param enabledApplyButtonTooltip:
+        :param disabledApplyButtonTooltip:
+        :return :
+        """
         return self.flashObject.as_setButtonsTooltips(enabledApplyButtonTooltip, disabledApplyButtonTooltip) if self._isDAAPIInited() else None
 
     def as_setDataS(self, data):
+        """
+        :param data:
+        :return :
+        """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

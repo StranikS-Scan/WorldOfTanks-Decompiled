@@ -6,7 +6,7 @@ from adisp import process
 from constants import FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, FORT_ORDER_TYPE
 from FortifiedRegionBase import BuildingDescr
 from debug_utils import LOG_DEBUG
-from gui import SystemMessages
+from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -18,15 +18,14 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.fortifications.context import UpgradeCtx
 from gui.shared.fortifications.settings import FORT_RESTRICTION, FORT_BATTLE_DIVISIONS
 from gui.shared.utils.functions import makeTooltip
 from gui.shared import events
 from gui.shared.formatters import icons, text_styles
+from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
-from gui import DialogsInterface
 
 class MAX_LEVEL:
     MAX_BUILD_LEVEL = 4
@@ -51,7 +50,6 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         self.__maxDerResVal = None
         self.__cost = None
         self.__defencePeriod = False
-        self.__isFortBattleAvailable = isFortificationBattlesEnabled()
         return
 
     def __buildData(self):
@@ -137,7 +135,11 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
             self.destroy()
 
     def __makeData(self):
-        baseBuildingMaxLevel = MAX_LEVEL.MAX_BASE_LEVEL_SECOND_ITERATION if self.__isFortBattleAvailable else MAX_LEVEL.MAX_BASE_LEVEL_FIRST_ITERATION
+        isFortsEnabled = g_lobbyContext.getServerSettings().isFortsEnabled()
+        if isFortsEnabled:
+            baseBuildingMaxLevel = MAX_LEVEL.MAX_BASE_LEVEL_SECOND_ITERATION
+        else:
+            baseBuildingMaxLevel = MAX_LEVEL.MAX_BASE_LEVEL_FIRST_ITERATION
         result = {}
         cndBody = ''
         limits = self.fortCtrl.getLimits()
@@ -150,12 +152,9 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         isBaseBuilding = self.__uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING
         if self.__uid != FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
             cndBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_GENERALCONDITION, level=fort_formatters.getTextLevel(self.__buildingLevel + 1))
-            if canUpgrade:
-                isCanModernization = True
-            else:
-                isCanModernization = False
+            canUpgrade = isCanModernization
             if self.__buildingLevel == MAX_LEVEL.MAX_BUILD_LEVEL:
-                if self.__isFortBattleAvailable:
+                if isFortsEnabled:
                     cndBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_DEFENCEPERIODANDBASEBUILDING, level=fort_formatters.getTextLevel(self.__buildingLevel + 1))
                     if not self.__defencePeriod or self.__baseBuildingLevel < MAX_LEVEL.MAX_BASE_LEVEL_SECOND_ITERATION:
                         cndPostfix = text_styles.error(i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
@@ -169,12 +168,12 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
                 isCanModernization = False
         elif self.__buildingLevel == baseBuildingMaxLevel:
             cndBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_BASEBUILDINGFIVELEVEL)
-            if not self.__defencePeriod and self.__isFortBattleAvailable:
+            if not self.__defencePeriod and isFortsEnabled:
                 cndPostfix = text_styles.error(i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
                 isCanModernization = False
                 canUpgradeByDefPeriod = False
                 conditionIcon = text_styles.standard('-')
-            elif not self.__isFortBattleAvailable:
+            elif not isFortsEnabled:
                 isCanModernization = False
                 canUpgradeByDefPeriod = False
                 cndBody = text_styles.alert(i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL))
@@ -198,12 +197,12 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
         if not isCanModernization:
             ttHeader = ''
             ttBody = ''
-            if not canUpgradeByDefPeriod and self.__isFortBattleAvailable:
+            if not canUpgradeByDefPeriod and isFortsEnabled:
                 ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_HEADER)
                 ttBody = i18n.makeString(i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_NOTACTIVATEDDEFPERIOD_BODY))
             else:
                 ttHeader = i18n.makeString(TOOLTIPS.FORTIFICATION_MODERNIZATION_APPLYBUTTON_HEADER)
-                if not self.__isFortBattleAvailable and isBaseBuilding and self.__buildingLevel == baseBuildingMaxLevel:
+                if not isFortsEnabled and isBaseBuilding and self.__buildingLevel == baseBuildingMaxLevel:
                     ttHeader = i18n.makeString('#tooltips:fortification/popOver/upgradeFoundationBtn_Disabled/header')
                     ttBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL)
                 elif upgradeRestriction == FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE_AND_LOW_LEVEL:
@@ -343,10 +342,7 @@ class FortModernizationWindow(FortModernizationWindowMeta, FortViewHelper):
             result['iconLevel'] = order.level if not increment else order.level + 1
         if increment and self.__uid != FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
             result['infoIconSource'] = RES_ICONS.MAPS_ICONS_LIBRARY_INFORMATIONICON
-            toolTipData = {}
-            toolTipData['header'] = i18n.makeString(TOOLTIPS.FORTIFICATION_DEFRESICONINFO_HEADER)
-            toolTipData['body'] = i18n.makeString(TOOLTIPS.FORTIFICATION_DEFRESICONINFO_BODY, testData='test py var')
-            result['infoIconToolTipData'] = toolTipData
+            result['infoIconToolTip'] = makeTooltip(TOOLTIPS.FORTIFICATION_DEFRESICONINFO_HEADER, TOOLTIPS.FORTIFICATION_DEFRESICONINFO_BODY)
         return result
 
     def openOrderDetailsWindow(self):

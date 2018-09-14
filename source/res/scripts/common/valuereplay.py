@@ -2,6 +2,14 @@
 # Embedded file name: scripts/common/ValueReplay.py
 import struct
 
+def makeFactor10(factor):
+    return int(round(factor * 10))
+
+
+def makeFactor100(factor):
+    return int(round(factor * 100))
+
+
 class BattleResults(dict):
     pass
 

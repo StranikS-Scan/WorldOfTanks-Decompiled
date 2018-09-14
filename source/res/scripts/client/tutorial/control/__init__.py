@@ -33,6 +33,10 @@ class TutorialProxyHolder(object):
     def _descriptor(self):
         return self._tutorial.getDescriptor()
 
+    @property
+    def _funcScene(self):
+        return self._tutorial.getFunctionalScene()
+
 
 def setTutorialProxy(tutorial):
     TutorialProxyHolder._tutorial = tutorial

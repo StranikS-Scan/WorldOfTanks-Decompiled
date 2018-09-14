@@ -3,10 +3,15 @@
 from debug_utils import LOG_WARNING
 
 class CLANS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CLAN_HEADER_SENDREQUESTBTN_TOOLTIP = '#clans:clan/header/sendRequestBtn/tooltip'
     CLAN_HEADER_CHATCHANNELBTN_TOOLTIP = '#clans:clan/header/chatChannelBtn/tooltip'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED = '#clans:clanProfile/summaryView/tooltip/ratingOutdated'
-    CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/afterClanLeave'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/limitHasBeenReached'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_INVITESHASBEENREACHED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/invitesHasBeenReached'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_RECEIVINGREQUESTSCLOSED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/receivingRequestsClosed'
@@ -79,7 +84,6 @@ class CLANS(object):
     SEARCH_INFO_REQUESTSLIMITEXCEEDED_TOOLTIP = '#clans:search/info/requestsLimitExceeded/tooltip'
     SEARCH_INFO_REQUESTALREADYSENT_TOOLTIP = '#clans:search/info/requestAlreadySent/tooltip'
     SEARCH_INFO_INVITEALREADYACHIEVED_TOOLTIP = '#clans:search/info/inviteAlreadyAchieved/tooltip'
-    SEARCH_INFO_COOLDOWN_TOOLTIP = '#clans:search/info/cooldown/tooltip'
     SEARCH_INFO_STATS_BATTLES_TOOLTIP = '#clans:search/info/stats/battles/tooltip'
     SEARCH_INFO_STATS_WINS_TOOLTIP = '#clans:search/info/stats/wins/tooltip'
     SEARCH_INFO_STATS_AVGEXP_TOOLTIP = '#clans:search/info/stats/avgExp/tooltip'
@@ -222,6 +226,8 @@ class CLANS(object):
     SECTION_FORT_TOOLTIPS_PROFIT_BODY = SECTION_FORT_TOOLTIPS_PROFIT + '/body'
     SECTION_FORT_BUILDING_TOOLTIP_BODY = '#clans:section/fort/building/tooltip/body'
     SECTION_FORT_DEFENCE_NOTACTIVATED = '#clans:section/fort/defence/notActivated'
+    CLANPROFILE_FORTIFICATIONINFO_DUMMY_HEADER = '#clans:clanProfile/fortificationInfo/dummy/header'
+    CLANPROFILE_FORTIFICATIONINFO_DUMMY_BODY = '#clans:clanProfile/fortificationInfo/dummy/body'
     CLANPERSONALINVITESWINDOW_TOOLTIPS_REFRESHBUTTON_ENABLED = '#clans:clanPersonalInvitesWindow/tooltips/refreshButton/enabled'
     CLANPERSONALINVITESWINDOW_TOOLTIPS_REFRESHBUTTON_DISABLED = '#clans:clanPersonalInvitesWindow/tooltips/refreshButton/disabled'
     CLANPERSONALINVITESWINDOW_TITLE = '#clans:clanPersonalInvitesWindow/title'
@@ -311,6 +317,7 @@ class CLANS(object):
     CLANINVITESWINDOW_TOOLTIPS_TABLE_INVITES_INVITEBUTTON = '#clans:clanInvitesWindow/tooltips/table/invites/inviteButton'
     CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTACCEPTREQUEST_BODY = '#clans:clanInvitesWindow/tooltips/table/cantAcceptRequest/body'
     CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTSENDINVITE_BODY = '#clans:clanInvitesWindow/tooltips/table/cantSendInvite/body'
+    CLANINVITESWINDOW_TOOLTIPS_TABLE_CANTACCEPTREQUESTDUETOCD_BODY = '#clans:clanInvitesWindow/tooltips/table/cantAcceptRequestDueToCD/body'
     CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTACCEPTED = '#clans:clanInvitesWindow/tooltips/request/requestAccepted'
     CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTDECLINED = '#clans:clanInvitesWindow/tooltips/request/requestDeclined'
     CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT = '#clans:clanInvitesWindow/tooltips/request/requestSent'
@@ -364,7 +371,6 @@ class CLANS(object):
     CLANPROFILE_SUMMARYVIEW_LINKS_GOTOMAP = '#clans:clanProfile/summaryView/links/gotoMap'
     CLANPROFILE_SUMMARYVIEW_LINKS_DETAILSMAP = '#clans:clanProfile/summaryView/links/detailsMap'
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_DETAILSCONDITIONS = '#clans:clanProfile/summaryView/statusMsg/detailsConditions'
-    CLANPROFILE_SUMMARYVIEW_STATUSMSG_ISINCOOLDOWN = '#clans:clanProfile/summaryView/statusMsg/isInCooldown'
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_REQUESTLIMIT = '#clans:clanProfile/summaryView/statusMsg/requestLimit'
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_INVITELIMIT = '#clans:clanProfile/summaryView/statusMsg/inviteLimit'
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_INANOTHERCLAN = '#clans:clanProfile/summaryView/statusMsg/inAnotherClan'
@@ -375,8 +381,6 @@ class CLANS(object):
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_RESYNCHRONIZE = '#clans:clanProfile/summaryView/statusMsg/resynchronize'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED_HEADER = CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED + '/header'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED_BODY = CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED + '/body'
-    CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE_HEADER = CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE + '/header'
-    CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE_BODY = CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE + '/body'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED_HEADER = CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED + '/header'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED_BODY = CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED + '/body'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_INVITESHASBEENREACHED_HEADER = CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_INVITESHASBEENREACHED + '/header'
@@ -550,8 +554,6 @@ class CLANS(object):
     SEARCH_INFO_REQUESTALREADYSENT_TOOLTIP_ATTENTION = SEARCH_INFO_REQUESTALREADYSENT_TOOLTIP + '/attention'
     SEARCH_INFO_INVITEALREADYACHIEVED_TOOLTIP_HEADER = SEARCH_INFO_INVITEALREADYACHIEVED_TOOLTIP + '/header'
     SEARCH_INFO_INVITEALREADYACHIEVED_TOOLTIP_ATTENTION = SEARCH_INFO_INVITEALREADYACHIEVED_TOOLTIP + '/attention'
-    SEARCH_INFO_COOLDOWN_TOOLTIP_HEADER = SEARCH_INFO_COOLDOWN_TOOLTIP + '/header'
-    SEARCH_INFO_COOLDOWN_TOOLTIP_ATTENTION = SEARCH_INFO_COOLDOWN_TOOLTIP + '/attention'
     SEARCH_INFO_BANNED_TOOLTIP_HEADER = '#clans:search/info/banned/tooltip/header'
     SEARCH_INFO_BANNED_TOOLTIP_BODY = '#clans:search/info/banned/tooltip/body'
     SEARCH_INFO_FORBIDDENACCOUNTTYPE_TOOLTIP_HEADER = '#clans:search/info/forbiddenAccountType/tooltip/header'
@@ -610,7 +612,6 @@ class CLANS(object):
      CLAN_POST_RECRUIT,
      CLAN_POST_RESERVIST)
     CLANPROFILE_SUMMARYVIEW_STATUSMSG_ENUM = (CLANPROFILE_SUMMARYVIEW_STATUSMSG_DETAILSCONDITIONS,
-     CLANPROFILE_SUMMARYVIEW_STATUSMSG_ISINCOOLDOWN,
      CLANPROFILE_SUMMARYVIEW_STATUSMSG_REQUESTLIMIT,
      CLANPROFILE_SUMMARYVIEW_STATUSMSG_INVITELIMIT,
      CLANPROFILE_SUMMARYVIEW_STATUSMSG_INANOTHERCLAN,
@@ -651,6 +652,10 @@ class CLANS(object):
 
     @staticmethod
     def globalmapview_statistics6(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:globalMapView/statistics6/%s' % key
         if outcome not in CLANS.GLOBALMAPVIEW_STATISTICS6_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -660,6 +665,10 @@ class CLANS(object):
 
     @staticmethod
     def globalmapview_statistics8(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:globalMapView/statistics8/%s' % key
         if outcome not in CLANS.GLOBALMAPVIEW_STATISTICS8_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -669,6 +678,10 @@ class CLANS(object):
 
     @staticmethod
     def clan_post(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:clan/post/%s' % key
         if outcome not in CLANS.CLAN_POST_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -678,6 +691,10 @@ class CLANS(object):
 
     @staticmethod
     def clanprofile_summaryview_statusmsg(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:clanProfile/summaryView/statusMsg/%s' % key
         if outcome not in CLANS.CLANPROFILE_SUMMARYVIEW_STATUSMSG_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -687,6 +704,10 @@ class CLANS(object):
 
     @staticmethod
     def clanprofile_summaryview_blocklbl(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:clanProfile/summaryView/blockLbl/%s' % key
         if outcome not in CLANS.CLANPROFILE_SUMMARYVIEW_BLOCKLBL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -696,6 +717,10 @@ class CLANS(object):
 
     @staticmethod
     def globalmapview_statistics10(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#clans:globalMapView/statistics10/%s' % key
         if outcome not in CLANS.GLOBALMAPVIEW_STATISTICS10_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')

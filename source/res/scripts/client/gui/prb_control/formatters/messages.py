@@ -36,7 +36,7 @@ def getPrbKickedFromQueueMessage(prbTypeName):
 
 
 def getVehicleNotPresentMessage():
-    return i18n.makeString('#menu:hangar/no_current_vehicle_selected')
+    return i18n.makeString('#system_messages:prebattle/vehicleInvalid/no_selectedVehicle')
 
 
 def getVehicleNotReadyMessage():

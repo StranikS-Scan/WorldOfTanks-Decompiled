@@ -3,14 +3,14 @@
 from PlayerEvents import g_playerEvents
 from adisp import process
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.meta.ConfirmModuleWindowMeta import ConfirmModuleWindowMeta
+from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
+from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
 from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters import ItemsRequester
 from items import vehicles
 
-class ConfirmModuleDialog(ConfirmModuleWindowMeta):
+class ConfirmModuleDialog(ConfirmItemWindowMeta):
     """
     Basic implementation of window which provides operation with modules.
     """
@@ -59,33 +59,27 @@ class ConfirmModuleDialog(ConfirmModuleWindowMeta):
             actualPrice = self.meta.getActualPrice(module)
             defaultPrice = self.meta.getDefaultPrice(module)
             currency = self.meta.getCurrency(module)
-            isAction = actualPrice[1] > 0 and actualPrice[0] > 0 and (shop.isEnabledBuyingGoldShellsForCredits and module.itemTypeID == vehicles._SHELL or shop.isEnabledBuyingGoldEqsForCredits and module.itemTypeID == vehicles._EQUIPMENT)
+            isAction = actualPrice.isAllSet() and (shop.isEnabledBuyingGoldShellsForCredits and module.itemTypeID == vehicles._SHELL or shop.isEnabledBuyingGoldEqsForCredits and module.itemTypeID == vehicles._EQUIPMENT)
             icon = self.__getIcon(module)
             extraData = None
             if module.itemTypeID == vehicles._GUN and module.isClipGun():
                 extraData = CLIP_ICON_PATH
             action = None
             if actualPrice != defaultPrice:
-                isBuying, state = self.meta.getAction(module)
-                action = {'type': ACTION_TOOLTIPS_TYPE.ITEM,
-                 'key': str(module.intCD),
-                 'isBuying': isBuying,
-                 'state': state,
-                 'newPrice': actualPrice,
-                 'oldPrice': defaultPrice}
+                action = self.meta.getActionVO(module)
             resultData = {'id': self.meta.getTypeCompDescr(),
-             'type': module.itemTypeName,
              'price': actualPrice,
              'actionPriceData': action,
              'icon': icon,
              'name': module.userName,
-             'descr': module.getShortInfo(),
+             'description': module.getShortInfo(),
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(module),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(module),
              'isActionNow': isAction,
              'moduleLabel': module.getGUIEmblemID(),
-             'moduleLevel': module.level,
+             'level': module.level,
+             'linkage': CONFIRM_DIALOG_ALIASES.MODULE_ICON,
              EXTRA_MODULE_INFO: extraData}
             self.as_setDataS(resultData)
         else:

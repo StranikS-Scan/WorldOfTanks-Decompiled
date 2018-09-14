@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.244	</moving>
+    <still>	0.406	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.609	</firePenalty>
+  </invisibility>
   <repairCost>	5.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -68,7 +75,8 @@
       <turret>	0.139781 0.544163 1.12004	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G101_StuG_III/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -216,13 +224,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.08884 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.25706 1.49473	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -339,13 +346,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.08884 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.25706 1.49473	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -408,6 +414,7 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
@@ -417,14 +424,15 @@
             <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_75mm_StuK_37_L24>
         <_75mm_StuK_40_L43>	shared	  <reloadTime>	3.9	</reloadTime>
           <unlocks>
             <gun>	_75mm_PaK_39_L48	  <cost>	3400	</cost>
             </gun>
-            <vehicle>	StuG_40_AusfG	  <cost>	12640	</cost>
+            <vehicle>	G05_StuG_40_AusfG	  <cost>	12640	</cost>
             </vehicle>
             <gun>	_105mm_StuH42_L28	  <cost>	3800	</cost>
             </gun>
@@ -446,6 +454,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.8	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_02.model	</undamaged>
@@ -453,7 +462,8 @@
             <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
@@ -478,6 +488,7 @@
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
           <turretYawLimits>	-10 10	</turretYawLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G101_StuG_III/normal/lod0/Gun_03.model	</undamaged>
@@ -485,7 +496,8 @@
             <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
@@ -509,6 +521,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
@@ -522,7 +535,8 @@
             <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G101_StuG_III/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
@@ -535,15 +549,14 @@
         <exploded>	vehicles/german/G101_StuG_III/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G101_StuG_III/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G101_StuG_III/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G101_StuG_III/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.008068 0.000871 -0.10535	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_G101_StuG_III>
   </turrets0>
   <engines>
@@ -570,6 +583,28 @@
     </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G101_StuG_III>
+        <alpha>	0.13685	</alpha>
+      </Chassis_G101_StuG_III>
+      <Chassis_G101_StuG_III_2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_G101_StuG_III_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_108TR>
+        <bravo>	84.58249	</bravo>
+      </Maybach_HL_108TR>
+      <Maybach_HL_120_TR>
+        <bravo>	92.5121	</bravo>
+      </Maybach_HL_120_TR>
+      <Maybach_HL_120_TRM>
+        <bravo>	116.3009	</bravo>
+      </Maybach_HL_120_TRM>
+    </engines>
+    <armour>	0.839436771	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

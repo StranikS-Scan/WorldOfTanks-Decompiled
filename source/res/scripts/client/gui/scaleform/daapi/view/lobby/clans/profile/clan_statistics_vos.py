@@ -11,7 +11,7 @@ from gui.Scaleform.locale.CLANS import CLANS as CL, CLANS
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, icons
-from gui.shared.utils.functions import makeTooltip, getArenaGeomentryName
+from gui.shared.utils.functions import makeTooltip
 
 def _resourceParam(value):
     return ''.join((text_styles.defRes(value), icons.nutStat()))
@@ -49,7 +49,7 @@ def _getLevelParams(i18nFunc, battlesCountGetter, winsEfficiencyGetter, eloRatin
     winsEfficiency = formatField(getter=winsEfficiencyGetter, formatter=lambda x: PUtils.formatFloatPercent(x))
     eloRating = formatField(getter=eloRatingGetter, formatter=BigWorld.wg_getIntegralFormat)
     place = formatField(getter=placeGetter, formatter=BigWorld.wg_getIntegralFormat)
-    favArenaName = formatField(getter=favArenaNameGetter, formatter=lambda x: getI18ArenaById(getArenaGeomentryName(x)))
+    favArenaName = formatField(getter=favArenaNameGetter, formatter=lambda arena_id: getI18ArenaById(arena_id))
     return [_getDataObject('battles', i18nFunc, battlesCount),
      _getDataObject('wins', i18nFunc, winsEfficiency),
      _getDataObject('eloRating', i18nFunc, eloRating),

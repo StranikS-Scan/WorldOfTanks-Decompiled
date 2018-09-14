@@ -3,68 +3,16 @@
 import calendar
 import datetime
 import time
+from adisp import process
+from account_helpers.AccountSettings import AccountSettings
 from constants import PREBATTLE_TYPE
 from FortifiedRegionBase import NOT_ACTIVATED
-from adisp import process
-from helpers import time_utils
+from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
-from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications import interfaces
-from gui.shared.fortifications.context import CreateOrJoinFortBattleCtx
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
-from account_helpers.AccountSettings import AccountSettings
+from gui.shared.fortifications.context import CreateOrJoinFortBattleCtx
 from gui.shared.fortifications.settings import ROSTER_INTRO_WINDOW
-
-class fortProviderProperty(property):
-
-    def __get__(self, obj, objType=None):
-        return g_clanCache.fortProvider
-
-
-class fortCtrlProperty(property):
-
-    def __get__(self, obj, objType=None):
-        provider = g_clanCache.fortProvider
-        ctrl = None
-        if provider:
-            ctrl = provider.getController()
-        return ctrl
-
-
-class fortStateProperty(property):
-
-    def __get__(self, obj, objType=None):
-        provider = g_clanCache.fortProvider
-        state = None
-        if provider:
-            state = provider.getState()
-        return state
-
-
-class FortListener(interfaces.IFortListener):
-
-    @fortProviderProperty
-    def fortProvider(self):
-        return None
-
-    @fortCtrlProperty
-    def fortCtrl(self):
-        return interfaces.IFortController()
-
-    @fortStateProperty
-    def fortState(self):
-        return None
-
-    def startFortListening(self):
-        provider = self.fortProvider
-        if provider:
-            provider.addListener(self)
-
-    def stopFortListening(self):
-        provider = self.fortProvider
-        if provider:
-            provider.removeListener(self)
-
+from helpers import time_utils
 
 def adjustDefenceHourToUTC(defenceHour):
     date = datetime.datetime.now()
@@ -130,7 +78,6 @@ def getTimeZoneOffset():
 @process
 def tryToConnectFortBattle(battleID, peripheryID):
     from gui.prb_control.dispatcher import g_prbLoader
-    from gui import DialogsInterface, SystemMessages
     yield lambda callback: callback(None)
     if g_lobbyContext.isAnotherPeriphery(peripheryID):
         if g_lobbyContext.isPeripheryAvailable(peripheryID):
@@ -157,3 +104,8 @@ def setRosterIntroWindowSetting(type, value=True):
         settings[ROSTER_INTRO_WINDOW] = {}
     settings[ROSTER_INTRO_WINDOW][type] = value
     AccountSettings.setSettings('fortSettings', settings)
+
+
+@process
+def showFortDisabledDialog():
+    yield DialogsInterface.showI18nInfoDialog('fortDisabled')

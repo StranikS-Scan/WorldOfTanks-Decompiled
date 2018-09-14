@@ -1,12 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/shared_utils/account_helpers/ClientInvitations.py
 import operator
+from collections import namedtuple
 from functools import partial
 import BigWorld
 import AccountCommands
 from constants import INVITATION_STATUS
 from helpers.time_utils import getCurrentTimestamp
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
+_UniqueId = namedtuple('_UniqueId', ['id', 'senderDBID'])
+
+def _getUniqueId(invite):
+    return _UniqueId(invite['id'], invite['senderDBID'])
+
 
 class ClientInvitations(object):
 
@@ -34,7 +40,7 @@ class ClientInvitations(object):
 
     def processInvitations(self, invitations):
         LOG_DEBUG('ClientInvitations::processInvitations', invitations)
-        self.__invitations.update(dict(((inv['id'], inv) for inv in invitations)))
+        self.__invitations.update(dict(((_getUniqueId(inv), inv) for inv in invitations)))
         self._loadExpiryCallback()
         self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
 
@@ -46,22 +52,23 @@ class ClientInvitations(object):
     def acceptInvitation(self, invitationID, senderDBID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
-        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, callback)
+        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.ACCEPTED, invitationID, senderDBID, callback)
         self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_ACCEPT, invitationID, senderDBID, 0, proxy)
 
     def declineInvitation(self, invitationID, senderDBID, callback=None):
         if self.__playerEvents.isPlayerEntityChanging:
             return
-        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.DECLINED, invitationID, callback)
+        proxy = partial(self._onInvitationResponseReceived, INVITATION_STATUS.DECLINED, invitationID, senderDBID, callback)
         self.__proxy._doCmdInt3(AccountCommands.CMD_INVITATION_DECLINE, invitationID, senderDBID, 0, proxy)
 
-    def _onInvitationResponseReceived(self, newStatus, invID, callback, requestID, code, errStr):
+    def _onInvitationResponseReceived(self, newStatus, invitationId, senderDBID, callback, _, code, errStr):
         if AccountCommands.isCodeValid(code):
+            uniqueId = _UniqueId(invitationId, senderDBID)
             try:
-                self.__invitations[invID]['status'] = newStatus
+                self.__invitations[uniqueId]['status'] = newStatus
                 self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
             except KeyError:
-                LOG_ERROR('Unknown invitation', self.__invitations, invID, callback, code, errStr)
+                LOG_ERROR('Unknown invitation', uniqueId, self.__invitations, callback, code, errStr)
 
         if callback is not None:
             callback(code, errStr)
@@ -74,12 +81,11 @@ class ClientInvitations(object):
 
     def _loadExpiryCallback(self):
         self._clearExpiryCallback()
-        if len(self.__invitations):
+        if self.__invitations:
             invite = min(self.__invitations.values(), key=operator.itemgetter('expiresAt'))
-            if invite:
-                expTime = max(invite['expiresAt'] - getCurrentTimestamp(), 0.0)
-                self.__expCbID = BigWorld.callback(expTime, partial(self.__onInviteExpired, invite))
-                LOG_DEBUG('Invite expiration callback has been loaded', invite['id'], expTime)
+            expTime = max(invite['expiresAt'] - getCurrentTimestamp(), 0.0)
+            self.__expCbID = BigWorld.callback(expTime, partial(self.__onInviteExpired, invite))
+            LOG_DEBUG('Invite expiration callback has been loaded', _getUniqueId(invite), expTime)
 
     def _clearExpiryCallback(self):
         if self.__expCbID is not None:
@@ -89,7 +95,7 @@ class ClientInvitations(object):
 
     def __onInviteExpired(self, invite):
         try:
-            del self.__invitations[invite['id']]
+            del self.__invitations[_getUniqueId(invite)]
             self.__playerEvents.onPrebattleInvitationsChanged(self.__invitations)
         except KeyError:
             LOG_ERROR('There is error while removing expired invite')

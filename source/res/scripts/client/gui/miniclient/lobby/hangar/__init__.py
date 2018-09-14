@@ -10,3 +10,4 @@ def configure_pointcuts(config):
     _pointcuts.TankHangarStatus(config)
     _pointcuts.TankModelHangarVisibility(config)
     _pointcuts.EnableCrew(config)
+    _pointcuts.ChangeLobbyMenuTooltip()

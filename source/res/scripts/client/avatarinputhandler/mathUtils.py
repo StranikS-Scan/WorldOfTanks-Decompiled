@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/mathUtils.py
-import functools
-import BigWorld
+import Event
 import Math
 from Math import Vector2, Vector3, Matrix
 import random

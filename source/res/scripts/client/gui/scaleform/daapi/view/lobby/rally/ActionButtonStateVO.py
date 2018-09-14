@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/ActionButtonStateVO.py
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from helpers import i18n
 
 class ActionButtonStateVO(dict):
@@ -49,7 +51,10 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.FALLOUT_VEHICLE_LEVEL_REQUIRED: self._getFalloutVehLevelStr(),
          UNIT_RESTRICTION.FALLOUT_VEHICLE_MIN: self._getFalloutVehMinStr(),
          UNIT_RESTRICTION.FALLOUT_VEHICLE_MAX: ('', {}),
-         UNIT_RESTRICTION.FALLOUT_VEHICLE_BROKEN: self._getFalloutVehBrokenStr()}
+         UNIT_RESTRICTION.FALLOUT_VEHICLE_BROKEN: self._getFalloutVehBrokenStr(),
+         UNIT_RESTRICTION.FORT_DISABLED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE, {}),
+         UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL, {})}
+        self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (MESSENGER.DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS, {})}
         stateKey, stateCtx = self.__getState()
         self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
         self['label'] = self._getLabel()
@@ -90,7 +95,10 @@ class ActionButtonStateVO(dict):
         if self.__isEnabled:
             if self._playerInfo.isInSlot:
                 if self._playerInfo.isReady:
-                    return self._getReadyValidInSlotStateStr()
+                    if self.__restrictionType in self.__WARNING_UNIT_MESSAGES:
+                        return self.__WARNING_UNIT_MESSAGES[self.__restrictionType]
+                    else:
+                        return self._getReadyValidInSlotStateStr()
                 else:
                     return (CYBERSPORT.WINDOW_UNIT_MESSAGE_GETREADY, {})
             elif self.__canTakeSlot:
@@ -109,7 +117,7 @@ class ActionButtonStateVO(dict):
         elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID
         elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
-            return '#tooltips:cyberSport/unit/fightBtn/vehicleWrongMode'
+            return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_EVENTVEHICLEWRONGMODE
         elif self.__isEnabled and not self._playerInfo.isReady:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY
         elif self.__isEnabled and self._playerInfo.isReady:
@@ -118,6 +126,8 @@ class ActionButtonStateVO(dict):
             return ''
 
     def __stateTextStyleFormatter(self, state):
+        if self.__restrictionType in self.__WARNING_UNIT_MESSAGES and self._playerInfo.isReady:
+            return ' '.join((icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, vSpace=-3), text_styles.alert(state)))
         return text_styles.error(state) if self.__restrictionType not in self.__NOT_CRITICAL_STATES else text_styles.main(state)
 
     def __notInSlotMessage(self):

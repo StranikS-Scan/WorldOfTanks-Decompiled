@@ -5,6 +5,8 @@ from gui import SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getVehicleTypeAssetPath, getNationsAssetPath, NATION_ICON_PREFIX_131x31
 from gui.Scaleform.daapi.view.meta.ExchangeXpWindowMeta import ExchangeXpWindowMeta
+from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
+from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared import g_itemsCache
@@ -62,6 +64,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
                  'vehicleType': getVehicleTypeAssetPath(vehicle.type),
                  'vehicleName': vehicle.shortUserName,
                  'xp': vehicle.xp,
+                 'xpStrValue': BigWorld.wg_getIntegralFormat(vehicle.xp),
                  'isSelectCandidate': vehicle.isFullyElite,
                  'vehicleIco': vehicle.iconSmall,
                  'nationIco': getNationsAssetPath(vehicle.nationID, namePrefix=NATION_ICON_PREFIX_131x31)})
@@ -72,11 +75,16 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         if self.__xpForFree is not None:
             labelBuilder.addStyledText(self.__getActionStyle(), i18n.makeString(MENU.EXCHANGEXP_AVAILABLE_FORFREE_LABEL))
             labelBuilder.addStyledText('expText', i18n.makeString(MENU.EXCHANGEXP_AVAILABLE_FORFREE_VALUE, icon=icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ELITEXPICON_2), forFree=BigWorld.wg_getNiceNumberFormat(self.__xpForFree)))
+        exchangeHeaderData = {'labelText': labelBuilder.render(),
+         'rateFromIcon': ICON_TEXT_FRAMES.GOLD,
+         'rateToIcon': ICON_TEXT_FRAMES.ELITE_XP,
+         'rateFromTextColor': self.app.colorManager.getColorScheme('textColorGold').get('rgb'),
+         'rateToTextColor': self.app.colorManager.getColorScheme('textColorCredits').get('rgb')}
         vehicleData = {'isHaveElite': bool(values),
          'vehicleList': values,
          'tableHeader': self._getTableHeader(),
          'xpForFree': self.__xpForFree,
-         'rateLabel': labelBuilder.render()}
+         'exchangeHeaderData': exchangeHeaderData}
         self.as_vehiclesDataChangedS(vehicleData)
         return
 

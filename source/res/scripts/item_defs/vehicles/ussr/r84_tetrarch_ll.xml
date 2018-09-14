@@ -1,0 +1,332 @@
+<r84_tetrarch_ll.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	64	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.206	</moving>
+    <still>	0.275	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.413	</firePenalty>
+  </invisibility>
+  <repairCost>	2.0	</repairCost>
+  <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R84_Tetrarch_LL/Tetrarch_LL_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	16	</armor_1>
+      <armor_2>	14	</armor_2>
+      <armor_3>	14	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	14	</armor_5>
+      <armor_6>	7	</armor_6>
+      <armor_7>	7	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	14	</armor_10>
+      <armor_11>	7	</armor_11>
+      <armor_12>	7	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4453	</weight>
+    <maxHealth>	112	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R84_Tetrarch_LL/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.71	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.646605 0.0276	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R84_Tetrarch_LL/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R84_Tetrarch_LL/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.598186 0.554991 1.18195	</rayStart>
+        <rayEnd>	0.598242 0.178367 1.04721	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.03594 0.708201 0.0934335	</rayStart>
+        <rayEnd>	0.984052 0.51505 0.0934561	</rayEnd>
+        <rayUp>	-0.965727 0.259558 0.000000	</rayUp>
+        <size>	0.45	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R84_Tetrarch_LL/Tetrarch_LL_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_Tetrarch_LL>
+      <userString>	#ussr_vehicles:Chassis_Tetrarch_LL	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	1000	</weight>
+      <maxLoad>	7900	</maxLoad>
+      <terrainResistance>	1.03 1.37 2.51	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	47	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.29	</vehicleMovement>
+        <vehicleRotation>	0.29	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R84_Tetrarch_LL/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.2 0.26	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.525	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.360373	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.360373	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.382926	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.360373	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.360373	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L3	</name>
+          <radius>	0.382926	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 W_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.703595 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R84_Tetrarch_LL/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R84_Tetrarch_LL/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.970558 1.34692	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.219460 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.055390 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.118290	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Tetrarch_LL>
+  </chassis>
+  <turrets0>
+    <Turret_1_Tetrarch_LL>
+      <userString>	#ussr_vehicles:Turret_1_Tetrarch_LL	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	650.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	16	</armor_1>
+        <armor_2>	16	</armor_2>
+        <armor_3>	14	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	7	</armor_5>
+        <armor_6>	4	</armor_6>
+        <armor_7>	10	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	7	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1000	</weight>
+      <maxHealth>	28	</maxHealth>
+      <rotationSpeed>	41.13	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	260	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_2pdr_QFSA>	shared	  <maxAmmo>	50	</maxAmmo>
+          <armor>
+            <armor_1>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2.85714285714286	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.28571428571429	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R84_Tetrarch_LL/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R84_Tetrarch_LL/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R84_Tetrarch_LL/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_2pdr_QFSA>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R84_Tetrarch_LL/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R84_Tetrarch_LL/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R84_Tetrarch_LL/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R84_Tetrarch_LL/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.285508 0.421804	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.85423 0.244644 0.12481	</rayStart>
+          <rayEnd>	-0.475219 0.140018 0.0512915	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.551 0.192 0.500 0.690 0.424 0.500 0.227 0.500 0.186 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Tetrarch_LL>
+  </turrets0>
+  <engines>
+    <Medous_MAT>	shared	</Medous_MAT>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Tip_9>	shared	</Tip_9>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Tetrarch_LL>
+        <alpha>	0.110285	</alpha>
+      </Chassis_Tetrarch_LL>
+    </chassis>
+    <engines>
+      <Medous_MAT>
+        <bravo>	47.57765	</bravo>
+      </Medous_MAT>
+    </engines>
+    <armour>	0.861916163	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r84_tetrarch_ll.xml>

@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/CompanyMainWindow.py
+import weakref
 from adisp import process
 from constants import PREBATTLE_COMPANY_DIVISION
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.CompanyMainWindowMeta import CompanyMainWindowMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
-from gui.prb_control.context import prb_ctx
 from gui.prb_control import formatters
+from gui.prb_control.context import prb_ctx
 from gui.prb_control.context.prb_ctx import LeavePrbCtx
 from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
@@ -110,6 +111,11 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         self.removeListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.stopPrbListening()
         super(CompanyMainWindow, self)._dispose()
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        if alias == PREBATTLE_ALIASES.COMPANY_LIST_VIEW_PY:
+            self.as_showWaitingS('#waiting:Flash', {})
+            viewPy.setProxy(weakref.proxy(self))
 
     def __handleWindowHide(self, _):
         self.destroy()

@@ -1,31 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/StrategicCamera.py
+import math
+import BattleReplay
 import BigWorld
 import Math
-from Math import Vector2, Vector3, Matrix
-from _functools import partial
-import math
-import random
-from AvatarInputHandler import mathUtils, cameras
-from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
-from helpers.CallbackDelayer import CallbackDelayer
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
-from AvatarInputHandler.Oscillator import Oscillator
-from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readBool, readVec2, ImpulseReason, readVec3, FovExtended
-import BattleReplay
-from ClientArena import Plane
 import Settings
 import constants
+from AvatarInputHandler import mathUtils, cameras
+from AvatarInputHandler.AimingSystems.StrategicAimingSystem import StrategicAimingSystem
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
+from AvatarInputHandler.cameras import ICamera, getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
+from ClientArena import Plane
+from Math import Vector2, Vector3
+from avatar_helpers import aim_global_binding
 from debug_utils import LOG_WARNING, LOG_ERROR
+from helpers.CallbackDelayer import CallbackDelayer
 
 def getCameraAsSettingsHolder(settingsDataSec):
-    return StrategicCamera(settingsDataSec, None)
+    return StrategicCamera(settingsDataSec)
 
 
 class StrategicCamera(ICamera, CallbackDelayer):
     _CAMERA_YAW = 0.0
     _DYNAMIC_ENABLED = True
     ABSOLUTE_VERTICAL_FOV = math.radians(60.0)
+    _SMOOTHING_PIVOT_DELTA_FACTOR = 6.0
 
     @staticmethod
     def enableDynamicCamera(enable):
@@ -37,8 +36,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
+    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
 
-    def __init__(self, dataSec, aim):
+    def __init__(self, dataSec):
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
@@ -49,14 +49,10 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__onChangeControlMode = None
         self.__aimingSystem = StrategicAimingSystem(self.__cfg['distRange'][0], StrategicCamera._CAMERA_YAW)
         self.__prevTime = BigWorld.time()
-        self.__aimOffsetFunc = None
-        if aim is None:
-            self.__aimOffsetFunc = lambda x=None: (0, 0)
-        else:
-            self.__aimOffsetFunc = aim.offset
         self.__autoUpdatePosition = False
         self.__dxdydz = Vector3(0, 0, 0)
         self.__needReset = 0
+        self.__smoothingPivotDelta = 0
         return
 
     def create(self, onChangeControlMode=None):
@@ -119,6 +115,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
     def restoreDefaultsState(self):
         LOG_ERROR('StrategiCamera::restoreDefaultState is obsolete!')
         return None
+
+    def getConfigValue(self, name):
+        return self.__cfg.get(name)
 
     def getUserConfigValue(self, name):
         return self.__userCfg.get(name)
@@ -217,9 +216,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
             aimOffset = self.__calcAimOffset()
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
-        self.__aimOffsetFunc(aimOffset)
+        self.__aimOffset = aimOffset
         shotDescr = BigWorld.player().vehicleTypeDescriptor.shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), self.__aimOffsetFunc())
+        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), aimOffset)
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
@@ -242,18 +241,25 @@ class StrategicCamera(ICamera, CallbackDelayer):
                     self.__needReset = 2
         else:
             self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
+        self.__calcSmoothingPivotDelta(deltaTime)
         distRange = self.__cfg['distRange']
         self.__camDist -= self.__dxdydz.z * float(self.__curSense)
         maxPivotHeight = distRange[1] - distRange[0]
         self.__camDist = mathUtils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cfg['camDist'] = self.__camDist
-        self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
+        camDistWithSmoothing = self.__camDist + self.__smoothingPivotDelta - self.__aimingSystem.heightFromPlane
+        self.__cam.pivotPosition = Math.Vector3(0.0, camDistWithSmoothing, 0.0)
         if self.__dxdydz.z != 0 and self.__onChangeControlMode is not None and mathUtils.almostZero(self.__camDist - maxPivotHeight):
             self.__onChangeControlMode()
         self.__updateOscillator(deltaTime)
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
         return 0.0
+
+    def __calcSmoothingPivotDelta(self, deltaTime):
+        heightsDy = self.__aimingSystem.heightFromPlane - self.__smoothingPivotDelta
+        smoothingPivotDeltaDy = StrategicCamera._SMOOTHING_PIVOT_DELTA_FACTOR * heightsDy * deltaTime
+        self.__smoothingPivotDelta += smoothingPivotDeltaDy
 
     def __calcAimOffset(self):
         aimWorldPos = self.__aimingSystem.matrix.applyPoint(Vector3(0, -self.__aimingSystem.height, 0))

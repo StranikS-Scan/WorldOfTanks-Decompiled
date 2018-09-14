@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/standalone/login/HttpServer.py
 from BaseHTTPServer import HTTPServer
-from SocketServer import ThreadingMixIn
 from socket import error as SocketError
 from threading import Thread
 import sys
@@ -64,7 +63,3 @@ class HttpServer(HTTPServer):
     @property
     def name(self):
         return self.__name
-
-
-class ThreadedHttpServer(HttpServer, ThreadingMixIn):
-    pass

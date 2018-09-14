@@ -46,7 +46,8 @@
       <turret>	0.000030 0.714031 0.370468	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F74_AMX_M4_1949/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F74_AMX_M4_1949/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F74_AMX_M4_1949/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -166,13 +167,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.07797 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F74_AMX_M4_1949/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F74_AMX_M4_1949/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F74_AMX_M4_1949/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.32242 2.16865	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -439,6 +439,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.425 10 0.427778 5 0.433333 4 0.438889 3.5 0.469444 3.5 0.472222 3 0.475 2.7 0.525 2.7 0.527778 3 0.530556 3.5 0.561111 3.5 0.566667 4 0.572222 5 0.575 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
@@ -453,7 +454,8 @@
             <exploded>	vehicles/french/F74_AMX_M4_1949/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F74_AMX_M4_1949/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F74_AMX_M4_1949/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F74_AMX_M4_1949/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -513,7 +515,8 @@
         <exploded>	vehicles/french/F74_AMX_M4_1949/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F74_AMX_M4_1949/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F74_AMX_M4_1949/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F74_AMX_M4_1949/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000059 0.529492 1.36455	</gunPosition>
       <emblemSlots>
@@ -534,9 +537,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	0.901 -0.253 1.106 0.000 0.765 -0.048 0.717 0.672 0.403 0.500 0.355 0.500 0.092 0.788 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
@@ -554,6 +555,13 @@
     <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.038	</moving>
+    <still>	0.075	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.113	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -566,6 +574,19 @@
   <radios>
     <SCR_528A>	shared	</SCR_528A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_F74_AMX_M4_1949>
+        <alpha>	0.1449	</alpha>
+      </Chassis_F74_AMX_M4_1949>
+    </chassis>
+    <engines>
+      <Maybach_HL_234P45A>
+        <bravo>	264.3203	</bravo>
+      </Maybach_HL_234P45A>
+    </engines>
+    <armour>	1.002279008	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

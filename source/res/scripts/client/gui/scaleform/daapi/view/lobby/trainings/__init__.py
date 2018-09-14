@@ -7,6 +7,10 @@ from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.trainings.Trainings import Trainings
     from gui.Scaleform.daapi.view.lobby.trainings.TrainingRoom import TrainingRoom

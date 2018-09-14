@@ -12,12 +12,13 @@ import motivation_quests
 from Event import Event, EventManager
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
+import nations
 from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.LobbyContext import g_lobbyContext
 from gui.shared import events
 from gui.server_events import caches as quests_caches
@@ -316,6 +317,20 @@ class _EventsCache(object):
         result.extend(self.__actionsCache[ACTION_SECTION_TYPE.ITEM][type].get(itemTypeID, {}).get(intCD, tuple()))
         return result
 
+    def getBoosterAction(self, booster, isBuying=True, forCredits=False):
+        result = []
+        type = ACTION_MODIFIER_TYPE.DISCOUNT if isBuying else ACTION_MODIFIER_TYPE.SELLING
+        boosterID = booster.boosterID
+        values = self.__actionsCache[ACTION_SECTION_TYPE.ALL_BOOSTERS][type].get(nations.NONE_INDEX, [])
+        for (key, value), actionID in values:
+            if forCredits and key == 'creditsPriceMultiplier':
+                result.append((value, actionID))
+            if not forCredits and key == 'goldPriceMultiplier':
+                result.append((value, actionID))
+
+        result.extend(self.__actionsCache[ACTION_SECTION_TYPE.BOOSTER][type].get(boosterID, tuple()))
+        return result
+
     def getRentAction(self, item, rentPackage):
         result = []
         type = ACTION_MODIFIER_TYPE.RENT
@@ -340,6 +355,24 @@ class _EventsCache(object):
 
     def getEmblemsAction(self, group):
         return tuple(self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(group, tuple()))
+
+    def isBalancedSquadEnabled(self):
+        return bool(self.__getUnitRestrictions().get('enabled', False))
+
+    def getBalancedSquadBounds(self):
+        return (self.__getUnitRestrictions().get('lowerBound', 0), self.__getUnitRestrictions().get('upperBound', 0))
+
+    def isSquadXpFactorsEnabled(self):
+        return bool(self.__getUnitXpFactors().get('enabled', False))
+
+    def getSquadBonusLevelDistance(self):
+        return set(self.__getUnitXpFactors().get('levelDistanceWithBonuses', ()))
+
+    def getSquadPenaltyLevelDistance(self):
+        return set(self.__getUnitXpFactors().get('levelDistanceWithPenalties', ()))
+
+    def getSquadZeroBonuses(self):
+        return set(self.__getUnitXpFactors().get('zeroBonusesFor', ()))
 
     def getQuestsDossierBonuses(self):
         return self.__questsDossierBonuses
@@ -584,14 +617,26 @@ class _EventsCache(object):
     def __getActionsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.ACTION)
 
+    def __getIngameEventsData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS)
+
     def __getEventBattles(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventBattles', {})
+        return self.__getIngameEventsData().get('eventBattles', {})
 
     def __getCompanyBattlesData(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('eventCompanies', {})
+        return self.__getIngameEventsData().get('eventCompanies', {})
+
+    def __getUnitRestrictions(self):
+        return self.__getUnitData().get('restrictions', {})
+
+    def __getUnitXpFactors(self):
+        return self.__getUnitData().get('xpFactors', {})
 
     def __getFallout(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.FALLOUT)
+
+    def __getUnitData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.SQUAD_BONUSES)
 
     def __getGasAttack(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS).get('gasAttack', {})

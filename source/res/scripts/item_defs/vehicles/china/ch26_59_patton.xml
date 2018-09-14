@@ -7,8 +7,15 @@
   </crew>
   <speedLimits>
     <forward>	50	</forward>
-    <backward>	16	</backward>
+    <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.11	</moving>
+    <still>	0.146	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.219	</firePenalty>
+  </invisibility>
   <repairCost>	5.5	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -57,7 +64,8 @@
       <turret>	-0.000001 0.53085 0.055683	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch26_59_Patton/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch26_59_Patton/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch26_59_Patton/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -70,7 +78,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch26_59_Patton/59_Patton_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	3.28 3.28 0.44 0.47	</tiling>
+      <tiling>	0.91 0.91 0.44 0.47	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -166,13 +174,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.966526 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch26_59_Patton/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch26_59_Patton/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch26_59_Patton/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.31088 1.86928	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -210,8 +217,8 @@
         <segmentModelRight>	vehicles/chinese/Ch26_59_Patton/track/segment.model	</segmentModelRight>
         <left>	vehicles/chinese/Ch26_59_Patton/track/left.track	</left>
         <right>	vehicles/chinese/Ch26_59_Patton/track/right.track	</right>
-        <segmentLength>	0.135	</segmentLength>
-        <segmentOffset>	0.083	</segmentOffset>
+        <segmentLength>	0.137	</segmentLength>
+        <segmentOffset>	0.055	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -446,7 +453,7 @@
         <maxRegenHealth>	49	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	49	</maxRegenHealth>
@@ -471,15 +478,18 @@
             <minPitch>	0 -19 1 -19	</minPitch>
             <maxPitch>	0 7.4 0.102778 7.4 0.130556 9 0.416667 9 0.444444 5 0.555556 5 0.583333 9 0.869444 9 0.897222 7.4 1 7.4	</maxPitch>
           </pitchLimits>
-          <reloadTime>	7.6	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/chinese/Ch26_59_Patton/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch26_59_Patton/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch26_59_Patton/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch26_59_Patton/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch26_59_Patton/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch26_59_Patton/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -491,6 +501,9 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
+          </camouflage>
         </_90mm_Gun_M41>
       </guns>
       <models>
@@ -499,7 +512,8 @@
         <exploded>	vehicles/chinese/Ch26_59_Patton/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch26_59_Patton/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch26_59_Patton/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch26_59_Patton/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000001 0.204871 1.09827	</gunPosition>
       <emblemSlots>
@@ -534,12 +548,10 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 -0.039 1.036 0.000 0.426 0.065 0.464 0.500 0.464 0.500 0.325 0.500 0.289 0.490 0.000	</physicsShape>
       <camouflage>
-        <tiling>	1.66 1.66 0.84 0.6	</tiling>
+        <tiling>	0.535 0.535 0.84 0.6	</tiling>
       </camouflage>
     </Turret_1_Ch26_59_Patton>
   </turrets0>
@@ -552,6 +564,19 @@
   <radios>
     <_9RM_R>	shared	</_9RM_R>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch26_59_Patton>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Ch26_59_Patton>
+    </chassis>
+    <engines>
+      <NORINCO_12150L7>
+        <bravo>	137.4465	</bravo>
+      </NORINCO_12150L7>
+    </engines>
+    <armour>	1.041892416	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

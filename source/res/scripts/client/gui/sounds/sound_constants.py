@@ -30,8 +30,7 @@ IS_ADVANCED_LOGGING = False
 
 class SoundSystems(CONST_CONTAINER):
     UNKNOWN = 0
-    FMOD = 1
-    WWISE = 2
+    WWISE = 1
 
     @classmethod
     def getUserName(cls, sysID):

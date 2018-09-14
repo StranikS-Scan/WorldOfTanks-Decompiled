@@ -12,10 +12,13 @@ from gui import GUI_NATIONS, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.meta.RecruitWindowMeta import RecruitWindowMeta
 from gui.Scaleform.framework.entities.View import View
-from gui.shared import g_itemsCache, REQ_CRITERIA as _RQ
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanRecruit, TankmanEquip, TankmanRecruitAndEquip
+from gui.shared.money import Money
+from gui.shared.tooltips.formatters import packActionTooltipData
 
 class RecruitWindow(RecruitWindowMeta):
 
@@ -57,7 +60,7 @@ class RecruitWindow(RecruitWindowMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def __getInitialData(self):
-        credits, gold = g_itemsCache.items.stats.money
+        money = g_itemsCache.items.stats.money
         shop = g_itemsCache.items.shop
         upgradeParams = shop.tankmanCost
         defUpgradeParams = shop.defaults.tankmanCost
@@ -65,24 +68,14 @@ class RecruitWindow(RecruitWindowMeta):
         schoolUpgradeDefPrice = round(defUpgradeParams[1]['credits'])
         schoolUpgradeAction = None
         if schoolUpgradePrice != schoolUpgradeDefPrice:
-            schoolUpgradeAction = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'creditsTankmanCost',
-             'isBuying': True,
-             'state': (ACTION_TOOLTIPS_STATE.DISCOUNT, None),
-             'newPrice': (schoolUpgradePrice, 0),
-             'oldPrice': (schoolUpgradeDefPrice, 0)}
+            schoolUpgradeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'creditsTankmanCost', True, Money(credits=schoolUpgradePrice), Money(credits=schoolUpgradeDefPrice))
         academyUpgradePrice = round(upgradeParams[2]['gold'])
         academyUpgradeDefPrice = round(defUpgradeParams[2]['gold'])
         academyUpgradeAction = None
         if academyUpgradePrice != academyUpgradeDefPrice:
-            academyUpgradeAction = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'goldTankmanCost',
-             'isBuying': True,
-             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-             'newPrice': (0, academyUpgradePrice),
-             'oldPrice': (0, academyUpgradeDefPrice)}
-        data = {'credits': credits,
-         'gold': gold,
+            academyUpgradeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'goldTankmanCost', True, Money(gold=academyUpgradePrice), Money(gold=academyUpgradeDefPrice))
+        data = {'credits': money.credits,
+         'gold': money.gold,
          'schoolUpgradePrice': schoolUpgradePrice,
          'schoolUpgradeActionPriceData': schoolUpgradeAction,
          'academyUpgradePrice': academyUpgradePrice,
@@ -119,7 +112,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return _RQ.UNLOCKED | ~_RQ.VEHICLE.OBSERVER
+        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
 
     def updateNationDropdown(self):
         vehsItems = g_itemsCache.items.getVehicles(self.__getNationsCriteria())
@@ -127,7 +120,7 @@ class RecruitWindow(RecruitWindowMeta):
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         for name in GUI_NATIONS:
             nationIdx = nations.INDICES[name]
-            vehiclesAvailable = len(vehsItems.filter(_RQ.NATIONS([nationIdx]))) > 0
+            vehiclesAvailable = len(vehsItems.filter(REQ_CRITERIA.NATIONS([nationIdx]))) > 0
             if name in nations.AVAILABLE_NAMES and vehiclesAvailable:
                 data.append({'id': nationIdx,
                  'label': MENU.nations(name)})
@@ -136,7 +129,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getClassesCriteria(self, nationID):
-        return self.__getNationsCriteria() | _RQ.NATIONS([nationID])
+        return self.__getNationsCriteria() | REQ_CRITERIA.NATIONS([nationID])
 
     def updateVehicleClassDropdown(self, nationID):
         Waiting.show('updating')
@@ -157,7 +150,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getVehicleTypeCriteria(self, nationID, vclass):
-        return self.__getClassesCriteria(nationID) | _RQ.VEHICLE.CLASSES([vclass]) | ~_RQ.VEHICLE.EVENT_BATTLE
+        return self.__getClassesCriteria(nationID) | REQ_CRITERIA.VEHICLE.CLASSES([vclass])
 
     def updateVehicleTypeDropdown(self, nationID, vclass):
         Waiting.show('updating')
@@ -174,7 +167,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getRoleCriteria(self, nationID, vclass, typeID):
-        return self.__getVehicleTypeCriteria(nationID, vclass) | _RQ.INNATION_IDS([typeID])
+        return self.__getVehicleTypeCriteria(nationID, vclass) | REQ_CRITERIA.INNATION_IDS([typeID])
 
     def updateRoleDropdown(self, nationID, vclass, typeID):
         Waiting.show('updating')

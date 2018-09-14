@@ -9,6 +9,13 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.176	</moving>
+    <still>	0.235	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.353	</firePenalty>
+  </invisibility>
   <repairCost>	12.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -56,7 +63,8 @@
       <turret>	0.000000 0.67696 0.372903	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz04_T50_51/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -193,13 +201,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.0078 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz04_T50_51/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.244 2.13367	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -398,6 +405,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.430556 8 0.433333 4 0.436111 1.8 0.563889 1.8 0.566667 4 0.569444 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	40	</rate>
@@ -416,7 +424,8 @@
             <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz04_T50_51/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -440,7 +449,8 @@
         <exploded>	vehicles/czech/Cz04_T50_51/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz04_T50_51/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz04_T50_51/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz04_T50_51/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.095539 0.343337 1.18711	</gunPosition>
       <emblemSlots>
@@ -461,9 +471,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.573 0.122 0.500 0.500 0.500 0.500 0.226 0.500 0.143 0.500 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
@@ -479,6 +487,19 @@
   <radios>
     <Radiostanice_RM_31T_A>	shared	</Radiostanice_RM_31T_A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Cz04_T50_51>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Cz04_T50_51>
+    </chassis>
+    <engines>
+      <Praga_AXK>
+        <bravo>	264.3203	</bravo>
+      </Praga_AXK>
+    </engines>
+    <armour>	1.032813638	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

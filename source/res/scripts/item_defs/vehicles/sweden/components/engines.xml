@@ -1,0 +1,43 @@
+<engines.xml>
+  <ids>
+    <_2_st_Scania_Vabis_607_1>	0	</_2_st_Scania_Vabis_607_1>
+    <Development_Engine>	65535	</Development_Engine>
+  </ids>
+  <shared>
+    <_2_st_Scania_Vabis_607_1>
+      <userString>	#sweden_vehicles:_2_st_Scania_Vabis_607_1	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	340	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	412	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
+    </_2_st_Scania_Vabis_607_1>
+    <Development_Engine>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	540	</power>
+      <weight>	750	</weight>
+      <maxHealth>	105	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <notInShop>	true	</notInShop>
+      <rpm_min>	382	</rpm_min>
+      <rpm_max>	2051	</rpm_max>
+    </Development_Engine>
+  </shared>
+</engines.xml>

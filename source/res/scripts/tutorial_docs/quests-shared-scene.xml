@@ -2,6 +2,7 @@
   <runtime-effects>
     <select-in-hangar>	SelectedVehicleCriteria	  <condition>
         <inactive>	PveChainShown	</inactive>
+        <active>	DefaultSandboxQueue	</active>
         <active>	InSandbox	</active>
         <active>	NoPveVehicleInInventory	</active>
         <effect-not-triggered>	SelectedVehicleCriteria	</effect-not-triggered>
@@ -218,11 +219,6 @@
         <effect-triggered>	TutorialQuest_8	</effect-triggered>
       </condition>
     </show-award-window>
-    <request-bonus>	TutorialQuest_9	  <condition>
-        <active>	PremiumDiscountUsed	</active>
-        <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
-      </condition>
-    </request-bonus>
     <activate>	Bonus9Received	  <condition>
         <bonus-received>	TutorialQuest_9	</bonus-received>
       </condition>
@@ -597,6 +593,7 @@
     <run-trigger>	AwardWindow14CloseTrigger	</run-trigger>
     <run-trigger>	InventoryVehicleTrigger	</run-trigger>
     <run-trigger>	PveChainShownTrigger	</run-trigger>
+    <run-trigger>	DefaultQueueTrigger	</run-trigger>
   </post-effects>
   <vars></vars>
 </quests-shared-scene.xml>

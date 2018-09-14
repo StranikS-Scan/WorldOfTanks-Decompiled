@@ -744,37 +744,6 @@
       <devices>	122	</devices>
     </damage>
   </_90mm_AP_M318>
-  <_90mm_HEAT_M348>
-    <id>	93	</id>
-    <userString>	#usa_vehicles:_90mm_HEAT_M348	</userString>
-    <icon>	hc	</icon>
-    <price>	10	  <gold></gold>
-    </price>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	90	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHollowCharge	</effects>
-    <damage>
-      <armor>	240	</armor>
-      <devices>	122	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-  </_90mm_HEAT_M348>
-  <_90mm_HE_T91E3>
-    <id>	80	</id>
-    <userString>	#usa_vehicles:_90mm_HE_T91E3	</userString>
-    <icon>	he	</icon>
-    <price>	255	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	90	</caliber>
-    <explosionRadius>	1.46	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	320	</armor>
-      <devices>	122	</devices>
-    </damage>
-  </_90mm_HE_T91E3>
   <_90mm_AP_M318A1>
     <id>	114	</id>
     <userString>	#usa_vehicles:_90mm_AP_M318A1	</userString>
@@ -805,6 +774,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_M431>
+  <_90mm_HEAT_M348>
+    <id>	93	</id>
+    <userString>	#usa_vehicles:_90mm_HEAT_M348	</userString>
+    <icon>	hc	</icon>
+    <price>	10	  <gold></gold>
+    </price>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_90mm_HEAT_M348>
   <_90mm_HEAT_T108E45>
     <id>	109	</id>
     <userString>	#usa_vehicles:_90mm_HEAT_T108E45	</userString>
@@ -821,6 +806,21 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_90mm_HEAT_T108E45>
+  <_90mm_HE_T91E3>
+    <id>	80	</id>
+    <userString>	#usa_vehicles:_90mm_HE_T91E3	</userString>
+    <icon>	he	</icon>
+    <price>	255	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_HE_T91E3>
   <_90mm_HEP_T142E2>
     <id>	108	</id>
     <userString>	#usa_vehicles:_90mm_HEP_T142E2	</userString>

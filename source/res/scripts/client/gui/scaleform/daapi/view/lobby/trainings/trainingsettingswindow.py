@@ -7,8 +7,9 @@ from gui.prb_control.context.prb_ctx import TrainingSettingsCtx
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
 from gui.prb_control.prb_helpers import prbFunctionalProperty
-from gui.prb_control.settings import TRAINING_MAX_DURATION_TIME
+from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from helpers import i18n
+from gui.shared import g_itemsCache
 from gui.shared import events, EVENT_BUS_SCOPE
 
 class ArenasCache(object):
@@ -65,6 +66,11 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         settings = TrainingSettingsCtx()
         if not self.__isCreateRequest:
             settings = settings.fetch(self.prbFunctional.getSettings())
+        if g_itemsCache.isSynced():
+            accountAttrs = g_itemsCache.items.stats.attributes
+        else:
+            accountAttrs = 0
+        _, maxBound = getTrainingBattleRoundLimits(accountAttrs)
         info = {'description': settings.getComment(),
          'timeout': settings.getRoundLen() / 60,
          'arena': settings.getArenaTypeID(),
@@ -73,7 +79,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
          'canMakeOpenedClosed': True,
          'canChangeComment': True,
          'canChangeArena': True,
-         'maxBattleTime': TRAINING_MAX_DURATION_TIME}
+         'maxBattleTime': maxBound / 60}
         if not self.__isCreateRequest:
             permissions = self.prbFunctional.getPermissions()
             info['canMakeOpenedClosed'] = permissions.canMakeOpenedClosed()

@@ -51,12 +51,6 @@
             <inactive>	BonusReceived	</inactive>
           </condition>
         </activate>
-        <request-bonus>
-          <condition>
-            <active>	FreeXpChanged	</active>
-            <inactive>	BonusReceived	</inactive>
-          </condition>
-        </request-bonus>
         <show-award-window>	CongratulationWindow	  <condition>
             <active>	BonusReceived	</active>
             <active>	FreeXpChanged	</active>
@@ -141,6 +135,11 @@
     <trigger>	FreeXpExchangeTrigger	  <type>	freeXP	</type>
       <on-effects>
         <activate>	FreeXpChanged	</activate>
+        <request-bonus>
+          <condition>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
       </on-effects>
       <off-effects>
         <refuse-training></refuse-training>

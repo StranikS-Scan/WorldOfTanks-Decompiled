@@ -14,6 +14,8 @@ class DecalMap:
         self._readCfg(dataSec)
 
     def initGroups(self, scaleFactor):
+        if BigWorld.isForwardPipeline():
+            return
         try:
             for group in self.__cfg['groups'].items():
                 BigWorld.wg_addDecalGroup(group[0], group[1]['lifeTime'] * scaleFactor, group[1]['trianglesCount'] * scaleFactor)

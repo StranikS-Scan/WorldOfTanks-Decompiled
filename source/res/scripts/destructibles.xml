@@ -1257,6 +1257,15 @@
       <touchdownEffect>	inf_deadtree_touchdown	</touchdownEffect>
     </entry>
     <entry>
+      <filename>	speedtree/18_Cliff/AppleWowTree.spt	</filename>
+      <health>	3	</health>
+      <density>	0.38	</density>
+      <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
+      <lifetimeEffect>	none	</lifetimeEffect>
+      <fractureEffect>	inf_appletree_fall	</fractureEffect>
+      <touchdownEffect>	inf_appletree_touchdown	</touchdownEffect>
+    </entry>
+    <entry>
       <filename>	speedtree/18_Cliff/AppleTree.spt	</filename>
       <health>	30	</health>
       <density>	0.38	</density>
@@ -4488,7 +4497,7 @@
     <entry>
       <filename>	speedtree/112_eiffel_tower/Bush.spt	</filename>
       <health>	3	</health>
-      <density>	0.15	</density>
+      <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <fractureEffect>	inf_tree_green_fall	</fractureEffect>
@@ -4497,7 +4506,7 @@
     <entry>
       <filename>	speedtree/112_eiffel_tower/BushCluster.spt	</filename>
       <health>	3	</health>
-      <density>	0.15	</density>
+      <density>	0.5	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <fractureEffect>	inf_tree_green_fall	</fractureEffect>
@@ -4578,7 +4587,7 @@
     <entry>
       <filename>	speedtree/112_eiffel_tower/RoseBush.spt	</filename>
       <health>	3	</health>
-      <density>	0.15	</density>
+      <density>	0.3	</density>
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <fractureEffect>	inf_spruce_fall	</fractureEffect>
@@ -5307,17 +5316,6 @@
     </entry>
   </fallingAtoms>
   <fragiles>
-    <entry>
-      <filename>	content/Environment/env801_TrackBoomTank/normal/lod0/env801_TrackBoomTank01.model	</filename>
-      <health>	5	</health>
-      <decayEffect>	none	</decayEffect>
-      <effect>	inf_env801_TrackBoomTank01	</effect>
-      <effectHP>	HP_module_0	</effectHP>
-      <effectScale>	1	</effectScale>
-      <matName>	n_metal_0	</matName>
-      <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_env801_TrackBoomTank01	</hitEffect>
-    </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/mle001_Fuel/normal/lod0/mle001_Fuel.model	</filename>
       <health>	26	</health>
@@ -14030,6 +14028,36 @@
       <lifetimeEffect>	none	</lifetimeEffect>
       <hitEffect>	inf_mle031_Aeroplane	</hitEffect>
     </entry>
+    <entry>
+      <filename>	content/Buildings/bldSU_92_26_Ruins_Walls/normal/lod0/bldSU_92_26_Ruins_Walls_01.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_bld_114_01_Workshop_new_01	</effect>
+      <effectHP>	HP_module_1	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_stone0_1	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/bldSU_92_26_Ruins_Walls/normal/lod0/bldSU_92_26_Ruins_Walls_04.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_bld_114_01_Workshop_new_01	</effect>
+      <effectHP>	HP_module_1	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_stone0_1	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Environment/env_18_01_FallingApplesSign/normal/lod0/env_18_01_FallingApplesSign.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_env_18_01_FallingApplesSign	</effect>
+      <effectHP>	HP_module_0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_wood0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
   </fragiles>
   <structures>
     <entry>
@@ -21049,42 +21077,6 @@
           <effectHP>	HP_module_4	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
-        <module>
-          <matName>	n_wood1_1	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP></effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_wood1_2	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP></effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_wood1_3	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP></effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_wood1_4	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP></effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
       </modules>
     </entry>
     <entry>
@@ -21509,20 +21501,6 @@
       </modules>
     </entry>
     <entry>
-      <filename>	content/Buildings/bldSU_92_26_Ruins_Walls/normal/lod0/bldSU_92_26_Ruins_Walls_01.model	</filename>
-      <modules>
-        <module>
-          <matName>	n_stone0_1	</matName>
-          <health>	300	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldSU_92_26_Ruins_Walls_01	</ramEffect>
-          <hitEffect>	inf_bldSU_92_26_Ruins_Walls_01	</hitEffect>
-          <effectHP>	HP_module_1	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-      </modules>
-    </entry>
-    <entry>
       <filename>	content/Buildings/bldSU_92_26_Ruins_Walls/normal/lod0/bldSU_92_26_Ruins_Walls_02.model	</filename>
       <modules>
         <module>
@@ -21564,20 +21542,6 @@
           <ramEffect>	inf_bldSU_92_26_Ruins_Walls_03	</ramEffect>
           <hitEffect>	inf_bldSU_92_26_Ruins_Walls_03	</hitEffect>
           <effectHP>	HP_module_2	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-      </modules>
-    </entry>
-    <entry>
-      <filename>	content/Buildings/bldSU_92_26_Ruins_Walls/normal/lod0/bldSU_92_26_Ruins_Walls_04.model	</filename>
-      <modules>
-        <module>
-          <matName>	n_stone0_1	</matName>
-          <health>	300	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldSU_92_26_Ruins_Walls_04	</ramEffect>
-          <hitEffect>	inf_bldSU_92_26_Ruins_Walls_04	</hitEffect>
-          <effectHP>	HP_module_1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>

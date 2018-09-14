@@ -5,13 +5,14 @@ from messenger.m_constants import MESSENGER_SCOPE, PROTO_TYPE
 from messenger.proto.bw_chat2 import chat_handlers
 from messenger.proto.bw_chat2.ClubListener import ClubListener
 from messenger.proto.bw_chat2.VOIPChatProvider import VOIPChatProvider
+from messenger.proto.bw_chat2.VOIPChatController import VOIPChatController
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.bw_chat2.provider import BWChatProvider
 from messenger.proto.bw_chat2.UsersHandler import UsersHandler
 
 class BWProtoPlugin(IProtoPlugin):
-    __slots__ = ('__provider', '__adminChat', '__users', '__arenaChat', '__battleCmd', '__unitChat', '__clubChat', '__voipProvider', '__isConnected', '__clubListener')
+    __slots__ = ('__provider', '__adminChat', '__users', '__arenaChat', '__battleCmd', '__unitChat', '__clubChat', '__voipProvider', '__voipCtrl', '__isConnected', '__clubListener')
 
     def __init__(self):
         super(BWProtoPlugin, self).__init__()
@@ -31,6 +32,7 @@ class BWProtoPlugin(IProtoPlugin):
         self.__clubListener = None
         self.__voipProvider = VOIPChatProvider(self.__provider)
         self.__voipProvider.registerHandlers()
+        self.__voipCtrl = VOIPChatController()
         self.__isConnected = False
         return
 
@@ -63,6 +65,10 @@ class BWProtoPlugin(IProtoPlugin):
         return self.__voipProvider
 
     @property
+    def voipController(self):
+        return self.__voipCtrl
+
+    @property
     def users(self):
         return self.__users
 
@@ -74,6 +80,7 @@ class BWProtoPlugin(IProtoPlugin):
             self.__arenaChat.leave()
         if not self.__isConnected:
             self.__isConnected = True
+            self.__voipCtrl.start()
             g_messengerEvents.onPluginConnected(PROTO_TYPE.BW_CHAT2)
 
     def view(self, scope):
@@ -96,6 +103,7 @@ class BWProtoPlugin(IProtoPlugin):
             self.__unitChat.disconnect()
             self.__clubChat.disconnect()
             self.__voipProvider.leave()
+            self.__voipCtrl.stop()
             self.__provider.setEnable(False)
             if self.__clubListener:
                 self.__clubListener.stop()
@@ -131,6 +139,8 @@ class BWProtoPlugin(IProtoPlugin):
             self.__voipProvider.unregisterHandlers()
             self.__voipProvider.clear()
             self.__voipProvider = None
+        if self.__voipCtrl:
+            self.__voipCtrl = None
         if self.__provider:
             self.__provider.clear()
             self.__provider = None

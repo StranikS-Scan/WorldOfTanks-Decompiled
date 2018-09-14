@@ -1,0 +1,642 @@
+<customization.xml>
+  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <armorColor>	15 36 36 0	</armorColor>
+  <inscriptions>
+    <sweden>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	1	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_01.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/arvet_forpliktar	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	2	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_02.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/fort_och_fel	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	3	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_03.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/framat	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	4	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_04.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gamla_bettan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	5	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	6	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_06.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/heja_sverige	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	7	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_07.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/kunglig_hovleverantor	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	8	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_08.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lisa	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	9	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_09.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lollo	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	10	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_10.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/lotta	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	11	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_11.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/maggan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	12	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_12.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/maja	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	13	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_13.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/moder_svea	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	14	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_14.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/nettan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	15	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_15.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/nulli_secundus	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	16	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_16.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/ring_sa_kommer_vi	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	17	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_17.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/sla_snabbt_sla_hart	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	18	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_18.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/ulla	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	19	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_19.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/v_gurra	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </sweden>
+  </inscriptions>
+  <insigniaOnGun>
+    <insignia>
+      <id>	1	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_1.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	2	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_2.dds	</texName>
+    </insignia>
+    <insignia>
+      <id>	3	</id>
+      <texName>	gui/maps/vehicles/decals/insignia/gun_sweden_3.dds	</texName>
+    </insignia>
+  </insigniaOnGun>
+  <camouflageGroups>
+    <winter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+    </winter>
+    <summer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+    </summer>
+    <desert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+    </desert>
+    <IGRwinter>
+      <userString>	#vehicle_customization:camouflage/winter	</userString>
+      <igrType>	2	</igrType>
+    </IGRwinter>
+    <IGRsummer>
+      <userString>	#vehicle_customization:camouflage/summer	</userString>
+      <igrType>	2	</igrType>
+    </IGRsummer>
+    <IGRdesert>
+      <userString>	#vehicle_customization:camouflage/desert	</userString>
+      <igrType>	2	</igrType>
+    </IGRdesert>
+  </camouflageGroups>
+  <camouflages>
+    <Sw_winter_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_winter_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	133	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	240 240 240 227	</c0>
+        <c1>	36 35 28 45	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	2.5 2.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_winter_01>
+    <Sw_winter_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_winter_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	134	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	240 240 240 199	</c0>
+        <c1>	36 35 28 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_winter_02>
+    <Sw_summer_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_summer_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	135	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	70 74 45 98	</c0>
+        <c1>	72 56 45 188	</c1>
+        <c2>	217 178 121 144	</c2>
+        <c3>	0 0 0 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.9 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_summer_01>
+    <Sw_summer_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_summer_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	136	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	81 44 19 155	</c0>
+        <c1>	82 100 74 140	</c1>
+        <c2>	21 30 15 208	</c2>
+        <c3>	160 133 83 201	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_summer_02>
+    <Sw_desert_01>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_01.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_desert_01	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	137	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	81 44 19 0	</c0>
+        <c1>	140 158 16 0	</c1>
+        <c2>	21 30 15 0	</c2>
+        <c3>	164 126 74 203	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.7 1.7 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_desert_01>
+    <Sw_desert_02>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_02.dds	</texture>
+      <priceFactor>	0.5	</priceFactor>
+      <description>	#vehicle_customization:camouflage/Sw_desert_02	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	138	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	29 29 29 255	</c0>
+        <c1>	125 128 125 255	</c1>
+        <c2>	206 181 147 0	</c2>
+        <c3>	206 181 147 116	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sw_desert_02>
+    <IGR_Winter>
+      <texture>	vehicles/german/Camouflage/IGR_Winter.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Winter	</description>
+      <id>	139	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	79 79 79 225	</c0>
+        <c1>	0 0 0 227	</c1>
+        <c2>	255 255 255 226	</c2>
+        <c3>	192 192 192 226	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Winter>
+    <IGR_Summer>
+      <texture>	vehicles/german/Camouflage/IGR_Summer.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Summer	</description>
+      <id>	140	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <colors>
+        <c0>	157 108 34 213	</c0>
+        <c1>	226 210 154 223	</c1>
+        <c2>	10 10 10 244	</c2>
+        <c3>	61 86 35 226	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Summer>
+    <IGR_Desert>
+      <texture>	vehicles/german/Camouflage/IGR_Desert.dds	</texture>
+      <priceFactor>	0.0	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Desert	</description>
+      <id>	141	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	196 126 34 202	</c0>
+        <c1>	226 210 154 230	</c1>
+        <c2>	0 0 0 222	</c2>
+        <c3>	113 89 57 202	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Desert>
+    <IGR_K_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Winter	</description>
+      <id>	142	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	32 35 43 225	</c0>
+        <c1>	101 74 50 227	</c1>
+        <c2>	164 164 164 148	</c2>
+        <c3>	255 255 255 172	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	2 2 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Winter>
+    <IGR_K_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_K_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_K_Desert	</description>
+      <id>	143	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	138 90 68 202	</c0>
+        <c1>	203 135 67 230	</c1>
+        <c2>	202 169 123 194	</c2>
+        <c3>	112 67 46 0	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_K_Desert>
+    <IGR_Ch_Winter>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Winter.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Winter	</description>
+      <id>	144	</id>
+      <kind>	winter	</kind>
+      <group>	IGRwinter	</group>
+      <colors>
+        <c0>	43 33 23 225	</c0>
+        <c1>	101 74 50 227	</c1>
+        <c2>	181 153 89 226	</c2>
+        <c3>	221 201 153 226	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Winter>
+    <IGR_Ch_Summer>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Summer.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Summer	</description>
+      <id>	145	</id>
+      <kind>	summer	</kind>
+      <group>	IGRsummer	</group>
+      <colors>
+        <c0>	52 78 41 213	</c0>
+        <c1>	108 72 19 223	</c1>
+        <c2>	39 40 30 244	</c2>
+        <c3>	207 196 150 226	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.6 1.6 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Summer>
+    <IGR_Ch_Desert>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Desert.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Desert	</description>
+      <id>	146	</id>
+      <kind>	desert	</kind>
+      <group>	IGRdesert	</group>
+      <colors>
+        <c0>	33 27 22 202	</c0>
+        <c1>	153 116 60 230	</c1>
+        <c2>	198 166 117 222	</c2>
+        <c3>	112 67 46 202	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+      <notInShop>	false	</notInShop>
+    </IGR_Ch_Desert>
+    <Clan_camuflage_01>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01	</description>
+      <id>	147	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	94 12 0 152	</c0>
+        <c1>	201 123 48 113	</c1>
+        <c2>	22 28 17 164	</c2>
+        <c3>	121 111 38 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.8 1.8 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Clan_camuflage_01>
+    <Clan_camuflage_02>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02	</description>
+      <id>	148	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	39 71 29 64	</c0>
+        <c1>	255 255 255 137	</c1>
+        <c2>	239 242 125 0	</c2>
+        <c3>	230 253 255 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	0.9 0.9 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Clan_camuflage_02>
+    <Clan_camuflage_03>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03	</description>
+      <id>	149	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	78 107 69 108	</c0>
+        <c1>	0 13 0 179	</c1>
+        <c2>	22 28 17 0	</c2>
+        <c3>	121 111 38 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Clan_camuflage_03>
+    <Clan_camuflage_04>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04	</description>
+      <id>	150	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	60 99 1 169	</c0>
+        <c1>	164 217 38 79	</c1>
+        <c2>	4 21 5 197	</c2>
+        <c3>	201 192 133 153	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Clan_camuflage_04>
+    <Cracked_ice>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Cracked_ice	</description>
+      <id>	151	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	255 255 255 243	</c0>
+        <c1>	255 255 255 0	</c1>
+        <c2>	255 255 255 0	</c2>
+        <c3>	255 255 255 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Cracked_ice>
+    <summer_camo>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/summer_camo	</description>
+      <id>	152	</id>
+      <group>	summer	</group>
+      <kind>	summer	</kind>
+      <colors>
+        <c0>	125 86 34 255	</c0>
+        <c1>	69 60 28 255	</c1>
+        <c2>	4 21 5 0	</c2>
+        <c3>	201 192 133 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </summer_camo>
+    <Desert_camou>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Desert_camou	</description>
+      <id>	153	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	162 123 77 222	</c0>
+        <c1>	128 0 0 0	</c1>
+        <c2>	97 34 22 0	</c2>
+        <c3>	255 255 255 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Desert_camou>
+    <Sweden_Victim_Black>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	154	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	0 0 0 224	</c0>
+        <c1>	36 36 36 186	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 51	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sweden_Victim_Black>
+    <Sweden_Victim_Gold>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	155	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	0 0 0 224	</c0>
+        <c1>	97 89 35 215	</c1>
+        <c2>	97 89 35 217	</c2>
+        <c3>	193 184 0 219	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sweden_Victim_Gold>
+    <Sweden_Victim_Red>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	156	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	0 0 0 224	</c0>
+        <c1>	77 15 15 215	</c1>
+        <c2>	77 15 15 217	</c2>
+        <c3>	138 21 21 219	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sweden_Victim_Red>
+    <Sweden_Victim_Silver>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <description></description>
+      <notInShop>	true	</notInShop>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <id>	157	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	0 0 0 224	</c0>
+        <c1>	97 112 114 182	</c1>
+        <c2>	97 112 114 182	</c2>
+        <c3>	168 177 181 255	</c3>
+      </colors>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+      </tiling>
+    </Sweden_Victim_Silver>
+  </camouflages>
+</customization.xml>

@@ -3,6 +3,17 @@
 from gui.Scaleform.daapi.view.lobby.rally.RallyMainWindowWithSearch import RallyMainWindowWithSearch
 
 class CyberSportMainWindowMeta(RallyMainWindowWithSearch):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends RallyMainWindowWithSearch
+    null
+    """
 
     def showHelp(self, helpId):
+        """
+        :param helpId:
+        :return :
+        """
         self._printOverrideError('showHelp')

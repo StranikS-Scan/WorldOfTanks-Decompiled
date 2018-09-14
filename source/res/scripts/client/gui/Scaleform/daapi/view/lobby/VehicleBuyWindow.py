@@ -11,9 +11,12 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.VehicleBuyWindowMeta import VehicleBuyWindowMeta
 from gui import SystemMessages
 from gui.shared import g_itemsCache
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE, getItemActionTooltipData, getItemRentActionTooltipData
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips.formatters import packItemActionTooltipData, packItemRentActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.money import Money, ZERO_MONEY
+from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import i18n, time_utils
 from gui.game_control import g_instance as g_gameCtrl
 
@@ -47,57 +50,36 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             shopDefaults = shop.defaults
             tankMenCount = len(vehicle.crew)
             tankMenStudyPrice = shop.tankmanCostWithGoodyDiscount
-            totalTankMenStudePrice = (tankMenStudyPrice[1]['credits'] * tankMenCount, tankMenStudyPrice[2]['gold'] * tankMenCount)
+            totalTankMenStudePrice = tankMenCount * Money(credits=tankMenStudyPrice[1]['credits'], gold=tankMenStudyPrice[2]['gold'])
             defTankMenStudyPrice = shopDefaults.tankmanCost
-            defTotalTankMenStudePrice = (defTankMenStudyPrice[1]['credits'] * tankMenCount, defTankMenStudyPrice[2]['gold'] * tankMenCount)
+            defTotalTankMenStudePrice = tankMenCount * Money(credits=defTankMenStudyPrice[1]['credits'], gold=defTankMenStudyPrice[2]['gold'])
             studyPriceCreditsActionData = None
-            if totalTankMenStudePrice[0] != defTotalTankMenStudePrice[0]:
-                studyPriceCreditsActionData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                 'key': 'creditsTankmanCost',
-                 'isBuying': True,
-                 'state': (ACTION_TOOLTIPS_STATE.DISCOUNT, None),
-                 'newPrice': (totalTankMenStudePrice[0], 0),
-                 'oldPrice': (defTotalTankMenStudePrice[0], 0)}
+            if totalTankMenStudePrice != defTotalTankMenStudePrice:
+                studyPriceCreditsActionData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'creditsTankmanCost', True, totalTankMenStudePrice, defTotalTankMenStudePrice)
             studyPriceGoldActionData = None
-            if totalTankMenStudePrice[1] != defTotalTankMenStudePrice[1]:
-                studyPriceGoldActionData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                 'key': 'goldTankmanCost',
-                 'isBuying': True,
-                 'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-                 'newPrice': (0, totalTankMenStudePrice[1]),
-                 'oldPrice': (0, defTotalTankMenStudePrice[1])}
+            if totalTankMenStudePrice != defTotalTankMenStudePrice:
+                studyPriceGoldActionData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'goldTankmanCost', True, totalTankMenStudePrice, defTotalTankMenStudePrice)
             vehiclePricesActionData = None
             if vehicle.buyPrice != vehicle.defaultPrice:
-                vehiclePricesActionData = getItemActionTooltipData(vehicle)
-            ammoPrice = [0, 0]
-            defAmmoPrice = [0, 0]
+                vehiclePricesActionData = packItemActionTooltipData(vehicle)
+            ammoPrice = ZERO_MONEY
+            defAmmoPrice = ZERO_MONEY
             for shell in vehicle.gun.defaultAmmo:
-                ammoPrice[0] += shell.buyPrice[0] * shell.defaultCount
-                ammoPrice[1] += shell.buyPrice[1] * shell.defaultCount
-                defAmmoPrice[0] += shell.defaultPrice[0] * shell.defaultCount
-                defAmmoPrice[1] += shell.defaultPrice[1] * shell.defaultCount
+                ammoPrice += shell.buyPrice * shell.defaultCount
+                defAmmoPrice += shell.defaultPrice * shell.defaultCount
 
             ammoActionPriceData = None
-            if ammoPrice[0] != defAmmoPrice[0]:
-                ammoActionPriceData = {'type': ACTION_TOOLTIPS_TYPE.AMMO,
-                 'key': str(vehicle.intCD),
-                 'isBuying': True,
-                 'state': (ACTION_TOOLTIPS_STATE.DISCOUNT, None),
-                 'newPrice': ammoPrice,
-                 'oldPrice': defAmmoPrice}
+            if ammoPrice != defAmmoPrice:
+                ammoActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.AMMO, str(vehicle.intCD), True, ammoPrice, defAmmoPrice)
             slotPrice = shop.getVehicleSlotsPrice(stats.vehicleSlots)
             slotDefaultPrice = shopDefaults.getVehicleSlotsPrice(stats.vehicleSlots)
             slotActionPriceData = None
             if slotPrice != slotDefaultPrice:
-                slotActionPriceData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                 'key': 'slotsPrices',
-                 'isBuying': True,
-                 'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-                 'newPrice': (0, slotPrice),
-                 'oldPrice': (0, slotDefaultPrice)}
+                slotActionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'slotsPrices', True, Money(gold=slotPrice), Money(gold=slotDefaultPrice))
             tankmenLabel = i18n.makeString(DIALOGS.BUYVEHICLEDIALOG_TANKMENLABEL, count=text_styles.titleFont(i18n.makeString(DIALOGS.BUYVEHICLEDIALOG_TANKMEN) + ' ' + str(tankMenCount)))
             initData = {'expanded': windowExpanded,
              'name': vehicle.userName,
+             'shortName': vehicle.shortUserName,
              'longName': vehicle.longUserName,
              'description': vehicle.fullDescription,
              'type': vehicle.type,
@@ -106,13 +88,13 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
              'level': vehicle.level,
              'isElite': vehicle.isElite,
              'tankmenLabel': tankmenLabel,
-             'studyPriceCredits': totalTankMenStudePrice[0],
+             'studyPriceCredits': totalTankMenStudePrice.credits,
              'studyPriceCreditsActionData': studyPriceCreditsActionData,
-             'studyPriceGold': totalTankMenStudePrice[1],
+             'studyPriceGold': totalTankMenStudePrice.gold,
              'studyPriceGoldActionData': studyPriceGoldActionData,
              'vehiclePrices': vehicle.buyPrice,
              'vehiclePricesActionData': vehiclePricesActionData,
-             'ammoPrice': ammoPrice[0],
+             'ammoPrice': ammoPrice.credits,
              'ammoActionPriceData': ammoActionPriceData,
              'slotPrice': slotPrice,
              'slotActionPriceData': slotActionPriceData,
@@ -138,7 +120,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             days = rentPackage['days']
             actionRentPrice = None
             if rentPackage['rentPrice'] != rentPackage['defaultRentPrice']:
-                actionRentPrice = getItemRentActionTooltipData(vehicle, rentPackage)
+                actionRentPrice = packItemRentActionTooltipData(vehicle, rentPackage)
             result.append({'itemId': days,
              'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_DAYS, days=days),
              'price': rentPackage['rentPrice'],

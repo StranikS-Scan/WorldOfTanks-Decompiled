@@ -81,7 +81,9 @@ class GUICommandsFactory(object):
         clazz = self.__typeMap.get(cmdType)
         if clazz is None:
             LOG_ERROR('Unknown type for GUI command', cmdType)
-        return clazz()
+            return
+        else:
+            return clazz()
 
     def invoke(self, root, data):
         command = self._factory(data.type)

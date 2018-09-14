@@ -5,8 +5,8 @@ import gui
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.tooltips import getItemActionTooltipData
-from gui.shared.tooltips import getItemRentActionTooltipData
+from gui.shared.tooltips.formatters import packItemActionTooltipData
+from gui.shared.tooltips.formatters import packItemRentActionTooltipData
 from gui.shared.utils import CLIP_ICON_PATH
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import i18n, html
@@ -122,10 +122,15 @@ class ResearchItemsObjDumper(_BaseDumper):
         extraInfo = None
         status = statusLevel = ''
         minRentPricePackage = None
+        vehicleBtnLabel = ''
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             vClass = self._vClassInfo.getInfoByTags(item.tags)
             status, statusLevel = self._getRentStatus(item)
             minRentPricePackage = item.getRentPackage()
+            if item.isInInventory:
+                vehicleBtnLabel = '#menu:research/labels/button/showInHangar'
+            else:
+                vehicleBtnLabel = '#menu:research/showInPreviewBtn/label'
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
@@ -133,10 +138,10 @@ class ResearchItemsObjDumper(_BaseDumper):
         credits, gold = item.minRentPrice or item.buyPrice
         action = None
         if item.buyPrice != item.defaultPrice and not minRentPricePackage:
-            action = getItemActionTooltipData(item)
+            action = packItemActionTooltipData(item)
         elif minRentPricePackage:
             if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
-                action = getItemRentActionTooltipData(item, minRentPricePackage)
+                action = packItemRentActionTooltipData(item, minRentPricePackage)
         return {'id': nodeCD,
          'nameString': item.shortUserName,
          'primaryClass': vClass,
@@ -152,7 +157,9 @@ class ResearchItemsObjDumper(_BaseDumper):
          'extraInfo': extraInfo,
          'status': status,
          'statusLevel': statusLevel,
-         'isPremiumIGR': item.isPremiumIGR}
+         'isPremiumIGR': item.isPremiumIGR,
+         'showVehicleBtnLabel': i18n.makeString(vehicleBtnLabel),
+         'showVehicleBtnEnabled': item.isInInventory or item.isPreviewAllowed()}
 
 
 class ResearchItemsXMLDumper(ResearchItemsObjDumper):
@@ -234,10 +241,10 @@ class NationObjDumper(_BaseDumper):
         action = None
         minRentPricePackage = item.getRentPackage()
         if item.buyPrice != item.defaultPrice and not minRentPricePackage:
-            action = getItemActionTooltipData(item)
+            action = packItemActionTooltipData(item)
         elif minRentPricePackage:
             if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
-                action = getItemRentActionTooltipData(item, minRentPricePackage)
+                action = packItemRentActionTooltipData(item, minRentPricePackage)
         return {'id': nodeCD,
          'state': node['state'],
          'type': item.itemTypeName,

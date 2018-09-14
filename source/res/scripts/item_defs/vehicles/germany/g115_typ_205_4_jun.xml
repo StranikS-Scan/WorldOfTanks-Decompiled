@@ -11,6 +11,13 @@
     <forward>	20	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.029	</moving>
+    <still>	0.057	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.086	</firePenalty>
+  </invisibility>
   <repairCost>	7.50	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -67,7 +74,8 @@
       <turret>	0.000000 0.79417 -0.086848	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G115_Typ_205_4_Jun/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -176,13 +184,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.05567 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G115_Typ_205_4_Jun/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.11974 2.41646	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -336,6 +343,7 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	17	</reloadTime>
           <aimingTime>	2.7	</aimingTime>
@@ -350,7 +358,8 @@
             <exploded>	vehicles/german/G115_Typ_205_4_Jun/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G115_Typ_205_4_Jun/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -373,7 +382,8 @@
         <exploded>	vehicles/german/G115_Typ_205_4_Jun/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G115_Typ_205_4_Jun/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G115_Typ_205_4_Jun/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G115_Typ_205_4_Jun/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.002065 0.59266 1.15463	</gunPosition>
       <emblemSlots>
@@ -408,9 +418,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	1.091 0.139 1.084 0.000 0.782 -0.098 0.366 0.000 0.344 0.500 0.422 0.500 0.183 0.341 0.000	</physicsShape>
       <camouflage>
         <tiling>	1.24 1.24 0.88 0.4	</tiling>
@@ -426,6 +434,19 @@
   <radios>
     <FuG12A>	shared	</FuG12A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G115_Typ_205_4_Jun>
+        <alpha>	0.07245	</alpha>
+      </Chassis_G115_Typ_205_4_Jun>
+    </chassis>
+    <engines>
+      <Porsche_16_Cyl_Y>
+        <bravo>	264.3203	</bravo>
+      </Porsche_16_Cyl_Y>
+    </engines>
+    <armour>	1.115460878	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

@@ -1,14 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import BigWorld
+from constants import SHELL_TYPES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
 from helpers import i18n
 from items import vehicles as veh_core
 from gui.shared.gui_items import FittingItem, _ICONS_MASK
-from gui.shared.utils import ParametersCache
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP
+from gui.shared.money import Currency
 MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(MODULE_TYPES_ORDER)))
-SHELL_TYPES_ORDER = ('ARMOR_PIERCING', 'ARMOR_PIERCING_CR', 'HOLLOW_CHARGE', 'HIGH_EXPLOSIVE')
+SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
+ SHELL_TYPES.ARMOR_PIERCING_CR,
+ SHELL_TYPES.HOLLOW_CHARGE,
+ SHELL_TYPES.HIGH_EXPLOSIVE)
 SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
 
 class VehicleModule(FittingItem):
@@ -55,6 +62,10 @@ class VehicleChassis(VehicleModule):
 
         return result
 
+    @property
+    def icon(self):
+        return RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
+
 
 class VehicleTurret(VehicleModule):
     """
@@ -76,6 +87,10 @@ class VehicleTurret(VehicleModule):
 
         return result
 
+    @property
+    def icon(self):
+        return RES_ICONS.MAPS_ICONS_MODULES_TOWER
+
 
 class VehicleGun(VehicleModule):
     """
@@ -95,10 +110,10 @@ class VehicleGun(VehicleModule):
         return (False, 'need turret') if not installPossible and reason == 'not for current vehicle' else (installPossible, reason)
 
     def getReloadingType(self, vehicleDescr=None):
-        return ParametersCache.g_instance.getGunReloadingSystemType(self.intCD, vehicleDescr.type.compactDescr if vehicleDescr is not None else None)
+        return g_paramsCache.getGunReloadingSystemType(self.intCD, vehicleDescr.type.compactDescr if vehicleDescr is not None else None)
 
     def isClipGun(self, vehicleDescr=None):
-        typeToCheck = ParametersCache.GUN_CLIP if vehicleDescr is not None else ParametersCache.GUN_CAN_BE_CLIP
+        typeToCheck = GUN_CLIP if vehicleDescr is not None else GUN_CAN_BE_CLIP
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
     def _getDefaultAmmo(self, proxy):
@@ -119,6 +134,10 @@ class VehicleGun(VehicleModule):
                 result.add(vehicle)
 
         return result
+
+    @property
+    def icon(self):
+        return RES_ICONS.MAPS_ICONS_MODULES_GUN
 
 
 class VehicleEngine(VehicleModule):
@@ -149,6 +168,10 @@ class VehicleEngine(VehicleModule):
 
         vehicle.descriptor.installComponent(oldModuleId)
         return conflictEqs
+
+    @property
+    def icon(self):
+        return RES_ICONS.MAPS_ICONS_MODULES_ENGINE
 
 
 class VehicleFuelTank(VehicleModule):
@@ -184,6 +207,10 @@ class VehicleRadio(VehicleModule):
 
         return result
 
+    @property
+    def icon(self):
+        return RES_ICONS.MAPS_ICONS_MODULES_RADIO
+
 
 class Shell(FittingItem):
     """
@@ -209,7 +236,8 @@ class Shell(FittingItem):
         @param proxy:
         @return:
         """
-        return (buyPrice[0] + buyPrice[1] * proxy.exchangeRateForShellsAndEqs, buyPrice[1])
+        creditsPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs)
+        return buyPrice.replace(Currency.CREDITS, creditsPrice.credits)
 
     def _getFormatLongUserName(self, kind):
         if self.nationID == nations.INDICES['germany']:

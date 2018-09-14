@@ -10,6 +10,13 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.194	</moving>
+    <still>	0.258	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.387	</firePenalty>
+  </invisibility>
   <repairCost>	5.34	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -61,7 +68,8 @@
       <turret>	0.000000 0.564403 0.252167	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A23_M7_med/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A23_M7_med/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -191,13 +199,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.0179 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A23_M7_med/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A23_M7_med/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.162 1.95302	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -455,13 +462,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.0179 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A23_M7_med/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A23_M7_med/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.162 1.95302	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -681,13 +687,15 @@
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -726,13 +734,15 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -755,7 +765,8 @@
         <exploded>	vehicles/american/A23_M7_med/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A23_M7_med/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A23_M7_med/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.33698 0.376183	</gunPosition>
       <emblemSlots>
@@ -777,9 +788,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.033 1.000 0.000 0.577 0.220 0.810 0.555 0.324 0.500 0.126 0.500 0.427 0.253 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.52 0.13 0.38	</tiling>
       </camouflage>
@@ -846,13 +855,15 @@
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -892,13 +903,15 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -937,13 +950,15 @@
           <shotDispersionRadius>	0.47	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -965,7 +980,7 @@
             <maxPitch>	0 8 0.394671 8 0.458333 7 0.541667 7 0.605329 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	T21	  <cost>	28700	</cost>
+            <vehicle>	A71_T21	  <cost>	28700	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -982,13 +997,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A23_M7_med/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A23_M7_med/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/american/A23_M7_med/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A23_M7_med/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A23_M7_med/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1011,7 +1028,8 @@
         <exploded>	vehicles/american/A23_M7_med/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A23_M7_med/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A23_M7_med/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A23_M7_med/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.256761 0.780183	</gunPosition>
       <emblemSlots>
@@ -1040,9 +1058,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.270 -0.270 0.951 0.000 0.542 0.222 0.790 0.635 0.551 0.500 0.305 0.500 0.071 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.565 0.565 0.13 0.000000	</tiling>
       </camouflage>
@@ -1077,6 +1093,28 @@
     </SCR_538>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <VVSS_T48>
+        <alpha>	0.08855	</alpha>
+      </VVSS_T48>
+      <VVSS_T48A>
+        <alpha>	0.07245	</alpha>
+      </VVSS_T48A>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975EC2>
+        <bravo>	92.5121	</bravo>
+      </Wright_Continental_R-975EC2>
+      <Wright_Continental_R-975C1>
+        <bravo>	105.7281	</bravo>
+      </Wright_Continental_R-975C1>
+      <Wright_Continental_R-975C4>
+        <bravo>	121.5873	</bravo>
+      </Wright_Continental_R-975C4>
+    </engines>
+    <armour>	0.865584893	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

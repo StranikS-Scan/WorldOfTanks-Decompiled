@@ -11,6 +11,7 @@ from helpers.i18n import makeString
 from gui import GUI_SETTINGS
 from items import ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
+from gui.shared.money import Currency
 
 def rnd_choice(*args):
     args = list(args)
@@ -140,15 +141,15 @@ def getModuleGoldStatus(price, money):
     @param money: player's money
     @return: tuple(CouldBeBought, menuStatus, tooltipStatus)
     """
-    currency = 'gold'
+    currency = Currency.GOLD
     availableForCredits = 1
     availableForGold = 2
     couldBeBought = 0
-    if price[0] and price[0] > money[0]:
-        currency = 'credit'
+    if price.credits and price.credits > money.credits:
+        currency = Currency.CREDITS
     else:
         couldBeBought |= availableForCredits
-    if price[1] and price[1] < money[1]:
+    if price.gold and price.gold < money.gold:
         couldBeBought |= availableForGold
     return (False, '#menu:moduleFits/%s_error' % currency, '#tooltips:moduleFits/%s_error' % currency) if not couldBeBought else (True, '', '')
 

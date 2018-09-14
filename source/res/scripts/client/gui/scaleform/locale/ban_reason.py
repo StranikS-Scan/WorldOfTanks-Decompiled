@@ -3,8 +3,13 @@
 
 
 class BAN_REASON(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     EDITING = '#ban_reason:editing'
-    CAPTCHA = '#ban_reason:captcha'
     CHINA_MIGRATION = '#ban_reason:china_migration'
     TEAM_KILL = '#ban_reason:team_kill'
     DAILY_LIMIT_EXCEEDED = '#ban_reason:daily_limit_exceeded'

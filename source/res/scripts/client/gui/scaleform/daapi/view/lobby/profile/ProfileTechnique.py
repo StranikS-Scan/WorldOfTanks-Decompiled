@@ -1,22 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 import BigWorld
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.fortifications import isFortificationEnabled, isFortificationBattlesEnabled
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
-from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.shared import g_itemsCache
-from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES
-from nations import NAMES
-from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
-from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
-from gui.shared.gui_items.dossier import dumpDossier
+from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from gui.Scaleform.locale.PROFILE import PROFILE
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared import g_itemsCache
+from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
+from gui.shared.gui_items.dossier import dumpDossier
 from helpers import i18n
+from nations import NAMES
 
 class ProfileTechnique(ProfileTechniqueMeta):
 
@@ -27,23 +26,19 @@ class ProfileTechnique(ProfileTechniqueMeta):
         super(ProfileTechnique, self)._populate()
         self.as_setInitDataS(self._getInitData())
 
-    def _getInitData(self, isFallout=False):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)]
-        if isFortificationEnabled():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES))
-        if isFortificationBattlesEnabled():
-            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES))
+    def _getInitData(self, accountDossier=None, isFallout=False):
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)]
+        if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
+        dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
+            dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)))
         return {'dropDownProvider': dropDownProvider,
          'tableHeader': self._getTableHeader(isFallout)}
 
     def _getTableHeader(self, isFallout=False):
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
-         self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL, inverted=True),
+         self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
          self._createTableBtnInfo('shortUserName', 154, 7, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NAME, 'ascending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_VEHICLENAME, sortType='string'),
          self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
@@ -78,7 +73,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
 
     def _sendAccountData(self, targetData, accountDossier):
-        self.as_setInitDataS(self._getInitData(self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
+        self.as_setInitDataS(self._getInitData(accountDossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
         self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(targetData), '', self.getEmptyScreenLabel())
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
@@ -104,7 +99,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
                  'winsEfficiencyStr': winsEfficiencyStr,
                  'avgExperience': avgXP,
                  'userName': vehicle.userName,
-                 'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES[vehicle.type],
+                 'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[vehicle.type],
                  'nationIndex': GUI_NATIONS_ORDER_INDEX[NAMES[vehicle.nationID]],
                  'nationID': vehicle.nationID,
                  'level': vehicle.level,

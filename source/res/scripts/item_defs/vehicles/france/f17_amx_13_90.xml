@@ -1,0 +1,825 @@
+<f17_amx_13_90.xml>
+  <crew>
+    <commander>	radioman
+			loader	</commander>
+    <gunner>	loader	</gunner>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	64	</forward>
+    <backward>	23	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.31	</moving>
+    <still>	0.31	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.465	</firePenalty>
+  </invisibility>
+  <repairCost>	9.4	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	15	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	25	</armor_9>
+      <armor_10>	50	</armor_10>
+      <armor_11>	40	</armor_11>
+    </armor>
+    <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
+    <weight>	7500	</weight>
+    <maxHealth>	880	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.42 1.00 0.03 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.42 1.00 0.03 0.30	</rollParams>
+      <sensitivityToImpulse>	0.59	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.317074 -0.3805	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-1.05869 0.304842 2.0086	</rayStart>
+        <rayEnd>	-1.05869 0.104843 2.00834	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.459024 0.337179 1.57063	</rayStart>
+        <rayEnd>	0.459024 0.151713 1.49578	</rayEnd>
+        <rayUp>	0.301911 -0.0189067 -0.953149	</rayUp>
+        <size>	0.5	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-0.541062 0.397785 1.41818	</rayStart>
+        <rayEnd>	-0.541059 0.212321 1.34333	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.2	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F17_AMX_13_90/AMX_13_90_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.5 2.5 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_AMX_13_90>
+      <userString>	#france_vehicles:Chassis_AMX_13_90	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	9250	</price>
+      <unlocks>
+        <chassis>	Chassis_AMX_13_90_2	  <cost>	18200	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	1400	</weight>
+      <maxLoad>	15610	</maxLoad>
+      <terrainResistance>	0.9 1 1.6	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.34 0.36	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.75	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.341248	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116741	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.2918	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.297357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.341248	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116741	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.2918	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.297357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.926326 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.07679 1.40007	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.518480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.151030 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.148280	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles\french\F17_AMX_13_90\track/segment_01.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles\french\F17_AMX_13_90\track/segment_01.model	</segmentModelRight>
+        <left>	vehicles\french\F17_AMX_13_90\track/left.track	</left>
+        <right>	vehicles\french\F17_AMX_13_90\track/right.track	</right>
+        <segmentLength>	0.116	</segmentLength>
+        <segmentOffset>	0.196	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0032	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_AMX_13_90>
+    <Chassis_AMX_13_90_2>
+      <userString>	#france_vehicles:Chassis_AMX_13_90_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	26000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	1400	</weight>
+      <maxLoad>	17840	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.34 0.36	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.75	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.341248	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.116741	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.2918	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.297357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.341248	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.116741	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.2918	</radius>
+          <syncAngle>	21.1725	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.297357	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.926326 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.07679 1.40007	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.504930 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.151030 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.148280	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles\french\F17_AMX_13_90\track/segment_01.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles\french\F17_AMX_13_90\track/segment_01.model	</segmentModelRight>
+        <left>	vehicles\french\F17_AMX_13_90\track/left.track	</left>
+        <right>	vehicles\french\F17_AMX_13_90\track/right.track	</right>
+        <segmentLength>	0.116	</segmentLength>
+        <segmentOffset>	0.196	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0032	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_AMX_13_90_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_AMX_13_90>
+      <userString>	#france_vehicles:Turret_1_AMX_13_90	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	20	</armor_2>
+        <armor_3>	20	</armor_3>
+        <armor_4>	20	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+      </armor>
+      <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
+      <weight>	2670	</weight>
+      <maxHealth>	220	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_SA50>	shared	  <maxAmmo>	48	</maxAmmo>
+          <unlocks>
+            <gun>	_90mm_F3	  <cost>	15000	</cost>
+            </gun>
+          </unlocks>
+          <pitchLimits>
+            <minPitch>	0 -12 0.194444 -12 0.202778 -9 0.213889 -9 0.222222 -7 0.777778 -7 0.786111 -9 0.797222 -9 0.805556 -12 1 -12	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	40	</armor_1>
+            <armor_2>	30	</armor_2>
+            <armor_3>	20	</armor_3>
+            <armor_4>	20	</armor_4>
+            <armor_5>	20	</armor_5>
+            <armor_6>	10	</armor_6>
+            <armor_7>	40	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	16	</reloadTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <clip>
+            <count>	6	</count>
+            <rate>	30	</rate>
+          </clip>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000052 0.000554094 2.95872	</rayStart>
+              <rayEnd>	0.161351 0.122245 2.95446	</rayEnd>
+              <rayUp>	0.075 0.069 4	</rayUp>
+              <size>	0.487	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.78 1.78 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_SA50>
+        <_90mm_F3>	shared	  <maxAmmo>	36	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -12 0.194444 -12 0.202778 -9 0.213889 -9 0.222222 -7 0.777778 -7 0.786111 -9 0.797222 -9 0.805556 -12 1 -12	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	F75_Char_de_25t	  <cost>	198000	</cost>
+            </vehicle>
+            <vehicle>	F71_AMX_30_prototype	  <cost>	197300	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	40	</armor_1>
+            <armor_2>	30	</armor_2>
+            <armor_3>	20	</armor_3>
+            <armor_4>	20	</armor_4>
+            <armor_5>	20	</armor_5>
+            <armor_6>	10	</armor_6>
+            <armor_7>	40	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <gun>	35	</gun>
+          </armor>
+          <reloadTime>	42	</reloadTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	6	</count>
+            <rate>	22	</rate>
+          </clip>
+          <aimingTime>	3	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000003 0.000586137 2.8671	</rayStart>
+              <rayEnd>	-0.00894188 -0.014948 2.86554	</rayEnd>
+              <rayUp>	0.076 0.07 4	</rayUp>
+              <size>	0.498	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
+          <camouflage>
+            <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_F3>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F17_AMX_13_90/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F17_AMX_13_90/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F17_AMX_13_90/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F17_AMX_13_90/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.504967 0.03262	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.324625 -0.0454813 -1.68711	</rayStart>
+          <rayEnd>	-0.324625 -0.0457586 -1.48711	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.2	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.360 -0.326 0.959 -0.027 0.740 0.521 0.090 0.000 0.500 0.500 0.109 0.500 0.289 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.685 0.685 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_AMX_13_90>
+  </turrets0>
+  <engines>
+    <SOFAM_8Gxb>	shared	  <unlocks>
+        <engine>	_6F11SRY	  <cost>	8000	</cost>
+        </engine>
+      </unlocks>
+    </SOFAM_8Gxb>
+    <_6F11SRY>	shared	  <unlocks>
+        <engine>	Detroit_Diesel_6V53T	  <cost>	11000	</cost>
+        </engine>
+      </unlocks>
+    </_6F11SRY>
+    <Detroit_Diesel_6V53T>	shared	  <unlocks>
+        <engine>	Detroit_Diesel_6V53T-S	  <cost>	12000	</cost>
+        </engine>
+      </unlocks>
+    </Detroit_Diesel_6V53T>
+    <Detroit_Diesel_6V53T-S>	shared	</Detroit_Diesel_6V53T-S>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_90mm_F3>
+        <delta>	1.460784	</delta>
+      </_90mm_F3>
+    </guns>
+    <chassis>
+      <Chassis_AMX_13_90>
+        <alpha>	0.0805	</alpha>
+      </Chassis_AMX_13_90>
+      <Chassis_AMX_13_90_2>
+        <alpha>	0.07245	</alpha>
+      </Chassis_AMX_13_90_2>
+    </chassis>
+    <engines>
+      <SOFAM_8Gxb>
+        <bravo>	66.08007	</bravo>
+      </SOFAM_8Gxb>
+      <_6F11SRY>
+        <bravo>	74.00968	</bravo>
+      </_6F11SRY>
+      <Detroit_Diesel_6V53T>
+        <bravo>	79.29608	</bravo>
+      </Detroit_Diesel_6V53T>
+      <Detroit_Diesel_6V53T-S>
+        <bravo>	92.5121	</bravo>
+      </Detroit_Diesel_6V53T-S>
+    </engines>
+    <armour>	0.705171195	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f17_amx_13_90.xml>

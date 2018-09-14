@@ -10,6 +10,13 @@
     <forward>	48	</forward>
     <backward>	13	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.182	</moving>
+    <still>	0.303	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.455	</firePenalty>
+  </invisibility>
   <repairCost>	7.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.000000 0.839219 -0.141891	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -138,7 +146,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.65	</textureScale>
+        <textureScale>	-3.16	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -205,18 +213,17 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.947403 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05187 1.89241	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
-      <trackThickness>	0.005	</trackThickness>
+      <trackThickness>	0.000000	</trackThickness>
       <groundNodes>
         <group>
           <template>	Track_L	</template>
@@ -259,9 +266,6 @@
         <gravity>	-5	</gravity>
         <elasticity>	1218	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -374,8 +378,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	120	</maxHealth>
@@ -396,7 +400,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.65	</textureScale>
+        <textureScale>	-3.16	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -463,13 +467,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.947403 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05187 1.89241	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -517,9 +520,6 @@
         <gravity>	-5	</gravity>
         <elasticity>	1218	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -671,6 +671,7 @@
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.430556 10 0.444444 9 0.555556 9 0.569445 10 1 10	</maxPitch>
@@ -689,7 +690,8 @@
             <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -719,6 +721,7 @@
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -737,7 +740,8 @@
             <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -757,7 +761,8 @@
         <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.362378 1.04756	</gunPosition>
       <emblemSlots>
@@ -778,9 +783,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.000 0.023 1.080 0.000 0.555 0.266 1.000 0.327 0.510 0.500 0.281 0.500 0.084 0.500 0.000	</physicsShape>
       <camouflage>
         <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
@@ -843,6 +846,7 @@
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 10 0.430556 10 0.444444 9 0.555556 9 0.569445 10 1 10	</maxPitch>
@@ -861,7 +865,8 @@
             <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -887,6 +892,7 @@
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -905,7 +911,8 @@
             <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -931,12 +938,13 @@
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <models>
             <undamaged>	vehicles/british/GB45_Achilles_IIC/normal/lod0/Gun_03.model	</undamaged>
@@ -944,7 +952,8 @@
             <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -964,7 +973,8 @@
         <exploded>	vehicles/british/GB45_Achilles_IIC/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB45_Achilles_IIC/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB45_Achilles_IIC/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB45_Achilles_IIC/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.362378 1.04785	</gunPosition>
       <emblemSlots>
@@ -985,9 +995,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.011 0.068 1.042 0.000 0.570 0.251 1.000 0.316 0.521 0.500 0.110 0.500 0.000 0.500 0.000	</physicsShape>
     </Turret_2_GB45_Achilles_IIC>
   </turrets0>
@@ -1015,6 +1023,25 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB45_Achilles_IIC>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB45_Achilles_IIC>
+      <Chassis_GB45_Achilles_IIC_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_GB45_Achilles_IIC_2>
+    </chassis>
+    <engines>
+      <GMC_6046>
+        <bravo>	108.3713	</bravo>
+      </GMC_6046>
+      <Ford_GAA>
+        <bravo>	132.1601	</bravo>
+      </Ford_GAA>
+    </engines>
+    <armour>	0.847232066	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

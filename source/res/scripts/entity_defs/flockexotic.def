@@ -122,6 +122,12 @@
       <Editable>	true	</Editable>
       <Default>	5	</Default>
     </respawnTime>
+    <flightSound>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	ambient_nature_trigger_soaring_birds	</Default>
+    </flightSound>
   </Properties>
   <ClientMethods></ClientMethods>
 </flockexotic.def>

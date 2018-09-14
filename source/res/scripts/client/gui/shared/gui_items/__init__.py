@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
-import nations
 from collections import namedtuple
+import BigWorld
+from gui.shared.items_parameters import params_helper, formatters
+import nations
 from debug_utils import *
 from helpers import i18n, time_utils
 from items import ITEM_TYPE_NAMES, vehicles, getTypeInfoByName, ITEM_TYPE_INDICES
 from shared_utils import CONST_CONTAINER
 from gui import nationCompareByIndex, GUI_SETTINGS
+from gui.shared.money import Money, ZERO_MONEY, Currency
 from gui.shared.economics import getActionPrc
-from gui.shared.utils import ItemsParameters
 from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
 CLAN_LOCK = 1
 _ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
@@ -216,24 +218,26 @@ class HasStrCD(object):
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime',
  'compensations',
  'battlesLeft',
- 'expiryState',
+ 'winsLeft',
  'isRented'))
-_RentalInfoProvider.__new__.__defaults__ = (0,
- (0, 0),
- 0,
- True,
- False)
 
 class RentalInfoProvider(_RentalInfoProvider):
 
-    def getTimeLeft(self):
-        return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime)))
+    @staticmethod
+    def __new__(cls, additionalData=None, time=0, battles=0, wins=0, isRented=False, *args, **kwargs):
+        additionalData = additionalData or {}
+        if 'compensation' in additionalData:
+            compensations = Money(*additionalData['compensation'])
+        else:
+            compensations = ZERO_MONEY
+        result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, isRented)
+        return result
 
-    def getBattlesLeft(self):
-        return self.battlesLeft or 0
+    def getTimeLeft(self):
+        return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime))) if self.rentExpiryTime != float('inf') else float('inf')
 
     def getExpiryState(self):
-        return self.expiryState if self.expiryState is not None else True
+        return self.rentExpiryTime != float('inf') and self.battlesLeft <= 0 and self.winsLeft <= 0 and self.getTimeLeft() <= 0
 
 
 class FittingItem(GUIItem, HasIntCD):
@@ -246,10 +250,10 @@ class FittingItem(GUIItem, HasIntCD):
     def __init__(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
-        self.defaultPrice = (0, 0)
-        self._buyPrice = (0, 0)
-        self.sellPrice = (0, 0)
-        self.defaultSellPrice = (0, 0)
+        self.defaultPrice = ZERO_MONEY
+        self._buyPrice = ZERO_MONEY
+        self.sellPrice = ZERO_MONEY
+        self.defaultSellPrice = ZERO_MONEY
         self.altPrice = None
         self.defaultAltPrice = None
         self.sellActionPrc = 0
@@ -262,16 +266,17 @@ class FittingItem(GUIItem, HasIntCD):
         if proxy is not None and proxy.isSynced():
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:
-                self.defaultPrice = (0, 0)
+                self.defaultPrice = ZERO_MONEY
             self._buyPrice, self.isHidden, self.sellForGold = proxy.shop.getItem(self.intCompactDescr)
             if self._buyPrice is None:
-                self._buyPrice = (0, 0)
-            self.defaultSellPrice = BigWorld.player().shop.getSellPrice(self.defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID)
-            self.sellPrice = BigWorld.player().shop.getSellPrice(self.buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID)
+                self._buyPrice = ZERO_MONEY
+            self.defaultSellPrice = Money(*BigWorld.player().shop.getSellPrice(self.defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID))
+            self.sellPrice = Money(*BigWorld.player().shop.getSellPrice(self.buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID))
             self.inventoryCount = proxy.inventory.getItems(self.itemTypeID, self.intCompactDescr)
             if self.inventoryCount is None:
                 self.inventoryCount = 0
             self.isUnlocked = self.intCD in proxy.stats.unlocks
+            self.isInitiallyUnlocked = self.intCD in proxy.stats.initialUnlocks
             self.altPrice = self._getAltPrice(self.buyPrice, proxy.shop)
             self.defaultAltPrice = self._getAltPrice(self.defaultPrice, proxy.shop.defaults)
             self.sellActionPrc = -1 * getActionPrc(self.sellPrice, self.defaultSellPrice)
@@ -285,6 +290,12 @@ class FittingItem(GUIItem, HasIntCD):
         return self._buyPrice
 
     @property
+    def rentOrBuyPrice(self):
+        price = self.altPrice or self.buyPrice
+        minRentPricePackage = self.getRentPackage()
+        return minRentPricePackage['rentPrice'] if minRentPricePackage else price
+
+    @property
     def actionPrc(self):
         return getActionPrc(self.altPrice or self.buyPrice, self.defaultAltPrice or self.defaultPrice)
 
@@ -294,7 +305,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def isPremium(self):
-        return self.buyPrice[1] > 0
+        return self.buyPrice.isSet(Currency.GOLD)
 
     @property
     def isPremiumIGR(self):
@@ -323,6 +334,9 @@ class FittingItem(GUIItem, HasIntCD):
     @property
     def rentLeftTime(self):
         pass
+
+    def isPreviewAllowed(self):
+        return False
 
     @property
     def userType(self):
@@ -363,10 +377,13 @@ class FittingItem(GUIItem, HasIntCD):
     def _getShortInfo(self, vehicle=None, expanded=False):
         try:
             description = i18n.makeString('#menu:descriptions/' + self.itemTypeName + ('Full' if expanded else ''))
-            itemParams = dict(ItemsParameters.g_instance.getParameters(self.descriptor, vehicle.descriptor if vehicle is not None else None))
+            vehicleDescr = vehicle.descriptor if vehicle is not None else None
+            params = params_helper.getParameters(self, vehicleDescr)
+            formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
             if self.itemTypeName == vehicles._VEHICLE:
-                itemParams['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun['shots'][0]['shell']['caliber'])
-            return description % itemParams
+                formattedParametersDict['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun['shots'][0]['shell']['caliber'])
+            result = description % formattedParametersDict
+            return result
         except Exception:
             LOG_CURRENT_EXCEPTION()
             return ''
@@ -377,7 +394,7 @@ class FittingItem(GUIItem, HasIntCD):
         return '' if not GUI_SETTINGS.technicalInfo else self._getShortInfo(vehicle, expanded)
 
     def getParams(self, vehicle=None):
-        return dict(ItemsParameters.g_instance.get(self.descriptor, vehicle.descriptor if vehicle is not None else None))
+        return dict(params_helper.get(self, vehicle.descriptor if vehicle is not None else None))
 
     def getRentPackage(self, days=None):
         return None
@@ -399,14 +416,14 @@ class FittingItem(GUIItem, HasIntCD):
 
     def getBuyPriceCurrency(self):
         if self.altPrice is not None:
-            if self.altPrice[1] and not self.isBoughtForCredits:
-                return 'gold'
-        elif self.buyPrice[1]:
-            return 'gold'
-        return 'credits'
+            if self.altPrice.gold and not self.isBoughtForCredits:
+                return Currency.GOLD
+        elif self.buyPrice.gold:
+            return Currency.GOLD
+        return Currency.CREDITS
 
     def getSellPriceCurrency(self):
-        return 'gold' if self.sellPrice[1] else 'credits'
+        return self.sellPrice.getCurrency()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return False
@@ -424,9 +441,15 @@ class FittingItem(GUIItem, HasIntCD):
         return self.mayPurchase(money)
 
     def mayPurchaseWithExchange(self, money, exchangeRate):
-        priceCredits, _ = self.altPrice or self.buyPrice
-        moneyCredits, moneyGold = money
-        return True if priceCredits <= moneyGold * exchangeRate + moneyCredits else False
+        price = self.altPrice or self.buyPrice
+        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
+        return price <= money
+
+    def isPurchaseEnabled(self, money, exchangeRate):
+        canBuy, buyReason = self.mayPurchase(money)
+        canRentOrBuy, rentReason = self.mayRentOrBuy(money)
+        canBuyWithExchange = self.mayPurchaseWithExchange(money, exchangeRate)
+        return canRentOrBuy or canBuy or canBuyWithExchange and buyReason == 'credits_error'
 
     def mayPurchase(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
@@ -436,18 +459,13 @@ class FittingItem(GUIItem, HasIntCD):
         if self.isHidden:
             return (False, 'isHidden')
         price = self.altPrice or self.buyPrice
-        if price[0] == 0 and price[1] == 0:
+        if not price:
             return (True, '')
-        currency = ''
-        if price[1]:
-            currency = 'gold'
-            if price[1] <= money[1]:
+        for c in price.getSetCurrencies():
+            if money.get(c) >= price.get(c):
                 return (True, '')
-        if price[0]:
-            currency = 'credit'
-            if price[0] <= money[0]:
-                return (True, '')
-        return (False, '%s_error' % currency)
+
+        return (False, '%s_error' % Currency.BY_WEIGHT[-1])
 
     def getTarget(self, vehicle):
         if self.isInstalled(vehicle):
@@ -476,10 +494,10 @@ class FittingItem(GUIItem, HasIntCD):
             res = self.level - other.level
             if res:
                 return res
-            res = self.buyPrice[1] - other.buyPrice[1]
+            res = self.buyPrice.gold - other.buyPrice.gold
             if res:
                 return res
-            res = self.buyPrice[0] - other.buyPrice[0]
+            res = self.buyPrice.credits - other.buyPrice.credits
             return res if res else cmp(self.userName, other.userName)
 
     def __eq__(self, other):

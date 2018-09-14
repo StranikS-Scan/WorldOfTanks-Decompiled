@@ -11,6 +11,13 @@
     <forward>	25	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.003	</moving>
+    <still>	0.007	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.011	</firePenalty>
+  </invisibility>
   <repairCost>	7.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -67,7 +74,8 @@
       <turret>	0.000000 0.959128 0.097507	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J27_O_I_120/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -193,13 +201,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.3508 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J27_O_I_120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.70148 3.4925	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -412,13 +419,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.3508 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J27_O_I_120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.70148 3.4925	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -590,6 +596,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.0305556 6 0.0583333 7 0.0611111 8 0.0638889 9 0.0694444 10 0.447222 10 0.452778 7 0.547222 7 0.552778 10 0.880556 10 0.888889 7 0.894444 7 0.9 5 0.916667 5 0.938889 5 0.941667 6 0.944444 7 0.966667 7 0.972222 6 0.975 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
           <shotDispersionFactors>
@@ -609,7 +616,8 @@
             <exploded>	vehicles/japan/J27_O_I_120/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J27_O_I_120/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -646,6 +654,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.00277778 4 0.00833333 3 0.0138889 3 0.0166667 4 0.0194444 5 0.05 5 0.0555556 6 0.0583333 7 0.0611111 8 0.0666667 10 0.447222 10 0.45 9 0.452778 7 0.455556 6 0.458333 5 0.541667 5 0.544444 6 0.547222 7 0.55 9 0.552778 10 0.880556 10 0.886111 8 0.888889 7 0.891667 6 0.897222 5 0.919444 5 0.922222 4 0.925 3 0.933333 3 0.936111 4 0.938889 5 0.947222 6 0.952778 7 0.958333 9 0.961111 10 0.963889 9 0.966667 7 0.969444 6 0.975 5 0.977778 4 0.980556 3 0.986111 3 0.991667 4 0.994444 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	9.3	</reloadTime>
           <shotDispersionFactors>
@@ -660,7 +669,8 @@
             <exploded>	vehicles/japan/J27_O_I_120/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J27_O_I_120/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -693,6 +703,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 1 0.0194444 1 0.025 3 0.0611111 3 0.0638889 5 0.0666667 6 0.0694444 8 0.0722222 10 0.444444 10 0.45 4 0.461111 3 0.547222 3 0.55 4 0.555556 10 0.877778 10 0.880556 8 0.883333 4 0.888889 3 0.897222 2 0.916667 2 0.919444 1 0.941667 1 0.944444 2 0.95 3 0.955556 3 0.958333 4 0.963889 4 0.966667 3 0.972222 2 0.975 1 1 1	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.54	</shotDispersionRadius>
           <reloadTime>	17	</reloadTime>
           <shotDispersionFactors>
@@ -707,7 +718,8 @@
             <exploded>	vehicles/japan/J27_O_I_120/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J27_O_I_120/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -730,7 +742,8 @@
         <exploded>	vehicles/japan/J27_O_I_120/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J27_O_I_120/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J27_O_I_120/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J27_O_I_120/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.993165 1.21847	</gunPosition>
       <emblemSlots>
@@ -765,9 +778,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	0.965 0.000 0.948 0.000 0.894 -0.068 0.728 0.578 0.491 0.500 0.000 0.500 0.098 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	1.54 1.54 0.000000 0.000000	</tiling>
@@ -798,6 +809,25 @@
     </_Type3_Otsu>
     <_Type3_Ko>	shared	</_Type3_Ko>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_J27_O_I_120>
+        <alpha>	0.10465	</alpha>
+      </Chassis_J27_O_I_120>
+      <Chassis_J27_O_I_120_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_J27_O_I_120_2>
+    </chassis>
+    <engines>
+      <_Type98_V12_x2_1100>
+        <bravo>	290.7523	</bravo>
+      </_Type98_V12_x2_1100>
+      <_Type98_V12_x2_1200>
+        <bravo>	317.1843	</bravo>
+      </_Type98_V12_x2_1200>
+    </engines>
+    <armour>	1.037632452	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

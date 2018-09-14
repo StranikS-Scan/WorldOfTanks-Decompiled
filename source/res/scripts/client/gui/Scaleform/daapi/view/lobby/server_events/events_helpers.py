@@ -7,7 +7,10 @@ import types
 from collections import namedtuple, defaultdict
 import BigWorld
 import constants
+from constants import EVENT_TYPE
+from gui.LobbyContext import g_lobbyContext
 from gui.server_events.bonuses import getTutorialBonusObj
+from gui.shared.utils.requesters.ItemsRequester import FALLOUT_QUESTS_CRITERIA
 from potapov_quests import PQ_BRANCH
 from debug_utils import LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -319,7 +322,7 @@ class _QuestInfo(_EventInfo):
         for qID, q in self._getEventsByIDs(parents, svrEvents or {}).iteritems():
             result.append(formatters.packTextBlock(i18n.makeString('#quests:bonuses/item/task', q.getUserName()), questID=qID))
 
-        return formatters.todict(result) if len(result) else []
+        return formatters.todict(result) if len(result) else formatters.todict([formatters.packTextBlock(text_styles.alert('#quests:bonuses/notAvailable'))])
 
     def _getBonusCount(self, pCur=None):
         if not self.event.isCompleted(progress=pCur):
@@ -605,6 +608,13 @@ class _MotiveQuestInfo(_QuestInfo):
          'infoList': infoList,
          'awards': self._getBonuses(svrEvents, useIconFormat=False)}
 
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+        filterFunc = lambda quest: quest.getType() == EVENT_TYPE.MOTIVE_QUEST and not quest.isCompleted()
+        motiveQuests = filter(filterFunc, svrEvents.values())
+        info = super(_MotiveQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted)
+        info.update({'isLinkBtnVisible': len(motiveQuests) > 0})
+        return info
+
     def _getTopConditions(self, svrEvents):
         result = []
         preBattleFmt = self.event.preBattleCond.format(svrEvents, self.event)
@@ -679,9 +689,16 @@ def getTutorialQuestsBoosters():
                     goodies = bonus.getValues().get('goodies', {})
                     boosterBonus = getTutorialBonusObj('goodies', goodies)
                     for booster, count in boosterBonus.getBoosters().iteritems():
-                        result[chapter].append((booster, count))
+                        if booster.enabled:
+                            result[chapter].append((booster, count))
 
     return result
+
+
+def getBoosterQuests():
+    hasTopVehicle = len(g_itemsCache.items.getVehicles(FALLOUT_QUESTS_CRITERIA.TOP_VEHICLE))
+    isFalloutQuestEnabled = g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+    return g_eventsCache.getAllQuests(lambda q: q.isAvailable()[0] and not q.isCompleted() and len(q.getBonuses('goodies')) and not (q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getPQType().branch == PQ_BRANCH.FALLOUT and (not isFalloutQuestEnabled or not hasTopVehicle)), includePotapovQuests=True)
 
 
 class _PotapovDependenciesResolver(object):

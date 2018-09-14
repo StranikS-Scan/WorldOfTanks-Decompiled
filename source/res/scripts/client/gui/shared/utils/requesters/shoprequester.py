@@ -9,6 +9,7 @@ from constants import WIN_XP_FACTOR_MODE
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import NamedGoodieData, getPremiumCost, getPriceWithDiscount
+from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class ShopCommonStats(object):
@@ -21,8 +22,14 @@ class ShopCommonStats(object):
     def getPrices(self):
         return self.getItemsData().get('itemPrices', {})
 
+    def getBoosterPrices(self):
+        return self.getGoodiesData().get('prices', {})
+
     def getHiddens(self):
         return self.getItemsData().get('notInShopItems', set([]))
+
+    def getHiddenBoosters(self):
+        return self.getGoodiesData().get('notInShop', set([]))
 
     def getNotToBuyVehicles(self):
         return self.getItemsData().get('vehiclesNotToBuy', set([]))
@@ -37,7 +44,12 @@ class ShopCommonStats(object):
         return self.getItemsData().get('vehicleSellPriceFactors', {})
 
     def getItemPrice(self, intCD):
-        return self.getPrices().get(intCD, (0, 0))
+        asTuple = self.getPrices().get(intCD, tuple())
+        return Money(*asTuple)
+
+    def getBoosterPrice(self, boosterID):
+        asTuple = self.getBoosterPrices().get(boosterID, tuple())
+        return Money(*asTuple)
 
     def getItem(self, intCD):
         return (self.getItemPrice(intCD), intCD in self.getHiddens(), intCD in self.getVehiclesForGold())
@@ -208,6 +220,9 @@ class ShopCommonStats(object):
     def getItemsData(self):
         return self.getValue('items', {})
 
+    def getGoodiesData(self):
+        return self.getValue('goodies', {})
+
     def getVehCamouflagePriceFactor(self, typeCompDescr):
         return self.getItemsData().get('vehicleCamouflagePriceFactors', {}).get(typeCompDescr)
 
@@ -241,7 +256,7 @@ class ShopCommonStats(object):
 
     @property
     def goodies(self):
-        return self.getValue('goodies', {})
+        return self.getGoodiesData().get('goodies', {})
 
     def getGoodieByID(self, discountID):
         return self.goodies.get(discountID, None)
@@ -256,10 +271,6 @@ class ShopCommonStats(object):
     @property
     def discounts(self):
         return self.getGoodiesByVariety(GOODIE_VARIETY.DISCOUNT)
-
-    @property
-    def premiumPacketsDiscounts(self):
-        return dict(filter(lambda (discountID, item): item.targetID == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM, self.discounts.iteritems()))
 
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
@@ -320,15 +331,12 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
     def _preprocessValidData(self, data):
         data = dict(data)
         formattedGoodies = defaultdict(dict)
-        for goodieID, goodieData in data.get('goodies', {}).iteritems():
+        goodies = data.get('goodies', {}).get('goodies', {})
+        for goodieID, goodieData in goodies.iteritems():
             formattedGoodies[goodieID] = NamedGoodieData(*goodieData)
 
-        data['goodies'] = formattedGoodies
+        data['goodies']['goodies'] = formattedGoodies
         return data
-
-    @property
-    def personalPremiumPacketsDiscounts(self):
-        return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, self.premiumPacketsDiscounts.iteritems()))
 
     def getPremiumCostWithDiscount(self, premiumPacketDiscounts=None):
         discounts = premiumPacketDiscounts or self.personalPremiumPacketsDiscounts
@@ -357,29 +365,20 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
                                 List is sorted by role level.
                         actionData = Action data for each level of retraining
         """
-        from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+        from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+        from gui.shared.tooltips.formatters import packActionTooltipData
         shopPrices = self.tankmanCost
         defaultPrices = self.defaults.tankmanCost
         action = []
         tmanCost = []
         for idx, price in enumerate(shopPrices):
             data = price.copy()
-            default = defaultPrices[idx]
-            isPremium = price['isPremium']
-            shopPrice = price['gold'] if isPremium else price['credits']
-            defaultPrice = default['gold'] if isPremium else default['credits']
+            shopPrice = Money(**price)
+            defaultPrice = Money(**defaultPrices[idx])
             actionData = None
             if shopPrice != defaultPrice:
-                key = 'goldTankmanCost' if isPremium else 'creditsTankmanCost'
-                newPrice = (0, shopPrice) if isPremium else (shopPrice, 0)
-                oldPrice = (0, defaultPrice) if isPremium else (defaultPrice, 0)
-                state = (None, ACTION_TOOLTIPS_STATE.DISCOUNT) if isPremium else (ACTION_TOOLTIPS_STATE.DISCOUNT, None)
-                actionData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                 'key': key,
-                 'isBuying': True,
-                 'state': state,
-                 'newPrice': newPrice,
-                 'oldPrice': oldPrice}
+                key = '{}TankmanCost'.format(shopPrice.getCurrency(byWeight=True))
+                actionData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, key, True, shopPrice, defaultPrice)
             tmanCost.append(data)
             action.append(actionData)
 
@@ -427,6 +426,10 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         return self.freeXPConversion[0] > self.defaults.freeXPConversion[0]
 
     @property
+    def personalPremiumPacketsDiscounts(self):
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_PREMIUM)
+
+    @property
     def personalSlotDiscounts(self):
         return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_SLOT)
 
@@ -457,7 +460,7 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats):
         return tuple(map(convert, prices))
 
     def __personalDiscountsByTarget(self, targetID):
-        discounts = filter(lambda (discountID, item): item.targetID == targetID, self.discounts.iteritems())
+        discounts = filter(lambda (discountID, item): item.targetID == targetID and item.enabled, self.discounts.iteritems())
         return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts))
 
 
@@ -488,8 +491,14 @@ class DefaultShopRequester(ShopCommonStats):
     def getPrices(self):
         return self.getItemsData().get('itemPrices', self.__proxy.getPrices())
 
+    def getBoosterPrices(self):
+        return self.getGoodiesData().get('prices', self.__proxy.getBoosterPrices())
+
     def getHiddens(self):
         return self.getItemsData().get('notInShopItems', self.__proxy.getHiddens())
+
+    def getHiddenBoosters(self):
+        return self.getGoodiesData().get('notInShop', self.__proxy.getHiddenBoosters())
 
     def getNotToBuyVehicles(self):
         return self.getItemsData().get('vehiclesNotToBuy', self.__proxy.getNotToBuyVehicles())
@@ -504,7 +513,10 @@ class DefaultShopRequester(ShopCommonStats):
         return self.getItemsData().get('vehicleSellPriceFactors', {})
 
     def getItemPrice(self, intCD):
-        return self.getPrices().get(intCD, self.__proxy.getItemPrice(intCD))
+        return Money(*self.getPrices().get(intCD, self.__proxy.getItemPrice(intCD)))
+
+    def getBoosterPrice(self, boosterID):
+        return Money(*self.getBoosterPrices().get(boosterID, self.__proxy.getBoosterPrice(boosterID)))
 
     @property
     def paidRemovalCost(self):
@@ -658,6 +670,9 @@ class DefaultShopRequester(ShopCommonStats):
     def getItemsData(self):
         return self.getValue('items', self.__proxy.getItemsData())
 
+    def getGoodiesData(self):
+        return self.getValue('goodies', self.__proxy.getGoodiesData())
+
     def getVehCamouflagePriceFactor(self, typeCompDescr):
         value = self.getItemsData().get('vehicleCamouflagePriceFactors', {}).get(typeCompDescr)
         return self.__proxy.getVehCamouflagePriceFactor(typeCompDescr) if value is None else value
@@ -700,9 +715,7 @@ class DefaultShopRequester(ShopCommonStats):
 
     @property
     def goodies(self):
-        value = self.__proxy.goodies.copy()
-        value.update(self.getValue('goodies', {}))
-        return value
+        return self.getGoodiesData().get('goodies', self.__proxy.goodies)
 
     @property
     def camouflageCost(self):

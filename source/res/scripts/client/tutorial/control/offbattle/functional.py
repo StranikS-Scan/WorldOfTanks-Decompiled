@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/functional.py
 import collections
 import urllib
-import MusicController
+import MusicControllerWWISE
 import ResMgr
 from adisp import process
 from constants import QUEUE_TYPE
@@ -155,10 +155,10 @@ class FunctionalOpenInternalBrowser(FunctionalEffect):
 class FunctionalPlayMusicEffect(FunctionalEffect):
 
     def triggerEffect(self):
-        if MusicController.g_musicController is not None:
-            soundID = getattr(MusicController, self._effect.getTargetID(), None)
+        if MusicControllerWWISE.g_musicController is not None:
+            soundID = getattr(MusicControllerWWISE, self._effect.getTargetID(), None)
             if soundID is not None:
-                MusicController.g_musicController.play(soundID)
+                MusicControllerWWISE.play(soundID)
             else:
                 LOG_ERROR('Sound not found', self._effect.getTargetID())
         return

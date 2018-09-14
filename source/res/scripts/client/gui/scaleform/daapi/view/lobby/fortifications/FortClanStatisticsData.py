@@ -9,7 +9,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.formatters import icons, text_styles
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 
 @async

@@ -22,7 +22,9 @@ It also imports things on demand instead of at the top of the file to try and
 minimise the number of imported modules (which may then import more modules)
 which would give false results when testing memory allocations.
 """
+import re
 import sys
+import itertools
 from bwdebug import DEBUG_MSG
 from bwdebug import ERROR_MSG
 import BigWorld
@@ -99,6 +101,48 @@ def gcWriteLog(file, s, isError=False):
     return
 
 
+def get_all_unique_loops(edges):
+    """
+    clean out all leafs and left only graph cycles
+    """
+    leafs = True
+    while leafs:
+        srcs = set()
+        trgts = set()
+        for src, tgt in edges:
+            srcs.add(src)
+            trgts.add(tgt)
+
+        leafs = trgts - srcs
+        new_edges = []
+        for src, tgt in edges:
+            if tgt not in leafs:
+                new_edges.append((src, tgt))
+
+        edges = new_edges
+
+    return edges
+
+
+def get_loops_graph(content):
+    """
+    clean objgraph graph and clean out all leaf nodes
+    """
+    lines = content.split(';')
+    g = re.compile('o\\d+')
+    objs = [ g.findall(i) for i in lines ]
+    edges = [ i for i in objs if len(i) == 2 ]
+    unique_loops = get_all_unique_loops(edges)
+    nodes = set((j for i in unique_loops for j in i))
+    result = []
+    for line in lines:
+        line_nodes = g.findall(line)
+        if not line_nodes or all((i in nodes for i in line_nodes)):
+            result.append(line)
+
+    return ';'.join(result)
+
+
 def gcDump():
     """
     Performs a garbage collect and then log count of objects in garbage collected.
@@ -115,8 +159,62 @@ def gcDump():
     leakCount = gc.collect()
     s = 'Total garbage: %u' % (leakCount,)
     gcWriteLog(None, s, isError=leakCount > 0)
+    if leakCount:
+        gc_dump = gc.garbage[:]
+        if len(gc_dump) > 0:
+            garbage_ids = {id(x):x for x in gc_dump}
+            garbage_list = []
+            gc_refs = get_refs(gc_dump, garbage_list, garbage_ids)
+            del garbage_list[:]
+            graph_info = get_graph_text_repr(gc_refs, garbage_ids, shortnames=False)
+            for obj in graph_info['nodes'].values():
+                gcWriteLog(None, repr(obj))
+
+            for obj in graph_info['edges']:
+                gcWriteLog(None, repr(obj))
+
+            graph_info['nodes'].clear()
+            del graph_info['edges'][:]
+            garbage_ids.clear()
+            del gc_refs[:]
+            del gc_dump[:]
     del gc.garbage[:]
     return leakCount
+
+
+def get_refs(obj, source_list, garbage_ids):
+    if id(obj) in source_list:
+        return []
+    source_list.append(id(obj))
+    res = []
+    referents = [ i for i in gc.get_referents(obj) if id(i) in garbage_ids ]
+    res = [ {'target': id(obj),
+     'source': id(i)} for i in referents ]
+    for i in referents:
+        inner_res = get_refs(i, source_list, garbage_ids)
+        res.extend(inner_res)
+        del inner_res[:]
+
+    return res
+
+
+def get_graph_text_repr(graph, garbage_ids, extra_info=False, refcounts=False, shortnames=True):
+    node_names = {}
+    for edge_data in graph:
+        if edge_data['source'] not in garbage_ids or edge_data['target'] not in garbage_ids:
+            continue
+        obj_id = edge_data['target']
+        target = garbage_ids[obj_id]
+        for obj_id in (edge_data['target'], edge_data['source']):
+            obj = garbage_ids[obj_id]
+            node_names[obj_id] = {'id': obj_id,
+             'label': objgraph._obj_label(obj, extra_info, refcounts, shortnames)}
+
+        source = garbage_ids[edge_data['source']]
+        edge_data['label'] = objgraph._edge_label(target, source)
+
+    return {'nodes': node_names,
+     'edges': graph}
 
 
 def getGarbageGraph():
@@ -129,12 +227,23 @@ def getGarbageGraph():
     leakCount = 0
     gcDebugEnable()
     leakCount = gc.collect()
-    copy = gc.garbage[:]
+    gc_dump = gc.garbage[:]
     del gc.garbage[:]
-    if len(copy) > 0:
-        garbageGraph = StringIO.StringIO()
-        objgraph.show_backrefs(copy, max_depth=10, output=garbageGraph)
-        return garbageGraph.getvalue()
+    if len(gc_dump) > 0:
+        garbage_ids = {id(x):x for x in gc_dump}
+        garbage_list = []
+        gc_refs = get_refs(gc_dump, garbage_list, garbage_ids)
+        del garbage_list[:]
+        graph_info = get_graph_text_repr(gc_refs, garbage_ids, shortnames=False)
+        result = 'digraph ObjectGraph { node[shape=box, style=filled, fillcolor=white];  %s }'
+        node_items = [ 'o%s[label="%s"]' % (i['id'], i['label']) for i in graph_info['nodes'].values() ]
+        edge_items = [ 'o%s -> o%s %s' % (i['source'], i['target'], i.get('label', '')) for i in graph_info['edges'] ]
+        garbage_ids.clear()
+        graph_info['nodes'].clear()
+        del graph_info['edges'][:]
+        del gc_refs[:]
+        del gc_dump[:]
+        return result % '; '.join(itertools.chain(node_items, edge_items))
 
 
 class TestLeak:
@@ -183,8 +292,10 @@ def createComplexLeak():
     refChain = TestLeak()
     refLink1 = TestLeak()
     refLink2 = TestLeak()
+    saltLink = TestLeak()
     refChain.badRefStart = refLink1
     refLink1.badRefMiddle = refLink2
+    refLink2.saltValue = saltLink
     refLink2.badRefEnd = refChain
     refChain = None
     refLink1 = None

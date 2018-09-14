@@ -1,7 +1,12 @@
 <hangar_premium_igr_cn.xml>
-  <music>	/hangar/music/hangar/lobby_premium	</music>
   <wwmusic>	hangar_premium_IGR_drone	</wwmusic>
-  <ambientSound>	/hangar/ambient/hangar_premium_IGR/silence	</ambientSound>
   <wwambientSound>	hangar_premium_IGR_silence	</wwambientSound>
-  <preloadSoundBanks>	hangar_premium_IGR.bnk	</preloadSoundBanks>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_premium_IGR.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
 </hangar_premium_igr_cn.xml>

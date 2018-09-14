@@ -3,16 +3,17 @@
 from collections import namedtuple
 import itertools
 import weakref
-from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE, INV_ID_CLEAR_VEHICLE
+from UnitBase import UNIT_ROLE, UNIT_FLAGS, ROSTER_TYPE_TO_CLASS, ROSTER_TYPE
 from account_helpers import getAccountDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
+from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_RESTRICTION
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.utils.decorators import ReprInjector
-from shared_utils import findFirst
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitIdx', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
@@ -260,7 +261,7 @@ class UnitRosterSettings(object):
     TOTAL_SLOTS = 15
     __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel', '_maxLegionariesCount', '__weakref__')
 
-    def __init__(self, minLevel=1, maxLevel=10, maxSlots=TOTAL_SLOTS, maxClosedSlots=0, maxEmptySlots=0, minTotalLevel=1, maxTotalLevel=150, maxLegionariesCount=0):
+    def __init__(self, minLevel=MIN_VEHICLE_LEVEL, maxLevel=MAX_VEHICLE_LEVEL, maxSlots=TOTAL_SLOTS, maxClosedSlots=0, maxEmptySlots=0, minTotalLevel=1, maxTotalLevel=150, maxLegionariesCount=0):
         super(UnitRosterSettings, self).__init__()
         self._minLevel = minLevel
         self._maxLevel = maxLevel
@@ -310,10 +311,24 @@ class UnitRosterSettings(object):
     def getLegionariesMaxCount(self):
         return self._maxLegionariesCount
 
+    def __eq__(self, other):
+        for fn in self.__slots__:
+            if not fn.startswith('__') and getattr(self, fn) != getattr(other, fn):
+                return False
+
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 class DynamicRosterSettings(UnitRosterSettings):
 
     def __init__(self, unit):
+        kwargs = self._extractSettings(unit)
+        super(DynamicRosterSettings, self).__init__(**kwargs)
+
+    def _extractSettings(self, unit):
         kwargs = {}
         roster = None
         if unit is not None:
@@ -328,8 +343,25 @@ class DynamicRosterSettings(UnitRosterSettings):
             kwargs['maxLegionariesCount'] = unit.getLegionaryMaxCount()
         else:
             LOG_ERROR('Unit roster is not defined')
-        super(DynamicRosterSettings, self).__init__(**kwargs)
-        return
+        return kwargs
+
+
+class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
+
+    def __init__(self, unit, lowerBound=0, upperBound=0):
+        self._lowerBound = lowerBound
+        self._upperBound = upperBound
+        super(BalancedSquadDynamicRosterSettings, self).__init__(unit)
+
+    def _extractSettings(self, unit):
+        kwargs = super(BalancedSquadDynamicRosterSettings, self)._extractSettings(unit)
+        if kwargs and unit.getCommanderDBID() != getAccountDatabaseID():
+            vehicles = unit.getMemberVehicles(unit.getCommanderDBID())
+            if vehicles:
+                levels = [ vehInfo.vehLevel for vehInfo in vehicles ]
+                kwargs['minLevel'] = max(MIN_VEHICLE_LEVEL, min(levels) + self._lowerBound)
+                kwargs['maxLevel'] = min(MAX_VEHICLE_LEVEL, max(levels) + self._upperBound)
+        return kwargs
 
 
 class PredefinedRosterSettings(UnitRosterSettings):

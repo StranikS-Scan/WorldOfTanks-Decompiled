@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
+from gui.shared.items_parameters import formatters
 from items import tankmen
 from helpers import i18n
 from debug_utils import LOG_ERROR
@@ -35,6 +36,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                 tankmenParams.append({'tankmanType': i18n.convert(tankmen.getSkillsConfig()[role].get('userString', '')),
                  'value': tankmanLabel})
 
+            paramsList = formatters.getFormattedParamsList(vehicle.descriptor, params['parameters'], excludeRelative=True)
             info = {'vehicleName': vehicle.longUserName,
              'vehicleDiscription': vehicle.fullDescription,
              'vehicleImage': vehicle.icon,
@@ -43,7 +45,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
              'vehicleElite': vehicle.isElite,
              'vehicleType': vehicle.type,
              'VehicleInfoPropsData': [ {'name': n,
-                                      'value': v} for n, v in params['parameters'] ],
+                                      'value': v} for n, v in paramsList ],
              'VehicleInfoBaseData': params['base'],
              'VehicleInfoCrewData': tankmenParams}
             self.as_setVehicleInfoS(info)

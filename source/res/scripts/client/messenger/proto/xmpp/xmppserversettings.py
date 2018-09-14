@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
 import types
 from debug_utils import LOG_ERROR
-from gui import GUI_SETTINGS
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
@@ -65,14 +64,22 @@ class ConnectionsIterator(object):
 
 
 class XmppServerSettings(IProtoSettings):
-    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource', 'altConnections', 'boshConnections', 'userRoomsService')
+    __slots__ = ('enabled', 'connections', 'domain', 'port', 'resource', 'altConnections', 'boshConnections', 'mucServices')
 
     def __init__(self):
         super(XmppServerSettings, self).__init__()
         self.clear()
 
     def __repr__(self):
-        return 'XmppServerSettings(enabled = {0!r:s}, connections = {1!r:s}, altConnections = {2!r:s}, boshConnections = {3!r:s}, domain = {4:>s}, port = {5:n}, resource = {6:>s}, userRoomsService = {7:>s})'.format(self.enabled, self.connections, self.altConnections, self.boshConnections, self.domain, self.port, self.resource, self.userRoomsService)
+        return 'XmppServerSettings(enabled = {0!r:s}, connections = {1!r:s}, altConnections = {2!r:s}, boshConnections = {3!r:s}, domain = {4:>s}, port = {5:n}, resource = {6:>s}, mucServices = {7:>s})'.format(self.enabled, self.connections, self.altConnections, self.boshConnections, self.domain, self.port, self.resource, self.mucServices)
+
+    @property
+    def userRoomsService(self):
+        from messenger.proto import XMPP_MUC_CHANNEL_TYPE
+        usersService = self.getChannelByType(XMPP_MUC_CHANNEL_TYPE.USERS)
+        if usersService:
+            return usersService['hostname']
+        raise AssertionError('users room service is not set')
 
     def update(self, data):
         if 'xmpp_connections' in data:
@@ -106,7 +113,11 @@ class XmppServerSettings(IProtoSettings):
                 self.enabled = False
         else:
             self.enabled = False
-        self.userRoomsService = GUI_SETTINGS.userRoomsService
+        if 'xmpp_muc_services' in data:
+            for service in data['xmpp_muc_services']:
+                self.mucServices[service['type']] = service
+
+        self.mucServices = self.mucServices or {}
 
     def clear(self):
         self.enabled = False
@@ -114,9 +125,9 @@ class XmppServerSettings(IProtoSettings):
         self.altConnections = []
         self.boshConnections = []
         self.domain = None
-        self.userRoomsService = ''
         self.port = -1
         self.resource = ''
+        self.mucServices = {}
         return
 
     def isEnabled(self):
@@ -138,10 +149,25 @@ class XmppServerSettings(IProtoSettings):
             iterator = ConnectionsIterator([(self.domain, self.port)])
         return iterator
 
-    def isMucServiceAllowed(self, service=''):
+    def isMucServiceAllowed(self, service='', hostname=''):
+        """
+        Return if muc service allowed in server config
+        :param service: service type
+        :param hostname: service hostname
+        :return: True if exist in server config
+        """
         if not self.enabled:
             return False
-        elif service:
-            return service in (self.userRoomsService,)
-        else:
-            return len(self.userRoomsService) > 0
+        for serviceType, serviceData in self.mucServices.iteritems():
+            if serviceType == service or hostname and hostname in serviceData['hostname']:
+                return serviceData['enabled']
+
+        return len(self.mucServices) > 0
+
+    def getChannelByType(self, channelType):
+        """
+        Return channel config by type
+        :param channelType: XMPP_MUC_CHANNEL_TYPE channel type (standard/users/clan...)
+        :return: channel config (dict), None if channel config not found
+        """
+        return self.mucServices[channelType] if channelType in self.mucServices else None

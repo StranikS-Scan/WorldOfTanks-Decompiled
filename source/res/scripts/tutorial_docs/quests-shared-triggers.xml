@@ -9,6 +9,15 @@
         <inactivate>	PveChainShown	</inactivate>
       </off-effects>
     </trigger>
+    <trigger>	DefaultQueueTrigger	  <type>	tutorialAccountSetting	</type>
+      <validate-var>	DefaultQueue	</validate-var>
+      <on-effects>
+        <activate>	DefaultSandboxQueue	</activate>
+      </on-effects>
+      <off-effects>
+        <inactivate>	DefaultSandboxQueue	</inactivate>
+      </off-effects>
+    </trigger>
     <trigger>	InventoryVehicleTrigger	  <type>	inventoryVehicle	</type>
       <validate-var>	SelectedVehicleCriteria	</validate-var>
       <on-effects>
@@ -65,11 +74,14 @@
     </trigger>
     <trigger>	FightBtnLoopTrigger	  <type>	timer	</type>
       <validate-var>	FightBtnTimer	</validate-var>
-      <set-var>	ShownBattleButtonHint	</set-var>
-      <off-effects></off-effects>
       <on-effects>
-        <inactivate>	ShownBattleButtonHint	</inactivate>
+        <global-inactivate>	BattleButtonHintCooldown	</global-inactivate>
+        <activate>	ShowBattleButtonHint	</activate>
       </on-effects>
+      <off-effects>
+        <global-activate>	BattleButtonHintCooldown	</global-activate>
+        <inactivate>	ShowBattleButtonHint	</inactivate>
+      </off-effects>
     </trigger>
     <trigger>	InSandBoxOrRandomPreQueueTrigger	  <type>	isInSandboxOrRandom	</type>
       <on-effects>
@@ -153,6 +165,10 @@
     <trigger>	BuySlotTrigger	  <type>	buySlot	</type>
       <on-effects>
         <activate>	SlotBought	</activate>
+        <request-bonus>	TutorialQuest_5	  <condition>
+            <bonus-not-received>	TutorialQuest_5	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
       <off-effects>
         <inactivate>	SlotBought	</inactivate>
@@ -188,6 +204,10 @@
       <validate-update-only></validate-update-only>
       <on-effects>
         <activate>	PremiumDiscountUsed	</activate>
+        <request-bonus>	TutorialQuest_9	  <condition>
+            <bonus-not-received>	TutorialQuest_9	</bonus-not-received>
+          </condition>
+        </request-bonus>
       </on-effects>
       <off-effects>
         <inactivate>	PremiumDiscountUsed	</inactivate>

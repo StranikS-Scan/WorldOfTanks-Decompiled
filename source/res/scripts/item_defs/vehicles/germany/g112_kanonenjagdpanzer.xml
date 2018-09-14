@@ -9,6 +9,13 @@
     <forward>	70	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.248	</moving>
+    <still>	0.414	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.621	</firePenalty>
+  </invisibility>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -66,7 +73,8 @@
       <turret>	0.085354 0.365468 2.51558	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G112_KanonenJagdPanzer/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -121,13 +129,13 @@
       </armor>
       <weight>	6500	</weight>
       <maxLoad>	29500	</maxLoad>
-      <terrainResistance>	0.7 0.8 2.0	</terrainResistance>
+      <terrainResistance>	0.7 0.8 2	</terrainResistance>
       <brakeForce>	29000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -346,13 +354,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.00924 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G112_KanonenJagdPanzer/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.26839 1.87345	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -416,6 +423,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
@@ -423,14 +431,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G112_KanonenJagdPanzer/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G112_KanonenJagdPanzer/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G112_KanonenJagdPanzer/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G112_KanonenJagdPanzer/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -453,14 +462,13 @@
         <exploded>	vehicles/german/G112_KanonenJagdPanzer/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G112_KanonenJagdPanzer/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G112_KanonenJagdPanzer/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G112_KanonenJagdPanzer/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.800 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.387 0.496 0.500	</physicsShape>
     </Turret_1_G112_KanonenJagdPanzer>
   </turrets0>
@@ -473,6 +481,19 @@
   <radios>
     <SEM25_1>	shared	</SEM25_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G112_KanonenJagdPanzer>
+        <alpha>	0.0644	</alpha>
+      </Chassis_G112_KanonenJagdPanzer>
+    </chassis>
+    <engines>
+      <MB-837-Aa_A>
+        <bravo>	132.1601	</bravo>
+      </MB-837-Aa_A>
+    </engines>
+    <armour>	0.701875139	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

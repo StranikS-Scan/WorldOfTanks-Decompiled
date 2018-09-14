@@ -77,7 +77,7 @@ class UnitFactory(ControlFactory):
                         flags |= FUNCTIONAL_FLAG.FALLOUT_SQUAD
                     ctx.removeFlags(FUNCTIONAL_FLAG.UNIT_BITMASK | FUNCTIONAL_FLAG.ACTIONS_BITMASK)
                     ctx.addFlags(flags)
-                    created = unit.UnitFunctional(entity.getPrebattleType(), unit_items.DynamicRosterSettings(entity), flags=flags)
+                    created = self._createUnitFunctional(entity.getPrebattleType(), unit_items.DynamicRosterSettings(entity), flags=flags)
                 else:
                     LOG_ERROR('Unit is not found in unit manager', unitMrg.unitIdx, unitMrg.units)
                     unitMrg.leave()
@@ -117,3 +117,11 @@ class UnitFactory(ControlFactory):
             else:
                 created = None
             return created
+
+    @staticmethod
+    def _createUnitFunctional(prbType, rosterSettings, flags=FUNCTIONAL_FLAG.UNIT):
+        if prbType == PREBATTLE_TYPE.SQUAD:
+            classz = unit.SquadUnitFunctional
+        else:
+            classz = unit.UnitFunctional
+        return classz(prbType, rosterSettings, flags)

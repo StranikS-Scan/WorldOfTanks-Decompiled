@@ -3,6 +3,7 @@
 from helpers import aop
 from helpers.i18n import makeString as _ms
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.formatters import text_styles
 
 class VehicleTooltipStatus(aop.Aspect):
 
@@ -28,7 +29,7 @@ class MakeTankUnavailableInCarousel(aop.Aspect):
         original_return_value = cd.returned
         original_args = cd.args
         if not self.__vehicle_is_available(original_args[0]):
-            original_return_value['stat'] = str(Vehicle.VEHICLE_STATE.UNAVAILABLE)
-            original_return_value['stateLevel'] = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-            original_return_value['statStr'] = cd.self.getStringStatus(Vehicle.VEHICLE_STATE.UNAVAILABLE)
+            state = _ms('#menu:tankCarousel/vehicleStates/%s' % Vehicle.VEHICLE_STATE.UNAVAILABLE)
+            original_return_value['showInfoText'] = True
+            original_return_value['infoText'] = text_styles.vehicleStatusCriticalText(state)
         return original_return_value

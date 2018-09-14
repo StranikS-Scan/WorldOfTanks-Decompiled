@@ -3,9 +3,24 @@
 from gui.Scaleform.daapi.view.lobby.exchange.BaseExchangeWindow import BaseExchangeWindow
 
 class ExchangeWindowMeta(BaseExchangeWindow):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends BaseExchangeWindow
+    null
+    """
 
     def as_setSecondaryCurrencyS(self, credits):
+        """
+        :param credits:
+        :return :
+        """
         return self.flashObject.as_setSecondaryCurrency(credits) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):
+        """
+        :param walletStatus:
+        :return :
+        """
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/LcdKeyboard.py
 import BigWorld
-_g_instance = None
+g_instance = None
 
 class LCD_KEY:
     LEFT = 256
@@ -14,25 +14,25 @@ class LCD_KEY:
 
 
 def enableLcdKeyboardSpecificKeys(bValue):
-    global _g_instance
+    global g_instance
     if bValue:
-        if _g_instance is not None:
+        if g_instance is not None:
             return True
-        _g_instance = BigWorld.WGLcdKeyboard()
-        if not _g_instance.isValid():
-            _g_instance.destroy()
-            _g_instance = None
+        g_instance = BigWorld.WGLcdKeyboard()
+        if not g_instance.isValid():
+            g_instance.destroy()
+            g_instance = None
             return False
     else:
-        if _g_instance is None:
+        if g_instance is None:
             return True
-        _g_instance.destroy()
-        _g_instance = None
+        g_instance.destroy()
+        g_instance = None
     return True
 
 
 def getKeys(mask=4294967295L):
-    return 0 if _g_instance is None else _g_instance.getKeys() & mask
+    return 0 if g_instance is None else g_instance.getKeys() & mask
 
 
 def finalize():

@@ -19,7 +19,7 @@ class _PrepareLibrariesListAspect(aop.Aspect):
 class PrepareLibrariesListPointcut(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.LobbyEntry', 'LobbyEntry', '_getRequiredLibraries', aspects=(_PrepareLibrariesListAspect,))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.lobby_entry', 'LobbyEntry', '_getRequiredLibraries', aspects=(_PrepareLibrariesListAspect,))
 
 
 class _OnHyperlinkClickAspect(aop.Aspect):

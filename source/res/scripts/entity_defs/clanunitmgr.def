@@ -1,0 +1,33 @@
+<clanunitmgr.def>
+  <Parent>	UnitMgr	</Parent>
+  <BaseMethods>
+    <pickupEquipments>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT64	</Arg>
+    </pickupEquipments>
+    <replaceClanEquipments>
+      <Arg>	INT32	</Arg>
+      <Arg>	ARRAY	  <of>	TUPLE	  <of>	INT32	</of>
+          <size>	2	</size>
+        </of>
+      </Arg>
+    </replaceClanEquipments>
+    <resetClanEquipments></resetClanEquipments>
+    <onSortieQueueCrash>
+      <Arg>	UINT8	</Arg>
+    </onSortieQueueCrash>
+    <addInviteExtraData>
+      <Arg>	PYTHON	</Arg>
+    </addInviteExtraData>
+    <updateInviteExtraData>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PREBATTLE_INVITE	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </updateInviteExtraData>
+  </BaseMethods>
+</clanunitmgr.def>

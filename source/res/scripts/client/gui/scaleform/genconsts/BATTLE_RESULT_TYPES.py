@@ -3,6 +3,12 @@
 
 
 class BATTLE_RESULT_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TOOLTIP_HEAD_BLOCK_LINKAGE = 'TooltipFinalStatsHeadBlockUI'
     TOOLTIP_TEXT_BLOCK_LINKAGE = 'TooltipTextBlockUI'
     TOOLTIP_BUILDUP_BLOCK_LINKAGE = 'TooltipBuildUpBlockUI'

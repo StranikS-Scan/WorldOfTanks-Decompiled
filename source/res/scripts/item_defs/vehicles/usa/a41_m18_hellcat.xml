@@ -1,0 +1,1207 @@
+<a41_m18_hellcat.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	72	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.222	</moving>
+    <still>	0.37	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.555	</firePenalty>
+  </invisibility>
+  <repairCost>	8.15	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	12.7	</armor_1>
+      <armor_2>	12.7	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	7.9	</armor_5>
+      <armor_6>	4.8	</armor_6>
+      <armor_7>	19.1	</armor_7>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	8800	</weight>
+    <maxHealth>	440	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.59169 0.077592	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00848388 0.27521 2.68005	</rayStart>
+        <rayEnd>	0.00848389 0.0287564 2.36499	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.685669 0.695395 1.9968	</rayStart>
+        <rayEnd>	0.685669 0.333533 1.82635	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A41_M18_Hellcat/M18_Hellcat_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_M18_Hellcat>
+      <userString>	#usa_vehicles:Chassis_M18_Hellcat	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8600	</price>
+      <unlocks>
+        <chassis>	Chassis_M18_Hellcat_2	  <cost>	5100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	17950	</maxLoad>
+      <terrainResistance>	1.2 1.6 2.5	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.44 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.6	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	23.2258064516129	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.363164	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.130754	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.307874	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.33694	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.363164	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.130754	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.307874	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.33694	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.917618 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20096 1.49395	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.918480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.610890 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.829240	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A41_M18_Hellcat/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A41_M18_Hellcat/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A41_M18_Hellcat/track/left.track	</left>
+        <right>	vehicles/american/A41_M18_Hellcat/track/right.track	</right>
+        <segmentLength>	0.125	</segmentLength>
+        <segmentOffset>	0.096	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.002	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	990	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_M18_Hellcat>
+    <Chassis_M18_Hellcat_2>
+      <userString>	#usa_vehicles:Chassis_M18_Hellcat_2	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	4000	</weight>
+      <maxLoad>	21800	</maxLoad>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.44 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.6	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	23.2258064516129	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.363164	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.130754	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.307874	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.33694	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.363164	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.130754	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.307874	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.33694	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.917618 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20096 1.49395	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.915860 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.610890 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.829240	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A41_M18_Hellcat/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A41_M18_Hellcat/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A41_M18_Hellcat/track/left.track	</left>
+        <right>	vehicles/american/A41_M18_Hellcat/track/right.track	</right>
+        <segmentLength>	0.125	</segmentLength>
+        <segmentOffset>	0.096	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.002	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	990	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.065	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_M18_Hellcat_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_M18_Hellcat>
+      <ceilless>	true	</ceilless>
+      <userString>	#usa_vehicles:Turret_1_M18_Hellcat	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	5	</level>
+      <price>	9000	</price>
+      <armor>
+        <armor_1>	25.4	</armor_1>
+        <armor_2>	19.1	</armor_2>
+        <armor_3>	12.7	</armor_3>
+        <armor_4>	12.7	</armor_4>
+        <armor_5>	7.9	</armor_5>
+        <armor_6>	4.8	</armor_6>
+        <armor_7>	19.1	</armor_7>
+        <armor_8>	4.8	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2300	</weight>
+      <maxHealth>	110	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	45	</maxAmmo>
+          <unlocks>
+            <gun>	_76mm_AT_Gun_M1A1	  <cost>	4600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0404894 -0.00213864 1.28285	</rayStart>
+              <rayEnd>	0.00277675 0.00637922 1.28076	</rayEnd>
+              <rayUp>	0.07 0.066 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_AT_Gun_M7_L50>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	45	</maxAmmo>
+          <unlocks>
+            <gun>	_76mm_AT_Gun_M1A2	  <cost>	5800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	3.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0404894 -0.0021384 1.59002	</rayStart>
+              <rayEnd>	0.0048028 -0.0051604 1.5884	</rayEnd>
+              <rayUp>	0.069 0.066 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A1>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	45	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_M18_Hellcat	  <cost>	4600	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.386338 10 0.45 6 0.55 6 0.613662 10 1 10	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0404832 -0.0012544 1.55037	</rayStart>
+              <rayEnd>	0.00359041 -0.00379151 1.54857	</rayEnd>
+              <rayUp>	0.069 0.065 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A2>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.392684 0.807828	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.983536 0.265524 0.00800835	</rayStart>
+          <rayEnd>	-0.949813 0.252986 0.00676216	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.994777 0.269703 0.00842373	</rayStart>
+          <rayEnd>	0.938572 0.248807 0.00634678	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.22	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.972 -0.076 1.000 0.000 0.654 0.207 0.744 0.716 0.500 0.500 0.256 0.500 0.061 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.78 0.67 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_M18_Hellcat>
+    <Turret_2_M18_Hellcat>
+      <ceilless>	true	</ceilless>
+      <userString>	#usa_vehicles:Turret_2_M18_Hellcat	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	6	</level>
+      <price>	16250	</price>
+      <unlocks>
+        <gun>	_90mm_AT_Gun_M3	  <cost>	14000	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	76.2	</armor_1>
+        <armor_2>	31.8	</armor_2>
+        <armor_3>	31.8	</armor_3>
+        <armor_4>	31.8	</armor_4>
+        <armor_5>	25.4	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	127	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	44.5	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
+      <weight>	4500	</weight>
+      <maxHealth>	130	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.994	</invisibilityFactor>
+      <guns>
+        <_75mm_AT_Gun_M7_L50>	shared	  <maxAmmo>	45	</maxAmmo>
+          <armor>
+            <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.366894 10 0.430556 3 0.569444 3 0.633106 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000014 0.0106096 1.31768	</rayStart>
+              <rayEnd>	-0.0372325 -0.00155322 1.31552	</rayEnd>
+              <rayUp>	0.069 0.064 5	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_AT_Gun_M7_L50>
+        <_76mm_AT_Gun_M1A1>	shared	  <maxAmmo>	45	</maxAmmo>
+          <armor>
+            <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.4	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000090 0.0106509 1.64529	</rayStart>
+              <rayEnd>	-0.0366617 -0.003053 1.64364	</rayEnd>
+              <rayUp>	0.068 0.065 5	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A1>
+        <_76mm_AT_Gun_M1A2>	shared	  <maxAmmo>	45	</maxAmmo>
+          <armor>
+            <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.1	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00045044 0.0105475 1.45916	</rayStart>
+              <rayEnd>	-0.0379309 0.00719101 1.45731	</rayEnd>
+              <rayUp>	0.07 0.065 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.745 0.745 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A2>
+        <_90mm_AT_Gun_M3>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <vehicle>	A72_T25_2	  <cost>	42350	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	63.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <gun>	30	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <reloadTime>	8.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Gun_07.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000452915 0.0105475 1.74622	</rayStart>
+              <rayEnd>	-0.0401739 0.00355536 1.74567	</rayEnd>
+              <rayUp>	0.066 0.064 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_90mm_AT_Gun_M3>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A41_M18_Hellcat/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A41_M18_Hellcat/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A41_M18_Hellcat/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A41_M18_Hellcat/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A41_M18_Hellcat/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.401463 0.878728	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.760984 0.533106 0.549678	</rayStart>
+          <rayEnd>	-0.730837 0.521422 0.526128	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.203	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.760984 0.533106 0.549678	</rayStart>
+          <rayEnd>	0.730837 0.521422 0.526128	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.203	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.952 -0.069 1.011 -0.003 0.683 0.187 0.766 0.713 0.500 0.500 0.176 0.500 0.061 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.72 0.625 0.2 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_M18_Hellcat>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975EC2>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C1	  <cost>	900.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975EC2>
+    <Wright_Continental_R-975C1>	shared	  <unlocks>
+        <engine>	Wright_Continental_R-975C4	  <cost>	1500.0	</cost>
+        </engine>
+      </unlocks>
+    </Wright_Continental_R-975C1>
+    <Wright_Continental_R-975C4>	shared	</Wright_Continental_R-975C4>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_510>	shared	  <unlocks>
+        <radio>	SCR_610	  <cost>	1480.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_510>
+    <SCR_610>	shared	  <unlocks>
+        <radio>	SCR_619	  <cost>	9000.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_610>
+    <SCR_619>	shared	</SCR_619>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_90mm_Gun_M3>
+        <delta>	1.108597	</delta>
+      </_90mm_Gun_M3>
+    </guns>
+    <chassis>
+      <Chassis_M18_Hellcat>
+        <alpha>	0.1288	</alpha>
+      </Chassis_M18_Hellcat>
+      <Chassis_M18_Hellcat_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_M18_Hellcat_2>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975EC2>
+        <bravo>	92.5121	</bravo>
+      </Wright_Continental_R-975EC2>
+      <Wright_Continental_R-975C1>
+        <bravo>	105.7281	</bravo>
+      </Wright_Continental_R-975C1>
+      <Wright_Continental_R-975C4>
+        <bravo>	121.5873	</bravo>
+      </Wright_Continental_R-975C4>
+    </engines>
+    <armour>	0.654565359	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a41_m18_hellcat.xml>

@@ -30,8 +30,8 @@ def alert(vspace=-4):
     return _getIcon('alert', vspace=vspace)
 
 
-def arrow():
-    return _getIcon('arrowButton')
+def arrow(vspace=-5):
+    return _getIcon('arrowButton', vspace=vspace)
 
 
 def xp():
@@ -92,6 +92,10 @@ def clock():
 
 def quest():
     return _getIcon('quest')
+
+
+def serverAlert():
+    return _getIcon('serverAlert')
 
 
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):

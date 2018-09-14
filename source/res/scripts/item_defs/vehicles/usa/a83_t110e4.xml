@@ -10,6 +10,13 @@
     <forward>	35	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.095	</moving>
+    <still>	0.159	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.239	</firePenalty>
+  </invisibility>
   <repairCost>	10.94	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	-0.000000 0.425 0.367231	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A83_T110E4/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A83_T110E4/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A83_T110E4/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -111,14 +119,14 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	usa_01	</textureSet>
-        <size>	0.68 0.77	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.75 0.77	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.52	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.1386 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A83_T110E4/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A83_T110E4/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A83_T110E4/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.51097 2.00908	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -207,14 +214,14 @@
         </decal>
       </AODecals>
       <splineDesc>
-        <segmentModelLeft>	vehicles/american/A83_T110E4/track/segment_01.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/american/A83_T110E4/track/segment_01.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/american/A83_T110E4/track/segment_02.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/american/A83_T110E4/track/segment_02.model	</segment2ModelRight>
+        <segmentModelLeft>	vehicles/american/A83_T110E4/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A83_T110E4/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A83_T110E4/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A83_T110E4/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A83_T110E4/track/left.track	</left>
         <right>	vehicles/american/A83_T110E4/track/right.track	</right>
-        <segmentLength>	0.174	</segmentLength>
-        <segmentOffset>	0.101	</segmentOffset>
+        <segmentLength>	0.172	</segmentLength>
+        <segmentOffset>	0.258	</segmentOffset>
         <segment2Offset>	0.09	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
@@ -249,9 +256,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1050	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -414,6 +418,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <turretYawLimits>	-90 90	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A83_T110E4/normal/lod0/Gun_01.model	</undamaged>
@@ -421,7 +426,8 @@
             <exploded>	vehicles/american/A83_T110E4/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A83_T110E4/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A83_T110E4/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A83_T110E4/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -444,7 +450,8 @@
         <exploded>	vehicles/american/A83_T110E4/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A83_T110E4/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A83_T110E4/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A83_T110E4/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000020 0.3555 1.5653	</gunPosition>
       <emblemSlots>
@@ -480,9 +487,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.714 0.053 0.330 0.566 0.500 0.500 0.285 0.500 0.136 0.596 0.319	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
     </Turret_1_T110E4>
   </turrets0>
   <engines>
@@ -494,6 +499,19 @@
   <radios>
     <AN_VRC-3>	shared	</AN_VRC-3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T110E4>
+        <alpha>	0.1288	</alpha>
+      </Chassis_T110E4>
+    </chassis>
+    <engines>
+      <AOI-1490>
+        <bravo>	231.2802	</bravo>
+      </AOI-1490>
+    </engines>
+    <armour>	1.038126183	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

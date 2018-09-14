@@ -9,6 +9,13 @@
     <forward>	65	</forward>
     <backward>	23	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.195	</moving>
+    <still>	0.26	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.39	</firePenalty>
+  </invisibility>
   <repairCost>	9.2	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.001042 0.591171 0.043599	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -326,13 +334,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.968981 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24109 2.02467	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -581,13 +588,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.968981 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24109 2.02467	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -671,6 +677,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.416667 8 0.430556 6 0.458333 6 0.472222 8 0.527778 8 0.541667 6 0.569445 6 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	7.9	</reloadTime>
           <shotDispersionFactors>
@@ -685,7 +692,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -727,6 +735,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.416667 8 0.430556 6 0.458333 6 0.472222 8 0.527778 8 0.541667 6 0.569445 6 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	9.1	</reloadTime>
           <shotDispersionFactors>
@@ -741,7 +750,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -783,6 +793,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.416667 8 0.430556 5 0.458333 5 0.472222 8 0.527778 8 0.541667 5 0.569445 5 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	10.2	</reloadTime>
           <shotDispersionFactors>
@@ -797,7 +808,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -821,7 +833,8 @@
         <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.009135 0.365393 1.16675	</gunPosition>
       <emblemSlots>
@@ -849,9 +862,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.077 0.056 1.028 -0.014 0.479 0.183 0.440 0.697 0.413 0.483 0.144 0.512 0.169 0.378 0.005	</physicsShape>
       <camouflage>
         <tiling>	0.64 0.64 0.36 0.03	</tiling>
@@ -926,6 +937,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.402778 8 0.416667 5 0.458333 5 0.472222 8 0.527778 8 0.541667 5 0.583333 5 0.597222 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
@@ -940,7 +952,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -980,6 +993,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.402778 8 0.416667 5 0.458333 5 0.472222 8 0.527778 8 0.541667 5 0.583333 5 0.597222 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	8.9	</reloadTime>
           <shotDispersionFactors>
@@ -994,7 +1008,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1034,6 +1049,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.402778 8 0.416667 4 0.458333 4 0.472222 8 0.527778 8 0.541667 4 0.583333 4 0.597222 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	9.9	</reloadTime>
           <shotDispersionFactors>
@@ -1048,7 +1064,8 @@
             <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1072,7 +1089,8 @@
         <exploded>	vehicles/french/F71_AMX_30_prototype/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F71_AMX_30_prototype/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F71_AMX_30_prototype/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F71_AMX_30_prototype/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000843 0.303971 1.20495	</gunPosition>
       <emblemSlots>
@@ -1100,9 +1118,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.042 0.056 0.995 0.000 0.486 0.155 0.542 0.642 0.448 0.478 0.328 0.547 0.144 0.588 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.715 0.715 0.06 0.000000	</tiling>
@@ -1128,6 +1144,25 @@
     </TRVP_11_Banane>
     <TRVP_13>	shared	</TRVP_13>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_30_prototype>
+        <alpha>	0.08855	</alpha>
+      </Chassis_AMX_30_prototype>
+      <Chassis_AMX_30_prototype_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_AMX_30_prototype_2>
+    </chassis>
+    <engines>
+      <SOFAM_12GSds_A>
+        <bravo>	190.3106	</bravo>
+      </SOFAM_12GSds_A>
+      <Hispano-Suiza_HS110_A>
+        <bravo>	190.3106	</bravo>
+      </Hispano-Suiza_HS110_A>
+    </engines>
+    <armour>	0.713563545	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ShadowForwardDecal.py
-import BigWorld
 from debug_utils import *
+from vehicle_systems.tankStructure import TankPartNames
 
 class ShadowForwardDecal:
 
@@ -12,7 +12,7 @@ class ShadowForwardDecal:
     def __init__(self):
         self.__attached = False
         self.__vehicle = None
-        self.__desc = None
+        self.__model = None
         self.__chassisDecals = []
         self.__chassisParent = None
         self.__hullDecals = []
@@ -27,30 +27,30 @@ class ShadowForwardDecal:
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.onSettingsChanged
         self.__vehicle = None
-        self.__desc = None
+        self.__model = None
         self.detach()
         return
 
-    def attach(self, vehicle, desc, isSettingsChaged=False):
+    def attach(self, vehicle, model, isSettingsChaged=False):
         self.__vehicle = vehicle
-        self.__desc = desc
+        self.__model = model
         if not isSettingsChaged:
             if not ShadowForwardDecal.isEnabled() or self.__attached:
                 return
         elif self.__attached:
             return
         self.__attached = True
-        self.__chassisParent = desc['chassis']['model']
+        self.__chassisParent = model.root
         for transform in vehicle.typeDescriptor.chassis['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__chassisParent, False)
             self.__chassisDecals.append(decal)
 
-        self.__hullParent = desc['hull']['model']
+        self.__hullParent = model.node(TankPartNames.HULL)
         for transform in vehicle.typeDescriptor.hull['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__hullParent, True)
             self.__hullDecals.append(decal)
 
-        self.__turretParent = desc['turret']['model']
+        self.__turretParent = model.node(TankPartNames.TURRET)
         for transform in vehicle.typeDescriptor.turret['AODecals']:
             decal = ShadowForwardDecal.__createDecal(transform, self.__turretParent, True)
             self.__turretDecals.append(decal)
@@ -61,17 +61,17 @@ class ShadowForwardDecal:
         else:
             self.__attached = False
             for decal in self.__chassisDecals:
-                self.__chassisParent.root.detach(decal)
+                self.__chassisParent.detach(decal)
 
             self.__chassisDecals = []
             self.__chassisParent = None
             for decal in self.__hullDecals:
-                self.__hullParent.root.detach(decal)
+                self.__hullParent.detach(decal)
 
             self.__hullDecals = []
             self.__hullParent = None
             for decal in self.__turretDecals:
-                self.__turretParent.root.detach(decal)
+                self.__turretParent.detach(decal)
 
             self.__turretDecals = []
             self.__turretParent = None
@@ -80,10 +80,10 @@ class ShadowForwardDecal:
     def __reattach(self):
         if self.__attached:
             return
-        elif self.__vehicle is None or self.__desc is None:
+        elif self.__vehicle is None or self.__model is None:
             return
         else:
-            self.attach(self.__vehicle, self.__desc, True)
+            self.attach(self.__vehicle, self.__model, True)
             return
 
     def onSettingsChanged(self, diff=None):
@@ -98,20 +98,15 @@ class ShadowForwardDecal:
                 self.detach()
 
     @staticmethod
-    def __createDecal(transform, parent, applyToAll):
-        diffuseTexture = ''
-        bumpTexture = ''
-        hmTexture = ''
+    def __createDecal(transform, parentNode, applyToAll):
         addTex = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
         priority = 0
         materialType = 6
-        visibilityMask = 4294967295L
-        accuracy = 2
         influence = 30
         if applyToAll:
             influence = 62
         decal = BigWorld.WGShadowForwardDecal()
-        decal.setup(diffuseTexture, bumpTexture, hmTexture, addTex, priority, materialType, influence, visibilityMask, accuracy)
+        decal.setup(addTex, materialType, priority, influence)
         decal.setLocalTransform(transform)
-        parent.root.attach(decal)
+        parentNode.attach(decal)
         return decal

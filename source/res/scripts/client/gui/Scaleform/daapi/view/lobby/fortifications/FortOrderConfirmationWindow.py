@@ -3,6 +3,7 @@
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
 from gui.Scaleform.locale.MENU import MENU
 from helpers import time_utils
 from adisp import process
@@ -48,14 +49,15 @@ class FortOrderConfirmationWindow(FortOrderConfirmationWindowMeta, FortViewHelpe
             defRes = building.storage
             maxPurchase = int(defRes / order.productionCost)
             maxAvailableCount = min(order.maxCount - order.count, maxPurchase, 100)
-            resultData = {'orderIcon': order.icon,
+            resultData = {'icon': order.icon,
              'name': orderTitle,
              'description': order.description,
              'productionTime': order.productionTotalTime,
              'productionCost': order.productionCost,
              'level': order.level,
              'defaultValue': -1,
-             'maxAvailableCount': maxAvailableCount}
+             'maxAvailableCount': maxAvailableCount,
+             'linkage': CONFIRM_DIALOG_ALIASES.ORDER_ICON}
         self.as_setDataS(resultData)
 
     def onWindowClose(self):

@@ -13,7 +13,8 @@ from helpers import i18n, int2roman
 from items import vehicles
 from gui import makeHtmlString
 from gui.clubs import formatters as club_fmts, settings as club_settings
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.server_events import formatters
 from shared_utils import CONST_CONTAINER
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.COMPANY: 'company',
@@ -41,7 +42,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'hasClub', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'camouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'clubs', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
+_SORT_ORDER = ('igrType', 'premiumAccount', 'token', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'hasClub', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'clanKills', 'clubs', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -260,10 +261,13 @@ class _VehsListParser(object):
     def _getDefaultCriteria(self):
         return ~REQ_CRITERIA.SECRET
 
-    def _getVehiclesList(self, data):
+    def _getVehiclesCache(self, data):
         if self.__vehsCache is None:
-            self.__vehsCache = sorted(g_itemsCache.items.getVehicles(self._getFilterCriteria(data)).itervalues())
+            self.__vehsCache = g_itemsCache.items.getVehicles(self._getFilterCriteria(data))
         return self.__vehsCache
+
+    def _getVehiclesList(self, data):
+        return self._getVehiclesCache(data).values()
 
     def _parseFilters(self, data):
         types, nationsList, levels, classes = (None, None, None, None)
@@ -510,8 +514,9 @@ class InClan(_Requirement):
 
     def __init__(self, path, data):
         super(InClan, self).__init__('inClan', dict(data), path)
-        self._ids = _getNodeValue(self._data, 'ids')
+        self._ids = self._data.get('value') or None
         self._isNegative = False
+        return
 
     def negate(self):
         self._isNegative = not self._isNegative
@@ -643,7 +648,7 @@ class VehiclesUnlocked(_VehsListRequirement):
         super(VehiclesUnlocked, self).__init__('vehiclesUnlocked', dict(data), path)
 
     def _checkVehicle(self, vehicle):
-        return vehicle.isUnlocked
+        return vehicle.isUnlocked and not vehicle.isInitiallyUnlocked
 
     def _getLabelKey(self):
         pass
@@ -753,7 +758,7 @@ class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
         return ~criteria | ~REQ_CRITERIA.SECRET if self._isNegative else criteria | self._otherCriteria
 
     def _isAvailable(self, vehicle):
-        return vehicle in self._getVehiclesList(self._data)
+        return vehicle.intCD in self._getVehiclesCache(self._data)
 
     def _format(self, svrEvents, event=None):
         predicate = None
@@ -779,7 +784,7 @@ class _DossierValue(_Requirement):
         dossierDescr = dossier.getDossierDescr()
         dossierValue = dossierDescr[block][record]
         if self._average:
-            battlesCount = dossier.getRandomStats().getBattlesCount()
+            battlesCount = dossierDescr[block]['battlesCount']
             dossierValue /= float(battlesCount or 1)
         return _handleRelation(self._relation, dossierValue, self._relationValue)
 
@@ -966,9 +971,11 @@ class BattleMap(_Condition, _Negatable):
             return []
         else:
             maps = []
+            mapsLabels = []
             for atID in self._maps:
                 fmt = formatters.packMapElement(atID)
-                if fmt is not None:
+                if fmt is not None and fmt.getLabel() not in mapsLabels:
+                    mapsLabels.append(fmt.getLabel())
                     maps.append(fmt)
 
             key = 'maps' if len(maps) > 1 else 'map'

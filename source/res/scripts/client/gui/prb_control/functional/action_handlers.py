@@ -4,13 +4,14 @@ import weakref
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from UnitBase import ROSTER_TYPE
-from constants import PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, rally_dialog_meta
 from gui.prb_control.context import unit_ctx, SendInvitesCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.formatters import messages
+from gui.prb_control.functional.decorators import vehicleAmmoCheck
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.server_events import g_eventsCache
 from messenger.storage import storage_getter
@@ -78,6 +79,7 @@ class CommonUnitActionsHandler(AbstractActionsHandler):
             g_eventDispatcher.setUnitProgressInCarousel(prbType, True)
         return FUNCTIONAL_FLAG.LOAD_WINDOW
 
+    @vehicleAmmoCheck
     def execute(self, customData):
         pInfo = self._functional.getPlayerInfo()
         if pInfo.isCreator():
@@ -147,6 +149,7 @@ class SquadActionsHandler(AbstractActionsHandler):
         self._loadWindow(squadCtx)
         return initResult
 
+    @vehicleAmmoCheck
     def execute(self, customData):
         if self._functional.isCreator():
             func = self._functional
@@ -223,6 +226,57 @@ class EventSquadActionsHandler(SquadActionsHandler):
         if not self._functional.getPlayerInfo().isReady:
             eventVehicle = g_eventsCache.getEventVehicles()[0]
             g_currentVehicle.selectVehicle(eventVehicle.invID)
+
+
+class BalancedSquadActionsHandler(SquadActionsHandler):
+
+    def execute(self, customData):
+        if self._functional.isCreator():
+            func = self._functional
+            fullData = func.getUnitFullData(unitIdx=self._functional.getUnitIdx())
+            if fullData is None:
+                return {}
+            _, _, unitStats, pInfo, slotsIter = fullData
+            notReadyCount = 0
+            for slot in slotsIter:
+                slotPlayer = slot.player
+                if slotPlayer:
+                    if slotPlayer.isInArena() or slotPlayer.isInPreArena() or pInfo.isInSearch() or pInfo.isInQueue():
+                        DialogsInterface.showI18nInfoDialog('squadHavePlayersInBattle', lambda result: None)
+                        return True
+                    if not slotPlayer.isReady:
+                        notReadyCount += 1
+
+            if not pInfo.isReady:
+                notReadyCount -= 1
+            if unitStats.occupiedSlotsCount == 1:
+                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNoPlayers'), self._setCreatorReady)
+                return True
+            if notReadyCount > 0:
+                if notReadyCount == 1:
+                    DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayer'), self._setCreatorReady)
+                    return True
+                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNotReadyPlayers'), self._setCreatorReady)
+                return True
+            if not g_currentVehicle.isLocked():
+                _, unit = self._functional.getUnit()
+                playerVehicles = unit.getVehicles()
+                if playerVehicles:
+                    commanderLevel = g_currentVehicle.item.level
+                    lowerBound, upperBound = self._functional.getSquadLevelBounds()
+                    minLevel = max(MIN_VEHICLE_LEVEL, commanderLevel + lowerBound)
+                    maxLevel = min(MAX_VEHICLE_LEVEL, commanderLevel + upperBound)
+                    levelRange = range(minLevel, maxLevel + 1)
+                    for _, unitVehicles in playerVehicles.iteritems():
+                        for vehicle in unitVehicles:
+                            if vehicle.vehLevel not in levelRange:
+                                DialogsInterface.showDialog(I18nConfirmDialogMeta('squadHaveNoPlayers'), self._setCreatorReady)
+                                return True
+
+            self._setCreatorReady(True)
+        else:
+            self._functional.togglePlayerReadyAction(True)
+        return True
 
 
 class FalloutSquadActionsHandler(SquadActionsHandler):

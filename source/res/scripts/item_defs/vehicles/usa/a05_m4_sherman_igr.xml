@@ -10,6 +10,13 @@
     <forward>	48	</forward>
     <backward>	18	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.226	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.339	</firePenalty>
+  </invisibility>
   <repairCost>	5.34	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.001877 0.950229 -0.079204	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -147,7 +155,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.54	</textureScale>
+        <textureScale>	-3.15	</textureScale>
       </tracks>
       <wheels>
         <leadingWheelSyncAngle>	27.69230769230769	</leadingWheelSyncAngle>
@@ -226,7 +234,7 @@
           <maxOffset>	0.06	</maxOffset>
         </group>
       </groundNodes>
-      <trackThickness>	0.0049	</trackThickness>
+      <trackThickness>	-0.035	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
@@ -235,9 +243,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -324,12 +329,11 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.96204 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05187 1.88355	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -344,7 +348,7 @@
           </transform>
         </decal>
       </AODecals>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
     </T42_IGR>
   </chassis>
   <turrets0>
@@ -402,6 +406,7 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -413,7 +418,8 @@
             <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -436,7 +442,8 @@
         <exploded>	vehicles/american/A05_M4_Sherman/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A05_M4_Sherman/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A05_M4_Sherman/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A05_M4_Sherman/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.001877 0.323661 0.874396	</gunPosition>
       <emblemSlots>
@@ -458,9 +465,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.956 -0.031 1.000 0.000 0.590 0.048 0.680 0.577 0.500 0.500 0.060 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
       </camouflage>
@@ -475,6 +480,19 @@
   <radios>
     <SCR_506_IGR>	shared	</SCR_506_IGR>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T42_IGR>
+        <alpha>	0.08855	</alpha>
+      </T42_IGR>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975C4_IGR>
+        <bravo>	121.5873	</bravo>
+      </Wright_Continental_R-975C4_IGR>
+    </engines>
+    <armour>	0.99230542	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

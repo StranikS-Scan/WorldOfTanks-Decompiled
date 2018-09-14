@@ -10,9 +10,7 @@
   <minimap>	spaces/111_paris/mmap.dds	</minimap>
   <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
-  <loadingMusic>	/music/intro/euro_city	</loadingMusic>
   <wwloadingMusic>	music_euro_city	</wwloadingMusic>
-  <ambientSound>	/wind/wind/wind_winter_01	</ambientSound>
   <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -420,7 +418,7 @@
       <endRadius>	110.000000	</endRadius>
     </gameplaySettings>
     <visualSettings>
-      <cloudModel>	particles/mesh_particles/funnel_death/fire_storm.model	</cloudModel>
+      <cloudModel>	particles/content_deferred/GFX_models/funnel_death/fire_storm.model	</cloudModel>
       <cloudClimbTime>	15	</cloudClimbTime>
       <cloudStartHeight>	-150	</cloudStartHeight>
       <cloudEndHeight>	25	</cloudEndHeight>

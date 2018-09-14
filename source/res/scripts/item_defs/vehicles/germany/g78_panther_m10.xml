@@ -10,6 +10,13 @@
     <forward>	46	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.121	</moving>
+    <still>	0.162	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.243	</firePenalty>
+  </invisibility>
   <repairCost>	5	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -61,7 +68,8 @@
       <turret>	-0.004487 0.690369 -0.340519	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G78_Panther_M10/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G78_Panther_M10/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G78_Panther_M10/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -182,13 +190,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.1771 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G78_Panther_M10/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G78_Panther_M10/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G78_Panther_M10/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.37602 2.0106	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -480,6 +487,7 @@
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/german/G78_Panther_M10/normal/lod0/Gun_01.model	</undamaged>
@@ -487,7 +495,8 @@
             <exploded>	vehicles/german/G78_Panther_M10/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G78_Panther_M10/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G78_Panther_M10/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G78_Panther_M10/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -510,7 +519,8 @@
         <exploded>	vehicles/german/G78_Panther_M10/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G78_Panther_M10/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G78_Panther_M10/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G78_Panther_M10/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.003586 0.444277 1.1987	</gunPosition>
       <emblemSlots>
@@ -546,9 +556,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.085 -0.105 1.025 0.000 0.674 0.193 0.000 0.100 0.500 0.500 0.277 0.477 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
       </camouflage>
@@ -563,6 +571,19 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Panther_M10>
+        <alpha>	0.0966	</alpha>
+      </Chassis_Panther_M10>
+    </chassis>
+    <engines>
+      <Maybach_HL_230P30A>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230P30A>
+    </engines>
+    <armour>	0.879257199	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

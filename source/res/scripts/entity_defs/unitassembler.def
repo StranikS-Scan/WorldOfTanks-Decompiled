@@ -1,0 +1,33 @@
+<unitassembler.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <enqueueAccount>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	ARRAY	  <of>	UINT16	</of>
+      </Arg>
+    </enqueueAccount>
+    <dequeueAccount>
+      <Arg>	MAILBOX	</Arg>
+    </dequeueAccount>
+    <enqueueUnit>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT64	</Arg>
+      <Arg>	ARRAY	  <of>	DB_ID	</of>
+      </Arg>
+      <Arg>	BOOL	</Arg>
+    </enqueueUnit>
+    <dequeueUnit>
+      <Arg>	MAILBOX	</Arg>
+    </dequeueUnit>
+    <onUnitFeedback>
+      <Arg>	MAILBOX	</Arg>
+    </onUnitFeedback>
+    <onAccountFeedback>
+      <Arg>	MAILBOX	</Arg>
+    </onAccountFeedback>
+  </BaseMethods>
+</unitassembler.def>

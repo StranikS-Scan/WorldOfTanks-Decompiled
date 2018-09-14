@@ -3,6 +3,12 @@
 
 
 class CREW_OPERATIONS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CREWOPERATIONS_BTN_TOOLTIP = '#crew_operations:crewOperations/btn/tooltip'
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP = '#crew_operations:return/warning/membersInBattle/tooltip'
     RETURN_WARNING_NOSPACE_TOOLTIP = '#crew_operations:return/warning/noSpace/tooltip'

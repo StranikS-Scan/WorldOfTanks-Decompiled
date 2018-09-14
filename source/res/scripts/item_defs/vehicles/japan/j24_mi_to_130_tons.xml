@@ -11,6 +11,13 @@
     <forward>	29.4	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.002	</moving>
+    <still>	0.004	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.006	</firePenalty>
+  </invisibility>
   <repairCost>	5.10	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -40,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	110208	</weight>
-    <maxHealth>	776	</maxHealth>
+    <maxHealth>	760	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -65,7 +72,8 @@
       <turret>	0.000000 1.21671 0.175305	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -114,7 +122,7 @@
       <terrainResistance>	1.2 1.4 1.9	</terrainResistance>
       <brakeForce>	150000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	16	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -205,13 +213,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.37077 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.90313 3.3228	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -425,10 +432,10 @@
       <terrainResistance>	1.1 1.3 1.8	</terrainResistance>
       <brakeForce>	150000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	210	</maxHealth>
@@ -516,13 +523,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.37077 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.90313 3.3228	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -743,8 +749,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	194	</maxHealth>
-      <rotationSpeed>	20	</rotationSpeed>
+      <maxHealth>	190	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -779,10 +785,11 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.025 10 0.0277778 9 0.0583333 9 0.0611111 8 0.0638889 7 0.0666667 6 0.261111 6 0.263889 5 0.269444 4 0.319444 5 0.322222 6 0.677778 6 0.680556 5 0.730556 4 0.736111 5 0.738889 6 0.933333 6 0.936111 7 0.938889 8 0.941667 9 0.972222 9 0.975 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	11.1	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -793,7 +800,8 @@
             <exploded>	vehicles/japan/J24_Mi_To_130_tons/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -832,11 +840,12 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.025 10 0.0277778 9 0.0583333 9 0.0611111 8 0.0638889 7 0.0666667 6 0.261111 6 0.263889 5 0.269444 4 0.319444 5 0.322222 6 0.677778 6 0.680556 5 0.730556 4 0.736111 5 0.738889 6 0.933333 6 0.936111 7 0.938889 8 0.941667 9 0.972222 9 0.975 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.58	</shotDispersionRadius>
-          <reloadTime>	25	</reloadTime>
+          <reloadTime>	26	</reloadTime>
           <aimingTime>	3.7	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.18	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -846,7 +855,8 @@
             <exploded>	vehicles/japan/J24_Mi_To_130_tons/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -869,7 +879,8 @@
         <exploded>	vehicles/japan/J24_Mi_To_130_tons/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J24_Mi_To_130_tons/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J24_Mi_To_130_tons/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J24_Mi_To_130_tons/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.512621 1.10612	</gunPosition>
       <emblemSlots>
@@ -890,8 +901,6 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 0.997 0.000 0.749 -0.016 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.500 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
@@ -923,6 +932,25 @@
     </_Type94_Hei>
     <_Type96_Bo>	shared	</_Type96_Bo>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_J24_Mi_To_130_tons>
+        <alpha>	0.1127	</alpha>
+      </Chassis_J24_Mi_To_130_tons>
+      <Chassis_J24_Mi_To_130_tons_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_J24_Mi_To_130_tons_2>
+    </chassis>
+    <engines>
+      <_Type98_V12_x2_1100>
+        <bravo>	290.7523	</bravo>
+      </_Type98_V12_x2_1100>
+      <_Type98_V12_x2_1200>
+        <bravo>	317.1843	</bravo>
+      </_Type98_V12_x2_1200>
+    </engines>
+    <armour>	1.022502039	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

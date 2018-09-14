@@ -9,6 +9,13 @@
     <forward>	65	</forward>
     <backward>	23	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.191	</moving>
+    <still>	0.255	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.383	</firePenalty>
+  </invisibility>
   <repairCost>	9.4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	-0.0043 0.515965 0.564963	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.00863 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34619 2.01907	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -439,13 +446,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.00863 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34619 2.01907	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -661,13 +667,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 0.375 6 0.388889 0 0.611111 0 0.625 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -715,13 +723,15 @@
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	13	</reloadTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -744,7 +754,8 @@
         <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0043 0.328167 1.01622	</gunPosition>
       <emblemSlots>
@@ -780,9 +791,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.055 0.000 1.055 0.000 0.436 0.497 0.604 0.373 0.433 0.500 0.291 0.500 0.242 0.676 0.230	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
       </camouflage>
@@ -852,13 +861,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 0.375 6 0.388889 0 0.611111 0 0.625 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -902,13 +913,15 @@
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	10.3	</reloadTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G91_Pro_Ag_A/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -931,7 +944,8 @@
         <exploded>	vehicles/german/G91_Pro_Ag_A/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G91_Pro_Ag_A/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G91_Pro_Ag_A/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G91_Pro_Ag_A/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0043 0.328167 1.01622	</gunPosition>
       <emblemSlots>
@@ -967,9 +981,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.055 0.000 1.055 0.000 0.436 0.497 0.604 0.373 0.433 0.500 0.291 0.500 0.242 0.676 0.230	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
       </camouflage>
@@ -994,6 +1006,25 @@
     </AN-GRC-4>
     <SEM25>	shared	</SEM25>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Pro_Ag_A>
+        <alpha>	0.0966	</alpha>
+      </Chassis_Pro_Ag_A>
+      <Chassis_Pro_Ag_A_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Pro_Ag_A_2>
+    </chassis>
+    <engines>
+      <MB-837A>
+        <bravo>	166.5218	</bravo>
+      </MB-837A>
+      <MB-838_CAM-500>
+        <bravo>	219.3858	</bravo>
+      </MB-838_CAM-500>
+    </engines>
+    <armour>	0.985738041	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

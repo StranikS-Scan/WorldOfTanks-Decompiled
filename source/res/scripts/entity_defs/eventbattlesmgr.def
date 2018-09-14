@@ -1,0 +1,28 @@
+<eventbattlesmgr.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onArenaCreated>
+    <enqueue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </enqueue>
+    <dequeue>
+      <Arg>	OBJECT_ID	</Arg>
+    </dequeue>
+    <addActiveArena>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT16	</Arg>
+    </addActiveArena>
+    <removeArena>
+      <Arg>	OBJECT_ID	</Arg>
+    </removeArena>
+  </BaseMethods>
+</eventbattlesmgr.def>

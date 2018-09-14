@@ -10,6 +10,13 @@
     <forward>	56.3	</forward>
     <backward>	30	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.19	</moving>
+    <still>	0.253	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.38	</firePenalty>
+  </invisibility>
   <repairCost>	5.0	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.535474 0.6302	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A86_T23E3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A86_T23E3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A86_T23E3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -186,13 +194,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.05943 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A86_T23E3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A86_T23E3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A86_T23E3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34703 1.99323	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -396,8 +403,8 @@
       <guns>
         <_76mm_Gun_M1A1T>	shared	  <maxAmmo>	84	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-            <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -420,13 +427,15 @@
             <afterShot>	2.7	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A86_T23E3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A86_T23E3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A86_T23E3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A86_T23E3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A86_T23E3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A86_T23E3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -449,7 +458,8 @@
         <exploded>	vehicles/american/A86_T23E3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A86_T23E3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A86_T23E3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A86_T23E3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.3759 0.9544	</gunPosition>
       <emblemSlots>
@@ -478,9 +488,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.957 -0.050 1.000 0.000 0.687 -0.048 0.769 0.614 0.452 0.500 0.109 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.7 0.7 0.32 0.34	</tiling>
       </camouflage>
@@ -495,6 +503,19 @@
   <radios>
     <SCR_528A1>	shared	</SCR_528A1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Torsion_bar_T80>
+        <alpha>	0.05635	</alpha>
+      </Torsion_bar_T80>
+    </chassis>
+    <engines>
+      <Ford_GAN_T>
+        <bravo>	132.1601	</bravo>
+      </Ford_GAN_T>
+    </engines>
+    <armour>	0.938082009	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

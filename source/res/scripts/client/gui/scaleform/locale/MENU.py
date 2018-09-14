@@ -3,6 +3,12 @@
 from debug_utils import LOG_WARNING
 
 class MENU(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TIME_TIMEVALUE = '#menu:Time/timeValue'
     TIME_TIMEVALUESHORT = TIME_TIMEVALUE + 'Short'
     TRAINING_INFO_STATES_STATE = '#menu:training/info/states/state'
@@ -36,6 +42,8 @@ class MENU(object):
     LOGIN_STATUS_INVALID_PASSWORD = '#menu:login/status/invalid_password'
     LOGIN_STATUS_EMPTY_SERVER = '#menu:login/status/empty_server'
     LOGIN_STATUS_CONNECTING = '#menu:login/status/connecting'
+    LOGIN_STATUS_CHECKOUT_ERROR = '#menu:login/status/checkout_error'
+    LOGIN_STATUS_ANOTHER_PERIPHERY = '#menu:login/status/another_periphery'
     LOGIN_STATUS_NOT_SET = '#menu:login/status/NOT_SET'
     LOGIN_STATUS_UNAVAILABLE = '#menu:login/status/unavailable'
     LOGIN_STATUS_LOGIN_REJECTED_ALREADY_LOGGED_IN = '#menu:login/status/LOGIN_REJECTED_ALREADY_LOGGED_IN'
@@ -136,7 +144,8 @@ class MENU(object):
     LOADING_HELPTIP = '#menu:loading/helpTip'
     HANGAR_VEHICLE_LOCKED = '#menu:hangar/vehicle_locked'
     LOBBY_MENU_TITLE = '#menu:lobby_menu/title'
-    LOBBY_MENU_SERVERS_TITLE = '#menu:lobby_menu/servers/title'
+    LOBBY_MENU_ONESERVER_TITLE = '#menu:lobby_menu/oneServer/title'
+    LOBBY_MENU_MANYSERVERS_TITLE = '#menu:lobby_menu/manyServers/title'
     LOBBY_MENU_BUTTONS_SETTINGS = '#menu:lobby_menu/buttons/settings'
     LOBBY_MENU_BUTTONS_LOGOFF = '#menu:lobby_menu/buttons/logoff'
     LOBBY_MENU_BUTTONS_EXIT = '#menu:lobby_menu/buttons/exit'
@@ -296,6 +305,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_FALLOUT_BROKEN = '#menu:currentVehicleStatus/fallout_broken'
     CURRENTVEHICLESTATUS_FALLOUT_ONLY = '#menu:currentVehicleStatus/fallout_only'
     CURRENTVEHICLESTATUS_DEALISOVER = '#menu:currentVehicleStatus/dealIsOver'
+    CURRENTVEHICLESTATUS_UNSUITABLETOUNIT = '#menu:currentVehicleStatus/unsuitableToUnit'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -361,6 +371,7 @@ class MENU(object):
     NATIONS_JAPAN = '#menu:nations/japan'
     NATIONS_UK = '#menu:nations/uk'
     NATIONS_CZECH = '#menu:nations/czech'
+    NATIONS_SWEDEN = '#menu:nations/sweden'
     NATIONS_ALL = '#menu:nations/all'
     CAROUSELFILTER_IGR = '#menu:carouselFilter/igr'
     LEVELS_1 = '#menu:levels/1'
@@ -382,14 +393,19 @@ class MENU(object):
     NATION_TREE_TITLE_CHINA = '#menu:nation_tree/title/china'
     NATION_TREE_TITLE_JAPAN = '#menu:nation_tree/title/japan'
     NATION_TREE_TITLE_CZECH = '#menu:nation_tree/title/czech'
+    NATION_TREE_TITLE_SWEDEN = '#menu:nation_tree/title/sweden'
     SERVERSTATS_PLAYERSCOUNT = '#menu:serverStats/playersCount'
     SERVERSTATS_ARENASCOUNT = '#menu:serverStats/arenasCount'
     SERVERSTATS_PLAYERSINARENACOUNT = '#menu:serverStats/playersInArenaCount'
     ACCOUNTINFO_EXPERIENCE = '#menu:accountInfo/experience'
     ACCOUNTINFO_CREDITS = '#menu:accountInfo/credits'
     ACCOUNTINFO_GOLD = '#menu:accountInfo/gold'
+    VEHPARAMS_FIREPOWER = '#menu:vehParams/firepower'
+    VEHPARAMS_ARMOR = '#menu:vehParams/armor'
+    VEHPARAMS_MOBILITY = '#menu:vehParams/mobility'
+    VEHPARAMS_RECONNAISSANCE = '#menu:vehParams/reconnaissance'
     TANK_PARAMS_MAXHEALTH = '#menu:tank_params/maxHealth'
-    TANK_PARAMS_WEIGHT = '#menu:tank_params/weight'
+    TANK_PARAMS_VEHICLEWEIGHT = '#menu:tank_params/vehicleWeight'
     TANK_PARAMS_ENGINEPOWER = '#menu:tank_params/enginePower'
     TANK_PARAMS_ENGINEPOWERPERTON = '#menu:tank_params/enginePowerPerTon'
     TANK_PARAMS_SPEEDLIMITS = '#menu:tank_params/speedLimits'
@@ -407,10 +423,21 @@ class MENU(object):
     TANK_PARAMS_GUNROTATIONSPEED = '#menu:tank_params/gunRotationSpeed'
     TANK_PARAMS_CIRCULARVISIONRADIUS = '#menu:tank_params/circularVisionRadius'
     TANK_PARAMS_RADIODISTANCE = '#menu:tank_params/radioDistance'
+    TANK_PARAMS_TURRETYAWLIMITS = '#menu:tank_params/turretYawLimits'
+    TANK_PARAMS_PITCHLIMITS = '#menu:tank_params/pitchLimits'
+    TANK_PARAMS_GUNYAWLIMITS = '#menu:tank_params/gunYawLimits'
+    TANK_PARAMS_CLIPFIRERATE = '#menu:tank_params/clipFireRate'
+    TANK_PARAMS_RELATIVEPOWER = '#menu:tank_params/relativePower'
+    TANK_PARAMS_RELATIVEARMOR = '#menu:tank_params/relativeArmor'
+    TANK_PARAMS_RELATIVEMOBILITY = '#menu:tank_params/relativeMobility'
+    TANK_PARAMS_RELATIVEVISIBILITY = '#menu:tank_params/relativeVisibility'
+    TANK_PARAMS_RELATIVECAMOUFLAGE = '#menu:tank_params/relativeCamouflage'
     TANK_PARAMS_PARAM12 = '#menu:tank_params/param12'
     TANK_PARAMS_SHOTDISPERSIONANGLE = '#menu:tank_params/shotDispersionAngle'
     TANK_PARAMS_AIMINGTIME = '#menu:tank_params/aimingTime'
     TANK_PARAMS_MAXAMMO = '#menu:tank_params/maxAmmo'
+    TANK_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:tank_params/invisibilityStillFactor'
+    TANK_PARAMS_INVISIBILITYMOVINGFACTOR = '#menu:tank_params/invisibilityMovingFactor'
     TANK_PARAMS_VALUES_PARAM12_VALUE0 = '#menu:tank_params/values/param12/value0'
     TANK_PARAMS_VALUES_PARAM12_VALUE1 = '#menu:tank_params/values/param12/value1'
     TANK_PARAMS_VALUES_PARAM12_VALUE2 = '#menu:tank_params/values/param12/value2'
@@ -438,6 +465,10 @@ class MENU(object):
     TANK_PARAMS_H = '#menu:tank_params/h'
     TANK_PARAMS_SQM = '#menu:tank_params/sqm'
     TANK_PARAMS_CNT = '#menu:tank_params/cnt'
+    TANK_PARAMS_GRADS = '#menu:tank_params/grads'
+    TANK_PARAMS_PERCENT = '#menu:tank_params/percent'
+    TANK_PARAMS_KG = '#menu:tank_params/kg'
+    TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
@@ -448,7 +479,6 @@ class MENU(object):
     DESCRIPTIONS_SHELLFULL = '#menu:descriptions/shellFull'
     HEADERBUTTONS_BTNLABEL_INSQUAD = '#menu:headerButtons/btnLabel/inSquad'
     HEADERBUTTONS_BTNLABEL_CREATESQUAD = '#menu:headerButtons/btnLabel/createSquad'
-    HEADERBUTTONS_BTNLABEL_CREATEEVENTSQUAD = '#menu:headerButtons/btnLabel/createEventSquad'
     HEADERBUTTONS_BTNLABEL_PREMIUM = '#menu:headerButtons/btnLabel/premium'
     HEADERBUTTONS_DOLABEL_PREMIUM = '#menu:headerButtons/doLabel/premium'
     HEADERBUTTONS_BTNLABEL_BUY_GOLD = '#menu:headerButtons/btnLabel/buy_gold'
@@ -458,6 +488,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_STANDART_DESCR = '#menu:headerButtons/battle/types/standart/descr'
     HEADERBUTTONS_BATTLE_TYPES_STANDARTLEAVE_DESCR = '#menu:headerButtons/battle/types/standartLeave/descr'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
+    HEADERBUTTONS_BATTLE_TYPES_SQUAD_RANDOMBATTLE = '#menu:headerButtons/battle/types/squad/randomBattle'
+    HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT = '#menu:headerButtons/battle/types/squad/event'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVEOWNER = '#menu:headerButtons/battle/types/squadLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE = '#menu:headerButtons/battle/types/squadLeave'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
@@ -467,6 +499,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_TRAINING_DESCR = '#menu:headerButtons/battle/types/training/descr'
     HEADERBUTTONS_BATTLE_TYPES_LEAVETRAINING_DESCR = '#menu:headerButtons/battle/types/leaveTraining/descr'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVEOWNER = '#menu:headerButtons/battle/types/trainingLeaveOwner'
+    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_TRAININGLEAVE = '#menu:headerButtons/battle/types/trainingLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING = '#menu:headerButtons/battle/types/battleTeaching'
     HEADERBUTTONS_BATTLE_TYPES_SPEC = '#menu:headerButtons/battle/types/spec'
@@ -488,14 +522,13 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLESLEAVE = '#menu:headerButtons/battle/types/historicalBattlesLeave'
     HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL = '#menu:headerButtons/battle/types/battleTutorial'
     HEADERBUTTONS_BATTLE_TYPES_FALLOUT = '#menu:headerButtons/battle/types/fallout'
-    HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTILSOON = '#menu:headerButtons/battle/availableUntilSoon'
     HEADERBUTTONS_BATTLE_MENU_STANDART = '#menu:headerButtons/battle/menu/standart'
     HEADERBUTTONS_BATTLE_MENU_FALLOUT = '#menu:headerButtons/battle/menu/fallout'
+    HEADERBUTTONS_BATTLE_MENU_EVENT = '#menu:headerButtons/battle/menu/event'
     HEADERBUTTONS_BATTLE_MENU_FALLOUT_14 = '#menu:headerButtons/battle/menu/fallout/14'
     HEADERBUTTONS_BATTLE_MENU_FALLOUT_15 = '#menu:headerButtons/battle/menu/fallout/15'
     HEADERBUTTONS_BATTLE_MENU_SQUAD = '#menu:headerButtons/battle/menu/squad'
@@ -504,7 +537,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_MENU_BATTLE_SESSION = '#menu:headerButtons/battle/menu/battle_session'
     HEADERBUTTONS_BATTLE_MENU_UNIT = '#menu:headerButtons/battle/menu/unit'
     HEADERBUTTONS_BATTLE_MENU_HISTORICAL = '#menu:headerButtons/battle/menu/historical'
-    HEADERBUTTONS_BATTLE_MENU_EVENT = '#menu:headerButtons/battle/menu/event'
     HEADERBUTTONS_HANGAR = '#menu:headerButtons/hangar'
     HEADERBUTTONS_SHOP = '#menu:headerButtons/shop'
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'
@@ -608,7 +640,7 @@ class MENU(object):
     MODULEFITS_CENTER_UNAVAILABLE = '#menu:moduleFits/center_unavailable'
     COMMON_PREMIUMBUY = '#menu:common/premiumBuy'
     COMMON_PREMIUMCONTINUE = '#menu:common/premiumContinue'
-    MODULEFITS_CREDIT_ERROR = '#menu:moduleFits/credit_error'
+    MODULEFITS_CREDITS_ERROR = '#menu:moduleFits/credits_error'
     MODULEFITS_GOLD_ERROR = '#menu:moduleFits/gold_error'
     MODULEFITS_NEED_TURRET = '#menu:moduleFits/need_turret'
     MODULEFITS_NOT_FOR_THIS_VEHICLE_TYPE = '#menu:moduleFits/not_for_this_vehicle_type'
@@ -626,6 +658,8 @@ class MENU(object):
     MODULEFITS_REMOVENAME = '#menu:moduleFits/removeName'
     MODULEFITS_REMOVEDESCR = '#menu:moduleFits/removeDescr'
     MODULEFITS_REMOVETOOLTIP = '#menu:moduleFits/removeToolTip'
+    MODULEFITS_TITLE = '#menu:moduleFits/title'
+    OPTIONALDEVICEFITS_TITLE = '#menu:optionalDeviceFits/title'
     EXCHANGE_TITLE = '#menu:exchange/title'
     EXCHANGE_RATE = '#menu:exchange/rate'
     EXCHANGE_ONHAND = '#menu:exchange/onhand'
@@ -782,6 +816,12 @@ class MENU(object):
     MODULEINFO_PARAMS_CIRCULARVISIONRADIUS = '#menu:moduleInfo/params/circularVisionRadius'
     MODULEINFO_PARAMS_WEIGHT = '#menu:moduleInfo/params/weight'
     MODULEINFO_PARAMS_EXPLOSIONRADIUS = '#menu:moduleInfo/params/explosionRadius'
+    MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER = '#menu:moduleInfo/params/piercingDistanceHeader'
+    MODULEINFO_PARAMS_PIERCINGDISTANCE = '#menu:moduleInfo/params/piercingDistance'
+    MODULEINFO_PARAMS_MAXSHOTDISTANCE = '#menu:moduleInfo/params/maxShotDistance'
+    MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/maxShotDistance/footnote'
+    MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
+    MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
     MODULEINFO_COMPATIBLE_TURRETS = '#menu:moduleInfo/compatible/turrets'
     MODULEINFO_COMPATIBLE_SHELLS = '#menu:moduleInfo/compatible/shells'
     MODULEINFO_COMPATIBLE_GUNS = '#menu:moduleInfo/compatible/guns'
@@ -792,7 +832,7 @@ class MENU(object):
     MODULEINFO_CLOSEBTN = '#menu:moduleInfo/closeBtn'
     VEHICLEINFO_TITLE = '#menu:vehicleInfo/title'
     VEHICLEINFO_PARAMS_MAXHEALTH = '#menu:vehicleInfo/params/maxHealth'
-    VEHICLEINFO_PARAMS_WEIGHT = '#menu:vehicleInfo/params/weight'
+    VEHICLEINFO_PARAMS_VEHICLEWEIGHT = '#menu:vehicleInfo/params/vehicleWeight'
     VEHICLEINFO_PARAMS_ENGINEPOWER = '#menu:vehicleInfo/params/enginePower'
     VEHICLEINFO_PARAMS_SPEEDLIMITS = '#menu:vehicleInfo/params/speedLimits'
     VEHICLEINFO_PARAMS_CHASSISROTATIONSPEED = '#menu:vehicleInfo/params/chassisRotationSpeed'
@@ -805,6 +845,18 @@ class MENU(object):
     VEHICLEINFO_PARAMS_GUNROTATIONSPEED = '#menu:vehicleInfo/params/gunRotationSpeed'
     VEHICLEINFO_PARAMS_CIRCULARVISIONRADIUS = '#menu:vehicleInfo/params/circularVisionRadius'
     VEHICLEINFO_PARAMS_RADIODISTANCE = '#menu:vehicleInfo/params/radioDistance'
+    VEHICLEINFO_PARAMS_PITCHLIMITS = '#menu:vehicleInfo/params/pitchLimits'
+    VEHICLEINFO_PARAMS_GUNYAWLIMITS = '#menu:vehicleInfo/params/gunYawLimits'
+    VEHICLEINFO_PARAMS_AIMINGTIME = '#menu:vehicleInfo/params/aimingTime'
+    VEHICLEINFO_PARAMS_SHOTDISPERSIONANGLE = '#menu:vehicleInfo/params/shotDispersionAngle'
+    VEHICLEINFO_PARAMS_DAMAGEAVGPERMINUTE = '#menu:vehicleInfo/params/damageAvgPerMinute'
+    VEHICLEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:vehicleInfo/params/enginePowerPerTon'
+    VEHICLEINFO_PARAMS_CLIPFIRERATE = '#menu:vehicleInfo/params/clipFireRate'
+    VEHICLEINFO_PARAMS_TURRETYAWLIMITS = '#menu:vehicleInfo/params/turretYawLimits'
+    VEHICLEINFO_PARAMS_INVISIBILITY = '#menu:vehicleInfo/params/invisibility'
+    VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR = '#menu:vehicleInfo/params/invisibilityStillFactor'
+    VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR = '#menu:vehicleInfo/params/invisibilityMovingFactor'
+    VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
     VEHICLEINFO_TABS_BASE = '#menu:vehicleInfo/tabs/base'
     VEHICLEINFO_TABS_STATISTIC = '#menu:vehicleInfo/tabs/statistic'
@@ -824,6 +876,7 @@ class MENU(object):
     RESEARCH_PREMIUM_BENEFITS_PREMIUMVEHICLESECOND = '#menu:research/premium/benefits/premiumVehicleSecond'
     RESEARCH_PREMIUM_DESCRIPTION_TITTE = '#menu:research/premium/description/titte'
     RESEARCH_LABELS_BUTTON_SHOWINHANGAR = '#menu:research/labels/button/showInHangar'
+    RESEARCH_SHOWINPREVIEWBTN_LABEL = '#menu:research/showInPreviewBtn/label'
     RESEARCH_LABELS_VEHXP = '#menu:research/labels/vehXP'
     RESEARCH_LABELS_FREEXP = '#menu:research/labels/freeXP'
     RESEARCH_LABELS_TOTALXP = '#menu:research/labels/totalXP'
@@ -1057,8 +1110,6 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_APPLY = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/apply'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
-    HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_MOONEVENTTITLE = '#menu:hangar/ammunitionPanel/technicalMaitenance/moonEventTitle'
-    HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_MESSAGETEXT = '#menu:hangar/ammunitionPanel/technicalMaitenance/messageText'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     SHELLLISTITEMRENDERER_REPLACE = '#menu:shellListItemRenderer/replace'
@@ -1166,6 +1217,8 @@ class MENU(object):
     CONTEXTMENU_SELLFROMINVENTORY = '#menu:contextMenu/sellFromInventory'
     CONTEXTMENU_SELECTVEHICLEINHANGAR = '#menu:contextMenu/selectVehicleInHangar'
     CONTEXTMENU_SHOWVEHICLESTATISTICS = '#menu:contextMenu/showVehicleStatistics'
+    CONTEXTMENU_SHOWVEHICLEPREVIEW = '#menu:contextMenu/showVehiclePreview'
+    CONTEXTMENU_VEHICLEPREVIEW = '#menu:contextMenu/vehiclePreview'
     CONTEXTMENU_BUY = '#menu:contextMenu/buy'
     CONTEXTMENU_UNLOAD = '#menu:contextMenu/unload'
     CONTEXTMENU_CANCELBUY = '#menu:contextMenu/cancelBuy'
@@ -1227,9 +1280,9 @@ class MENU(object):
     SKILLDROPWINDOW_BEFORE = '#menu:skillDropWindow/before'
     SKILLDROPWINDOW_MULTIPLIER = '#menu:skillDropWindow/multiplier'
     SKILLDROPWINDOW_AFTER = '#menu:skillDropWindow/after'
-    SKILLDROPWINDOW_STUDY_GOLDLABEL = '#menu:skillDropWindow/study/goldLabel'
-    SKILLDROPWINDOW_STUDY_CREDITSLABEL = '#menu:skillDropWindow/study/creditsLabel'
-    SKILLDROPWINDOW_STUDY_FREELABEL = '#menu:skillDropWindow/study/freeLabel'
+    SKILLDROPWINDOW_STUDY_ACADEMY = '#menu:skillDropWindow/study/academy'
+    SKILLDROPWINDOW_STUDY_SCOOL = '#menu:skillDropWindow/study/scool'
+    SKILLDROPWINDOW_STUDY_FREE = '#menu:skillDropWindow/study/free'
     SKILLDROPWINDOW_APPLYBTN = '#menu:skillDropWindow/applyBtn'
     SKILLDROPWINDOW_CANCELBTN = '#menu:skillDropWindow/cancelBtn'
     SKILLDROPWINDOW_FREEDROPLABEL = '#menu:skillDropWindow/freeDropLabel'
@@ -1459,6 +1512,7 @@ class MENU(object):
     TIME_TIMEVALUESHORT_LESSMIN = TIME_TIMEVALUE + 'Short/lessMin'
     PROMO_PATCH_TITLE = '#menu:promo/patch/title'
     PROMO_PATCH_MESSAGE = '#menu:promo/patch/message'
+    PROMO_TOARCHIVE = '#menu:promo/toArchive'
     PROMOPREMIUMIGRWINDOW_WINDOWTITLE = '#menu:PromoPremiumIgrWindow/windowTitle'
     PROMOPREMIUMIGRWINDOW_TITLE = '#menu:PromoPremiumIgrWindow/title'
     PROMOPREMIUMIGRWINDOW_TEXT = '#menu:PromoPremiumIgrWindow/text'
@@ -1467,19 +1521,23 @@ class MENU(object):
     STATICFORAMTION_STAFF_CTXMENU_REMOVEMEMBER = '#menu:staticForamtion/staff/ctxMenu/removeMember'
     BOOSTERSWINDOW_TITLE = '#menu:boostersWindow/title'
     BOOSTERSWINDOW_CLOSEBTN_LABEL = '#menu:boostersWindow/closeBtn/label'
+    BOOSTERSWINDOW_RETURNBTN_LABEL = '#menu:boostersWindow/returnBtn/label'
     BOOSTERSWINDOW_LEVELFILTERS_LABEL = '#menu:boostersWindow/levelFilters/label'
     BOOSTERSWINDOW_TYPEFILTERS_LABEL = '#menu:boostersWindow/typeFilters/label'
     BOOSTERSWINDOW_TABS_AVAILABLELABEL = '#menu:boostersWindow/tabs/availableLabel'
     BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL = '#menu:boostersWindow/tabs/notAvailableLabel'
+    BOOSTERSWINDOW_TABS_BUYLABEL = '#menu:boostersWindow/tabs/buyLabel'
     BOOSTERSWINDOW_ACTIVEBOOSTERS = '#menu:boostersWindow/activeBoosters'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_HEADER = '#menu:boostersWindow/boostersTableRenderer/header'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME = '#menu:boostersWindow/boostersTableRenderer/time'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME = '#menu:boostersWindow/boostersTableRenderer/undefineTime'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_QUESTFOROPEN = '#menu:boostersWindow/boostersTableRenderer/questForOpen'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_ACTIVATEBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/activateBtnLabel'
+    BOOSTERSWINDOW_BOOSTERSTABLERENDERER_BUYBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/buyBtnLabel'
     BOOSTERSWINDOW_BOOSTERSTABLERENDERER_GOTOQUESTBTNLABEL = '#menu:boostersWindow/boostersTableRenderer/goToQuestBtnLabel'
-    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_TITLE = '#menu:boostersWindow/boostersTable/noInfo/title'
-    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/message'
+    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_TITLE = '#menu:boostersWindow/boostersTable/noInfo/notFound/title'
+    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/notFound/message'
+    BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_EMPTY_MESSAGE = '#menu:boostersWindow/boostersTable/noInfo/empty/message'
     BOOSTER_USERNAME_BOOSTER_XP = '#menu:booster/userName/booster_xp'
     BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
     BOOSTER_USERNAME_BOOSTER_FREE_XP = '#menu:booster/userName/booster_free_xp'
@@ -1503,7 +1561,8 @@ class MENU(object):
      NATION_TREE_TITLE_UK,
      NATION_TREE_TITLE_CHINA,
      NATION_TREE_TITLE_JAPAN,
-     NATION_TREE_TITLE_CZECH)
+     NATION_TREE_TITLE_CZECH,
+     NATION_TREE_TITLE_SWEDEN)
     DATETIME_MONTHS_FULL_ENUM = (DATETIME_MONTHS_FULL_1,
      DATETIME_MONTHS_FULL_2,
      DATETIME_MONTHS_FULL_3,
@@ -1517,7 +1576,7 @@ class MENU(object):
      DATETIME_MONTHS_FULL_11,
      DATETIME_MONTHS_FULL_12)
     TANK_PARAMS_ENUM = (TANK_PARAMS_MAXHEALTH,
-     TANK_PARAMS_WEIGHT,
+     TANK_PARAMS_VEHICLEWEIGHT,
      TANK_PARAMS_ENGINEPOWER,
      TANK_PARAMS_ENGINEPOWERPERTON,
      TANK_PARAMS_SPEEDLIMITS,
@@ -1535,10 +1594,21 @@ class MENU(object):
      TANK_PARAMS_GUNROTATIONSPEED,
      TANK_PARAMS_CIRCULARVISIONRADIUS,
      TANK_PARAMS_RADIODISTANCE,
+     TANK_PARAMS_TURRETYAWLIMITS,
+     TANK_PARAMS_PITCHLIMITS,
+     TANK_PARAMS_GUNYAWLIMITS,
+     TANK_PARAMS_CLIPFIRERATE,
+     TANK_PARAMS_RELATIVEPOWER,
+     TANK_PARAMS_RELATIVEARMOR,
+     TANK_PARAMS_RELATIVEMOBILITY,
+     TANK_PARAMS_RELATIVEVISIBILITY,
+     TANK_PARAMS_RELATIVECAMOUFLAGE,
      TANK_PARAMS_PARAM12,
      TANK_PARAMS_SHOTDISPERSIONANGLE,
      TANK_PARAMS_AIMINGTIME,
      TANK_PARAMS_MAXAMMO,
+     TANK_PARAMS_INVISIBILITYSTILLFACTOR,
+     TANK_PARAMS_INVISIBILITYMOVINGFACTOR,
      TANK_PARAMS_VALUES_PARAM12_VALUE0,
      TANK_PARAMS_VALUES_PARAM12_VALUE1,
      TANK_PARAMS_VALUES_PARAM12_VALUE2,
@@ -1565,7 +1635,15 @@ class MENU(object):
      TANK_PARAMS_M,
      TANK_PARAMS_H,
      TANK_PARAMS_SQM,
-     TANK_PARAMS_CNT)
+     TANK_PARAMS_CNT,
+     TANK_PARAMS_GRADS,
+     TANK_PARAMS_PERCENT,
+     TANK_PARAMS_KG,
+     TANK_PARAMS_CLIPSEC)
+    VEHPARAMS_ENUM = (VEHPARAMS_FIREPOWER,
+     VEHPARAMS_ARMOR,
+     VEHPARAMS_MOBILITY,
+     VEHPARAMS_RECONNAISSANCE)
     DATETIME_WEEKDAYS_SHORT_ENUM = (DATETIME_WEEKDAYS_SHORT_1,
      DATETIME_WEEKDAYS_SHORT_2,
      DATETIME_WEEKDAYS_SHORT_3,
@@ -1619,7 +1697,13 @@ class MENU(object):
      MODULEINFO_PARAMS_RADIODISTANCE,
      MODULEINFO_PARAMS_CIRCULARVISIONRADIUS,
      MODULEINFO_PARAMS_WEIGHT,
-     MODULEINFO_PARAMS_EXPLOSIONRADIUS)
+     MODULEINFO_PARAMS_EXPLOSIONRADIUS,
+     MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER,
+     MODULEINFO_PARAMS_PIERCINGDISTANCE,
+     MODULEINFO_PARAMS_MAXSHOTDISTANCE,
+     MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE,
+     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE,
+     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE)
     INVENTORY_MENU_ENUM = (INVENTORY_MENU_VEHICLE_NAME,
      INVENTORY_MENU_VEHICLE_TAGS_NAME,
      INVENTORY_MENU_VEHICLE_TAGS_ALL_NAME,
@@ -1708,6 +1792,8 @@ class MENU(object):
      LOGIN_STATUS_INVALID_PASSWORD,
      LOGIN_STATUS_EMPTY_SERVER,
      LOGIN_STATUS_CONNECTING,
+     LOGIN_STATUS_CHECKOUT_ERROR,
+     LOGIN_STATUS_ANOTHER_PERIPHERY,
      LOGIN_STATUS_NOT_SET,
      LOGIN_STATUS_UNAVAILABLE,
      LOGIN_STATUS_LOGIN_REJECTED_ALREADY_LOGGED_IN,
@@ -1838,7 +1924,7 @@ class MENU(object):
      SHOP_MENU_EQUIPMENT_FITS_OTHERVEHICLES_NAME,
      SHOP_MENU_VEHICLE_RENT_DAYS,
      SHOP_MENU_VEHICLE_RENT_FOREVER)
-    SKILLDROPWINDOW_STUDY_ENUM = (SKILLDROPWINDOW_STUDY_GOLDLABEL, SKILLDROPWINDOW_STUDY_CREDITSLABEL, SKILLDROPWINDOW_STUDY_FREELABEL)
+    SKILLDROPWINDOW_STUDY_ENUM = (SKILLDROPWINDOW_STUDY_ACADEMY, SKILLDROPWINDOW_STUDY_SCOOL, SKILLDROPWINDOW_STUDY_FREE)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_1,
      LOADING_BATTLETYPES_2,
@@ -1922,7 +2008,7 @@ class MENU(object):
      PROFILE_STATS_BLOCKS_CREDITS,
      PROFILE_STATS_BLOCKS_STUDYING)
     VEHICLEINFO_PARAMS_ENUM = (VEHICLEINFO_PARAMS_MAXHEALTH,
-     VEHICLEINFO_PARAMS_WEIGHT,
+     VEHICLEINFO_PARAMS_VEHICLEWEIGHT,
      VEHICLEINFO_PARAMS_ENGINEPOWER,
      VEHICLEINFO_PARAMS_SPEEDLIMITS,
      VEHICLEINFO_PARAMS_CHASSISROTATIONSPEED,
@@ -1934,7 +2020,19 @@ class MENU(object):
      VEHICLEINFO_PARAMS_TURRETROTATIONSPEED,
      VEHICLEINFO_PARAMS_GUNROTATIONSPEED,
      VEHICLEINFO_PARAMS_CIRCULARVISIONRADIUS,
-     VEHICLEINFO_PARAMS_RADIODISTANCE)
+     VEHICLEINFO_PARAMS_RADIODISTANCE,
+     VEHICLEINFO_PARAMS_PITCHLIMITS,
+     VEHICLEINFO_PARAMS_GUNYAWLIMITS,
+     VEHICLEINFO_PARAMS_AIMINGTIME,
+     VEHICLEINFO_PARAMS_SHOTDISPERSIONANGLE,
+     VEHICLEINFO_PARAMS_DAMAGEAVGPERMINUTE,
+     VEHICLEINFO_PARAMS_ENGINEPOWERPERTON,
+     VEHICLEINFO_PARAMS_CLIPFIRERATE,
+     VEHICLEINFO_PARAMS_TURRETYAWLIMITS,
+     VEHICLEINFO_PARAMS_INVISIBILITY,
+     VEHICLEINFO_PARAMS_INVISIBILITYSTILLFACTOR,
+     VEHICLEINFO_PARAMS_INVISIBILITYMOVINGFACTOR,
+     VEHICLEINFO_PARAMS_RELOADTIMESECS)
     DENUNCIATION_ENUM = (DENUNCIATION_0,
      DENUNCIATION_1,
      DENUNCIATION_2,
@@ -1989,6 +2087,7 @@ class MENU(object):
      NATIONS_JAPAN,
      NATIONS_UK,
      NATIONS_CZECH,
+     NATIONS_SWEDEN,
      NATIONS_ALL)
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
@@ -2019,6 +2118,8 @@ class MENU(object):
      CONTEXTMENU_SELLFROMINVENTORY,
      CONTEXTMENU_SELECTVEHICLEINHANGAR,
      CONTEXTMENU_SHOWVEHICLESTATISTICS,
+     CONTEXTMENU_SHOWVEHICLEPREVIEW,
+     CONTEXTMENU_VEHICLEPREVIEW,
      CONTEXTMENU_BUY,
      CONTEXTMENU_UNLOAD,
      CONTEXTMENU_CANCELBUY,
@@ -2076,6 +2177,10 @@ class MENU(object):
 
     @staticmethod
     def nation_tree_title(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:nation_tree/title/%s' % key
         if outcome not in MENU.NATION_TREE_TITLE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2085,6 +2190,10 @@ class MENU(object):
 
     @staticmethod
     def datetime_months_full(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:dateTime/months/full/%s' % key
         if outcome not in MENU.DATETIME_MONTHS_FULL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2094,6 +2203,10 @@ class MENU(object):
 
     @staticmethod
     def tank_params(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tank_params/%s' % key
         if outcome not in MENU.TANK_PARAMS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2102,7 +2215,24 @@ class MENU(object):
             return outcome
 
     @staticmethod
+    def vehparams(key):
+        """
+        :param key:
+        :return String:
+        """
+        outcome = '#menu:vehParams/%s' % key
+        if outcome not in MENU.VEHPARAMS_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
     def datetime_weekdays_short(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:dateTime/weekDays/short/%s' % key
         if outcome not in MENU.DATETIME_WEEKDAYS_SHORT_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2112,6 +2242,10 @@ class MENU(object):
 
     @staticmethod
     def datetime_weekdays_full(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:dateTime/weekDays/full/%s' % key
         if outcome not in MENU.DATETIME_WEEKDAYS_FULL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2121,6 +2255,10 @@ class MENU(object):
 
     @staticmethod
     def datetime_months_short(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:dateTime/months/short/%s' % key
         if outcome not in MENU.DATETIME_MONTHS_SHORT_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2130,196 +2268,308 @@ class MENU(object):
 
     @staticmethod
     def moduleinfo_params(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:moduleInfo/params/%s' % key
         if outcome not in MENU.MODULEINFO_PARAMS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def inventory_menu(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:inventory/menu/%s' % key
         if outcome not in MENU.INVENTORY_MENU_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def referralreferrerintrowindow_textblock_title(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:ReferralReferrerIntroWindow/textBlock_title/%s' % key
         if outcome not in MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def profile_stats_items(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:profile/stats/items/%s' % key
         if outcome not in MENU.PROFILE_STATS_ITEMS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def header_account_popover_stats(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:header/account/popover/stats/%s' % key
         if outcome not in MENU.HEADER_ACCOUNT_POPOVER_STATS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def login_status(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:login/status/%s' % key
         if outcome not in MENU.LOGIN_STATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def tankmanrecruitrenderer(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tankmanRecruitRenderer/%s' % key
         if outcome not in MENU.TANKMANRECRUITRENDERER_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def tankmantrainingwindow(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tankmanTrainingWindow/%s' % key
         if outcome not in MENU.TANKMANTRAININGWINDOW_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def tankmanpersonalcase_modifiers(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tankmanPersonalCase/modifiers/%s' % key
         if outcome not in MENU.TANKMANPERSONALCASE_MODIFIERS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def header_account_popover_crew_position(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:header/account/popover/crew/position/%s' % key
         if outcome not in MENU.HEADER_ACCOUNT_POPOVER_CREW_POSITION_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def shop_menu(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:shop/menu/%s' % key
         if outcome not in MENU.SHOP_MENU_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def skilldropwindow_study(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:skillDropWindow/study/%s' % key
         if outcome not in MENU.SKILLDROPWINDOW_STUDY_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def loading_battletypes(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:loading/battleTypes/%s' % key
         if outcome not in MENU.LOADING_BATTLETYPES_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def referralreferrerintrowindow_textblock_body(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:ReferralReferrerIntroWindow/textBlock_body/%s' % key
         if outcome not in MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def tankcarousel_vehiclestates(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tankCarousel/vehicleStates/%s' % key
         if outcome not in MENU.TANKCAROUSEL_VEHICLESTATES_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def finalstatistic_commonstats_resultlabel(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:finalStatistic/commonStats/resultlabel/%s' % key
         if outcome not in MENU.FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def shop_table_header_count(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:shop/table/header/count/%s' % key
         if outcome not in MENU.SHOP_TABLE_HEADER_COUNT_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def tankmen(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:tankmen/%s' % key
         if outcome not in MENU.TANKMEN_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def loading_battletypes_desc(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:loading/battleTypes/desc/%s' % key
         if outcome not in MENU.LOADING_BATTLETYPES_DESC_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def profile_stats_blocks(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:profile/stats/blocks/%s' % key
         if outcome not in MENU.PROFILE_STATS_BLOCKS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def vehicleinfo_params(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:vehicleInfo/params/%s' % key
         if outcome not in MENU.VEHICLEINFO_PARAMS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def denunciation(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:denunciation/%s' % key
         if outcome not in MENU.DENUNCIATION_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def header_account_popover_clan_position(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:header/account/popover/clan/position/%s' % key
         if outcome not in MENU.HEADER_ACCOUNT_POPOVER_CLAN_POSITION_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def training_info(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:training/info/%s' % key
         if outcome not in MENU.TRAINING_INFO_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def referralreferralsintrowindow_text_block_body(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:ReferralReferralsIntroWindow/text_block/body/%s' % key
         if outcome not in MENU.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def nations(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:nations/%s' % key
         if outcome not in MENU.NATIONS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def contextmenu(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:contextMenu/%s' % key
         if outcome not in MENU.CONTEXTMENU_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def moduleinfo_compatible(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#menu:moduleInfo/compatible/%s' % key
         if outcome not in MENU.MODULEINFO_COMPATIBLE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

@@ -1,9 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ARENAS.py
-C_114_CZECH_NAME = '#arenas:114_czech/name'
-C_114_CZECH_DESCRIPTION = '#arenas:114_czech/description'
+
 
 class ARENAS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TYPE_CTF_NAME = '#arenas:type/ctf/name'
     TYPE_CTF_DESCRIPTION = '#arenas:type/ctf/description'
     TYPE_DOMINATION_NAME = '#arenas:type/domination/name'
@@ -36,8 +41,6 @@ class ARENAS(object):
     TYPE_FALLOUT5_DESCRIPTION = '#arenas:type/fallout5/description'
     TYPE_FALLOUT6_NAME = '#arenas:type/fallout6/name'
     TYPE_FALLOUT6_DESCRIPTION = '#arenas:type/fallout6/description'
-    TYPE_EVENT_NAME = '#arenas:type/event/name'
-    TYPE_EVENT_DESCRIPTION = '#arenas:type/event/description'
     TYPE_FALLOUTMUTLITEAM_DESCRIPTION = '#arenas:type/falloutMutliteam/description'
     C_00_TANK_TUTORIAL_NAME = '#arenas:00_tank_tutorial/name'
     C_00_TANK_TUTORIAL_DESCRIPTION = '#arenas:00_tank_tutorial/description'
@@ -97,16 +100,12 @@ class ARENAS(object):
     C_37_CAUCASUS_DESCRIPTION = '#arenas:37_caucasus/description'
     C_38_MANNERHEIM_LINE_NAME = '#arenas:38_mannerheim_line/name'
     C_38_MANNERHEIM_LINE_DESCRIPTION = '#arenas:38_mannerheim_line/description'
-    C_43_NORTH_AMERICA_NAME = '#arenas:43_north_america/name'
-    C_43_NORTH_AMERICA_DESCRIPTION = '#arenas:43_north_america/description'
     C_44_NORTH_AMERICA_NAME = '#arenas:44_north_america/name'
     C_44_NORTH_AMERICA_DESCRIPTION = '#arenas:44_north_america/description'
     C_45_NORTH_AMERICA_NAME = '#arenas:45_north_america/name'
     C_45_NORTH_AMERICA_DESCRIPTION = '#arenas:45_north_america/description'
     C_47_CANADA_A_NAME = '#arenas:47_canada_a/name'
     C_47_CANADA_A_DESCRIPTION = '#arenas:47_canada_a/description'
-    C_51_ASIA_NAME = '#arenas:51_asia/name'
-    C_51_ASIA_DESCRIPTION = '#arenas:51_asia/description'
     C_59_ASIA_GREAT_WALL_NAME = '#arenas:59_asia_great_wall/name'
     C_59_ASIA_GREAT_WALL_DESCRIPTION = '#arenas:59_asia_great_wall/description'
     C_63_TUNDRA_NAME = '#arenas:63_tundra/name'
@@ -119,8 +118,6 @@ class ARENAS(object):
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_92_STALINGRAD_NAME = '#arenas:92_stalingrad/name'
     C_92_STALINGRAD_DESCRIPTION = '#arenas:92_stalingrad/description'
-    ST_BALLANCE_MAP_NAME = '#arenas:st_ballance_map/name'
-    ST_BALLANCE_MAP_DESCRIPTION = '#arenas:st_ballance_map/description'
     C_101_DDAY_NAME = '#arenas:101_dday/name'
     C_101_DDAY_DESCRIPTION = '#arenas:101_dday/description'
     C_100_THEPIT_NAME = '#arenas:100_thepit/name'
@@ -133,5 +130,5 @@ class ARENAS(object):
     C_111_PARIS_DESCRIPTION = '#arenas:111_paris/description'
     C_112_EIFFEL_TOWER_NAME = '#arenas:112_eiffel_tower/name'
     C_112_EIFFEL_TOWER_DESCRIPTION = '#arenas:112_eiffel_tower/description'
-    C_119_MOON_POOL_NAME = '#arenas:119_moon_pool/name'
-    C_119_MOON_POOL_DESCRIPTION = '#arenas:119_moon_pool/description'
+    C_114_CZECH_NAME = '#arenas:114_czech/name'
+    C_114_CZECH_DESCRIPTION = '#arenas:114_czech/description'

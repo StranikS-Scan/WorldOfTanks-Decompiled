@@ -65,13 +65,15 @@ class _Notifier(object):
         return
 
     def __processNotification(self):
-        delta = self.__deltaFunc()
+        delta = self.__deltaFunc() if self.__deltaFunc is not None else None
         if not delta:
             return
-        nextNotification = self._getNextNotificationDelta(delta)
-        if not nextNotification:
+        else:
+            nextNotification = self._getNextNotificationDelta(delta)
+            if not nextNotification:
+                return
+            self._notificationCallbackID = self._registerCallback(nextNotification, self._onNotification)
             return
-        self._notificationCallbackID = self._registerCallback(nextNotification, self._onNotification)
 
     def __cancelNotification(self):
         if self._notificationCallbackID is not None:

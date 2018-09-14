@@ -2,40 +2,36 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortMainViewComponent.py
 import time
 import BigWorld
-from ClientFortifiedRegion import BUILDING_UPDATE_REASON
+import fortified_regions
 from account_helpers.AccountSettings import AccountSettings, FORT_MEMBER_TUTORIAL, ORDERS_FILTER
 from adisp import process
 from constants import PREBATTLE_TYPE, FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
+from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from debug_utils import LOG_DEBUG, LOG_ERROR
-import fortified_regions
-from gui.clans.clan_controller import g_clanCtrl
-from gui.shared import event_dispatcher as shared_events
-from shared_utils import CONST_CONTAINER
 from gui import SystemMessages
+from gui.clans.clan_controller import g_clanCtrl
+from gui.clans.clan_helpers import ClanListener
+from gui.LobbyContext import g_lobbyContext
+from gui.prb_control.context.unit_ctx import JoinModeCtx
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
 from gui.Scaleform.daapi.view.lobby.fortifications.FortRosterIntroWindow import FortRosterIntroWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.context.unit_ctx import JoinModeCtx
-from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.settings import FUNCTIONAL_FLAG
-from gui.clans.clan_helpers import ClanListener
-from gui.shared import events, g_eventBus
-from gui.shared import EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.view.meta.FortMainViewMeta import FortMainViewMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.events import FortEvent
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications import events_dispatcher as fort_events
-from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.shared.fortifications.context import DirectionCtx
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.fortifications.fort_helpers import getRosterIntroWindowSetting
@@ -43,6 +39,7 @@ from gui.shared.fortifications.fort_helpers import setRosterIntroWindowSetting
 from gui.shared.fortifications.settings import MUST_SHOW_FORT_UPGRADE, MUST_SHOW_DEFENCE_START
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils, setHangarVisibility
+from shared_utils import CONST_CONTAINER
 
 def _checkBattleConsumesIntro(fort):
     settings = dict(AccountSettings.getSettings('fortSettings'))
@@ -150,7 +147,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     def _populate(self):
         super(FortMainViewComponent, self)._populate()
-        self.addListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
         self.addListener(events.FortEvent.REQUEST_TRANSPORTATION, self.__onTransportationRequested, scope=EVENT_BUS_SCOPE.FORT)
         self.startFortListening()
@@ -168,7 +165,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
         super(FortMainViewComponent, self)._dispose()
         self.stopFortListening()
         self.stopFortListening()
-        self.removeListener(FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.FortEvent.SWITCH_TO_MODE, self.__handleSwitchToMode, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FortEvent.TRANSPORTATION_STEP, self.__onTransportingStep, scope=EVENT_BUS_SCOPE.FORT)
         self.__clanDBID = None
         return
@@ -237,7 +234,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, ClanListener):
 
     def onIntelligenceClick(self):
         isDefenceHourEnabled = self.fortCtrl.getFort().isDefenceHourEnabled()
-        if not isFortificationBattlesEnabled():
+        if not g_lobbyContext.getServerSettings().isFortsEnabled():
             isDefenceHourEnabled = False
             alias = FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW
         elif not isDefenceHourEnabled:

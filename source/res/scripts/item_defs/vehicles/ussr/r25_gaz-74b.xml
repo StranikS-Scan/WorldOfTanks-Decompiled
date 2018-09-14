@@ -1,0 +1,784 @@
+<r25_gaz-74b.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	43	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.238	</moving>
+    <still>	0.397	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.596	</firePenalty>
+  </invisibility>
+  <repairCost>	3.8	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R25_GAZ-74b/GAZ-74b_hull_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	25	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	42	</armor_5>
+      <armor_6>	25	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	7	</armor_9>
+      <armor_10>	7	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	6870	</weight>
+    <maxHealth>	208	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 36.00 0.38 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.28 36.00 0.38 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.72	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.1658 0.852648 -0.09499	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00974929 0.18483 2.13092	</rayStart>
+        <rayEnd>	-0.00974929 0.0114721 2.03119	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.09015 1.0887 -1.06815	</rayStart>
+        <rayEnd>	-0.90197 1.02097 -1.06815	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	-1.1386 0.717689 -1.54609	</rayStart>
+        <rayEnd>	-1.06343 0.690315 -1.54609	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	0.928782 1.09166 -1.02731	</rayStart>
+        <rayEnd>	0.740685 1.02369 -1.02738	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R25_GAZ-74b/GAZ-74b_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <GAZ-74B>
+      <userString>	#ussr_vehicles:GAZ-74B	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1800	</price>
+      <unlocks>
+        <chassis>	SU-85A	  <cost>	1060	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	12400	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.3	</terrainResistance>
+      <brakeForce>	12400	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	38	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.32 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.277052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.277052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.268656	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.277052	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.268656	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.277052	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.836922 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.18398 1.56381	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.884730 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.167850 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.137450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R25_GAZ-74b/track/SU-76_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R25_GAZ-74b/track/SU-76_track.model	</segmentModelRight>
+        <left>	vehicles/russian/R25_GAZ-74b/track/left.track	</left>
+        <right>	vehicles/russian/R25_GAZ-74b/track/right.track	</right>
+        <segmentLength>	0.109	</segmentLength>
+        <segmentOffset>	0.057	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-6.2	</gravity>
+        <elasticity>	1168	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	-0.046	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.47	</forwardElastK>
+          <backwardElastK>	2.18	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.47	</forwardElastK>
+          <backwardElastK>	2.18	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.000000	</trackThickness>
+    </GAZ-74B>
+    <SU-85A>
+      <userString>	#ussr_vehicles:SU-85A	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4510	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	15000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	14000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	40	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.32 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.277052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.277052	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.268656	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.277052	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.268656	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.277052	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.836922 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.18398 1.56381	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.885620 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.167850 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.137450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R25_GAZ-74b/track/SU-76_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R25_GAZ-74b/track/SU-76_track.model	</segmentModelRight>
+        <left>	vehicles/russian/R25_GAZ-74b/track/left.track	</left>
+        <right>	vehicles/russian/R25_GAZ-74b/track/right.track	</right>
+        <segmentLength>	0.109	</segmentLength>
+        <segmentOffset>	0.057	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-6.2	</gravity>
+        <elasticity>	1168	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	-0.046	</offset>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.47	</forwardElastK>
+          <backwardElastK>	2.18	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.47	</forwardElastK>
+          <backwardElastK>	2.18	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.78	</backwardElastK>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.000000	</trackThickness>
+    </SU-85A>
+  </chassis>
+  <turrets0>
+    <SU-85A1>
+      <ceilless>	true	</ceilless>
+      <userString>	#ussr_vehicles:SU-85A1	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_3>	15	</armor_3>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	52	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_ZiS-3_mod_42>	shared	  <pitchLimits>
+            <minPitch>	0 -7 1 -7	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	64	</maxAmmo>
+          <reloadTime>	3.4	</reloadTime>
+          <unlocks>
+            <gun>	_57mm_ZiS-2	  <cost>	4000.0	</cost>
+            </gun>
+            <gun>	_85mm_D-5S-85A	  <cost>	3800.0	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	7	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_ZiS-3_mod_42>
+        <_57mm_ZiS-2>	shared	  <pitchLimits>
+            <minPitch>	0 -7 1 -7	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	72	</maxAmmo>
+          <reloadTime>	2.3	</reloadTime>
+          <armor>
+            <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	7	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_ZiS-2>
+        <_85mm_D-5S-85A>	shared	  <pitchLimits>
+            <minPitch>	0 -7 1 -7	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	43	</maxAmmo>
+          <unlocks>
+            <gun>	_85mm_LB-2S	  <cost>	5100.0	</cost>
+            </gun>
+            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	7	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	30	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_D-5S-85A>
+        <_85mm_LB-2S>	shared	  <pitchLimits>
+            <minPitch>	0 -7 1 -7	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	43	</maxAmmo>
+          <armor>
+            <armor_1>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	7	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	30	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_85mm_LB-2S>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R25_GAZ-74b/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R25_GAZ-74b/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R25_GAZ-74b/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R25_GAZ-74b/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R25_GAZ-74b/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.203 1.000 -0.000 1.000 -0.038 0.972 0.360 0.381 0.500 0.000 0.500 0.000 0.100 0.240	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
+      </camouflage>
+    </SU-85A1>
+  </turrets0>
+  <engines>
+    <GAZ-203>	shared	  <unlocks>
+        <engine>	M-80	  <cost>	240.0	</cost>
+        </engine>
+      </unlocks>
+    </GAZ-203>
+    <M-80>	shared	  <unlocks>
+        <engine>	GMC	  <cost>	400.0	</cost>
+        </engine>
+      </unlocks>
+    </M-80>
+    <GMC>	shared	</GMC>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <_9R>	shared	  <unlocks>
+        <radio>	_9RM	  <cost>	4040.0	</cost>
+        </radio>
+      </unlocks>
+    </_9R>
+    <_9RM>	shared	</_9RM>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <GAZ-74B>
+        <alpha>	0.12075	</alpha>
+      </GAZ-74B>
+      <SU-85A>
+        <alpha>	0.10465	</alpha>
+      </SU-85A>
+    </chassis>
+    <engines>
+      <GAZ-203>
+        <bravo>	37.00484	</bravo>
+      </GAZ-203>
+      <M-80>
+        <bravo>	44.93445	</bravo>
+      </M-80>
+      <GMC>
+        <bravo>	55.50726	</bravo>
+      </GMC>
+    </engines>
+    <armour>	0.850502793	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r25_gaz-74b.xml>

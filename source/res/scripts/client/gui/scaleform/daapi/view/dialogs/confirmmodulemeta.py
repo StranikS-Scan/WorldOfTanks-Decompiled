@@ -5,12 +5,14 @@ from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 import Event
 from gui.Scaleform.framework import ScopeTemplates
 from gui.shared import events
-from gui.shared.tooltips import ACTION_TOOLTIPS_STATE
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from helpers import i18n
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.decorators import process
 from gui.shared.gui_items.processors.module import ModuleBuyer, ModuleSeller
+from gui.shared.money import ZERO_MONEY, Currency
+from gui.shared.tooltips.formatters import packActionTooltipData
 from gui import SystemMessages
 MAX_ITEMS_FOR_OPERATION = 1000000
 
@@ -51,15 +53,15 @@ class ConfirmModuleMeta(IDialogMeta):
         pass
 
     def getActualPrice(self, module):
-        pass
+        return ZERO_MONEY
 
     def getDefaultPrice(self, module):
-        pass
-
-    def getActionState(self, module):
-        return (None, (None, None))
+        return ZERO_MONEY
 
     def getCurrency(self, module):
+        return None
+
+    def getActionVO(self, module):
         return None
 
     def getViewScopeType(self):
@@ -94,12 +96,10 @@ class SellModuleMeta(ConfirmModuleMeta):
     def getDefaultPrice(self, module):
         return module.defaultSellPrice
 
-    def getAction(self, module):
+    def getActionVO(self, module):
         price = self.getActualPrice(module)
         defaultPrice = self.getDefaultPrice(module)
-        creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[0] >= defaultPrice[0] else ACTION_TOOLTIPS_STATE.PENALTY
-        goldState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[1] >= defaultPrice[1] else ACTION_TOOLTIPS_STATE.PENALTY
-        return (False, (creditsState, goldState))
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), False, price, defaultPrice)
 
     def getCurrency(self, module):
         return module.getSellPriceCurrency()
@@ -115,22 +115,22 @@ class BuyModuleMeta(ConfirmModuleMeta):
 
     def __init__(self, typeCompactDescr, balance):
         super(BuyModuleMeta, self).__init__(typeCompactDescr, DIALOGS.BUYCONFIRMATION_TITLE, DIALOGS.BUYCONFIRMATION_SUBMIT, DIALOGS.BUYCONFIRMATION_CANCEL)
-        self.__balance = list(balance)
+        self.__balance = balance
         g_clientUpdateManager.addCallbacks({'stats': self.__onStatsChanged})
 
     def __onStatsChanged(self, stats):
         if 'credits' in stats:
-            self.__balance[0] = stats['credits']
+            self.__balance = self.__balance.replace(Currency.CREDITS, stats['credits'])
             self.onInvalidate()
         if 'gold' in stats:
-            self.__balance[1] = stats['gold']
+            self.__balance = self.__balance.replace(Currency.GOLD, stats['gold'])
             self.onInvalidate()
 
-    def __getMaxCount(self, module, currencyIdx):
+    def __getMaxCount(self, module, currency):
         result = 0
         modulePrice = self.getActualPrice(module)
-        if modulePrice[currencyIdx] > 0:
-            result = math.floor(self.__balance[currencyIdx] / modulePrice[currencyIdx])
+        if modulePrice.get(currency) > 0:
+            result = math.floor(self.__balance.get(currency) / modulePrice.get(currency))
         return min(result, MAX_ITEMS_FOR_OPERATION)
 
     def destroy(self):
@@ -138,7 +138,7 @@ class BuyModuleMeta(ConfirmModuleMeta):
         super(BuyModuleMeta, self).destroy()
 
     def getMaxAvailableItemsCount(self, module):
-        return (self.__getMaxCount(module, 0), self.__getMaxCount(module, 1))
+        return (self.__getMaxCount(module, Currency.CREDITS), self.__getMaxCount(module, Currency.GOLD))
 
     def getDefaultValue(self, module):
         pass
@@ -149,18 +149,16 @@ class BuyModuleMeta(ConfirmModuleMeta):
     def getDefaultPrice(self, module):
         return module.defaultAltPrice or module.defaultPrice
 
-    def getAction(self, module):
+    def getActionVO(self, module):
         price = self.getActualPrice(module)
         defaultPrice = self.getDefaultPrice(module)
-        creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[0] != defaultPrice[0] else None
-        goldState = ACTION_TOOLTIPS_STATE.DISCOUNT if price[1] != defaultPrice[1] else None
-        return (True, (creditsState, goldState))
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), True, price, defaultPrice)
 
     def getCurrency(self, module):
         return module.getBuyPriceCurrency()
 
     @process('buyItem')
     def submit(self, item, count, currency):
-        result = yield ModuleBuyer(item, count, currency == 'credits').request()
+        result = yield ModuleBuyer(item, count, currency == Currency.CREDITS).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)

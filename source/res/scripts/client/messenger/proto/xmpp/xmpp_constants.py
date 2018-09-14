@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_constants.py
+from constants import IS_CLIENT
 from debug_utils import LOG_WARNING
+_COOLDOWN_OFFSET = 0.0 if IS_CLIENT else -0.1
 
 class MESSAGE_LIMIT(object):
     COOLDOWN = 0.5
     MESSAGE_MAX_SIZE = 512
-    HISTORY_MAX_LEN = 20
+    HISTORY_MAX_LEN = 100
 
 
 class CONTACT_LIMIT(object):
@@ -22,9 +24,14 @@ class CONTACT_LIMIT(object):
 class CHANNEL_LIMIT(object):
     MAX_SEARCH_RESULTS = 50
     NAME_MIN_CHARS_COUNT = 3
-    NAME_MAX_CHARS_COUNT = 32
+    NAME_MAX_CHARS_COUNT = 100
     PWD_MIN_CHARS_COUNT = 3
-    PWD_MAX_CHARS_COUNT = 12
+    PWD_MAX_CHARS_COUNT = 32
+
+
+class USER_SEARCH_LIMITS(object):
+    FIND_USERS_BY_NAME_MAX_RESULT_SIZE = 50
+    FIND_USERS_BY_NAME_REQUEST_COOLDOWN_SEC = 5.0 + _COOLDOWN_OFFSET
 
 
 class CONTACT_ERROR_ID(object):
@@ -125,3 +132,15 @@ class MUC_CREATION_ERROR(object):
 
 
 MUC_CREATION_ERROR_NAMES = {v:k for k, v in MUC_CREATION_ERROR.__dict__.iteritems() if not k.startswith('_')}
+
+class XMPP_MUC_CHANNEL_TYPE(object):
+    UNKNOWN = 0
+    STANDARD = 1
+    USERS = 2
+    CLANS = 3
+    COMPANY = 4
+
+
+XMPP_MUC_USER_TEMPLATE_GROUPS = {'owner': 'channelOwner',
+ 'admin': 'chatAdmin',
+ 'moderator': 'channelModerator'}

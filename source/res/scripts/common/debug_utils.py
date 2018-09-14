@@ -28,7 +28,7 @@ if CURRENT_REALM == 'DEV':
     _logLevel = LOG_LEVEL.DEV
 elif CURRENT_REALM == 'ST':
     _logLevel = LOG_LEVEL.ST
-elif CURRENT_REALM == 'CT':
+elif CURRENT_REALM in ('CT', 'SB'):
     _logLevel = LOG_LEVEL.CT
 elif IS_CLIENT:
     _logLevel = LOG_LEVEL.RELEASE
@@ -91,7 +91,8 @@ def init():
      'WARNING': BigWorld.logWarning,
      'ERROR': BigWorld.logError,
      'CRITICAL': BigWorld.logCritical,
-     'HACK': BigWorld.logHack}
+     'HACK': BigWorld.logHack,
+     'OBSOLETE': BigWorld.logWarning}
     excepthook.init(not IS_CLIENT and _logLevel < LOG_LEVEL.SVR_RELEASE, _src_file_trim_to)
 
 
@@ -100,10 +101,8 @@ def CRITICAL_ERROR(msg, *kargs):
     msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
     BigWorld.logCritical('CRITICAL', msg, None)
     if IS_CLIENT:
-        import BigWorld
         BigWorld.quit()
     elif IS_CELLAPP or IS_BASEAPP:
-        import BigWorld
         BigWorld.shutDownApp()
         raise CriticalError(msg)
     else:
@@ -171,6 +170,10 @@ def LOG_WARNING(msg, *kargs, **kwargs):
     _doLog('WARNING', msg, kargs, kwargs)
 
 
+def LOG_OBSOLETE(msg, *kargs):
+    _doLog('OBSOLETE', msg, kargs)
+
+
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_NOTE(msg, *kargs, **kwargs):
     _doLog('NOTE', msg, kargs, kwargs)
@@ -197,7 +200,6 @@ def LOG_VOIP(msg, *kargs):
 
 
 def FLUSH_LOG():
-    import BigWorld
     BigWorld.flushPythonLog()
 
 
@@ -376,22 +378,6 @@ def initMemoryLeaksLogging(repeatOffset=300):
             BigWorld.addTimer(memoryLeaksSafeDump, 1, repeatOffset, 1)
 
     BigWorld.addTimer(detectMemoryLeaksTimerCallback, 1, 0, 0)
-
-
-def createMemoryLeakFunctionWatcher():
-    """
-    register function watcher as command
-    command can be executed remotely and return structure created by objgraph
-    based on result of garbage collection
-    """
-    for app_type, flag_name in (('cellapp', 'EXPOSE_CELL_APPS'), ('baseapp', 'EXPOSE_BASE_APPS'), ('serviceapp', 'EXPOSE_SERVICE_APPS')):
-        try:
-            if not hasattr(BigWorld, flag_name):
-                continue
-            flag = getattr(BigWorld, flag_name)
-            BigWorld.addFunctionWatcher('command/garbageCollect%s' % app_type, getGarbageGraph, [], flag, 'Colect %s garbage data and return objgraph result as dot data' % app_type)
-        except:
-            LOG_CURRENT_EXCEPTION()
 
 
 def verify(expression):

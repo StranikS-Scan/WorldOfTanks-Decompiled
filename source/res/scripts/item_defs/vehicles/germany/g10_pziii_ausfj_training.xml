@@ -1,0 +1,476 @@
+<g10_pziii_ausfj_training.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	64	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.26	</moving>
+    <still>	0.31	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.3	</firePenalty>
+  </invisibility>
+  <repairCost>	4.17	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	30	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	50	</armor_4>
+      <armor_5>	16	</armor_5>
+      <armor_6>	16	</armor_6>
+      <armor_7>	16	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	25	</armor_9>
+      <armor_10>	16	</armor_10>
+      <armor_12>	50	</armor_12>
+      <armor_13>	30	</armor_13>
+      <armor_15>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+      <armor_16>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	8000	</weight>
+    <maxHealth>	300	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.524294 0.3	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G10_PzIII_training/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G10_PzIII_training/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.323516 0.460187 1.97881	</rayStart>
+        <rayEnd>	0.323518 0.387774 1.52455	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.274	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.0641 0.433362 0.236764	</rayStart>
+        <rayEnd>	0.864094 0.43309 0.236804	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.449	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G10_PzIII_AusfJ/PzIII_AusfJ_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <PzIIIketten_Ausf_L_T>
+      <userString>	#germany_vehicles:PzIIIketten_Ausf_L	</userString>
+      <shortUserString>	#germany_vehicles:PzIIIketten_Ausf_L_short	</shortUserString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4650	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	15	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        </leftTrack>
+        <rightTrack>	15	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
+        </rightTrack>
+      </armor>
+      <weight>	7000	</weight>
+      <maxLoad>	22650	</maxLoad>
+      <terrainResistance>	1 1.1 1.7	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	45	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.41 0.39	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.5	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.271616	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.271616	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.42687	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.164508	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.37565	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.42687	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.164508	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.37565	</radius>
+          <syncAngle>	17.1428	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07571 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G10_PzIII_training/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G10_PzIII_training/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.25516 1.45606	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.161410 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.680310 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.608840	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G10_PzIII_AusfJ/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G10_PzIII_AusfJ/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G10_PzIII_AusfJ/track/left.track	</left>
+        <right>	vehicles/german/G10_PzIII_AusfJ/track/right.track	</right>
+        <segmentLength>	0.117	</segmentLength>
+        <segmentOffset>	0.182	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.009	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.2	</maxAmplitude>
+        <maxOffset>	0.2	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1050	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </PzIIIketten_Ausf_L_T>
+  </chassis>
+  <turrets0>
+    <PzIII_Ausf_E_T>
+      <userString>	#germany_vehicles:PzIII_Ausf_E	</userString>
+      <shortUserString>	#germany_vehicles:PzIII_Ausf_E_short	</shortUserString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2290	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	30	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_8>	0	</armor_8>
+        <armor_15>	30	</armor_15>
+        <armor_16>	90	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2200	</weight>
+      <maxHealth>	10	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_KwK_L46_T>	shared	  <maxAmmo>	131	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <models>
+            <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G10_PzIII_training/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G10_PzIII_training/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_KwK_L46_T>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G10_PzIII_AusfJ/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G10_PzIII_AusfJ/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G10_PzIII_training/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G10_PzIII_training/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.3 0.8	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	0.887819 0.351926 0.54122	</rayStart>
+          <rayEnd>	0.707278 0.265889 0.539596	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.252	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.887819 0.351926 0.54122	</rayStart>
+          <rayEnd>	-0.707278 0.265889 0.539596	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.252	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.791 0.167 0.930 0.000 0.772 -0.145 0.500 1.000 0.239 0.500 0.287 0.500 0.119 0.875 0.196	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </PzIII_Ausf_E_T>
+  </turrets0>
+  <engines>
+    <Maybach_HL_108TR_T>	shared	</Maybach_HL_108TR_T>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <FuG5_T>	shared	</FuG5_T>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <PzIIIketten_Ausf_L_T>
+        <alpha>	0.08855	</alpha>
+      </PzIIIketten_Ausf_L_T>
+    </chassis>
+    <engines>
+      <Maybach_HL_108TR_T>
+        <bravo>	84.58249	</bravo>
+      </Maybach_HL_108TR_T>
+    </engines>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.823529	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g10_pziii_ausfj_training.xml>

@@ -1,25 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/updaters.py
+import sys
 import struct
 import constants
+from functools import partial
 from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import addBlock, removeBlock, addRecords, removeRecords, setVersion, getHeader
 import dossiers2.custom.tankmen_dossier1_updater
-ACCOUNT_DOSSIER_VERSION = 100
+from VersionUpdater import VersionUpdaterBase
+from wotdecorators import singleton
+ACCOUNT_DOSSIER_VERSION = 101
+ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
 VEHICLE_DOSSIER_VERSION = 94
+VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
+TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
 FORT_DOSSIER_VERSION = 3
+FORT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromFortDossier%d'
+CLAN_DOSSIER_VERSION = 1
+CLAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromClanDossier%d'
 RATED7X7_DOSSIER_VERSION = 1
+RATED7X7_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromRated7x7Dossier%d'
 CLUB_DOSSIER_VERSION = 2
-
-def __updateFromAccountDossier1(compDescr):
-    if not constants.IS_DEVELOPMENT:
-        raise Exception('unexpected compact descriptor v1.0')
-    import dossiers2
-    d2 = dossiers2.getAccountDossierDescr()
-    return (ACCOUNT_DOSSIER_VERSION, d2.makeCompDescr())
-
+CLUB_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromClubDossier%d'
 
 def __updateFromAccountDossier64(compDescr):
     blocksLayout = ['a15x15',
@@ -259,8 +263,8 @@ def __updateFromAccountDossier70(compDescr):
     a7x7packing = {'battlesCount': (4, 'I')}
     a7x7defaults = getStaticSizeBlockRecordValues(updateCtx, 'a7x7', a7x7packing)
     addRecords(updateCtx, 'a7x7', recordFormats, {'battlesCountBefore9_0': a7x7defaults.get('battlesCount', 0)})
-    setVersion(updateCtx, 72)
-    return (72, updateCtx['dossierCompDescr'])
+    setVersion(updateCtx, 71)
+    return (71, updateCtx['dossierCompDescr'])
 
 
 def __updateFromAccountDossier71(compDescr):
@@ -285,19 +289,6 @@ def __updateFromAccountDossier71(compDescr):
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
-    recordFormats = [('battlesCountBefore9_0', 'I')]
-    a15x15_2packing = {'battlesCountBefore9_0': (44, 'I')}
-    a15x15_2defaults = getStaticSizeBlockRecordValues(updateCtx, 'a15x15_2', a15x15_2packing)
-    removeRecords(updateCtx, 'a15x15_2', a15x15_2packing)
-    addRecords(updateCtx, 'a15x15', recordFormats, a15x15_2defaults)
-    company2Packing = {'battlesCountBefore9_0': (44, 'I')}
-    company2Defaults = getStaticSizeBlockRecordValues(updateCtx, 'company2', company2Packing)
-    removeRecords(updateCtx, 'company2', company2Packing)
-    addRecords(updateCtx, 'company', recordFormats, company2Defaults)
-    clan2Packing = {'battlesCountBefore9_0': (44, 'I')}
-    clan2Defaults = getStaticSizeBlockRecordValues(updateCtx, 'clan2', clan2Packing)
-    removeRecords(updateCtx, 'clan2', clan2Packing)
-    addRecords(updateCtx, 'clan', recordFormats, clan2Defaults)
     setVersion(updateCtx, 72)
     return (72, updateCtx['dossierCompDescr'])
 
@@ -1813,12 +1804,67 @@ def __updateFromAccountDossier99(compDescr):
     return (100, updateCtx['dossierCompDescr'])
 
 
-def __updateFromVehicleDossier1(compDescr):
-    if not constants.IS_DEVELOPMENT:
-        raise Exception('unexpected compact descriptor v1.0')
-    import dossiers2
-    d2 = dossiers2.getVehicleDossierDescr()
-    return (VEHICLE_DOSSIER_VERSION, d2.makeCompDescr())
+def __updateFromAccountDossier100(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'maxFallout',
+     'falloutCut',
+     'falloutAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    formats = [('EFC2016WinSeries', 'H'), ('maxEFC2016WinSeries', 'H'), ('EFC2016Goleador', 'H')]
+    addRecords(updateCtx, 'achievements', formats, {})
+    setVersion(updateCtx, 101)
+    return (101, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):
@@ -2101,8 +2147,8 @@ def __updateFromVehicleDossier71(compDescr):
     a7x7packing = {'battlesCount': (4, 'I')}
     a7x7defaults = getStaticSizeBlockRecordValues(updateCtx, 'a7x7', a7x7packing)
     addRecords(updateCtx, 'a7x7', recordFormats, {'battlesCountBefore9_0': a7x7defaults.get('battlesCount', 0)})
-    setVersion(updateCtx, 73)
-    return (73, updateCtx['dossierCompDescr'])
+    setVersion(updateCtx, 72)
+    return (72, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier72(compDescr):
@@ -2128,19 +2174,6 @@ def __updateFromVehicleDossier72(compDescr):
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
-    recordFormats = [('battlesCountBefore9_0', 'I')]
-    a15x15_2packing = {'battlesCountBefore9_0': (44, 'I')}
-    a15x15_2defaults = getStaticSizeBlockRecordValues(updateCtx, 'a15x15_2', a15x15_2packing)
-    removeRecords(updateCtx, 'a15x15_2', a15x15_2packing)
-    addRecords(updateCtx, 'a15x15', recordFormats, a15x15_2defaults)
-    company2Packing = {'battlesCountBefore9_0': (44, 'I')}
-    company2Defaults = getStaticSizeBlockRecordValues(updateCtx, 'company2', company2Packing)
-    removeRecords(updateCtx, 'company2', company2Packing)
-    addRecords(updateCtx, 'company', recordFormats, company2Defaults)
-    clan2Packing = {'battlesCountBefore9_0': (44, 'I')}
-    clan2Defaults = getStaticSizeBlockRecordValues(updateCtx, 'clan2', clan2Packing)
-    removeRecords(updateCtx, 'clan2', clan2Packing)
-    addRecords(updateCtx, 'clan', recordFormats, clan2Defaults)
     setVersion(updateCtx, 73)
     return (73, updateCtx['dossierCompDescr'])
 
@@ -3095,9 +3128,21 @@ def __updateFromVehicleDossier93(compDescr):
     return (94, updateCtx['dossierCompDescr'])
 
 
-def __updateFromTankmanDossier1(compDescr):
-    return (dossiers2.TANKMAN_DOSSIER_VERSION, dossiers2.custom.tankmen_dossier1_updater.updateDossierCompDescr(compDescr))
+def __bootstrapTankmanDossierFrom(ver, compDescr):
+    return (ver, compDescr) if ver > 14 else (TANKMAN_DOSSIER_VERSION, dossiers2.custom.tankmen_dossier1_updater.updateDossierCompDescr(compDescr))
 
+
+def __addTankmanDossierUpdaters(module, seq):
+    for v in seq:
+        updaterName = '__updateFromTankmanDossier%d' % (v,)
+        if getattr(module, updaterName, None) is None:
+            setattr(module, updaterName, partial(__bootstrapTankmanDossierFrom, v))
+            getattr(module, updaterName).__name__ = updaterName
+
+    return
+
+
+__addTankmanDossierUpdaters(sys.modules[__name__], xrange(10, 64))
 
 def __updateFromTankmanDossier64(compDescr):
     blocksLayout = ['total', 'achievements']
@@ -3181,107 +3226,60 @@ def __updateFromClubDossier1(compDescr):
     return (2, updateCtx['dossierCompDescr'])
 
 
-accountVersionUpdaters = {19: __updateFromAccountDossier1,
- 20: __updateFromAccountDossier1,
- 21: __updateFromAccountDossier1,
- 22: __updateFromAccountDossier1,
- 23: __updateFromAccountDossier1,
- 24: __updateFromAccountDossier1,
- 25: __updateFromAccountDossier1,
- 26: __updateFromAccountDossier1,
- 27: __updateFromAccountDossier1,
- 28: __updateFromAccountDossier1,
- 29: __updateFromAccountDossier1,
- 30: __updateFromAccountDossier1,
- 31: __updateFromAccountDossier1,
- 32: __updateFromAccountDossier1,
- 64: __updateFromAccountDossier64,
- 65: __updateFromAccountDossier65,
- 66: __updateFromAccountDossier66,
- 67: __updateFromAccountDossier67,
- 68: __updateFromAccountDossier68,
- 69: __updateFromAccountDossier69,
- 70: __updateFromAccountDossier70,
- 71: __updateFromAccountDossier71,
- 72: __updateFromAccountDossier72,
- 73: __updateFromAccountDossier73,
- 74: __updateFromAccountDossier74,
- 75: __updateFromAccountDossier75,
- 76: __updateFromAccountDossier76,
- 77: __updateFromAccountDossier77,
- 78: __updateFromAccountDossier78,
- 79: __updateFromAccountDossier79,
- 80: __updateFromAccountDossier80,
- 81: __updateFromAccountDossier81,
- 82: __updateFromAccountDossier82,
- 83: __updateFromAccountDossier83,
- 84: __updateFromAccountDossier84,
- 85: __updateFromAccountDossier85,
- 86: __updateFromAccountDossier86,
- 87: __updateFromAccountDossier87,
- 88: __updateFromAccountDossier88,
- 89: __updateFromAccountDossier89,
- 90: __updateFromAccountDossier90,
- 91: __updateFromAccountDossier91,
- 92: __updateFromAccountDossier92,
- 93: __updateFromAccountDossier93,
- 94: __updateFromAccountDossier94,
- 95: __updateFromAccountDossier95,
- 96: __updateFromAccountDossier96,
- 97: __updateFromAccountDossier97,
- 98: __updateFromAccountDossier98,
- 99: __updateFromAccountDossier99}
-vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
- 18: __updateFromVehicleDossier1,
- 19: __updateFromVehicleDossier1,
- 20: __updateFromVehicleDossier1,
- 21: __updateFromVehicleDossier1,
- 22: __updateFromVehicleDossier1,
- 23: __updateFromVehicleDossier1,
- 24: __updateFromVehicleDossier1,
- 25: __updateFromVehicleDossier1,
- 26: __updateFromVehicleDossier1,
- 27: __updateFromVehicleDossier1,
- 28: __updateFromVehicleDossier1,
- 29: __updateFromVehicleDossier1,
- 64: __updateFromVehicleDossier64,
- 65: __updateFromVehicleDossier65,
- 66: __updateFromVehicleDossier66,
- 67: __updateFromVehicleDossier67,
- 68: __updateFromVehicleDossier68,
- 69: __updateFromVehicleDossier69,
- 70: __updateFromVehicleDossier70,
- 71: __updateFromVehicleDossier71,
- 72: __updateFromVehicleDossier72,
- 73: __updateFromVehicleDossier73,
- 74: __updateFromVehicleDossier74,
- 75: __updateFromVehicleDossier75,
- 76: __updateFromVehicleDossier76,
- 77: __updateFromVehicleDossier77,
- 78: __updateFromVehicleDossier78,
- 79: __updateFromVehicleDossier79,
- 80: __updateFromVehicleDossier80,
- 81: __updateFromVehicleDossier81,
- 82: __updateFromVehicleDossier82,
- 83: __updateFromVehicleDossier83,
- 84: __updateFromVehicleDossier84,
- 85: __updateFromVehicleDossier85,
- 86: __updateFromVehicleDossier86,
- 87: __updateFromVehicleDossier87,
- 88: __updateFromVehicleDossier88,
- 89: __updateFromVehicleDossier89,
- 90: __updateFromVehicleDossier90,
- 91: __updateFromVehicleDossier91,
- 92: __updateFromVehicleDossier92,
- 93: __updateFromVehicleDossier93}
-tankmanVersionUpdaters = {10: __updateFromTankmanDossier1,
- 11: __updateFromTankmanDossier1,
- 12: __updateFromTankmanDossier1,
- 13: __updateFromTankmanDossier1,
- 14: __updateFromTankmanDossier1,
- 64: __updateFromTankmanDossier64,
- 65: __updateFromTankmanDossier65}
-fortVersionUpdaters = {1: __updateFromFortDossier1,
- 2: __updateFromFortDossier2}
-rated7x7VersionUpdaters = {}
-clubVersionUpdaters = {1: __updateFromClubDossier1}
+class DossierVersionUpdaterBase(VersionUpdaterBase):
+
+    def __init__(self, logID, functionTemplate, latestVersion):
+        super(DossierVersionUpdaterBase, self).__init__(functionTemplate, latestVersion)
+        self.__logID = logID
+
+    def updateVersion(self, currentVersion, compDescr):
+        return self._updateToLatestVersion(currentVersion, self.__logID, compDescr)[0]
+
+
+@singleton
+class AccountDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Account dossier', ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE, ACCOUNT_DOSSIER_VERSION)
+
+
+@singleton
+class VehicleDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Vehicle dossier', VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE, VEHICLE_DOSSIER_VERSION)
+
+
+@singleton
+class TankmanDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Tankman dossier', TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE, TANKMAN_DOSSIER_VERSION)
+
+
+@singleton
+class FortDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Fort dossier', FORT_DOSSIER_UPDATE_FUNCTION_TEMPLATE, FORT_DOSSIER_VERSION)
+
+
+@singleton
+class ClanDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Clan dossier', CLAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE, CLAN_DOSSIER_VERSION)
+
+
+@singleton
+class Rated7x7DossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Rated7x7 dossier', RATED7X7_DOSSIER_UPDATE_FUNCTION_TEMPLATE, RATED7X7_DOSSIER_VERSION)
+
+
+@singleton
+class ClubDossierVersionUpdater(DossierVersionUpdaterBase):
+
+    def __init__(self):
+        super(self.__class__, self).__init__('Club dossier', CLUB_DOSSIER_UPDATE_FUNCTION_TEMPLATE, CLUB_DOSSIER_VERSION)

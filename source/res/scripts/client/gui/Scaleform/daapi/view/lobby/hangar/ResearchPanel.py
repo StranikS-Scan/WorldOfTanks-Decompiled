@@ -3,8 +3,7 @@
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
-from helpers.i18n import makeString
-from gui import makeHtmlString
+from gui.shared.gui_items.Vehicle import getLobbyDescription
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
 
@@ -30,14 +29,8 @@ class ResearchPanel(ResearchPanelMeta):
         if g_currentVehicle.isPresent():
             xps = g_itemsCache.items.stats.vehiclesXPs
             xp = xps.get(g_currentVehicle.item.intCD, 0)
-            isElite = g_currentVehicle.item.isElite
-            vTypeId = g_currentVehicle.item.type
-            vTypeName = makeString('#menu:header/vehicleType/elite/%s' % vTypeId) if isElite is True else makeString('#menu:header/vehicleType/%s' % vTypeId)
-            vDescription = makeString('#menu:header/level', vTypeName=vTypeName)
-            vLevel = makeString('#menu:header/level/%s' % g_currentVehicle.item.level)
-            vDescription = makeHtmlString('html_templates:lobby/header', 'vehicle-level', {'level': vLevel,
-             'vDescription': vDescription})
-            self.as_updateCurrentVehicleS(g_currentVehicle.item.userName, vTypeId, vDescription, xp, isElite, g_currentVehicle.item.isPremiumIGR)
+            vehicle = g_currentVehicle.item
+            self.as_updateCurrentVehicleS(vehicle.userName, vehicle.type, getLobbyDescription(vehicle), xp, vehicle.isElite, g_currentVehicle.item.isPremiumIGR)
         else:
             self.as_updateCurrentVehicleS('', '', '', 0, False, False)
 

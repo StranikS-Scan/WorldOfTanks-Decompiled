@@ -69,6 +69,14 @@ def _fix_ordered_dict():
                 yield curr.key
                 curr = curr.next
 
+        def iteritems(self):
+            for key in self:
+                yield (key, self[key])
+
+        def itervalues(self):
+            for key in self:
+                yield self[key]
+
         def __reversed__(self):
             """od.__reversed__() <==> reversed(od)"""
             root = self.__root
@@ -141,6 +149,7 @@ def _fix_ordered_dict():
                 link.next = first
                 root.next = first.prev = link
 
+        iterkeys = __iter__
         setdefault = MutableMapping.setdefault
         update = MutableMapping.update
         pop = MutableMapping.pop

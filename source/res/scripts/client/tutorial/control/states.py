@@ -68,7 +68,9 @@ class TutorialStateLearning(_TutorialState):
 
     def tick(self):
         scene = self._tutorial.getFunctionalScene()
-        scene.update()
+        if scene is not None:
+            scene.update()
+        return
 
     def setInput(self, event):
         scene = self._tutorial.getFunctionalScene()

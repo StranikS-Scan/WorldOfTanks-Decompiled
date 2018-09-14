@@ -4,6 +4,7 @@ import ResMgr
 from items import _xml
 from gui import doc_loaders
 from debug_utils import *
+import WWISE
 
 class GuiSoundsLoader(object):
     """
@@ -71,7 +72,8 @@ class GuiSoundsLoader(object):
                                                 sounds for schemas
         @return: [str] sound path
         """
-        state = 'ww' + state
+        if WWISE.enabled:
+            state = 'ww' + state
         if controlID is not None and controlID in self.__overrides:
             return self.__overrides[controlID].get(state)
         elif controlType in self.__groups:

@@ -11,6 +11,13 @@
     <forward>	38	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.112	</moving>
+    <still>	0.187	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.281	</firePenalty>
+  </invisibility>
   <repairCost>	8.4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -68,7 +75,8 @@
       <turret>	0.000000 1.03995 1.19585	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G44_JagdTiger/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -210,13 +218,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.10965 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G44_JagdTiger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.40304 2.23187	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -550,13 +557,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.10965 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G44_JagdTiger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.40304 2.23187	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -851,6 +857,7 @@
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G44_JagdTiger/normal/lod0/Gun_01.model	</undamaged>
@@ -858,7 +865,8 @@
             <exploded>	vehicles/german/G44_JagdTiger/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G44_JagdTiger/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -879,7 +887,7 @@
           <reloadTime>	11.4	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <unlocks>
-            <vehicle>	JagdPz_E100	  <cost>	210000	</cost>
+            <vehicle>	G72_JagdPz_E100	  <cost>	210000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -898,6 +906,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G44_JagdTiger/normal/lod0/Gun_02.model	</undamaged>
@@ -905,7 +914,8 @@
             <exploded>	vehicles/german/G44_JagdTiger/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G44_JagdTiger/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -928,15 +938,14 @@
         <exploded>	vehicles/german/G44_JagdTiger/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G44_JagdTiger/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G44_JagdTiger/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G44_JagdTiger/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.139772 0.233882	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </JagdTiger_turm>
   </turrets0>
   <engines>
@@ -963,6 +972,25 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <JagdTiger_Standardketten>
+        <alpha>	0.1127	</alpha>
+      </JagdTiger_Standardketten>
+      <JagdTiger_Vetstaerktketten>
+        <alpha>	0.10465	</alpha>
+      </JagdTiger_Vetstaerktketten>
+    </chassis>
+    <engines>
+      <Maybach_HL_210_TRM_P30>
+        <bravo>	171.8082	</bravo>
+      </Maybach_HL_210_TRM_P30>
+      <Maybach_HL_230_TRM_P30>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230_TRM_P30>
+    </engines>
+    <armour>	0.746031969	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

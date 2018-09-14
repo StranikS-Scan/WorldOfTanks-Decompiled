@@ -5,6 +5,7 @@ from messenger.proto.xmpp.extensions import PyQuery, PyExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
 from messenger.proto.xmpp.extensions.shared_handlers import IQHandler
+from messenger.proto.xmpp.extensions.wg_items import WgSharedExtension
 from messenger.proto.xmpp.gloox_constants import IQ_TYPE
 Identity = namedtuple('Identity', ('name', 'category', 'type'))
 
@@ -34,6 +35,22 @@ class FeatureElement(PyExtension):
         super(FeatureElement, self).parseTag(pyGlooxTag)
 
 
+class CreatedByElement(PyExtension):
+
+    def __init__(self):
+        super(CreatedByElement, self).__init__(_TAG.CREATED_BY)
+        self.setXmlNs(_NS.WG_DISCO_ITEMS)
+        self.setChild(WgSharedExtension())
+
+    @classmethod
+    def getDefaultData(cls):
+        return WgSharedExtension.getDefaultData()
+
+    def parseTag(self, pyGlooxTag):
+        info = self._getChildData(pyGlooxTag, 0, WgSharedExtension.getDefaultData())
+        return info
+
+
 class DiscoInfoExtension(PyExtension):
 
     def __init__(self):
@@ -41,6 +58,7 @@ class DiscoInfoExtension(PyExtension):
         self.setXmlNs(_NS.DISCO_INFO)
         self.setChild(IdentityElement())
         self.setChild(FeatureElement())
+        self.setChild(CreatedByElement())
 
     @classmethod
     def getDefaultData(cls):
@@ -55,7 +73,8 @@ class DiscoInfoExtension(PyExtension):
             if feature is not None:
                 features.append(feature)
 
-        return (identity, features)
+        created_by = self._getChildData(pyGlooxTag, 2, CreatedByElement.getDefaultData())
+        return (identity, features, created_by)
 
     def _makeChildrenString(self):
         pass

@@ -5,7 +5,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.search_processor import SearchProcessor
-from messenger_common_chat2 import MESSENGER_LIMITS
+from messenger.proto.bw_chat2 import limits
 from messenger.ext import checkAccountName
 from messenger.proto.bw_chat2 import errors
 
@@ -13,6 +13,7 @@ class SearchUsersProcessor(SearchProcessor):
 
     def __init__(self):
         super(SearchUsersProcessor, self).__init__()
+        self.__limits = limits.FindUserLimits()
 
     def init(self):
         super(SearchUsersProcessor, self).init()
@@ -23,9 +24,11 @@ class SearchUsersProcessor(SearchProcessor):
     def proto(self):
         return None
 
-    @classmethod
     def getSearchResultLimit(self):
-        return MESSENGER_LIMITS.FIND_USERS_BY_NAME_MAX_RESULT_SIZE
+        return self.__limits.getMaxResultSize()
+
+    def getSearchCoolDown(self):
+        return self.__limits.getRequestCooldown()
 
     def find(self, token, onlineMode=None):
         token = token.strip()

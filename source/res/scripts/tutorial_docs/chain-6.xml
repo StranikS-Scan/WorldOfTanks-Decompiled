@@ -111,6 +111,11 @@
     <trigger>	FreeSlotTrigger	  <type>	freeSlot	</type>
       <on-effects>
         <activate>	FreeSlotBought	</activate>
+        <request-bonus>
+          <condition>
+            <inactive>	BonusReceived	</inactive>
+          </condition>
+        </request-bonus>
       </on-effects>
       <off-effects>
         <inactivate>	FreeSlotBought	</inactivate>

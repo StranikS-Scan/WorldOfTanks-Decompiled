@@ -11,6 +11,13 @@
     <forward>	56.3	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.054	</moving>
+    <still>	0.107	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.161	</firePenalty>
+  </invisibility>
   <repairCost>	30.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	0.000000 0.368928 -1.2935	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A88_M53_55/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A88_M53_55/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -128,7 +136,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.5	</textureScale>
+        <textureScale>	-2.75	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -193,13 +201,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.24267 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A88_M53_55/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A88_M53_55/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.47337 2.31404	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -239,9 +246,9 @@
         <segment2ModelRight>	vehicles/american/A88_M53_55/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A88_M53_55/track/left.track	</left>
         <right>	vehicles/american/A88_M53_55/track/right.track	</right>
-        <segmentLength>	0.139	</segmentLength>
-        <segmentOffset>	0.14	</segmentOffset>
-        <segment2Offset>	0.073	</segment2Offset>
+        <segmentLength>	0.142	</segmentLength>
+        <segmentOffset>	0.235	</segmentOffset>
+        <segment2Offset>	0.083	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -257,9 +264,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1105	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -364,7 +368,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.5	</textureScale>
+        <textureScale>	-2.75	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -449,9 +453,9 @@
         <segment2ModelRight>	vehicles/american/A88_M53_55/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A88_M53_55/track/left.track	</left>
         <right>	vehicles/american/A88_M53_55/track/right.track	</right>
-        <segmentLength>	0.139	</segmentLength>
-        <segmentOffset>	0.14	</segmentOffset>
-        <segment2Offset>	0.073	</segment2Offset>
+        <segmentLength>	0.142	</segmentLength>
+        <segmentOffset>	0.235	</segmentOffset>
+        <segment2Offset>	0.083	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -467,9 +471,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1105	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -540,13 +541,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.24267 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A88_M53_55/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A88_M53_55/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.47337 2.31404	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -616,6 +616,7 @@
           </armor>
           <shotDispersionRadius>	0.68	</shotDispersionRadius>
           <aimingTime>	6	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-30 30	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
@@ -627,7 +628,8 @@
             <exploded>	vehicles/american/A88_M53_55/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A88_M53_55/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A88_M53_55/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -647,7 +649,7 @@
           <reloadTime>	45.2	</reloadTime>
           <shotDispersionRadius>	0.84	</shotDispersionRadius>
           <unlocks>
-            <vehicle>	T92	  <cost>	271000	</cost>
+            <vehicle>	A38_T92	  <cost>	271000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -660,6 +662,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	7	</aimingTime>
+          <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -65 1 -65	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -671,7 +674,8 @@
             <exploded>	vehicles/american/A88_M53_55/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A88_M53_55/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A88_M53_55/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -694,7 +698,8 @@
         <exploded>	vehicles/american/A88_M53_55/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A88_M53_55/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A88_M53_55/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A88_M53_55/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.829 0.5251	</gunPosition>
       <emblemSlots>
@@ -722,9 +727,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.929 0.059 0.852 0.000 0.728 -0.272 0.149 0.027 0.122 0.500 0.000 0.500 0.162 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
     </Turret_1_M53_55>
   </turrets0>
   <engines>
@@ -746,6 +749,30 @@
     </AN_PRC_10>
     <AN_PRC_25>	shared	</AN_PRC_25>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_203mm_Howitzer_M47>
+        <delta>	1.104368	</delta>
+      </_203mm_Howitzer_M47>
+    </guns>
+    <chassis>
+      <Chassis_M53_55>
+        <alpha>	0.12075	</alpha>
+      </Chassis_M53_55>
+      <Chassis_M53_55_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_M53_55_2>
+    </chassis>
+    <engines>
+      <Ford_GAC_R>
+        <bravo>	203.5266	</bravo>
+      </Ford_GAC_R>
+      <Continental_AV-1790-7B>
+        <bravo>	214.0994	</bravo>
+      </Continental_AV-1790-7B>
+    </engines>
+    <armour>	0.878196397	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

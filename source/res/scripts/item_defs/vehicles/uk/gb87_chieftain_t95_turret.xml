@@ -51,7 +51,8 @@
       <turret>	-0.000001 0.511346 0.610158	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB87_Chieftain_T95_turret/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB87_Chieftain_T95_turret/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -174,13 +175,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.07847 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB87_Chieftain_T95_turret/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB87_Chieftain_T95_turret/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34524 2.31032	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -335,6 +335,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.35 10 0.352778 9 0.355556 8 0.358333 7 0.361111 6 0.363889 5 0.366667 4 0.369444 3 0.372222 2.4 0.408333 2.4 0.411111 2.2 0.416667 2 0.422222 1.8 0.427778 1.6 0.486111 1.6 0.488889 1.4 0.491667 1.2 0.508333 1.2 0.511111 1.4 0.513889 1.6 0.572222 1.6 0.577778 1.8 0.583333 2 0.588889 2.2 0.591667 2.4 0.627778 2.4 0.630556 3 0.633333 4 0.636111 5 0.638889 6 0.641667 7 0.644444 8 0.647222 9 0.65 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	8.3	</reloadTime>
           <shotDispersionFactors>
@@ -349,7 +350,8 @@
             <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB87_Chieftain_T95_turret/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB87_Chieftain_T95_turret/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -409,7 +411,8 @@
         <exploded>	vehicles/british/GB87_Chieftain_T95_turret/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB87_Chieftain_T95_turret/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB87_Chieftain_T95_turret/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB87_Chieftain_T95_turret/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000499 0.365597 1.3023	</gunPosition>
       <emblemSlots>
@@ -443,8 +446,6 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.000 0.000 1.000 0.000 0.538 0.133 0.766 0.646 0.445 0.500 0.355 0.500 0.000 0.100 0.310	</physicsShape>
       <camouflage>
@@ -462,6 +463,13 @@
     <forward>	42	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.09	</moving>
+    <still>	0.119	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.179	</firePenalty>
+  </invisibility>
   <repairCost>	8.5	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -474,6 +482,19 @@
   <radios>
     <C42_B47>	shared	</C42_B47>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB87_Chieftain_T95_turret>
+        <alpha>	0.0805	</alpha>
+      </Chassis_GB87_Chieftain_T95_turret>
+    </chassis>
+    <engines>
+      <Leyland_L60_No_4>
+        <bravo>	198.2402	</bravo>
+      </Leyland_L60_No_4>
+    </engines>
+    <armour>	1.059943384	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision>	collision	</collision>
     <damagedStateGroup>	large	</damagedStateGroup>

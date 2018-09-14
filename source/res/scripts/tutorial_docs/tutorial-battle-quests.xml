@@ -5,7 +5,7 @@
     <scene>	Battle	  <post-effects>
         <run-trigger>	MedkitUseTrigger	</run-trigger>
         <run-trigger>	RepairKitUseTrigger	</run-trigger>
-        <run-trigger>	FireExtinguisherUseTrigger	</run-trigger>
+        <run-trigger>	FireExtinguisherInstalledTrigger	</run-trigger>
       </post-effects>
       <runtime-effects></runtime-effects>
       <gui-items></gui-items>
@@ -18,7 +18,7 @@
     <tutorial-setting>	RepairKitUsedSetting	  <setting-name>	repairKitUsed	</setting-name>
       <setting-value>	True	</setting-value>
     </tutorial-setting>
-    <tutorial-setting>	FireExtinguisherUsedSetting	  <setting-name>	fireExtinguisherUsed	</setting-name>
+    <tutorial-setting>	FireExtinguisherWasInBattleSetting	  <setting-name>	fireExtinguisherUsed	</setting-name>
       <setting-value>	True	</setting-value>
     </tutorial-setting>
   </has-id>
@@ -50,6 +50,8 @@
         </items>
       </asDict>
     </var-set>
+    <var-set>	FireExtinguisherInstalledVar	  <asString>	fireExtinguisherInstalled	</asString>
+    </var-set>
   </vars>
   <triggers>
     <trigger>	MedkitUseTrigger	  <type>	useItem	</type>
@@ -66,10 +68,10 @@
       </on-effects>
       <off-effects></off-effects>
     </trigger>
-    <trigger>	FireExtinguisherUseTrigger	  <type>	useItem	</type>
+    <trigger>	FireExtinguisherInstalledTrigger	  <type>	installItem	</type>
       <validate-var>	FireExtinguishersConditionVar	</validate-var>
       <on-effects>
-        <save-setting>	FireExtinguisherUsedSetting	</save-setting>
+        <save-setting>	FireExtinguisherWasInBattleSetting	</save-setting>
       </on-effects>
       <off-effects></off-effects>
     </trigger>

@@ -208,7 +208,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
         return province.getProvinceLocalizedName()
 
     def __getMap(self, province):
-        return getI18ArenaById(province.getArenaName())
+        return formatField(getter=province.getArenaId, formatter=lambda arena_id: getI18ArenaById(arena_id))
 
     def __getPrimeTime(self, province):
         primeTime = province.getPrimeTime()

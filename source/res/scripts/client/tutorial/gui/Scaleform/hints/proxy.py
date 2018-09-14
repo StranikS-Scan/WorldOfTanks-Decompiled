@@ -27,7 +27,7 @@ class HintsProxy(SfLobbyProxy):
         addListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         self.__eManager.clear()
         self.effects.stopAll()
         removeListener = g_eventBus.removeListener

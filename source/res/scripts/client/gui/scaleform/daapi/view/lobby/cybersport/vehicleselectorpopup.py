@@ -6,7 +6,8 @@ from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import Vehicl
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleSelectorPopupMeta import VehicleSelectorPopupMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.ItemsCache import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 

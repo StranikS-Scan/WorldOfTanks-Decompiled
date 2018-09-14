@@ -9,6 +9,13 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.098	</moving>
+    <still>	0.163	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.245	</firePenalty>
+  </invisibility>
   <repairCost>	6.0	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -37,7 +44,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15865	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	920	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -62,7 +69,8 @@
       <turret>	0.000056 0.660448 -0.288547	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G114_Skorpian/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -110,8 +118,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.23974 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G114_Skorpian/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.32129 1.91752	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -223,14 +230,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.09	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-7.4	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -431,14 +435,14 @@
         <armor_5>	10	</armor_5>
       </armor>
       <weight>	3150	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -453,21 +457,29 @@
           <pitchLimits>	-90 90	  <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 5.75 0.072222 5.75 0.086111 7 0.386111 7 0.4 2.9 0.6 2.9 0.613889 7 0.913889 7 0.927778 5.75 1 5.75	</maxPitch>
           </pitchLimits>
-          <reloadTime>	14.2	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <reloadTime>	12.2	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/german/G114_Skorpian/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G114_Skorpian/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G114_Skorpian/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000056 0.50928 5.72967	</rayStart>
+              <rayStart>	-0.000056 0.246871 5.79	</rayStart>
               <rayEnd>	-0.00628333 0.485546 5.72571	</rayEnd>
-              <rayUp>	0.101 0.091 4	</rayUp>
+              <rayUp>	0.103 0.092 4	</rayUp>
               <size>	0.47	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -485,9 +497,10 @@
         <exploded>	vehicles/german/G114_Skorpian/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G114_Skorpian/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G114_Skorpian/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G114_Skorpian/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <gunPosition>	0.000000 0.26241 -0.114005	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.24143 0.352097 -0.049547	</rayStart>
@@ -506,9 +519,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	1.030 0.216 1.053 0.000 1.006 0.000 0.581 0.401 0.622 0.500 0.075 0.500 0.312 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	1.96 0.82 0.52 0.06	</tiling>
@@ -524,6 +535,19 @@
   <radios>
     <FuG_FA>	shared	</FuG_FA>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G114_Skorpian>
+        <alpha>	0.12075	</alpha>
+      </Chassis_G114_Skorpian>
+    </chassis>
+    <engines>
+      <Maybach_HL_210_TRM_P30_A>
+        <bravo>	212.5	</bravo>
+      </Maybach_HL_210_TRM_P30_A>
+    </engines>
+    <armour>	0.850624002	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

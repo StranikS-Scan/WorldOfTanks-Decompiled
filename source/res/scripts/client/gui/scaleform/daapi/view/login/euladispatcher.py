@@ -70,7 +70,7 @@ class EULADispatcher(EventSystemEntity):
         from account_helpers.AccountSettings import EULA_VERSION
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         version = {'version': self.EULAVersion.xmlVersion}
-        g_settingsCore.serverSettings.setSection(EULA_VERSION, version)
+        g_settingsCore.serverSettings.setSectionSettings(EULA_VERSION, version)
         self.serverVersion = None
         self.EULACallback(True)
         return

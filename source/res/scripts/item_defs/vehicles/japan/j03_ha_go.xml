@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.2	</moving>
+    <still>	0.266	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.399	</firePenalty>
+  </invisibility>
   <repairCost>	3.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	-0.129174 0.576724 0.057301	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -190,13 +198,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.968797 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.899746 1.12284	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -419,13 +426,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.968797 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.899746 1.12284	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -611,13 +617,15 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.535 0.37 0.000000 0.000000	</tiling>
@@ -647,13 +655,15 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.55 0.37 0.000000 0.000000	</tiling>
@@ -681,13 +691,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.625 0.43 0.000000 0.000000	</tiling>
@@ -700,7 +712,8 @@
         <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.061182 0.245479 0.652885	</gunPosition>
       <emblemSlots>
@@ -729,9 +742,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.916 0.024 1.011 0.000 0.376 0.210 0.652 0.467 0.365 0.550 0.251 0.500 0.230 0.638 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
       </camouflage>
@@ -798,13 +809,15 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.61 0.43 0.000000 0.000000	</tiling>
@@ -829,13 +842,15 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.625 0.43 0.000000 0.000000	</tiling>
@@ -863,13 +878,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J03_Ha_Go/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_08.model	</destroyed>
             <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.67 0.43 0.000000 0.000000	</tiling>
@@ -882,7 +899,8 @@
         <exploded>	vehicles/japan/J03_Ha_Go/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J03_Ha_Go/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J03_Ha_Go/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J03_Ha_Go/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.048904 0.225779 0.64212	</gunPosition>
       <emblemSlots>
@@ -911,9 +929,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.050 -0.011 1.000 0.000 0.348 0.264 0.669 0.628 0.603 0.232 0.132 0.500 0.098 0.527 0.066	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.37 0.000000 0.000000	</tiling>
       </camouflage>
@@ -933,6 +949,25 @@
   <radios>
     <_Type94_Hei>	shared	</_Type94_Hei>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ha_Go>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Ha_Go>
+      <Chassis_Ha_Go_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Ha_Go_2>
+    </chassis>
+    <engines>
+      <_A6120VDe>
+        <bravo>	31.71843	</bravo>
+      </_A6120VDe>
+      <_A6120VDe_S>
+        <bravo>	35.68324	</bravo>
+      </_A6120VDe_S>
+    </engines>
+    <armour>	0.716041208	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

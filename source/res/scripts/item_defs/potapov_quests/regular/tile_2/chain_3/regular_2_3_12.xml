@@ -8,11 +8,14 @@
         <postBattle>
           <and>
             <vehicleDamage>
-              <lvlDiff>	1	</lvlDiff>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -28,16 +31,19 @@
       <conditions>
         <postBattle>
           <and>
-            <results>
-              <key>	xp	</key>
-              <max>	3	</max>
-            </results>
             <vehicleDamage>
-              <lvlDiff>	1	</lvlDiff>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	2000	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
           </and>
         </postBattle>
       </conditions>

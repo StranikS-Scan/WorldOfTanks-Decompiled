@@ -1,26 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
-import BigWorld
-import Math
-from Math import Vector2, Vector3, Matrix
-import math
-import random
-import weakref
-from AvatarInputHandler import mathUtils, DynamicCameras, AimingSystems, cameras
-from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from helpers.CallbackDelayer import CallbackDelayer
-from AvatarInputHandler.Oscillator import Oscillator
-from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, readBool, ImpulseReason, FovExtended
 import BattleReplay
+import BigWorld
 import Settings
 import constants
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from AvatarInputHandler import mathUtils, cameras
+from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
+from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
+from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, ImpulseReason, FovExtended
+from Math import Vector2, Vector3, Matrix
 from account_helpers.settings_core.SettingsCore import g_settingsCore
+from avatar_helpers import aim_global_binding
+from debug_utils import LOG_WARNING
+from helpers.CallbackDelayer import CallbackDelayer
 
 def getCameraAsSettingsHolder(settingsDataSec):
-    return SniperCamera(settingsDataSec, None, None)
+    return SniperCamera(settingsDataSec)
 
 
 class SniperCamera(ICamera, CallbackDelayer):
@@ -39,8 +35,10 @@ class SniperCamera(ICamera, CallbackDelayer):
     _MIN_REL_SPEED_ACC_SMOOTHING = 0.7
     camera = property(lambda self: self.__cam)
     aimingSystem = property(lambda self: self.__aimingSystem)
+    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
+    __zoomFactor = aim_global_binding.bind(aim_global_binding.BINDING_ID.ZOOM_FACTOR)
 
-    def __init__(self, dataSec, aim, binoculars):
+    def __init__(self, dataSec, defaultOffset=None, binoculars=None):
         CallbackDelayer.__init__(self)
         self.__impulseOscillator = None
         self.__movementOscillator = None
@@ -48,7 +46,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__dynamicCfg = CameraDynamicConfig()
         self.__accelerationSmoother = None
         self.__readCfg(dataSec)
-        if aim is None or binoculars is None:
+        if binoculars is None:
             return
         else:
             self.__cam = BigWorld.FreeCamera()
@@ -58,16 +56,21 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__waitVehicleCallbackId = None
             self.__onChangeControlMode = None
             self.__aimingSystem = SniperAimingSystem(dataSec)
-            self.__aim = weakref.proxy(aim)
             self.__binoculars = binoculars
-            self.__defaultAimOffset = self.__aim.offset()
-            self.__defaultAimOffset = (self.__defaultAimOffset[0], self.__defaultAimOffset[1])
+            self.__defaultAimOffset = defaultOffset or Vector2()
             self.__crosshairMatrix = createCrosshairMatrix(offsetFromNearPlane=self.__dynamicCfg['aimMarkerDistance'])
             self.__prevTime = BigWorld.time()
             self.__autoUpdateDxDyDz = Vector3(0, 0, 0)
+            if BattleReplay.g_replayCtrl.isPlaying:
+                BattleReplay.g_replayCtrl.setDataCallback('applyZoom', self.__applyZoom)
             return
 
     def __onSettingsChanged(self, diff):
+        if 'increasedZoom' in diff:
+            self.__cfg['increasedZoom'] = diff['increasedZoom']
+            if not self.__cfg['increasedZoom']:
+                self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][:3][-1]
+                self.delayCallback(0.0, self.__applyZoom, self.__cfg['zoom'])
         if 'fov' in diff:
             self.delayCallback(0.01, self.__applyZoom, self.__cfg['zoom'])
 
@@ -83,7 +86,6 @@ class SniperCamera(ICamera, CallbackDelayer):
         if self.__aimingSystem is not None:
             self.__aimingSystem.destroy()
             self.__aimingSystem = None
-        self.__aim = None
         CallbackDelayer.destroy(self)
         return
 
@@ -123,6 +125,9 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__autoUpdateDxDyDz.set(0)
         FovExtended.instance().resetFov()
         return
+
+    def getConfigValue(self, name):
+        return self.__cfg.get(name)
 
     def getUserConfigValue(self, name):
         return self.__userCfg.get(name)
@@ -207,6 +212,9 @@ class SniperCamera(ICamera, CallbackDelayer):
         return
 
     def __applyZoom(self, zoomFactor):
+        self.__zoomFactor = zoomFactor
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.serializeCallbackData('applyZoom', (zoomFactor,))
         FovExtended.instance().setFovByMultiplier(1 / zoomFactor)
 
     def __setupZoom(self, dz):
@@ -214,6 +222,8 @@ class SniperCamera(ICamera, CallbackDelayer):
             return
         else:
             zooms = self.__cfg['zooms']
+            if not self.__cfg['increasedZoom']:
+                zooms = zooms[:3]
             prevZoom = self.__zoom
             if self.__zoom == zooms[0] and dz < 0 and self.__onChangeControlMode is not None:
                 self.__onChangeControlMode(True)
@@ -243,7 +253,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__rotateAndZoom(self.__autoUpdateDxDyDz.x, self.__autoUpdateDxDyDz.y, self.__autoUpdateDxDyDz.z)
         self.__aimingSystem.update(deltaTime)
         localTransform, impulseTransform = self.__updateOscillators(deltaTime)
-        aimMatrix = cameras.getAimMatrix(*self.__defaultAimOffset)
+        aimMatrix = cameras.getAimMatrix(self.__defaultAimOffset.x, self.__defaultAimOffset.y)
         camMat = Matrix(aimMatrix)
         rodMat = mathUtils.createTranslationMatrix(-self.__dynamicCfg['pivotShift'])
         antiRodMat = mathUtils.createTranslationMatrix(self.__dynamicCfg['pivotShift'])
@@ -262,7 +272,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             binocularsOffset = self.__calcAimOffset()
             if replayCtrl.isRecording:
                 replayCtrl.setAimClipPosition(aimOffset)
-        self.__aim.offset(aimOffset)
+        self.__aimOffset = aimOffset
         self.__binoculars.setMaskCenter(binocularsOffset.x, binocularsOffset.y)
         player = BigWorld.player()
         if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):
@@ -353,20 +363,22 @@ class SniperCamera(ICamera, CallbackDelayer):
         bcfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0, 10, 0.005)
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0, 10, 0.005)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0, 10, 0.005)
-        zooms = readVec3(dataSec, 'zooms', (0, 0, 0), (10, 10, 10), (2, 4, 8))
-        bcfg['zooms'] = [zooms.x, zooms.y, zooms.z]
+        zooms = dataSec.readString('zooms', '2 4 8 16 25')
+        bcfg['zooms'] = [ float(x) for x in zooms.split() ]
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['sniperMode/camera']
         self.__userCfg = dict()
         ucfg = self.__userCfg
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
         ucfg['horzInvert'] = g_settingsCore.getSetting('mouseHorzInvert')
         ucfg['vertInvert'] = g_settingsCore.getSetting('mouseVertInvert')
+        ucfg['increasedZoom'] = g_settingsCore.getSetting('increasedZoom')
+        maxZoom = bcfg['zooms'][-1] if ucfg['increasedZoom'] else bcfg['zooms'][:3][-1]
+        ucfg['zoom'] = readFloat(ds, 'zoom', 0.0, maxZoom, bcfg['zooms'][0])
+        ucfg['sniperModeByShift'] = g_settingsCore.getSetting('sniperModeByShift')
         ucfg['keySensitivity'] = readFloat(ds, 'keySensitivity', 0.0, 10.0, 1.0)
         ucfg['sensitivity'] = readFloat(ds, 'sensitivity', 0.0, 10.0, 1.0)
         ucfg['scrollSensitivity'] = readFloat(ds, 'scrollSensitivity', 0.0, 10.0, 1.0)
-        ucfg['zoom'] = readFloat(ds, 'zoom', 0.0, 10.0, bcfg['zooms'][0])
         self.__cfg = dict()
         cfg = self.__cfg
         cfg['keySensitivity'] = bcfg['keySensitivity']
@@ -379,6 +391,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         cfg['horzInvert'] = ucfg['horzInvert']
         cfg['vertInvert'] = ucfg['vertInvert']
         cfg['zoom'] = ucfg['zoom']
+        cfg['increasedZoom'] = ucfg['increasedZoom']
+        cfg['sniperModeByShift'] = ucfg['sniperModeByShift']
         dynamicsSection = dataSec['dynamics']
         self.__impulseOscillator = createOscillatorFromSection(dynamicsSection['impulseOscillator'])
         self.__movementOscillator = createOscillatorFromSection(dynamicsSection['movementOscillator'])
@@ -393,7 +407,8 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__dynamicCfg['impulsePartToRoll'] = readFloat(dynamicsSection, 'impulsePartToRoll', 0.0, 1000.0, 0.3)
         self.__dynamicCfg['pivotShift'] = Vector3(0, readFloat(dynamicsSection, 'pivotShift', -1000, 1000, -0.5), 0)
         self.__dynamicCfg['aimMarkerDistance'] = readFloat(dynamicsSection, 'aimMarkerDistance', -1000, 1000, 1.0)
-        self.__dynamicCfg['zoomExposure'] = readVec3(dynamicsSection, 'zoomExposure', (0.1, 0.1, 0.1), (10, 10, 10), (0.5, 0.5, 0.5))
+        rawZoomExposure = dynamicsSection.readString('zoomExposure', '0.6 0.5 0.4 0.3 0.2')
+        self.__dynamicCfg['zoomExposure'] = [ float(x) for x in rawZoomExposure.split() ]
         accelerationFilter = mathUtils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, mathUtils.SMAFilter(SniperCamera._FILTER_LENGTH))
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, SniperCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)

@@ -1,6 +1,22 @@
 <quests-shared-vars.xml>
   <vars>
-    <var-set>	PveChainShownVar	  <asString>	PveTriggerShown	</asString>
+    <var-set>	PveChainShownVar	  <asDict>
+        <key>
+          <asString>	PveTriggerShown	</asString>
+        </key>
+        <value>
+          <asBool>	True	</asBool>
+        </value>
+      </asDict>
+    </var-set>
+    <var-set>	DefaultQueue	  <asDict>
+        <key>
+          <asString>	defaultQueue	</asString>
+        </key>
+        <value>
+          <asInt>	4	</asInt>
+        </value>
+      </asDict>
     </var-set>
     <var-set>	ResearchVar	  <asString>	research	</asString>
     </var-set>

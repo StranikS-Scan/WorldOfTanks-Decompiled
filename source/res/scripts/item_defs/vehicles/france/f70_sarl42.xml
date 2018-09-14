@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	16	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.184	</moving>
+    <still>	0.245	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.368	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	-0.0042 0.691525 0.72596	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F70_SARL42/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F70_SARL42/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -205,13 +213,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.858475 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.944202 1.70122	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -467,13 +474,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.858475 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F70_SARL42/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.944202 1.70122	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -677,6 +683,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	2.2	</reloadTime>
           <shotDispersionFactors>
@@ -691,7 +698,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -728,6 +736,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
@@ -742,7 +751,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -773,6 +783,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <shotDispersionFactors>
@@ -787,7 +798,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -811,7 +823,8 @@
         <exploded>	vehicles/french/F70_SARL42/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F70_SARL42/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F70_SARL42/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0042 0.4277 0.95884	</gunPosition>
       <emblemSlots>
@@ -832,9 +845,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	0.965 -0.035 1.023 -0.023 0.653 0.231 0.405 0.301 0.500 0.587 0.000 0.500 0.000 0.000 0.295	</physicsShape>
       <camouflage>
         <exclusionMask></exclusionMask>
@@ -903,6 +914,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2	</reloadTime>
           <shotDispersionFactors>
@@ -917,7 +929,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -952,6 +965,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
@@ -966,7 +980,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1001,6 +1016,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.2	</reloadTime>
           <shotDispersionFactors>
@@ -1015,7 +1031,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1056,6 +1073,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	5.2	</reloadTime>
           <shotDispersionFactors>
@@ -1070,7 +1088,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
           <emblemSlots>
@@ -1106,6 +1125,7 @@
             <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
             <maxPitch>	0 10 0.458333 10 0.461111 9 0.469444 9 0.472222 10 0.527778 10 0.530556 9 0.538889 9 0.541667 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	5.4	</reloadTime>
           <shotDispersionFactors>
@@ -1120,7 +1140,8 @@
             <exploded>	vehicles/french/F70_SARL42/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F70_SARL42/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F70_SARL42/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1144,7 +1165,8 @@
         <exploded>	vehicles/french/F70_SARL42/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F70_SARL42/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F70_SARL42/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F70_SARL42/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0042 0.5168 0.97264	</gunPosition>
       <emblemSlots>
@@ -1165,9 +1187,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	0.988 0.000 1.000 0.000 0.827 0.116 0.728 0.587 0.500 0.500 0.000 0.500 0.000 0.000 0.514	</physicsShape>
       <camouflage>
         <exclusionMask></exclusionMask>
@@ -1204,6 +1224,25 @@
     </ER_26_ter>
     <ER_27>	shared	</ER_27>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_SARL42>
+        <alpha>	0.10465	</alpha>
+      </Chassis_SARL42>
+      <Chassis_SARL42_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_SARL42_2>
+    </chassis>
+    <engines>
+      <Hispano_219CV_V8>
+        <bravo>	57.88614	</bravo>
+      </Hispano_219CV_V8>
+      <Somua_230_V8>
+        <bravo>	60.79367	</bravo>
+      </Somua_230_V8>
+    </engines>
+    <armour>	0.914159825	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

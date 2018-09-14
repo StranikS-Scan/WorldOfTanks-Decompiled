@@ -9,6 +9,13 @@
     <forward>	38	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.061	</moving>
+    <still>	0.122	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.183	</firePenalty>
+  </invisibility>
   <repairCost>	7.48	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.559995 0.598698	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R19_IS-3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -223,90 +231,75 @@
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.13	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.88	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2.05	</forwardElastK>
           <backwardElastK>	1.39	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2.05	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
@@ -316,13 +309,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.927233 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24432 2.22363	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -481,90 +473,75 @@
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	1.13	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.88	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2.05	</forwardElastK>
           <backwardElastK>	1.39	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	2.05	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <damping>	2	</damping>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
         </node>
@@ -574,13 +551,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.927233 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24432 2.22363	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -673,13 +649,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	14.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -724,13 +702,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -781,13 +761,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	12.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -831,13 +813,15 @@
           </armor>
           <reloadTime>	13.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -860,7 +844,8 @@
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R19_IS-3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.007957 0.36468 1.31239	</gunPosition>
       <emblemSlots>
@@ -896,9 +881,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.040 -0.000 0.637 0.170 0.550 0.405 0.431 0.500 0.590 0.500 0.355 0.833 0.261	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
       </camouflage>
@@ -964,13 +947,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	14.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1007,13 +992,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1050,13 +1037,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	12.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1092,13 +1081,15 @@
           </armor>
           <reloadTime>	13.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_08.model	</destroyed>
             <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R19_IS-3/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1121,7 +1112,8 @@
         <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R19_IS-3/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0123 0.34932 1.35644	</gunPosition>
       <emblemSlots>
@@ -1157,9 +1149,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.049 1.000 0.000 0.625 0.168 0.628 0.355 0.500 0.500 0.500 0.500 0.233 0.901 0.216	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1189,6 +1179,25 @@
     </_12RT>
     <R113>	shared	</R113>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <IS-3>
+        <alpha>	0.13685	</alpha>
+      </IS-3>
+      <IS-3M>
+        <alpha>	0.1127	</alpha>
+      </IS-3M>
+    </chassis>
+    <engines>
+      <V-11>
+        <bravo>	171.8082	</bravo>
+      </V-11>
+      <V-2-54IS>
+        <bravo>	185.0242	</bravo>
+      </V-2-54IS>
+    </engines>
+    <armour>	1.098949784	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

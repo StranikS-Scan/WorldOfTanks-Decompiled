@@ -66,7 +66,7 @@ class FunctionalState(object):
             return True
         if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
             return True
-        return self.isInUnit(PREBATTLE_TYPE.FALLOUT) and (True if queueType == QUEUE_TYPE.FALLOUT_CLASSIC and self.rosterType == ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER or queueType == QUEUE_TYPE.FALLOUT_MULTITEAM and self.rosterType == ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER else False)
+        return True if self.isInUnit(PREBATTLE_TYPE.FALLOUT) and (queueType == QUEUE_TYPE.FALLOUT_CLASSIC and self.rosterType == ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER or queueType == QUEUE_TYPE.FALLOUT_MULTITEAM and self.rosterType == ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER) else False
 
     def doLeaveToAcceptInvite(self, prbType=0):
         result = False

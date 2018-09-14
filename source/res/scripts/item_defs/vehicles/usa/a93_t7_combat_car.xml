@@ -1,0 +1,343 @@
+<a93_t7_combat_car.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.177	</moving>
+    <still>	0.237	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.356	</firePenalty>
+  </invisibility>
+  <repairCost>	2.00	</repairCost>
+  <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A93_T7_Combat_Car/T7_Combat_Car_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	15.9	</armor_1>
+      <armor_2>	15.9	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	6.4	</armor_4>
+      <armor_5>	12.7	</armor_5>
+      <armor_6>	12.7	</armor_6>
+      <armor_7>	15.9	</armor_7>
+      <armor_8>	9.5	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	15.9	</armor_10>
+      <armor_11>	6.4	</armor_11>
+      <armor_12>	12.7	</armor_12>
+      <armor_13>	15.9	</armor_13>
+      <armor_14>	15.9	</armor_14>
+      <armor_15>	12.7	</armor_15>
+      <armor_16>	9.5	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	5085	</weight>
+    <maxHealth>	120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A93_T7_Combat_Car/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.71	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.792414 0.382979	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A93_T7_Combat_Car/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A93_T7_Combat_Car/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00428616 0.213229 2.1209	</rayStart>
+        <rayEnd>	0.00428624 -0.157603 1.97096	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A93_T7_Combat_Car/T7_Combat_Car_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_T7_Combat_Car>
+      <userString>	#usa_vehicles:Chassis_T7_Combat_Car	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	6	</leftTrack>
+        <rightTrack>	6	</rightTrack>
+      </armor>
+      <weight>	3500	</weight>
+      <maxLoad>	12500	</maxLoad>
+      <terrainResistance>	1.2 1.5 3.4	</terrainResistance>
+      <brakeForce>	10500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	44	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	60	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A93_T7_Combat_Car/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.04	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.337653	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.265801	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.51465	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.337653	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.265801	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.51465	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.935223 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A93_T7_Combat_Car/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A93_T7_Combat_Car/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.13763 1.28484	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.713770 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.402830 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.882390	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T7_Combat_Car>
+  </chassis>
+  <turrets0>
+    <Turret_1_T7_Combat_Car>
+      <userString>	#usa_vehicles:Turret_1_T7_Combat_Car	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	2	</level>
+      <price>	600	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	12.7	</armor_1>
+        <armor_2>	12.7	</armor_2>
+        <armor_3>	12.7	</armor_3>
+        <armor_4>	12.7	</armor_4>
+        <armor_5>	6.4	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	12.7	</armor_7>
+        <armor_8>	6.4	</armor_8>
+        <armor_9>	12.7	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	800	</weight>
+      <maxHealth>	30	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_12.7mm_MG_HB_M2_A>	shared	  <maxAmmo>	1350	</maxAmmo>
+          <reloadTime>	24	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	1.1	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -40 1 -40	</minPitch>
+            <maxPitch>	0 15 0.333333 15 0.347222 4 0.45 4 0.463889 12 0.536111 12 0.55 4 0.652778 4 0.666667 15 1 15	</maxPitch>
+          </pitchLimits>
+          <clip>
+            <count>	50	</count>
+            <rate>	550	</rate>
+          </clip>
+          <models>
+            <undamaged>	vehicles/american/A93_T7_Combat_Car/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A93_T7_Combat_Car/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A93_T7_Combat_Car/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_12.7mm_MG_HB_M2_A>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A93_T7_Combat_Car/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A93_T7_Combat_Car/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A93_T7_Combat_Car/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A93_T7_Combat_Car/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.158454 0.217714 0.641431	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.793589 0.38784 0.306776	</rayStart>
+          <rayEnd>	-0.410274 0.385812 0.192511	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.18	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.619025 0.214955 -0.566583	</rayStart>
+          <rayEnd>	-0.340419 0.214955 -0.279569	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.5	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.796005 0.387036 0.297464	</rayStart>
+          <rayEnd>	0.412568 0.387036 0.183586	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.18	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.023 0.000 1.000 0.000 0.349 0.465 0.667 0.421 0.315 0.500 0.000 0.500 0.196 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.925 0.925 0.51 0.98	</tiling>
+      </camouflage>
+    </Turret_1_T7_Combat_Car>
+  </turrets0>
+  <engines>
+    <Continental_W-670-9A>	shared	</Continental_W-670-9A>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <SCR_210A>	shared	</SCR_210A>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T7_Combat_Car>
+        <alpha>	0.12075	</alpha>
+      </Chassis_T7_Combat_Car>
+    </chassis>
+    <engines>
+      <Continental_W-670-9A>
+        <bravo>	69.25191	</bravo>
+      </Continental_W-670-9A>
+    </engines>
+    <armour>	0.877327986	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a93_t7_combat_car.xml>

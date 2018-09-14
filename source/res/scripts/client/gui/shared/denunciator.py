@@ -27,6 +27,13 @@ class DENUNCIATIONS(object):
     FLOOD = 'flood'
     SWINDLE = 'swindle'
     BLACKMAIL = 'blackmail'
+    ORDER = (OFFEND,
+     FLOOD,
+     BLACKMAIL,
+     SWINDLE,
+     NOT_FAIR_PLAY,
+     FORBIDDEN_NICK,
+     BOT)
 
 
 class Denunciator(object):
@@ -53,7 +60,7 @@ class Denunciator(object):
         return self.getDenunciationsLeft() > 0
 
     def getDenunciationsLeft(self):
-        return g_itemsCache.items.stats.denunciationsLeft
+        raise NotImplementedError()
 
     def _getViolatorKind(self, player, violatorID):
         raise NotImplementedError()
@@ -64,6 +71,9 @@ class Denunciator(object):
 
 class LobbyDenunciator(Denunciator):
 
+    def getDenunciationsLeft(self):
+        return g_itemsCache.items.stats.denunciationsLeft
+
     def _getViolatorKind(self, player, violatorID):
         return constants.VIOLATOR_KIND.UNKNOWN
 
@@ -72,6 +82,9 @@ class LobbyDenunciator(Denunciator):
 
 
 class BattleDenunciator(Denunciator):
+
+    def getDenunciationsLeft(self):
+        return getattr(BigWorld.player(), 'denunciationsLeft', 0)
 
     def _getViolatorKind(self, player, violatorID):
         arenaDP = g_sessionProvider.getArenaDP()

@@ -10,6 +10,13 @@
     <forward>	41.8	</forward>
     <backward>	18	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.149	</moving>
+    <still>	0.199	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.299	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -65,7 +72,8 @@
       <turret>	0.0041 1.03461 -0.126444	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A104_M4A3E8A/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/american/A104_M4A3E8A/M4A3E8A_HangarShadowMap.dds	</hangarShadowTexture>
@@ -256,14 +264,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
@@ -274,7 +279,6 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <elasticity>	1106	</elasticity>
           <forwardElastK>	0.64	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.052	</offset>
@@ -317,7 +321,6 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
-          <elasticity>	1106	</elasticity>
           <forwardElastK>	0.64	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.052	</offset>
@@ -400,13 +403,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.924156 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A104_M4A3E8A/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.15517 1.94669	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -476,6 +478,7 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -487,7 +490,8 @@
             <exploded>	vehicles/american/A104_M4A3E8A/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A104_M4A3E8A/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -510,14 +514,13 @@
         <exploded>	vehicles/american/A104_M4A3E8A/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A104_M4A3E8A/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A104_M4A3E8A/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A104_M4A3E8A/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000014 0.327537 0.985351	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	0.947 0.000 1.000 0.000 0.704 0.018 0.695 0.500 0.407 0.500 0.128 0.500 0.022 0.420 0.080	</physicsShape>
       <camouflage>
         <tiling>	0.925 0.685 0.12 0.000000	</tiling>
@@ -533,6 +536,19 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_A104_M4A3E8A>
+        <alpha>	0.0805	</alpha>
+      </Chassis_A104_M4A3E8A>
+    </chassis>
+    <engines>
+      <Ford_GAA_2>
+        <bravo>	132.1601	</bravo>
+      </Ford_GAA_2>
+    </engines>
+    <armour>	0.983901358	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

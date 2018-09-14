@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/messengerBar/__init__.py
-from gui.app_loader.settings import APP_NAME_SPACE
-from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
-from gui.Scaleform.managers.context_menu import ContextMenuManager
-ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.CHANNEL_LIST, 'gui.Scaleform.daapi.view.lobby.messengerBar.ChannelListContextMenuHandler', 'ChannelListContextMenuHandler')
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.app_loader.settings import APP_NAME_SPACE
+from gui.shared import EVENT_BUS_SCOPE
+
+def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.messengerBar.ChannelListContextMenuHandler import ChannelListContextMenuHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.CHANNEL_LIST, ChannelListContextMenuHandler),)
+
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.messengerBar.ChannelCarousel import ChannelCarousel

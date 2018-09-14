@@ -3,11 +3,15 @@
 
 
 class SQUADTYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     SQUAD_TYPE_SIMPLE = 'squadTypeSimple'
     SQUAD_TYPE_FALLOUT = 'squadTypeFallout'
-    EVENT_SQUAD_TYPE = 'eventSquadType'
     FALLOUT_SQUAD_TEAM_SECTION = 'FalloutSquadTeamSection_UI'
     SIMPLE_SQUAD_TEAM_SECTION = 'SimpleSquadTeamSection_UI'
-    EVENT_SQUAD_TEAM_SECTION = 'EventSquadTeamSection_UI'
     FALLOUT_SQUAD_CHAT_SECTION = 'FalloutSquadChatSection_UI'
     SIMPLE_SQUAD_CHAT_SECTION = 'SimpleSquadChatSection_UI'

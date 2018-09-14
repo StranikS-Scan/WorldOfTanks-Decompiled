@@ -10,8 +10,14 @@ def _readUseItemsTriggerSection(xmlCtx, section, chapter, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.UseItemsTrigger)
 
 
+def _readInstallItemsTriggerSection(xmlCtx, section, chapter, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.InstallItemsTrigger)
+
+
 def init():
     sub_parsers.setEffectsParsers({'save-setting': quests.readSaveTutorialSettingSection})
     sub_parsers.setEntitiesParsers({'tutorial-setting': quests.readTutorialSettingSection})
     sub_parsers.setTriggersParsers({'tutorialIntSetting': quests.readTutorialIntSettingTriggerSection,
-     'useItem': _readUseItemsTriggerSection})
+     'tutorialAccountSetting': quests.readTutorialAccountSettingTriggerSection,
+     'useItem': _readUseItemsTriggerSection,
+     'installItem': _readInstallItemsTriggerSection})

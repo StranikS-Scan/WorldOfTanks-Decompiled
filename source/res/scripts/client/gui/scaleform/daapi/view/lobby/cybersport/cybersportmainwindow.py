@@ -36,6 +36,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
     def __init__(self, _=None):
         super(CyberSportMainWindow, self).__init__()
         self.currentState = ''
+        self.__isKicked = False
         selectorUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.UNIT)
 
     def getIntroViewAlias(self):
@@ -64,8 +65,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         CyberSportIntroView._selectedVehicles = None
         flags = self.unitFunctional.getFunctionalFlags()
         if flags & settings.FUNCTIONAL_FLAG.UNIT_INTRO > 0:
-            if self.unitFunctional.isKicked():
-                self._goToNextView(closeForced=True)
+            self.__isKicked = self.unitFunctional.isKicked()
         else:
             NavigationStack.clear(self.getNavigationKey())
         return
@@ -123,6 +123,11 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
         chat = self.chat
         if chat:
             chat.as_addMessageS(messages.getUnitPlayerNotification(settings.UNIT_NOTIFICATION_KEY.GIVE_LEADERSHIP, pInfo))
+
+    def onIntroUnitFunctionalInited(self):
+        if self.__isKicked:
+            self._goToNextView(closeForced=True)
+        self.__isKicked = False
 
     def onIntroUnitFunctionalFinished(self):
         flags = self.unitFunctional.getFunctionalFlags()
@@ -334,6 +339,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta, ClubListener):
     def __updateChatAvailability(self):
         state = self.unitFunctional.getFlags()
         pInfo = self.unitFunctional.getPlayerInfo()
-        if self.chat is not None:
-            self.chat.as_setJoinedS(not state.isInPreArena() or pInfo.isInSlot)
+        isJoined = not state.isInPreArena() or pInfo.isInSlot
+        if self.chat is not None and self.chat.isJoined() is not isJoined:
+            self.chat.as_setJoinedS(isJoined)
         return

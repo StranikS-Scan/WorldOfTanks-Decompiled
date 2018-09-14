@@ -64,7 +64,6 @@ class IntSettingsRequester(object):
      'MARKERS_DEAD': 50,
      'MARKERS_ALLY': 51,
      'GUI_START_BEHAVIOR': 52,
-     'CAROUSEL_FILTER': 53,
      'EULA_VERSION': 54,
      'GAMEPLAY': 55,
      'FORT': 56,
@@ -73,11 +72,16 @@ class IntSettingsRequester(object):
      'GAME_EXTENDED': constants.USER_SERVER_SETTINGS.GAME_EXTENDED,
      'FALLOUT': 60,
      'TUTORIAL': 61,
-     'FALLOUT_CAROUSEL_FILTER': 62,
+     'AIM_ARCADE_4': 63,
+     'AIM_SNIPER_4': 64,
      'MARKS_ON_GUN': constants.USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN,
      'ONCE_ONLY_HINTS': 70,
      'CMD_BLOCK_TRACKS': 71,
-     'CMD_VOICECHAT_ENABLE': 72}
+     'CMD_VOICECHAT_ENABLE': 72,
+     'CAROUSEL_FILTER_1': 73,
+     'CAROUSEL_FILTER_2': 74,
+     'FALLOUT_CAROUSEL_FILTER_1': 75,
+     'FALLOUT_CAROUSEL_FILTER_2': 76}
 
     def __init__(self):
         self.__cache = dict()

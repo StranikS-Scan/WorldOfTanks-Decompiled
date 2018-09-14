@@ -5,7 +5,7 @@ import math
 import BigWorld
 from Math import Vector3, Vector2, Matrix
 from debug_utils import *
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, IS_CLIENT
 
 class ModelHitTester(object):
     bbox = None
@@ -20,9 +20,10 @@ class ModelHitTester(object):
         self.__bspModel = None
         self.__bspModelName = None
         if dataSection is not None:
-            self.__bspModelName = dataSection.readString('collisionModel')
+            modelTag = 'collisionModelClient' if IS_CLIENT else 'collisionModelServer'
+            self.__bspModelName = dataSection.readString(modelTag)
             if not self.__bspModelName:
-                raise Exception('<collisionModel> is missing or wrong')
+                raise Exception('<%s> is missing or wrong' % modelTag)
         return
 
     def getBspModel(self):

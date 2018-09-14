@@ -3,6 +3,12 @@
 
 
 class LOBBY_HELP(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     HEADER_SETTINGS_BUTTON = '#lobby_help:header/settings-button'
     HEADER_ACCOUNT_BUTTON = '#lobby_help:header/account-button'
     HEADER_PREMIUM_BUTTON = '#lobby_help:header/premium-button'

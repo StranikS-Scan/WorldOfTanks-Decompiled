@@ -43,6 +43,23 @@ class RoamingState(_ClientFortState):
         result = False
         serverSettings = g_lobbyContext.getServerSettings()
         if serverSettings is not None and not serverSettings.roaming.isInRoaming():
+            state = DisabledFortState()
+            result = state.update(provider)
+            if not result:
+                result = True
+                provider.changeState(state)
+        return result
+
+
+class DisabledFortState(_ClientFortState):
+
+    def __init__(self):
+        super(DisabledFortState, self).__init__(CLIENT_FORT_STATE.DISABLED, isDisabled=True)
+
+    def update(self, provider):
+        result = False
+        serverSettings = g_lobbyContext.getServerSettings()
+        if serverSettings is not None and serverSettings.isFortsEnabled():
             state = NoClanState()
             result = state.update(provider)
             if not result:
@@ -106,7 +123,6 @@ class NoFortState(_ClientFortState):
         super(NoFortState, self).__init__(CLIENT_FORT_STATE.NO_FORT, isInitial=True)
 
     def update(self, provider):
-        cache = provider.getClanCache()
         result = False
         state = None
         fort = getClientFort()

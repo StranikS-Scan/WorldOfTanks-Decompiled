@@ -13,5 +13,50 @@
     <DetachedTurret></DetachedTurret>
     <OfflineFlag></OfflineFlag>
   </ClientServerEntities>
-  <ServerOnlyEntities></ServerOnlyEntities>
+  <ServerOnlyEntities>
+    <Admin></Admin>
+    <Arena></Arena>
+    <ArenaMgr></ArenaMgr>
+    <TeamBase></TeamBase>
+    <RepairBase></RepairBase>
+    <ChatChannel></ChatChannel>
+    <SysMessenger></SysMessenger>
+    <BaseAppChatManager></BaseAppChatManager>
+    <Clan></Clan>
+    <ClanRequestProcessor></ClanRequestProcessor>
+    <Node></Node>
+    <Prebattle></Prebattle>
+    <UnitMgr></UnitMgr>
+    <SquadUnitMgr></SquadUnitMgr>
+    <FalloutUnitMgr></FalloutUnitMgr>
+    <ClubUnitMgr></ClubUnitMgr>
+    <ClanUnitMgr></ClanUnitMgr>
+    <SpecUnitMgr></SpecUnitMgr>
+    <EventUnitMgr></EventUnitMgr>
+    <VoiceChatMgr></VoiceChatMgr>
+    <MessageFilterManager></MessageFilterManager>
+    <CenterStatusReader></CenterStatusReader>
+    <AccountRegistrator></AccountRegistrator>
+    <WebPrebattleMgr></WebPrebattleMgr>
+    <LoginQueue></LoginQueue>
+    <GameStatsCollector></GameStatsCollector>
+    <YYChatMgr></YYChatMgr>
+    <TutorialQueue></TutorialQueue>
+    <UnitAssembler></UnitAssembler>
+    <ClusterDismissal></ClusterDismissal>
+    <UnitFinder></UnitFinder>
+    <EventBattlesMgr></EventBattlesMgr>
+    <FalloutMgr></FalloutMgr>
+    <FalloutMultiteamMgr></FalloutMultiteamMgr>
+    <SortieQueue></SortieQueue>
+    <FortBattleMgr></FortBattleMgr>
+    <SpecBattleMgr></SpecBattleMgr>
+    <ClanRelay></ClanRelay>
+    <FortScheduler></FortScheduler>
+    <AccountSurrogate></AccountSurrogate>
+    <ClubBucket></ClubBucket>
+    <RankedMatchmaker></RankedMatchmaker>
+    <SandboxMgr></SandboxMgr>
+    <SingletonLock></SingletonLock>
+  </ServerOnlyEntities>
 </entities.xml>

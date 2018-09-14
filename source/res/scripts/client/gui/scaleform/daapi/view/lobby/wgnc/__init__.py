@@ -18,6 +18,10 @@ class WGNC_ALIASES(object):
     UI_POLL_WINDOW = 'WGNCPollWindowUI'
 
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.wgnc.WGNCDialog import WGNCDialog
     from gui.Scaleform.daapi.view.lobby.wgnc.WGNCPollWindow import WGNCPollWindow

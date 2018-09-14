@@ -9,6 +9,13 @@
     <forward>	69	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.28	</moving>
+    <still>	0.28	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.401	</firePenalty>
+  </invisibility>
   <repairCost>	9.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.491411 -0.04544	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R109_T54S/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R109_T54S/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -357,13 +365,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.04381 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R109_T54S/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R109_T54S/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33439 1.95042	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -642,13 +649,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.04381 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R109_T54S/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R109_T54S/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33439 1.95042	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -725,6 +731,7 @@
             </armor_9>
             <gun>	40	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 5 0.422222 5 0.447222 2.8 0.552778 2.8 0.577778 5 1 5	</maxPitch>
@@ -743,7 +750,8 @@
             <exploded>	vehicles/russian/R109_T54S/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R109_T54S/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R109_T54S/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -773,6 +781,7 @@
             </armor_9>
             <gun>	40	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 5 0.422222 5 0.447222 2.8 0.552778 2.8 0.577778 5 1 5	</maxPitch>
@@ -791,7 +800,8 @@
             <exploded>	vehicles/russian/R109_T54S/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R109_T54S/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R109_T54S/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -814,7 +824,8 @@
         <exploded>	vehicles/russian/R109_T54S/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R109_T54S/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R109_T54S/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R109_T54S/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.017049 0.244376 1.0711	</gunPosition>
       <emblemSlots>
@@ -849,9 +860,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.035 -0.090 1.055 -0.010 0.527 0.209 0.500 0.388 0.582 0.500 0.244 0.500 0.254 0.500 0.358	</physicsShape>
       <camouflage>
         <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
@@ -865,7 +874,7 @@
       </unlocks>
     </V-54>
     <V-55U>	shared	  <unlocks>
-        <vehicle>	T-54	  <cost>	192200	</cost>
+        <vehicle>	R40_T-54	  <cost>	192200	</cost>
         </vehicle>
       </unlocks>
     </V-55U>
@@ -886,6 +895,25 @@
     </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R109_T54S>
+        <alpha>	0.0805	</alpha>
+      </Chassis_R109_T54S>
+      <Chassis_R109_T54S_2>
+        <alpha>	0.0644	</alpha>
+      </Chassis_R109_T54S_2>
+    </chassis>
+    <engines>
+      <V-54>
+        <bravo>	137.4465	</bravo>
+      </V-54>
+      <V-55U>
+        <bravo>	185.0242	</bravo>
+      </V-55U>
+    </engines>
+    <armour>	1.007627808	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

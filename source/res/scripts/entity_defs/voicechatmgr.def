@@ -1,0 +1,23 @@
+<voicechatmgr.def>
+  <Implements>
+    <Interface>	ChatProvider_chat2	</Interface>
+  </Implements>
+  <Properties>
+    <pdata>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	10240	</DatabaseLength>
+    </pdata>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+      <DatabaseLength>	16	</DatabaseLength>
+      <Identifier>	true	</Identifier>
+    </name>
+  </Properties>
+  <BaseMethods>
+    <increaseUniqueLoginCounter></increaseUniqueLoginCounter>
+  </BaseMethods>
+</voicechatmgr.def>

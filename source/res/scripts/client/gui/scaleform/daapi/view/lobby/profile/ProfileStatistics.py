@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.clubs.club_helpers import ClubListener
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
+from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
+from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.shared.formatters import text_styles
 from helpers import i18n
-from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
-from gui.shared.fortifications import isFortificationEnabled
-from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
-from gui.Scaleform.locale.PROFILE import PROFILE
-from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.FALLOUT: 'fallout',
  PROFILE_DROPDOWN_KEYS.HISTORICAL: 'historical',
@@ -40,17 +40,15 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
 
     def _populate(self):
         super(ProfileStatistics, self)._populate()
-        self._setInitData(PROFILE_DROPDOWN_KEYS.ALL)
+        self._setInitData()
         self.startClubListening()
 
-    def _setInitData(self, battlesType, accountDossier=None):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM),
-         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)]
-        if isFortificationEnabled():
+    def _setInitData(self, accountDossier=None):
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)]
+        if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
+            dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
+        dropDownProvider.extend((self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.TEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.STATICTEAM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.CLAN)))
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS))
         seasonItems = [self._dataProviderEntry(PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE.PROFILE_SEASONSDROPDOWN_ALL)]
         if accountDossier is not None:
@@ -80,7 +78,7 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         vo = getStatisticsVO(battlesType=self._battlesType, targetData=targetData, accountDossier=accountDossier, isCurrentUser=self._userID is None)
         if self._battlesType in (PROFILE_DROPDOWN_KEYS.TEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON):
             if self._battlesType in (PROFILE_DROPDOWN_KEYS.STATICTEAM, PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON):
-                self._setInitData(self._battlesType, accountDossier)
+                self._setInitData(accountDossier)
                 self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
                 vo['headerText'] = i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_STATICTEAM)
                 vo['dropdownSeasonLabel'] = text_styles.main(CYBERSPORT.STATICFORMATIONSTATSVIEW_SEASONFILTER)
@@ -101,4 +99,4 @@ class ProfileStatistics(ProfileStatisticsMeta, ClubListener):
         super(ProfileStatistics, self)._dispose()
 
     def onCompletedSeasonsInfoChanged(self):
-        self._setInitData(PROFILE_DROPDOWN_KEYS.ALL)
+        self._setInitData()

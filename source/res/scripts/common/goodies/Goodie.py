@@ -19,7 +19,7 @@ class Goodie(object):
         return self.state == GOODIE_STATE.ACTIVE
 
     def isExpired(self):
-        if self.expiration and self.isActive() and self.expiration < time.time():
+        if self.expiration and self.expiration < time.time():
             return True
         else:
             return False

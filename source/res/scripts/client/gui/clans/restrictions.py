@@ -132,8 +132,6 @@ class AccountClanLimits(BaseAccountClanLimits):
             return error(_CCR.CLAN_INVITE_ALREADY_RECEIVED)
         if self.__profile.isClanApplicationSent(clan.getDbID()):
             return error(_CCR.CLAN_APPLICATION_ALREADY_SENT)
-        if self.__profile.isInClanEnterCooldown():
-            return error(_CCR.CLAN_LEAVE_COOLDOWN)
         if self.__profile.isInvitesLimitReached():
             return error(_CCR.SENT_INVITES_LIMIT_REACHED)
         if not clan.canAcceptsJoinRequests():

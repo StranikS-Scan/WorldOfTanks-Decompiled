@@ -1,0 +1,806 @@
+<r63_st_i.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	13	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.059	</moving>
+    <still>	0.117	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.176	</firePenalty>
+  </invisibility>
+  <repairCost>	8.945	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R63_ST_I/ST_I_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	140	</armor_1>
+      <armor_2>	160	</armor_2>
+      <armor_3>	140	</armor_3>
+      <armor_4>	100	</armor_4>
+      <armor_5>	140	</armor_5>
+      <armor_6>	200	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	50	</armor_10>
+      <armor_11>	80	</armor_11>
+      <armor_12>	100	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	30000	</weight>
+    <maxHealth>	1440	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.20 36.00 0.36 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.13	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.599765 0.667336	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.586232 0.447714 2.61429	</rayStart>
+        <rayEnd>	0.586232 0.0901435 2.435	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R63_ST_I/ST_I_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_ST_I>
+      <userString>	#ussr_vehicles:Chassis_ST_I	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	27900.0	</price>
+      <unlocks>
+        <chassis>	Chassis_ST_I_2	  <cost>	24100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	58900	</maxLoad>
+      <terrainResistance>	1.3 1.8 3.3	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	24	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.64	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.83	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.300053	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.384503	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.300011	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.385073	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L2	</name>
+          <radius>	0.350264	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.24472 2.2284	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.356490 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.467920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_ST_I>
+    <Chassis_ST_I_2>
+      <userString>	#ussr_vehicles:Chassis_ST_I_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	65000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	63500	</maxLoad>
+      <terrainResistance>	1.2 1.6 3	</terrainResistance>
+      <brakeForce>	39500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.64	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.83	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.300053	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.384503	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.300011	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.385073	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L2	</name>
+          <radius>	0.350264	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.338448	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	4	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.24472 2.2284	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.334010 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.467920	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_ST_I_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_ST_I>
+      <userString>	#ussr_vehicles:Turret_1_ST_I	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	33680.0	</price>
+      <armor>
+        <armor_1>	170	</armor_1>
+        <armor_2>	170	</armor_2>
+        <armor_3>	170	</armor_3>
+        <armor_4>	160	</armor_4>
+        <armor_5>	100	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	15	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	13000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <rotationSpeed>	22	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	160	</maxHealth>
+        <maxRegenHealth>	80	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	30	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_122mm_BL-9	  <cost>	44000.0	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000011 -0.00151989 1.28	</rayStart>
+              <rayEnd>	0.120338 -0.0772978 1.14717	</rayEnd>
+              <rayUp>	0.1 0.098 2	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_122-mm_D-25T_with_wedges_shutter>
+        <_122mm_BL-9>	shared	  <maxAmmo>	30	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_ST_I	  <cost>	25900.0	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	50	</gun>
+          </armor>
+          <reloadTime>	13.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000010 0.00355569 1.63055	</rayStart>
+              <rayEnd>	0.135629 -0.0146253 1.6284	</rayEnd>
+              <rayUp>	0.101 0.098 2	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_BL-9>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.36 1.321	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.29548 0.523249 -0.46204	</rayStart>
+          <rayEnd>	-0.926736 0.368438 -0.470005	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.29548 0.523249 -0.46204	</rayStart>
+          <rayEnd>	0.926736 0.368438 -0.470005	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.0868 0.427658 0.692173	</rayStart>
+          <rayEnd>	-0.759133 0.282292 0.514686	</rayEnd>
+          <rayUp>	0.0153039 0.999471 0.0286867	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.0926 0.509074 0.621057	</rayStart>
+          <rayEnd>	0.785046 0.312005 0.458047	</rayEnd>
+          <rayUp>	-0.0405234 0.995852 0.0814704	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.041 1.000 0.000 0.654 0.101 0.500 0.274 0.500 0.500 0.230 0.500 0.094 0.799 0.173	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_ST_I>
+    <Turret_2_ST_I>
+      <userString>	#ussr_vehicles:Turret_2_ST_I	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	61000.0	</price>
+      <unlocks>
+        <gun>	_122mm_M62-T2	  <cost>	59300.0	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	250	</armor_1>
+        <armor_2>	220	</armor_2>
+        <armor_3>	160	</armor_3>
+        <armor_4>	160	</armor_4>
+        <armor_5>	200	</armor_5>
+        <armor_6>	30	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	100	</armor_9>
+        <armor_10>	15	</armor_10>
+        <armor_11>	100	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	15200	</weight>
+      <maxHealth>	460	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	160	</maxHealth>
+        <maxRegenHealth>	80	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.915	</invisibilityFactor>
+      <guns>
+        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	40	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	11.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000946474 0.000274115 1.54	</rayStart>
+              <rayEnd>	0.131185 -0.0395427 1.51457	</rayEnd>
+              <rayUp>	0.102 0.098 2	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_122-mm_D-25T_with_wedges_shutter>
+        <_122mm_BL-9>	shared	  <maxAmmo>	40	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	50	</gun>
+          </armor>
+          <reloadTime>	12.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000968314 -0.000829305 1.53	</rayStart>
+              <rayEnd>	0.111552 -0.0379233 1.39207	</rayEnd>
+              <rayUp>	0.122 0.115 2	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_BL-9>
+        <_122mm_M62-T2>	shared	  <maxAmmo>	40	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -16 1 -16	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	R90_IS_4M	  <cost>	189000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	250	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	60	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	13.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Gun_08.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000390001 0.000215528 1.26	</rayStart>
+              <rayEnd>	0.124325 -0.0488346 1.06865	</rayEnd>
+              <rayUp>	0.115 0.106 2	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_122mm_M62-T2>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R63_ST_I/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R63_ST_I/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R63_ST_I/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R63_ST_I/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R63_ST_I/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.379 1.22	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.41733 0.698645 0.148715	</rayStart>
+          <rayEnd>	-1.0364 0.594732 0.084758	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.32695 0.624807 -1.01054	</rayStart>
+          <rayEnd>	-0.949172 0.517539 -0.934553	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.41733 0.698645 0.148715	</rayStart>
+          <rayEnd>	1.0364 0.594732 0.084758	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.32695 0.624807 -1.01054	</rayStart>
+          <rayEnd>	0.949172 0.517539 -0.934553	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.041 1.000 0.000 0.704 0.101 0.723 0.610 0.500 0.500 0.179 0.500 0.119 0.642 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_ST_I>
+  </turrets0>
+  <engines>
+    <V-11>	shared	  <unlocks>
+        <engine>	V-12P	  <cost>	23000.0	</cost>
+        </engine>
+      </unlocks>
+    </V-11>
+    <V-12P>	shared	</V-12P>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <_10RK>	shared	  <unlocks>
+        <radio>	_12RT	  <cost>	5600.0	</cost>
+        </radio>
+      </unlocks>
+    </_10RK>
+    <_12RT>	shared	  <unlocks>
+        <radio>	R113	  <cost>	8700.0	</cost>
+        </radio>
+      </unlocks>
+    </_12RT>
+    <R113>	shared	</R113>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_ST_I>
+        <alpha>	0.1449	</alpha>
+      </Chassis_ST_I>
+      <Chassis_ST_I_2>
+        <alpha>	0.1288	</alpha>
+      </Chassis_ST_I_2>
+    </chassis>
+    <engines>
+      <V-11>
+        <bravo>	171.8082	</bravo>
+      </V-11>
+      <V-12P>
+        <bravo>	185.0242	</bravo>
+      </V-12P>
+    </engines>
+    <armour>	1.218519781	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r63_st_i.xml>

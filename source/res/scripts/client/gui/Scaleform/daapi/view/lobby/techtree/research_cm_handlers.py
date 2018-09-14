@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
-from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, UnlockStats
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import MODULE, SimpleVehicleCMHandler, VEHICLE
+from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
@@ -78,6 +79,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def __init__(self, cmProxy, ctx=None):
         super(ResearchVehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
+         VEHICLE.PREVIEW: 'showVehiclePreview',
          VEHICLE.UNLOCK: 'unlockVehicle',
          VEHICLE.BUY: 'buyVehicle',
          VEHICLE.SELL: 'sellVehicle',
@@ -91,11 +93,11 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return self._nodeInvID
 
     def unlockVehicle(self):
-        stats = g_itemsCache.items.stats
-        unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
-        unlockKwargs = unlockStats._asdict()
-        _, unlockProps = g_techTreeDP.isNext2Unlock(self._nodeCD, **unlockKwargs)
+        unlockProps = g_techTreeDP.getUnlockProps(self._nodeCD)
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self._nodeCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost)
+
+    def showVehiclePreview(self):
+        shared_events.showVehiclePreview(self._nodeCD, self._previewAlias)
 
     def selectVehicle(self):
         shared_events.selectVehicleInHangar(self._nodeCD)
@@ -105,6 +107,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._rootCD = int(ctx.rootCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
+        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
         self._nodeInvID = vehicle.invID if vehicle is not None else None
         return
 
@@ -117,13 +120,20 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def _generateOptions(self, ctx=None):
         vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
-        options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX),
-         self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS, {'enabled': NODE_STATE.isWasInBattle(self._nodeState)}),
-         self._makeSeparator(),
-         self._makeItem(VEHICLE.UNLOCK, MENU.CONTEXTMENU_UNLOCK, {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState) and not NODE_STATE.isPremium(self._nodeState)})]
+        options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
+        if vehicle.isPreviewAllowed():
+            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))
+        if NODE_STATE.isWasInBattle(self._nodeState):
+            options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
+        options.append(self._makeSeparator())
+        if vehicle.isUnlocked:
+            if not vehicle.isPremiumIGR and (not vehicle.isInInventory or vehicle.isRented):
+                options.append(self._makeItem(VEHICLE.BUY, MENU.CONTEXTMENU_BUY, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}))
+        else:
+            options.append(self._makeItem(VEHICLE.UNLOCK, MENU.CONTEXTMENU_UNLOCK, {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState) and not NODE_STATE.isPremium(self._nodeState)}))
         if not vehicle.isPremiumIGR:
-            options.extend([self._makeItem(VEHICLE.BUY, MENU.CONTEXTMENU_BUY, {'enabled': NODE_STATE.isAvailable2Buy(self._nodeState)}),
-             self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': NODE_STATE.isAvailable2Sell(self._nodeState)}),
-             self._makeSeparator(),
-             self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': (NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
+            isAvailable2SellOrRemove = NODE_STATE.isAvailable2Sell(self._nodeState)
+            if isAvailable2SellOrRemove:
+                options.append(self._makeItem(VEHICLE.SELL, MENU.CONTEXTMENU_VEHICLEREMOVE if vehicle.isRented else MENU.CONTEXTMENU_SELL, {'enabled': isAvailable2SellOrRemove}))
+        options.extend([self._makeSeparator(), self._makeItem(VEHICLE.SELECT, MENU.CONTEXTMENU_SELECTVEHICLEINHANGAR, {'enabled': (NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isRentalOver(self._nodeState)) and NODE_STATE.isVehicleCanBeChanged(self._nodeState)})])
         return options

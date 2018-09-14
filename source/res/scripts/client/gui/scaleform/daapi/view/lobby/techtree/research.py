@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
+from gui.shared import g_itemsCache, event_dispatcher as shared_events
 
 class RESEARCH_HINT_ID(object):
     PREMIUM = 'researchAlone'
@@ -39,6 +40,14 @@ class Research(ResearchMeta):
 
     def __del__(self):
         LOG_DEBUG('ResearchPage deleted')
+
+    def goToVehicleView(self, itemCD):
+        vehicle = g_itemsCache.items.getItemByCD(int(itemCD))
+        if vehicle:
+            if vehicle.isPreviewAllowed():
+                shared_events.showVehiclePreview(int(itemCD), self.alias)
+            elif vehicle.isInInventory:
+                shared_events.selectVehicleInHangar(itemCD)
 
     def requestNationData(self):
         if USE_XML_DUMPING and IS_DEVELOPMENT:

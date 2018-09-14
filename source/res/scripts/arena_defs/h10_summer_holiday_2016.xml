@@ -1,0 +1,46 @@
+<h10_summer_holiday_2016.xml>
+  <wwmusic>	hangar_h10_silence	</wwmusic>
+  <wwambientSound>	hangar_h10_ambient	</wwambientSound>
+  <soundRemapping>
+    <events>
+      <event>
+        <name>	ambient_nature_birds_seagulls	</name>
+        <mod>	birds_seagull_distance	</mod>
+      </event>
+    </events>
+    <loadBanks>
+      <bank>	hangar_h10_summer_holiday_2016.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_prem_v2.bnk	</bank>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <mapActivities>
+    <warplane>
+      <preset>	h10_summer_holiday_2016_crab	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	h10_summer_holiday_2016_crab_2	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 40.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	h10_summer_holiday_2016_crab_3	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	20.000000 20.000000	</startTime>
+      <period>	55.000000	</period>
+    </warplane>
+  </mapActivities>
+</h10_summer_holiday_2016.xml>

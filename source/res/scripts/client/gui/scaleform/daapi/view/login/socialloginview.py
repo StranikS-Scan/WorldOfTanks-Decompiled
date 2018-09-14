@@ -59,7 +59,7 @@ class SocialLoginView(LoginView):
 
     def _onLoginRejected(self, loginStatus, responseData):
         socialList = g_loginManager.getAvailableSocialNetworks()
-        if self.__lastLoginType in socialList and loginStatus == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD:
+        if self.__lastLoginType in socialList and (loginStatus == LOGIN_STATUS.SESSION_END or loginStatus == LOGIN_STATUS.LOGIN_REJECTED_INVALID_PASSWORD):
             Waiting.hide('login')
             g_loginManager.clearToken2Preference()
             self._showForm()

@@ -9,6 +9,13 @@
     <forward>	72.4	</forward>
     <backward>	24	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.279	</moving>
+    <still>	0.279	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.374	</firePenalty>
+  </invisibility>
   <repairCost>	5	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	-0.00047 0.598844 0.268222	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G120_M41_90/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G120_M41_90/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G120_M41_90/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -194,13 +202,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.999411 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G120_M41_90/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G120_M41_90/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G120_M41_90/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.2626 1.5715	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -399,6 +406,7 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <reloadTime>	6.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -413,7 +421,8 @@
             <exploded>	vehicles/german/G120_M41_90_GrandFinal/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G120_M41_90/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G120_M41_90/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G120_M41_90/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -436,7 +445,8 @@
         <exploded>	vehicles/german/G120_M41_90_GrandFinal/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G120_M41_90/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G120_M41_90/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G120_M41_90/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.00047 0.323531 0.998643	</gunPosition>
       <emblemSlots>
@@ -466,8 +476,6 @@
         </fixedEmblem>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.138 -0.237 1.120 0.000 0.597 0.016 0.829 0.576 0.424 0.535 0.312 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
@@ -484,6 +492,19 @@
   <radios>
     <AN_GRC_8>	shared	</AN_GRC_8>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G120_M41_90_GrandFinal>
+        <alpha>	0.05635	</alpha>
+      </Chassis_G120_M41_90_GrandFinal>
+    </chassis>
+    <engines>
+      <Continental_AOS-895-3>
+        <bravo>	132.1601	</bravo>
+      </Continental_AOS-895-3>
+    </engines>
+    <armour>	0.817789876	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

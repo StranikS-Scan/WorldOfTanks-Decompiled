@@ -315,6 +315,20 @@ class Shop(object):
         self.__account._doCmdInt4(AccountCommands.CMD_BUY_TMAN, self.__getCacheRevision(), vehTypeCompDescr, roleIdx, tmanCostTypeIdx, proxy)
         return
 
+    def buyGoodie(self, goodieID, count, forGold, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, {})
+            return
+        else:
+            count = int(round(count))
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.__getCacheRevision(), goodieID, count, forGold, proxy)
+            return
+
     def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
             return

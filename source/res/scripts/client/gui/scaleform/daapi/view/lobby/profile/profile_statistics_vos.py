@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/profile_statistics_vos.py
 import BigWorld
+import nations
+from dossiers2.ui import layouts
+from gui import GUI_NATIONS, getNationIndex
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import DetailedStatisticsUtils as DSUtils
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
-from gui.shared.fortifications import isFortificationBattlesEnabled
 from gui.Scaleform.locale.PROFILE import PROFILE
-from helpers import i18n
-from gui import GUI_NATIONS, getNationIndex
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
-from dossiers2.ui import layouts
-import nations
+from helpers import i18n
 
 def _packAvgDmgLditItemData(avgDmg):
     return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgDmg), PROFILE.SECTION_SUMMARY_SCORES_AVGDAMAGE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGDAMAGE, 'avgDamage40x32.png')
@@ -212,7 +212,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         headerParams = []
-        if isFortificationBattlesEnabled():
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
             headerParams.append(PUtils.getTotalBattlesHeaderParam(self.__fortBattlesTargetData, PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES))
             headerParams.append(PUtils.packLditItemData(PUtils.getFormattedWinsEfficiency(self.__fortBattlesTargetData), PROFILE.SECTION_STATISTICS_SCORES_FORT_BATTLESWINSEFFICIENCY, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLESWINSEFFICIENCY, 'wins40x32.png'))
         else:
@@ -226,7 +226,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
     def _getDetailedData(self, data):
         targetData = data[0]
         dataList = []
-        if isFortificationBattlesEnabled():
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
             dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTBATTLES, self.__fortBattlesTargetData, isCurrentUser=self._isCurrentUser, layout=FORT_STATISTICS_LAYOUT))
         dataList.append(_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_FORTSORTIE, targetData, isCurrentUser=self._isCurrentUser))
         specificData = []
@@ -235,7 +235,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
         winsCount = self.__fortBattlesTargetData.getWinsCount()
         formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
         specificDataColumn1 = []
-        if isFortificationBattlesEnabled():
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
             specificDataColumn1.append(PUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTBATTLES, (DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTTOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, PUtils.createToolTipData((BigWorld.wg_getIntegralFormat(winsCount), BigWorld.wg_getIntegralFormat(lossesCount)))),
              DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS, PUtils.getFormattedWinsEfficiency(self.__fortBattlesTargetData), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS),
              DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_LOOTING, self.__fortMiscTargetData.getEnemyBasePlunderNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_LOOTING),
@@ -250,7 +250,7 @@ class ProfileFortStatisticsVO(ProfileDictStatisticsVO):
         specificData.append(specificDataColumn1)
         resourcesDataList = [DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_AVGRESOURCES, self.__avgFortSortiesLoot, PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES), DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTSORTIES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(self.__totalSortiesLoot), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES)]
         specificDataColumn2 = []
-        if isFortificationBattlesEnabled():
+        if g_lobbyContext.getServerSettings().isFortsEnabled():
             resourcesDataList.append(DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_TOTALRESOURCES, BigWorld.wg_getIntegralFormat(self.__fortMiscTargetData.getLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES))
             resourcesDataList.append(DSUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_MAXRESOURCES, BigWorld.wg_getIntegralFormat(self.__fortMiscTargetData.getMaxLootInBattles()), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES))
         specificDataColumn2.append(PUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_RESOURCE, resourcesDataList))

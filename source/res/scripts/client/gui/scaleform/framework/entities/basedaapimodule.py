@@ -15,7 +15,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
     def app(self):
         return self.__app
 
-    def seEnvironment(self, app):
+    def setEnvironment(self, app):
         self.__app = app
 
     def _printOverrideError(self, methodName):

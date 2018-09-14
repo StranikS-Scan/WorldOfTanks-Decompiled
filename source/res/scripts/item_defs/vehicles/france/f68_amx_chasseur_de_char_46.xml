@@ -9,6 +9,13 @@
     <forward>	57	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.146	</moving>
+    <still>	0.195	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.293	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.365312 0.900996	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -181,13 +189,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.30501 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.425 2.08044	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -389,6 +396,7 @@
             </armor_3>
             <gun>	30	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	7.3	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
@@ -403,7 +411,8 @@
             <exploded>	vehicles/french/F68_AMX_Chasseur_de_char_46/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -427,7 +436,8 @@
         <exploded>	vehicles/french/F68_AMX_Chasseur_de_char_46/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F68_AMX_Chasseur_de_char_46/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.411534 1.18286	</gunPosition>
       <emblemSlots>
@@ -462,9 +472,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	0.941 -0.118 1.000 0.000 0.426 0.294 0.000 0.493 0.265 0.588 0.228 0.500 0.132 0.779 0.000	</physicsShape>
     </Turret_1_AMX_Chasseur_de_char_46>
   </turrets0>
@@ -477,6 +485,19 @@
   <radios>
     <SCR_528A>	shared	</SCR_528A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_Chasseur_de_char_46>
+        <alpha>	0.13685	</alpha>
+      </Chassis_AMX_Chasseur_de_char_46>
+    </chassis>
+    <engines>
+      <Maybach_HL_295_FA>
+        <bravo>	317.1843	</bravo>
+      </Maybach_HL_295_FA>
+    </engines>
+    <armour>	0.828800764	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

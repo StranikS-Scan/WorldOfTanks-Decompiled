@@ -629,9 +629,13 @@ def _show_graph(objs, edge_func, swap_source_target, max_depth=3, extra_ignore=(
          v))
         if v < 0.5:
             f.write('  %s[fontcolor=white];\n' % _obj_node_id(target))
-        if hasattr(getattr(target, '__class__', None), '__del__'):
-            f.write('  %s->%s_has_a_del[color=red,style=dotted,len=0.25,weight=10];\n' % (_obj_node_id(target), _obj_node_id(target)))
-            f.write('  %s_has_a_del[label="__del__",shape=doublecircle,height=0.25,color=red,fillcolor="0,.5,1",fontsize=6];\n' % _obj_node_id(target))
+        try:
+            if hasattr(getattr(target, '__class__', None), '__del__'):
+                f.write('  %s->%s_has_a_del[color=red,style=dotted,len=0.25,weight=10];\n' % (_obj_node_id(target), _obj_node_id(target)))
+                f.write('  %s_has_a_del[label="__del__",shape=doublecircle,height=0.25,color=red,fillcolor="0,.5,1",fontsize=6];\n' % _obj_node_id(target))
+        except ReferenceError:
+            pass
+
         if tdepth >= max_depth:
             continue
         if cull_func is not None and cull_func(target):

@@ -9,6 +9,13 @@
     <forward>	56	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.203	</moving>
+    <still>	0.27	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.405	</firePenalty>
+  </invisibility>
   <repairCost>	9.94	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -56,7 +63,8 @@
       <turret>	-0.000253 0.549289 -0.107132	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -161,13 +169,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.939821 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.30039 1.94956	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -270,13 +277,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.939821 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.30039 1.94956	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -357,13 +363,15 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -404,13 +412,15 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -430,7 +440,8 @@
         <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.046344 0.273661 0.989757	</gunPosition>
       <emblemSlots>
@@ -466,9 +477,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.033 0.000 0.511 0.244 0.689 0.350 0.614 0.500 0.278 0.500 0.239 0.442 0.203	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
     </Turret_1_Ch18_WZ-120>
     <Turret_2_Ch18_WZ-120>
       <userString>	#china_vehicles:Turret_2_Ch18_WZ-120	</userString>
@@ -535,13 +544,15 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -578,13 +589,15 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -625,13 +638,15 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -668,13 +683,15 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 3 0.366894 3 0.430556 0 0.569444 0 0.633106 3 1 3	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch18_WZ-120/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -697,7 +714,8 @@
         <exploded>	vehicles/chinese/Ch18_WZ-120/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch18_WZ-120/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch18_WZ-120/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch18_WZ-120/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.046344 0.273661 0.989757	</gunPosition>
       <emblemSlots>
@@ -733,9 +751,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.006 0.000 1.033 0.000 0.544 0.178 0.697 0.350 0.614 0.500 0.278 0.500 0.239 0.442 0.203	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
     </Turret_2_Ch18_WZ-120>
   </turrets0>
   <engines>
@@ -762,6 +778,28 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch18_WZ-120>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Ch18_WZ-120>
+      <Chassis_Ch18_WZ-120_2>
+        <alpha>	0.07245	</alpha>
+      </Chassis_Ch18_WZ-120_2>
+    </chassis>
+    <engines>
+      <_12150L>
+        <bravo>	137.4465	</bravo>
+      </_12150L>
+      <_12150LS>
+        <bravo>	153.3058	</bravo>
+      </_12150LS>
+      <_12150LT>
+        <bravo>	158.5922	</bravo>
+      </_12150LT>
+    </engines>
+    <armour>	1.082015819	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

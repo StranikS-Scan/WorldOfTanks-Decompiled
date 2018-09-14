@@ -1,0 +1,40 @@
+<h16_wg_bday_2016.xml>
+  <wwmusic>	hangar_h16_music	</wwmusic>
+  <wwambientSound>	hangar_h16_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_h16_WG_bday_2016.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_prem_v2.bnk	</bank>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <mapActivities>
+    <warplane>
+      <preset>	wg_bday_plane_landing	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	20.000000 20.000000	</startTime>
+      <period></period>
+    </warplane>
+    <warplane>
+      <preset>	wg_bday_jeep_moving	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	40.000000 50.000000	</startTime>
+      <period>	300.0	</period>
+    </warplane>
+    <warplane>
+      <preset>	wg_bday_lorry_moving	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	90.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	10.000000 15.000000	</startTime>
+      <period>	200.0	</period>
+    </warplane>
+  </mapActivities>
+</h16_wg_bday_2016.xml>

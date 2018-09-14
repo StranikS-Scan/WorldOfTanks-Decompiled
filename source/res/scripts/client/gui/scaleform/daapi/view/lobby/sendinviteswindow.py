@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/SendInvitesWindow.py
 from debug_utils import LOG_ERROR
+from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.SendInvitesWindowMeta import SendInvitesWindowMeta
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
-from gui import SystemMessages
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.prb_control.context import SendInvitesCtx
 from gui.prb_control.prb_helpers import prbDispatcherProperty
@@ -11,9 +11,9 @@ from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import i18n
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
-from messenger.gui.Scaleform.view.ContactsTreeComponent import ContactsTreeComponent
-from messenger.proto.interfaces import ISearchHandler
+from messenger.gui.Scaleform.view.lobby.ContactsTreeComponent import ContactsTreeComponent
 from messenger.proto.events import g_messengerEvents
+from messenger.proto.interfaces import ISearchHandler
 
 class SendInvitesWindow(SendInvitesWindowMeta, ISearchHandler):
 

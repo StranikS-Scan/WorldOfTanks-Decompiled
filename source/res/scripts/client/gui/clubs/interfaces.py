@@ -13,6 +13,18 @@ class IClubListener(object):
     def onIGRTypeChanged(self):
         pass
 
+    def onUserStatusUpdated(self, user):
+        pass
+
+    def onColorBlindSettingsChanged(self):
+        pass
+
+    def onUserActionIgnore(self, user):
+        pass
+
+    def onUserActionFriend(self, user):
+        pass
+
     def onAccountClubRelationChanged(self, isRelatedToClubs):
         pass
 

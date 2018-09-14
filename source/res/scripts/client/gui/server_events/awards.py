@@ -10,7 +10,7 @@ from helpers import i18n
 from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.server_events import g_eventsCache
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, packRibbonInfo
+from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -83,7 +83,7 @@ class AchievementsAward(AwardAbstract):
         return {'achievements': result}
 
 
-class TokenAward(AwardAbstract):
+class TokenAward(ExplosionBackAward):
 
     def __init__(self, potapovQuest, tokenID, count, proxyEvent):
         super(TokenAward, self).__init__()
@@ -94,9 +94,6 @@ class TokenAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_TOKENS)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return RES_ICONS.MAPS_ICONS_QUESTS_TOKEN256
@@ -125,7 +122,7 @@ class TokenAward(AwardAbstract):
             return None
 
 
-class VehicleAward(AwardAbstract):
+class VehicleAward(ExplosionBackAward):
 
     def __init__(self, vehicle):
         super(VehicleAward, self).__init__()
@@ -133,9 +130,6 @@ class VehicleAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_NEWVEHICLE)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return self.__vehicle.iconUniqueLight
@@ -147,7 +141,7 @@ class VehicleAward(AwardAbstract):
         return text_styles.main(i18n.makeString(MENU.AWARDWINDOW_QUESTS_VEHICLE_DESCRIPTION))
 
 
-class TankwomanAward(AwardAbstract):
+class TankwomanAward(ExplosionBackAward):
 
     def __init__(self, questID, tankmanData, proxyEvent):
         super(TankwomanAward, self).__init__()
@@ -157,9 +151,6 @@ class TankwomanAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_NEWTANKMAN)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return RES_ICONS.MAPS_ICONS_QUESTS_TANKMANFEMALEORANGE

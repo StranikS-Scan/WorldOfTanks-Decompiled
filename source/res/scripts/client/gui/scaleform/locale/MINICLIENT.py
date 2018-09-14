@@ -3,6 +3,12 @@
 
 
 class MINICLIENT(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     PERSONAL_QUESTS_WELCOME_VIEW_DESCRIPTION = '#miniclient:personal_quests_welcome_view/description'
     PERSONAL_QUESTS_WELCOME_VIEW_CONTINUE_DOWNLOAD = '#miniclient:personal_quests_welcome_view/continue_download'
     CONTINUE_DOWNLOAD_DIALOG_TITLE = '#miniclient:continue_download_dialog/title'

@@ -11,6 +11,13 @@
     <forward>	32	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.053	</moving>
+    <still>	0.106	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.159	</firePenalty>
+  </invisibility>
   <repairCost>	5.158	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.590735 0.50787	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R39_KV-3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.11336 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R39_KV-3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34776 2.54975	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -443,13 +450,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.11336 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R39_KV-3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34776 2.54975	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -654,13 +660,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -679,7 +687,7 @@
         <_107mm_ZiS-6>	shared	  <unlocks>
             <turret>	KV-3	  <cost>	7120	</cost>
             </turret>
-            <vehicle>	KV4	  <cost>	53000	</cost>
+            <vehicle>	R73_KV4	  <cost>	53000	</cost>
             </vehicle>
           </unlocks>
           <maxAmmo>	61	</maxAmmo>
@@ -699,13 +707,15 @@
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	9.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -739,13 +749,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_11.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_11.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_11.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_11.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_11.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_11.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -768,7 +780,8 @@
         <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R39_KV-3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.556 1.11004	</gunPosition>
       <emblemSlots>
@@ -804,9 +817,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.022 -0.044 1.000 0.000 0.746 -0.066 0.857 0.542 0.335 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
       </camouflage>
@@ -872,13 +883,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -911,13 +924,15 @@
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	9.3	</reloadTime>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -951,13 +966,15 @@
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	9.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_08.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -991,13 +1008,15 @@
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_12.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_12.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_12.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_12.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_12.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_12.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1034,13 +1053,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	14.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_09.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1073,13 +1094,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	12.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R39_KV-3/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/russian/R39_KV-3/crash/lod0/Gun_10.model	</destroyed>
             <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Gun_10.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R39_KV-3/collision/Gun_10.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Gun_10.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1102,7 +1125,8 @@
         <exploded>	vehicles/russian/R39_KV-3/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R39_KV-3/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R39_KV-3/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R39_KV-3/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.48 1.12004	</gunPosition>
       <emblemSlots>
@@ -1138,9 +1162,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.030 -0.143 1.033 0.000 0.762 -0.033 0.650 0.303 0.422 0.500 0.421 0.500 0.206 0.872 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.595 0.595 0.22 0.42	</tiling>
       </camouflage>
@@ -1180,6 +1202,28 @@
     </_12RT>
     <R113>	shared	</R113>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <KV-3>
+        <alpha>	0.13685	</alpha>
+      </KV-3>
+      <KV-3bis>
+        <alpha>	0.1127	</alpha>
+      </KV-3bis>
+    </chassis>
+    <engines>
+      <V-5>
+        <bravo>	158.5922	</bravo>
+      </V-5>
+      <V-2IS>
+        <bravo>	158.5922	</bravo>
+      </V-2IS>
+      <V-2SN>
+        <bravo>	198.2402	</bravo>
+      </V-2SN>
+    </engines>
+    <armour>	1.124254562	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

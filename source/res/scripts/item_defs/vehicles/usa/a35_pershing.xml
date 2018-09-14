@@ -10,6 +10,13 @@
     <forward>	48	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.226	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.339	</firePenalty>
+  </invisibility>
   <repairCost>	8.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.529289 0.554646	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A35_Pershing/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A35_Pershing/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -87,7 +95,7 @@
       <userString>	#usa_vehicles:Pershingchassis1	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	16300.0	</price>
+      <price>	16300	</price>
       <unlocks>
         <chassis>	Pershingchassis2	  <cost>	13500	</cost>
         </chassis>
@@ -192,13 +200,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.0706 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A35_Pershing/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A35_Pershing/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.397 1.88998	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -374,7 +381,7 @@
       <userString>	#usa_vehicles:Pershingchassis2	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	30250.0	</price>
+      <price>	30250	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -475,13 +482,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.0706 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A35_Pershing/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A35_Pershing/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.397 1.88998	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -727,6 +733,7 @@
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_01.model	</undamaged>
@@ -734,7 +741,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -774,6 +782,7 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_02.model	</undamaged>
@@ -781,7 +790,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -829,6 +839,7 @@
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_03.model	</undamaged>
@@ -836,7 +847,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -878,6 +890,7 @@
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_04.model	</undamaged>
@@ -885,7 +898,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -908,7 +922,8 @@
         <exploded>	vehicles/american/A35_Pershing/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A35_Pershing/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A35_Pershing/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.427038 0.938862	</gunPosition>
       <emblemSlots>
@@ -923,9 +938,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.988 0.034 1.000 0.000 0.650 0.028 0.887 0.556 0.500 0.489 0.000 0.391 0.075 0.398 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.775 0.775 0.57 0.48	</tiling>
       </camouflage>
@@ -997,6 +1010,7 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_06.model	</undamaged>
@@ -1004,7 +1018,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1043,6 +1058,7 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_07.model	</undamaged>
@@ -1050,7 +1066,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1090,6 +1107,7 @@
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_08.model	</undamaged>
@@ -1097,7 +1115,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1137,6 +1156,7 @@
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_09.model	</undamaged>
@@ -1144,7 +1164,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1184,6 +1205,7 @@
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A35_Pershing/normal/lod0/Gun_10.model	</undamaged>
@@ -1191,7 +1213,8 @@
             <exploded>	vehicles/american/A35_Pershing/crash/lod0/Gun_10.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A35_Pershing/collision/Gun_10.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A35_Pershing/collision/Gun_10.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1214,7 +1237,8 @@
         <exploded>	vehicles/american/A35_Pershing/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A35_Pershing/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A35_Pershing/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A35_Pershing/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.427038 0.938862	</gunPosition>
       <emblemSlots>
@@ -1229,9 +1253,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.969 -0.024 1.023 0.015 0.694 0.069 0.895 0.571 0.421 0.526 0.102 0.500 0.000 0.100 0.069	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.79 0.79 0.86 0.74	</tiling>
       </camouflage>
@@ -1256,6 +1278,25 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Pershingchassis1>
+        <alpha>	0.12075	</alpha>
+      </Pershingchassis1>
+      <Pershingchassis2>
+        <alpha>	0.10465	</alpha>
+      </Pershingchassis2>
+    </chassis>
+    <engines>
+      <Ford_GAN>
+        <bravo>	148.0194	</bravo>
+      </Ford_GAN>
+      <Continental_AV-1790-1>
+        <bravo>	186.0815	</bravo>
+      </Continental_AV-1790-1>
+    </engines>
+    <armour>	0.966014424	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

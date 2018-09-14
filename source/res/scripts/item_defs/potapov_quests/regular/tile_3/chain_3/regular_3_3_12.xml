@@ -8,9 +8,10 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -27,9 +28,10 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <lvlDiff>	0	</lvlDiff>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
-              <greaterOrEqual>	2	</greaterOrEqual>
+              <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleDamage>
             <results>
               <key>	xp	</key>

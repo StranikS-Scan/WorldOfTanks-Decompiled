@@ -1,0 +1,958 @@
+<r59_a44.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	59	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.165	</moving>
+    <still>	0.22	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.33	</firePenalty>
+  </invisibility>
+  <repairCost>	7.30	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R59_A44/A44_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	150	</armor_1>
+      <armor_2>	75	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	90	</armor_5>
+      <armor_6>	75	</armor_6>
+      <armor_7>	60	</armor_7>
+      <armor_8>	30	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	30	</armor_10>
+      <armor_11>	75	</armor_11>
+      <armor_12>	60	</armor_12>
+      <armor_13>	150	</armor_13>
+      <armor_14>	0	</armor_14>
+      <armor_15>	150	</armor_15>
+    </armor>
+    <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
+    <weight>	17930	</weight>
+    <maxHealth>	800	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R59_A44/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R59_A44/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R59_A44/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.52	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000000 0.649517 -1.49831	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R59_A44/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.467689 0.575536 2.34527	</rayStart>
+        <rayEnd>	0.467689 0.212312 2.17772	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R59_A44/A44_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A44>
+      <userString>	#ussr_vehicles:Chassis_A44	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	12700	</price>
+      <unlocks>
+        <chassis>	Chassis_A44_2	  <cost>	7900	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	37000	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
+      <brakeForce>	32000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R59_A44/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R59_A44/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R59_A44/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.5 0.59	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.358212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127001	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.328779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.31708	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.358211	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127001	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.328779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.31708	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R59_A44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.26251 2.09477	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.408890 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.960120	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_A44>
+    <Chassis_A44_2>
+      <userString>	#ussr_vehicles:Chassis_A44_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	17700	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	41000	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
+      <brakeForce>	36000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	44	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R59_A44/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R59_A44/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R59_A44/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_02	</textureSet>
+        <size>	0.5 0.59	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.358212	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.127001	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.328779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.31708	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.358211	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.127001	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.328779	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.31708	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R59_A44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.26251 2.09477	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.411170 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.960120	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_A44_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_A44>
+      <userString>	#ussr_vehicles:Turret_1_A44	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	12840	</price>
+      <unlocks>
+        <turret>	Turret_2_A44	  <cost>	8800	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	75	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	75	</armor_3>
+        <armor_4>	75	</armor_4>
+        <armor_5>	120	</armor_5>
+        <armor_6>	75	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	30	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	30	</armor_10>
+        <armor_11>	75	</armor_11>
+        <armor_12>	60	</armor_12>
+        <armor_13>	45	</armor_13>
+        <armor_16>	60	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4250	</weight>
+      <maxHealth>	200	</maxHealth>
+      <rotationSpeed>	40	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	360	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_F-34>	shared	  <maxAmmo>	160	</maxAmmo>
+          <unlocks>
+            <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
+            </gun>
+            <gun>	_76mm_S-54	  <cost>	4300	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00429833 0.0636455 1.02483	</rayStart>
+              <rayEnd>	0.230955 0.0407436 1.02031	</rayEnd>
+              <rayUp>	0.068 0.064 1	</rayUp>
+              <size>	0.503	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_76mm_F-34>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	160	</maxAmmo>
+          <armor>
+            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00429827 0.0628277 1.02188	</rayStart>
+              <rayEnd>	0.234278 0.0600066 1.01685	</rayEnd>
+              <rayUp>	0.063 0.059 1	</rayUp>
+              <size>	0.503	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_ZiS-4>
+        <_76mm_S-54>	shared	  <maxAmmo>	160	</maxAmmo>
+          <unlocks>
+            <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000955464 0.0837631 1.19	</rayStart>
+              <rayEnd>	0.220178 -0.00122024 1.04638	</rayEnd>
+              <rayUp>	0.068 0.065 2	</rayUp>
+              <size>	0.438	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_S-54>
+        <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	R60_Object416	  <cost>	104600	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	75	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	40	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	10.5	</reloadTime>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0402489 0.020018 0.87	</rayStart>
+              <rayEnd>	0.260484 -0.00672225 0.954948	</rayEnd>
+              <rayUp>	0.092 0.091 1	</rayUp>
+              <size>	0.558	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_107mm_ZiS-6>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R59_A44/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R59_A44/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R59_A44/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R59_A44/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00064 0.331213 0.938134	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-0.949334 0.393412 -0.559806	</rayStart>
+          <rayEnd>	-0.590821 0.247172 -0.459398	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	0.949334 0.393412 -0.559806	</rayStart>
+          <rayEnd>	0.590821 0.247172 -0.459398	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-1.0563 0.227424 0.325898	</rayStart>
+          <rayEnd>	-0.707641 0.0483511 0.246092	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.0563 0.227424 0.325898	</rayStart>
+          <rayEnd>	0.707641 0.0483511 0.246092	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.980 0.000 1.000 0.000 0.401 0.048 0.840 0.481 0.243 0.500 0.228 0.422 0.175 0.577 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A44>
+    <Turret_2_A44>
+      <userString>	#ussr_vehicles:Turret_2_A44	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	17300	</price>
+      <armor>
+        <armor_1>	90	</armor_1>
+        <armor_2>	75	</armor_2>
+        <armor_3>	90	</armor_3>
+        <armor_4>	90	</armor_4>
+        <armor_5>	120	</armor_5>
+        <armor_6>	90	</armor_6>
+        <armor_7>	30	</armor_7>
+        <armor_8>	30	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	30	</armor_10>
+        <armor_11>	90	</armor_11>
+        <armor_12>	60	</armor_12>
+        <armor_13>	90	</armor_13>
+        <armor_14>	90	</armor_14>
+        <armor_15>	45	</armor_15>
+        <armor_16>	60	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5170	</weight>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_F-34>	shared	  <maxAmmo>	160	</maxAmmo>
+          <armor>
+            <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00429833 0.0636455 0.989775	</rayStart>
+              <rayEnd>	0.242497 0.0522978 0.985077	</rayEnd>
+              <rayUp>	0.067 0.063 1	</rayUp>
+              <size>	0.558	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.66 1.66 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_F-34>
+        <_57mm_ZiS-4>	shared	  <maxAmmo>	160	</maxAmmo>
+          <armor>
+            <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00429827 0.0628277 1.09	</rayStart>
+              <rayEnd>	0.187155 -0.137398 0.989007	</rayEnd>
+              <rayUp>	0.064 0.058 1	</rayUp>
+              <size>	0.454	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_57mm_ZiS-4>
+        <_76mm_S-54>	shared	  <maxAmmo>	160	</maxAmmo>
+          <armor>
+            <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	20	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000955464 0.0837631 1.15	</rayStart>
+              <rayEnd>	0.233836 0.00817737 0.96124	</rayEnd>
+              <rayUp>	0.069 0.066 2	</rayUp>
+              <size>	0.454	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_S-54>
+        <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_9>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	40	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	10.5	</reloadTime>
+          <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0402489 0.020018 0.861002	</rayStart>
+              <rayEnd>	0.22668 -0.133055 0.858138	</rayEnd>
+              <rayUp>	0.092 0.091 1	</rayUp>
+              <size>	0.465	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_107mm_ZiS-6>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R59_A44/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/russian/R59_A44/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/russian/R59_A44/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R59_A44/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.00064 0.331213 0.938134	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.06534 0.238182 0.375088	</rayStart>
+          <rayEnd>	-0.720932 0.054972 0.286692	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.02868 0.425909 -0.506268	</rayStart>
+          <rayEnd>	-0.586822 0.255041 -0.429032	</rayEnd>
+          <rayUp>	-0.0120226 0.997873 0.0640739	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.02868 0.425909 -0.506268	</rayStart>
+          <rayEnd>	0.586822 0.255041 -0.429032	</rayEnd>
+          <rayUp>	-0.0120226 0.997873 0.0640739	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.06534 0.238182 0.375088	</rayStart>
+          <rayEnd>	0.720932 0.054972 0.286692	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.976 0.000 1.021 0.000 0.449 0.082 0.755 0.481 0.230 0.500 0.294 0.500 0.148 0.774 0.175	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_2_A44>
+  </turrets0>
+  <engines>
+    <V-2-34>	shared	  <unlocks>
+        <engine>	V-5	  <cost>	5500	</cost>
+        </engine>
+      </unlocks>
+    </V-2-34>
+    <V-5>	shared	</V-5>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_9R>	shared	  <unlocks>
+        <radio>	_9RM	  <cost>	4040	</cost>
+        </radio>
+      </unlocks>
+    </_9R>
+    <_9RM>	shared	</_9RM>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_107mm_ZiS-6>
+        <delta>	1.034	</delta>
+      </_107mm_ZiS-6>
+    </guns>
+    <chassis>
+      <Chassis_A44>
+        <alpha>	0.07245	</alpha>
+      </Chassis_A44>
+      <Chassis_A44_2>
+        <alpha>	0.0644	</alpha>
+      </Chassis_A44_2>
+    </chassis>
+    <engines>
+      <V-2-34>
+        <bravo>	132.1601	</bravo>
+      </V-2-34>
+      <V-5>
+        <bravo>	158.5922	</bravo>
+      </V-5>
+    </engines>
+    <armour>	0.951972301	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.823529	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r59_a44.xml>

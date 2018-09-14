@@ -10,6 +10,13 @@
     <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.015	</moving>
+    <still>	0.024	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.036	</firePenalty>
+  </invisibility>
   <repairCost>	11	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.512455 0.35876	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB83_FV4005/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB83_FV4005/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -306,13 +314,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.17581 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB83_FV4005/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB83_FV4005/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.30183 2.32785	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -384,6 +391,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3	</aimingTime>
+          <invisibilityFactorAtShot>	0.114	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -8 1 -8	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -395,7 +403,8 @@
             <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB83_FV4005/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB83_FV4005/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -418,7 +427,8 @@
         <exploded>	vehicles/british/GB83_FV4005/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB83_FV4005/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB83_FV4005/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.991024 0.774686	</gunPosition>
       <emblemSlots>
@@ -453,9 +463,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.053 0.010 0.909 0.000 1.062 0.000 0.184 0.500 0.500 0.500 0.000 0.500 0.105 0.000 0.182	</physicsShape>
       <camouflage>
         <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
@@ -471,6 +479,19 @@
   <radios>
     <C45>	shared	</C45>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB83_FV4005>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB83_FV4005>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_MkIV_B>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV_B>
+    </engines>
+    <armour>	1.16649011	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

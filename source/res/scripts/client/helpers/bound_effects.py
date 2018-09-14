@@ -54,9 +54,8 @@ class StaticSceneBoundEffects(object):
 
 class ModelBoundEffects(object):
 
-    def __init__(self, model, nodeName=''):
+    def __init__(self, model):
         self.__model = model
-        self.__nodeName = nodeName
         self._effects = list()
 
     def destroy(self):
@@ -67,11 +66,18 @@ class ModelBoundEffects(object):
         self.__model = None
         return
 
-    def addNew(self, matProv, effectsList, keyPoints, **args):
-        desc = EffectsListPlayer(effectsList, keyPoints, position=(self.__nodeName, matProv), **args)
-        desc.play(self.__model, None, partial(self._effects.remove, desc))
+    def addNew(self, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
+        return self.addNewToNode('', matProv, effectsList, keyPoints, waitForKeyOff, **args)
+
+    def addNewToNode(self, node, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
+        if not node and matProv is None:
+            position = None
+        else:
+            position = (node, matProv)
+        desc = EffectsListPlayer(effectsList, keyPoints, position=position, **args)
+        desc.play(self.__model, None, partial(self._effects.remove, desc), waitForKeyOff)
         self._effects.append(desc)
-        return
+        return desc
 
     def reattachTo(self, model):
         self.__model = model

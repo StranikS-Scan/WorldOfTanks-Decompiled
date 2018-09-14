@@ -3,6 +3,12 @@
 
 
 class FALLOUT(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CHANNEL_LABEL = '#fallout:channel/label'
     INFOPANEL_GETFLAGS_HEAD = '#fallout:infoPanel/getFlags/head'
     INFOPANEL_GETFLAGS_DESCR = '#fallout:infoPanel/getFlags/descr'

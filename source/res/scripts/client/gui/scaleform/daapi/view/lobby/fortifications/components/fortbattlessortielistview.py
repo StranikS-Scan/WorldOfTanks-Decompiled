@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesSortieListView.py
 import BigWorld
 from constants import PREBATTLE_TYPE
-from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortListMeta import FortListMeta
@@ -13,7 +12,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.battle_availability import getForbiddenPeriods
 from gui.prb_control.prb_helpers import UnitListener
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import int2roman
 from helpers.time_utils import ONE_HOUR
@@ -148,7 +147,6 @@ class FortBattlesSortieListView(FortListMeta, FortListener, UnitListener):
             self.fortCtrl.removeSortiesCache()
             self._isBackButtonClicked = False
         g_messengerEvents.users.onUserActionReceived -= self.onContactsUpdated
-        g_clientUpdateManager.removeObjectCallbacks(self)
         if self.__sortiesCurfewCtrl:
             self.__sortiesCurfewCtrl.onStatusChanged -= self.__onSortieStatusChanged
         super(FortBattlesSortieListView, self)._dispose()

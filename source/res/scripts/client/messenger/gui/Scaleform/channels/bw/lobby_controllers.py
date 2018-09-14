@@ -13,14 +13,14 @@ from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.channels._layout import _LobbyLayout
+from messenger.gui.Scaleform.channels.layout import LobbyLayout
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw import cooldown
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
-class _ChannelController(_LobbyLayout):
+class _ChannelController(LobbyLayout):
 
     def __init__(self, channel):
         super(_ChannelController, self).__init__(channel)

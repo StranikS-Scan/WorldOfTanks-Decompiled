@@ -88,25 +88,25 @@ class VehicleProgressHelper(object):
         for itemTypeCD, unlockProps in unlockedVehicleItems.iteritems():
             item = getter(itemTypeCD)
             price = item.altPrice or item.buyPrice
-            if price and not item.isInInventory and creditsValue - price[0] <= pureCreditsReceived and creditsValue > price[0]:
+            if price is not None and not item.isInInventory and creditsValue - price.credits <= pureCreditsReceived and creditsValue > price.credits:
                 if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                    ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price[0]))
+                    ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price.credits))
                 elif not item.isInstalled(self.__vehicle):
                     items = getVehicleComponentsByType(self.__vehicle, item.itemTypeID).values()
                     if len(items) > 0:
                         installedModule = max(items, key=attrgetter('level'))
                         if item.level > installedModule.level:
-                            ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price[0]))
+                            ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price.credits))
 
         return (ready2BuyVehicles, ready2BuyModules)
 
     def __getNewSkilledTankmen(self, tankmenXps):
         skilledTankmans = []
         for slotIdx, tman in self.__vehicle.crew:
-            if tman is not None:
+            if tman is not None and tman.hasSkillToLearn():
                 tmanBattleXp = tankmenXps.get(tman.invID, 0)
                 avgBattles2NewSkill = 0
-                if tman.hasNewSkill:
+                if tman.hasNewSkill(useCombinedRoles=True):
                     if tmanBattleXp - tman.descriptor.freeXP > 0:
                         skilledTankmans.append(self.__makeTankmanVO(tman, avgBattles2NewSkill))
                 else:

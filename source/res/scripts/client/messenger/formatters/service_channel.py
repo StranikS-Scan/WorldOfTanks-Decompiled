@@ -8,6 +8,7 @@ import constants
 import account_helpers
 import ArenaType
 import BigWorld
+from gui.server_events.EventsCache import g_eventsCache
 import potapov_quests
 from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
 from adisp import async, process
@@ -16,7 +17,7 @@ from club_shared import ladderRating
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from shared_utils import BoundMethodWeakref
+from shared_utils import BoundMethodWeakref, findFirst
 from gui.goodies import g_goodiesCache
 from gui.shared.formatters import text_styles
 from gui import GUI_SETTINGS
@@ -34,6 +35,8 @@ from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiS
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.utils.transport import z_loads
 from gui.shared.gui_items.Vehicle import getUserName
+from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.formatters.currency import getBWFormatter
 from gui.prb_control.formatters import getPrebattleFullDescription
 from helpers import i18n, html, getClientLanguage, getLocalizedData
 from helpers import time_utils
@@ -46,7 +49,7 @@ from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.m_constants import MESSENGER_I18N_FILE
 from predefined_hosts import g_preDefinedHosts
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STATE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_BUILDING_TYPE_NAMES, ARENA_GUI_TYPE
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STATE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_BUILDING_TYPE_NAMES, ARENA_GUI_TYPE, EVENT_TYPE
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 
 def _getTimeStamp(message):
@@ -74,6 +77,28 @@ def _extendCustomizationData(newData, extendable):
             extendable.append(i18n.makeString('#system_messages:customization/added/%s' % custType))
 
         return
+
+
+@async
+def _getRareTitle(rareID, callback):
+    rare_achievements.getRareAchievementText(getClientLanguage(), rareID, lambda rID, text: callback(text.get('title')))
+
+
+@async
+@process
+def _processRareAchievements(rares, callback):
+    unknownAchieves = 0
+    achievements = []
+    for rareID in rares:
+        title = yield _getRareTitle(rareID)
+        if title is None:
+            unknownAchieves += 1
+        achievements.append(title)
+
+    if unknownAchieves:
+        achievements.append(i18n.makeString('#system_messages:%s/title' % ('actionAchievements' if unknownAchieves > 1 else 'actionAchievement')))
+    callback(achievements)
+    return
 
 
 class ServiceChannelFormatter(object):
@@ -364,6 +389,8 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
      AUTO_MAINTENANCE_RESULT.NO_WALLET_SESSION: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairErrorNoWallet',
                                                  AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadErrorNoWallet',
                                                  AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipErrorNoWallet'}}
+    __currencyTemplates = {Currency.CREDITS: 'PurchaseForCreditsSysMessage',
+     Currency.GOLD: 'PurchaseForGoldSysMessage'}
 
     def isNotify(self):
         return True
@@ -372,13 +399,13 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
         vehicleCompDescr = message.data.get('vehTypeCD', None)
         result = message.data.get('result', None)
         typeID = message.data.get('typeID', None)
-        cost = message.data.get('cost', (0, 0))
+        cost = Money(*message.data.get('cost', ()))
         if vehicleCompDescr is not None and result is not None and typeID is not None:
             vt = vehicles_core.getVehicleType(vehicleCompDescr)
             if typeID == AUTO_MAINTENANCE_TYPE.REPAIR:
                 formatMsgType = 'RepairSysMessage'
             else:
-                formatMsgType = 'PurchaseForCreditsSysMessage' if cost[1] == 0 else 'PurchaseForGoldSysMessage'
+                formatMsgType = self._getTemplateByCurrency(cost.getCurrency())
             msg = i18n.makeString(self.__messages[result][typeID]) % getUserName(vt)
             priorityLevel = NotificationPriorityLevel.MEDIUM
             if result == AUTO_MAINTENANCE_RESULT.OK:
@@ -389,19 +416,18 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
             else:
                 templateName = 'WarningSysMessage'
             if result == AUTO_MAINTENANCE_RESULT.OK:
-                msg += shared_fmts.formatPrice((abs(cost[0]), abs(cost[1])))
+                msg += shared_fmts.formatPrice(cost.toAbs())
             formatted = g_settings.msgTemplates.format(templateName, {'text': msg})
             return (formatted, self._getGuiSettings(message, priorityLevel=priorityLevel))
         else:
             return (None, None)
             return
 
+    def _getTemplateByCurrency(self, currency):
+        return self.__currencyTemplates.get(currency, 'PurchaseForCreditsSysMessage')
+
 
 class AchievementFormatter(ServiceChannelFormatter):
-
-    @async
-    def __getRareTitle(self, rareID, callback):
-        rare_achievements.getRareAchievementText(getClientLanguage(), rareID, lambda rID, text: callback(text.get('title')))
 
     def isNotify(self):
         return True
@@ -417,19 +443,9 @@ class AchievementFormatter(ServiceChannelFormatter):
         achieves = message.data.get('popUpRecords')
         if achieves is not None:
             achievesList.extend([ i18n.makeString('#achievements:{0[1]:s}'.format(name)) for name in achieves ])
-        rares = message.data.get('rareAchievements')
-        if rares is not None:
-            unknownAchieves = 0
-            for rareID in rares:
-                if rareID > 0:
-                    title = yield self.__getRareTitle(rareID)
-                    if title is None:
-                        unknownAchieves += 1
-                    else:
-                        achievesList.append(title)
-
-            if unknownAchieves:
-                achievesList.append(i18n.makeString('#system_messages:%s/title' % ('actionAchievements' if unknownAchieves > 1 else 'actionAchievement')))
+        rares = [ rareID for rareID in message.data.get('rareAchievements', []) if rareID > 0 ]
+        raresList = yield _processRareAchievements(rares)
+        achievesList.extend(raresList)
         if not len(achievesList):
             callback((None, None))
             return
@@ -603,7 +619,13 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             vInfo.append(action)
         else:
             if 'rent' in vehData:
-                rentDays = vehData['rent'].get('expires', {}).get('after', None)
+                time = vehData['rent'].get('time', None)
+                rentDays = None
+                if time:
+                    if time == float('inf'):
+                        pass
+                    elif time <= time_utils.DAYS_IN_YEAR:
+                        rentDays = time
                 if rentDays:
                     rentDays = g_settings.htmlTemplates.format('rentDays', {'value': str(rentDays)})
                     vInfo.append(rentDays)
@@ -676,26 +698,23 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if vehicleName is None:
                 continue
             if 'rentCompensation' in vehData:
-                credits, gold = vehData['rentCompensation']
-                if gold > 0:
-                    key = 'goldRentCompensationReceived'
-                    formattedGold = BigWorld.wg_getGoldFormat(account_helpers.convertGold(gold))
-                    ctx = {'gold': formattedGold,
-                     'vehicleName': vehicleName}
-                else:
-                    key = 'creditsRentCompensationReceived'
-                    formattedCredits = BigWorld.wg_getIntegralFormat(credits)
-                    ctx = {'credits': formattedCredits,
-                     'vehicleName': vehicleName}
+                comp = Money(*vehData['rentCompensation'])
+                currency = comp.getCurrency(byWeight=True)
+                formatter = getBWFormatter(currency)
+                key = '{}RentCompensationReceived'.format(currency)
+                ctx = {currency: formatter(comp.get(currency)),
+                 'vehicleName': vehicleName}
                 result.append(html.format(key, ctx=ctx))
             if 'customCompensation' in vehData:
                 itemNames = [vehicleName]
-                credits, gold = vehData['customCompensation']
+                comp = Money(*vehData['customCompensation'])
                 values = []
-                if gold > 0:
-                    values.append(html.format('goldCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getGoldFormat(gold)}))
-                if credits > 0:
-                    values.append(html.format('creditsCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getIntegralFormat(credits)}))
+                currencies = comp.getSetCurrencies(byWeight=True)
+                for currency in currencies:
+                    formatter = getBWFormatter(currency)
+                    key = '{}Compensation'.format(currency)
+                    values.append(html.format(key + htmlTplPostfix, ctx={'amount': formatter(comp.get(currency))}))
+
                 if len(values):
                     result.append(html.format('compensationFor' + htmlTplPostfix, ctx={'items': ', '.join(itemNames),
                      'compensation': ', '.join(values)}))
@@ -726,7 +745,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         boostersStrings = []
         for goodieID, ginfo in goodies.iteritems():
             booster = g_goodiesCache.getBooster(goodieID)
-            if booster is not None:
+            if booster is not None and booster.enabled:
                 boostersStrings.append(booster.userName)
 
         result = ''
@@ -749,6 +768,29 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             template = 'berthsDebitedInvoiceReceived'
         return g_settings.htmlTemplates.format(template, {'amount': BigWorld.wg_getIntegralFormat(abs(berths))})
 
+    @async
+    @process
+    def __prerocessRareAchievements(self, data, callback):
+        yield lambda callback: callback(True)
+        dossiers = data.get('data', {}).get('dossier', {})
+        if dossiers:
+            self.__dossierResult = []
+            rares = [ rec['value'] for d in dossiers.itervalues() for (blck, _), rec in d.iteritems() if blck == ACHIEVEMENT_BLOCK.RARE ]
+            addDossierStrings = [ i18n.makeString('#achievements:{0:s}'.format(name)) for rec in dossiers.itervalues() for _, name in rec if name != '' ]
+            addDossiers = [ rare for rare in rares if rare > 0 ]
+            if addDossiers:
+                addDossierStrings += (yield _processRareAchievements(addDossiers))
+            if addDossierStrings:
+                self.__dossierResult.append(g_settings.htmlTemplates.format('dossiersAccruedInvoiceReceived', ctx={'dossiers': ', '.join(addDossierStrings)}))
+            delDossiers = [ abs(rare) for rare in rares if rare < 0 ]
+            if delDossiers:
+                delDossierStrings = yield _processRareAchievements(delDossiers)
+                self.__dossierResult.append(g_settings.htmlTemplates.format('dossiersDebitedInvoiceReceived', ctx={'dossiers': ', '.join(delDossierStrings)}))
+        callback(True)
+
+    def __getDossierString(self):
+        return '<br/>'.join(self.__dossierResult)
+
     def __getL10nDescription(self, data):
         descr = ''
         lData = getLocalizedData(data.get('data', {}), 'localized_description', defVal=None)
@@ -761,23 +803,20 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     @classmethod
     def _processCompensations(cls, data):
         vehicles = data.get('vehicles')
-        credits = 0
-        gold = 0
+        comp = ZERO_MONEY
         if vehicles is not None:
             for value in vehicles.itervalues():
                 if 'rentCompensation' in value:
-                    credits += value['rentCompensation'][0]
-                    gold += value['rentCompensation'][1]
+                    comp += Money(*value['rentCompensation'])
                 if 'customCompensation' in value:
-                    credits += value['customCompensation'][0]
-                    gold += value['customCompensation'][1]
+                    comp += Money(*value['customCompensation'])
 
         if 'gold' in data:
-            data['gold'] -= gold
+            data['gold'] -= comp.gold
             if data['gold'] == 0:
                 del data['gold']
         if 'credits' in data:
-            data['credits'] -= credits
+            data['credits'] -= comp.credits
             if data['credits'] == 0:
                 del data['credits']
         return
@@ -790,7 +829,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
     def _composeOperations(self, data):
         dataEx = data.get('data', {})
-        if dataEx is None or not len(dataEx):
+        if not dataEx:
             return
         else:
             operations = []
@@ -808,11 +847,11 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if premium is not None:
                 operations.append(self.__getFinOperationString(INVOICE_ASSET.PREMIUM, premium))
             items = dataEx.get('items', {})
-            if items is not None and len(items) > 0:
+            if items:
                 operations.append(self.__getItemsString(items))
             tmen = dataEx.get('tankmen', [])
             vehicles = dataEx.get('vehicles', {})
-            if vehicles is not None and len(vehicles) > 0:
+            if vehicles:
                 result = self._getVehiclesString(vehicles)
                 if len(result):
                     operations.append(result)
@@ -822,7 +861,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 for v in vehicles.itervalues():
                     tmen.extend(v.get('tankmen', []))
 
-            if tmen is not None and len(tmen) > 0:
+            if tmen:
                 operations.append(self._getTankmenString(tmen))
             slots = dataEx.get('slots')
             if slots:
@@ -831,8 +870,13 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if berths:
                 operations.append(self.__getBerthsString(berths))
             goodies = data.get('goodies', {})
-            if goodies is not None and len(goodies) > 0:
-                operations.append(self._getGoodiesString(goodies))
+            if goodies:
+                strGoodies = self._getGoodiesString(goodies)
+                if strGoodies:
+                    operations.append(strGoodies)
+            dossier = dataEx.get('dossier', {})
+            if dossier:
+                operations.append(self.__getDossierString())
             _extendCustomizationData(dataEx, operations)
             return operations
 
@@ -850,6 +894,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         formatted, settings = (None, None)
         if isSynced:
             data = message.data
+            yield self.__prerocessRareAchievements(data)
             assetType = data.get('assetType', -1)
             handler = self.__assetHandlers.get(assetType)
             if handler is not None:
@@ -1435,7 +1480,9 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             result.append(InvoiceReceivedFormatter._getTankmenString(tmen))
         goodies = data.get('goodies', {})
         if goodies is not None and len(goodies) > 0:
-            result.append(InvoiceReceivedFormatter._getGoodiesString(goodies))
+            strGoodies = InvoiceReceivedFormatter._getGoodiesString(goodies)
+            if strGoodies:
+                result.append(strGoodies)
         if not self._asBattleFormatter:
             achieves = data.get('popUpRecords', [])
             achievesNames = set()
@@ -1824,7 +1871,7 @@ class FortBattleInviteFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         from gui.prb_control.formatters.invites import PrbFortBattleInviteHtmlTextFormatter
         battleData = message.data
-        if battleData:
+        if battleData and g_lobbyContext.getServerSettings().isFortsEnabled():
             inviteWrapper = self.__toFakeInvite(battleData)
             formatter = PrbFortBattleInviteHtmlTextFormatter()
             if message.createdAt is not None:
@@ -1857,7 +1904,7 @@ class VehicleRentedFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         data = message.data
         vehTypeCD = data.get('vehTypeCD', None)
-        expiryTime = data.get('expiryTime', None)
+        expiryTime = data.get('time', None)
         return (self._getMessage(vehTypeCD, expiryTime), self._getGuiSettings(message, self._templateKey)) if vehTypeCD is not None else (None, None)
 
     def _getMessage(self, vehTypeCD, expiryTime):
@@ -1891,17 +1938,30 @@ class RefSystemReferralBoughtVehicleFormatter(ServiceChannelFormatter):
         return (formatted, settings)
 
 
-class RefSystemReferralContributedXPFormatter(ServiceChannelFormatter):
+class RefSystemReferralContributedXPFormatter(WaitItemsSyncFormatter):
 
     def isNotify(self):
         return True
 
-    def format(self, message, *args):
-        data = message.data
-        settings = self._getGuiSettings(message, 'refSystemContributeXp')
-        formatted = g_settings.msgTemplates.format('refSystemContributeXp', {'userName': data.get('nickName', ''),
-         'xp': BigWorld.wg_getIntegralFormat(data.get('xp', 0))})
-        return (formatted, settings)
+    @async
+    @process
+    def format(self, message, callback):
+        yield lambda callback: callback(True)
+        isSynced = yield self._waitForSyncItems()
+        if message.data and isSynced:
+            refSystemQuests = g_eventsCache.getHiddenQuests(lambda x: x.getType() == EVENT_TYPE.REF_SYSTEM_QUEST)
+            notCompleted = findFirst(lambda q: not q.isCompleted(), refSystemQuests.values())
+            if notCompleted:
+                data = message.data
+                settings = self._getGuiSettings(message, 'refSystemContributeXp')
+                formatted = g_settings.msgTemplates.format('refSystemContributeXp', {'userName': data.get('nickName', ''),
+                 'xp': BigWorld.wg_getIntegralFormat(data.get('xp', 0))})
+                callback((formatted, settings))
+            else:
+                callback((None, None))
+        else:
+            callback((None, None))
+        return None
 
 
 class RefSystemQuestsFormatter(TokenQuestsFormatter):
@@ -1916,7 +1976,7 @@ class PotapovQuestsFormatter(TokenQuestsFormatter):
         pass
 
 
-class GoodieRemovedFormatter(WaitItemsSyncFormatter):
+class GoodieFormatter(WaitItemsSyncFormatter):
 
     @async
     @process
@@ -1928,13 +1988,28 @@ class GoodieRemovedFormatter(WaitItemsSyncFormatter):
             if goodieID is not None:
                 booster = g_goodiesCache.getBooster(goodieID)
                 if booster is not None:
-                    formatted = g_settings.msgTemplates.format('boosterExpired', ctx={'boosterName': booster.userName})
-                    callback((formatted, self._getGuiSettings(message, 'boosterExpired')))
+                    formatted = g_settings.msgTemplates.format(self._getTemplateName(), ctx={'boosterName': booster.userName})
+                    callback((formatted, self._getGuiSettings(message, self._getTemplateName())))
                     return
             callback((None, None))
         else:
             callback((None, None))
         return
+
+    def _getTemplateName(self):
+        raise NotImplementedError
+
+
+class GoodieRemovedFormatter(GoodieFormatter):
+
+    def _getTemplateName(self):
+        pass
+
+
+class GoodieDisabledFormatter(GoodieFormatter):
+
+    def _getTemplateName(self):
+        pass
 
 
 class TelecomStatusFormatter(ServiceChannelFormatter):
@@ -2048,3 +2123,21 @@ class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
     def _getMessageContext(self, data, vehicleNames):
         return {'vehicles': ', '.join(vehicleNames),
          'datetime': self._getOperationTimeString(data)}
+
+
+class PrbVehicleKickFormatter(ServiceChannelFormatter):
+    """
+    Message coming from the server when the user is kicked from the squad due to the vehicle
+    level doesn't correspond to commander's vehicle level rules.
+    """
+
+    def format(self, message, *args):
+        formatted = None
+        data = message.data
+        vehInvID = data.get('vehInvID', None)
+        g_itemsCache.items.getVehicle(vehInvID)
+        if vehInvID:
+            vehicle = g_itemsCache.items.getVehicle(vehInvID)
+            if vehicle:
+                formatted = g_settings.msgTemplates.format('prbVehicleKick', ctx={'vehName': vehicle.userName})
+        return (formatted, self._getGuiSettings(message, 'prbVehicleKick'))

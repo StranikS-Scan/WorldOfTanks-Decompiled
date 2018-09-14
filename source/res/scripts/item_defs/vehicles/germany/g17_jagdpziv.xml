@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.25	</moving>
+    <still>	0.417	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.626	</firePenalty>
+  </invisibility>
   <repairCost>	7.3	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -66,10 +73,11 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.202911 0.556736 1.42923	</turret>
+      <turret>	0.20291 0.539292 1.33557	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <player>
@@ -221,13 +229,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.959148 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.2167 1.75507	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -264,9 +271,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -472,13 +476,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.959148 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.2167 1.75507	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -515,9 +518,6 @@
         <gravity>	-9	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -649,6 +649,7 @@
             </gun>
           </unlocks>
           <reloadTime>	3.2	</reloadTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -673,7 +674,8 @@
             <exploded>	vehicles/german/G17_JagdPzIV/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -692,7 +694,7 @@
         <_75mm_StuK42_L70>	shared	  <unlocks>
             <gun>	_88mm_PaK_36_L56	  <cost>	9500	</cost>
             </gun>
-            <vehicle>	JagdPanther	  <cost>	60500	</cost>
+            <vehicle>	G18_JagdPanther	  <cost>	60500	</cost>
             </vehicle>
           </unlocks>
           <reloadTime>	3.8	</reloadTime>
@@ -714,6 +716,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G17_JagdPzIV/normal/lod0/Gun_03.model	</undamaged>
@@ -721,7 +724,8 @@
             <exploded>	vehicles/german/G17_JagdPzIV/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_main	</effects>
           <emblemSlots>
@@ -757,6 +761,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G17_JagdPzIV/normal/lod0/Gun_04.model	</undamaged>
@@ -764,7 +769,8 @@
             <exploded>	vehicles/german/G17_JagdPzIV/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -787,15 +793,14 @@
         <exploded>	vehicles/german/G17_JagdPzIV/crash/lod0/turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G17_JagdPzIV/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G17_JagdPzIV/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G17_JagdPzIV/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 -0.017445 -0.114224	</gunPosition>
+      <gunPosition>	0.000000 0.000000 -0.020563	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </JagdPzIV_0>
   </turrets0>
   <engines>
@@ -822,6 +827,28 @@
     </FuG5>
     <FuG7>	shared	</FuG7>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <JagdPzIV_Ausf_1940>
+        <alpha>	0.1127	</alpha>
+      </JagdPzIV_Ausf_1940>
+      <JagdPzIV_Ausf_1943>
+        <alpha>	0.10465	</alpha>
+      </JagdPzIV_Ausf_1943>
+    </chassis>
+    <engines>
+      <Maybach_HL_108TR>
+        <bravo>	84.58249	</bravo>
+      </Maybach_HL_108TR>
+      <Maybach_HL_120_TR>
+        <bravo>	92.5121	</bravo>
+      </Maybach_HL_120_TR>
+      <Maybach_HL_120_TRM>
+        <bravo>	116.3009	</bravo>
+      </Maybach_HL_120_TRM>
+    </engines>
+    <armour>	1.030547374	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

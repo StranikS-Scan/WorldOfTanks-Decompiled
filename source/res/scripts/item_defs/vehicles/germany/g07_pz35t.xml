@@ -9,6 +9,13 @@
     <forward>	35	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.2	</moving>
+    <still>	0.266	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.399	</firePenalty>
+  </invisibility>
   <repairCost>	3.54	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -55,7 +62,8 @@
       <turret>	0.000000 0.52708 0.3504	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G07_Pz35t/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -225,13 +233,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.940273 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G07_Pz35t/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.818974 1.55291	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -533,13 +540,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.940273 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G07_Pz35t/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.818974 1.55291	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -758,6 +764,7 @@
           </armor>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.24	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.529043 10 0.530462 8.5 0.542823 8 0.573774 9.5 0.575396 10 1 10	</maxPitch>
@@ -768,7 +775,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
@@ -776,7 +784,7 @@
         </_37mm_KwK_34t_L40>
         <_37mm_KwK_38t_L47>	shared	  <maxAmmo>	72	</maxAmmo>
           <unlocks>
-            <vehicle>	Pz38t	  <cost>	1250	</cost>
+            <vehicle>	G08_Pz38t	  <cost>	1250	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -795,6 +803,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -805,7 +814,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
@@ -832,6 +842,7 @@
           </armor>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
+          <invisibilityFactorAtShot>	0.224	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.528625 10 0.531864 9 0.53802 9.5 0.557247 10 1 10	</maxPitch>
@@ -842,7 +853,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
@@ -855,7 +867,8 @@
         <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G07_Pz35t/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0006 0.3041 0.5431	</gunPosition>
       <emblemSlots>
@@ -891,9 +904,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.967 0.006 1.021 0.000 0.520 0.007 0.897 0.578 0.347 0.500 0.264 0.500 0.161 0.511 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.31 0.000000 0.000000	</tiling>
       </camouflage>
@@ -960,6 +971,7 @@
           </armor>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.24	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.529043 10 0.530462 8.5 0.542823 8 0.573774 9.5 0.575396 10 1 10	</maxPitch>
@@ -970,7 +982,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
@@ -998,6 +1011,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1008,7 +1022,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.76 0.76 0.000000 0.000000	</tiling>
@@ -1035,6 +1050,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.224	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.528625 10 0.531864 9 0.53802 9.5 0.557247 10 1 10	</maxPitch>
@@ -1045,7 +1061,8 @@
             <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G07_Pz35t/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
@@ -1058,7 +1075,8 @@
         <exploded>	vehicles/german/G07_Pz35t/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G07_Pz35t/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G07_Pz35t/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G07_Pz35t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0006 0.3041 0.5431	</gunPosition>
       <emblemSlots>
@@ -1094,9 +1112,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.967 0.006 1.021 0.000 0.520 0.007 0.897 0.578 0.347 0.500 0.264 0.500 0.161 0.511 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1116,6 +1132,25 @@
   <radios>
     <FuG37>	shared	</FuG37>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Pz35t_Standardketten>
+        <alpha>	0.1288	</alpha>
+      </Pz35t_Standardketten>
+      <Pz35t_Vetstaerktketten>
+        <alpha>	0.10465	</alpha>
+      </Pz35t_Vetstaerktketten>
+    </chassis>
+    <engines>
+      <Skoda_T-11>
+        <bravo>	31.71843	</bravo>
+      </Skoda_T-11>
+      <Skoda_T-15>
+        <bravo>	58.15046	</bravo>
+      </Skoda_T-15>
+    </engines>
+    <armour>	0.80077794	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

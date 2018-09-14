@@ -2,16 +2,21 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BattleSessionWindow.py
 import BigWorld
 import constants
+import functools
 import nations
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.formatters import text_styles
 from gui.shared.utils import functions
+from shared_utils import safeCancelCallback
 from gui.prb_control import formatters, prb_getters
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_SETTING_NAME
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.meta.BattleSessionWindowMeta import BattleSessionWindowMeta
 from gui import makeHtmlString
+from helpers import time_utils
 
 class BattleSessionWindow(BattleSessionWindowMeta):
     START_TIME_SYNC_PERIOD = 10
@@ -22,6 +27,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__setStaticData()
         self.__startTimeSyncCallbackID = None
         self.__team = None
+        self.__timerCallbackID = None
         return
 
     def startListening(self):
@@ -95,6 +101,7 @@ class BattleSessionWindow(BattleSessionWindowMeta):
     def _dispose(self):
         self.__team = None
         self.__clearSyncStartTimeCallback()
+        self.__cancelTimerCallback()
         super(BattleSessionWindow, self)._dispose()
         return
 
@@ -104,8 +111,9 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         return self.__team
 
     def _setRosterList(self, rosters):
-        self.as_setRosterListS(self._getPlayerTeam(), True, self._makeAccountsData(rosters[self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED]))
-        self.as_setRosterListS(self._getPlayerTeam(), False, self._makeAccountsData(rosters[self._getPlayerTeam() | PREBATTLE_ROSTER.UNASSIGNED]))
+        playerTeam = self._getPlayerTeam()
+        self.as_setRosterListS(playerTeam, True, self._makeAccountsData(rosters[playerTeam | PREBATTLE_ROSTER.ASSIGNED]))
+        self.as_setRosterListS(playerTeam, False, self._makeAccountsData(rosters[playerTeam | PREBATTLE_ROSTER.UNASSIGNED]))
 
     def __handleBSWindowHide(self, _):
         self.destroy()
@@ -124,9 +132,23 @@ class BattleSessionWindow(BattleSessionWindowMeta):
         self.__clearSyncStartTimeCallback()
         startTime = self.prbFunctional.getSettings()[PREBATTLE_SETTING_NAME.START_TIME]
         startTime = formatters.getStartTimeLeft(startTime)
-        self.as_setStartTimeS(startTime)
+        self.__cancelTimerCallback()
+        self.__showTimer(startTime)
         if startTime > 0:
             self.__startTimeSyncCallbackID = BigWorld.callback(self.START_TIME_SYNC_PERIOD, self.__syncStartTime)
+
+    def __showTimer(self, timeLeft):
+        self.__timerCallbackID = None
+        self.as_setStartTimeS(time_utils.getTimeLeftFormat(timeLeft))
+        if timeLeft > 0:
+            self.__timerCallbackID = BigWorld.callback(1, functools.partial(self.__showTimer, timeLeft - 1))
+        return
+
+    def __cancelTimerCallback(self):
+        if self.__timerCallbackID is not None:
+            safeCancelCallback(self.__timerCallbackID)
+            self.__timerCallbackID = None
+        return
 
     def __setStaticData(self):
         settings = self.prbFunctional.getSettings()
@@ -155,9 +177,17 @@ class BattleSessionWindow(BattleSessionWindowMeta):
                     if player.isVehicleSpecified():
                         totalLvl += player.getVehicle().level
 
-        self.as_setCommonLimitsS(totalLvl, minTotalLvl, maxTotalLvl, playersMaxCount)
+        if minTotalLvl <= totalLvl and totalLvl <= maxTotalLvl:
+            teamLevelStr = text_styles.main(str(totalLvl))
+        else:
+            teamLevelStr = text_styles.error(str(totalLvl))
+        self.as_setCommonLimitsS(teamLevelStr, playersMaxCount)
         self.as_setPlayersCountTextS(makeHtmlString('html_templates:lobby/prebattle', 'specBattlePlayersCount', {'membersCount': playersCount,
          'maxMembersCount': playersMaxCount}))
+        playerTeam = len(self._makeAccountsData(rosters[self._getPlayerTeam() | PREBATTLE_ROSTER.ASSIGNED]))
+        playersStyleFunc = text_styles.main if playerTeam < playersMaxCount else text_styles.error
+        playersCountStr = playersStyleFunc('%d/%d' % (playerTeam, playersMaxCount))
+        self.as_setTotalPlayersCountS(playersCountStr)
 
     def __updateLimits(self, teamLimits, rosters):
         levelLimits = {}

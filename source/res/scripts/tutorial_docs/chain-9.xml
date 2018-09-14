@@ -44,7 +44,8 @@
         <inactivate>	ShowCongratulationWindow	</inactivate>
         <run-trigger>	BonusTrigger	</run-trigger>
       </post-effects>
-      <runtime-effects>	&gt;	  <set-gui-item-criteria>	PremiumPeriodCriteria	  <condition>
+      <runtime-effects>
+        <set-gui-item-criteria>	PremiumPeriodCriteria	  <condition>
             <var>	PremiumDays	  <is-not-none></is-not-none>
             </var>
             <effect-not-triggered>	PremiumPeriodRendererCriteria	</effect-not-triggered>
@@ -85,24 +86,10 @@
             <effect-not-triggered>	PremiumWindowSubmitButtonHint	</effect-not-triggered>
           </condition>
         </show-hint>
-        <request-bonus>
-          <condition>
-            <active>	PremiumDiscountsChanged	</active>
-            <inactive>	BonusReceived	</inactive>
-          </condition>
-        </request-bonus>
-        <activate>	ShowCongratulationWindow	  <condition>
-            <active>	BonusReceived	</active>
-            <active>	PremiumDiscountsChanged	</active>
-          </condition>
-        </activate>
-        <show-award-window>	CongratulationWindow	  <condition>
-            <active>	ShowCongratulationWindow	</active>
-          </condition>
-        </show-award-window>
         <refuse-training>
-          <condition>	&gt;	  <either>
-              <active>	ShowCongratulationWindow	</active>
+          <condition>
+            <either>
+              <effect-triggered>	CongratulationWindow	</effect-triggered>
               <var>	PremiumDays	  <is-none></is-none>
               </var>
             </either>
@@ -193,21 +180,26 @@
     </simple-window>
   </has-id>
   <triggers>
-    <trigger>	BonusTrigger	  <type>	bonus	</type>
-      <on-effects>
-        <activate>	BonusReceived	</activate>
-      </on-effects>
-      <off-effects></off-effects>
-    </trigger>
     <trigger>	PremiumDiscountsChangedTrigger	  <type>	premiumDiscount	</type>
       <validate-var>	PremiumDays	</validate-var>
       <validate-update-only></validate-update-only>
       <on-effects>
         <activate>	PremiumDiscountsChanged	</activate>
+        <request-bonus></request-bonus>
       </on-effects>
       <off-effects>
         <refuse-training></refuse-training>
       </off-effects>
+    </trigger>
+    <trigger>	BonusTrigger	  <type>	bonus	</type>
+      <on-effects>
+        <activate>	BonusReceived	</activate>
+        <show-award-window>	CongratulationWindow	  <condition>
+            <active>	PremiumDiscountsChanged	</active>
+          </condition>
+        </show-award-window>
+      </on-effects>
+      <off-effects></off-effects>
     </trigger>
     <trigger>	SimpleDialogTrigger	  <type>	simpleDialog	</type>
       <on-effects>

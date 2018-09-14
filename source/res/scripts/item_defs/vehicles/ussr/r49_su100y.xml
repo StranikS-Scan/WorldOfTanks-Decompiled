@@ -1,0 +1,530 @@
+<r49_su100y.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.07	</moving>
+    <still>	0.117	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.176	</firePenalty>
+  </invisibility>
+  <repairCost>	4.8	</repairCost>
+  <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	75	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	60	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	50	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	40	</armor_11>
+      <armor_12>	20	</armor_12>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	42603	</weight>
+    <maxHealth>	560	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R49_SU100Y/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R49_SU100Y/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R49_SU100Y/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 34.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.20 34.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.25	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000004 1.35626 1.45128	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R49_SU100Y/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R49_SU100Y/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.534083 0.284565 3.68533	</rayStart>
+        <rayEnd>	0.534083 -0.0863349 3.53558	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	-1.41987 1.56879 -0.592474	</rayStart>
+        <rayEnd>	-1.01987 1.56879 -0.592474	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.41987 1.56879 -0.592474	</rayStart>
+        <rayEnd>	1.01987 1.56879 -0.592474	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	1.41987 1.52055 0.550798	</rayStart>
+        <rayEnd>	1.01987 1.52055 0.550798	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.86	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-1.41987 1.52055 0.550798	</rayStart>
+        <rayEnd>	-1.01987 1.52055 0.550798	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.86	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R49_SU100Y/SU100Y_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_SU100Y>
+      <userString>	#ussr_vehicles:Chassis_SU100Y	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	34100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	67400	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
+      <brakeForce>	50000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R49_SU100Y/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R49_SU100Y/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R49_SU100Y/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.46 0.74	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.344507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.137582	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.494819	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.370109	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.344507	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.137583	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.494819	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.370109	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.1711 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R49_SU100Y/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R49_SU100Y/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.32234 3.00201	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.756050 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.558840 0.000000	</row1>
+            <row2>	0.000000 0.000000 11.205100	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R49_SU100Y/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R49_SU100Y/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R49_SU100Y/track/left.track	</left>
+        <right>	vehicles/russian/R49_SU100Y/track/right.track	</right>
+        <segmentLength>	0.168	</segmentLength>
+        <segmentOffset>	0.181	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.118557	</minOffset>
+          <maxOffset>	0.118557	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.118557	</minOffset>
+          <maxOffset>	0.124742	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0119	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.074	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+      </trackNodes>
+    </Chassis_SU100Y>
+  </chassis>
+  <turrets0>
+    <Turret_1_SU100Y>
+      <userString>	#ussr_vehicles:Turret_1_SU100Y	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	8	</level>
+      <price>	1200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_1>
+        <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_2>
+        <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_3>
+        <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_4>
+        <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	140	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_130mm_B-13-S2>	shared	  <maxAmmo>	30	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	60	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	16	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.23	</invisibilityFactorAtShot>
+          <turretYawLimits>	-10 10	</turretYawLimits>
+          <effects>	shot_large	</effects>
+          <models>
+            <undamaged>	vehicles/russian/R49_SU100Y/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R49_SU100Y/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R49_SU100Y/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R49_SU100Y/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R49_SU100Y/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000004 -0.000000 2.3	</rayStart>
+              <rayEnd>	-0.344985 -0.0873606 2.19448	</rayEnd>
+              <rayUp>	0.174 0.136 5	</rayUp>
+              <size>	0.825	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_130mm_B-13-S2>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R49_SU100Y/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R49_SU100Y/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R49_SU100Y/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R49_SU100Y/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R49_SU100Y/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 -0.112641 -0.156791	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 1.000 0.100 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_SU100Y>
+  </turrets0>
+  <engines>
+    <GAZ-34-BT>	shared	</GAZ-34-BT>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <_71-TK-3U>	shared	</_71-TK-3U>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_SU100Y>
+        <alpha>	0.1127	</alpha>
+      </Chassis_SU100Y>
+    </chassis>
+    <engines>
+      <GAZ-34-BT>
+        <bravo>	235.2451	</bravo>
+      </GAZ-34-BT>
+    </engines>
+    <armour>	0.915403844	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r49_su100y.xml>

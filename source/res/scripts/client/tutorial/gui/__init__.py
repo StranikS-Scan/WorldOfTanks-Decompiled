@@ -3,22 +3,27 @@
 import Event
 from debug_utils import LOG_ERROR
 
-class GUI_EFFECT_NAME:
+class GUI_EFFECT_NAME(object):
     SHOW_DIALOG = 'ShowDialog'
     SHOW_WINDOW = 'ShowWindow'
     SHOW_HINT = 'ShowHint'
     UPDATE_CONTENT = 'UpdateContent'
     SET_CRITERIA = 'SetCriteria'
     SET_TRIGGER = 'SetTrigger'
+    SHOW_GREETING = 'ShowGreeting'
+    NEXT_TASK = 'NextTask'
 
 
 class GUIProxy(object):
-    eManager = Event.EventManager()
-    onGUILoaded = Event.Event(eManager)
-    onGUIInput = Event.Event(eManager)
-    onPageChanging = Event.Event(eManager)
-    onItemFound = Event.Event(eManager)
-    onItemLost = Event.Event(eManager)
+
+    def __init__(self):
+        super(GUIProxy, self).__init__()
+        self.eManager = Event.EventManager()
+        self.onGUILoaded = Event.Event(self.eManager)
+        self.onGUIInput = Event.Event(self.eManager)
+        self.onPageChanging = Event.Event(self.eManager)
+        self.onItemFound = Event.Event(self.eManager)
+        self.onItemLost = Event.Event(self.eManager)
 
     def init(self):
         return True
@@ -26,7 +31,7 @@ class GUIProxy(object):
     def show(self):
         pass
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         pass
 
     def clear(self):
@@ -101,11 +106,6 @@ class GUIProxy(object):
     def getGuiRoot(self):
         return None
 
-    @classmethod
-    def windowsManager(cls):
-        from gui import WindowsManager
-        return WindowsManager.g_windowsManager
-
     def setDispatcher(self, dispatcher):
         pass
 
@@ -164,6 +164,14 @@ class GUIDispatcher(object):
             result = self._loader.stop()
         else:
             LOG_ERROR('Tutorial can not be stopped, loader is not defined')
+        return result
+
+    def refuseTraining(self):
+        result = False
+        if self._loader:
+            result = self._loader.refuse()
+        else:
+            LOG_ERROR('Tutorial can not be refuse, loader is not defined')
         return result
 
     def startTraining(self, settingsID, state):

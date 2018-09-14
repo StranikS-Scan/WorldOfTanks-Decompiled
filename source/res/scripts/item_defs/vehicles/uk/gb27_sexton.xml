@@ -11,6 +11,13 @@
     <forward>	40.2	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.128	</moving>
+    <still>	0.255	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.383	</firePenalty>
+  </invisibility>
   <repairCost>	7.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -68,7 +75,8 @@
       <turret>	-0.125975 0.613358 1.20022	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB27_Sexton/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -219,13 +227,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.938962 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB27_Sexton/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.08393 1.82769	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -467,13 +474,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.938962 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB27_Sexton/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.08393 1.82769	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -671,6 +677,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	5.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 15	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB27_Sexton/normal/lod0/Gun_02.model	</undamaged>
@@ -678,7 +685,8 @@
             <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB27_Sexton/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.595 0.415 0.000000 0.000000	</tiling>
@@ -691,15 +699,14 @@
         <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB27_Sexton/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.016515 0.43822 -0.624731	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.208 0.745 0.667 0.558 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
       </camouflage>
@@ -755,6 +762,7 @@
             <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 15	</turretYawLimits>
           <effects>	shot_large_mb	</effects>
           <models>
@@ -763,7 +771,8 @@
             <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB27_Sexton/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.685 0.25 0.000000 0.000000	</tiling>
@@ -776,15 +785,14 @@
         <exploded>	vehicles/british/GB27_Sexton/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB27_Sexton/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB27_Sexton/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB27_Sexton/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.014534 0.567338 -0.059905	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.208 0.388 0.100 0.500 0.500 0.000 0.500 0.355 0.986 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
       </camouflage>
@@ -814,6 +822,25 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB27_Sexton>
+        <alpha>	0.1288	</alpha>
+      </Chassis_GB27_Sexton>
+      <Chassis_GB27_Sexton_2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_GB27_Sexton_2>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975C1>
+        <bravo>	105.7281	</bravo>
+      </Wright_Continental_R-975C1>
+      <Wright_Continental_R-975C4>
+        <bravo>	121.5873	</bravo>
+      </Wright_Continental_R-975C4>
+    </engines>
+    <armour>	0.494149349	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

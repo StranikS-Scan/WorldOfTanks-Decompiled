@@ -75,13 +75,13 @@ class _UserPresence(ClientHolder):
         g_playerEvents.onIGRTypeChanged -= self.__onIGRTypeChanged
 
     def __createQuery(self, presence):
-        from gui.battle_control.arena_info import getArenaGuiTypeLabel
         query = PresenceQuery(presence)
         item = g_preDefinedHosts.byName(connectionManager.serverUserName)
         if item.url:
             query.setGameServerHost(item.url)
         if self.__scope == MESSENGER_SCOPE.BATTLE and presence == PRESENCE.DND:
-            query.setArenaGuiLabel(getArenaGuiTypeLabel())
+            from gui.battle_control import g_sessionProvider
+            query.setArenaGuiLabel(g_sessionProvider.arenaVisitor.gui.getLabel())
         return query
 
     def __onIGRTypeChanged(self, igrID, _):

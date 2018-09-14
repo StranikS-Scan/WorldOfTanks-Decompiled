@@ -6,6 +6,10 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.profile.ProfileAwards import ProfileAwards
     from gui.Scaleform.daapi.view.lobby.profile.ProfilePage import ProfilePage

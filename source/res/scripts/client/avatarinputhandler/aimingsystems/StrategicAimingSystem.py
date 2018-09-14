@@ -11,11 +11,13 @@ from AvatarInputHandler.cameras import _clampPoint2DInBox2D
 class StrategicAimingSystem(IAimingSystem):
     _LOOK_DIR = Vector3(0, -math.cos(0.001), math.sin(0.001))
     height = property(lambda self: self.__height)
+    heightFromPlane = property(lambda self: self.__heightFromPlane)
 
     def __init__(self, height, yaw):
         self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
         self.__planePosition = Vector3(0, 0, 0)
         self.__height = height
+        self.__heightFromPlane = 0.0
 
     def destroy(self):
         pass
@@ -45,6 +47,6 @@ class StrategicAimingSystem(IAimingSystem):
         self.__planePosition.x = pos2D[0]
         self.__planePosition.z = pos2D[1]
         collPoint = BigWorld.wg_collideSegment(BigWorld.player().spaceID, self.__planePosition + Math.Vector3(0, 1000.0, 0), self.__planePosition + Math.Vector3(0, -250.0, 0), 3)
-        heightFromPlane = 0.0 if collPoint is None else collPoint[0][1]
-        self._matrix.translation = self.__planePosition + Vector3(0, heightFromPlane + self.__height, 0)
+        self.__heightFromPlane = 0.0 if collPoint is None else collPoint[0][1]
+        self._matrix.translation = self.__planePosition + Vector3(0, self.__heightFromPlane + self.__height, 0)
         return

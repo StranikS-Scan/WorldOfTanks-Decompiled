@@ -12,16 +12,12 @@ g_keyEventHandlers = set()
 g_mouseEventHandlers = set()
 g_tankActiveCamouflage = {'historical': {}}
 GUI_SETTINGS = _GuiSettings()
-DEPTH_OF_Disconnect = 0.0
-DEPTH_OF_Postmortem = 0.01
 DEPTH_OF_BotsMenu = 0.05
 DEPTH_OF_PhysicChart = 0.7
 DEPTH_OF_Battle = 0.1
 DEPTH_OF_Statistic = 0.1
 DEPTH_OF_PlayerBonusesPanel = 0.2
-DEPTH_OF_Minimap = 0.5
 DEPTH_OF_Aim = 0.6
-DEPTH_OF_Binoculars = 0.55
 DEPTH_OF_GunMarker = 0.56
 DEPTH_OF_VehicleMarker = 0.9
 CLIENT_ENCODING = '1251'
@@ -103,3 +99,12 @@ if IS_DEVELOPMENT:
 
 def makeHtmlString(path, key, ctx=None, **kwargs):
     return g_htmlTemplates[path].format(key, ctx=ctx, **kwargs)
+
+
+class GUI_CTRL_MODE_FLAG(object):
+    CURSOR_DETACHED = 0
+    CURSOR_ATTACHED = 1
+    CURSOR_VISIBLE = 2
+    MOVING_DISABLED = 4
+    AIMING_ENABLED = 8
+    GUI_ENABLED = CURSOR_ATTACHED | CURSOR_VISIBLE

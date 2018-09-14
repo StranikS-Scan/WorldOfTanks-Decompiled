@@ -3,6 +3,12 @@
 
 
 class BATTLE_EFFICIENCY_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     ARMOR = 'armor'
     DAMAGE = 'damage'
     DESTRUCTION = 'kill'

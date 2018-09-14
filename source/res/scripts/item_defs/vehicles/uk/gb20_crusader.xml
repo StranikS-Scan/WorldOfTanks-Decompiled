@@ -8,6 +8,13 @@
     <forward>	44	</forward>
     <backward>	22	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.294	</moving>
+    <still>	0.294	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.441	</firePenalty>
+  </invisibility>
   <repairCost>	5.66	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -57,7 +64,8 @@
       <turret>	0.000001 0.534131 0.461662	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB20_Crusader/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -177,13 +185,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.880846 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB20_Crusader/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.15194 1.73458	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -516,13 +523,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.880846 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB20_Crusader/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.15194 1.73458	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -816,6 +822,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -827,7 +834,8 @@
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -859,13 +867,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -888,7 +898,8 @@
         <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB20_Crusader/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.004074 0.276168 0.683498	</gunPosition>
       <emblemSlots>
@@ -910,9 +921,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.985 -0.086 0.927 0.000 0.522 0.176 1.000 0.637 0.249 0.500 0.000 0.500 0.181 0.711 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
       </camouflage>
@@ -965,6 +974,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -976,7 +986,8 @@
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1008,13 +1019,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1052,13 +1065,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1090,13 +1105,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB20_Crusader/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/british/GB20_Crusader/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB20_Crusader/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1119,7 +1136,8 @@
         <exploded>	vehicles/british/GB20_Crusader/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB20_Crusader/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB20_Crusader/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB20_Crusader/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.004074 0.307533 0.682434	</gunPosition>
       <emblemSlots>
@@ -1141,9 +1159,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.052 0.003 0.927 0.000 0.603 0.293 1.000 0.653 0.344 0.500 0.000 0.500 0.195 0.797 0.184	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.745 0.55 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1178,6 +1194,25 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB20_Crusader>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB20_Crusader>
+      <Chassis_GB20_Crusader_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_GB20_Crusader_2>
+    </chassis>
+    <engines>
+      <Nuffield_liberty_MKIV>
+        <bravo>	104.4065	</bravo>
+      </Nuffield_liberty_MKIV>
+      <Nuffield_liberty_MKV>
+        <bravo>	108.3713	</bravo>
+      </Nuffield_liberty_MKV>
+    </engines>
+    <armour>	0.67821695	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

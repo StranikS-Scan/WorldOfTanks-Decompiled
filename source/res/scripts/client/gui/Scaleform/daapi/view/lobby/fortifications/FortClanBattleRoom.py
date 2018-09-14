@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortClanBattleRoom.py
 import ArenaType
 from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.shared.utils.MethodsRules import MethodsRules
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, int2roman
 from UnitBase import UNIT_OP
 from adisp import process
@@ -31,7 +33,7 @@ from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.formatters import icons, text_styles
 
-class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
+class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper, MethodsRules):
 
     class TIMER_GLOW_COLORS(CONST_CONTAINER):
         NORMAL = int('BB6200', 16)
@@ -61,13 +63,11 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
 
     def onFortBattleChanged(self, cache, item, battleItem):
         self.__initData()
-        self.__makeData()
 
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__setReadyStatus()
         self._setActionButtonState()
         self.__initData()
-        self.__makeData()
 
     def onUnitSettingChanged(self, opCode, value):
         if opCode == UNIT_OP.SET_COMMENT:
@@ -106,8 +106,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
     def onClientStateChanged(self, state):
         if state.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
             self.__initData()
-            self.__makeData()
-        elif self.fortState.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
+        elif self.fortState.getStateID() in CLIENT_FORT_STATE.NOT_AVAILABLE_FORT:
             self.__leaveOnError()
 
     def onUnitRejoin(self):
@@ -120,7 +119,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__updateHeaderTeamSection()
 
     def initCandidatesDP(self):
-        self._candidatesDP = rally_dps.SortieCandidatesDP()
+        self._candidatesDP = rally_dps.ClanBattleCandidatesDP()
         self._candidatesDP.init(self.app, self.as_getCandidatesDPS(), self.unitFunctional.getCandidates())
 
     def rebuildCandidatesDP(self):
@@ -136,8 +135,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.startFortListening()
         if self.fortState.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
             self.__initData()
-            self.__makeData()
-        elif self.fortState.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
+        elif self.fortState.getStateID() in CLIENT_FORT_STATE.NOT_AVAILABLE_FORT:
             self.__leaveOnError()
 
     def _dispose(self):
@@ -159,6 +157,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
     def _setActionButtonState(self):
         self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
 
+    @MethodsRules.delayable()
     def __initData(self):
         fort = self.fortCtrl.getFort()
         self.__battleID = prb_getters.getBattleID()
@@ -169,6 +168,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         if self.__allBuildings:
             self.__prevBuilding = self.__allBuildings[self.__battle.getPrevBuildNum()]
             self.__currentBuilding = self.__allBuildings[self.__battle.getCurrentBuildNum()]
+        self.__makeData()
         return
 
     def __makeData(self):
@@ -181,6 +181,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.__requestEnemyClanEmblem()
         self._updateVehiclesLabel(int2roman(1), int2roman(self.__battle.additionalData.division))
 
+    @MethodsRules.delayable('__initData')
     def __makeMainVO(self):
         result = {}
         extra = self.unitFunctional.getExtra()
@@ -206,9 +207,11 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
         self.as_setBattleRoomDataS(result)
         return
 
+    @MethodsRules.delayable('__initData')
     def __setReadyStatus(self):
         self.as_updateReadyStatusS(self.unitFunctional.getFlags().isInQueue(), self.__battle.isEnemyReadyForBattle())
 
+    @MethodsRules.delayable('__initData')
     def __setTimerDelta(self):
         isInBattle = self.unitFunctional.getFlags().isInArena()
         self.as_setTimerDeltaS({'deltaTime': self.__battle.getRoundStartTimeLeft() if not isInBattle else 0,
@@ -254,8 +257,7 @@ class FortClanBattleRoom(FortClanBattleRoomMeta, UnitListener, FortViewHelper):
                             'buildingIndicatorTTBody': buildingIndicatorTTBody,
                             'revertArrowDirection': isReverse},
          'connectionIcon': connectionIcon,
-         'connectionIconTTHeader': connectionIconTTHeader,
-         'connectionIconTTBody': connectionIconTTBody}
+         'connectionIconTooltip': makeTooltip(connectionIconTTHeader, connectionIconTTBody)}
         self.as_updateDirectionsS(directionsData)
 
     def __defineArrowDirection(self):

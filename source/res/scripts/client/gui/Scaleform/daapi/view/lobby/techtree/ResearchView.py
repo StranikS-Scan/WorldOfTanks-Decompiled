@@ -83,9 +83,6 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     def invalidateRent(self, vehicles):
         raise NotImplementedError('Must be overridden in subclass')
 
-    def request4SelectInHangar(self, itemCD):
-        shared_events.selectVehicleInHangar(itemCD)
-
     def request4Info(self, itemCD, rootCD):
         vehicle = g_itemsCache.items.getItemByCD(int(rootCD))
         if vehicle:

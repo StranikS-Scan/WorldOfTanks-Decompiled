@@ -7,49 +7,53 @@
     <loader></loader>
   </crew>
   <speedLimits>
-    <forward>	35	</forward>
+    <forward>	30	</forward>
     <backward>	15	</backward>
   </speedLimits>
-  <repairCost>	4.5	</repairCost>
-  <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
-  <crewXpFactor>	1.5	</crewXpFactor>
+  <invisibility>
+    <moving>	0.044	</moving>
+    <still>	0.088	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.132	</firePenalty>
+  </invisibility>
+  <repairCost>	8.945	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.4	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G58_VK4502P7/VK4502P_CM.dds	</exclusionMask>
+    <exclusionMask>	vehicles/german/G58_VK4502P/VK4502P_CM.dds	</exclusionMask>
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	80	</armor_1>
-      <armor_2>	80	</armor_2>
-      <armor_3>	80	</armor_3>
-      <armor_4>	80	</armor_4>
-      <armor_5>	80	</armor_5>
-      <armor_6>	40	</armor_6>
-      <armor_7>	20	</armor_7>
+      <armor_1>	200	</armor_1>
+      <armor_2>	200	</armor_2>
+      <armor_3>	100	</armor_3>
+      <armor_4>	100	</armor_4>
+      <armor_5>	100	</armor_5>
+      <armor_6>	60	</armor_6>
+      <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	80	</armor_9>
-      <armor_10>	100	</armor_10>
-      <armor_11>	100	</armor_11>
+      <armor_9>	170	</armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-    <weight>	36873	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <weight>	36400	</weight>
+    <maxHealth>	1480	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
-      <undamaged>	vehicles/german/G58_VK4502P7/normal/lod0/Hull.model	</undamaged>
-      <destroyed>	vehicles/german/G58_VK4502P7/crash/lod0/Hull.model	</destroyed>
-      <exploded>	vehicles/german/G58_VK4502P7/crash/lod0/Hull.model	</exploded>
+      <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Hull.model	</exploded>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.22 36.00 0.36 1.00 0.04 0.26	</pitchParams>
-      <rollParams>	1.00 0.22 36.00 0.36 1.00 0.04 0.26	</rollParams>
-      <sensitivityToImpulse>	0.22	</sensitivityToImpulse>
+      <pitchParams>	0.20 36.00 0.34 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.20 36.00 0.34 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.08	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	gas_large	</pixie>
@@ -59,7 +63,8 @@
       <turret>	-0.010441 0.904588 -1.5514	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G58_VK4502P7/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -70,38 +75,41 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/german/G58_VK4502P7/VK4502P_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/german/G58_VK4502P/VK4502P_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
-    <Chassis_G58_VK4502P>
-      <userString>	#germany_vehicles:Chassis_G58_VK4502P	</userString>
-      <shortUserString>	#germany_vehicles:Chassis_G58_VK4502P_short	</shortUserString>
+    <VK4502P_Standardketten>
+      <userString>	#germany_vehicles:VK4502P_Standardketten	</userString>
+      <shortUserString>	#germany_vehicles:VK4502P_Standardketten_short	</shortUserString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	20000	</price>
-      <notInShop>	true	</notInShop>
+      <level>	8	</level>
+      <price>	31500.0	</price>
+      <unlocks>
+        <chassis>	VK4502P_Vetstaerktketten	  <cost>	23300	</cost>
+        </chassis>
+      </unlocks>
       <armor>
         <leftTrack>	25	</leftTrack>
         <rightTrack>	25	</rightTrack>
       </armor>
-      <weight>	15000	</weight>
-      <maxLoad>	69690	</maxLoad>
-      <terrainResistance>	1.1 1.3 2.2	</terrainResistance>
-      <brakeForce>	70000	</brakeForce>
+      <weight>	19000	</weight>
+      <maxLoad>	75500	</maxLoad>
+      <terrainResistance>	1.1 2 3.4	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	28	</rotationSpeed>
+      <rotationSpeed>	17	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	145	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
-        <undamaged>	vehicles/german/G58_VK4502P7/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/german/G58_VK4502P7/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/german/G58_VK4502P7/crash/lod0/Chassis.model	</exploded>
+        <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Chassis.model	</exploded>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -162,13 +170,121 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G58_VK4502P7/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.32677 1.98117	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.413900 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.528440	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </VK4502P_Standardketten>
+    <VK4502P_Vetstaerktketten>
+      <userString>	#germany_vehicles:VK4502P_Vetstaerktketten	</userString>
+      <shortUserString>	#germany_vehicles:VK4502P_Vetstaerktketten_short	</shortUserString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	60000	</price>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	19000	</weight>
+      <maxLoad>	80800	</maxLoad>
+      <terrainResistance>	1.1 1.7 2.5	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.44 0.6	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.84	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.35788	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.35788	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.408303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.409381	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.408303	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.409381	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.32677 1.98117	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -183,80 +299,92 @@
           </transform>
         </decal>
       </AODecals>
-    </Chassis_G58_VK4502P>
+    </VK4502P_Vetstaerktketten>
   </chassis>
   <turrets0>
-    <Turret_1_G58_VK4502P>
-      <userString>	#germany_vehicles:Turret_1_G58_VK4502P	</userString>
-      <shortUserString>	#germany_vehicles:Turret_1_G58_VK4502P_short	</shortUserString>
+    <VK4502P_Standardturm>
+      <userString>	#germany_vehicles:VK4502P_Standardturm	</userString>
+      <shortUserString>	#germany_vehicles:VK4502P_Standardturm_short	</shortUserString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	20000	</price>
-      <notInShop>	true	</notInShop>
+      <level>	8	</level>
+      <price>	31500.0	</price>
+      <unlocks>
+        <turret>	VK4502P_Eliteturm	  <cost>	20400	</cost>
+        </turret>
+      </unlocks>
       <armor>
-        <armor_1>	100	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	80	</armor_3>
-        <armor_4>	80	</armor_4>
-        <armor_5>	25	</armor_5>
-        <armor_6>	25	</armor_6>
-        <armor_7>	40	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	60	</armor_9>
-        <armor_10>	20	</armor_10>
-        <armor_11>	90	</armor_11>
-        <armor_12>	60	</armor_12>
-        <armor_13>	40	</armor_13>
+        <armor_1>	220	</armor_1>
+        <armor_2>	180	</armor_2>
+        <armor_3>	150	</armor_3>
+        <armor_4>	150	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	100	</armor_6>
+        <armor_7>	140	</armor_7>
+        <armor_8>	40	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	80	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	9500	</weight>
-      <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <weight>	13500	</weight>
+      <maxHealth>	370	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	90	</maxHealth>
-        <maxRegenHealth>	45	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_88mm_KwK_43_L71B>	shared	  <maxAmmo>	68	</maxAmmo>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	92	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 6 1 6	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_KwK45_L52	  <cost>	16800	</cost>
+            </gun>
+          </unlocks>
           <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	2.8	</aimingTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P7/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P7/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P7/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G58_VK4502P7/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -271,17 +399,428 @@
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
           </camouflage>
-        </_88mm_KwK_43_L71B>
+        </_88mm_KwK_43_L71>
+        <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 4 0.0555556 4 0.0694444 6 0.930556 6 0.944444 4 1 4	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_KwK46_L68	  <cost>	46000	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	10.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000549107 0.000552906 4.2301	</rayStart>
+              <rayEnd>	0.027042 -0.132786 4.22271	</rayEnd>
+              <rayUp>	0.089 0.081 2	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_KwK45_L52>
+        <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 4 0.0555556 4 0.0694444 7 0.930556 7 0.944444 4 1 4	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	10.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_07.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000549107 0.000552906 5.44874	</rayStart>
+              <rayEnd>	0.0977876 -0.0964935 5.4433	</rayEnd>
+              <rayUp>	0.087 0.081 2	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_KwK46_L68>
       </guns>
       <models>
-        <undamaged>	vehicles/german/G58_VK4502P7/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/german/G58_VK4502P7/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/german/G58_VK4502P7/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G58_VK4502P7/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.032003 0.350083 1.22245	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.994154 0.551787 0.729172	</rayStart>
+          <rayEnd>	-0.657634 0.35722 0.634843	</rayEnd>
+          <rayUp>	0.0154533 0.99814 0.0589656	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.948289 0.53298 -1.06242	</rayStart>
+          <rayEnd>	-0.606599 0.336206 -0.995105	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.994154 0.551787 0.729172	</rayStart>
+          <rayEnd>	0.657634 0.35722 0.634843	</rayEnd>
+          <rayUp>	0.0154533 0.99814 0.0589656	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	0.948289 0.53298 -1.06242	</rayStart>
+          <rayEnd>	0.606599 0.336206 -0.995105	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.046 1.025 0.000 0.579 0.144 0.928 0.592 0.322 0.500 0.408 0.500 0.223 0.603 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </VK4502P_Standardturm>
+    <VK4502P_Eliteturm>
+      <userString>	#germany_vehicles:VK4502P_Eliteturm	</userString>
+      <shortUserString>	#germany_vehicles:VK4502P_Eliteturm_short	</shortUserString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	48000.0	</price>
+      <unlocks>
+        <gun>	_128mm_KwK44_L55	  <cost>	63000	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	252	</armor_1>
+        <armor_2>	120	</armor_2>
+        <armor_3>	160	</armor_3>
+        <armor_4>	160	</armor_4>
+        <armor_5>	265	</armor_5>
+        <armor_6>	160	</armor_6>
+        <armor_7>	100	</armor_7>
+        <armor_8>	200	</armor_8>
+        <armor_9>	140	</armor_9>
+        <armor_10>	60	</armor_10>
+        <armor_11>	40	</armor_11>
+        <armor_13>	0	</armor_13>
+        <armor_14>	30	</armor_14>
+        <armor_15>	130	</armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	18520	</weight>
+      <maxHealth>	470	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.952	</invisibilityFactor>
+      <guns>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	92	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	7.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0120195 -0.0148757 3.91445	</rayStart>
+              <rayEnd>	0.106037 -0.109402 3.91034	</rayEnd>
+              <rayUp>	0.073 0.069 2	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_88mm_KwK_43_L71>
+        <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 5 0.0555556 5 0.0694444 6 0.930556 6 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <reloadTime>	8.9	</reloadTime>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_08.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0124261 -0.0121604 3.87314	</rayStart>
+              <rayEnd>	0.0302991 -0.142227 3.86571	</rayEnd>
+              <rayUp>	0.089 0.081 2	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_KwK45_L52>
+        <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 5 0.0555556 5 0.0694444 7 0.930556 7 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <reloadTime>	9.1	</reloadTime>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_09.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0119318 -0.0127953 5.08449	</rayStart>
+              <rayEnd>	-0.0428238 -0.147073 5.07907	</rayEnd>
+              <rayUp>	0.086 0.08 2	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_KwK46_L68>
+        <_128mm_KwK44_L55>	shared	  <maxAmmo>	36	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <unlocks>
+            <vehicle>	G42_Maus	  <cost>	196470	</cost>
+            </vehicle>
+          </unlocks>
+          <reloadTime>	15.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	60	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <models>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0120629 -0.0105802 4.47803	</rayStart>
+              <rayEnd>	0.0172287 -0.136543 4.47435	</rayEnd>
+              <rayUp>	0.096 0.092 3	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_128mm_KwK44_L55>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.062704 0.397337 1.43271	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.20896 0.581034 0.246526	</rayStart>
@@ -315,20 +854,60 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.030 -0.042 1.025 0.000 0.622 0.096 0.882 0.488 0.391 0.500 0.267 0.500 0.152 0.581 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
-    </Turret_1_G58_VK4502P>
+    </VK4502P_Eliteturm>
   </turrets0>
   <engines>
-    <Porsche_Typ_100_3A>	shared	</Porsche_Typ_100_3A>
+    <Porsche_Typ_100_1>	shared	  <unlocks>
+        <engine>	Porsche_Typ_100_3	  <cost>	12000	</cost>
+        </engine>
+      </unlocks>
+    </Porsche_Typ_100_1>
+    <Porsche_Typ_100_3>	shared	  <unlocks>
+        <engine>	Porsche_Deutz_Typ180_2	  <cost>	31000	</cost>
+        </engine>
+      </unlocks>
+    </Porsche_Typ_100_3>
+    <Porsche_Deutz_Typ180_2>	shared	</Porsche_Deutz_Typ180_2>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <FuG7A>	shared	</FuG7A>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG12>	shared	</FuG12>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_128mm_KwK44_L55>
+        <delta>	1.16901408	</delta>
+      </_128mm_KwK44_L55>
+    </guns>
+    <chassis>
+      <VK4502P_Standardketten>
+        <alpha>	0.161	</alpha>
+      </VK4502P_Standardketten>
+      <VK4502P_Vetstaerktketten>
+        <alpha>	0.13685	</alpha>
+      </VK4502P_Vetstaerktketten>
+    </chassis>
+    <engines>
+      <Porsche_Typ_100_1>
+        <bravo>	158.5922	</bravo>
+      </Porsche_Typ_100_1>
+      <Porsche_Typ_100_3>
+        <bravo>	177.0946	</bravo>
+      </Porsche_Typ_100_3>
+      <Porsche_Deutz_Typ180_2>
+        <bravo>	222.029	</bravo>
+      </Porsche_Deutz_Typ180_2>
+    </engines>
+    <armour>	1.014469501	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

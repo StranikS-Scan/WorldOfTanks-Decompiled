@@ -3,14 +3,14 @@
 import BigWorld
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
-from gui.prb_control.prb_helpers import GlobalListener
-from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
+from gui.Scaleform.locale.WAITING import WAITING
+from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
     LEADERSHIP_NOTIFICATION_TIME = 2.5

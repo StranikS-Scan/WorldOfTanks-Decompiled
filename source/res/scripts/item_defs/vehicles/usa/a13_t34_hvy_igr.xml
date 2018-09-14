@@ -11,6 +11,13 @@
     <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.034	</moving>
+    <still>	0.069	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.104	</firePenalty>
+  </invisibility>
   <repairCost>	4.5	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -61,7 +68,8 @@
       <turret>	0.000000 0.578733 0.58255	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A13_T34_hvy/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A13_T34_hvy/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A13_T34_hvy/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -196,13 +204,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.11556 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A13_T34_hvy/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A13_T34_hvy/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A13_T34_hvy/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.47979 2.65597	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -360,6 +367,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <effects>	shot_large_mb	</effects>
           <models>
             <undamaged>	vehicles/american/A13_T34_hvy/normal/lod0/Gun_01.model	</undamaged>
@@ -367,7 +375,8 @@
             <exploded>	vehicles/american/A13_T34_hvy/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A13_T34_hvy/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A13_T34_hvy/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A13_T34_hvy/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -390,7 +399,8 @@
         <exploded>	vehicles/american/A13_T34_hvy/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A13_T34_hvy/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A13_T34_hvy/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A13_T34_hvy/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.474 1.07551	</gunPosition>
       <emblemSlots>
@@ -426,9 +436,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.944 -0.058 1.000 0.000 0.941 0.030 0.753 0.703 0.379 0.500 0.082 0.500 0.030 0.000 0.214	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.7 0.7 0.12 0.000000	</tiling>
       </camouflage>
@@ -443,6 +451,19 @@
   <radios>
     <SCR_528A1_IGR>	shared	</SCR_528A1_IGR>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T80E3_IGR>
+        <alpha>	0.13685	</alpha>
+      </T80E3_IGR>
+    </chassis>
+    <engines>
+      <Continental_AV-1790-3A1_IGR>
+        <bravo>	214.0994	</bravo>
+      </Continental_AV-1790-3A1_IGR>
+    </engines>
+    <armour>	0.968169405	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

@@ -35,6 +35,9 @@ class ICamera(object):
     def restoreDefaultsState(self):
         pass
 
+    def getConfigValue(self, name):
+        pass
+
     def getUserConfigValue(self, name):
         pass
 

@@ -44,9 +44,10 @@ class Bomber(object):
                 BigWorld.delModel(self.__model)
         self.__model = None
         self.__motor = None
-        if self.__sound:
+        if self.__sound is not None:
             self.__sound.stop()
-        self.__sound = None
+            self.__sound.releaseMatrix()
+            self.__sound = None
         return
 
     def __onModelLoaded(self, resourceRefs):

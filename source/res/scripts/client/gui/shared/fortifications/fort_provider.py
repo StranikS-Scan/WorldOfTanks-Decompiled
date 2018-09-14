@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_provider.py
 import weakref
-from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES
-from PlayerEvents import g_playerEvents
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SM
 from gui.shared.fortifications import controls, states, getClientFortMgr, getClanFortState
 from gui.shared.fortifications.fort_ext import FortSubscriptionKeeper
+from gui.shared.fortifications.fort_helpers import showFortDisabledDialog
 from gui.shared.fortifications.interfaces import IFortListener
 from gui.shared.fortifications.settings import FORT_PROVIDER_INITIAL_FLAGS, CLIENT_FORT_STATE
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.listeners_collection import ListenersCollection
+from gui.LobbyContext import g_lobbyContext
 from helpers import i18n
+from FortifiedRegionBase import FORT_ERROR, FORT_ERROR_NAMES
+from PlayerEvents import g_playerEvents
 
 class _ClientFortListeners(ListenersCollection):
 
@@ -52,6 +55,7 @@ class ClientFortProvider(object):
         self.__keeper = None
         self.__initial = 0
         self.__lock = False
+        self.__cachedState = None
         return
 
     def __del__(self):
@@ -92,27 +96,35 @@ class ClientFortProvider(object):
         if self.isStarted():
             LOG_WARNING('Fort provider already is ready')
             return
-        self.__initial |= FORT_PROVIDER_INITIAL_FLAGS.STARTED
-        self.__clan = weakref.proxy(clanCache)
-        self.__listeners = _ClientFortListeners()
-        self.__keeper = FortSubscriptionKeeper()
-        self.__keeper.onAutoUnsubscribed += self.__onAutoUnsubscribed
-        fortMgr = getClientFortMgr()
-        if fortMgr:
-            fortMgr.onFortResponseReceived += self.__onFortResponseReceived
-            fortMgr.onFortUpdateReceived += self.__onFortUpdateReceived
-            fortMgr.onFortStateChanged += self.__onFortStateChanged
         else:
-            LOG_ERROR('Fort manager is not found')
-        g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
-        self.__controller = controls.createInitial()
-        self.__controller.init(self.__clan, self.__listeners)
-        states.create(self)
+            self.__initial |= FORT_PROVIDER_INITIAL_FLAGS.STARTED
+            self.__clan = weakref.proxy(clanCache)
+            self.__listeners = _ClientFortListeners()
+            self.__keeper = FortSubscriptionKeeper()
+            self.__keeper.onAutoUnsubscribed += self.__onAutoUnsubscribed
+            fortMgr = getClientFortMgr()
+            if fortMgr:
+                fortMgr.onFortResponseReceived += self.__onFortResponseReceived
+                fortMgr.onFortUpdateReceived += self.__onFortUpdateReceived
+                fortMgr.onFortStateChanged += self.__onFortStateChanged
+            else:
+                LOG_ERROR('Fort manager is not found')
+            g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+            g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
+            self.__controller = controls.createInitial()
+            self.__controller.init(self.__clan, self.__listeners)
+            states.create(self)
+            if not g_lobbyContext.getServerSettings().isFortsEnabled() and self.__cachedState is not None:
+                if self.__cachedState.getStateID() not in (CLIENT_FORT_STATE.UNSUBSCRIBED, CLIENT_FORT_STATE.DISABLED):
+                    SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDOFF, type=SystemMessages.SM_TYPE.Warning)
+                    showFortDisabledDialog()
+            return
 
     def stop(self):
         if not self.isStarted():
             LOG_DEBUG('Fort provider already is stopped')
             return
+        self.__cachedState = self.__state
         self.__initial = 0
         self.clear()
         fortMgr = getClientFortMgr()
@@ -121,6 +133,7 @@ class ClientFortProvider(object):
             fortMgr.onFortUpdateReceived -= self.__onFortUpdateReceived
             fortMgr.onFortStateChanged -= self.__onFortStateChanged
         g_playerEvents.onCenterIsLongDisconnected -= self.__onCenterIsLongDisconnected
+        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
 
     @async
     def sendRequest(self, ctx, callback=None):
@@ -174,7 +187,7 @@ class ClientFortProvider(object):
         controller = controls.createByState(state, self.__controller.getPermissions().canCreate(), self.__controller.__class__)
         if controller:
             controller.init(self.__clan, self.__listeners, self.__controller)
-            self.__controller.fini(self.__state.getStateID() != CLIENT_FORT_STATE.CENTER_UNAVAILABLE)
+            self.__controller.fini(self.__state.getStateID() not in CLIENT_FORT_STATE.NOT_AVAILABLE_FORT)
             self.__controller = controller
             LOG_DEBUG('Fort controller has been changed', controller)
         self.__listeners.notify('onClientStateChanged', state)
@@ -245,4 +258,13 @@ class ClientFortProvider(object):
 
     def __onCenterIsLongDisconnected(self, _):
         self.__controller.stopProcessing()
-        self.resetState()
+
+    def __onServerSettingChanged(self, diff):
+        if 'isFortsEnabled' in diff:
+            if diff['isFortsEnabled']:
+                SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDON, priority=NotificationPriorityLevel.MEDIUM)
+            else:
+                SystemMessages.pushI18nMessage(I18N_SM.FORTIFICATION_NOTIFICATION_TURNEDOFF, type=SystemMessages.SM_TYPE.Warning)
+                if self.__state.getStateID() != CLIENT_FORT_STATE.UNSUBSCRIBED:
+                    showFortDisabledDialog()
+            self.resetState()

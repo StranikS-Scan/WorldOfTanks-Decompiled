@@ -7,6 +7,10 @@ from gui.shared.events import ShowDialogEvent
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ConfirmExchangeDialog import ConfirmExchangeDialog
     from gui.Scaleform.daapi.view.lobby.exchange.ExchangeWindow import ExchangeWindow

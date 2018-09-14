@@ -52,5 +52,48 @@ class SoundSystemAbstract(object):
         """
         pass
 
+    def setSoundSystem(self, value):
+        """
+        Switch between sound systems
+        :param value: int - particular sound system index
+        :return:
+        """
+        pass
+
+    def setBassBoost(self, isEnabled):
+        """
+        Enable/disable bass boost.
+        """
+        pass
+
+    def sendGlobalEvent(self, eventName, **params):
+        """
+        This method is used to send global event to the currently
+        enabled sound system
+        
+        @param eventName: str
+        @param params: key->value parameters
+        @return:
+        """
+        pass
+
+    def onEnvStart(self, environment):
+        """
+        This method is used to notify sound system about environment start
+        
+        @param environement: str
+        @return:
+        """
+        pass
+
+    def onEnvStop(self, environment):
+        """
+        This method is used to notify sound system about environment stop
+        
+        @param environement: str
+        @return:
+        """
+        pass
+
     def __repr__(self):
         return 'SoundSystem(%s)' % SoundSystems.getUserName(self.getID())

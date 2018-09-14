@@ -872,7 +872,8 @@ class StagingDataAccessor(base.BaseDataAccessor):
      'periphery': 'periphery_id',
      'turns_owned': 'turns_owned',
      'pillage_cooldown': 'pillage_cooldown',
-     'pillage_end_datetime': 'pillage_end_datetime'})
+     'pillage_end_datetime': 'pillage_end_datetime',
+     'arena_id': 'arena_id'})
     def get_clan_provinces(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans provinces API method`_

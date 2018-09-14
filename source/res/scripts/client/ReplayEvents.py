@@ -9,6 +9,7 @@ class _ReplayEvents(object):
         self.onTimeWarpFinish = Event.Event()
         self.onPause = Event.Event()
         self.onMuteSound = Event.Event()
+        self.onWatcherNotify = Event.Event()
 
 
 g_replayEvents = _ReplayEvents()

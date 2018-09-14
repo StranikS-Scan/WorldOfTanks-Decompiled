@@ -1,0 +1,590 @@
+<f67_bat_chatillon155_55.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56.3	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.061	</moving>
+    <still>	0.121	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.182	</firePenalty>
+  </invisibility>
+  <repairCost>	31.13	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/french/F67_Bat_Chatillon155_55/Bat_Chatillon155_55_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	101.6	</armor_1>
+      <armor_2>	88.9	</armor_2>
+      <armor_3>	76.2	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	76.2	</armor_5>
+      <armor_6>	25.4	</armor_6>
+      <armor_7>	76.2	</armor_7>
+      <armor_8>	12.7	</armor_8>
+      <armor_9>	50.8	</armor_9>
+      <armor_10>	25.4	</armor_10>
+      <armor_11>	22.4	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	19.1	</armor_13>
+      <armor_14>	101.6	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	9147	</weight>
+    <maxHealth>	352	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	134	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <chanceToHit>	0.50	</chanceToHit>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.38 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.38 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.70599 0.381996	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.95668 0.176514 2.53927	</rayStart>
+        <rayEnd>	1.55668 0.176513 2.53927	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F67_Bat_Chatillon155_55/Bat_Chatillon155_55_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_Bat_Chatillon155_55>
+      <userString>	#france_vehicles:Chassis_Bat_Chatillon155_55	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <unlocks>
+        <chassis>	Chassis_Bat_Chatillon155_55_2	  <cost>	23000	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	24000	</weight>
+      <maxLoad>	47000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	42000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.44	</vehicleMovement>
+        <vehicleRotation>	0.44	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.44 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.64	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347702	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.178976	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.349149	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.188388	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.349117	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.345501	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.177384	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.349125	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.188388	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.347741	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.1182 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.42012 1.8019	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.847490 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.677300 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.847220	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Bat_Chatillon155_55>
+    <Chassis_Bat_Chatillon155_55_2>
+      <userString>	#france_vehicles:Chassis_Bat_Chatillon155_55_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	61000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	24000	</weight>
+      <maxLoad>	50000	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	47000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	24	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.4	</vehicleMovement>
+        <vehicleRotation>	0.4	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.44 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.64	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347702	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.178976	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.349149	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.188388	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.349117	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.345501	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.177384	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.349125	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.188388	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.347741	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.1182 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.42012 1.8019	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.857090 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.677300 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.847220	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Bat_Chatillon155_55_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Bat_Chatillon155_55>
+      <ceilless>	true	</ceilless>
+      <userString>	#france_vehicles:Turret_1_Bat_Chatillon155_55	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	20	</armor_3>
+        <armor_4>	10	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	10	</armor_6>
+        <armor_7>	10	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	8000	</weight>
+      <maxHealth>	88	</maxHealth>
+      <rotationSpeed>	10	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Canon_de_155mm_L_GPF>	shared	  <maxAmmo>	36	</maxAmmo>
+          <unlocks>
+            <gun>	Canon_de_155mm	  <cost>	59000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	</armor_1>
+            <gun>	25	</gun>
+          </armor>
+          <shotDispersionRadius>	0.7	</shotDispersionRadius>
+          <reloadTime>	31.1	</reloadTime>
+          <aimingTime>	6	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 0 1 0	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.56	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 0.141147 3.92	</rayStart>
+              <rayEnd>	0.0814858 0.0731042 3.84617	</rayEnd>
+              <rayUp>	0.114 0.112 3	</rayUp>
+              <size>	0.809	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </Canon_de_155mm_L_GPF>
+        <Canon_de_155mm>	shared	  <maxAmmo>	36	</maxAmmo>
+          <unlocks>
+            <vehicle>	F38_Bat_Chatillon155_58	  <cost>	277000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	15	</armor_1>
+            <gun>	25	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.7	</shotDispersionRadius>
+          <reloadTime>	31.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.56	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	5.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -45 1 -45	</minPitch>
+            <maxPitch>	0 0 1 0	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000254993 0.141208 3.86828	</rayStart>
+              <rayEnd>	0.0551488 0.0771522 3.86354	</rayEnd>
+              <rayUp>	0.144 0.1335 4	</rayUp>
+              <size>	0.874	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload155_170	</reloadEffect>
+          <camouflage>
+            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Canon_de_155mm>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F67_Bat_Chatillon155_55/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F67_Bat_Chatillon155_55/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F67_Bat_Chatillon155_55/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F67_Bat_Chatillon155_55/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.485261 -0.027537	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.840264 1.15151 0.71857	</rayStart>
+          <rayEnd>	-0.670596 1.03301 0.376267	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.58336 1.02181 0.0856537	</rayStart>
+          <rayEnd>	1.18337 1.02017 0.0856537	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.34778 0.991792 -0.531088	</rayStart>
+          <rayEnd>	-1.00003 0.794127 -0.531088	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	1.2	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.58135 0.264079 -0.13887	</rayStart>
+          <rayEnd>	1.18135 0.264079 -0.13887	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.043 0.000 0.862 0.128 0.138 0.000 0.500 0.500 0.239 0.500 0.101 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_Bat_Chatillon155_55>
+  </turrets0>
+  <engines>
+    <Ford_GAC_R>	shared	  <unlocks>
+        <engine>	Continental_AV-1790-7B	  <cost>	31000	</cost>
+        </engine>
+      </unlocks>
+    </Ford_GAC_R>
+    <Continental_AV-1790-7B>	shared	</Continental_AV-1790-7B>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <Canon_de_155mm>
+        <delta>	1.03275109	</delta>
+      </Canon_de_155mm>
+    </guns>
+    <chassis>
+      <Chassis_Bat_Chatillon155_55>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Bat_Chatillon155_55>
+      <Chassis_Bat_Chatillon155_55_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Bat_Chatillon155_55_2>
+    </chassis>
+    <engines>
+      <Ford_GAC_R>
+        <bravo>	203.5266	</bravo>
+      </Ford_GAC_R>
+      <Continental_AV-1790-7B>
+        <bravo>	214.0994	</bravo>
+      </Continental_AV-1790-7B>
+    </engines>
+    <armour>	1.005337153	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f67_bat_chatillon155_55.xml>

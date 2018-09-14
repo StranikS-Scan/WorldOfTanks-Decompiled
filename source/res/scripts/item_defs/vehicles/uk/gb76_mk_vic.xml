@@ -9,6 +9,13 @@
     <forward>	52.5	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.206	</moving>
+    <still>	0.275	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.413	</firePenalty>
+  </invisibility>
   <repairCost>	2.00	</repairCost>
   <premiumVehicleXPFactor>	0.7	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -60,7 +67,8 @@
       <turret>	-0.01411 0.728701 -0.43524	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB76_Mk_VIC/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -169,13 +177,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.617166 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB76_Mk_VIC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.895306 1.01086	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -257,13 +264,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB76_Mk_VIC/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB76_Mk_VIC/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB76_Mk_VIC/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB76_Mk_VIC/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_15mm_Machine_gun_BESA_>
       </guns>
@@ -273,7 +282,8 @@
         <exploded>	vehicles/british/GB76_Mk_VIC/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB76_Mk_VIC/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.01411 0.360525 0.502194	</gunPosition>
       <emblemSlots>
@@ -302,9 +312,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.956 -0.033 1.029 0.000 0.502 0.180 1.000 0.585 0.167 0.500 0.000 0.500 0.142 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GB76_Mk_VIC>
   </turrets0>
   <engines>
@@ -316,6 +324,19 @@
   <radios>
     <N9A>	shared	</N9A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB76_Mk_VIC>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB76_Mk_VIC>
+    </chassis>
+    <engines>
+      <Meadows_ESTB>
+        <bravo>	23.26019	</bravo>
+      </Meadows_ESTB>
+    </engines>
+    <armour>	0.785039432	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

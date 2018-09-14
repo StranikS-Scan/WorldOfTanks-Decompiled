@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/resource_helper.py
+import importlib
+import inspect
 from contextlib import contextmanager
 import ResMgr
 from collections import namedtuple
@@ -18,6 +20,7 @@ class RESOURCE_ITEM_TYPE(object):
     LIST = 'list'
     DICT = 'dict'
     SEQ_PAIRS = 'seq-pairs'
+    CLASS = 'class'
 
 
 class ResourceError(Exception):
@@ -237,6 +240,25 @@ def readSeqPairs(xmlCtx, section, valueName='value'):
     return ResourceItem(RESOURCE_ITEM_TYPE.SEQ_PAIRS, name, tuple(result))
 
 
+def readClassItem(xmlCtx, section):
+    if 'value' in section.keys():
+        value = section.readString('value')
+    else:
+        value = section.asString
+    parts = value.split('.')
+    if len(parts) == 1:
+        raise ResourceError(xmlCtx, 'Class path {0} is invalid'.format(value))
+    try:
+        module = importlib.import_module('.'.join(parts[:-1]))
+    except ImportError:
+        raise ResourceError(xmlCtx, 'Class path {0} is invalid'.format(value))
+
+    clazz = getattr(module, parts[-1], None)
+    if clazz is None or not inspect.isclass(clazz):
+        raise ResourceError(xmlCtx, 'There is not path to class {0}'.format(value))
+    return ResourceItem(RESOURCE_ITEM_TYPE.STRING, readItemName(xmlCtx, section), clazz)
+
+
 _ITEM_VALUE_READERS = {RESOURCE_ITEM_TYPE.BOOL: readBoolItem,
  RESOURCE_ITEM_TYPE.INTEGER: readIntItem,
  RESOURCE_ITEM_TYPE.FLOAT: readFloatItem,
@@ -247,7 +269,8 @@ _ITEM_VALUE_READERS = {RESOURCE_ITEM_TYPE.BOOL: readBoolItem,
  RESOURCE_ITEM_TYPE.VECTOR4: readVector4Item,
  RESOURCE_ITEM_TYPE.LIST: readList,
  RESOURCE_ITEM_TYPE.DICT: readDict,
- RESOURCE_ITEM_TYPE.SEQ_PAIRS: readSeqPairs}
+ RESOURCE_ITEM_TYPE.SEQ_PAIRS: readSeqPairs,
+ RESOURCE_ITEM_TYPE.CLASS: readClassItem}
 
 def readItem(ctx, section, name='item'):
     if section.name != name:

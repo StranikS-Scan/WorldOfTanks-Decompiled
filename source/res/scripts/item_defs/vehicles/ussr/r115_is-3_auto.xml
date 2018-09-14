@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.06	</moving>
+    <still>	0.12	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.18	</firePenalty>
+  </invisibility>
   <repairCost>	7.5	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -62,7 +69,8 @@
       <turret>	0.000389 0.595951 0.630888	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R115_IS-3_auto/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R115_IS-3_auto/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -182,13 +190,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.927233 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R115_IS-3_auto/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R115_IS-3_auto/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24432 2.22363	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -230,14 +237,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -383,6 +387,7 @@
             <minPitch>	0 -19 1 -19	</minPitch>
             <maxPitch>	0 5 0.394671 5 0.458333 -0.4 0.541667 -0.4 0.605329 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	11.7	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
@@ -392,7 +397,8 @@
             <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R115_IS-3_auto/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R115_IS-3_auto/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -415,7 +421,8 @@
         <exploded>	vehicles/russian/R115_IS-3_auto/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R115_IS-3_auto/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R115_IS-3_auto/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R115_IS-3_auto/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.011911 0.310516 1.27375	</gunPosition>
       <emblemSlots>
@@ -450,9 +457,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.059 0.000 0.950 -0.081 0.751 0.439 0.500 0.500 0.226 0.500 0.000 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
@@ -468,6 +473,19 @@
   <radios>
     <_10RK-26>	shared	</_10RK-26>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R115_IS-3_auto>
+        <alpha>	0.0966	</alpha>
+      </Chassis_R115_IS-3_auto>
+    </chassis>
+    <engines>
+      <V-11-IS-3>
+        <bravo>	137.4465	</bravo>
+      </V-11-IS-3>
+    </engines>
+    <armour>	1.0707518	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

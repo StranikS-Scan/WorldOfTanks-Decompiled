@@ -11,6 +11,13 @@
     <forward>	48	</forward>
     <backward>	16	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.156	</moving>
+    <still>	0.208	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.312	</firePenalty>
+  </invisibility>
   <repairCost>	3.15	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.671372 0.982072	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -378,13 +386,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18217 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.10927 1.66529	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -687,13 +694,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18217 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.10927 1.66529	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -772,13 +778,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.85 0.37 0.000000 0.000000	</tiling>
@@ -806,13 +814,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.685 0.4 0.000000 0.000000	</tiling>
@@ -825,7 +835,8 @@
         <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.465096 0.624628	</gunPosition>
       <emblemSlots>
@@ -847,9 +858,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.980 0.006 1.029 0.000 0.732 0.202 0.616 0.500 0.456 0.500 0.160 0.500 0.140 0.350 0.176	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.85 0.52 0.000000 0.000000	</tiling>
       </camouflage>
@@ -912,13 +921,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1 0.37 0.000000 0.000000	</tiling>
@@ -946,13 +957,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.73 0.4 0.000000 0.000000	</tiling>
@@ -979,6 +992,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -990,7 +1004,8 @@
             <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.82 0.43 0.000000 0.000000	</tiling>
@@ -1003,7 +1018,8 @@
         <exploded>	vehicles/british/GB06_Vickers_Medium_Mk_III/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB06_Vickers_Medium_Mk_III/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.465095 0.624628	</gunPosition>
       <emblemSlots>
@@ -1032,9 +1048,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.020 0.006 1.000 0.000 0.507 0.063 0.277 0.000 0.440 0.500 0.136 0.500 0.086 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1064,6 +1078,25 @@
     </N11>
     <N9>	shared	</N9>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB06_Vickers_Medium_Mk_III>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB06_Vickers_Medium_Mk_III>
+      <Chassis_GB06_Vickers_Medium_Mk_III_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_GB06_Vickers_Medium_Mk_III_2>
+    </chassis>
+    <engines>
+      <Armstrong-Siddeley>
+        <bravo>	47.57765	</bravo>
+      </Armstrong-Siddeley>
+      <Rolls_Royse_Phantom_II>
+        <bravo>	58.15046	</bravo>
+      </Rolls_Royse_Phantom_II>
+    </engines>
+    <armour>	0.888097942	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

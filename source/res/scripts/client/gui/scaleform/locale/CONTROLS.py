@@ -3,6 +3,12 @@
 
 
 class CONTROLS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MOUSE_KEY_LEFT = '#controls:mouse/key_left'
     MOUSE_KEY_MIDDLE = '#controls:mouse/key_middle'
     MOUSE_KEY_RIGHT = '#controls:mouse/key_right'

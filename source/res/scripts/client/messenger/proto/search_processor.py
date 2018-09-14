@@ -41,6 +41,9 @@ class SearchProcessor(ISearchProcessor):
     def getSearchResultLimit(self):
         raise NotImplementedError('Routine SearchProcessor.getSearchResultLimit must be implemented')
 
+    def getSearchCoolDown(self):
+        raise NotImplementedError('Routine SearchProcessor.getSearchCoolDown must be implemented')
+
     def _makeRequestID(self):
         return BigWorld.player().acquireRequestID()
 

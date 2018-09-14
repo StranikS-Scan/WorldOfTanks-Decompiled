@@ -9,6 +9,13 @@
     <forward>	25	</forward>
     <backward>	8	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.166	</moving>
+    <still>	0.221	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.332	</firePenalty>
+  </invisibility>
   <repairCost>	0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -54,7 +61,8 @@
       <turret>	-0.002452 0.655486 0.583497	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -182,13 +190,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.964166 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.726021 1.20625	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -255,13 +262,15 @@
           <shotDispersionRadius>	0.54	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_37mm_APX_SA18_bot>
       </guns>
@@ -271,7 +280,8 @@
         <exploded>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch06_Renault_NC31/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch06_Renault_NC31/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch06_Renault_NC31/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.235125 0.430947	</gunPosition>
       <emblemSlots>
@@ -293,9 +303,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.033 -0.006 1.003 0.000 0.462 0.116 0.565 0.492 0.550 0.500 0.210 0.500 0.237 0.486 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	1 0.865 0.000000 0.000000	</tiling>
       </camouflage>
@@ -310,6 +318,18 @@
   <radios>
     <Fanions_de_signaux_bot>	shared	</Fanions_de_signaux_bot>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch06_Renault_NC31_bot>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Ch06_Renault_NC31_bot>
+    </chassis>
+    <engines>
+      <_Renault_M26_27_bot>
+        <bravo>	11.89441	</bravo>
+      </_Renault_M26_27_bot>
+    </engines>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

@@ -322,6 +322,20 @@ def isValidClientVersion(clientVersion, serverVersion):
     return True
 
 
+def getClientMainVersion():
+    mainVersion = None
+    try:
+        try:
+            _, clentVersion = readClientServerVersion()
+            parsedVersion = parseVersion(clentVersion)
+            _, mainVersion, _ = parsedVersion
+        except:
+            LOG_ERROR('Can not read or parse client-server version')
+
+    finally:
+        return mainVersion
+
+
 def readClientServerVersion():
     import ResMgr
     fileName = 'scripts/entity_defs/Account.def'

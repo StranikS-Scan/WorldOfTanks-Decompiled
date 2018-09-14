@@ -1,0 +1,32 @@
+<radios.xml>
+  <ids>
+    <Ra_400_1>	0	</Ra_400_1>
+    <Development_Radio>	65535	</Development_Radio>
+  </ids>
+  <shared>
+    <Ra_400_1>
+      <userString>	#sweden_vehicles:Ra_400_1	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	45	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </Ra_400_1>
+    <Development_Radio>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
+  </shared>
+</radios.xml>

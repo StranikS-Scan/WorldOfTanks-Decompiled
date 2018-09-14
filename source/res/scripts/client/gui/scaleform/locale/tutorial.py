@@ -3,6 +3,12 @@
 
 
 class TUTORIAL(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MESSAGES_REQUEST_BONUS_FAILED = '#tutorial:messages/request-bonus-failed'
     MESSAGES_TUTORIAL_DISABLED = '#tutorial:messages/tutorial-disabled'
     ONCEONLYHINTS_FALLOUTQUESTSTAB = '#tutorial:onceOnlyHints/falloutQuestsTab'

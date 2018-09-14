@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/quests/battle/proxy.py
 from tutorial.gui import GUIProxy
-from tutorial.gui.Scaleform import effects_player
 
 class BattleQuestsProxy(GUIProxy):
 

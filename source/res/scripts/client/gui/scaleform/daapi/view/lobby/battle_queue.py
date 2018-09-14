@@ -4,7 +4,7 @@ import BigWorld
 import weakref
 from UnitBase import FALLOUT_QUEUE_TYPE_TO_ROSTER
 import constants
-import MusicController
+import MusicControllerWWISE
 from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -14,7 +14,7 @@ from gui.prb_control import prb_getters
 from gui.prb_control.prb_helpers import preQueueFunctionalProperty, prbDispatcherProperty
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.sounds.ambients import LobbySubViewEnv
+from gui.sounds.ambients import BattleQueueEnv
 from helpers.i18n import makeString
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi import LobbySubView
@@ -145,7 +145,7 @@ def _providerFactory(proxy, qType):
 
 
 class BattleQueue(BattleQueueMeta, LobbySubView):
-    __sound_env__ = LobbySubViewEnv
+    __sound_env__ = BattleQueueEnv
 
     def __init__(self, ctx=None):
         super(BattleQueue, self).__init__()
@@ -187,8 +187,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__updateQueueInfo()
         self.__updateTimer()
         self.__updateClientState()
-        MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
-        MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_LOBBY)
+        MusicControllerWWISE.play(MusicControllerWWISE.MUSIC_EVENT_LOBBY)
+        MusicControllerWWISE.play(MusicControllerWWISE.AMBIENT_EVENT_LOBBY)
 
     def _dispose(self):
         self.__stopUpdateScreen()

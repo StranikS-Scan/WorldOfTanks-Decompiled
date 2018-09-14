@@ -6,24 +6,22 @@ from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 from AccountCommands import VEHICLE_SETTINGS_FLAG
-from gui.shared.gui_items.service_items import Price
 from shared_utils import findFirst
 from gui import SystemMessages
-from gui.SystemMessages import SM_TYPE
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice
+from gui.shared.formatters import formatPrice, formatGoldPrice
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
+from gui.shared.money import Money, ZERO_MONEY, Currency
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
         tankmenCount = len(vehicle.crew)
         tankmanCost = g_itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
-        result[0] += tankmanCost['credits'] * tankmenCount
-        result[1] += tankmanCost['gold'] * tankmenCount
+        result += Money(tankmanCost['credits'] * tankmenCount, tankmanCost['gold'] * tankmenCount)
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:
-            result[0] += shell.buyPrice[0] * shell.defaultCount
-            result[1] += shell.buyPrice[1] * shell.defaultCount
+            result += shell.buyPrice * shell.defaultCount
 
     return result
 
@@ -64,14 +62,14 @@ class VehicleRenter(ItemProcessor):
         return self.rentPackage
 
     def _getSysMsgType(self):
-        return SM_TYPE.PurchaseForGold if self.item.buyPrice[1] > 0 else SM_TYPE.PurchaseForCredits
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def __getRentPrice(self, rentPackage, vehicle):
         for package in vehicle.rentPackages:
             if package['days'] == rentPackage:
-                return list(package['rentPrice'])
+                return Money(*package['rentPrice'])
 
-        return [0, 0]
+        return ZERO_MONEY
 
 
 class VehicleBuyer(VehicleRenter):
@@ -85,7 +83,7 @@ class VehicleBuyer(VehicleRenter):
         return (plugins.MoneyValidator(self.price), plugins.VehicleSlotsConfirmator(not self.buySlot), plugins.VehicleFreeLimitConfirmator(self.vehicle, self.crewType))
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(list(self.vehicle.buyPrice), self.vehicle, self.crewType, self.buyShell)
+        return getCrewAndShellsSumPrice(self.vehicle.buyPrice, self.vehicle, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if not len(errStr):
@@ -107,12 +105,12 @@ class VehicleSlotBuyer(Processor):
         self.__hasDiscounts = bool(g_itemsCache.items.shop.personalSlotDiscounts)
         self.__frozenSlotPrice = None
         slotCost = self.__getSlotPrice()
-        if self.__hasDiscounts and slotCost.gold == 0:
+        if self.__hasDiscounts and not slotCost:
             confirmationType = 'freeSlotConfirmation'
             ctx = {}
         else:
             confirmationType = 'buySlotConfirmation'
-            ctx = {'gold': slotCost[1]}
+            ctx = {'gold': slotCost.gold}
         super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
         return
 
@@ -120,7 +118,12 @@ class VehicleSlotBuyer(Processor):
         return makeI18nError('vehicle_slot_buy/%s' % errStr) if len(errStr) else makeI18nError('vehicle_slot_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('vehicle_slot_buy/success', money=formatPrice(self.__getSlotPrice()), type=SM_TYPE.FinancialTransactionWithGold)
+        price = self.__getSlotPrice()
+        if price == ZERO_MONEY:
+            money = formatGoldPrice(price.gold)
+        else:
+            money = formatPrice(price)
+        return makeI18nSuccess('vehicle_slot_buy/success', money=money, type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
         LOG_DEBUG('Attempt to request server for buying vehicle slot')
@@ -128,12 +131,12 @@ class VehicleSlotBuyer(Processor):
 
     def __getSlotPrice(self):
         if self.__frozenSlotPrice is not None:
-            price = self.__frozenSlotPrice
+            return self.__frozenSlotPrice
         else:
             price = g_itemsCache.items.shop.getVehicleSlotsPrice(g_itemsCache.items.stats.vehicleSlots)
             if self.__hasDiscounts:
-                self.__frozenSlotPrice = price
-        return Price(0, price)
+                self.__frozenSlotPrice = Money(gold=price)
+            return Money(gold=price)
 
 
 class VehicleSeller(ItemProcessor):
@@ -221,23 +224,21 @@ class VehicleSeller(ItemProcessor):
             return result
 
     def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, vehOptDevs, inventory, dismantlingGoldCost):
-        moneyGain = list(vehicle.sellPrice)
+        moneyGain = vehicle.sellPrice
         for shell in vehShells:
-            self.__accumulatePrice(moneyGain, shell.sellPrice, shell.count)
+            moneyGain += shell.sellPrice * shell.count
 
         for module in vehEqs + vehOptDevs:
-            self.__accumulatePrice(moneyGain, module.sellPrice)
+            moneyGain += module.sellPrice
 
         for module in inventory:
-            self.__accumulatePrice(moneyGain, module.sellPrice, module.inventoryCount)
+            moneyGain += module.sellPrice * module.inventoryCount
 
-        moneySpend = (0, self.__dismantlingForGoldDevicesCount(vehicle, vehOptDevs) * dismantlingGoldCost)
+        moneySpend = dismantlingGoldCost * Money(gold=self.__dismantlingForGoldDevicesCount(vehicle, vehOptDevs))
         return (moneyGain, moneySpend)
 
     def __accumulatePrice(self, result, price, count=1):
-        for i in xrange(2):
-            result[i] += price[i] * count
-
+        result += price * count
         return result
 
 
@@ -308,28 +309,29 @@ class VehicleLayoutProcessor(Processor):
         self.eqsLayout = eqsLayout
         shellsPrice = self.getShellsLayoutPrice()
         eqsPrice = self.getEqsLayoutPrice()
-        isWalletValidatorEnabled = bool(shellsPrice[1] or eqsPrice[1])
+        isWalletValidatorEnabled = bool(shellsPrice.gold or eqsPrice.gold)
         self.addPlugins((plugins.VehicleLockValidator(vehicle), plugins.WalletValidator(isWalletValidatorEnabled), plugins.VehicleLayoutValidator(shellsPrice, eqsPrice)))
 
     def _request(self, callback):
         BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, self.shellsLayout, self.eqsLayout, lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
 
     def __getSysMsgType(self, price):
-        return SM_TYPE.PurchaseForGold if price[1] > 0 else SM_TYPE.PurchaseForCredits
+        return CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _successHandler(self, code, ctx=None):
         additionalMessages = []
         if len(ctx.get('shells', [])):
-            totalPrice = [0, 0]
+            totalPrice = ZERO_MONEY
             for shellCompDescr, price, count in ctx.get('shells', []):
+                price = Money(*price)
                 shell = g_itemsCache.items.getItemByCD(shellCompDescr)
                 additionalMessages.append(makeI18nSuccess('shell_buy/success', name=shell.userName, count=count, money=formatPrice(price), type=self.__getSysMsgType(price)))
-                totalPrice[0] += price[0]
-                totalPrice[1] += price[1]
+                totalPrice += price
 
             additionalMessages.append(makeI18nSuccess('layout_apply/success_money_spent', money=formatPrice(totalPrice), type=self.__getSysMsgType(totalPrice)))
         if len(ctx.get('eqs', [])):
             for eqCompDescr, price, count in ctx.get('eqs', []):
+                price = Money(*price)
                 equipment = g_itemsCache.items.getItemByCD(eqCompDescr)
                 additionalMessages.append(makeI18nSuccess('artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self.__getSysMsgType(price)))
 
@@ -346,11 +348,10 @@ class VehicleLayoutProcessor(Processor):
         """
         @return: price that should be paid to fill layout
         """
-        goldPrice = 0
-        creditsPrice = 0
         if self.shellsLayout is None:
-            return (creditsPrice, goldPrice)
+            return ZERO_MONEY
         else:
+            price = ZERO_MONEY
             for shellCompDescr, count, isBoughtForCredits in LayoutIterator(self.shellsLayout):
                 if not shellCompDescr or not count:
                     continue
@@ -359,24 +360,21 @@ class VehicleLayoutProcessor(Processor):
                 vehCount = vehShell.count if vehShell is not None else 0
                 buyCount = count - shell.inventoryCount - vehCount
                 if buyCount:
-                    if shell.buyPrice[1] and not isBoughtForCredits:
-                        goldPrice += shell.buyPrice[1] * buyCount
-                    elif shell.buyPrice[1] and isBoughtForCredits:
-                        creditsPrice += shell.buyPrice[1] * buyCount * g_itemsCache.items.shop.exchangeRateForShellsAndEqs
-                    elif shell.buyPrice[0]:
-                        creditsPrice += shell.buyPrice[0] * buyCount
+                    buyPrice = buyCount * shell.buyPrice
+                    if isBoughtForCredits:
+                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, g_itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                    price += buyPrice
 
-            return (creditsPrice, goldPrice)
+            return price
 
     def getEqsLayoutPrice(self):
         """
         @return: price that should be paid to fill layout
         """
-        goldPrice = 0
-        creditsPrice = 0
         if self.eqsLayout is None:
-            return (creditsPrice, goldPrice)
+            return ZERO_MONEY
         else:
+            price = ZERO_MONEY
             for idx, (eqCompDescr, count, isBoughtForCredits) in enumerate(LayoutIterator(self.eqsLayout)):
                 if not eqCompDescr or not count:
                     continue
@@ -385,20 +383,18 @@ class VehicleLayoutProcessor(Processor):
                 vehCount = 1 if vehEquipment is not None else 0
                 buyCount = count - equipment.inventoryCount - vehCount
                 if buyCount:
-                    if equipment.buyPrice[1] and not isBoughtForCredits:
-                        goldPrice += equipment.buyPrice[1] * buyCount
-                    elif equipment.buyPrice[1] and isBoughtForCredits:
-                        creditsPrice += equipment.buyPrice[1] * buyCount * g_itemsCache.items.shop.exchangeRateForShellsAndEqs
-                    elif equipment.buyPrice[0]:
-                        creditsPrice += equipment.buyPrice[0] * buyCount
+                    buyPrice = buyCount * equipment.buyPrice
+                    if isBoughtForCredits:
+                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, g_itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                    price += buyPrice
 
-            return (creditsPrice, goldPrice)
+            return price
 
 
 class VehicleRepairer(ItemProcessor):
 
     def __init__(self, vehicle):
-        self._repairCost = (vehicle.repairCost, 0)
+        self._repairCost = Money(credits=vehicle.repairCost)
         super(VehicleRepairer, self).__init__(vehicle, (plugins.MoneyValidator(self._repairCost),))
 
     def _request(self, callback):
@@ -406,7 +402,7 @@ class VehicleRepairer(ItemProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if len(errStr):
-            needed = (self._repairCost[0] - g_itemsCache.items.stats.credits, 0)
+            needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
             return makeI18nError('vehicle_repair/%s' % errStr, vehName=self.item.userName, needed=formatPrice(needed))
         return makeI18nError('vehicle_repair/server_error', vehName=self.item.userName)
 

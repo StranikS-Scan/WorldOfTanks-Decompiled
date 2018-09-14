@@ -9,22 +9,16 @@ from Math import Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_WARNING, LOG_ERROR
 from items import _xml
-import items.vehicles
 import material_kinds
 from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from CustomEffect import RangeTable
-from CustomEffect import enablePixie
+from helpers import PixieBG
+from vehicle_systems.stricted_loading import restrictBySpaceAndNode, restrictBySpace
+from vehicle_systems.tankStructure import TankNodeNames, TankPartNames
+from vehicle_systems.assembly_utility import Component
+DUMMY_NODE_PREFIX = 'DM'
 
-class TankComponentNames():
-    CHASSIS = 'chassis'
-    HULL = 'hull'
-    TURRET = 'turret'
-    GUN = 'gun'
-
-
-clamp = lambda minVal, maxVal, val: (minVal if val < minVal else maxVal if val > maxVal else val)
-
-class VehicleTrailEffects():
+class VehicleTrailEffects(Component):
     _DRAW_ORDER_IDX = 102
     enabled = property(lambda self: self.__enabled)
     _TRAIL_E_PIXIE_ORDER = 0
@@ -36,7 +30,7 @@ class VehicleTrailEffects():
 
     def __init__(self, vehicle):
         self.__vehicle = vehicle
-        chassisModel = self.__vehicle.appearance.modelsDesc['chassis']['model']
+        chassisModel = self.__vehicle.appearance.compoundModel
         topRightCarryingPoint = self.__vehicle.typeDescriptor.chassis['topRightCarryingPoint']
         self.__enabled = True
         self.__trailParticleNodes = []
@@ -45,23 +39,25 @@ class VehicleTrailEffects():
         mMidLeft.setTranslate((-topRightCarryingPoint[0], 0, 0))
         mMidRight = Math.Matrix()
         mMidRight.setTranslate((topRightCarryingPoint[0], 0, 0))
-        self.__trailParticleNodes = [chassisModel.node('', mMidLeft), chassisModel.node('', mMidRight)]
+        self.__trailParticleNodes = [chassisModel.node(TankNodeNames.TRACK_LEFT_MID, mMidLeft), chassisModel.node(TankNodeNames.TRACK_RIGHT_MID, mMidRight)]
         i = 0
-        for nodeName in ('HP_Track_LFront', 'HP_Track_RFront', 'HP_Track_LRear', 'HP_Track_RRear'):
-            try:
-                identity = Math.Matrix()
-                identity.setIdentity()
-                node = chassisModel.node(nodeName, identity)
-            except:
-                matr = mMidLeft if i % 2 == 0 else mMidRight
-                node = chassisModel.node('', Math.Matrix(matr))
-
+        for nodeName in (TankNodeNames.TRACK_LEFT_FRONT,
+         TankNodeNames.TRACK_RIGHT_FRONT,
+         TankNodeNames.TRACK_LEFT_REAR,
+         TankNodeNames.TRACK_RIGHT_REAR):
+            identity = Math.Matrix()
+            identity.setIdentity()
+            node = chassisModel.node(nodeName)
+            if node is None:
+                raise Exception('Node %s is not found' % nodeName)
+            chassisModel.node(nodeName, Math.Matrix(node.localMatrix))
             self.__trailParticleNodes.append(node)
 
         identity = Math.Matrix()
         identity.setIdentity()
-        self.__centerNode = chassisModel.node('', identity)
+        self.__centerNode = chassisModel.node(TankNodeNames.CHASSIS_MID_TRAIL, identity)
         self.__trailParticlesDelayBeforeShow = BigWorld.time() + 4.0
+        return
 
     def destroy(self):
         self.stopEffects()
@@ -101,7 +97,7 @@ class VehicleTrailEffects():
             if time < self.__trailParticlesDelayBeforeShow:
                 return
             movementInfo = Math.Vector4(vehicleAppearance.fashion.movementInfo.value)
-            vehicleSpeedRel = vehicle.filter.speedInfo.value[2] / vehicle.typeDescriptor.physics['speedLimits'][0]
+            vehicleSpeedRel = vehicle.speedInfo.value[2] / vehicle.typeDescriptor.physics['speedLimits'][0]
             tooSlow = abs(vehicleSpeedRel) < 0.1
             waterHeight = None if not vehicleAppearance.isInWater else vehicleAppearance.waterHeight
             effectIndexes = self.__getEffectIndexesUnderVehicle(vehicleAppearance)
@@ -144,9 +140,9 @@ class VehicleTrailEffects():
     def __updateNodePosition(self, node, vehiclePos, waterHeight):
         if waterHeight is not None:
             toCenterShift = vehiclePos.y - (Math.Matrix(node).translation.y - node.local.translation.y)
-            node.local.translation = Math.Vector3(0, waterHeight + toCenterShift, 0)
+            node.local.translation.y = waterHeight + toCenterShift
         else:
-            node.local.translation = Math.Vector3(0, 0, 0)
+            node.local.translation.y = 0
         return
 
     def __createTrailParticlesIfNeeded(self, node, iTrack, effectGroup, effectIndex, drawOrder, isActiveNode):
@@ -186,11 +182,11 @@ class VehicleTrailEffects():
              isActiveNode,
              effectRecord]
             nodeEffects.append(effectRecord)
-            Pixie.createBG(effectName, partial(self._callbackTrailParticleLoaded, elemDesc))
+            Pixie.createBG(effectName, restrictBySpaceAndNode(node, self._callbackTrailParticleLoaded, elemDesc))
             return
 
     def _callbackTrailParticleLoaded(self, elemDesc, pixie):
-        if self.__vehicle is None:
+        if self.__vehicle is None or self.__vehicle.model is None:
             LOG_WARNING("The vehicle object is 'None', can't attach pixie '%s'" % elemDesc[self._TRAIL_E_PIXIE_FILE])
             return
         elif pixie is None:
@@ -313,7 +309,7 @@ class ExhaustEffectsCache():
                 effect = self.__uniqueEffects.get(name)
                 if effect is None:
                     elemDesc = [name, effectsValues]
-                    Pixie.createBG(name, partial(self._callbackExhaustPixieLoaded, elemDesc))
+                    Pixie.createBG(name, restrictBySpace(self._callbackExhaustPixieLoaded, elemDesc))
                 effectsValues.append(effect)
 
             self.__tables.append(RangeTable(rangeTable.keys, effectsValues))
@@ -360,11 +356,11 @@ class ExhaustEffectsCache():
             elemDesc[self._EXHAUST_E_PIXE_LIST].append(pixie)
             if self.__node is not None:
                 self.__node.attach(pixie)
-            enablePixie(pixie, False)
+            PixieBG.enablePixie(pixie, False)
             return
 
 
-class VehicleExhaustEffects():
+class VehicleExhaustEffects(Component):
     enabled = property(lambda self: self.__enabled)
 
     def __init__(self, vehicleTypeDescriptor):
@@ -391,7 +387,7 @@ class VehicleExhaustEffects():
     def destroy(self):
         for pixieCache in self.__exhaust:
             if pixieCache.activeEffect is not None:
-                enablePixie(pixieCache.activeEffect, False)
+                PixieBG.enablePixie(pixieCache.activeEffect, False)
                 pixieCache.activeEffect.clear()
 
         for effectsCache in self.__exhaust:
@@ -404,7 +400,7 @@ class VehicleExhaustEffects():
         for pixieCache in self.__exhaust:
             activeEffect = pixieCache.activeEffect
             if activeEffect is not None:
-                enablePixie(activeEffect, isEnabled)
+                PixieBG.enablePixie(activeEffect, isEnabled)
 
         self.__enabled = isEnabled
         return
@@ -427,9 +423,9 @@ class VehicleExhaustEffects():
                 shouldReattach = pixieCache.changeActiveEffect(engineMode, rpm)
                 if shouldReattach and pixieCache.node is not None:
                     if prevEffect is not None:
-                        enablePixie(prevEffect, False)
+                        PixieBG.enablePixie(prevEffect, False)
                     if pixieCache.activeEffect is not None:
-                        enablePixie(pixieCache.activeEffect, True)
+                        PixieBG.enablePixie(pixieCache.activeEffect, True)
 
             return
 
@@ -490,16 +486,16 @@ class DamageFromShotDecoder(object):
     def decodeSegment(segment, vehicleDescr):
         compIdx = segment >> 8 & 255
         if compIdx == 0:
-            componentName = TankComponentNames.CHASSIS
+            componentName = TankPartNames.CHASSIS
             bbox = vehicleDescr.chassis['hitTester'].bbox
         elif compIdx == 1:
-            componentName = TankComponentNames.HULL
+            componentName = TankPartNames.HULL
             bbox = vehicleDescr.hull['hitTester'].bbox
         elif compIdx == 2:
-            componentName = TankComponentNames.TURRET
+            componentName = TankPartNames.TURRET
             bbox = vehicleDescr.turret['hitTester'].bbox
         elif compIdx == 3:
-            componentName = TankComponentNames.GUN
+            componentName = TankPartNames.GUN
             bbox = vehicleDescr.gun['hitTester'].bbox
         else:
             LOG_CODEPOINT_WARNING(compIdx)

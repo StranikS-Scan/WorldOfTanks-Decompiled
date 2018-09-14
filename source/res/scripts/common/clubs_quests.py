@@ -3,10 +3,10 @@
 import os
 from pprint import pformat
 from quest_cache_helpers import readQuestsFromFile
-from constants import ITEM_DEFS_PATH, EVENT_TYPE
+from constants import ITEM_DEFS_PATH, EVENT_TYPE, CURRENT_REALM
 from debug_utils import LOG_DEBUG_DEV
 _CLUBS_QUESTS_DIR = ITEM_DEFS_PATH + 'clubs_quests/'
-_LADDER_QUESTS_FILE = 'ladder_quests.xml'
+_LADDER_QUESTS_FILE = 'ladder_quests_%s.xml' % CURRENT_REALM.upper()
 
 def _parseLadderQuest(node):
     try:

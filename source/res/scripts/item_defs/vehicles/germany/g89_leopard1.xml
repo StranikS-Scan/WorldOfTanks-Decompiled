@@ -9,6 +9,13 @@
     <forward>	65	</forward>
     <backward>	23	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.185	</moving>
+    <still>	0.247	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.371	</firePenalty>
+  </invisibility>
   <repairCost>	13	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.000001 0.503075 0.540925	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G89_Leopard1/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G89_Leopard1/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -324,13 +332,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.990601 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G89_Leopard1/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G89_Leopard1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34635 2.04474	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -414,6 +421,7 @@
           </armor>
           <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <reloadTime>	8.7	</reloadTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/german/G89_Leopard1/normal/lod0/Gun_01.model	</undamaged>
@@ -421,7 +429,8 @@
             <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G89_Leopard1/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G89_Leopard1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -444,7 +453,8 @@
         <exploded>	vehicles/german/G89_Leopard1/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G89_Leopard1/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G89_Leopard1/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G89_Leopard1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000001 0.4 1.19598	</gunPosition>
       <emblemSlots>
@@ -480,9 +490,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.396 0.415 0.621 0.368 0.468 0.500 0.290 0.500 0.315 0.462 0.014	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.12 0.46 0.32 0.000000	</tiling>
       </camouflage>
@@ -497,6 +505,19 @@
   <radios>
     <SEM25_1>	shared	</SEM25_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Leopard1>
+        <alpha>	0.07245	</alpha>
+      </Chassis_Leopard1>
+    </chassis>
+    <engines>
+      <MB-838_CAM-500_1>
+        <bravo>	219.3858	</bravo>
+      </MB-838_CAM-500_1>
+    </engines>
+    <armour>	1.00092121	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

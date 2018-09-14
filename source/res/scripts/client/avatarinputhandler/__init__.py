@@ -2,38 +2,39 @@
 # Embedded file name: scripts/client/AvatarInputHandler/__init__.py
 import functools
 import math
-from helpers.CallbackDelayer import CallbackDelayer
-import BigWorld
-import Math
-import ResMgr
-import Keys
-import GUI
-from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from Event import Event
-from debug_utils import *
-from gui import g_guiResetters
-from gui.app_loader import g_appLoader, settings
-from post_processing.post_effect_controllers import g_postProcessingEvents
-from constants import ARENA_PERIOD, AIMING_MODE
-from control_modes import _ARCADE_CAM_PIVOT_POS
-import control_modes
-import MapCaseMode
-import constants
-import cameras
+from functools import partial
+import BattleReplay
 import DynamicCameras.ArcadeCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
-import BattleReplay
 import FalloutDeathMode
-from functools import partial
+import GUI
+import Keys
+import MapCaseMode
+import Math
+import ResMgr
+import cameras
+import constants
+import control_modes
+from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
+from Event import Event
+from avatar_helpers import aim_global_binding
+from constants import ARENA_PERIOD, AIMING_MODE
+from control_modes import _ARCADE_CAM_PIVOT_POS
+from debug_utils import *
+from gui import g_guiResetters, GUI_CTRL_MODE_FLAG
+from gui.app_loader import g_appLoader, settings
+from gui.battle_control import event_dispatcher as gui_event_dispatcher
+from gui.battle_control.battle_constants import GUN_RELOADING_VALUE_TYPE
+from helpers.CallbackDelayer import CallbackDelayer
+from post_processing.post_effect_controllers import g_postProcessingEvents
 
 def _getAmmoGuiCtrl():
     from gui.battle_control import g_sessionProvider
-    return g_sessionProvider.getAmmoCtrl()
+    return g_sessionProvider.shared.ammo
 
 
 _INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
-_CTRLS_FIRST = 'arcade'
 
 class _CTRL_TYPE():
     USUAL = 0
@@ -41,15 +42,17 @@ class _CTRL_TYPE():
     DEVELOPMENT = 2
 
 
-_CTRLS_DESC_MAP = {'arcade': ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
- 'strategic': ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
- 'sniper': ('SniperControlMode', 'sniperMode', _CTRL_TYPE.USUAL),
- 'postmortem': ('PostMortemControlMode', 'postMortemMode', _CTRL_TYPE.USUAL),
- 'debug': ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
- 'cat': ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
- 'video': ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
- 'mapcase': ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
- 'falloutdeath': ('FalloutDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
+_CTRL_MODE = aim_global_binding.CTRL_MODE_NAME
+_CTRLS_FIRST = _CTRL_MODE.DEFAULT
+_CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.STRATEGIC: ('StrategicControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.SNIPER: ('SniperControlMode', 'sniperMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.POSTMORTEM: ('PostMortemControlMode', 'postMortemMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DEBUG: ('DebugControlMode', None, _CTRL_TYPE.DEVELOPMENT),
+ _CTRL_MODE.CAT: ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
+ _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
+ _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.FALLOUT_DEATH: ('FalloutDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera, DynamicCameras.SniperCamera.SniperCamera, DynamicCameras.StrategicCamera.StrategicCamera)
 
 class ShakeReason():
@@ -111,14 +114,16 @@ class DynamicCameraSettings(object):
 
 
 class AvatarInputHandler(CallbackDelayer):
-    aim = property(lambda self: self.__curCtrl.getAim())
     ctrl = property(lambda self: self.__curCtrl)
     ctrls = property(lambda self: self.__ctrls)
-    ctrlModeName = property(lambda self: self.__eMode)
     isSPG = property(lambda self: self.__isSPG)
     isATSPG = property(lambda self: self.__isATSPG)
     isFlashBangAllowed = property(lambda self: self.__ctrls['video'] != self.__curCtrl)
-    cursorDetached = property(lambda self: self.__detachCount < 0)
+    isDetached = property(lambda self: self.__isDetached)
+    isGuiVisible = property(lambda self: self.__isGUIVisible)
+    ctrlModeName = aim_global_binding.bind(aim_global_binding.BINDING_ID.CTRL_MODE_NAME)
+    __aimOffset = aim_global_binding.bind(aim_global_binding.BINDING_ID.AIM_OFFSET)
+    __gunMarkerPosition = aim_global_binding.bind(aim_global_binding.BINDING_ID.GUN_MARKER_POSITION)
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
 
     @staticmethod
@@ -142,7 +147,6 @@ class AvatarInputHandler(CallbackDelayer):
 
     def __init__(self):
         CallbackDelayer.__init__(self)
-        self.__alwaysShowAim = False
         self.__alwaysShowAimKey = None
         self.__showMarkersKey = None
         sec = self._readCfg()
@@ -162,8 +166,8 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isATSPG = False
         self.__setupCtrls(sec)
         self.__curCtrl = self.__ctrls[_CTRLS_FIRST]
-        self.__eMode = _CTRLS_FIRST
-        self.__detachCount = 0
+        self.ctrlModeName = _CTRLS_FIRST
+        self.__isDetached = False
         self.__waitObserverCallback = None
         self.__observerVehicle = None
         return
@@ -176,58 +180,56 @@ class AvatarInputHandler(CallbackDelayer):
         return out
 
     def handleKeyEvent(self, event):
-        cursorDetached = self.__detachCount < 0
         import game
         isDown, key, mods, isRepeat = game.convertKeyEvent(event)
         if isRepeat:
             return False
-        elif self.__isStarted and cursorDetached:
+        elif self.__isStarted and self.__isDetached:
             return BigWorld.player().handleKey(isDown, key, mods)
-        elif not self.__isStarted or cursorDetached:
+        elif not self.__isStarted or self.__isDetached:
             return False
         else:
             if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
                 if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
-                    self.__alwaysShowAim = not self.__alwaysShowAim
-                    getAim = getattr(self.__curCtrl, 'getAim')
-                    if getAim is not None:
-                        aim = getAim()
-                        if aim is not None:
-                            aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
+                    gui_event_dispatcher.toggleCrosshairVisibility()
                     return True
-                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
-                    battle = g_appLoader.getDefBattleApp()
-                    if battle:
-                        markersManager = battle.markersManager
-                        markersManager.active(not markersManager.isActive)
+                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not self.__isGUIVisible:
+                    gui_event_dispatcher.toggleMarkers2DVisibility()
                     return True
-                if key == Keys.KEY_F5 and constants.IS_DEVELOPMENT:
+                if key == Keys.KEY_F5 and constants.HAS_DEV_RESOURCES:
                     self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
                     return True
             return True if self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else BigWorld.player().handleKey(isDown, key, mods)
 
     def handleMouseEvent(self, dx, dy, dz):
-        return False if not self.__isStarted or self.__detachCount < 0 else self.__curCtrl.handleMouseEvent(dx, dy, dz)
+        return False if not self.__isStarted or self.__isDetached else self.__curCtrl.handleMouseEvent(dx, dy, dz)
 
-    def detachCursor(self, isDetached, enableAiming):
+    def setForcedGuiControlMode(self, flags):
+        result = False
         if not self.__isStarted:
-            return
-        self.__detachCount += -1 if isDetached else 1
-        assert self.__detachCount <= 0
-        if self.__detachCount == -1 and isDetached:
-            self.__targeting.enable(False)
-            g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
-            if enableAiming:
-                self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
-        elif not self.__detachCount:
-            self.__targeting.enable(True)
-            g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+            return result
+        detached = flags & GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED > 0
+        if detached ^ self.__isDetached:
+            self.__isDetached = detached
+            self.__targeting.detach(self.__isDetached)
+            if detached:
+                g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
+                result = True
+                if flags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0:
+                    self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
+            else:
+                g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+                result = True
+            self.__curCtrl.setForcedGuiControlMode(not detached)
+        elif detached:
+            g_appLoader.syncCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
+        return result
 
     def updateShootingStatus(self, canShoot):
-        return None if self.__detachCount < 0 else self.__curCtrl.updateShootingStatus(canShoot)
+        return None if self.__isDetached else self.__curCtrl.updateShootingStatus(canShoot)
 
     def getDesiredShotPoint(self):
-        if self.__detachCount < 0:
+        if self.__isDetached:
             return None
         else:
             g_postProcessingEvents.onFocalPlaneChanged()
@@ -240,11 +242,8 @@ class AvatarInputHandler(CallbackDelayer):
         self.__curCtrl.showGunMarker2(flag)
 
     def updateGunMarker(self, pos, dir, size, relaxTime, collData):
-        aim = self.__curCtrl.getAim()
-        if aim is not None:
-            aim.updateMarkerPos(pos, relaxTime)
+        self.__gunMarkerPosition = (pos, relaxTime)
         self.__curCtrl.updateGunMarker(pos, dir, size, relaxTime, collData)
-        return
 
     def updateGunMarker2(self, pos, dir, size, relaxTime, collData):
         self.__curCtrl.updateGunMarker2(pos, dir, size, relaxTime, collData)
@@ -294,6 +293,24 @@ class AvatarInputHandler(CallbackDelayer):
             self.onControlModeChanged('falloutdeath')
         return
 
+    def addVehicleToCameraCollider(self, vehicle):
+        cams = (self.ctrls['arcade'].camera, self.ctrls['postmortem'].camera)
+        for camera in cams:
+            if camera is None:
+                continue
+            camera.addVehicleToCollideWith(vehicle)
+
+        return
+
+    def removeVehicleFromCameraCollider(self, vehicle):
+        cams = (self.ctrls['arcade'].camera, self.ctrls['postmortem'].camera)
+        for camera in cams:
+            if camera is None:
+                continue
+            camera.removeVehicleToCollideWith(vehicle)
+
+        return
+
     def reinitVehicleMatrix(self):
         arcadeMode = self.__ctrls['arcade']
         arcadeMode.camera.reinitMatrix()
@@ -313,14 +330,11 @@ class AvatarInputHandler(CallbackDelayer):
 
     def start(self):
         g_guiResetters.add(self.__onRecreateDevice)
-        import aims
-        aims.clearState()
         self.__identifySPG()
         for control in self.__ctrls.itervalues():
             control.create()
 
         self.__addBattleCtrlListeners()
-        g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
         if not self.__curCtrl.isManualBind():
             BigWorld.player().positionControl.bindToVehicle(True)
         self.__curCtrl.enable(ctrlState=control_modes.dumpStateEmpty())
@@ -349,6 +363,7 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isStarted = False
         import SoundGroups
         SoundGroups.g_instance.changePlayMode(1)
+        aim_global_binding.clear()
         self.__removeBattleCtrlListeners()
         for control in self.__ctrls.itervalues():
             control.destroy()
@@ -394,7 +409,7 @@ class AvatarInputHandler(CallbackDelayer):
                     player.positionControl.followCamera(False)
                     player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     return
-            if isObserverMode and self.__eMode == 'postmortem':
+            if isObserverMode and self.ctrlModeName == _CTRL_MODE.POSTMORTEM:
                 player = BigWorld.player()
                 self.__observerVehicle = player.vehicle.id if player.vehicle else None
             ctrl = BattleReplay.g_replayCtrl
@@ -404,7 +419,7 @@ class AvatarInputHandler(CallbackDelayer):
             self.__curCtrl.disable()
             prevCtrl = self.__curCtrl
             self.__curCtrl = self.__ctrls[eMode]
-            self.__eMode = eMode
+            self.ctrlModeName = eMode
             if player is not None:
                 if not prevCtrl.isManualBind() and self.__curCtrl.isManualBind():
                     player.positionControl.bindToVehicle(False)
@@ -426,9 +441,6 @@ class AvatarInputHandler(CallbackDelayer):
                         BigWorld.player().enableOwnVehicleAutorotation(self.__isAutorotation)
                     self.__prevModeAutorotation = None
             self.__targeting.onRecreateDevice()
-            aim = self.aim
-            if self.__detachCount == 0:
-                GUI.mcursor().position = aim.offset() if aim is not None else (0, 0)
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             vehicle = player.getVehicleAttached()
             if isObserverMode:
@@ -436,12 +448,7 @@ class AvatarInputHandler(CallbackDelayer):
             else:
                 self.__curCtrl.enable(ctrlState=ctrlState, **args)
             self.onCameraChanged(eMode, vehicle.id if isObserverMode else None)
-            if self.__alwaysShowAim:
-                getAim = getattr(self.__curCtrl, 'getAim')
-                if getAim is not None:
-                    aim = getAim()
-                    if aim is not None:
-                        aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
+            self.__curCtrl.handleMouseEvent(0.0, 0.0, 0.0)
             return
 
     def getTargeting(self):
@@ -450,7 +457,6 @@ class AvatarInputHandler(CallbackDelayer):
     def setGUIVisible(self, isVisible):
         self.__isGUIVisible = isVisible
         self.__curCtrl.setGUIVisible(isVisible)
-        self.__alwaysShowAim = False
 
     def selectPlayer(self, vehId):
         self.__curCtrl.selectPlayer(vehId)
@@ -590,7 +596,7 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isATSPG = 'AT-SPG' in vehTypeDesc.tags
 
     def reloadDynamicSettings(self):
-        if not constants.IS_DEVELOPMENT:
+        if not constants.HAS_DEV_RESOURCES:
             return
         ResMgr.purge(_INPUT_HANDLER_CFG)
         sec = ResMgr.openSection(_INPUT_HANDLER_CFG)
@@ -617,20 +623,25 @@ class AvatarInputHandler(CallbackDelayer):
     def __setupCtrls(self, section):
         modules = (control_modes, MapCaseMode, FalloutDeathMode)
         for name, desc in _CTRLS_DESC_MAP.items():
-            if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.IS_DEVELOPMENT:
-                if name not in self.__ctrls:
-                    for module in modules:
-                        classType = getattr(module, desc[0], None)
-                        if classType is None:
-                            pass
-                        self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
-                        break
+            try:
+                if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
+                    if name not in self.__ctrls:
+                        for module in modules:
+                            classType = getattr(module, desc[0], None)
+                            if classType is None:
+                                pass
+                            self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
+                            break
+
+            except:
+                LOG_DEBUG('Error while setting ctrls', name, desc, constants.HAS_DEV_RESOURCES)
+                LOG_CURRENT_EXCEPTION()
 
         return
 
     def __checkSections(self, section):
         for name, desc in _CTRLS_DESC_MAP.items():
-            if desc[1] is None or desc[2] == _CTRL_TYPE.OPTIONAL or desc[2] == _CTRL_TYPE.DEVELOPMENT and not constants.IS_DEVELOPMENT:
+            if desc[1] is None or desc[2] == _CTRL_TYPE.OPTIONAL or desc[2] == _CTRL_TYPE.DEVELOPMENT and not constants.HAS_DEV_RESOURCES:
                 continue
             if not section.has_key(desc[1]):
                 LOG_ERROR('Invalid section <%s> in <%s>.' % (desc[1], _INPUT_HANDLER_CFG))
@@ -641,7 +652,7 @@ class AvatarInputHandler(CallbackDelayer):
         self.__isArenaStarted = True if period == ARENA_PERIOD.BATTLE else False
         show = self.__isGUIVisible and self.__isArenaStarted
         self.__curCtrl.showGunMarker2(show and control_modes.useServerAim())
-        if constants.IS_DEVELOPMENT:
+        if constants.HAS_DEV_RESOURCES:
             showArcadeAim = show
         else:
             showArcadeAim = show and not control_modes.useServerAim()
@@ -660,38 +671,23 @@ class AvatarInputHandler(CallbackDelayer):
 
     def __addBattleCtrlListeners(self):
         ammoCtrl = _getAmmoGuiCtrl()
-        self.__onGunSettingsSet(ammoCtrl.getGunSettings())
-        ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
-        ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
-        ammoCtrl.onGunReloadTimeSetInPercent += self.__onGunReloadTimeSetInPercent
-        import aims
-        self.onSetReloading += aims.getReloadingHandler().setReloading
-        self.onSetReloadingPercents += aims.getReloadingHandler().setReloadingInPercent
-        ammoCtrl.onShellsUpdated += aims.getReloadingHandler().setAmmoStock
-        ammoCtrl.onCurrentShellChanged += aims.getReloadingHandler().setShellChanged
-
-    def __removeBattleCtrlListeners(self):
-        import aims
-        self.onSetReloading -= aims.getReloadingHandler().setReloading
-        self.onSetReloadingPercents -= aims.getReloadingHandler().setReloadingInPercent
-        ammoCtrl = _getAmmoGuiCtrl()
-        ammoCtrl.onShellsUpdated -= aims.getReloadingHandler().setAmmoStock
-        ammoCtrl.onCurrentShellChanged += aims.getReloadingHandler().setShellChanged
-        ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
-        ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
-        ammoCtrl.onGunReloadTimeSetInPercent -= self.__onGunReloadTimeSetInPercent
-
-    def __onGunSettingsSet(self, gunSettings):
-        aim = self.__curCtrl.getAim()
-        if aim:
-            self.__curCtrl.getAim().setClipParams(gunSettings.clip.size, gunSettings.burst.size)
-
-    def __onGunReloadTimeSet(self, _, timeLeft, baseTime):
-        self.setReloading(timeLeft, None, baseTime)
+        if ammoCtrl is not None:
+            ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         return
 
-    def __onGunReloadTimeSetInPercent(self, _, percent):
-        self.setReloadingInPercent(percent)
+    def __removeBattleCtrlListeners(self):
+        ammoCtrl = _getAmmoGuiCtrl()
+        if ammoCtrl is not None:
+            ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
+        return
+
+    def __onGunReloadTimeSet(self, _, state):
+        valueType = state.getValueType()
+        if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
+            self.setReloading(state.getActualValue(), None, state.getBaseValue())
+        elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
+            self.setReloadingInPercent(state.getActualValue())
+        return
 
 
 class _Targeting():
@@ -726,6 +722,9 @@ class _Targeting():
     def onRecreateDevice(self):
         if BigWorld.target.isEnabled:
             BigWorld.target.clear()
+
+    def detach(self, value):
+        self.__mouseMatProv.detach(value)
 
 
 class _VertScreenshotCamera(object):

@@ -11,6 +11,13 @@
     <forward>	35	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.164	</moving>
+    <still>	0.218	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.327	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.5	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -61,7 +68,8 @@
       <turret>	-0.000157 0.729214 0.732138	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R118_T28_F30/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R118_T28_F30/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R118_T28_F30/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -328,13 +336,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.10907 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R118_T28_F30/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R118_T28_F30/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R118_T28_F30/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.23882 2.653	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -409,6 +416,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 0.369444 5 0.380556 2 0.619444 2 0.630556 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	6.1	</reloadTime>
           <aimingTime>	3.2	</aimingTime>
@@ -418,7 +426,8 @@
             <exploded>	vehicles/russian/R118_T28_F30/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R118_T28_F30/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R118_T28_F30/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R118_T28_F30/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
@@ -431,7 +440,8 @@
         <exploded>	vehicles/russian/R118_T28_F30/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R118_T28_F30/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R118_T28_F30/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R118_T28_F30/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.022368 0.417425 0.809551	</gunPosition>
       <emblemSlots>
@@ -466,9 +476,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.006 -0.022 0.994 0.000 0.425 0.320 0.738 0.627 0.602 0.519 0.000 0.207 0.000 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
@@ -484,6 +492,19 @@
   <radios>
     <_71-TK-3A>	shared	</_71-TK-3A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R118_T28_F30>
+        <alpha>	0.1288	</alpha>
+      </Chassis_R118_T28_F30>
+    </chassis>
+    <engines>
+      <M-17L_R>
+        <bravo>	132.1601	</bravo>
+      </M-17L_R>
+    </engines>
+    <armour>	0.785012915	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

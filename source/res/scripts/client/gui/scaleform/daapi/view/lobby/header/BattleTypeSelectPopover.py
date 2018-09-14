@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 import BigWorld
 from helpers import i18n
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
@@ -9,13 +10,13 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.ARENAS import ARENAS
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from gui.server_events import g_eventsCache
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.utils.functions import makeTooltip
-from gui.server_events import g_eventsCache
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from predefined_hosts import g_preDefinedHosts
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
@@ -37,7 +38,9 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             return self.__getCompanyAvailabilityData()
         else:
             if itemData == PREBATTLE_ACTION_NAME.FORT:
-                if not g_clanCache.isInClan:
+                if not g_lobbyContext.getServerSettings().isFortsEnabled():
+                    return TOOLTIPS.BATTLETYPES_FORTIFICATION_DISABLED
+                elif not g_clanCache.isInClan:
                     return '#tooltips:fortification/disabled/no_clan'
                 elif not isStartingScriptDone():
                     return '#tooltips:fortification/disabled/no_fort'

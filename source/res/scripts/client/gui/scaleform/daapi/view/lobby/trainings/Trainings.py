@@ -16,6 +16,7 @@ from gui.shared.utils.functions import getArenaFullName
 from gui.sounds.ambients import LobbySubViewEnv
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
+from gui.Scaleform.Waiting import Waiting
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.Scaleform.locale.MENU import MENU
@@ -32,6 +33,7 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
 
     def _populate(self):
         super(Trainings, self)._populate()
+        Waiting.show('Flash')
         self.startPrbListening()
         self.addListener(events.TrainingSettingsEvent.UPDATE_TRAINING_SETTINGS, self.__createTrainingRoom, scope=EVENT_BUS_SCOPE.LOBBY)
         self.sendData([], 0)
@@ -61,6 +63,8 @@ class Trainings(LobbySubView, TrainingFormMeta, PrbListener):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onPrbListReceived(self, prebattles):
+        if Waiting.isOpened('Flash'):
+            Waiting.hide('Flash')
         listData = []
         playersTotal = 0
         for item in prebattles:

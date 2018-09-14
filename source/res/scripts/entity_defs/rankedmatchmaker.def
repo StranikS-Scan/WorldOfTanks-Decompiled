@@ -1,0 +1,34 @@
+<rankedmatchmaker.def>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+    </name>
+  </Properties>
+  <BaseMethods>
+    <enqueue>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </enqueue>
+    <dequeue>
+      <Arg>	MAILBOX	</Arg>
+    </dequeue>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onArenaCreated>
+    <onUnitMgrFailure>
+      <Arg>	MAILBOX	</Arg>
+    </onUnitMgrFailure>
+    <receiveArenaType>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT32	</Arg>
+    </receiveArenaType>
+  </BaseMethods>
+</rankedmatchmaker.def>

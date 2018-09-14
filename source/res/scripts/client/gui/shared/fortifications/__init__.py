@@ -45,23 +45,6 @@ def isSortieEnabled():
     return isStartingScriptDone()
 
 
-def isFortificationEnabled():
-    try:
-        import fortified_regions
-        return fortified_regions.g_cache.isSupported
-    except Exception:
-        LOG_DEBUG('There is problem while getting fortifications supporting flag.Fortification availability value is default')
-        return False
-
-
-def isFortificationBattlesEnabled():
-    try:
-        return not BigWorld.player().serverSettings['isFortBattlesDisabled']
-    except Exception:
-        LOG_DEBUG('There is problem while getting fortifications battles supporting flag.Fortification availability value is default')
-        return False
-
-
 def getDirectionFromDirPos(dirPos):
     return dirPos >> 4 & 15
 

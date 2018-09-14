@@ -17,7 +17,9 @@ class SoundEventChecker(Controller):
         return None
 
     def onLobbyStarted(self, ctx):
-        self.__credits, self.__gold = g_itemsCache.items.stats.money
+        money = g_itemsCache.items.stats.money
+        self.__credits = money.credits
+        self.__gold = money.gold
         g_clientUpdateManager.addCallbacks({'stats': self.__onStatsChanged})
         from CurrentVehicle import g_currentVehicle
         g_currentVehicle.onChangeStarted += self.__onVehicleChanging

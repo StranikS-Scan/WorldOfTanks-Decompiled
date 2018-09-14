@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/quests/triggers.py
 import BigWorld
 from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from gui.shared import g_eventBus, events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from tutorial import doc_loader
@@ -12,7 +13,7 @@ from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA, RESEARCH_CRITERIA
 from tutorial.control import g_tutorialWeaver
-from tutorial.control.quests import aspects
+from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
 from tutorial.settings import createSettingsCollection
 
@@ -231,7 +232,7 @@ class InventoryVehicleTrigger(BuyVehicleTrigger):
     def isOn(self):
         vehicleCriteria = self.getVar()
         minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
-        criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+        criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         return bool(len(g_itemsCache.items.getVehicles(criteria)))
 
 
@@ -246,7 +247,7 @@ class VehicleBattleCountTrigger(TriggerWithValidateVar):
 
     def isOn(self):
         vehicleDossier = g_itemsCache.items.getVehicleDossier(self.getVar()['vehicle'])
-        return vehicleDossier.getRandomStats().getBattlesCount() >= self.getVar()['battlesCount']
+        return vehicleDossier.getTotalStats().getBattlesCount() >= self.getVar()['battlesCount']
 
     def clear(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -267,7 +268,7 @@ class TutorialIntSettingsTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return g_settingsCore.serverSettings.getTutorialSetting(self.getVar(), False)
+        return g_settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.TUTORIAL, self.getVar(), False)
 
     def clear(self):
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -289,7 +290,8 @@ class TutorialAccountSettingsTrigger(TriggerWithValidateVar):
         self.toggle(isOn=self.isOn())
 
     def isOn(self):
-        return AccountSettings.getSettings(self.getVar())
+        var = self.getVar()
+        return var['value'] == AccountSettings.getSettings(var['key']) if var else False
 
     def clear(self):
         AccountSettings.onSettingsChanging -= self.__onSettingsChanged
@@ -297,41 +299,25 @@ class TutorialAccountSettingsTrigger(TriggerWithValidateVar):
         self.isRunning = False
 
     def __onSettingsChanged(self, key, value):
-        if self.getVar() == key:
+        if key in self.getVar():
             self.toggle(isOn=self.isOn())
 
 
 class XpExchangeTrigger(Trigger):
-    REQUEST_SENT_FLAG = 'xpExchangeRequestSent'
 
     def __init__(self, triggerID):
         super(XpExchangeTrigger, self).__init__(triggerID)
-        self.__pIdx = -1
-        self.__startProcessTriggerId = -1
+        self.__startProcessPointcutId = -1
 
     def run(self):
         if not self.isSubscribed:
-            self.__startProcessTriggerId = g_tutorialWeaver.weave(pointcut=aspects.StartXpExchangePointcut, aspects=[aspects.StartXpExchangeAspect(self)])
-            self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.XpExchangePointcut, aspects=[aspects.XpExchangeAspect(self)])
+            self.__startProcessPointcutId = g_tutorialWeaver.weave(pointcut=aspects.StartXpExchangePointcut, aspects=[aspects.StartXpExchangeAspect(self)])
             self.isSubscribed = True
         self.isRunning = True
-        self.toggle(isOn=self.isOn())
-
-    def isOn(self):
-        return self._tutorial.getFlags().isActiveFlag(self.REQUEST_SENT_FLAG)
-
-    def registerRequest(self):
-        flags = self._tutorial.getFlags()
-        flags.addFlag(self.REQUEST_SENT_FLAG)
-        flags.activateFlag(self.REQUEST_SENT_FLAG)
-        self._cache.update(None, self._tutorial.getFlags().getDict())
-        return
 
     def clear(self):
-        g_tutorialWeaver.clear(self.__pIdx)
-        g_tutorialWeaver.clear(self.__startProcessTriggerId)
-        self.__pIdx = -1
-        self.__startProcessTriggerId = -1
+        g_tutorialWeaver.clear(self.__startProcessPointcutId)
+        self.__startProcessPointcutId = -1
         self.isSubscribed = False
         self.isRunning = False
 
@@ -378,10 +364,9 @@ class TimerTrigger(TriggerWithValidateVar):
 
     def run(self):
         self.isRunning = True
-        if self._tutorial.getFlags().isActiveFlag(self._setVarID):
-            if self.__timerCallback is None:
-                self.isSubscribed = True
-                self.__timerCallback = BigWorld.callback(self.getVar(), self.__updateTimer)
+        if self.__timerCallback is None:
+            self.isSubscribed = True
+            self.__timerCallback = BigWorld.callback(self.getVar(), self.__updateTimer)
         self.toggle(isOn=False)
         return
 

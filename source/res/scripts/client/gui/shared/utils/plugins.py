@@ -6,11 +6,12 @@ from debug_utils import LOG_ERROR
 from shared_utils import forEach
 
 class IPlugin(object):
+    __slots__ = ('_parentObj',)
 
     def __init__(self, parentObj):
         self._parentObj = parentObj
 
-    def init(self):
+    def init(self, *args):
         pass
 
     def fini(self):
@@ -35,6 +36,7 @@ class IPlugin(object):
 
 
 class PluginsCollection(IPlugin):
+    __slots__ = ('__plugins',)
 
     def __init__(self, parentObj):
         super(PluginsCollection, self).__init__(weakref.proxy(parentObj))
@@ -48,8 +50,24 @@ class PluginsCollection(IPlugin):
             pluginObj = pluginClass(self._parentObj)
             self.__plugins[pluginName] = pluginObj
 
-    def init(self):
-        self._invoke('init')
+    def removePlugins(self, *names):
+        for name in names:
+            plugin = self.__plugins.pop(name, None)
+            if plugin is not None:
+                plugin.stop()
+                plugin.fini()
+
+        return
+
+    def getPlugin(self, name):
+        if name in self.__plugins:
+            return self.__plugins[name]
+        else:
+            return None
+            return None
+
+    def init(self, *args):
+        self._invoke('init', *args)
 
     def fini(self):
         self._invoke('fini')

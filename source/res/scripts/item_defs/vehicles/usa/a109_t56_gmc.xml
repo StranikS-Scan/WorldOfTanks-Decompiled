@@ -10,6 +10,13 @@
     <forward>	50	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.199	</moving>
+    <still>	0.332	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.498	</firePenalty>
+  </invisibility>
   <repairCost>	6.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -67,7 +74,8 @@
       <turret>	-0.0007 0.721451 -0.7989	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A109_T56_GMC/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -229,13 +237,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.903849 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A109_T56_GMC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.93044 1.51195	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -481,13 +488,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.903849 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A109_T56_GMC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.93044 1.51195	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -660,6 +666,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	5.6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
@@ -669,7 +676,8 @@
             <exploded>	vehicles/american/A109_T56_GMC/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A109_T56_GMC/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_75mm_AT_Gun_M7_L50>
       </guns>
@@ -679,14 +687,13 @@
         <exploded>	vehicles/american/A109_T56_GMC/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A109_T56_GMC/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000354 0.302703 -0.016507	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.281 0.157 1.020 -0.017 0.586 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
     </Turret_1_A109_T56_GMC>
     <Turret_2_A109_T56_GMC>
@@ -718,7 +725,7 @@
         <_57mm_Gun_M1_L50>	shared	  <unlocks>
             <vehicle>	A29_T40	  <cost>	3300	</cost>
             </vehicle>
-            <vehicle>	M8A1	  <cost>	3350	</cost>
+            <vehicle>	A57_M8A1	  <cost>	3350	</cost>
             </vehicle>
           </unlocks>
           <maxAmmo>	53	</maxAmmo>
@@ -731,6 +738,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	4	</reloadTime>
           <aimingTime>	2	</aimingTime>
@@ -745,7 +753,8 @@
             <exploded>	vehicles/american/A109_T56_GMC/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A109_T56_GMC/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
         </_57mm_Gun_M1_L50>
       </guns>
@@ -755,14 +764,13 @@
         <exploded>	vehicles/american/A109_T56_GMC/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A109_T56_GMC/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A109_T56_GMC/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A109_T56_GMC/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000050 0.399092 0.000812	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.177 0.000 1.000 0.052 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
     </Turret_2_A109_T56_GMC>
   </turrets0>
@@ -795,6 +803,28 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_A109_T56_GMC>
+        <alpha>	0.16905	</alpha>
+      </Chassis_A109_T56_GMC>
+      <Chassis_A109_T56_GMC_2>
+        <alpha>	0.15295	</alpha>
+      </Chassis_A109_T56_GMC_2>
+    </chassis>
+    <engines>
+      <Continental_W-670>
+        <bravo>	69.25191	</bravo>
+      </Continental_W-670>
+      <Continental_W-670-12>
+        <bravo>	76.12424	</bravo>
+      </Continental_W-670-12>
+      <Wright_Continental_R-975C1>
+        <bravo>	105.7281	</bravo>
+      </Wright_Continental_R-975C1>
+    </engines>
+    <armour>	0.783840619	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

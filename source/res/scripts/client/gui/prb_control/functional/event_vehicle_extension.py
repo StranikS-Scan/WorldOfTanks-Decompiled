@@ -1,5 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/event_vehicle_extension.py
+"""
+The main goal of Event Vehicle Extension package - provide to developers an easy way to extend
+capabilities of standard functionals by event specific logic. As a rule all events are based on
+the special event vehicles that are enqueued to Event Queue on the server. The extension allows
+to patch a functional such so all event vehicles are processed by event rules and standard
+vehicles are processed by original rules of the patched functional. The extension logic based
+on AOP concept. For details please see descriptions of classes.
+
+To use extension you should follow to a few recommendations:
+- update _SUPPORTED_FUNCTIONALS list with functionals (class names) that should be patched by
+the extension. Take into account that the extension is applied only to functionals from this list.
+- update _SWITCHED_METHODS list if it don't correspond your needs (if you want to override one
+more method from the extended functional). Also don't forget to provide implementation of new
+methods. Follow to the existing rules of naming.
+- if you need to fully replace method of the patched functional, update _PATCHED_METHODS list.
+
+For more details please see classes descriptions.
+"""
 import weakref
 from functools import partial
 import BigWorld
@@ -8,7 +26,7 @@ from debug_utils import LOG_DEBUG
 from gui.prb_control.context import pre_queue_ctx
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.server_events import g_eventsCache
-_SUPPORTED_FUNCTIONALS = ('RandomQueueFunctional',)
+_SUPPORTED_FUNCTIONALS = ()
 _PATCHED_METHODS = ('init', 'fini')
 _SWITCHED_METHODS = ('isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
 
@@ -42,9 +60,9 @@ class _EventVehicleFunctionalExtension(object):
     The class that encapsulates functional logic required for queuing the current vehicle in the
     event queue on the server. The extension can be applied to all functionals derived
     from the AccountQueueFunctional (AccountQueueFunctional is marked with the appropriate meta
-    class). All functionals which is supposed to be extended through the event vehicle extension
+    class). All functionals which are supposed to be extended through the event vehicle extension
     should correspond to the following conditions:
-    - functional should be marked with EventVehicleMeta meta class (directly or through inheritance)
+    - functional should be marked with EventVehicleMeta meta (directly or through inheritance)
     - functional interface should include all methods listed in _PATCHED_METHODS and
     _SWITCHED_METHODS methods.
     
@@ -144,7 +162,7 @@ class _EventVehicleFunctionalExtension(object):
         
         :param ctx: An instance of EventVehicleQueueCtx class.
         """
-        BigWorld.player().enqueueEventBattles([ctx.getVehicleInventoryID()])
+        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs())
         LOG_DEBUG('Sends request on queuing to the event battles', ctx)
 
     def _doDequeue(self, ctx):
@@ -165,7 +183,7 @@ class _EventVehicleFunctionalExtension(object):
         :param action: Unused.
         :return: Instance of EventVehicleQueueCtx class.
         """
-        return pre_queue_ctx.EventVehicleQueueCtx(vehInvID=g_currentVehicle.item.invID, waitingID='prebattle/join')
+        return pre_queue_ctx.EventVehicleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
 
     def _onEventsCacheResync(self):
         """

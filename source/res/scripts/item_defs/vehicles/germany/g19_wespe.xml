@@ -10,6 +10,13 @@
     <forward>	40	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.142	</moving>
+    <still>	0.284	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.426	</firePenalty>
+  </invisibility>
   <repairCost>	6.12	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.0001 0.287191 -0.72731	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G19_Wespe/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G19_Wespe/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -333,13 +341,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.876576 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G19_Wespe/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G19_Wespe/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.942364 1.19578	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -576,13 +583,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.876576 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G19_Wespe/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G19_Wespe/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.942364 1.19578	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -653,6 +659,7 @@
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-20 20	</turretYawLimits>
           <effects>	shot_main_mb	</effects>
           <models>
@@ -661,7 +668,8 @@
             <exploded>	vehicles/german/G19_Wespe/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G19_Wespe/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G19_Wespe/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.24 0.46 0.000000 0.000000	</tiling>
@@ -684,6 +692,7 @@
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-20 20	</turretYawLimits>
           <effects>	shot_main_mb	</effects>
           <models>
@@ -692,7 +701,8 @@
             <exploded>	vehicles/german/G19_Wespe/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G19_Wespe/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G19_Wespe/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.24 0.58 0.000000 0.000000	</tiling>
@@ -705,15 +715,14 @@
         <exploded>	vehicles/german/G19_Wespe/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G19_Wespe/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G19_Wespe/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G19_Wespe/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.008033 0.827437 -0.224642	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.074 0.000 0.840 0.106 1.000 0.489 0.346 0.500 0.282 0.500 0.340 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
       </camouflage>
@@ -731,7 +740,7 @@
       </unlocks>
     </Maybach_HL62TR>
     <Maybach_HL_45P>	shared	  <unlocks>
-        <vehicle>	Pz_Sfl_IVb	  <cost>	4740	</cost>
+        <vehicle>	G95_Pz_Sfl_IVb	  <cost>	4740	</cost>
         </vehicle>
       </unlocks>
     </Maybach_HL_45P>
@@ -747,6 +756,28 @@
     </FuG5>
     <FuG_Spr.1>	shared	</FuG_Spr.1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Wespeketten_ausf_A>
+        <alpha>	0.12075	</alpha>
+      </Wespeketten_ausf_A>
+      <Wespeketten_ausf_B>
+        <alpha>	0.1127	</alpha>
+      </Wespeketten_ausf_B>
+    </chassis>
+    <engines>
+      <Maybach_HL57TR>
+        <bravo>	34.36164	</bravo>
+      </Maybach_HL57TR>
+      <Maybach_HL62TR>
+        <bravo>	37.00484	</bravo>
+      </Maybach_HL62TR>
+      <Maybach_HL_45P>
+        <bravo>	39.64804	</bravo>
+      </Maybach_HL_45P>
+    </engines>
+    <armour>	0.528511401	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

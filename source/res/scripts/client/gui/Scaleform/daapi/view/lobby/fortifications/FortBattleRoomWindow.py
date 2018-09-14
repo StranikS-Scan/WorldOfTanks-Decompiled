@@ -27,8 +27,9 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FortEvent
 from gui.shared import events
 from gui.shared.fortifications.context import CreateSortieCtx, CreateOrJoinFortBattleCtx
-from gui.shared.fortifications.fort_helpers import fortProviderProperty, FortListener
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.prb_control.items.sortie_items import getDivisionNameByUnit
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.utils import getPlayerDatabaseID
 from helpers import i18n
 from messenger.storage import storage_getter
@@ -40,10 +41,6 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
         self.__isMinimize = False
         super(FortBattleRoomWindow, self).__init__()
         self.__flags = ctx.get('flags', FUNCTIONAL_FLAG.UNDEFINED)
-
-    @fortProviderProperty
-    def fortProvider(self):
-        return None
 
     @prbPeripheriesHandlerProperty
     def prbPeripheriesHandler(self):
@@ -139,6 +136,10 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
         if not pInfo.isInvite():
             self.__addPlayerNotification(settings.UNIT_NOTIFICATION_KEY.PLAYER_REMOVED, pInfo)
 
+    def onClientStateChanged(self, state):
+        if self.unitFunctional.getID() == 0 and state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+            self.onWindowClose()
+
     def __addPlayerNotification(self, key, pInfo):
         chat = self.chat
         if chat and not pInfo.isCurrentPlayer():
@@ -189,11 +190,14 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, FortListener):
             if commanderID != getPlayerDatabaseID():
                 getter = storage_getter('users')
                 commander = getter().getUser(commanderID)
+                if commander is None:
+                    return
                 division = getDivisionNameByUnit(unit)
                 divisionName = i18n.makeString(I18N_SYSTEM_MESSAGES.unit_notification_divisiontype(division))
                 key = I18N_SYSTEM_MESSAGES.UNIT_NOTIFICATION_CHANGEDIVISION
                 txt = i18n.makeString(key, name=commander.getName(), division=divisionName)
                 chat.addNotification(txt)
+        return
 
     def onIntroUnitFunctionalFinished(self):
         flags = self.unitFunctional.getFunctionalFlags()

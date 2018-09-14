@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/utils/key_mapping.py
 import BigWorld
 import Keys
+from gui import GUI_SETTINGS
 from gui.battle_control import g_sessionProvider
 BW_TO_SCALEFORM = {Keys.KEY_NONE: 666,
  Keys.KEY_MOUSE0: 0,
@@ -144,5 +145,21 @@ def getBigworldKeyFromName(bigworldName):
     return bigworldName.split('KEY_')[-1]
 
 
-def getScaleformKey(bigworldKey):
-    return BW_TO_SCALEFORM_OVERRIDE[bigworldKey] if g_sessionProvider.getCtx().isInBattle and bigworldKey in BW_TO_SCALEFORM_OVERRIDE else BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)
+if GUI_SETTINGS.useAS3Battle:
+
+    def getBigworldKey(scaleformKey):
+        return SCALEFORM_TO_BW.get(scaleformKey, voidSymbol)
+
+
+    def getScaleformKey(bigworldKey):
+        return BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)
+
+
+else:
+
+    def getBigworldKey(scaleformKey):
+        return SCALEFORM_TO_BW_OVERRIDE[scaleformKey] if g_sessionProvider.getCtx().isInBattle and scaleformKey in SCALEFORM_TO_BW_OVERRIDE else SCALEFORM_TO_BW.get(scaleformKey, voidSymbol)
+
+
+    def getScaleformKey(bigworldKey):
+        return BW_TO_SCALEFORM_OVERRIDE[bigworldKey] if g_sessionProvider.getCtx().isInBattle and bigworldKey in BW_TO_SCALEFORM_OVERRIDE else BW_TO_SCALEFORM.get(bigworldKey, voidSymbol)

@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.059	</moving>
+    <still>	0.118	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.177	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -62,7 +69,8 @@
       <turret>	-0.00379 0.578851 0.742292	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch03_WZ-111/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch03_WZ-111/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch03_WZ-111/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.94446 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch03_WZ-111/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch03_WZ-111/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch03_WZ-111/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.3441 2.39162	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -413,13 +420,15 @@
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch03_WZ-111/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch03_WZ-111/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch03_WZ-111/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch03_WZ-111/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch03_WZ-111/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch03_WZ-111/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -442,7 +451,8 @@
         <exploded>	vehicles/chinese/Ch03_WZ-111/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch03_WZ-111/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch03_WZ-111/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch03_WZ-111/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.300596 1.21094	</gunPosition>
       <emblemSlots>
@@ -478,9 +488,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.016 0.073 0.995 0.000 0.746 0.022 0.523 0.381 0.500 0.500 0.288 0.500 0.259 0.474 0.199	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
     </Turret_1_Ch03_WZ-111>
   </turrets0>
   <engines>
@@ -492,6 +500,19 @@
   <radios>
     <_9RM>	shared	</_9RM>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch03_WZ-111>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Ch03_WZ-111>
+    </chassis>
+    <engines>
+      <_12150LZ>
+        <bravo>	137.4465	</bravo>
+      </_12150LZ>
+    </engines>
+    <armour>	1.213301369	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

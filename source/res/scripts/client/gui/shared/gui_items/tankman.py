@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Tankman.py
 from helpers import i18n
 from items import tankmen, vehicles, ITEM_TYPE_NAMES
-from gui import nationCompareByIndex
+from gui import nationCompareByIndex, TANKMEN_ROLES_ORDER_DICT
 from gui.shared.utils.functions import getShortDescr
 from gui.shared.gui_items import HasStrCD, GUIItem, ItemsCollection
 
@@ -125,6 +125,10 @@ class Tankman(GUIItem, HasStrCD):
         return self.vehicleDescr is not None
 
     @property
+    def role(self):
+        return self.descriptor.role
+
+    @property
     def roleLevel(self):
         return self.descriptor.roleLevel
 
@@ -164,13 +168,32 @@ class Tankman(GUIItem, HasStrCD):
     def roleUserName(self):
         return getRoleUserName(self.descriptor.role)
 
-    @property
-    def hasNewSkill(self):
-        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(self.skills))
+    def availableSkills(self, useCombinedRoles=False):
+        """ Get list of skills which tankman can learn
+        :param useCombinedRoles: get skills for combined roles (True/False)
+        :return: List with text name of skills, e.g. ['brotherhood', 'gunner_gunsmith', 'gunner_smoothTurret']
+        """
+        if useCombinedRoles:
+            availSkills = set()
+            for role in self.combinedRoles:
+                availSkills |= tankmen.SKILLS_BY_ROLES.get(role, set())
+
+        else:
+            availSkills = tankmen.SKILLS_BY_ROLES.get(self.descriptor.role, set())
+        availSkills -= set(self.descriptor.skills)
+        return availSkills
+
+    def hasNewSkill(self, useCombinedRoles=False):
+        """ Has tankman new skills for learn
+        :param useCombinedRoles: take in account combined roles skills, (e.g. commander and radioman skills)
+        :return: True/False
+        """
+        availSkills = self.availableSkills(useCombinedRoles)
+        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and len(availSkills) and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(self.skills))
 
     @property
     def newSkillCount(self):
-        if self.hasNewSkill:
+        if self.hasNewSkill(useCombinedRoles=True):
             tmanDescr = tankmen.TankmanDescr(self.strCD)
             i = 0
             skills_list = list(tankmen.ACTIVE_SKILLS)
@@ -190,8 +213,11 @@ class Tankman(GUIItem, HasStrCD):
         return round(self.roleLevel * factor)
 
     def getNextLevelXpCost(self):
-        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.hasNewSkill:
-            descr = self.descriptor
+        """ Calculate the XP cost to raise a skill by one point
+        :return: integer -> value of xp cost
+        """
+        descr = self.descriptor
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or len(self.skills) and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
             if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
                 nextSkillLevel = self.roleLevel
@@ -203,8 +229,11 @@ class Tankman(GUIItem, HasStrCD):
             return descr.levelUpXpCost(nextSkillLevel, skillSeqNum) - descr.freeXP
 
     def getNextSkillXpCost(self):
-        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.hasNewSkill:
-            descr = self.descriptor
+        """ Calculate the XP cost to raise a skill to MAX_SKILL_LEVEL
+        :return: integer -> value of xp cost
+        """
+        descr = self.descriptor
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or len(self.skills) and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
             if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
                 nextSkillLevel = self.roleLevel
@@ -214,7 +243,7 @@ class Tankman(GUIItem, HasStrCD):
             if self.roleLevel == tankmen.MAX_SKILL_LEVEL:
                 skillSeqNum = lastSkillNumValue
             needXp = 0
-            for level in range(nextSkillLevel, tankmen.MAX_SKILL_LEVEL):
+            for level in xrange(nextSkillLevel, tankmen.MAX_SKILL_LEVEL):
                 needXp += descr.levelUpXpCost(level, skillSeqNum)
 
             return needXp - descr.freeXP
@@ -223,6 +252,43 @@ class Tankman(GUIItem, HasStrCD):
     def vehicleNativeType(self):
         for tag in vehicles.VEHICLE_CLASS_TAGS.intersection(self.vehicleNativeDescr.type.tags):
             return tag
+
+    def getSkillsToLearn(self):
+        result = []
+        commonSkills = []
+        for skill in tankmen.COMMON_SKILLS:
+            if skill not in self.descriptor.skills:
+                commonSkills.append(self.__packSkill(TankmanSkill(skill)))
+
+        result.append({'id': 'common',
+         'skills': commonSkills})
+        for role in TANKMEN_ROLES_ORDER_DICT['plain']:
+            roleSkills = tankmen.SKILLS_BY_ROLES.get(role, tuple())
+            if role not in self.combinedRoles:
+                continue
+            skills = []
+            for skill in roleSkills:
+                if skill not in tankmen.COMMON_SKILLS and skill not in self.descriptor.skills:
+                    skills.append(self.__packSkill(TankmanSkill(skill)))
+
+            result.append({'id': role,
+             'skills': skills})
+
+        return result
+
+    def hasSkillToLearn(self):
+        for skillsData in self.getSkillsToLearn():
+            if skillsData['skills']:
+                return True
+
+        return False
+
+    def __packSkill(self, skillItem):
+        return {'id': skillItem.name,
+         'name': skillItem.userName,
+         'desc': skillItem.shortDescription,
+         'enabled': True,
+         'tankmanID': self.invID}
 
     def __cmp__(self, other):
         if other is None:

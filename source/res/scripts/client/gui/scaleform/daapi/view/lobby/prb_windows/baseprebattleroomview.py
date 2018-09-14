@@ -17,10 +17,12 @@ from helpers import int2roman
 from messenger import g_settings
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from prebattle_shared import decodeRoster
 
 class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
@@ -36,6 +38,10 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
 
     @storage_getter('users')
     def usersStorage(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
         return None
 
     @process
@@ -162,7 +168,7 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener):
 
     def _makeAccountsData(self, accounts):
         result = []
-        isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
+        isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         getUser = self.usersStorage.getUser
         getColors = g_settings.getColorScheme('rosters').getColors
         accounts = sorted(accounts, cmp=prb_items.getPlayersComparator())

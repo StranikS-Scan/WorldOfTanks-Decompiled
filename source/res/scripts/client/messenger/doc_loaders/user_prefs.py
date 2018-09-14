@@ -59,14 +59,13 @@ def loadDefault(xmlCtx, section, messengerSettings):
 
 
 def loadFromServer(messengerSettings):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.settings_core.SettingsCore import g_settingsCore
     data = messengerSettings.userPrefs._asdict()
     core = g_settingsCore.serverSettings
     for key, (_, _, _, isExtended) in _userProps.iteritems():
-        if isExtended:
-            settingValue = core.getExtendedGameSetting(key, None)
-        else:
-            settingValue = core.getGameSetting(key, None)
+        section = SETTINGS_SECTIONS.GAME_EXTENDED if isExtended else SETTINGS_SECTIONS.GAME
+        settingValue = core.getSectionSettings(section, key, None)
         if settingValue is not None:
             data[key] = settingValue
 

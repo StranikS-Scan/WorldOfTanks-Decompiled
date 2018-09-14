@@ -3,6 +3,12 @@
 
 
 class INGAME_HELP(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     BATTLECONTROLS_TITLE = '#ingame_help:battleControls/title'
     BATTLECONTROLS_MOVEMENTFORWARD = '#ingame_help:battleControls/movementForward'
     BATTLECONTROLS_MOVEMENTBACKWARD = '#ingame_help:battleControls/movementBackward'
@@ -11,6 +17,7 @@ class INGAME_HELP(object):
     BATTLECONTROLS_CRUISECTRLFORWARD = '#ingame_help:battleControls/cruiseCtrlForward'
     BATTLECONTROLS_CRUISECTRLBACKWARD = '#ingame_help:battleControls/cruiseCtrlBackward'
     BATTLECONTROLS_SWITCHAUTOROTATION = '#ingame_help:battleControls/switchAutorotation'
+    BATTLECONTROLS_STOPFIRE = '#ingame_help:battleControls/stopFire'
     BATTLECONTROLS_VOICECHATMUTE = '#ingame_help:battleControls/voiceChatMute'
     BATTLECONTROLS_HIDEMINIMAP = '#ingame_help:battleControls/hideMinimap'
     BATTLECONTROLS_FIRE = '#ingame_help:battleControls/fire'
@@ -69,6 +76,7 @@ class INGAME_HELP(object):
     CROSSHAIRCONTROLS_EXAMPLE_HP = '#ingame_help:crosshairControls/example/hp'
     CROSSHAIRCONTROLS_EXAMPLE_DAMAGE = '#ingame_help:crosshairControls/example/damage'
     CROSSHAIRCONTROLS_EXAMPLE_NAME = '#ingame_help:crosshairControls/example/name'
+    CROSSHAIRCONTROLS_TIMELEFT = '#ingame_help:crosshairControls/timeLeft'
     MARKERMARKS_TITLE = '#ingame_help:markerMarks/title'
     MARKERMARKS_FOLLOW = '#ingame_help:markerMarks/follow'
     MARKERMARKS_HELP = '#ingame_help:markerMarks/help'

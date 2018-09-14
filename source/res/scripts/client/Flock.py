@@ -2,17 +2,14 @@
 # Embedded file name: scripts/client/Flock.py
 from AvatarInputHandler import mathUtils
 import BigWorld
-import helpers
 import Math
 import ResMgr
 import math
 import random
 import BattleReplay
-import Settings
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
-import WWISE
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo:
@@ -111,7 +108,6 @@ class FlockLike:
 
     def _loadModels(self, prereqs):
         try:
-            firstModel = True
             for modelId in prereqs.keys():
                 if modelId in prereqs.failedIDs:
                     LOG_ERROR('Failed to load flock model: %s' % modelId)
@@ -120,9 +116,8 @@ class FlockLike:
                 model.outsideOnly = 1
                 model.moveAttachments = True
                 self.addModel(model)
-                if firstModel:
+                if self.__sound is None:
                     self._addSound(model)
-                    firstModel = False
                 animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
                 model.actionScale = animSpeed
                 model.action('FlockAnimAction')()
@@ -130,14 +125,17 @@ class FlockLike:
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-    def _addSound(self, model):
+        return
+
+    def _addSound(self, model, soundName=''):
         if not model.sources:
             return
         else:
             modelName = model.sources[0]
-            soundName = FlockLike.__SoundNames.get(modelName, None)
-            if soundName is None or soundName == '':
-                return
+            if soundName == '':
+                soundName = FlockLike.__SoundNames.get(modelName, None)
+                if soundName is None or soundName == '':
+                    return
             try:
                 self.__sound = SoundGroups.g_instance.getSound3D(model.root, soundName)
                 if self.__sound is not None:
@@ -151,6 +149,7 @@ class FlockLike:
     def _delSound(self):
         if self.__sound is not None:
             self.__sound.stop()
+            self.__sound.releaseMatrix()
             self.__sound = None
         return
 

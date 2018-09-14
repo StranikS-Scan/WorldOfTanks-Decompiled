@@ -117,6 +117,8 @@ class EntitiesFactories(object):
         factory.validate(settings)
         alias = settings.alias
         eventType = settings.event
+        if alias in self.__settings:
+            raise Exception('Alias {0} is already added to settings'.format(alias))
         self.__settings[alias] = settings
         if eventType is not None and len(eventType):
             self.__eventToAlias[eventType] = alias

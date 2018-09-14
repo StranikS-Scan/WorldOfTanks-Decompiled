@@ -3,6 +3,7 @@
 import BigWorld
 import AccountCommands
 from gui import makeHtmlString
+from gui.shared.gui_items.vehicle_modules import VehicleTurret
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from debug_utils import LOG_DEBUG
 from gui.SystemMessages import SM_TYPE
@@ -10,6 +11,9 @@ from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
 from gui.shared.formatters import formatPrice
+from gui.shared.money import Money
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.utils.requesters.ItemsRequester import ItemsRequester
 from helpers import i18n
 
 class ModuleProcessor(ItemProcessor):
@@ -41,6 +45,16 @@ class ModuleProcessor(ItemProcessor):
          'opType': self.opType,
          'msg': msg}
 
+    def _errorHandler(self, code, errStr='', ctx=None):
+        if not len(errStr):
+            if code != AccountCommands.RES_CENTER_DISCONNECTED:
+                msg = 'server_error'
+            else:
+                msg = 'server_error_centerDown'
+        else:
+            msg = errStr
+        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
+
 
 class ModuleTradeProcessor(ModuleProcessor):
     """
@@ -66,6 +80,9 @@ class ModuleTradeProcessor(ModuleProcessor):
          'money': formatPrice(self._getOpPrice())}
 
     def _getOpPrice(self):
+        """
+        @return Returns an instance of Money
+        """
         raise NotImplemented
 
 
@@ -97,18 +114,11 @@ class ModuleBuyer(ModuleTradeProcessor):
 
     def _getOpPrice(self):
         price = self.item.altPrice or self.item.buyPrice
-        return (price[0] * self.count, 0) if self.buyForCredits else (0, price[1] * self.count)
+        return self.count * Money(credits=price.credits) if self.buyForCredits else self.count * Money(gold=price.gold)
 
     def _successHandler(self, code, ctx=None):
         sysMsgType = SM_TYPE.PurchaseForCredits if self.buyForCredits else SM_TYPE.PurchaseForGold
         return makeI18nSuccess(self._formMessage('success'), type=sysMsgType, **self._getMsgCtx())
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
-            msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to buy module', self.item, self.count, self._isItemBuyingForCredits())
@@ -130,17 +140,10 @@ class ModuleSeller(ModuleTradeProcessor):
         super(ModuleSeller, self).__init__(item, count, 'sell')
 
     def _getOpPrice(self):
-        return (self.item.sellPrice[0] * self.count, self.item.sellPrice[1] * self.count)
+        return self.item.sellPrice * self.count
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Selling, **self._getMsgCtx())
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
-            msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to sell item', self.item, self.count)
@@ -184,13 +187,6 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())
 
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
-            msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
-
 
 class OptDeviceInstaller(ModuleInstallProcessor):
     """
@@ -212,12 +208,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
         defaultCost = g_itemsCache.items.shop.defaults.paidRemovalCost
         action = None
         if self.cost != defaultCost:
-            action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'paidRemovalCost',
-             'isBuying': True,
-             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-             'newPrice': (0, self.cost),
-             'oldPrice': (0, defaultCost)}
+            action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, Money(gold=self.cost), Money(gold=defaultCost))
         addPlugins = []
         if install:
             addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable),)
@@ -313,13 +304,6 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         additionalMessages.append(makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
         return makeSuccess(auxData=additionalMessages)
 
-    def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
-            msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
-        else:
-            msg = errStr
-        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
-
 
 class TurretInstaller(CommonModuleInstallProcessor):
     """
@@ -338,15 +322,17 @@ class TurretInstaller(CommonModuleInstallProcessor):
         self.gunCD = 0
         mayInstallCurrent = item.mayInstall(vehicle, gunCD=self.gunCD)
         if not mayInstallCurrent[0]:
-            for gun in item.descriptor['guns']:
-                gunItem = g_itemsCache.items.getItemByCD(gun['compactDescr'])
-                if gunItem.isInInventory:
-                    mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
-                    if mayInstall[0]:
-                        self.gunCD = gun['compactDescr']
-                        break
-
+            self._findAvailableGun(vehicle, item)
         self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.gunCD))
+
+    def _findAvailableGun(self, vehicle, item):
+        for gun in item.descriptor['guns']:
+            gunItem = g_itemsCache.items.getItemByCD(gun['compactDescr'])
+            if gunItem.isInInventory:
+                mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
+                if mayInstall[0]:
+                    self.gunCD = gun['compactDescr']
+                    break
 
     def _request(self, callback):
         BigWorld.player().inventory.equipTurret(self.vehicle.invID, self.item.intCD, self.gunCD, lambda code, ext: self._response(code, callback, ctx=ext))
@@ -356,6 +342,22 @@ class TurretInstaller(CommonModuleInstallProcessor):
             gun = g_itemsCache.items.getItemByCD(self.gunCD)
             return makeI18nSuccess(self._formMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())
         return super(TurretInstaller, self)._successHandler(code, ctx)
+
+
+class PreviewVehicleTurretInstaller(TurretInstaller):
+
+    def _findAvailableGun(self, vehicle, item):
+        for gun in item.descriptor['guns']:
+            mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
+            if mayInstall[0]:
+                self.gunCD = gun['compactDescr']
+                break
+
+    def _request(self, callback):
+        vehDescr = self.vehicle.descriptor
+        vehDescr.installTurret(self.item.intCD, self.gunCD)
+        self.vehicle.turret = VehicleTurret(vehDescr.turret['compactDescr'], descriptor=vehDescr.turret)
+        callback(makeSuccess())
 
 
 class OtherModuleInstaller(CommonModuleInstallProcessor):
@@ -384,6 +386,22 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
         BigWorld.player().inventory.equip(self.vehicle.invID, self.item.intCD, lambda code, ext: self._response(code, callback, ctx=ext))
 
 
+class PreviewVehicleModuleInstaller(OtherModuleInstaller):
+    OTHER_PREVIEW_MODULES = {GUI_ITEM_TYPE.GUN: 'gun',
+     GUI_ITEM_TYPE.CHASSIS: 'chassis',
+     GUI_ITEM_TYPE.ENGINE: 'engine',
+     GUI_ITEM_TYPE.RADIO: 'radio'}
+
+    def _request(self, callback):
+        itemTypeID = self.item.itemTypeID
+        moduleName = self.OTHER_PREVIEW_MODULES[itemTypeID]
+        cls = ItemsRequester.ITEM_TYPES_MAPPING[itemTypeID]
+        self.vehicle.descriptor.installComponent(self.item.intCD)
+        itemDescr = getattr(self.vehicle.descriptor, moduleName)
+        setattr(self.vehicle, moduleName, cls(itemDescr['compactDescr'], descriptor=itemDescr))
+        callback(makeSuccess())
+
+
 class BuyAndInstallItemProcessor(ModuleBuyer):
 
     def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None):
@@ -403,7 +421,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
               'isLocked': True}), plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.ModuleBuyerConfirmator('confirmBuyAndInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,
               'conflictedEqs': conflictMsg,
-              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0])})])
+              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice().credits)})])
             if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
@@ -412,7 +430,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,
-              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice()[0]),
+              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice().credits),
               'reason': self.__makeInstallReasonMsg(installReason)})])
 
     def __makeConflictMsg(self, conflictedText):
@@ -483,3 +501,10 @@ def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, is
         return TurretInstaller(vehicle, newComponentItem, conflictedEqs)
     else:
         return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+
+
+def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):
+    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
+        return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs)
+    else:
+        return PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)

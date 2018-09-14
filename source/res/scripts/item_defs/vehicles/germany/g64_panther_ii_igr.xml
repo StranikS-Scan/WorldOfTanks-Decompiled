@@ -1,0 +1,369 @@
+<g64_panther_ii_igr.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	55	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.109	</moving>
+    <still>	0.146	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.219	</firePenalty>
+  </invisibility>
+  <repairCost>	8.93	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G64_Panther_II/Panther_II_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	100	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	30	</armor_7>
+      <armor_8>	16	</armor_8>
+      <armor_9>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	30	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	25490	</weight>
+    <maxHealth>	1120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.913712 -0.366759	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.980539 0.86684 2.27802	</rayStart>
+        <rayEnd>	-0.980539 0.539982 2.04744	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G64_Panther_II/Panther_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Panther_II_2_IGR>
+      <userString>	#igr_vehicles:Chassis_Panther_II_IGR	</userString>
+      <shortUserString>	#igr_vehicles:Chassis_Panther_II_IGR_short	</shortUserString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30350	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	16500	</weight>
+      <maxLoad>	56000	</maxLoad>
+      <terrainResistance>	0.8 1 2.1	</terrainResistance>
+      <brakeForce>	53000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.68	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.588	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.477716	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.363584	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.422609	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.477716	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.363584	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.422609	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.985684 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2942 1.90928	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.678580 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.478530 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.255260	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Panther_II_2_IGR>
+  </chassis>
+  <turrets0>
+    <Turret_2_Panther_II_IGR>
+      <userString>	#igr_vehicles:Turret_2_Panther_II_IGR	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	28550	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	60	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	120	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+        <armor_10>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_10>
+        <armor_11>	40	</armor_11>
+        <armor_12>	120	</armor_12>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
+      <weight>	7745	</weight>
+      <maxHealth>	380	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	1.122	</invisibilityFactor>
+      <guns>
+        <_88mm_KwK_43_L71_IGR>	shared	  <maxAmmo>	60	</maxAmmo>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <reloadTime>	7.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.7	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.353005 8 0.416667 2 0.583333 2 0.646995 8 1 8	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0245146 0.064394 4.80157	</rayStart>
+              <rayEnd>	0.397507 -0.0661117 4.79005	</rayEnd>
+              <rayUp>	0.068 0.063 2	</rayUp>
+              <size>	0.416	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_88mm_KwK_43_L71_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G64_Panther_II/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G64_Panther_II/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G64_Panther_II/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G64_Panther_II/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G64_Panther_II/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.345903 1.12506	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.951358 0.338818 0.676145	</rayStart>
+          <rayEnd>	-0.670813 0.211839 0.589139	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.951358 0.338818 0.676145	</rayStart>
+          <rayEnd>	0.670813 0.211839 0.589139	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.19004 0.324571 0.0546305	</rayStart>
+          <rayEnd>	-0.83608 0.17145 -0.0515105	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.84	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.19004 0.324571 0.0546305	</rayStart>
+          <rayEnd>	0.83608 0.17145 -0.0515105	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.84	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.909 -0.149 1.000 0.000 0.646 0.011 0.912 0.275 0.377 0.500 0.289 0.500 0.143 0.983 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <exclusionMask>	vehicles/german/G64_Panther_II/Panther_II_CM.dds	</exclusionMask>
+        <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Panther_II_IGR>
+  </turrets0>
+  <engines>
+    <Maybach_HL_230_TRM_P30_IGR>	shared	</Maybach_HL_230_TRM_P30_IGR>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <FuG12_IGR>	shared	</FuG12_IGR>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Panther_II_2_IGR>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Panther_II_2_IGR>
+    </chassis>
+    <engines>
+      <Maybach_HL_230_TRM_P30_IGR>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230_TRM_P30_IGR>
+    </engines>
+    <armour>	1.02451236	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g64_panther_ii_igr.xml>

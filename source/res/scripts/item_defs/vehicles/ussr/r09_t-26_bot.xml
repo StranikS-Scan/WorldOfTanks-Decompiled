@@ -1,0 +1,352 @@
+<r09_t-26_bot.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner>	loader	</gunner>
+  </crew>
+  <speedLimits>
+    <forward>	36	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.184	</moving>
+    <still>	0.245	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.368	</firePenalty>
+  </invisibility>
+  <repairCost>	2.35	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R09_T-26/T-26_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	15	</armor_1>
+      <armor_2>	15	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	15	</armor_4>
+      <armor_5>	7	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_8>	6	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	10	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	5700	</weight>
+    <maxHealth>	120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	75	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R09_T-26/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R09_T-26/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R09_T-26/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 32.00 0.38 1.00 0.06 0.34	</pitchParams>
+      <rollParams>	1.00 0.30 32.00 0.38 1.00 0.06 0.34	</rollParams>
+      <sensitivityToImpulse>	0.78	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.144989 0.524156 0.053718	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R09_T-26/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R09_T-26/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.488748 0.204127 1.68237	</rayStart>
+        <rayEnd>	0.488749 -0.189386 1.61062	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.0399 0.348562 0.0537052	</rayStart>
+        <rayEnd>	0.639895 0.348562 0.0537052	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-0.45264 0.358762 0.917125	</rayStart>
+        <rayEnd>	-0.459776 0.339894 0.51763	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R09_T-26/T-26_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <T-26_bot>
+      <userString>	#ussr_vehicles:T-26_bot	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	340.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	1880	</weight>
+      <maxLoad>	10200	</maxLoad>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <brakeForce>	33000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R09_T-26/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R09_T-26/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R09_T-26/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.32 0.28	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.161131	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.161131	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.352125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.141942	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.31833	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.352125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.141942	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.31833	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.978368 -0.10165	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R09_T-26/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R09_T-26/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.02922 1.36129	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.296850 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.467550 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.172900	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </T-26_bot>
+  </chassis>
+  <turrets0>
+    <T-26_cylindrical_bot>
+      <userString>	#ussr_vehicles:T-26_cylindrical_bot	</userString>
+      <shortUserString>	#ussr_vehicles:T-26_cylindrical_bot_short	</shortUserString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	670.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	30	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	15	</armor_3>
+        <armor_4>	15	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	10	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	850	</weight>
+      <maxHealth>	30	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	40	</maxHealth>
+        <maxRegenHealth>	20	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_B-3_bot>	shared	  <maxAmmo>	160	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R09_T-26/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R09_T-26/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R09_T-26/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R09_T-26/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R09_T-26/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_37mm_B-3_bot>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R09_T-26/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R09_T-26/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R09_T-26/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R09_T-26/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R09_T-26/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.015381 0.369662 0.616633	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.675176 0.439617 -0.763186	</rayStart>
+          <rayEnd>	-0.290207 0.439617 -0.654566	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.675176 0.439617 -0.763186	</rayStart>
+          <rayEnd>	0.290207 0.439617 -0.654566	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.939 -0.059 1.000 0.000 0.523 0.139 0.803 0.600 0.407 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 0.745 0.000000 0.000000	</tiling>
+      </camouflage>
+    </T-26_cylindrical_bot>
+  </turrets0>
+  <engines>
+    <T-26_bot>	shared	</T-26_bot>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <_71-TK-1_bot>	shared	</_71-TK-1_bot>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T-26_bot>
+        <alpha>	0.1127	</alpha>
+      </T-26_bot>
+    </chassis>
+    <engines>
+      <T-26_bot>
+        <bravo>	23.78883	</bravo>
+      </T-26_bot>
+    </engines>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r09_t-26_bot.xml>

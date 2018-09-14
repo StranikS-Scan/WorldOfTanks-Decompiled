@@ -177,14 +177,3 @@ class InternalRepresenter(object):
 
         clazz.__repr__ = __repr__
         return clazz
-
-
-def next_tick(func):
-    """
-    Moves function calling to the next frame
-    """
-
-    def wrapper(*args, **kwargs):
-        BigWorld.callback(0.01, lambda : func(*args, **kwargs))
-
-    return wrapper

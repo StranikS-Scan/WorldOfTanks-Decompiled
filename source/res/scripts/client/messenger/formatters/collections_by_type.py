@@ -39,9 +39,11 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.refSystemReferralContributedXP.index(): _sc.RefSystemReferralContributedXPFormatter(),
  _SM_TYPE.potapovQuestBonus.index(): _sc.PotapovQuestsFormatter(),
  _SM_TYPE.goodieRemoved.index(): _sc.GoodieRemovedFormatter(),
+ _SM_TYPE.goodieDisabled.index(): _sc.GoodieDisabledFormatter(),
  _SM_TYPE.telecomOrderCreated.index(): _sc.TelecomReceivedInvoiceFormatter(),
  _SM_TYPE.telecomOrderUpdated.index(): _sc.TelecomStatusFormatter(),
- _SM_TYPE.telecomOrderDeleted.index(): _sc.TelecomRemovedInvoiceFormatter()}
+ _SM_TYPE.telecomOrderDeleted.index(): _sc.TelecomRemovedInvoiceFormatter(),
+ _SM_TYPE.prbVehicleKick.index(): _sc.PrbVehicleKickFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

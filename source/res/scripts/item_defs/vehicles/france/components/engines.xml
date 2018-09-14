@@ -56,12 +56,12 @@
     <SOFAM_12GSds_A>	67	</SOFAM_12GSds_A>
     <Hispano-Suiza_HS110_A>	68	</Hispano-Suiza_HS110_A>
     <Berliet_MDPA>	69	</Berliet_MDPA>
-    <Berliet_ACRO>	70	</Berliet_ACRO>
     <Berliet_Ricardo>	71	</Berliet_Ricardo>
     <Maybach_HL_295_F_fallout>	72	</Maybach_HL_295_F_fallout>
     <Cummins_VT8-460>	73	</Cummins_VT8-460>
     <Renault_bot>	75	</Renault_bot>
     <Moteur_moderne_3M_27_1_01>	76	</Moteur_moderne_3M_27_1_01>
+    <Maybach_HL_230_F>	79	</Maybach_HL_230_F>
     <Maybach_HL_295_IGR>	60001	</Maybach_HL_295_IGR>
     <Detroit_Diesel_6V53T-S_IGR>	60002	</Detroit_Diesel_6V53T-S_IGR>
     <Renault_A_IGR>	60003	</Renault_A_IGR>
@@ -75,9 +75,7 @@
       <tags>	gasoline	</tags>
       <level>	4	</level>
       <price>	10420	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	220	</power>
       <weight>	400	</weight>
@@ -93,9 +91,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	16100	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	260	</power>
       <weight>	400	</weight>
@@ -111,9 +107,7 @@
       <tags>	gasoline	</tags>
       <level>	4	</level>
       <price>	13000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	350	</power>
       <weight>	540	</weight>
@@ -129,9 +123,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	21400	</price>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	400	</power>
       <weight>	750	</weight>
@@ -147,9 +139,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	22300	</price>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	450	</power>
       <weight>	750	</weight>
@@ -165,9 +155,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	16000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	250	</power>
       <weight>	400	</weight>
@@ -184,9 +172,7 @@
       <level>	5	</level>
       <price>	16000	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	250	</power>
       <weight>	400	</weight>
@@ -202,9 +188,7 @@
       <tags>	diesel	</tags>
       <level>	6	</level>
       <price>	27000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	280	</power>
       <weight>	400	</weight>
@@ -221,8 +205,6 @@
       <tags>	diesel	</tags>
       <level>	7	</level>
       <price>	37000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	300	</power>
@@ -240,8 +222,6 @@
       <tags>	diesel	</tags>
       <level>	7	</level>
       <price>	39740	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	350	</power>
@@ -259,9 +239,7 @@
       <level>	10	</level>
       <price>	94250	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	720	</power>
       <weight>	1426	</weight>
@@ -277,9 +255,7 @@
       <tags>	diesel	</tags>
       <level>	10	</level>
       <price>	94250	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	720	</power>
       <weight>	1426	</weight>
@@ -295,9 +271,7 @@
       <tags>	gasoline	</tags>
       <level>	9	</level>
       <price>	86050	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	720	</power>
       <weight>	2100	</weight>
@@ -314,9 +288,7 @@
       <level>	9	</level>
       <price>	86050	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	680	</power>
       <weight>	2100	</weight>
@@ -332,9 +304,7 @@
       <tags>	gasoline	</tags>
       <level>	2	</level>
       <price>	700	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	150	</power>
       <weight>	540	</weight>
@@ -350,9 +320,7 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	3500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	180	</power>
       <weight>	540	</weight>
@@ -369,9 +337,7 @@
       <tags>	gasoline	</tags>
       <level>	4	</level>
       <price>	10000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	307	</power>
       <weight>	540	</weight>
@@ -388,9 +354,7 @@
       <level>	1	</level>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	39	</power>
       <weight>	266	</weight>
@@ -406,9 +370,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	0	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	39	</power>
       <weight>	266	</weight>
@@ -424,9 +386,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	300	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	45	</power>
       <weight>	266	</weight>
@@ -442,9 +402,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	330	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	100	</power>
       <weight>	266	</weight>
@@ -460,9 +418,7 @@
       <tags>	gasoline	</tags>
       <level>	2	</level>
       <price>	5000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	48	</power>
       <weight>	400	</weight>
@@ -478,9 +434,7 @@
       <tags>	gasoline	</tags>
       <level>	4	</level>
       <price>	11120	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	350	</power>
       <weight>	540	</weight>
@@ -496,9 +450,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	400	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	75	</power>
       <weight>	266	</weight>
@@ -514,9 +466,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	310	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	65	</power>
       <weight>	266	</weight>
@@ -532,9 +482,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	350	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	74	</power>
       <weight>	266	</weight>
@@ -550,9 +498,7 @@
       <tags>	gasoline	</tags>
       <level>	2	</level>
       <price>	480	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	82	</power>
       <weight>	266	</weight>
@@ -569,9 +515,7 @@
       <level>	4	</level>
       <price>	10000	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	307	</power>
       <weight>	540	</weight>
@@ -587,9 +531,7 @@
       <tags>	diesel	</tags>
       <level>	1	</level>
       <price>	1500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	38	</power>
       <weight>	300	</weight>
@@ -606,9 +548,7 @@
       <level>	1	</level>
       <notInShop>	true	</notInShop>
       <price>	1500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	91	</power>
       <weight>	200	</weight>
@@ -624,9 +564,7 @@
       <tags>	diesel	</tags>
       <level>	1	</level>
       <price>	500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	91	</power>
       <weight>	200	</weight>
@@ -637,33 +575,12 @@
       <rpm_min>	359	</rpm_min>
       <rpm_max>	1981	</rpm_max>
     </Berliet_MDPA>
-    <Berliet_ACRO>
-      <userString>	#france_vehicles:Berliet_ACRO	</userString>
-      <tags>	diesel	</tags>
-      <level>	2	</level>
-      <price>	690	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
-      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
-      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	95	</power>
-      <weight>	200	</weight>
-      <maxHealth>	44	</maxHealth>
-      <maxRegenHealth>	22	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	357	</rpm_min>
-      <rpm_max>	1984	</rpm_max>
-    </Berliet_ACRO>
     <Berliet_Ricardo>
       <userString>	#france_vehicles:Berliet_Ricardo	</userString>
       <tags>	diesel	</tags>
       <level>	2	</level>
       <price>	720	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	105	</power>
       <weight>	200	</weight>
@@ -680,9 +597,7 @@
       <tags>	gasoline	</tags>
       <level>	8	</level>
       <price>	55000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	750	</power>
       <weight>	750	</weight>
@@ -698,9 +613,7 @@
       <tags>	gasoline	</tags>
       <level>	6	</level>
       <price>	26000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	575	</power>
       <weight>	700	</weight>
@@ -711,15 +624,30 @@
       <rpm_min>	265	</rpm_min>
       <rpm_max>	2951	</rpm_max>
     </Maybach_HL_230>
+    <Maybach_HL_230_F>
+      <userString>	#france_vehicles:Maybach_HL_230_F	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	26800	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	575	</power>
+      <weight>	700	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	265	</rpm_min>
+      <rpm_max>	2951	</rpm_max>
+    </Maybach_HL_230_F>
     <Maybach_HL_234P45>
       <userString>	#france_vehicles:Maybach_HL_234P45	</userString>
       <shortUserString>	#france_vehicles:Maybach_HL_234P45_short	</shortUserString>
       <tags>	gasoline	</tags>
       <level>	9	</level>
       <price>	98730	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	750	</weight>
@@ -737,9 +665,7 @@
       <level>	9	</level>
       <price>	98730	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	750	</weight>
@@ -756,9 +682,8 @@
       <tags>	gasoline	</tags>
       <level>	10	</level>
       <price>	125000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
+      <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	980	</power>
       <weight>	750	</weight>
@@ -774,9 +699,7 @@
       <tags>	diesel	</tags>
       <level>	2	</level>
       <price>	750	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	150	</power>
       <weight>	540	</weight>
@@ -792,9 +715,7 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	4500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	190	</power>
       <weight>	540	</weight>
@@ -811,9 +732,7 @@
       <level>	1	</level>
       <price>	350	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	70	</power>
       <weight>	266	</weight>
@@ -829,9 +748,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	370	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	75	</power>
       <weight>	266	</weight>
@@ -847,9 +764,7 @@
       <tags>	gasoline	</tags>
       <level>	1	</level>
       <price>	450	</price>
-      <soundPC>	/vehicles/tanks_pc/light/MC-1	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/MC-1	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	90	</power>
       <weight>	266	</weight>
@@ -865,9 +780,7 @@
       <tags>	gasoline	</tags>
       <level>	9	</level>
       <price>	78000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	750	</weight>
@@ -883,9 +796,7 @@
       <tags>	diesel	</tags>
       <level>	9	</level>
       <price>	99800	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	1000	</power>
       <weight>	750	</weight>
@@ -901,9 +812,7 @@
       <tags>	diesel	</tags>
       <level>	3	</level>
       <price>	4500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	160	</power>
       <weight>	600	</weight>
@@ -919,9 +828,7 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	5100	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	200	</power>
       <weight>	340	</weight>
@@ -937,9 +844,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	20000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	250	</power>
       <weight>	400	</weight>
@@ -956,9 +861,7 @@
       <level>	10	</level>
       <notInShop>	true	</notInShop>
       <price>	123000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1200	</power>
       <weight>	750	</weight>
@@ -975,9 +878,7 @@
       <level>	10	</level>
       <notInShop>	true	</notInShop>
       <price>	123000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1200	</power>
       <weight>	750	</weight>
@@ -994,9 +895,7 @@
       <level>	10	</level>
       <notInShop>	true	</notInShop>
       <price>	123000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	1200	</power>
       <weight>	750	</weight>
@@ -1012,9 +911,7 @@
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	4500	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	190	</power>
       <weight>	540	</weight>
@@ -1030,9 +927,7 @@
       <tags>	diesel	</tags>
       <level>	4	</level>
       <price>	9800	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	219	</power>
       <weight>	400	</weight>
@@ -1048,9 +943,7 @@
       <tags>	gasoline	</tags>
       <level>	5	</level>
       <price>	16000	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	230	</power>
       <weight>	540	</weight>
@@ -1066,9 +959,7 @@
       <tags>	gasoline	</tags>
       <level>	4	</level>
       <price>	700	</price>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
       <power>	150	</power>
       <weight>	340	</weight>
@@ -1085,9 +976,7 @@
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	35500	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	650	</power>
       <weight>	850	</weight>
@@ -1104,9 +993,7 @@
       <tags>	gasoline	</tags>
       <level>	8	</level>
       <price>	54000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	700	</power>
       <weight>	1200	</weight>
@@ -1123,9 +1010,7 @@
       <tags>	gasoline	</tags>
       <level>	9	</level>
       <price>	80000	</price>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	1200	</weight>
@@ -1141,9 +1026,7 @@
       <tags>	gasoline	</tags>
       <level>	8	</level>
       <price>	59000	</price>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	770	</power>
       <weight>	839	</weight>
@@ -1160,9 +1043,7 @@
       <tags>	gasoline	</tags>
       <level>	10	</level>
       <price>	100000	</price>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	810	</power>
       <weight>	1171	</weight>
@@ -1179,9 +1060,7 @@
       <level>	5	</level>
       <price>	13500	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/medium/tiger	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/medium/tiger	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	460	</power>
       <weight>	1656	</weight>
@@ -1196,18 +1075,15 @@
       <userString>	#france_vehicles:Moteur_moderne_3M_27_1_01	</userString>
       <shortUserString>	#france_vehicles:Moteur_moderne_3M_27_1_01_short	</shortUserString>
       <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	40000	</price>
-      <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
+      <level>	6	</level>
+      <price>	24600	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	635	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
@@ -1218,9 +1094,7 @@
       <level>	9	</level>
       <price>	78000	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	850	</power>
       <weight>	750	</weight>
@@ -1238,8 +1112,6 @@
       <level>	7	</level>
       <price>	39740	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
       <power>	350	</power>
@@ -1257,9 +1129,7 @@
       <level>	4	</level>
       <price>	10000	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	307	</power>
       <weight>	540	</weight>
@@ -1276,9 +1146,7 @@
       <level>	5	</level>
       <price>	16100	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/light/PzIII	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/light/PzIII	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	260	</power>
       <weight>	400	</weight>
@@ -1295,9 +1163,7 @@
       <level>	5	</level>
       <price>	16000	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	250	</power>
       <weight>	400	</weight>
@@ -1314,9 +1180,7 @@
       <level>	10	</level>
       <price>	94250	</price>
       <notInShop>	true	</notInShop>
-      <soundPC>	/vehicles/tanks_pc/heavy/IS_2	</soundPC>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/heavy/IS_2	</soundNPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	720	</power>
       <weight>	1426	</weight>

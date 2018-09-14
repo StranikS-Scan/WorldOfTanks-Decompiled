@@ -113,7 +113,6 @@ class FORT_ERROR():
     ORDER_NOT_SUPPORTED = 45
     POSITION_OCCUPIED = 46
     BAD_SORTIE_DIVISION = 47
-    NOT_SUPPORTED = 48
     PERIPHERY_NOT_CONNECTED = 49
     NO_DATA_FOR_ACTIVATING_ORDER = 50
     TOO_FEW_OPEN_DIRS = 51
@@ -160,7 +159,7 @@ class FORT_ERROR():
     CANT_CREATE_CLAN = 92
     CANT_LOOKUP_CLAN = 93
     WRONG_PERIPHERY = 94
-    FORT_BATTLES_DISABLED = 95
+    FORT_DISABLED = 95
     TOO_MANY_DEFENCES = 96
     CURFEW_HOUR = 97
     LAST_DIR_FOR_DEFENCE = 98
@@ -504,8 +503,11 @@ class BuildingDescr():
         if self.hp >= levelRef.hp and self.level == 0:
             self.level = 1
         storage = max(0, resCount)
-        if self.typeID != FORT_BUILDING_TYPE.MILITARY_BASE or not allowBaseOverflow:
-            storage = min(storage, levelRef.storage)
+        if not allowBaseOverflow:
+            if self.typeID == FORT_BUILDING_TYPE.MILITARY_BASE:
+                storage = min(storage, max(self.storage, levelRef.storage))
+            else:
+                storage = min(storage, levelRef.storage)
         self.storage = storage
         resCount -= storage
         return resCount

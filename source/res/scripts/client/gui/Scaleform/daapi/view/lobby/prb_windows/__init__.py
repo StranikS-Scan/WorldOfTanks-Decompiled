@@ -1,16 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
 from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
-from gui.Scaleform.managers.context_menu import ContextMenuManager
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName
-ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.PREBATTLE_USER, 'gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleUserCMHandler', 'PrebattleUserCMHandler')
+
+def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattleUserCMHandler import PrebattleUserCMHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.PREBATTLE_USER, PrebattleUserCMHandler),)
+
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.prb_windows import invite_windows
@@ -21,7 +24,8 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.prb_windows.CompanyRoomView import CompanyRoomView
     from gui.Scaleform.daapi.view.lobby.SendInvitesWindow import SendInvitesWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.SquadPromoWindow import SquadPromoWindow
-    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import SquadView, FalloutSquadView, EventSquadView
+    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import SquadView, FalloutSquadView
+    from gui.Scaleform.daapi.view.lobby.prb_windows.squad_view import EventSquadView
     from gui.Scaleform.daapi.view.lobby.prb_windows.squad_window import SquadWindow, FalloutSquadWindow, EventSquadWindow
     from gui.Scaleform.daapi.view.lobby.prb_windows.SwitchPeripheryWindow import SwitchPeripheryWindow
     return (GroupedViewSettings(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, SendInvitesWindow, 'sendInvitesWindow.swf', ViewTypes.WINDOW, '', PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ScopeTemplates.DEFAULT_SCOPE, True),

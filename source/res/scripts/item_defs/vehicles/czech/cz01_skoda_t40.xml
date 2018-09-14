@@ -10,6 +10,13 @@
     <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.172	</moving>
+    <still>	0.229	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.344	</firePenalty>
+  </invisibility>
   <repairCost>	4.00	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.781217 0.794371	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/czech/Cz01_Skoda_T40/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/czech/Cz01_Skoda_T40/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz01_Skoda_T40/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -185,13 +193,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.05719 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz01_Skoda_T40/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz01_Skoda_T40/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz01_Skoda_T40/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24002 2.31079	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -391,6 +398,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	6.9	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
@@ -400,7 +408,8 @@
             <exploded>	vehicles/czech/Cz01_Skoda_T40/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz01_Skoda_T40/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz01_Skoda_T40/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz01_Skoda_T40/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -424,7 +433,8 @@
         <exploded>	vehicles/czech/Cz01_Skoda_T40/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz01_Skoda_T40/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz01_Skoda_T40/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz01_Skoda_T40/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.369643 1.12886	</gunPosition>
       <emblemSlots>
@@ -459,9 +469,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.003 -0.005 1.099 0.000 0.501 0.127 0.636 0.484 0.378 0.500 0.308 0.500 0.178 0.500 0.000	</physicsShape>
       <camouflage>
         <tiling>	1 1 0.72 0.3	</tiling>
@@ -477,6 +485,19 @@
   <radios>
     <Fu7A>	shared	</Fu7A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Cz01_Skoda_T40>
+        <alpha>	0.07245	</alpha>
+      </Chassis_Cz01_Skoda_T40>
+    </chassis>
+    <engines>
+      <Skoda_16_ADH_140>
+        <bravo>	185.0242	</bravo>
+      </Skoda_16_ADH_140>
+    </engines>
+    <armour>	0.752201376	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

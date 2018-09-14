@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/states.py
 import BigWorld
+from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.utils.decorators import ReprInjector
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
@@ -50,21 +51,21 @@ class IGlobalState(object):
 class StartState(IGlobalState):
 
     def goNext(self, ctx):
-        spaceID = ctx.guiSpace
+        spaceID = ctx.guiSpaceID
         if spaceID == _SPACE_ID.UNDEFINED:
             if _isBattleReplayAutoStart():
                 return None
             elif isShowStartupVideo():
-                ctx.guiSpace = _SPACE_ID.INTRO_VIDEO
+                ctx.guiSpaceID = _SPACE_ID.INTRO_VIDEO
                 return IntroVideoState()
             else:
-                ctx.guiSpace = _SPACE_ID.LOGIN
+                ctx.guiSpaceID = _SPACE_ID.LOGIN
                 return LoginState()
         else:
             if spaceID == _SPACE_ID.LOGIN:
                 return LoginState()
-            if spaceID in _SPACE_ID.BATTLE_LOADING_IDS:
-                return _createBattleLoadingState(spaceID)
+            if spaceID == _SPACE_ID.BATTLE_LOADING:
+                return _createBattleLoadingState(ctx)
             LOG_ERROR('State can not be switched', self, ctx)
         return None
 
@@ -80,7 +81,7 @@ class IntroVideoState(IGlobalState):
             appFactory.goToIntroVideo(appNS)
 
     def goNext(self, ctx):
-        ctx.guiSpace = _SPACE_ID.LOGIN
+        ctx.guiSpaceID = _SPACE_ID.LOGIN
         return LoginState()
 
 
@@ -118,23 +119,21 @@ class LoginState(IGlobalState):
         self._showDsnDialogIfNeed(appFactory, appNS)
 
     def goNext(self, ctx):
-        spaceID = ctx.guiSpace
-        if spaceID == self.getSpaceID():
-            return None
-        elif not ctx.isConnected() and not _isBattleReplayPlaying():
-            ctx.guiSpace = _SPACE_ID.LOGIN
+        spaceID = ctx.guiSpaceID
+        if not ctx.isConnected() and not _isBattleReplayPlaying():
+            ctx.guiSpaceID = _SPACE_ID.LOGIN
             LOG_WARNING('Can not change GUI space to other, because client is not connected to game server.', ctx)
             return None
         elif spaceID == _SPACE_ID.LOBBY:
             return LobbyState()
-        elif spaceID in _SPACE_ID.BATTLE_LOADING_IDS:
-            return _createBattleLoadingState(spaceID)
+        elif spaceID == _SPACE_ID.BATTLE_LOADING:
+            return _createBattleLoadingState(ctx)
         else:
             LOG_ERROR('State can not be switched', self, ctx)
             return None
 
     def _updateDscDesc(self, ctx):
-        if ctx.dsnReason in (_REASON.EVENT, _REASON.KICK):
+        if ctx.dsnReason in (_REASON.EVENT, _REASON.KICK, _REASON.ERROR):
             self._dsnDesc = ctx.dsnDesc
 
     def _showDsnDialogIfNeed(self, appFactory, appNS):
@@ -142,7 +141,8 @@ class LoginState(IGlobalState):
             appFactory.showDisconnectDialog(appNS, self._dsnDesc)
         return
 
-    def _clearEntitiesAndSpaces(self):
+    @staticmethod
+    def _clearEntitiesAndSpaces():
         from gui.shared.utils.HangarSpace import g_hangarSpace
         keepClientOnlySpaces = False
         if g_hangarSpace is not None and g_hangarSpace.inited:
@@ -155,19 +155,19 @@ class ConnectionState(IGlobalState):
 
     def goNext(self, ctx):
         if not ctx.isConnected() and not _isBattleReplayPlaying():
-            ctx.guiSpace = _SPACE_ID.LOGIN
-        spaceID = ctx.guiSpace
+            ctx.guiSpaceID = _SPACE_ID.LOGIN
+        spaceID = ctx.guiSpaceID
         newState = None
         if spaceID != self.getSpaceID():
             if spaceID == _SPACE_ID.LOGIN:
                 newState = LoginState()
             else:
-                newState = self._getNextState(spaceID)
+                newState = self._getNextState(ctx)
                 if not newState:
                     LOG_ERROR('State can not be switched', self, ctx)
         return newState
 
-    def _getNextState(self, spaceID):
+    def _getNextState(self, ctx):
         return None
 
 
@@ -177,8 +177,8 @@ class WaitingState(ConnectionState):
     def getSpaceID(self):
         return _SPACE_ID.WAITING
 
-    def _getNextState(self, spaceID):
-        if spaceID == _SPACE_ID.LOBBY:
+    def _getNextState(self, ctx):
+        if ctx.guiSpaceID == _SPACE_ID.LOBBY:
             newState = LobbyState()
         else:
             newState = None
@@ -196,43 +196,35 @@ class LobbyState(ConnectionState):
             appFactory.attachCursor(appNS)
             appFactory.goToLobby(appNS)
 
-    def _getNextState(self, spaceID):
+    def _getNextState(self, ctx):
         newState = None
-        return _createBattleLoadingState(spaceID) if spaceID in _SPACE_ID.BATTLE_LOADING_IDS else newState
+        return _createBattleLoadingState(ctx) if ctx.guiSpaceID == _SPACE_ID.BATTLE_LOADING else newState
 
 
 @ReprInjector.simple()
 class BattleLoadingState(ConnectionState):
-    __slots__ = ('_spaceID', '_destroyLobby')
+    __slots__ = ('_arenaGuiType', '_destroyLobby')
 
-    def __init__(self, spaceID=None):
+    def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         super(BattleLoadingState, self).__init__()
+        self._arenaGuiType = arenaGuiType
         self._destroyLobby = True
-        self._spaceID = spaceID
-
-    def getSpaceID(self):
-        return _SPACE_ID.BATTLE_LOADING
 
     def fini(self, ctx):
         super(BattleLoadingState, self).fini(ctx)
-        self._destroyLobby = ctx.guiSpace == _SPACE_ID.BATTLE
+        self._destroyLobby = ctx.guiSpaceID == _SPACE_ID.BATTLE
 
     def showGUI(self, appFactory, appNS, appState):
         if appState == _STATE_ID.INITIALIZED:
             appFactory.detachCursor(appNS)
-            if self._spaceID is None:
-                return
-            if self._spaceID == _SPACE_ID.FALLOUT_MULTI_TEAM_LOADING:
-                appFactory.goToFalloutMultiTeamLoading(appNS)
-            else:
-                appFactory.goToBattleLoading(appNS)
-        return
+            appFactory.goToBattleLoading(appNS, self._arenaGuiType)
 
     def hideGUI(self, appFactory):
         if self._destroyLobby:
             appFactory.destroyLobby()
 
-    def _getNextState(self, spaceID):
+    def _getNextState(self, ctx):
+        spaceID = ctx.guiSpaceID
         newState = None
         if spaceID == _SPACE_ID.BATTLE:
             newState = self._createBattleState()
@@ -241,19 +233,7 @@ class BattleLoadingState(ConnectionState):
         return newState
 
     def _createBattleState(self):
-        return BattleState()
-
-
-@ReprInjector.simple()
-class BattleTutorialLoadingState(BattleLoadingState):
-
-    def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED:
-            appFactory.detachCursor(appNS)
-            appFactory.goToTutorialLoading(appNS)
-
-    def _createBattleState(self):
-        return BattleTutorialState()
+        return BattleState(self._arenaGuiType)
 
 
 @ReprInjector.simple()
@@ -263,105 +243,40 @@ class ReplayLoadingState(BattleLoadingState):
         appFactory.hideLobby()
 
     def _createBattleState(self):
-        return ReplayBattleState()
+        return ReplayBattleState(self._arenaGuiType)
 
 
-def _createBattleLoadingState(spaceID):
-    if spaceID == _SPACE_ID.BATTLE_TUT_LOADING:
-        return BattleTutorialLoadingState(spaceID)
-    elif _isBattleReplayPlaying():
-        return ReplayLoadingState(spaceID)
+def _createBattleLoadingState(ctx):
+    if _isBattleReplayPlaying():
+        return ReplayLoadingState(ctx.arenaGuiType)
     else:
-        return BattleLoadingState(spaceID)
+        return BattleLoadingState(ctx.arenaGuiType)
 
 
 @ReprInjector.simple()
-class AbstractBattleState(ConnectionState):
+class BattleState(ConnectionState):
+
+    def __init__(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+        super(BattleState, self).__init__()
+        self._arenaGuiType = arenaGuiType
 
     def getSpaceID(self):
         return _SPACE_ID.BATTLE
 
     def showGUI(self, appFactory, appNS, appState):
-        raise NotImplementedError
+        if appState == _STATE_ID.INITIALIZED:
+            appFactory.goToBattle(appNS, self._arenaGuiType)
 
     def hideGUI(self, appFactory):
-        raise NotImplementedError
+        appFactory.createLobby()
+        appFactory.destroyBattle()
 
-    def _getNextState(self, spaceID):
-        if spaceID == _SPACE_ID.WAITING:
+    def _getNextState(self, ctx):
+        if ctx.guiSpaceID == _SPACE_ID.WAITING:
             newState = WaitingState()
         else:
             newState = None
         return newState
-
-
-@ReprInjector.simple()
-class BattleState(AbstractBattleState):
-
-    def __init__(self):
-        super(BattleState, self).__init__()
-        self._isInvokeTutorial = False
-
-    def showGUI(self, appFactory, appNS, appState):
-        if appState == _STATE_ID.INITIALIZED and not self._isInvokeTutorial:
-            try:
-                from tutorial import loader
-                if loader.g_loader:
-                    settingsID = 'BATTLE_QUESTS'
-                    if loader.g_loader.areSettingsEnabled(settingsID):
-                        loader.g_loader.run(settingsID)
-                        self._isInvokeTutorial = True
-            except ImportError:
-                LOG_ERROR('Module tutorial not found')
-
-        if appState == _STATE_ID.INITIALIZED:
-            appFactory.goToBattle(appNS)
-
-    def hideGUI(self, appFactory):
-        if self._isInvokeTutorial:
-            try:
-                from tutorial import loader
-                if loader.g_loader:
-                    loader.g_loader.stop(restore=False)
-            except (ImportError, AttributeError):
-                LOG_ERROR('Module tutorial not found')
-
-        appFactory.createLobby()
-        appFactory.destroyBattle()
-
-
-@ReprInjector.simple()
-class BattleTutorialState(AbstractBattleState):
-
-    def __init__(self):
-        super(BattleTutorialState, self).__init__()
-        self._isInvokeTutorial = False
-
-    def showGUI(self, appFactory, appNS, appState):
-        if appState in (_STATE_ID.INITIALIZING, _STATE_ID.INITIALIZED) and not self._isInvokeTutorial:
-            try:
-                from tutorial import loader
-                if loader.g_loader:
-                    loader.g_loader.run('BATTLE')
-                    self._isInvokeTutorial = True
-            except (ImportError, AttributeError):
-                self._isInvokeTutorial = False
-                LOG_ERROR('Module tutorial not found')
-
-        if appState == _STATE_ID.INITIALIZED:
-            appFactory.goToBattle(appNS)
-
-    def hideGUI(self, appFactory):
-        if self._isInvokeTutorial:
-            try:
-                from tutorial import loader
-                if loader.g_loader:
-                    loader.g_loader.stop(restore=False)
-            except (ImportError, AttributeError):
-                LOG_ERROR('Module tutorial not found')
-
-        appFactory.createLobby()
-        appFactory.destroyBattle()
 
 
 @ReprInjector.simple()
@@ -371,9 +286,9 @@ class ReplayBattleState(BattleState):
         appFactory.showLobby()
         appFactory.destroyBattle()
 
-    def _getNextState(self, spaceID):
-        if spaceID == _SPACE_ID.WAITING:
-            newState = ReplayLoadingState()
+    def _getNextState(self, ctx):
+        if ctx.guiSpaceID == _SPACE_ID.WAITING:
+            newState = ReplayLoadingState(arenaGuiType=self._arenaGuiType)
         else:
             newState = None
         return newState

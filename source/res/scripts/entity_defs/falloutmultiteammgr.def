@@ -1,0 +1,15 @@
+<falloutmultiteammgr.def>
+  <Parent>	FalloutMgr	</Parent>
+  <Properties></Properties>
+  <BaseMethods>
+    <onJoinFalloutUnit>
+      <Arg>	UINT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </onJoinFalloutUnit>
+    <onCreateFalloutUnit>
+      <Arg>	UINT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </onCreateFalloutUnit>
+  </BaseMethods>
+</falloutmultiteammgr.def>

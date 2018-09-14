@@ -237,7 +237,7 @@ def ladderRatingLocal(cr, division):
 
 
 class CLUB_LIMITS(object):
-    MAX_SHORT_DESC_LENGTH = 60
+    MAX_SHORT_DESC_LENGTH = 120
     MAX_INVITES_PER_CALL = 20
     MAX_PREVIOUS_CLUBS = 5
     MAX_NAME_LENGTH = 32

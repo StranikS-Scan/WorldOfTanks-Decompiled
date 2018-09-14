@@ -5,6 +5,7 @@ from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE
 from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
+from gui.shared.money import Currency
 from shared_utils import CONST_CONTAINER
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
@@ -38,14 +39,24 @@ BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
 
 class Booster(object):
 
-    def __init__(self, boosterID, boosterDescription, boosterValues, activeBoostersValues):
+    def __init__(self, boosterID, boosterDescription, proxy):
+        """
+        Booster instance
+        :param boosterID: booster ID <int>
+        :param boosterDescription: server representation of booster description <NamedGoodieData>
+        :param proxy: poxy which provides inventory values, prices, count, etc <_GoodiesCache>
+        """
         self.boosterID = boosterID
         self.expiryTime = boosterDescription.useby
         self.maxCount = boosterDescription.limit
         self.effectTime = boosterDescription.lifetime
         self.boosterType, self.effectValue, _ = boosterDescription.resource
-        self.__activeBoostersValues = activeBoostersValues
         self.enabled = boosterDescription.enabled
+        self.__activeBoostersValues = proxy.getActiveBoostersTypes()
+        self.buyPrice = proxy.shop.getBoosterPrice(boosterID)
+        self.defaultPrice = proxy.shop.defaults.getBoosterPrice(boosterID)
+        self.isHidden = boosterID in proxy.shop.getHiddenBoosters()
+        boosterValues = proxy.personalGoodies.get(boosterID, None)
         if boosterValues is not None:
             self.state = boosterValues.state
             self.count = boosterValues.count
@@ -135,13 +146,13 @@ class Booster(object):
         return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.finishTime)) if self.finishTime is not None else 0
 
     def getUsageLeftTimeStr(self):
-        return self._getLocalizedTime(self.getUsageLeftTime(), MENU.TIME_TIMEVALUE)
+        return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUE)
 
     def getShortLeftTimeStr(self):
-        return self._getLocalizedTime(self.getUsageLeftTime(), MENU.TIME_TIMEVALUESHORT)
+        return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUESHORT)
 
     def getEffectTimeStr(self):
-        return self._getLocalizedTime(self.effectTime, MENU.TIME_TIMEVALUE)
+        return time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
 
     def getQualityIcon(self):
         return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
@@ -149,8 +160,12 @@ class Booster(object):
     def getExpiryDate(self):
         return BigWorld.wg_getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''
 
-    def _getLocalizedTime(self, seconds, locale):
-        return time_utils.getTillTimeString(seconds, locale)
+    def getExpiryDateStr(self):
+        if self.expiryTime:
+            text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_TIME, tillTime=self.getExpiryDate())
+        else:
+            text = _ms(MENU.BOOSTERSWINDOW_BOOSTERSTABLERENDERER_UNDEFINETIME)
+        return text_styles.standard(text)
 
     def getFormattedValue(self, formatter):
         if self.effectValue > 0:
@@ -158,3 +173,29 @@ class Booster(object):
         else:
             value = '%s%%' % self.effectValue
         return formatter(value)
+
+    def getBuyPriceCurrency(self):
+        """
+        :return: currency <str>
+        """
+        return Currency.GOLD if self.buyPrice.gold else Currency.CREDITS
+
+    def mayPurchase(self, money):
+        """
+        Booster can be purchased.
+        if center is not available, than disables purchase.
+        :param money: player money
+        :return: (can be installed <bool>, error msg <str>)
+        """
+        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
+            return (False, 'center_unavailable')
+        if self.isHidden:
+            return (False, 'isHidden')
+        price = self.buyPrice
+        if not price:
+            return (False, 'noPrice')
+        shortage = money.getShortage(price)
+        if shortage:
+            currency, _ = shortage.pop()
+            return (False, '%s_error' % currency)
+        return (True, '')

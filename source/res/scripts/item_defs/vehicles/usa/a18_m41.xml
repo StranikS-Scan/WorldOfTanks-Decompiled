@@ -10,6 +10,13 @@
     <forward>	56.3	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.142	</moving>
+    <still>	0.284	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.426	</firePenalty>
+  </invisibility>
   <repairCost>	6.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.000030 0.449889 -1.10481	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A18_M41/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A18_M41/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A18_M41/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -220,13 +228,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.026 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A18_M41/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.25037 1.66276	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -490,13 +497,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.026 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A18_M41/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A18_M41/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.25037 1.66276	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -695,6 +701,7 @@
           </armor>
           <shotDispersionRadius>	0.82	</shotDispersionRadius>
           <aimingTime>	7	</aimingTime>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.5	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -707,7 +714,8 @@
             <exploded>	vehicles/american/A18_M41/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A18_M41/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A18_M41/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A18_M41/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -730,15 +738,14 @@
         <exploded>	vehicles/american/A18_M41/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A18_M41/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A18_M41/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A18_M41/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000031 0.5339 -0.584602	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	2.000 0.000 0.966 -0.011 1.268 0.045 0.550 0.299 0.131 0.500 0.257 0.500 0.159 0.000 0.581	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_02	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
       </camouflage>
@@ -770,6 +777,25 @@
     </SCR_610>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T72>
+        <alpha>	0.12075	</alpha>
+      </T72>
+      <T72E1>
+        <alpha>	0.12075	</alpha>
+      </T72E1>
+    </chassis>
+    <engines>
+      <Continental_W-670>
+        <bravo>	69.25191	</bravo>
+      </Continental_W-670>
+      <Twin_Cadillac_series_44T4>
+        <bravo>	78.23881	</bravo>
+      </Twin_Cadillac_series_44T4>
+    </engines>
+    <armour>	0.689806225	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

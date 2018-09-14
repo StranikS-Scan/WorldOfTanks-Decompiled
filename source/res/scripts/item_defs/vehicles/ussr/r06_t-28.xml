@@ -11,6 +11,13 @@
     <forward>	45	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.153	</moving>
+    <still>	0.204	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.306	</firePenalty>
+  </invisibility>
   <repairCost>	3.80	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -57,7 +64,8 @@
       <turret>	0.000000 0.714107 0.66577	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R06_T-28/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R06_T-28/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -197,13 +205,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.1442 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R06_T-28/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R06_T-28/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.23882 2.5897	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -467,13 +474,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.1442 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R06_T-28/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R06_T-28/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.23882 2.5897	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -709,13 +715,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.353005 6 0.416667 3 0.583333 3 0.646995 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_76mm_KT-28>
         <_57mm_ZiS-8>	shared	  <maxAmmo>	78	</maxAmmo>
@@ -748,13 +756,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
@@ -792,13 +802,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.339116 6 0.402778 2 0.597222 2 0.660884 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
@@ -834,13 +846,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.319671 6 0.383333 -2 0.616667 -2 0.680329 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.54 1.54 0.000000 0.000000	</tiling>
@@ -872,13 +886,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
@@ -891,7 +907,8 @@
         <exploded>	vehicles/russian/R06_T-28/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R06_T-28/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R06_T-28/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.44668 0.83599	</gunPosition>
       <emblemSlots>
@@ -913,9 +930,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.952 0.000 1.000 0.000 0.400 0.326 0.714 0.614 0.542 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
     </T-28_cylindrical>
     <T-28_conic>
       <userString>	#ussr_vehicles:T-28_conic	</userString>
@@ -975,13 +990,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.353005 6 0.416667 3 0.583333 3 0.646995 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
         </_76mm_KT-28>
         <_57mm_ZiS-8>	shared	  <maxAmmo>	78	</maxAmmo>
@@ -1005,13 +1022,15 @@
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	2.9	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_09.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
@@ -1040,13 +1059,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.339116 6 0.402778 2 0.597222 2 0.660884 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
         </_76mm_L-10>
         <_76mm_F-32>	shared	  <maxAmmo>	69	</maxAmmo>
@@ -1074,13 +1095,15 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 0.319671 6 0.383333 -2 0.616667 -2 0.680329 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_08.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
         </_76mm_F-32>
         <_57mm_ZiS-4>	shared	  <maxAmmo>	78	</maxAmmo>
@@ -1104,13 +1127,15 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_10.model	</destroyed>
             <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_10.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R06_T-28/collision/Gun_10.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_10.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
@@ -1123,7 +1148,8 @@
         <exploded>	vehicles/russian/R06_T-28/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R06_T-28/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R06_T-28/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.44668 0.83599	</gunPosition>
       <emblemSlots>
@@ -1145,9 +1171,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.958 -0.042 1.000 0.000 0.411 0.326 0.754 0.632 0.444 0.500 0.241 0.500 0.106 0.743 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1181,6 +1205,28 @@
     </_71-TK-3>
     <_10R>	shared	</_10R>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T-28_0>
+        <alpha>	0.12075	</alpha>
+      </T-28_0>
+      <T-28_A>
+        <alpha>	0.10465	</alpha>
+      </T-28_A>
+    </chassis>
+    <engines>
+      <M-5-400>
+        <bravo>	105.7281	</bravo>
+      </M-5-400>
+      <M-17T>
+        <bravo>	118.9441	</bravo>
+      </M-17T>
+      <M-17F>
+        <bravo>	132.1601	</bravo>
+      </M-17F>
+    </engines>
+    <armour>	0.843833809	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

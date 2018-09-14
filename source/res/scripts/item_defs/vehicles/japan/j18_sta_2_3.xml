@@ -9,6 +9,13 @@
     <forward>	45	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.18	</moving>
+    <still>	0.24	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.36	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.637904 0.517864	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J18_STA_2_3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J18_STA_2_3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J18_STA_2_3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -188,7 +196,8 @@
       </effects>
       <hullPosition>	0.000000 0.963481 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J18_STA_2_3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J18_STA_2_3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J18_STA_2_3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.21092 1.90663	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -328,9 +337,7 @@
           <offset>	-0.097	</offset>
         </node>
       </trackNodes>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <AODecals>
         <decal>
@@ -397,16 +404,17 @@
             </armor_5>
             <gun>	35	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 10 0.416667 10 0.438889 3 0.561111 3 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	7.1	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -415,7 +423,8 @@
             <exploded>	vehicles/japan/J18_STA_2_3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J18_STA_2_3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J18_STA_2_3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J18_STA_2_3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -438,7 +447,8 @@
         <exploded>	vehicles/japan/J18_STA_2_3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J18_STA_2_3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J18_STA_2_3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J18_STA_2_3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.338085 0.939433	</gunPosition>
       <emblemSlots>
@@ -473,9 +483,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.051 -0.055 1.000 0.000 0.645 0.194 0.753 0.645 0.394 0.500 0.240 0.429 0.152 0.417 0.187	</physicsShape>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
@@ -491,6 +499,19 @@
   <radios>
     <JAN-GRC-3Z_1>	shared	</JAN-GRC-3Z_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_STA_2_3>
+        <alpha>	0.07245	</alpha>
+      </Chassis_STA_2_3>
+    </chassis>
+    <engines>
+      <_Mitsubishi_DL10TA>
+        <bravo>	132.1601	</bravo>
+      </_Mitsubishi_DL10TA>
+    </engines>
+    <armour>	0.753559261	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

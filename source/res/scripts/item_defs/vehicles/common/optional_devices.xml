@@ -6,7 +6,6 @@
     <icon>	../maps/icons/artefact/toolbox.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	true	</removable>
-    <vehicleFilter></vehicleFilter>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/repairSpeedFactor	</attribute>
       <factor>	1.25	</factor>
@@ -86,7 +85,6 @@
     <icon>	../maps/icons/artefact/stereoscope.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	true	</removable>
-    <vehicleFilter></vehicleFilter>
     <script>	Stereoscope	  <weight>	50	</weight>
       <activateWhenStillSec>	3.0	</activateWhenStillSec>
       <circularVisionRadiusFactor>	1.25	</circularVisionRadiusFactor>
@@ -99,7 +97,6 @@
     <icon>	../maps/icons/artefact/coatedOptics.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	false	</removable>
-    <vehicleFilter></vehicleFilter>
     <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
       <factor>	1.1	</factor>
     </script>
@@ -111,7 +108,6 @@
     <icon>	../maps/icons/artefact/camouflageNet.png 0 0	</icon>
     <price>	100000	</price>
     <removable>	true	</removable>
-    <vehicleFilter></vehicleFilter>
     <script>	CamouflageNet	  <weight>	100	</weight>
       <activateWhenStillSec>	3.0	</activateWhenStillSec>
     </script>
@@ -495,7 +491,6 @@
     <icon>	../maps/icons/artefact/enhancedAimDrives.png 0 0	</icon>
     <price>	500000	</price>
     <removable>	false	</removable>
-    <vehicleFilter></vehicleFilter>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
       <factor>	0.91	</factor>

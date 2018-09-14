@@ -1,0 +1,39 @@
+<teambase.def>
+  <Implements>
+    <Interface>	ControlPoint	</Interface>
+  </Implements>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+      <Editable>	true	</Editable>
+    </team>
+    <baseID>
+      <Type>	UINT8	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1	</Default>
+      <Editable>	true	</Editable>
+    </baseID>
+    <pointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	1.0	</Default>
+      <Editable>	true	</Editable>
+    </pointsPerSecond>
+    <maxPointsPerSecond>
+      <Type>	FLOAT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	3.0	</Default>
+      <Editable>	true	</Editable>
+    </maxPointsPerSecond>
+    <ownerStopsCapturing>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+      <Default>	0	</Default>
+      <Editable>	true	</Editable>
+    </ownerStopsCapturing>
+  </Properties>
+  <TempProperties>
+    <_TeamBase__p></_TeamBase__p>
+  </TempProperties>
+</teambase.def>

@@ -3,6 +3,12 @@
 
 
 class TOOLTIPS_CONSTANTS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     DEFAULT = 'default'
     TANKMAN = 'tankman'
     CONTACT = 'contact'
@@ -22,6 +28,7 @@ class TOOLTIPS_CONSTANTS(object):
     TECHTREE_MODULE = 'techtreeModule'
     TECH_MAIN_SHELL = 'techMainShell'
     HANGAR_MODULE = 'hangarModule'
+    PREVIEW_MODULE = 'previewModule'
     SHOP_VEHICLE = 'shopVehicle'
     SHOP_SHELL = 'shopShell'
     HANGAR_SHELL = 'hangarShell'
@@ -39,6 +46,7 @@ class TOOLTIPS_CONSTANTS(object):
     CUSTOMIZATION_ITEM = 'customizationItem'
     TECH_CUSTOMIZATION_ITEM = 'techCustomizationItem'
     TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
+    VEHICLE_FILTER = 'vehicleFilter'
     LADDER = 'ladder'
     CLAN_INFO = 'clanInfo'
     CLAN_COMMON_INFO = 'clanCommonInfo'
@@ -56,6 +64,7 @@ class TOOLTIPS_CONSTANTS(object):
     SQUAD_SLOT_VEHICLE_SELECTED = 'squadSlotVehicleSelected'
     SORTIE_DIVISION = 'sortieDivision'
     ACTION_PRICE = 'actionPrice'
+    SPECIAL = 'special'
     SIMPLE = 'simple'
     COMPLEX = 'complex'
     PRIVATE_QUESTS_TILE = 'privateQuestsTile'
@@ -87,6 +96,11 @@ class TOOLTIPS_CONSTANTS(object):
     PRIVATE_QUESTS_FEMALE_TANKMAN_AWARD = 'femaleTankmanPersonalQuestAward'
     PRIVATE_QUESTS_TOKENS_AWARD = 'tokensPersonalQuestAward'
     BOOSTERS_BOOSTER_INFO = 'boostersBoosterInfo'
+    BOOSTERS_QUESTS = 'boostersQuests'
+    BOOSTERS_SHOP = 'boostersShop'
+    VEHICLE_PARAMETERS = 'vehicleParameters'
+    VEHICLE_PREVIEW_PARAMETERS = 'vehiclePreviewParameters'
+    VEHICLE_PREVIEW_CREW_MEMBER = 'vehiclePreviewCrewMember'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
@@ -113,7 +127,7 @@ class TOOLTIPS_CONSTANTS(object):
     REF_SYS_AWARDS_UI = 'ToolTipRefSysAwardsUI'
     REF_SYS_DESCRIPTION_UI = 'ToolTipRefSysDescriptionUI'
     REF_SYS_XP_MULTIPLIER_UI = 'ToolTipRefSysXPMultiplierUI'
-    SETTINGS_BUTTON_UI = 'ToolTipSettingsButtonUI'
+    SETTINGS_BUTTON_UI = 'ToolTipInblocksDefaultUI'
     CUSTOMIZATION_ITEM_UI = 'ToolTipCustomizationItemUI'
     TECH_CUSTOMIZATION_ITEM_UI = 'ToolTipInblocksDefaultUI'
     TECH_CUSTOMIZATION_BONUS_UI = 'ToolTipInblocksDefaultUI'
@@ -143,4 +157,8 @@ class TOOLTIPS_CONSTANTS(object):
     CLAN_COMMON_INFO_UI = 'ToolTipClanCommonInfoUI'
     SETTINGS_MINIMAP_CIRCLES = 'SettingsMinimapCircles'
     SETTINGS_MINIMAP_CIRCLES_UI = 'ToolTipInblocksDefaultUI'
+    SQUAD_RESTRICTIONS_INFO = 'SquadRestrictionsInfo'
+    SQUAD_RESTRICTIONS_INFO_UI = 'ToolTipInblocksDefaultUI'
     BOOSTERS_BOOSTER_INFO_UI = 'ToolTipInblocksDefaultUI'
+    VEHICLE_PARAMETERS_UI = 'ToolTipInblocksDefaultUI'
+    VEHICLE_PREVIEW_CREW_MEMBER_UI = 'ToolTipInblocksDefaultUI'

@@ -4,6 +4,7 @@ import BigWorld
 from account_helpers import isPremiumAccount
 from adisp import async
 from helpers import time_utils
+from gui.shared.money import Money
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 
 class StatsRequester(AbstractSyncDataRequester):
@@ -35,7 +36,7 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def money(self):
-        return (self.credits, self.gold)
+        return Money(credits=self.credits, gold=self.gold)
 
     @property
     def actualCredits(self):
@@ -54,7 +55,7 @@ class StatsRequester(AbstractSyncDataRequester):
 
     @property
     def actualMoney(self):
-        return (self.actualCredits, self.actualGold)
+        return Money(credits=self.actualCredits, gold=self.actualGold)
 
     @property
     def freeXP(self):
@@ -141,6 +142,10 @@ class StatsRequester(AbstractSyncDataRequester):
     @property
     def unlocks(self):
         return self.getCacheValue('unlocks', list())
+
+    @property
+    def initialUnlocks(self):
+        return self.getCacheValue(('initial', 'unlocks'), list())
 
     @property
     def vehicleSlots(self):

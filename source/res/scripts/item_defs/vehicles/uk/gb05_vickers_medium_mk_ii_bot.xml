@@ -10,6 +10,13 @@
     <forward>	40	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.12	</moving>
+    <still>	0.159	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.239	</firePenalty>
+  </invisibility>
   <repairCost>	4.58	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	-0.000000 1.17624 -0.279723	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -221,13 +229,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.16244 1.55974	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -292,6 +299,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 6 0.083333 6 0.146995 7 0.853005 7 0.916667 6 1 6	</maxPitch>
@@ -302,7 +310,8 @@
             <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
@@ -315,7 +324,8 @@
         <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.002673 0.361974 0.605508	</gunPosition>
       <emblemSlots>
@@ -344,9 +354,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.950 0.000 0.950 0.000 0.474 0.096 0.550 0.500 0.550 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GB05_Vickers_Medium_Mk_II_bot>
   </turrets0>
   <engines>
@@ -358,6 +366,18 @@
   <radios>
     <N14_bot>	shared	</N14_bot>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB05_Vickers_Medium_Mk_II_bot>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB05_Vickers_Medium_Mk_II_bot>
+    </chassis>
+    <engines>
+      <Vickers-Armstrong_bot>
+        <bravo>	23.78883	</bravo>
+      </Vickers-Armstrong_bot>
+    </engines>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

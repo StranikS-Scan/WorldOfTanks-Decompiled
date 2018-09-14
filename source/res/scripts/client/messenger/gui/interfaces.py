@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/interfaces.py
-
+from messenger.gui.Scaleform import FILL_COLORS
 
 class IGUIEntry(object):
 
@@ -26,7 +26,7 @@ class IGUIEntry(object):
     def isFocused(self):
         return False
 
-    def isEditing(self, event):
+    def handleKey(self, event):
         return False
 
     def addClientMessage(self, message, isCurrentPlayer=False):
@@ -149,5 +149,5 @@ class IBattleChannelView(object):
     def removeController(self, ctrl):
         pass
 
-    def addMessage(self, text, isCurrentPlayer=False):
+    def addMessage(self, text, fillColor=FILL_COLORS.BLACK):
         pass

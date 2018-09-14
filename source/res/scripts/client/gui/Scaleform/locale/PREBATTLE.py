@@ -3,6 +3,12 @@
 
 
 class PREBATTLE(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     LABELS_PLAYER = '#prebattle:labels/player'
     LABELS_VEHICLE = '#prebattle:labels/vehicle'
     LABELS_LEVEL = '#prebattle:labels/level'

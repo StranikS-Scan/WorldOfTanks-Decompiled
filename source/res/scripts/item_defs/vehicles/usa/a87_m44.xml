@@ -10,6 +10,13 @@
     <forward>	56.3	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.086	</moving>
+    <still>	0.171	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.257	</firePenalty>
+  </invisibility>
   <repairCost>	7.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.569535 -0.1581	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A87_M44/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A87_M44/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A87_M44/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <player>
@@ -213,13 +221,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.03492 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A87_M44/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A87_M44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A87_M44/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.335 2.00764	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -460,13 +467,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.03492 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A87_M44/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A87_M44/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A87_M44/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.335 2.00764	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -649,6 +655,7 @@
           </armor>
           <shotDispersionRadius>	0.82	</shotDispersionRadius>
           <aimingTime>	6.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.48	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -661,7 +668,8 @@
             <exploded>	vehicles/american/A87_M44/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A87_M44/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A87_M44/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A87_M44/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -684,15 +692,14 @@
         <exploded>	vehicles/american/A87_M44/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A87_M44/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A87_M44/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A87_M44/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.494338 -0.584627	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.768 0.500 0.100 0.332 0.500 0.072 1.000 0.178 0.574 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
       </camouflage>
@@ -731,7 +738,7 @@
           </pitchLimits>
           <reloadTime>	22	</reloadTime>
           <unlocks>
-            <vehicle>	M12	  <cost>	59400	</cost>
+            <vehicle>	A32_M12	  <cost>	59400	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -742,6 +749,7 @@
           </armor>
           <shotDispersionRadius>	0.8	</shotDispersionRadius>
           <aimingTime>	6	</aimingTime>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.46	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -754,7 +762,8 @@
             <exploded>	vehicles/american/A87_M44/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A87_M44/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A87_M44/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A87_M44/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -777,15 +786,14 @@
         <exploded>	vehicles/american/A87_M44/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A87_M44/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A87_M44/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A87_M44/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.518403 -0.115575	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.014 1.000 0.000 1.000 0.759 0.500 0.100 0.332 0.500 0.072 1.000 0.178 0.574 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
       </camouflage>
@@ -810,6 +818,25 @@
     </AN_PRC_10>
     <AN_PRC_25>	shared	</AN_PRC_25>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_M44>
+        <alpha>	0.1288	</alpha>
+      </Chassis_M44>
+      <Chassis_M44_2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_M44_2>
+    </chassis>
+    <engines>
+      <Continental_AOS-895-3>
+        <bravo>	132.1601	</bravo>
+      </Continental_AOS-895-3>
+      <Continental_AOSI-895-5>
+        <bravo>	145.3762	</bravo>
+      </Continental_AOSI-895-5>
+    </engines>
+    <armour>	0.988233031	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

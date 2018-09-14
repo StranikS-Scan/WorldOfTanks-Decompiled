@@ -136,12 +136,12 @@ class ScaleformLayout(GUIProxy, UIInterface):
         self.onGUILoaded()
         return
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         self.eManager.clear()
         if self._guiRef is None or self._guiRef() is None:
             return
         else:
-            self.loader.unload(isItemsRevert=isItemsRevert)
+            self.loader.unload()
             if self._movieView is not None:
                 self._movieView.script = None
                 self._movieView = None
@@ -196,15 +196,6 @@ class ScaleformLayout(GUIProxy, UIInterface):
 
     def invokeCommand(self, data):
         self._commands.invoke(self.uiHolder, data)
-
-    def getGuiRoot(self):
-        try:
-            root = g_appLoader.getApp()
-        except AttributeError:
-            LOG_CURRENT_EXCEPTION()
-            root = None
-
-        return root
 
     def setChapterInfo(self, title, description):
         dispatcher = self.getDispatcher()

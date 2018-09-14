@@ -6,7 +6,6 @@
     <icon>	handExtinguishers 0 0	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Extinguisher	</script>
   </handExtinguishers>
   <autoExtinguishers>
@@ -17,7 +16,6 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	extinguisher	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
     </script>
@@ -29,7 +27,6 @@
     <icon>	smallMedkit 0 0	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
     </script>
@@ -42,7 +39,6 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	medkit	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.30	</bonusValue>
     </script>
@@ -54,7 +50,6 @@
     <icon>	smallRepairkit 0 0	</icon>
     <price>	3000	</price>
     <tags>	repairkit	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	false	</repairAll>
       <bonusValue>	0	</bonusValue>
     </script>
@@ -67,7 +62,6 @@
     <price>	50	  <gold></gold>
     </price>
     <tags>	repairkit	</tags>
-    <vehicleFilter></vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.1	</bonusValue>
     </script>
@@ -103,7 +97,7 @@
     </incompatibleTags>
     <vehicleFilter>
       <include>
-        <nations>	usa germany france uk czech	</nations>
+        <nations>	usa germany france uk czech sweden	</nations>
         <engine>
           <tags>	gasoline	</tags>
         </engine>
@@ -126,7 +120,7 @@
     </incompatibleTags>
     <vehicleFilter>
       <include>
-        <nations>	usa germany france uk czech	</nations>
+        <nations>	usa germany france uk czech sweden	</nations>
         <engine>
           <tags>	gasoline	</tags>
         </engine>
@@ -299,6 +293,22 @@
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
     </script>
   </ration_czech>
+  <ration_sweden>
+    <id>	62	</id>
+    <userString>	#artefacts:ration_sweden/name	</userString>
+    <description>	#artefacts:ration_sweden/descr	</description>
+    <icon>	ration_sweden 0 0	</icon>
+    <price>	50	  <gold></gold>
+    </price>
+    <tags>	stimulator	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+  </ration_sweden>
   <artillery_tier1>
     <id>	19	</id>
     <userString>	#artefacts:artillery/name	</userString>
@@ -608,8 +618,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_02	</soundEvent>
-      <wwsoundEvent>	bomber_02	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	20.	</areaLength>
@@ -648,8 +657,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_03	</soundEvent>
-      <wwsoundEvent>	bomber_03	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	20.	</areaLength>
@@ -688,8 +696,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_01	</soundEvent>
-      <wwsoundEvent>	bomber_01	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
       <speed>	50	</speed>
       <heights>	170 120	</heights>
       <areaLength>	30.	</areaLength>
@@ -728,8 +735,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_02	</soundEvent>
-      <wwsoundEvent>	bomber_02	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
       <speed>	50	</speed>
       <heights>	170 120	</heights>
       <areaLength>	30.	</areaLength>
@@ -768,8 +774,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_03	</soundEvent>
-      <wwsoundEvent>	bomber_03	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	30.	</areaLength>
@@ -808,8 +813,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	7.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
-      <wwsoundEvent>	bomber_04	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
       <speed>	50	</speed>
       <heights>	170 120	</heights>
       <areaLength>	40.	</areaLength>
@@ -848,8 +852,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_01	</soundEvent>
-      <wwsoundEvent>	bomber_01	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_01	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	40.	</areaLength>
@@ -888,8 +891,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_02	</soundEvent>
-      <wwsoundEvent>	bomber_02	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
       <speed>	200	</speed>
       <heights>	170 120	</heights>
       <areaLength>	55.	</areaLength>
@@ -928,8 +930,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_03	</soundEvent>
-      <wwsoundEvent>	bomber_03	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_03	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	55.	</areaLength>
@@ -968,8 +969,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
-      <wwsoundEvent>	bomber_04	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
       <areaLength>	55	</areaLength>
@@ -1095,8 +1095,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
-      <wwsoundEvent>	bomber_04	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
       <speed>	50	</speed>
       <heights>	170 120	</heights>
       <areaLength>	35	</areaLength>
@@ -1135,8 +1134,7 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_02	</soundEvent>
-      <wwsoundEvent>	bomber_02	</wwsoundEvent>
+      <wwsoundEvent>	plane_bomber_02	</wwsoundEvent>
       <speed>	200	</speed>
       <heights>	170 120	</heights>
       <areaLength>	40	</areaLength>
@@ -1175,7 +1173,6 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
@@ -1244,7 +1241,6 @@
     </vehicleFilter>
     <script>	Bomber	  <delay>	6.0	</delay>
       <modelName>	content/MilitaryEnvironment/mle205_IL2/normal/lod0/mle205_IL2.model	</modelName>
-      <soundEvent>	/plane/bombardment/bomber_04	</soundEvent>
       <wwsoundEvent>	plane_bomber_04	</wwsoundEvent>
       <speed>	80	</speed>
       <heights>	170 120	</heights>
@@ -1265,33 +1261,4 @@
       <areaVisual>	content/Interface/TargetPoint/rectangle2.visual	</areaVisual>
     </script>
   </bomber_fallout>
-  <artillery_moon>
-    <id>	103	</id>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/descr	</description>
-    <icon>	artillery 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
-    <notInShop>	True	</notInShop>
-    <tags>	avatar trigger	</tags>
-    <vehicleFilter>
-      <include>
-        <vehicle>
-          <minLevel>	1	</minLevel>
-          <maxLevel>	10	</maxLevel>
-        </vehicle>
-      </include>
-    </vehicleFilter>
-    <script>	Artillery	  <delay>	1.5	</delay>
-      <duration>	0.01	</duration>
-      <shotsNumber>	1	</shotsNumber>
-      <areaRadius>	40	</areaRadius>
-      <shellCompactDescr>	41226	</shellCompactDescr>
-      <piercingPower>	100 100	</piercingPower>
-      <reusable>	true	</reusable>
-      <cooldownTime>	60.0	</cooldownTime>
-      <deployTime>	60.0	</deployTime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint_red.visual	</areaVisual>
-    </script>
-  </artillery_moon>
 </equipments.xml>

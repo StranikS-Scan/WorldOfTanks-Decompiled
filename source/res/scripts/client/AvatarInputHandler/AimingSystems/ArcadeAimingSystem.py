@@ -96,8 +96,8 @@ class ArcadeAimingSystem(IAimingSystem):
     def disable(self):
         pass
 
-    def setModelsToCollideWith(self, models):
-        self.__cursor.setModelsToCollideWith(models)
+    def setDynamicColliders(self, colliders):
+        self.__cursor.setDynamicColliders(colliders)
 
     def focusOnPos(self, preferredPos):
         vehPos = Matrix(self.__vehicleMProv).translation
@@ -249,7 +249,7 @@ class ShotPointCalculatorPlanar(object):
     def __calculateClosestPoint(self, start, dir):
         dir.normalise()
         end = start + dir.scale(10000.0)
-        testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, lambda matKind, collFlags, itemId, chunkId: collFlags & 8)
+        testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, 8)
         terrainSuitsForCheck = testResTerrain and testResTerrain[1].dot(Math.Vector3(0.0, 1.0, 0.0)) <= math.cos(ShotPointCalculatorPlanar.TERRAIN_MIN_ANGLE)
         testResNonTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 136)
         testResDynamic = collideDynamic(start, end, (BigWorld.player().playerVehicleID,), False)

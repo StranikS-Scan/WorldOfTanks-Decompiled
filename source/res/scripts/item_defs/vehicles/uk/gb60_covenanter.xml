@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.294	</moving>
+    <still>	0.294	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.441	</firePenalty>
+  </invisibility>
   <repairCost>	4.17	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	0.000000 0.458482 0.313397	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB60_Covenanter/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -402,13 +410,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -745,13 +752,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -824,6 +830,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -835,7 +842,8 @@
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
@@ -859,6 +867,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.24	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	120	</rate>
@@ -873,7 +882,8 @@
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
@@ -897,13 +907,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
@@ -916,7 +928,8 @@
         <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.015997 0.313288 0.654896	</gunPosition>
       <emblemSlots>
@@ -945,9 +958,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.958 -0.059 1.036 0.000 0.497 0.303 1.000 0.667 0.232 0.495 0.362 0.500 0.085 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1010,13 +1021,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.745 0.745 0.000000 0.000000	</tiling>
@@ -1035,6 +1048,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	5	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.24	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	2	</afterShot>
@@ -1054,7 +1068,8 @@
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
@@ -1078,13 +1093,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB60_Covenanter/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
@@ -1108,6 +1125,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	150	</rate>
@@ -1122,7 +1140,8 @@
             <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB60_Covenanter/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
@@ -1135,7 +1154,8 @@
         <exploded>	vehicles/british/GB60_Covenanter/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB60_Covenanter/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.00968 0.313288 0.704896	</gunPosition>
       <emblemSlots>
@@ -1164,9 +1184,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.932 -0.176 1.166 0.000 0.439 0.256 1.000 0.723 0.303 0.500 0.528 0.500 0.055 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
     </Turret_2_GB60_Covenanter>
   </turrets0>
   <engines>
@@ -1198,6 +1216,25 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB60_Covenanter>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB60_Covenanter>
+      <Chassis_GB60_Covenanter_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_GB60_Covenanter_2>
+    </chassis>
+    <engines>
+      <Meadows_DAV>
+        <bravo>	79.29608	</bravo>
+      </Meadows_DAV>
+      <Meadows_DAV_MkI>
+        <bravo>	95.1553	</bravo>
+      </Meadows_DAV_MkI>
+    </engines>
+    <armour>	0.732798328	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

@@ -30,7 +30,6 @@
     <_57mm_6_pdr_AT_Gun_Mk_IV>	29	</_57mm_6_pdr_AT_Gun_Mk_IV>
     <Obusier_de_155mm_mle.1950>	31	</Obusier_de_155mm_mle.1950>
     <Canon_de_155mm_L_GPF>	32	</Canon_de_155mm_L_GPF>
-    <_25mm_antichar_SA-L_mle_1934>	33	</_25mm_antichar_SA-L_mle_1934>
     <_25mm_antichar_SA-L_mle_1937>	34	</_25mm_antichar_SA-L_mle_1937>
     <_75mm_APX>	40	</_75mm_APX>
     <_75mm_Long_44_AC>	41	</_75mm_Long_44_AC>
@@ -58,6 +57,7 @@
     <_105mm_D1504_L51>	70	</_105mm_D1504_L51>
     <_100mm_SA_47_A>	73	</_100mm_SA_47_A>
     <Canon_de_90mm_Vo_930_m_s>	74	</Canon_de_90mm_Vo_930_m_s>
+    <_100mm_SA_47_L>	77	</_100mm_SA_47_L>
     <_120mm_SA_46_AC_IGR>	60001	</_120mm_SA_46_AC_IGR>
     <_90mm_F3_IGR>	60002	</_90mm_F3_IGR>
     <_100mm_SA_47_IGR>	60003	</_100mm_SA_47_IGR>
@@ -102,6 +102,7 @@
       <maxHealth>	34	</maxHealth>
       <maxRegenHealth>	17	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.582857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -152,6 +153,7 @@
       <maxHealth>	56	</maxHealth>
       <maxRegenHealth>	28	</maxRegenHealth>
       <repairCost>	2	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.445714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.1	</turretRotation>
@@ -175,56 +177,6 @@
         </_25mm_Balle_T.P._mle._1934P>
       </shots>
     </_25mm_Canon_Raccourci_Mle.1934>
-    <_25mm_antichar_SA-L_mle_1934>
-      <userString>	#france_vehicles:_25mm_antichar_SA-L_mle_1934	</userString>
-      <shortUserString>	#france_vehicles:_25mm_antichar_SA-L_mle_1934_short	</shortUserString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	3000	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.06	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.2	</amplitude>
-        <recoilEffect>	small	</recoilEffect>
-      </recoil>
-      <effects>	shot_small	</effects>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <rotationSpeed>	43.75	</rotationSpeed>
-      <reloadTime>	1.14285714285714	</reloadTime>
-      <maxAmmo>	100	</maxAmmo>
-      <aimingTime>	1.25714285714286	</aimingTime>
-      <weight>	70	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_25mm_Balle_T.P._mle._1934>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	950	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	50 44	</piercingPower>
-        </_25mm_Balle_T.P._mle._1934>
-        <_25mm_Balle_T.P._mle._1939P>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1188	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	75 45	</piercingPower>
-        </_25mm_Balle_T.P._mle._1939P>
-      </shots>
-    </_25mm_antichar_SA-L_mle_1934>
     <_25mm_antichar_SA-L_mle_1937>
       <userString>	#france_vehicles:_25mm_antichar_SA-L_mle_1937	</userString>
       <shortUserString>	#france_vehicles:_25mm_antichar_SA-L_mle_1937_short	</shortUserString>
@@ -252,6 +204,7 @@
       <maxHealth>	56	</maxHealth>
       <maxRegenHealth>	28	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -310,6 +263,7 @@
       <maxHealth>	56	</maxHealth>
       <maxRegenHealth>	28	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -359,6 +313,7 @@
       <maxHealth>	54	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.537142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -416,6 +371,7 @@
       <maxHealth>	54	</maxHealth>
       <maxRegenHealth>	27	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.537142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -458,6 +414,7 @@
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.48	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -514,6 +471,7 @@
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	35	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.525714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.14	</turretRotation>
@@ -570,6 +528,7 @@
       <maxHealth>	76	</maxHealth>
       <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.468571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.14	</turretRotation>
@@ -626,6 +585,7 @@
       <maxHealth>	76	</maxHealth>
       <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.37714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.06	</turretRotation>
@@ -682,6 +642,7 @@
       <maxHealth>	76	</maxHealth>
       <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.06	</turretRotation>
@@ -738,6 +699,7 @@
       <maxHealth>	76	</maxHealth>
       <maxRegenHealth>	38	</maxRegenHealth>
       <repairCost>	1	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.37714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.06	</turretRotation>
@@ -788,6 +750,7 @@
       <maxHealth>	94	</maxHealth>
       <maxRegenHealth>	47	</maxRegenHealth>
       <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -838,6 +801,7 @@
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.35	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -887,6 +851,7 @@
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -943,6 +908,7 @@
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -999,6 +965,7 @@
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1055,6 +1022,7 @@
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1111,6 +1079,7 @@
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1168,6 +1137,7 @@
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -1224,6 +1194,7 @@
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1281,6 +1252,7 @@
       <maxHealth>	84	</maxHealth>
       <maxRegenHealth>	42	</maxRegenHealth>
       <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.502857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.24	</turretRotation>
@@ -1294,6 +1266,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	38 38	</piercingPower>
+          <maxHeight>	163	</maxHeight>
         </_76mm_OEO_mle._1917>
         <_76mm_OCO_mle._1941>
           <defaultPortion>	0.0	</defaultPortion>
@@ -1301,6 +1274,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	100 100	</piercingPower>
+          <maxHeight>	163	</maxHeight>
         </_76mm_OCO_mle._1941>
       </shots>
     </_76mm_Schneider>
@@ -1330,6 +1304,7 @@
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.434285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1386,6 +1361,7 @@
       <maxHealth>	94	</maxHealth>
       <maxRegenHealth>	47	</maxRegenHealth>
       <repairCost>	5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.41142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -1442,6 +1418,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.41142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1499,6 +1476,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1555,6 +1533,7 @@
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1611,6 +1590,7 @@
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1667,6 +1647,7 @@
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.411428571428571	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1723,6 +1704,7 @@
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1780,6 +1762,7 @@
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.411428571428571	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1837,6 +1820,7 @@
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1872,7 +1856,6 @@
       <tags></tags>
       <level>	8	</level>
       <price>	95500	</price>
-      <notInShop>	true	</notInShop>
       <impulse>	0.48	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
@@ -1894,6 +1877,7 @@
       <maxHealth>	170	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.4	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -1950,6 +1934,7 @@
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2007,6 +1992,7 @@
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.35	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2037,6 +2023,64 @@
         </_100mm_OE_mle_1930>
       </shots>
     </_100mm_SA_47_A>
+    <_100mm_SA_47_L>
+      <userString>	#france_vehicles:_100mm_SA_47_A	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	127550	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.65	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_mainext_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	21.875	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	3000	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_100mm_Prf1940>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	232 205	</piercingPower>
+        </_100mm_Prf1940>
+        <_100mm_FrtPrf1945>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	263 253	</piercingPower>
+        </_100mm_FrtPrf1945>
+        <_100mm_OE_mle_1930>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_100mm_OE_mle_1930>
+      </shots>
+    </_100mm_SA_47_L>
     <_105mm_CN_105_57>
       <userString>	#france_vehicles:_105mm_CN_105_57	</userString>
       <tags></tags>
@@ -2063,6 +2107,7 @@
       <maxHealth>	208	</maxHealth>
       <maxRegenHealth>	104	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2104,7 +2149,7 @@
         <amplitude>	0.65	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main_mb	</effects>
+      <effects>	shot_mainext_mb	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
@@ -2119,6 +2164,7 @@
       <maxHealth>	208	</maxHealth>
       <maxRegenHealth>	104	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2176,6 +2222,7 @@
       <maxHealth>	148	</maxHealth>
       <maxRegenHealth>	74	</maxRegenHealth>
       <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.44571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -2232,6 +2279,7 @@
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2273,7 +2321,7 @@
         <amplitude>	0.6	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
-      <effects>	shot_main	</effects>
+      <effects>	shot_mainext	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
@@ -2288,6 +2336,7 @@
       <maxHealth>	148	</maxHealth>
       <maxRegenHealth>	74	</maxRegenHealth>
       <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.44571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -2345,6 +2394,7 @@
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.388571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.16	</turretRotation>
@@ -2402,6 +2452,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.491428571428571	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2415,6 +2466,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mm_Sprg_K>
         <_105mmGr39H1A>
           <defaultPortion>	0.0	</defaultPortion>
@@ -2422,6 +2474,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	104 104	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mmGr39H1A>
         <_105mm_PzGr39K>
           <defaultPortion>	0.20	</defaultPortion>
@@ -2429,6 +2482,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	64 61	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mm_PzGr39K>
       </shots>
     </_105mm_leFH18_L28>
@@ -2458,6 +2512,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2471,6 +2526,7 @@
           <gravity>	147	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	60 60	</piercingPower>
+          <maxHeight>	398	</maxHeight>
         </_105mm_OE_mle_1930>
         <_105mm_FrtPrf1943>
           <defaultPortion>	0.0	</defaultPortion>
@@ -2478,6 +2534,7 @@
           <gravity>	147	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	223 186	</piercingPower>
+          <maxHeight>	398	</maxHeight>
         </_105mm_FrtPrf1943>
       </shots>
     </Canon_de_105_mle_1930_Schneider_AM>
@@ -2508,6 +2565,7 @@
       <maxHealth>	120	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.514285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2521,6 +2579,7 @@
           <gravity>	152	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	299	</maxHeight>
         </_105mm_OE_mle_1920>
         <_105mm_OCO_mle._1936>
           <defaultPortion>	0.0	</defaultPortion>
@@ -2528,6 +2587,7 @@
           <gravity>	152	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	104 104	</piercingPower>
+          <maxHeight>	299	</maxHeight>
         </_105mm_OCO_mle._1936>
       </shots>
     </Canon_de_105_court_mle_1935B>
@@ -2558,6 +2618,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.468571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2571,6 +2632,7 @@
           <gravity>	167	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	308	</maxHeight>
         </_105mm_OE_mle_1920>
         <_105mm_OCO_mle._1936>
           <defaultPortion>	0.0	</defaultPortion>
@@ -2578,6 +2640,7 @@
           <gravity>	167	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	104 104	</piercingPower>
+          <maxHeight>	308	</maxHeight>
         </_105mm_OCO_mle._1936>
       </shots>
       <groundWave></groundWave>
@@ -2609,6 +2672,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.46857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2660,6 +2724,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.46857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2710,6 +2775,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.468571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -2723,6 +2789,7 @@
           <gravity>	167	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	308	</maxHeight>
         </_105mm_OE_mle_1920>
         <_105mm_OCO_mle._1936>
           <defaultPortion>	0.0	</defaultPortion>
@@ -2730,6 +2797,7 @@
           <gravity>	167	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	104 104	</piercingPower>
+          <maxHeight>	308	</maxHeight>
         </_105mm_OCO_mle._1936>
       </shots>
       <groundWave></groundWave>
@@ -2760,6 +2828,7 @@
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.32	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2817,6 +2886,7 @@
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.32	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2873,6 +2943,7 @@
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.285714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2930,6 +3001,7 @@
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.285714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -2987,6 +3059,7 @@
       <maxHealth>	168	</maxHealth>
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.525714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -3000,6 +3073,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	77 77	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_155mm_OE_mle_1917>
         <_155mm_OCO_mle_1944>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3007,6 +3081,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	185 185	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_155mm_OCO_mle_1944>
       </shots>
     </Obusier_de_155mm_C_mle.1917>
@@ -3037,6 +3112,7 @@
       <maxHealth>	188	</maxHealth>
       <maxRegenHealth>	94	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.48	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.36	</turretRotation>
@@ -3050,6 +3126,7 @@
           <gravity>	160	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	90 90	</piercingPower>
+          <maxHeight>	425	</maxHeight>
         </_155_OE_mle_1956>
         <_155mm_OCO_mle_1944>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3057,6 +3134,7 @@
           <gravity>	160	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	185 185	</piercingPower>
+          <maxHeight>	425	</maxHeight>
         </_155mm_OCO_mle_1944>
       </shots>
     </Canon_de_155mm_de_33_calibres>
@@ -3087,6 +3165,7 @@
       <maxHealth>	188	</maxHealth>
       <maxRegenHealth>	94	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.48	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.36	</turretRotation>
@@ -3100,6 +3179,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	90 90	</piercingPower>
+          <maxHeight>	416	</maxHeight>
         </_155_OE_mle_1956>
         <_M_107>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3107,6 +3187,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	90 90	</piercingPower>
+          <maxHeight>	416	</maxHeight>
         </_M_107>
         <_155mm_OCO_mle_1944>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3114,6 +3195,7 @@
           <gravity>	150	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	185 185	</piercingPower>
+          <maxHeight>	416	</maxHeight>
         </_155mm_OCO_mle_1944>
       </shots>
     </Obusier_de_155mm_mle.1950>
@@ -3144,6 +3226,7 @@
       <maxHealth>	230	</maxHealth>
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.36	</turretRotation>
@@ -3157,6 +3240,7 @@
           <gravity>	165	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	95 95	</piercingPower>
+          <maxHeight>	421	</maxHeight>
         </_155mm_OE_M101M4>
         <_155mm_OE_M101M6>
           <defaultPortion>	0.00	</defaultPortion>
@@ -3164,6 +3248,7 @@
           <gravity>	165	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	95 95	</piercingPower>
+          <maxHeight>	421	</maxHeight>
         </_155mm_OE_M101M6>
         <_155mm_OCO_mle_1944>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3171,6 +3256,7 @@
           <gravity>	165	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	185 185	</piercingPower>
+          <maxHeight>	421	</maxHeight>
         </_155mm_OCO_mle_1944>
       </shots>
     </Canon_de_155mm_L_GPF>
@@ -3186,7 +3272,7 @@
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
       <effects>	shot_huge	</effects>
-      <reloadEffect>	reload155_170	</reloadEffect>
+      <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
@@ -3200,6 +3286,7 @@
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.468571428571429	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.44	</turretRotation>
@@ -3213,6 +3300,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	95 95	</piercingPower>
+          <maxHeight>	434	</maxHeight>
         </_155mm_OE_M101M4>
         <_155mm_OE_M101M6>
           <defaultPortion>	0.00	</defaultPortion>
@@ -3220,6 +3308,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	95 95	</piercingPower>
+          <maxHeight>	434	</maxHeight>
         </_155mm_OE_M101M6>
         <_155mm_OCO_mle_1944>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3227,6 +3316,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	185 185	</piercingPower>
+          <maxHeight>	434	</maxHeight>
         </_155mm_OCO_mle_1944>
       </shots>
     </Canon_de_155mm>
@@ -3257,6 +3347,7 @@
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.285714285714286	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -3314,6 +3405,7 @@
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -3371,6 +3463,7 @@
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
@@ -3428,6 +3521,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.491428571428571	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.32	</turretRotation>
@@ -3441,6 +3535,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mm_Sprg_K>
         <_105mmGr39H1A>
           <defaultPortion>	0.0	</defaultPortion>
@@ -3448,6 +3543,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	104 104	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mmGr39H1A>
         <_105mm_PzGr39K>
           <defaultPortion>	0.20	</defaultPortion>
@@ -3455,6 +3551,7 @@
           <gravity>	170	</gravity>
           <maxDistance>	10000	</maxDistance>
           <piercingPower>	64 61	</piercingPower>
+          <maxHeight>	310	</maxHeight>
         </_105mm_PzGr39K>
       </shots>
     </_105mm_leFH18_L28_IGR>
@@ -3486,6 +3583,7 @@
       <maxHealth>	150	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -3543,6 +3641,7 @@
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.12	</turretRotation>
@@ -3600,6 +3699,7 @@
       <maxHealth>	208	</maxHealth>
       <maxRegenHealth>	104	</maxRegenHealth>
       <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>

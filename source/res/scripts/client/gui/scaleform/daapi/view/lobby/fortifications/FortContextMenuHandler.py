@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortContextMenuHandler.py
-from gui.shared import events, EVENT_BUS_SCOPE
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.fortifications.ConfirmOrderDialogMeta import BuyOrderDialogMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
+from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared import events, EVENT_BUS_SCOPE
 
 class FortContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity, FortViewHelper):
 

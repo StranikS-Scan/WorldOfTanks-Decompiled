@@ -3,6 +3,12 @@
 
 
 class CHAT(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CHANNELS_SQUADREADY_TOOLTIP = '#chat:channels/squadReady/tooltip'
     CHANNELS_SQUADNOTREADY_TOOLTIP = '#chat:channels/squadNotReady/tooltip'
     CHANNELS_PREBATTLE = '#chat:channels/prebattle'

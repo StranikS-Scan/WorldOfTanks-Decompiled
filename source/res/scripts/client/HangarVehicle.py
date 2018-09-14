@@ -17,7 +17,20 @@ class HangarVehicle(BigWorld.Entity):
         pass
 
     def onLeaveWorld(self):
-        pass
+        self.releaseBspModels()
+
+    def canDoHitTest(self, dotest):
+        self.icanDoHitTest = dotest
+
+    def releaseBspModels(self):
+        self.icanDoHitTest = False
+        if self.typeDescriptor is not None:
+            for compDescr, compMatrix in self.getComponents():
+                hitTester = compDescr['hitTester']
+                if hitTester.isBspModelLoaded():
+                    hitTester.releaseBspModel()
+
+        return
 
     def collideSegment(self, startPoint, endPoint, skipGun=False):
         worldToVehMatrix = Math.Matrix(self.model.matrix)

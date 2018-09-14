@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/formatters.py
 from gui import makeHtmlString
-from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
+from gui.shared.utils.functions import makeTooltip
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from helpers import i18n, time_utils
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
 
@@ -62,7 +64,7 @@ def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
+def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueWidth=-1, gap=5, nameOffset=-1, padding=None):
     data = {'name': name,
      'value': value,
      'icon': icon}
@@ -70,6 +72,8 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
         data['valueWidth'] = valueWidth
     if gap != -1:
         data['gap'] = gap
+    if nameOffset != -1:
+        data['nameOffset'] = nameOffset
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -96,8 +100,9 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtGap=0, txtOffset=-1, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
-    data = {'imageAtLeft': imgAtLeft}
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
+    data = {'imageAtLeft': imgAtLeft,
+     'textsAlign': txtAlign}
     if title is not None:
         data['title'] = title
     if desc is not None:
@@ -106,6 +111,8 @@ def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, img
         data['imagePath'] = img
     if imgPadding is not None:
         data['imagePadding'] = imgPadding
+    if txtPadding is not None:
+        data['textsPadding'] = txtPadding
     if txtGap != 0:
         data['textsGap'] = txtGap
     if txtOffset != 0:
@@ -124,6 +131,105 @@ def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=
     return packBlockDataItem(linkage, data, padding)
 
 
-def packSaleTextParameterBlockData(name, saleData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None):
-    return packBlockDataItem(linkage, {'name': name,
-     'saleData': saleData}, padding)
+def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONSTANTS.STATE_CAMOUFLAGE, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None):
+    data = {'name': name,
+     'saleData': saleData,
+     'actionStyle': actionStyle}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packStatusDeltaBlockData(title, valueStr, statusBarData, showDecreaseArrow=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_STATUS_DELTA_PARAMETER_BLOCK_LINKAGE, padding=None):
+    data = {'title': title,
+     'valueStr': valueStr,
+     'statusBarData': statusBarData,
+     'showDecreaseArrow': showDecreaseArrow}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packItemActionTooltipData(item, isBuying=True):
+    """
+    Build action data for given fitting item
+    
+    :param item:
+    :param isBuying:
+    :return: action data dict
+    """
+    if isBuying:
+        price = item.altPrice or item.buyPrice
+        defaultPrice = item.defaultAltPrice or item.defaultPrice
+    else:
+        price = item.sellPrice
+        defaultPrice = item.defaultSellPrice
+    return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), isBuying, price, defaultPrice)
+
+
+def packActionTooltipData(type, key, isBuying, price, oldPrice):
+    """
+    Packs data into action tooltip VO.
+    
+    :param type: an ACTION_TOOLTIPS_STATE
+    :param key: key
+    :param isBuying: True if tooltip is for buying, otherwise False
+    :param price: current price
+    :param oldPrice: old price
+    :return: VO
+    """
+    states = list()
+    for currency, oldValue in oldPrice.iteritems():
+        priceValue = price.get(currency)
+        if priceValue < oldValue:
+            state = ACTION_TOOLTIPS_STATE.DISCOUNT if isBuying else ACTION_TOOLTIPS_STATE.PENALTY
+        elif priceValue > oldValue:
+            state = ACTION_TOOLTIPS_STATE.PENALTY if isBuying else ACTION_TOOLTIPS_STATE.DISCOUNT
+        else:
+            state = None
+        states.append(state)
+
+    return {'type': type,
+     'key': key,
+     'isBuying': isBuying,
+     'state': states,
+     'newPrice': price,
+     'oldPrice': oldPrice}
+
+
+def packItemRentActionTooltipData(item, rentPackage):
+    """
+    Build rent action data for given fitting item
+    
+    :param item:
+    :param rentPackage:
+    :return: action data dict
+    """
+    goldState = creditsState = ACTION_TOOLTIPS_STATE.DISCOUNT
+    defaultPrice = rentPackage['defaultRentPrice']
+    price = rentPackage['rentPrice']
+    return {'type': ACTION_TOOLTIPS_TYPE.RENT,
+     'key': str(item.intCD),
+     'state': (creditsState, goldState),
+     'newPrice': price,
+     'oldPrice': defaultPrice,
+     'rentPackage': rentPackage['days']}
+
+
+def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_LIST_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'listIconSrc': listIconSrc,
+     'columnWidth': columnWidth,
+     'rowHeight': rowHeight}, padding)
+
+
+def getActionPriceData(item):
+    price = item.altPrice or item.buyPrice
+    defaultPrice = item.defaultAltPrice or item.defaultPrice
+    minRentPricePackage = item.getRentPackage()
+    action = None
+    if price != defaultPrice and not minRentPricePackage:
+        action = packItemActionTooltipData(item)
+    elif minRentPricePackage:
+        if minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
+            action = packItemRentActionTooltipData(item, minRentPricePackage)
+    return action
+
+
+def getLimitExceededPremiumTooltip():
+    return makeTooltip(i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER), i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY))

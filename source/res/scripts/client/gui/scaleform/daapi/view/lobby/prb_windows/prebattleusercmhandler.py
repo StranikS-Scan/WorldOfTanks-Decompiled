@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleUserCMHandler.py
 from adisp import process
-from constants import PREBATTLE_TYPE
 from gui.prb_control.context import prb_ctx
 from gui.prb_control.prb_helpers import PrbListener
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import AppealCMHandler, USER
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 KICK_FROM_PREBATTLE = 'kickPlayerFromPrebattle'
 
 class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
@@ -14,6 +15,10 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
         super(PrebattleUserCMHandler, self).__init__(cmProxy, ctx)
         self._isCreator = self.prbFunctional.isCreator()
         self.startPrbListening()
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        return None
 
     def fini(self):
         self._isCreator = None
@@ -29,7 +34,7 @@ class PrebattleUserCMHandler(AppealCMHandler, PrbListener):
 
     def _addMutedInfo(self, options, userCMInfo):
         muted = USER.UNSET_MUTED if userCMInfo.isMuted else USER.SET_MUTED
-        if not userCMInfo.isIgnored and self.app.voiceChatManager.isVOIPEnabled():
+        if not userCMInfo.isIgnored and self.bwProto.voipController.isVOIPEnabled():
             options.append(self._makeItem(muted, MENU.contextmenu(muted)))
         return options
 

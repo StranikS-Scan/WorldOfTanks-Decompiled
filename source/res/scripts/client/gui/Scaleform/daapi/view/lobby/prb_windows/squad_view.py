@@ -1,27 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_view.py
+import account_helpers
 from gui.Scaleform.daapi.view.lobby.prb_windows.SquadActionButtonStateVO import SquadActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import getFalloutCtrl
 from gui.shared.formatters import text_styles
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.context import unit_ctx
 from gui.Scaleform.daapi.view.meta.SquadViewMeta import SquadViewMeta
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
-from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.formatters.ranges import toRomanRangeString
+from gui.server_events import g_eventsCache
 from helpers import i18n, int2roman
 from gui.prb_control import settings
-from gui.shared.formatters.icons import makeImageTag
-from gui.shared.formatters.text_styles import main
-from gui.server_events import g_eventsCache
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.utils.functions import makeTooltip
 
 class SquadView(SquadViewMeta):
 
@@ -36,6 +37,7 @@ class SquadView(SquadViewMeta):
     def onUnitVehiclesChanged(self, dbID, vInfos):
         functional = self.unitFunctional
         pInfo = functional.getPlayerInfo(dbID=dbID)
+        needToUpdateSlots = g_eventsCache.isSquadXpFactorsEnabled()
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if vInfos and not vInfos[0].isEmpty():
@@ -50,6 +52,15 @@ class SquadView(SquadViewMeta):
                 else:
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
+            if pInfo.isCurrentPlayer():
+                if len(vInfos) < slotIdx + 1:
+                    needToUpdateSlots = True
+            elif vehicleVO is None:
+                needToUpdateSlots = True
+        if g_eventsCache.isSquadXpFactorsEnabled():
+            self.as_setActionButtonStateS(self.__getActionButtonStateVO())
+        if needToUpdateSlots:
+            self._updateMembersData()
         return
 
     def chooseVehicleRequest(self):
@@ -93,12 +104,9 @@ class SquadView(SquadViewMeta):
         return requests
 
     def _populate(self):
-        self.as_updateBattleTypeS(self._getBattleTypeName(), self._isEvent(), self._isNew(), self._getSlotIcon())
-        self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         super(SquadView, self)._populate()
-
-    def _getSlotIcon(self):
-        pass
+        self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._updateHeader()
 
     def _dispose(self):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -109,13 +117,72 @@ class SquadView(SquadViewMeta):
         enabled = not (functional.getFlags().isInQueue() and functional.getPlayerInfo().isReady) and self.__canSendInvite()
         if enabled:
             enabled = False
-            for slot in functional.getSlotsIterator(*functional.getUnit(unitIdx=functional.getUnitIdx())):
+            unitIdx = functional.getUnitIdx()
+            for slot in functional.getSlotsIterator(*functional.getUnit(unitIdx=unitIdx)):
                 if not slot.player:
                     enabled = True
                     break
 
         self.as_updateInviteBtnStateS(enabled)
         self.as_setActionButtonStateS(self.__getActionButtonStateVO())
+
+    def _updateHeader(self):
+        isSquadXpFactorsEnabled = g_eventsCache.isSquadXpFactorsEnabled()
+        isArtVisible = isSquadXpFactorsEnabled
+        if isArtVisible:
+            tooltip, tooltipType = self._getInfoIconTooltipParams()
+            hdrIconSource, iXPadding, iYPadding, hdrMessageText = self._getHeaderMessageParams()
+        else:
+            tooltip = ''
+            tooltipType = ''
+            hdrIconSource = ''
+            hdrMessageText = ''
+            iXPadding = 0
+            iYPadding = 0
+        data = {'infoIconTooltip': tooltip,
+         'infoIconTooltipType': tooltipType,
+         'isVisibleInfoIcon': isArtVisible,
+         'isVisibleHeaderIcon': isArtVisible,
+         'headerIconSource': hdrIconSource,
+         'icoXPadding': iXPadding,
+         'icoYPadding': iYPadding,
+         'headerMessageText': hdrMessageText,
+         'isVisibleHeaderMessage': isArtVisible}
+        self.as_setSimpleTeamSectionDataS(data)
+
+    def _getHeaderMessageParams(self):
+        functional = self.unitFunctional
+        isBalancedSquadEnabled = g_eventsCache.isBalancedSquadEnabled()
+        if isBalancedSquadEnabled:
+            if functional.isDynamic():
+                headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS_ATTENTION
+                headerMessageText = text_styles.middleTitle(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD))
+                iconXPadding = 0
+                iconYPadding = 0
+            else:
+                headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS
+                headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATION))
+                iconXPadding = 9
+                iconYPadding = 9
+        else:
+            headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_SQUAD_SILVER_STARS
+            headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION))
+            iconXPadding = 9
+            iconYPadding = 9
+        return (headerIconSource,
+         iconXPadding,
+         iconYPadding,
+         headerMessageText)
+
+    def _getInfoIconTooltipParams(self):
+        isBalancedSquadEnabled = g_eventsCache.isBalancedSquadEnabled()
+        if isBalancedSquadEnabled:
+            tooltipType = TOOLTIPS_CONSTANTS.COMPLEX
+            tooltip = TOOLTIPS.SQUADWINDOW_INFOICON_TECH
+        else:
+            tooltipType = TOOLTIPS_CONSTANTS.SPECIAL
+            tooltip = TOOLTIPS_CONSTANTS.SQUAD_RESTRICTIONS_INFO
+        return (tooltip, tooltipType)
 
     def _updateMembersData(self):
         functional = self.unitFunctional
@@ -126,8 +193,12 @@ class SquadView(SquadViewMeta):
         functional = self.unitFunctional
         data = vo_converters.makeUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
         self.as_updateRallyS(data)
-        self.as_updateBattleTypeInfoS('', False)
-        self.as_updateBattleTypeS(self._getBattleTypeName(), self._isEvent(), self._isNew(), self._getSlotIcon())
+        self.as_updateBattleTypeS({'battleTypeName': '',
+         'isNew': self._isNew(),
+         'leaveBtnTooltip': self._getLeaveBtnTooltip()})
+
+    def _getLeaveBtnTooltip(self):
+        return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVESQUAD
 
     def _getBattleTypeName(self):
         return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART)
@@ -152,26 +223,29 @@ class SquadView(SquadViewMeta):
 
 class EventSquadView(SquadView):
 
-    def _populate(self):
-        super(EventSquadView, self)._populate()
-        self._updateVehiclesLabel(0, 0)
-
     def _getBattleTypeName(self):
-        return text_styles.stats(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + text_styles.stats(MENU.HEADERBUTTONS_BATTLE_MENU_EVENT)
+        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_EVENT)
 
     def _isEvent(self):
         return True
 
-    def _updateVehiclesLabel(self, minVal, maxVal):
-        tankName = g_eventsCache.getEventVehicles()[0].shortUserName
-        tooltip = {'body': {'value': i18n.makeString(TOOLTIPS.SQUADWINDOW_EVENTVEHICLE, tankName=tankName)}}
-        self.as_setVehiclesTitleS(text_styles.stats(MESSENGER.DIALOGS_SQUADCHANNEL_VEHICLES), tooltip)
+    def _getInfoIconTooltipParams(self):
+        vehiclesNames = [ veh.userName for veh in g_eventsCache.getEventVehicles() ]
+        tooltip = i18n.makeString(TOOLTIPS.SQUADWINDOW_EVENTVEHICLE, tankName=', '.join(vehiclesNames))
+        return (makeTooltip(body=tooltip), TOOLTIPS_CONSTANTS.COMPLEX)
 
-    def _getSlotIcon(self):
-        eventVehicleImgTag = makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_EVENT_VEH_CONTOUR, 32, 32, -8)
-        tankName = g_eventsCache.getEventVehicles()[0].shortUserName
-        textWithName = i18n.makeString(MESSENGER.DIALOGS_SQUAD_EVENT_VEHICLE, tankName=tankName)
-        return main(textWithName) + eventVehicleImgTag
+    def _getHeaderMessageParams(self):
+        headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_EVENT
+        headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION))
+        iconXPadding = 0
+        iconYPadding = 0
+        return (headerIconSource,
+         iconXPadding,
+         iconYPadding,
+         headerMessageText)
+
+    def _getLeaveBtnTooltip(self):
+        return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
 
 
 class FalloutSquadView(SquadView):
@@ -185,7 +259,8 @@ class FalloutSquadView(SquadView):
         self.unitFunctional.togglePlayerReadyAction()
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
-        self._updateRallyData()
+        if dbID != account_helpers.getAccountDatabaseID():
+            self._updateRallyData()
 
     def onUnitRejoin(self):
         super(FalloutSquadView, self).onUnitRejoin()
@@ -206,8 +281,16 @@ class FalloutSquadView(SquadView):
         super(FalloutSquadView, self)._dispose()
         return
 
+    def _updateRallyData(self):
+        functional = self.unitFunctional
+        data = vo_converters.makeUnitVO(functional, unitIdx=functional.getUnitIdx(), app=self.app)
+        self.as_updateRallyS(data)
+        self.as_updateBattleTypeS({'battleTypeName': self._getBattleTypeName(),
+         'isNew': self._isNew(),
+         'leaveBtnTooltip': self._getLeaveBtnTooltip()})
+
     def _getBattleTypeName(self):
-        return text_styles.standard('#menu:headerButtons/battle/menu/fallout') + '\n' + i18n.makeString('#menu:headerButtons/battle/menu/fallout/%d' % self.__falloutCtrl.getBattleType())
+        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_STANDART)
 
     def __dominationVehicleInfoTooltip(self, requiredLevel, allowedLevelsStr):
         return {'id': TOOLTIPS.SQUADWINDOW_DOMINATION_VEHICLESINFOICON,
@@ -230,4 +313,6 @@ class FalloutSquadView(SquadView):
         self.__updateHeader()
 
     def __onVehiclesChanged(self, *args):
+        self._updateRallyData()
         self._setActionButtonState()
+        self.__updateHeader()

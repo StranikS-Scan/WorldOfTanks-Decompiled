@@ -10,7 +10,7 @@ from gui.prb_control.prb_helpers import UnitListener
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
 from gui.Scaleform.daapi.view.meta.FortClanBattleListMeta import FortClanBattleListMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_BATTLE_DIVISIONS
 

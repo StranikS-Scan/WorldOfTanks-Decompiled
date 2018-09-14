@@ -4,6 +4,7 @@ from Event import Event
 from adisp import async
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.requesters.IntSettingsRequester import IntSettingsRequester
+from account_helpers.settings_core.settings_constants import VERSION
 
 class _SettingsCache(object):
 
@@ -49,10 +50,10 @@ class _SettingsCache(object):
         return self.__intSettings.getSetting(key, defaultValue)
 
     def getVersion(self, defaultValue=0):
-        return self.__intSettings.getSetting('VERSION', defaultValue)
+        return self.__intSettings.getSetting(VERSION, defaultValue)
 
     def setVersion(self, value):
-        self.__intSettings.setSetting('VERSION', value)
+        self.__intSettings.setSetting(VERSION, value)
 
     def __invalidateData(self, callback=lambda *args: None):
 

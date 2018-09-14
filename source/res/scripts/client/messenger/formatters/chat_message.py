@@ -6,10 +6,7 @@ from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.formatters import TimeFormatter
-from messenger.m_constants import MESSENGER_I18N_FILE
 from messenger.storage import storage_getter
-_I18_ALLY = i18n.makeString('#{0:>s}:battle/unknown/ally'.format(MESSENGER_I18N_FILE))
-_I18_ENEMY = i18n.makeString('#{0:>s}:battle/unknown/enemy'.format(MESSENGER_I18N_FILE))
 
 class _BattleMessageBuilder(object):
 
@@ -27,9 +24,10 @@ class _BattleMessageBuilder(object):
         return self
 
     def setName(self, dbID, pName=None):
-        if pName:
+        if pName is not None:
             pName = i18n.encodeUtf8(pName)
-        self._ctx['playerName'] = g_sessionProvider.getCtx().getFullPlayerName(accID=dbID, pName=pName)
+        name = g_sessionProvider.getCtx().getPlayerFullName(accID=dbID, pName=pName)
+        self._ctx['playerName'] = unicode(name, 'utf-8')
         return self
 
     def setText(self, text):
@@ -77,17 +75,6 @@ class CommonMessageBuilder(_BattleMessageBuilder):
                 pColor = pColorScheme.getHexStr('enemy')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('common')
-        return self
-
-    def setName(self, dbID, pName=None):
-        ctx = g_sessionProvider.getCtx()
-        fullName = ctx.getFullPlayerName(accID=dbID, pName=pName)
-        if not len(fullName):
-            if ctx.isAlly(accID=dbID):
-                fullName = _I18_ALLY
-            else:
-                fullName = _I18_ENEMY
-        self._ctx['playerName'] = fullName
         return self
 
 

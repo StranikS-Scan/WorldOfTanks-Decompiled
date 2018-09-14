@@ -188,6 +188,10 @@ class PreQueueFunctional(NoPreQueueFunctional):
         self._invokeListeners('onKickedFromArena', self._queueType, *args)
         self._exitFromQueueUI()
 
+    def onArenaJoinFailure(self, *args):
+        self._invokeListeners('onArenaJoinFailure', self._queueType, *args)
+        self._exitFromQueueUI()
+
     def _goToQueueUI(self):
         return FUNCTIONAL_FLAG.UNDEFINED
 
@@ -203,12 +207,10 @@ class AccountQueueFunctional(PreQueueFunctional):
         self._requestCtx = PrbCtrlRequestCtx()
 
     def init(self, ctx=None):
-        g_gameCtrl.captcha.onCaptchaInputCanceled += self.__onCaptchaInputCanceled
         return super(AccountQueueFunctional, self).init(ctx)
 
     def fini(self, woEvents=False):
         self._requestCtx.clear()
-        g_gameCtrl.captcha.onCaptchaInputCanceled -= self.__onCaptchaInputCanceled
         super(AccountQueueFunctional, self).fini(woEvents)
 
     def doAction(self, action=None):
@@ -288,6 +290,10 @@ class AccountQueueFunctional(PreQueueFunctional):
         self._requestCtx.stopProcessing(True)
         super(AccountQueueFunctional, self).onKickedFromArena(*args)
 
+    def onArenaJoinFailure(self, *args):
+        self._requestCtx.stopProcessing(True)
+        super(AccountQueueFunctional, self).onArenaJoinFailure(*args)
+
     def _doQueue(self, ctx):
         raise NotImplementedError('Routine _doQueue must be overridden')
 
@@ -302,6 +308,3 @@ class AccountQueueFunctional(PreQueueFunctional):
         if result:
             g_eventDispatcher.showParentControlNotification()
         return result
-
-    def __onCaptchaInputCanceled(self):
-        self._requestCtx.stopProcessing(False)

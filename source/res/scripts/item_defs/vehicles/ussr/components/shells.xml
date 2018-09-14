@@ -654,6 +654,21 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_UBR-354KA>
+  <_76mm_UBR-354KB>
+    <id>	164	</id>
+    <userString>	#ussr_vehicles:_76mm_UBR-354KB	</userString>
+    <icon>	ap	</icon>
+    <price>	6	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_UBR-354KB>
   <_76mm_UOF-354K>
     <id>	35	</id>
     <userString>	#ussr_vehicles:_76mm_UOF-354K	</userString>
@@ -1998,64 +2013,4 @@
       <devices>	270	</devices>
     </damage>
   </_203mm_F-625DBM>
-  <R00_Sfera_AP>
-    <id>	158	</id>
-    <userString>	#ussr_vehicles:R00_Sfera_AP	</userString>
-    <icon>	ap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	45	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	aprilArmorPiercing	</effects>
-    <damage>
-      <armor>	32	</armor>
-      <devices>	61	</devices>
-    </damage>
-  </R00_Sfera_AP>
-  <R00_Sfera_APCR>
-    <id>	159	</id>
-    <userString>	#ussr_vehicles:R00_Sfera_APCR	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	1	  <gold></gold>
-    </price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	45	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	aprilArmorPiercing	</effects>
-    <damage>
-      <armor>	16	</armor>
-      <devices>	61	</devices>
-    </damage>
-  </R00_Sfera_APCR>
-  <R00_Sfera_HE>
-    <id>	160	</id>
-    <userString>	#ussr_vehicles:R00_Sfera_HE	</userString>
-    <icon>	he	</icon>
-    <price>	1	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	45	</caliber>
-    <explosionRadius>	0.43	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	aprilArmorPiercing	</effects>
-    <damage>
-      <armor>	20	</armor>
-      <devices>	61	</devices>
-    </damage>
-  </R00_Sfera_HE>
-  <moon_shell>
-    <id>	161	</id>
-    <userString>	#germany_vehicles:artillery_shell	</userString>
-    <icon>	he	</icon>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	100	</caliber>
-    <explosionRadius>	40	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	MoonAsteroidPreparation	</effects>
-    <damage>
-      <armor>	5000	</armor>
-      <devices>	1	</devices>
-    </damage>
-  </moon_shell>
 </shells.xml>

@@ -59,6 +59,7 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'browser': _convertToNamedTuple,
  'postBattleExchange': _convertToNamedTuple}
 _DEFAULT_SETTINGS = {'registrationURL': '',
+ 'registrationProxyURL': '',
  'recoveryPswdURL': '',
  'paymentURL': '',
  'securitySettingsURL': '',
@@ -74,10 +75,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'voiceChat': True,
  'technicalInfo': True,
  'nationHangarSpace': False,
- 'customizationCamouflages': True,
  'customizationHorns': False,
- 'customizationEmblems': True,
- 'customizationInscriptions': True,
  'showMinimapSuperHeavy': False,
  'showMinimapDeath': True,
  'permanentMinimapDeath': False,
@@ -95,6 +93,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'eula': EULAProps(False, ''),
  'igrCredentialsReset': False,
  'igrEnabled': False,
+ 'battleEndWarningEnabled': True,
  'isPollEnabled': False,
  'csisRequestRate': 0,
  'showSectorLines': False,
@@ -112,7 +111,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'playerFeedbackDelay': 0.75,
  'allowedNotSupportedGraphicSettings': {},
  'userRoomsService': '',
- 'cryptLoginInfo': True}
+ 'cryptLoginInfo': True,
+ 'compulsoryIntroVideos': []}
 
 class GuiSettings(object):
 
@@ -192,8 +192,9 @@ class GuiSettings(object):
 
                     return value
                 raise AttributeError("Unsupported macros '{0}', not found in {1}".format(macros, simpleMacroses))
-            if macrosKey in dictValue or 'default' in dictValue:
-                value = dictValue.get(macrosKey, None) or dictValue['default']
-                return self.__applyMacros(value)
+            if macrosKey in dictValue:
+                return self.__applyMacros(dictValue[macrosKey])
+            if 'default' in dictValue:
+                return self.__applyMacros(dictValue['default'])
             raise AttributeError("Incorrect section in {0}, dict {1} with macros '{2}' should contains item '{3}' or 'default'".format(GUI_SETTINGS_FILE_PATH, dictValue, macros, macrosKey))
         return value

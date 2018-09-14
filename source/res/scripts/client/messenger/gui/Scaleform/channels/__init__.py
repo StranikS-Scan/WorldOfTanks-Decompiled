@@ -4,7 +4,8 @@ from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from messenger import g_settings
 from messenger.gui.Scaleform.channels import bw, bw_chat2, xmpp
 from messenger.gui.interfaces import IControllersCollection
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL
+from messenger.proto import XMPP_MUC_CHANNEL_TYPE
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
@@ -131,8 +132,10 @@ class LobbyControllers(ControllersCollection):
     def factory(self, channel):
         if channel.getProtoType() == PROTO_TYPE.BW_CHAT2 and not g_settings.server.BW_CHAT2.isEnabled():
             return None
+        elif channel.getProtoType() == PROTO_TYPE.XMPP and not g_settings.server.XMPP.isEnabled():
+            return None
         else:
-            return None if channel.getProtoType() == PROTO_TYPE.XMPP and not g_settings.server.XMPP.isEnabled() else super(LobbyControllers, self).factory(channel)
+            return None if channel.getProtoType() == PROTO_TYPE.BW and channel.getName() == LAZY_CHANNEL.COMMON and g_settings.server.XMPP.isMucServiceAllowed(service=XMPP_MUC_CHANNEL_TYPE.STANDARD) else super(LobbyControllers, self).factory(channel)
 
 
 class BattleControllers(ControllersCollection):

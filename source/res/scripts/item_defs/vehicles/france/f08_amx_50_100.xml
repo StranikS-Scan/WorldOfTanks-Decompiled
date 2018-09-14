@@ -9,6 +9,13 @@
     <forward>	51	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.049	</moving>
+    <still>	0.098	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.147	</firePenalty>
+  </invisibility>
   <repairCost>	8.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -56,10 +63,11 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.684772 0.305321	</turret>
+      <turret>	0.000000 0.68477 0.31238	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -86,7 +94,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F08_AMX_50_100/AMX_50_100_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	2.5 2.5 0.1 0.18	</tiling>
+      <tiling>	1.18 1.18 0.1 0.18	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -227,15 +235,14 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.01271 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.29389 2.12417	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29389 2.13123	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -283,14 +290,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -522,15 +526,14 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.01271 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.29389 2.12417	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29389 2.13123	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -578,14 +581,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.25	</maxAmplitude>
         <maxOffset>	0.25	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -749,6 +749,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
             <rate>	22	</rate>
@@ -760,7 +761,8 @@
             <exploded>	vehicles/french/F08_AMX_50_100/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -772,8 +774,9 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
-            <tiling>	2.32 2.44 0.000000 0.000000	</tiling>
+            <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_F3>
         <_90mm_canon_DCA_45>	shared	  <maxAmmo>	72	</maxAmmo>
@@ -812,6 +815,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
             <rate>	22	</rate>
@@ -822,7 +826,8 @@
             <exploded>	vehicles/french/F08_AMX_50_100/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -834,8 +839,9 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
-            <tiling>	2.14 2.14 0.28 0.31	</tiling>
+            <tiling>	1.18 0.625 0.28 0.31	</tiling>
           </camouflage>
         </_90mm_canon_DCA_45>
         <_100mm_SA_47>	shared	  <maxAmmo>	60	</maxAmmo>
@@ -868,6 +874,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
             <rate>	22	</rate>
@@ -878,7 +885,8 @@
             <exploded>	vehicles/french/F08_AMX_50_100/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -890,8 +898,9 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
-            <tiling>	2.02 2.02 0.26 0.35	</tiling>
+            <tiling>	1.18 0.64 0.26 0.35	</tiling>
           </camouflage>
         </_100mm_SA_47>
       </guns>
@@ -901,7 +910,8 @@
         <exploded>	vehicles/french/F08_AMX_50_100/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F08_AMX_50_100/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F08_AMX_50_100/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F08_AMX_50_100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.621759 -0.052418	</gunPosition>
       <emblemSlots>
@@ -923,11 +933,9 @@
       </emblemSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.237 -0.169 0.958 -0.000 1.539 0.012 0.782 0.692 0.350 0.500 0.103 0.500 0.213 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
-        <tiling>	1.54 0.415 0.000000 0.000000	</tiling>
+        <tiling>	0.655 0.43 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_AMX_50_100>
   </turrets0>
@@ -955,6 +963,28 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_50_100>
+        <alpha>	0.1127	</alpha>
+      </Chassis_AMX_50_100>
+      <Chassis_AMX_50_100_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_AMX_50_100_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_230>
+        <bravo>	151.9842	</bravo>
+      </Maybach_HL_230>
+      <Maybach_HL_230P45>
+        <bravo>	198.2402	</bravo>
+      </Maybach_HL_230P45>
+      <Maybach_HL_295>
+        <bravo>	224.6722	</bravo>
+      </Maybach_HL_295>
+    </engines>
+    <armour>	1.34250162	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

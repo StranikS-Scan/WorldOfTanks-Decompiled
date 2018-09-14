@@ -11,6 +11,13 @@
     <forward>	45	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.043	</moving>
+    <still>	0.086	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.129	</firePenalty>
+  </invisibility>
   <repairCost>	29.67	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -70,7 +77,8 @@
       <turret>	-0.005374 1.19869 -1.86744	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G45_G_Tiger/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -223,13 +231,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.19399 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G45_G_Tiger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.3663 2.03069	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -589,13 +596,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.19399 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G45_G_Tiger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.3663 2.03069	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -895,6 +901,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	7.0	</aimingTime>
+          <invisibilityFactorAtShot>	0.108	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -48 1 -48	</minPitch>
             <maxPitch>	0 2 1 2	</maxPitch>
@@ -907,7 +914,8 @@
             <exploded>	vehicles/german/G45_G_Tiger/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G45_G_Tiger/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -926,7 +934,7 @@
         <_210mm_Morser_21>	shared	  <maxAmmo>	15	</maxAmmo>
           <shotDispersionRadius>	0.86	</shotDispersionRadius>
           <unlocks>
-            <vehicle>	G_E	  <cost>	266000	</cost>
+            <vehicle>	G61_G_E	  <cost>	266000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -937,6 +945,7 @@
           </armor>
           <reloadTime>	48	</reloadTime>
           <aimingTime>	7.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.56	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -953,7 +962,8 @@
             <exploded>	vehicles/german/G45_G_Tiger/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G45_G_Tiger/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -976,15 +986,14 @@
         <exploded>	vehicles/german/G45_G_Tiger/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G45_G_Tiger/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G45_G_Tiger/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G45_G_Tiger/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_G_Tiger>
   </turrets0>
   <engines>
@@ -1011,6 +1020,30 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_210mm_Morser_21>
+        <delta>	1.03773584	</delta>
+      </_210mm_Morser_21>
+    </guns>
+    <chassis>
+      <Chassis_G_Tiger>
+        <alpha>	0.1288	</alpha>
+      </Chassis_G_Tiger>
+      <Chassis_G_Tiger2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_G_Tiger2>
+    </chassis>
+    <engines>
+      <Maybach_HL_210_TRM_P45>
+        <bravo>	171.8082	</bravo>
+      </Maybach_HL_210_TRM_P45>
+      <Maybach_HL_230_TRM_P45>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230_TRM_P45>
+    </engines>
+    <armour>	0.816951974	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

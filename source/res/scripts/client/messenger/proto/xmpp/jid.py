@@ -3,8 +3,11 @@
 import random
 import types
 import time
+from string import Template
+from ConnectionManager import connectionManager
 from ids_generators import SequenceIDGenerator
 from messenger import g_settings
+from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 
 class BareJID(object):
     __slots__ = ('_node', '_domain')
@@ -157,11 +160,55 @@ _counter = SequenceIDGenerator()
 
 def makeUserRoomJID(room=''):
     jid = JID()
-    service = g_settings.server.XMPP.userRoomsService
-    if not service:
+    service = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.USERS)
+    if not service or not service['hostname']:
         return jid
     if not room:
         room = 'user_room_{:08X}_{:08X}_{:04X}'.format(long(time.time()) & 4294967295L, random.randrange(1, 4294967295L), _counter.next())
     jid.setNode(room)
-    jid.setDomain(service)
+    jid.setDomain(service['hostname'])
+    return jid
+
+
+def makeSystemRoomJID(room='', channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD):
+    """
+    create jid for system room
+    :param room: room name if exist
+    :param channelType: channel type (XMPP_MUC_CHANNEL_TYPE)
+    :return: system room jid
+    """
+    jid = JID()
+    service = g_settings.server.XMPP.getChannelByType(channelType)
+    if not service or not service['hostname']:
+        return jid
+    room = room or _getSystemChannelNameFormatter(service)
+    if not room:
+        return jid
+    jid.setNode(room)
+    jid.setDomain(service['hostname'])
+    return jid
+
+
+def _getSystemChannelNameFormatter(service):
+    peripheryID = connectionManager.peripheryID
+    chanTemplate = Template(service['format'])
+    return chanTemplate.safe_substitute(peripheryID=peripheryID, userString=service['userString'], hostname=service['hostname'], type=service['type']) if chanTemplate else None
+
+
+def makeClanRoomJID(clandDbId, channelType=XMPP_MUC_CHANNEL_TYPE.CLANS):
+    """
+    create jid for clan room
+    :param room: room name if exist
+    :return: clan room jid
+    """
+    jid = JID()
+    service = g_settings.server.XMPP.getChannelByType(channelType)
+    if not service or not service['hostname']:
+        return jid
+    clanTemplate = Template(service['format'])
+    room = clanTemplate.safe_substitute(clanDBID=clandDbId)
+    if not room:
+        return jid
+    jid.setNode(room)
+    jid.setDomain(service['hostname'])
     return jid

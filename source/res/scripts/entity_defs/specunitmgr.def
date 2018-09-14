@@ -1,0 +1,15 @@
+<specunitmgr.def>
+  <Parent>	UnitMgr	</Parent>
+  <BaseMethods>
+    <addInviteExtraData>
+      <Arg>	PYTHON	</Arg>
+    </addInviteExtraData>
+    <updateInviteExtraData>
+      <Arg>	ARRAY	  <of>	INT64	</of>
+      </Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PREBATTLE_INVITE	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </updateInviteExtraData>
+  </BaseMethods>
+</specunitmgr.def>

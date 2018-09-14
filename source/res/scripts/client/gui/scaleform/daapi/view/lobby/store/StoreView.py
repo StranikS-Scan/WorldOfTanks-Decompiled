@@ -15,12 +15,26 @@ _TABS = ({'id': STORE_CONSTANTS.SHOP,
   'label': MENU.STORETAB_INVENTORY,
   'linkage': STORE_CONSTANTS.INVENTORY_LINKAGE})
 
+def _getTabIndex(tabId):
+    index, _ = findFirst(lambda (i, e): e['id'] == tabId, enumerate(_TABS), (0, None))
+    return index
+
+
 class StoreView(StoreViewMeta):
     __sound_env__ = ShopEnv
 
     def __init__(self, ctx=None):
         super(StoreView, self).__init__(ctx)
-        self.__currentTab = AccountSettings.getFilter(STORE_TAB)
+        tabId = ctx.get('tabId')
+        component = ctx.get('component')
+        if tabId is not None:
+            self.__currentTab = _getTabIndex(tabId)
+        else:
+            self.__currentTab = AccountSettings.getFilter(STORE_TAB)
+        if component is not None:
+            nation, _ = AccountSettings.getFilter('shop_current')
+            AccountSettings.setFilter('shop_current', (nation, component))
+        return
 
     def _populate(self):
         super(StoreView, self)._populate()
@@ -28,9 +42,7 @@ class StoreView(StoreViewMeta):
          'buttonBarData': _TABS})
 
     def onTabChange(self, tabId):
-        index, _ = findFirst(lambda (i, e): e['id'] == tabId, enumerate(_TABS), (0, None))
-        self.__currentTab = index
-        return None
+        self.__currentTab = _getTabIndex(tabId)
 
     def onClose(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)

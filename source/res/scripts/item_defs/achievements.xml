@@ -1316,6 +1316,21 @@
       </value>
     </achievement>
     <achievement>
+      <name>	singleAchievements:EFC2016	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	series	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	901	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	achievements:kamikaze	</name>
       <type>	dict	</type>
       <value>
@@ -2351,6 +2366,21 @@
       </value>
     </achievement>
     <achievement>
+      <name>	achievements:EFC2016Goleador	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	902	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	singleAchievements:tankwomen	</name>
       <type>	dict	</type>
       <value>
@@ -2731,7 +2761,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	group	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	402.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2746,7 +2776,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	605.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2761,7 +2791,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	memorial	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1013.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2776,7 +2806,7 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1407.2	  <name>	weight	</name>
           <type>	float	</type>
@@ -2791,7 +2821,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	801.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2806,7 +2836,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	battle	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	200.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2821,7 +2851,7 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1407.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2836,7 +2866,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	900.1	  <name>	weight	</name>
           <type>	float	</type>
@@ -2851,7 +2881,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	900.2	  <name>	weight	</name>
           <type>	float	</type>
@@ -2866,7 +2896,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	battle	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	605.3	  <name>	weight	</name>
           <type>	float	</type>
@@ -2881,7 +2911,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	battle	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	605.2	  <name>	weight	</name>
           <type>	float	</type>

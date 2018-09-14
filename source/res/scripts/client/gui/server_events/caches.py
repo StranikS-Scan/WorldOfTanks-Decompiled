@@ -6,7 +6,7 @@ from shared_utils import first
 from gui import nationCompareByIndex, getNationIndex
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.decorators import ReprInjector
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
+from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, compareByVehTableTypeName
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
 _g_sortedVehs = {}
 VehiclesListProps = namedtuple('VehiclesListProps', ['disableChecker',
@@ -169,7 +169,7 @@ def clearNavInfo():
 
 
 _SORTINGS = {'nation': lambda (veh1, _), (veh2, __): nationCompareByIndex(veh1.nationID, veh2.nationID),
- 'type': lambda (veh1, _), (veh2, __): veh1._sortByType(veh2),
+ 'type': lambda (veh1, _), (veh2, __): compareByVehTableTypeName(veh2.type, veh1.type),
  'level': lambda (veh1, _), (veh2, __): veh1.level - veh2.level,
  'vName': lambda (veh1, _), (veh2, __): cmp(veh1.userName, veh2.userName),
  'notAvailable': lambda (_, vData1), (__, vData2): cmp(vData1[0], vData2[0]),

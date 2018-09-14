@@ -2,15 +2,13 @@
 # Embedded file name: scripts/client/MapActivities.py
 import BigWorld
 import ResMgr
-import Pixie
 import PlayerEvents
 import math
 import random
 import SoundGroups
 from constants import ARENA_PERIOD
 from debug_utils import *
-from functools import partial
-import WWISE
+from helpers.PixieBG import PixieBG
 
 class Timer:
     __timeMethod = None
@@ -277,7 +275,7 @@ class WarplaneActivity(IMapActivity):
                 if self.__cbID is not None:
                     BigWorld.cancelCallback(self.__cbID)
                 if self.__sound is not None:
-                    self.__sound.stop()
+                    self.__sound.stopAll()
                     self.__sound = None
                 self.__fadedIn = False
             self.__model.visible = 1
@@ -298,20 +296,20 @@ class WarplaneActivity(IMapActivity):
             self.__motor = None
             self.__curve = None
         if self.__sound is not None:
-            self.__sound.stop()
+            self.__sound.stopAll()
             self.__sound = None
-        if self.__particle[1] is not None:
-            self.__particle[0].detach(self.__particle[1])
+        if self.__particle[1] is not None and self.__particle[1].pixie is not None:
+            self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
         self.__firstLaunch = True
         return
 
     def pause(self):
         if self.__sound is not None:
-            self.__sound.stop()
+            self.__sound.stopAll()
             self.__sound = None
-        if self.__particle[1] is not None:
-            self.__particle[0].detach(self.__particle[1])
+        if self.__particle[1] is not None and self.__particle[1].pixie is not None:
+            self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
         if self.__model is not None:
             if self.__motor is not None and self.__motor in self.__model.motors:
@@ -339,8 +337,7 @@ class WarplaneActivity(IMapActivity):
             self.pause()
             return
         if self.__sound is not None:
-            if self.__sound.isPlaying:
-                self.__sound.volume = visibility
+            self.__sound.volume = visibility
         else:
             self.__playSound()
         self.__cbID = BigWorld.callback(0.25, self.__update)
@@ -364,27 +361,22 @@ class WarplaneActivity(IMapActivity):
             effectName = ds.asString if ds is not None else ''
             if effectName != '':
                 modelNode = self.__model.node(hardPointName)
-                Pixie.createBG(effectName, partial(self.__onParticlesLoaded, effectName))
-                self.__particle = (modelNode, None)
+                self.__particle = (modelNode, PixieBG(effectName, self.__onParticlesLoaded))
         return
 
-    def __onParticlesLoaded(self, effectName, particles):
-        if particles is None:
-            LOG_ERROR("Can't create pixie '%s'." % effectName)
-            return
-        else:
-            if self.__particle[0] is not None:
-                self.__particle[0].attach(particles)
-                self.__particle = (self.__particle[0], particles)
-            return
+    def __onParticlesLoaded(self, pixieBG):
+        if self.__particle[0] is not None:
+            self.__particle[0].attach(pixieBG.pixie)
+        return
 
     def __playSound(self):
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         soundName = ds.asString if ds is not None else ''
         if soundName != '':
             try:
-                self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, soundName)
-                self.__sound.play()
+                objectName = soundName + ' : ' + str(self.__model.root)
+                self.__sound = SoundGroups.g_instance.WWgetSoundObject(objectName, self.__model.root)
+                self.__sound.play(soundName)
                 self.__sound.volume = 0.0
             except:
                 self.__sound = None
@@ -487,6 +479,7 @@ class ExplosionActivity(IMapActivity):
             self.__motor = None
         if self.__sound is not None:
             self.__sound.stop()
+            self.__sound.releaseMatrix()
             self.__sound = None
         self.__firstLaunch = True
         return
@@ -494,6 +487,7 @@ class ExplosionActivity(IMapActivity):
     def pause(self):
         if self.__sound is not None:
             self.__sound.stop()
+            self.__sound.releaseMatrix()
             self.__sound = None
         if self.__model is not None:
             self.__model.visible = 0
@@ -519,6 +513,10 @@ class ExplosionActivity(IMapActivity):
     def __endEventCallback(self, sound):
         self.pause()
         self.__isOver = True
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
+        return
 
     def __onModelLoaded(self, resourceRefs):
         if self.__modelName not in resourceRefs.failedIDs:

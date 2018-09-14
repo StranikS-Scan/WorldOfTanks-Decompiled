@@ -52,7 +52,7 @@ def _readDispatcherTriggerSection(xmlCtx, section, _, triggerID):
 
 def _readDispatchableTriggerSection(xmlCtx, section, triggerID, clazz, **kwargs):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, clazz, stateFlagID=stateFlagID, **kwargs)
 
@@ -83,7 +83,7 @@ def _readVehicleDestroyedTriggerSection(xmlCtx, section, _, triggerID):
 
 def _readShotMissedTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.ShotMissedTrigger(triggerID, stateFlagID=stateFlagID)
 
@@ -133,10 +133,7 @@ def _readAimMarkerSection(xmlCtx, section, markerID, varRef):
 
 
 def _readAreaMarkerSection(xmlCtx, section, markerID, varRef):
-    subSec = _xml.getSubsection(xmlCtx, section, 'minimap')
-    minimapData = {'entry-name': _xml.readString(xmlCtx, subSec, 'entry-name'),
-     'entry-type': _xml.readString(xmlCtx, subSec, 'entry-type')}
-    return chapter.AreaMarker(markerID, varRef, _readModelMarkerSection(xmlCtx, section), _readModelMarkerSection(xmlCtx, section, name='ground'), _readWorldMarkerSection(xmlCtx, section), minimapData, createInd=section.readBool('create-indicator', True))
+    return chapter.AreaMarker(markerID, varRef, _readModelMarkerSection(xmlCtx, section), _readModelMarkerSection(xmlCtx, section, name='ground'), _readWorldMarkerSection(xmlCtx, section), createInd=section.readBool('create-indicator', True))
 
 
 def _readVehicleMarkerSection(xmlCtx, section, markerID, varRef):

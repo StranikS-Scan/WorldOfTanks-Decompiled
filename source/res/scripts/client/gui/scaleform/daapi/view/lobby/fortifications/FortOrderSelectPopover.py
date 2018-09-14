@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderSelectPopover.py
 import constants
 from adisp import process
+from debug_utils import LOG_DEBUG
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers.i18n import makeString as _ms
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.context import ActivateConsumableCtx, ReturnConsumableCtx
@@ -28,6 +30,11 @@ class FortOrderSelectPopover(FortOrderSelectPopoverMeta, FortViewHelper, UnitLis
     @process
     def removeOrder(self, consumableOrderTypeID):
         yield self.fortProvider.sendRequest(ReturnConsumableCtx(consumableOrderTypeID, waitingID='fort/returnConsumable'))
+
+    def onClientStateChanged(self, state):
+        super(FortOrderSelectPopover, self).onClientStateChanged(state)
+        if state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+            self.destroy()
 
     def onConsumablesChanged(self, unitMgrID):
         self.destroy()

@@ -23,7 +23,7 @@ class SandboxStorage(LocalStorage):
         if AccountSettings.getSettings(DEFAULT_QUEUE) == QUEUE_TYPE.SANDBOX:
             isSelected = True
             dossier = g_itemsCache.items.getAccountDossier()
-            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(3, 10)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(3, 10)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             vehicles = sorted(g_itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
             vehicle = findFirst(None, vehicles)
             if vehicle is not None:

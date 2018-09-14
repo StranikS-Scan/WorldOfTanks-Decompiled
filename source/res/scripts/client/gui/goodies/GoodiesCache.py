@@ -12,6 +12,8 @@ class _GoodiesCache(object):
     def __init__(self):
         self._items = weakref.proxy(g_itemsCache.items)
         self.__goodiesCache = defaultdict(dict)
+        self.__activeBoostersTypes = None
+        return
 
     def init(self):
         g_itemsCache.onSyncStarted += self.__clearCache
@@ -20,52 +22,61 @@ class _GoodiesCache(object):
         g_itemsCache.onSyncStarted -= self.__clearCache
 
     def clear(self):
+        self.__activeBoostersTypes = None
         while len(self.__goodiesCache):
             _, cache = self.__goodiesCache.popitem()
             cache.clear()
+
+        return
 
     @property
     def personalGoodies(self):
         return self._items.goodies.goodies
 
     @property
+    def shop(self):
+        return self._items.shop
+
+    @property
     def shopBoosters(self):
-        return self._items.shop.boosters
+        return self.shop.boosters
 
     def getActiveBoostersTypes(self):
-        activeBoosterTypes = []
-        for boosterID, boosterValues in self.personalGoodies.iteritems():
-            if boosterValues.state == GOODIE_STATE.ACTIVE:
-                boosterDescription = self.shopBoosters.get(boosterID, None)
-                if boosterDescription:
-                    activeBoosterTypes.append(boosterDescription.resource)
+        if self.__activeBoostersTypes is not None:
+            return self.__activeBoostersTypes
+        else:
+            activeBoosterTypes = []
+            for boosterID, boosterValues in self.personalGoodies.iteritems():
+                if boosterValues.state == GOODIE_STATE.ACTIVE:
+                    boosterDescription = self.shopBoosters.get(boosterID, None)
+                    if boosterDescription:
+                        activeBoosterTypes.append(boosterDescription.resource)
 
-        return activeBoosterTypes
+            self.__activeBoostersTypes = activeBoosterTypes
+            return self.__activeBoostersTypes
+            return
 
     def getBooster(self, boosterID):
         boosterDescription = self.shopBoosters.get(boosterID, None)
-        boosterValues = self.personalGoodies.get(boosterID, None)
-        return self.__makeBooster(boosterID, boosterDescription, boosterValues, self.getActiveBoostersTypes())
+        return self.__makeBooster(boosterID, boosterDescription)
 
     def getBoosters(self, criteria=REQ_CRITERIA.EMPTY):
         results = {}
-        activeBoosterTypes = self.getActiveBoostersTypes()
         for boosterID, boosterDescription in self.shopBoosters.iteritems():
-            boosterValues = self.personalGoodies.get(boosterID, None)
-            booster = self.__makeBooster(boosterID, boosterDescription, boosterValues, activeBoosterTypes)
+            booster = self.__makeBooster(boosterID, boosterDescription)
             if criteria(booster):
                 results[boosterID] = booster
 
         return results
 
-    def __makeBooster(self, boosterID, boosterDescription, boosterValues, activeBoosterTypes):
+    def __makeBooster(self, boosterID, boosterDescription):
         container = self.__goodiesCache[GOODIE_VARIETY.BOOSTER]
         if boosterID in container:
             return container[boosterID]
         else:
             booster = None
             if boosterDescription is not None:
-                container[boosterID] = booster = Booster(boosterID, boosterDescription, boosterValues, activeBoosterTypes)
+                container[boosterID] = booster = Booster(boosterID, boosterDescription, self)
             return booster
 
     def __clearCache(self, *args):

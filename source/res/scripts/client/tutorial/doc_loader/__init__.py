@@ -4,7 +4,6 @@ import ResMgr
 from tutorial import settings
 from tutorial.doc_loader import gui_config
 from tutorial.doc_loader.parsers import DescriptorParser, ChapterParser
-from tutorial.settings import GLOBAL_REFS_FILE_PATH, TUTORIAL_SETTINGS
 from tutorial.logger import LOG_CURRENT_EXCEPTION
 
 def loadDescriptorData(setting, exParsers=None, clearCache=False):
@@ -37,7 +36,7 @@ def loadChapterData(chapter, chapterParser, afterBattle=False, initial=False):
 
 
 def clearChapterData(chapter):
-    ResMgr.purge(GLOBAL_REFS_FILE_PATH)
+    ResMgr.purge(settings.GLOBAL_REFS_FILE_PATH)
     defPath = chapter.getFilePath(afterBattle=False)
     abPath = chapter.getFilePath(afterBattle=True)
     ResMgr.purge(defPath)
@@ -49,7 +48,7 @@ def clearChapterData(chapter):
 def getQuestsDescriptor():
     global _questsDescriptor
     if _questsDescriptor is None:
-        _questsDescriptor = loadDescriptorData(TUTORIAL_SETTINGS.QUESTS)
+        _questsDescriptor = loadDescriptorData(settings.TUTORIAL_SETTINGS.QUESTS)
     return _questsDescriptor
 
 

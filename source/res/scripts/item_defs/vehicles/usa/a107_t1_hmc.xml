@@ -51,7 +51,8 @@
       <turret>	0.000000 0.414625 0.272627	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A107_T1_HMC/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A107_T1_HMC/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A107_T1_HMC/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -206,13 +207,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.87494 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A107_T1_HMC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A107_T1_HMC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A107_T1_HMC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.776996 0.76849	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -435,13 +435,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.87494 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A107_T1_HMC/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A107_T1_HMC/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A107_T1_HMC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.776996 0.76849	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -585,6 +584,7 @@
             <minPitch></minPitch>
             <maxPitch></maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.221	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.8	</shotDispersionRadius>
           <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
@@ -599,7 +599,8 @@
             <exploded>	vehicles/american/A107_T1_HMC/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A107_T1_HMC/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A107_T1_HMC/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A107_T1_HMC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium	</effects>
           <camouflage>
@@ -639,14 +640,13 @@
         <exploded>	vehicles/american/A107_T1_HMC/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A107_T1_HMC/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A107_T1_HMC/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A107_T1_HMC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.009209 0.595805 -0.074752	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.520 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <camouflage>
         <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
@@ -664,6 +664,13 @@
     <forward>	34	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.128	</moving>
+    <still>	0.257	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.386	</firePenalty>
+  </invisibility>
   <repairCost>	5.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <engines>
@@ -691,6 +698,25 @@
       </unlocks>
     </SCR_210>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_A107_T1_HMC>
+        <alpha>	0.12075	</alpha>
+      </Chassis_A107_T1_HMC>
+      <Chassis_A107_T1_HMC_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_A107_T1_HMC_2>
+    </chassis>
+    <engines>
+      <LaSalle_V8_75>
+        <bravo>	19.82402	</bravo>
+      </LaSalle_V8_75>
+      <LaSalle_V8_89>
+        <bravo>	23.52451	</bravo>
+      </LaSalle_V8_89>
+    </engines>
+    <armour>	0.767378312	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

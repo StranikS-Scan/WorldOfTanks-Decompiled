@@ -9,6 +9,13 @@
     <forward>	48	</forward>
     <backward>	8	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.205	</moving>
+    <still>	0.342	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.513	</firePenalty>
+  </invisibility>
   <repairCost>	5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	0.000000 0.519467 0.315602	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -155,6 +163,12 @@
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.057836	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.281548	</radius>
         </wheel>
@@ -170,6 +184,12 @@
           <isLeading>	false	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.277836	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.057836	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -191,13 +211,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.812 0.745158	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -264,6 +283,12 @@
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.057836	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.281548	</radius>
         </wheel>
@@ -279,6 +304,12 @@
           <isLeading>	false	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.277836	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.057836	</radius>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -300,13 +331,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.812 0.745158	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -379,6 +409,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <turretYawLimits>	-22 22	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB39_Universal_CarrierQF2/normal/lod0/Gun_01.model	</undamaged>
@@ -386,7 +417,8 @@
             <exploded>	vehicles/british/GB39_Universal_CarrierQF2/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_2pdr_AT_Gun_Mk_IX>
         <QF_6_pounder_8cwt_Mk_II_AT>	shared	  <maxAmmo>	64	</maxAmmo>
@@ -408,6 +440,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -419,7 +452,8 @@
             <exploded>	vehicles/british/GB39_Universal_CarrierQF2/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
@@ -444,6 +478,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -455,7 +490,8 @@
             <exploded>	vehicles/british/GB39_Universal_CarrierQF2/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -468,7 +504,8 @@
         <exploded>	vehicles/british/GB39_Universal_CarrierQF2/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB39_Universal_CarrierQF2/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB39_Universal_CarrierQF2/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB39_Universal_CarrierQF2/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.210533 0.037638	</gunPosition>
       <emblemSlots>
@@ -482,9 +519,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.000 0.500 0.488 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
       </camouflage>
@@ -504,6 +539,30 @@
   <radios>
     <N11>	shared	</N11>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <QF_6_pounder_8cwt_Mk_I_AT>
+        <delta>	1.121951	</delta>
+      </QF_6_pounder_8cwt_Mk_I_AT>
+    </guns>
+    <chassis>
+      <Chassis_GB39_Universal_CarrierQF2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_GB39_Universal_CarrierQF2>
+      <Chassis_GB39_Universal_CarrierQF2_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_GB39_Universal_CarrierQF2_2>
+    </chassis>
+    <engines>
+      <Ford_V8-221>
+        <bravo>	22.46722	</bravo>
+      </Ford_V8-221>
+      <Ford_V8-239>
+        <bravo>	26.43203	</bravo>
+      </Ford_V8-239>
+    </engines>
+    <armour>	0.772140005	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

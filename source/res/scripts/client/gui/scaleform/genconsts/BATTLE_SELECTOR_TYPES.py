@@ -3,6 +3,12 @@
 
 
 class BATTLE_SELECTOR_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     BATTLE_SELECTOR_TYPE_RANDOM = 'joinRandomQueue'
     BATTLE_SELECTOR_TYPE_FALLOUT = 'fallout'
     BATTLE_SELECTOR_TYPE_UNIT = 'unit'

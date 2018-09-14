@@ -10,6 +10,13 @@
     <forward>	56	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.199	</moving>
+    <still>	0.265	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.398	</firePenalty>
+  </invisibility>
   <repairCost>	7.25	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.515023 0.4404	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A07_T20/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A07_T20/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A07_T20/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -93,7 +101,7 @@
       <userString>	#usa_vehicles:HVSS_T48	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	11900.0	</price>
+      <price>	11900	</price>
       <unlocks>
         <chassis>	HVSS_T51	  <cost>	8000	</cost>
         </chassis>
@@ -131,7 +139,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.68	</textureScale>
+        <textureScale>	-3.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -198,15 +206,14 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.95893 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A07_T20/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A07_T20/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A07_T20/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.29106 1.94335	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29677 1.92611	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -245,8 +252,8 @@
         <left>	vehicles/american/A07_T20/track/left.track	</left>
         <right>	vehicles/american/A07_T20/track/right.track	</right>
         <segmentLength>	0.128	</segmentLength>
-        <segmentOffset>	0.152	</segmentOffset>
-        <segment2Offset>	0.064	</segment2Offset>
+        <segmentOffset>	0.421	</segmentOffset>
+        <segment2Offset>	0.065	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -262,9 +269,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1500	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -295,7 +299,7 @@
       <userString>	#usa_vehicles:HVSS_T51	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	17900.0	</price>
+      <price>	17900	</price>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -329,7 +333,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.68	</textureScale>
+        <textureScale>	-3.15	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -396,15 +400,14 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.95893 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A07_T20/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A07_T20/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A07_T20/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.29106 1.94335	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29677 1.92611	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -460,9 +463,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1500	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -495,7 +495,7 @@
       <userString>	#usa_vehicles:T20D1	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	12900.0	</price>
+      <price>	12900	</price>
       <armor>
         <armor_1>	88.9	</armor_1>
         <armor_3>	63.5	</armor_3>
@@ -545,13 +545,15 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -591,13 +593,15 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -620,7 +624,8 @@
         <exploded>	vehicles/american/A07_T20/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A07_T20/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A07_T20/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A07_T20/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0809 0.3554 0.8913	</gunPosition>
       <emblemSlots>
@@ -642,9 +647,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.016 0.005 1.000 0.000 0.670 0.099 0.626 0.522 0.500 0.500 0.096 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.325 0.325 0.55 0.57	</tiling>
       </camouflage>
@@ -653,7 +656,7 @@
       <userString>	#usa_vehicles:T20D2	</userString>
       <tags></tags>
       <level>	7	</level>
-      <price>	17400.0	</price>
+      <price>	17400	</price>
       <unlocks>
         <gun>	_90mm_Gun_M3	  <cost>	14000	</cost>
         </gun>
@@ -706,13 +709,15 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -746,13 +751,15 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -786,13 +793,15 @@
           </armor>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -827,13 +836,15 @@
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A07_T20/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A07_T20/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/american/A07_T20/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A07_T20/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A07_T20/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A07_T20/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -856,7 +867,8 @@
         <exploded>	vehicles/american/A07_T20/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A07_T20/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A07_T20/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A07_T20/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.3404 0.6841	</gunPosition>
       <emblemSlots>
@@ -878,9 +890,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.021 0.000 0.984 0.042 0.664 0.077 0.628 0.686 0.500 0.500 0.000 0.500 0.131 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.325 0.325 1 0.92	</tiling>
       </camouflage>
@@ -909,6 +919,30 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_90mm_Gun_M3>
+        <delta>	1.07216	</delta>
+      </_90mm_Gun_M3>
+    </guns>
+    <chassis>
+      <HVSS_T48>
+        <alpha>	0.13685	</alpha>
+      </HVSS_T48>
+      <HVSS_T51>
+        <alpha>	0.08855	</alpha>
+      </HVSS_T51>
+    </chassis>
+    <engines>
+      <Ford_GAA>
+        <bravo>	137.4465	</bravo>
+      </Ford_GAA>
+      <Ford_GAN>
+        <bravo>	148.0194	</bravo>
+      </Ford_GAN>
+    </engines>
+    <armour>	1.003286086	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

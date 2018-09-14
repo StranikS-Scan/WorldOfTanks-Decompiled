@@ -11,6 +11,13 @@
     <forward>	35	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.097	</moving>
+    <still>	0.161	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.242	</firePenalty>
+  </invisibility>
   <repairCost>	9.585	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	0.000000 0.580489 0.58254	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A14_T30/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A14_T30/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A14_T30/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -198,13 +206,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12551 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A14_T30/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A14_T30/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A14_T30/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.47979 2.65597	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -446,13 +453,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12551 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A14_T30/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A14_T30/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A14_T30/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.47979 2.65597	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -639,13 +645,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A14_T30/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A14_T30/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -689,13 +697,15 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A14_T30/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A14_T30/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -733,13 +743,15 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A14_T30/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A14_T30/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A14_T30/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A14_T30/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A14_T30/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A14_T30/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -762,7 +774,8 @@
         <exploded>	vehicles/american/A14_T30/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A14_T30/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A14_T30/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A14_T30/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4954 1.31448	</gunPosition>
       <emblemSlots>
@@ -790,9 +803,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.929 -0.077 1.034 0.000 0.943 0.034 0.863 0.717 0.396 0.500 0.041 0.500 0.036 0.100 0.245	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1 1 0.09 0.34	</tiling>
       </camouflage>
@@ -817,6 +828,25 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T80E3A>
+        <alpha>	0.1449	</alpha>
+      </T80E3A>
+      <T84E38>
+        <alpha>	0.1288	</alpha>
+      </T84E38>
+    </chassis>
+    <engines>
+      <Continental_AV-1790-3>
+        <bravo>	211.4562	</bravo>
+      </Continental_AV-1790-3>
+      <Continental_AV-1790-5>
+        <bravo>	227.3154	</bravo>
+      </Continental_AV-1790-5>
+    </engines>
+    <armour>	0.97667163	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

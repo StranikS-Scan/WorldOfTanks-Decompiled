@@ -7,6 +7,10 @@ class INPUT_CHECKER_ALIASES(object):
     INPUT_CHECKER = 'inputCheckerComponent'
 
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     return (ViewSettings(INPUT_CHECKER_ALIASES.INPUT_CHECKER, InputChecker, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),)
 

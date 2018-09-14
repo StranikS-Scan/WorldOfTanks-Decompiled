@@ -3,6 +3,7 @@
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import artefacts
 from gui.shared.gui_items import FittingItem
+from gui.shared.money import Currency
 
 class VehicleArtefact(FittingItem):
 
@@ -30,9 +31,10 @@ class Equipment(VehicleArtefact):
         """ Overridden method for receiving special action price value for shells
         @param buyPrice:
         @param proxy:
-        @return: (gold, credits)
+        @return: an instance of Money class
         """
-        return (buyPrice[0] + buyPrice[1] * proxy.exchangeRateForShellsAndEqs, buyPrice[1])
+        creditsPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs)
+        return buyPrice.replace(Currency.CREDITS, creditsPrice.credits)
 
     @property
     def icon(self):

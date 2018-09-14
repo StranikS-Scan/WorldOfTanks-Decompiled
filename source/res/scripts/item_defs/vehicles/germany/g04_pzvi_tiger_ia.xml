@@ -10,6 +10,13 @@
     <forward>	40	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.075	</moving>
+    <still>	0.129	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.164	</firePenalty>
+  </invisibility>
   <repairCost>	3.5	</repairCost>
   <premiumVehicleXPFactor>	1.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -68,7 +75,8 @@
       <hardPoint>	HP_turretJoint_2	</hardPoint>
     </turretHardPoints>
     <hitTester>
-      <collisionModel>	vehicles/german/G04_PzVI_Tiger_I/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots></emblemSlots>
     <hangarShadowTexture>	vehicles/german/G04_PzVI_Tiger_I/PzVI_Tiger_I_HangarShadowMap.dds	</hangarShadowTexture>
@@ -372,13 +380,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.27105 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G04_PzVI_Tiger_I/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.40885 1.86016	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -464,6 +471,7 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.394671 8 0.458333 3 0.541667 3 0.605329 8 1 8	</maxPitch>
@@ -474,7 +482,8 @@
             <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots></emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -489,15 +498,14 @@
         <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G04_PzVI_Tiger_I/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.060207 0.411165 1.36912	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.043 0.000 0.574 0.089 0.867 0.436 0.271 0.500 0.000 0.500 0.000 0.100 0.089	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
       </camouflage>
@@ -512,6 +520,18 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G04_PzVI_Tiger_IA>
+        <alpha>	0.0966	</alpha>
+      </Chassis_G04_PzVI_Tiger_IA>
+    </chassis>
+    <engines>
+      <Maybach_HL_210_TRM_P45A>
+        <bravo>	158.5922	</bravo>
+      </Maybach_HL_210_TRM_P45A>
+    </engines>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

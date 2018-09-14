@@ -28,6 +28,8 @@ class BrowserController(Controller):
         self.onBrowserAdded = Event.Event(self.__eventMgr)
         self.onBrowserDeleted = Event.Event(self.__eventMgr)
         self.__urlMacros = URLMarcos()
+        self.__pendingBrowsers = {}
+        self.__creatingBrowser = False
 
     def fini(self):
         self.__eventMgr.clear()
@@ -46,21 +48,19 @@ class BrowserController(Controller):
 
     @async
     @process
-    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False):
+    def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useWhitelisting=False):
         url = yield self.__urlMacros.parse(url or GUI_SETTINGS.browser.url)
         suffix = yield self.__urlMacros.parse(GUI_SETTINGS.browser.params)
         concatenator = '&' if '?' in url else '?'
         if suffix not in url:
             url = concatenator.join([url, suffix])
         size = browserSize or BROWSER.SIZE
+        webBrowserID = browserID
         if browserID is None:
             browserID = self.__browserIDGenerator.next()
-        if browserID not in self.__browsers:
-            texture = self._BROWSER_TEXTURE if isDefault else self._ALT_BROWSER_TEXTURE
-            app = g_appLoader.getApp()
-            assert app, 'Application can not be None'
-            self.__browsers[browserID] = WebBrowser(browserID, app, texture, size, url)
-            self.onBrowserAdded(browserID)
+            webBrowserID = browserID
+        elif type(browserID) is not int:
+            webBrowserID = self.__browserIDGenerator.next()
         ctx = {'url': url,
          'title': title,
          'showActionBtn': showActionBtn,
@@ -70,10 +70,39 @@ class BrowserController(Controller):
          'isDefault': isDefault,
          'isAsync': isAsync,
          'showCloseBtn': showCloseBtn}
+        if browserID not in self.__browsers and browserID not in self.__pendingBrowsers:
+            texture = self._BROWSER_TEXTURE if isDefault else self._ALT_BROWSER_TEXTURE
+            app = g_appLoader.getApp()
+            assert app, 'Application can not be None'
+            browser = WebBrowser(webBrowserID, app, texture, size, url, useWhitelisting)
+            self.__browsers[browserID] = browser
+            if self.__creatingBrowser:
+                self.__pendingBrowsers[browserID] = ctx
+            else:
+                self.__createBrowser(ctx)
+        elif browserID in self.__pendingBrowsers:
+            self.__pendingBrowsers[browserID] = ctx
+        elif browserID in self.__browsers:
+            self.__browsers[browserID].navigate(url)
+        callback(browserID)
+        return
+
+    def __createDone(self, browserID):
+        self.__creatingBrowser = False
+        if len(self.__pendingBrowsers) > 0:
+            ctx = self.__pendingBrowsers.popitem()[1]
+            self.__createBrowser(ctx)
+
+    def __createBrowser(self, ctx):
+        self.__creatingBrowser = True
+        browserID = ctx['browserID']
+        self.__browsers[browserID].create()
+        self.onBrowserAdded(browserID)
 
         def browserCallback(*args):
             self.__clearCallback(browserID)
             self.__showBrowser(browserID, ctx)
+            self.__createDone(browserID)
 
         def browserAsyncCallback(url, isLoaded):
             self.__clearCallback(browserID)
@@ -81,14 +110,14 @@ class BrowserController(Controller):
                 self.__showBrowser(browserID, ctx)
             else:
                 LOG_WARNING('Browser async request url was not loaded!', url)
+            self.__createDone(browserID)
 
-        if isAsync:
+        if ctx['isAsync']:
             self.__browsersCallbacks[browserID] = (None, browserAsyncCallback)
             self.__browsers[browserID].onLoadEnd += browserAsyncCallback
         else:
             self.__browsersCallbacks[browserID] = (browserCallback, None)
-            self.__browsers[browserID].onLoadStart += browserCallback
-        callback(browserID)
+            self.__browsers[browserID].onReady += browserCallback
         return
 
     def getBrowser(self, browserID):
@@ -109,9 +138,9 @@ class BrowserController(Controller):
     def __stop(self):
         while self.__browsers:
             browserID, browser = self.__browsers.popitem()
-            loadStart, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
-            if loadStart is not None:
-                browser.onLoadStart -= loadStart
+            ready, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
+            if ready is not None:
+                browser.onReady -= ready
             if loadEnd is not None:
                 browser.onLoadEnd -= loadEnd
             browser.destroy()
@@ -119,9 +148,9 @@ class BrowserController(Controller):
         return
 
     def __clearCallback(self, browserID):
-        loadStart, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
-        if loadStart is not None:
-            self.__browsers[browserID].onLoadStart -= loadStart
+        ready, loadEnd = self.__browsersCallbacks.pop(browserID, (None, None))
+        if ready is not None:
+            self.__browsers[browserID].onReady -= ready
         if loadEnd is not None:
             self.__browsers[browserID].onLoadEnd -= loadEnd
         return

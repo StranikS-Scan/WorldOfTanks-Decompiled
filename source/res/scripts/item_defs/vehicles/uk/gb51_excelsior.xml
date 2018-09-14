@@ -10,6 +10,13 @@
     <forward>	38.6	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.075	</moving>
+    <still>	0.149	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.224	</firePenalty>
+  </invisibility>
   <repairCost>	4	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -65,7 +72,8 @@
       <turret>	0.0039 0.522874 0.397108	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB51_Excelsior/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -184,13 +192,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.899899 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB51_Excelsior/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.25117 2.12114	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -267,13 +274,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB51_Excelsior/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB51_Excelsior/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -296,7 +305,8 @@
         <exploded>	vehicles/british/GB51_Excelsior/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB51_Excelsior/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB51_Excelsior/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB51_Excelsior/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0039 0.390893 0.60283	</gunPosition>
       <emblemSlots>
@@ -332,9 +342,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.008 0.000 0.611 0.203 0.743 0.515 0.268 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
       </camouflage>
@@ -349,6 +357,19 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB51_Excelsior>
+        <alpha>	0.12075	</alpha>
+      </Chassis_GB51_Excelsior>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_A>
+        <bravo>	158.5922	</bravo>
+      </Rolls_Royse_Meteor_A>
+    </engines>
+    <armour>	1.004719221	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

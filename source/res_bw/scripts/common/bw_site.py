@@ -184,11 +184,23 @@ def setupPaths():
     known_paths = addsitepackages(known_paths)
 
 
+def setTwistedReactor():
+    """
+    Override Twisted's default reactor, selectreactor, with ours.
+    This ensures the only reactor installed is BWTwistedReactor.
+    """
+    if BigWorld.component in ('base', 'service', 'cell', 'database'):
+        import BWTwistedReactor
+        import twisted.internet.selectreactor
+        twisted.internet.selectreactor = BWTwistedReactor
+
+
 def main():
     sethelper()
     setDefaultEncoding()
     if BigWorld.component not in ('client', 'bot'):
         setupPaths()
+    setTwistedReactor()
     import bwpydevd
     bwpydevd.startDebug(isStartUp=True)
 
@@ -200,10 +212,3 @@ try:
     import BWAutoImport
 except ImportError as e:
     NOTICE_MSG('bw_site.py failed to import BWAutoImport: %s\n' % (e,))
-
-try:
-    import BWTwistedReactor
-    import twisted.internet.selectreactor
-    twisted.internet.selectreactor = BWTwistedReactor
-except:
-    pass

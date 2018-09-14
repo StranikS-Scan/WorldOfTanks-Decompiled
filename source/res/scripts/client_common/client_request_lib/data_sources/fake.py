@@ -462,7 +462,8 @@ class FakeDataAccessor(base.BaseDataAccessor):
       'game_map': 'some_map2',
       'pillage_cooldown': None,
       'pillage_end_datetime': None,
-      'turns_owned': 13}])
+      'turns_owned': 12,
+      'arena_id': 5}])
     def get_clan_provinces(self, clan_id, fields=None):
         """
         return fake data from `clan_provinces` section

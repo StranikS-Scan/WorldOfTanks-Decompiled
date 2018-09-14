@@ -3,7 +3,7 @@
 import BigWorld
 import functools
 
-class CallbackDelayer:
+class CallbackDelayer(object):
 
     def __init__(self):
         self.__callbacks = {}

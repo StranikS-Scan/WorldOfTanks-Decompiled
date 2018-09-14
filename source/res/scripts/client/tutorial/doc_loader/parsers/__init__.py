@@ -7,7 +7,7 @@ from tutorial.data.chapter import Bonus, Chapter, Scene
 from tutorial.data.descriptor import DescriptorData
 from tutorial.data.hints import HintsData
 from tutorial.doc_loader import sub_parsers
-from tutorial.settings import TUTORIAL_STOP_REASON_NAMES, GLOBAL_REFS_FILE_PATH, BONUSES_REFS_FILE_PATH
+from tutorial.settings import GLOBAL_REFS_FILE_PATH, BONUSES_REFS_FILE_PATH
 
 class DescriptorParser(object):
 
@@ -19,7 +19,6 @@ class DescriptorParser(object):
         xmlCtx = (None, filePath)
         descriptor.setGuiFilePath(_xml.readString(xmlCtx, section, 'gui'))
         descriptor.setInitialChapterID(_xml.readString(xmlCtx, section, 'initial-chapter'))
-        self.__parseStopBehavior(xmlCtx, section, descriptor)
         self.__parseChapterSummaries(xmlCtx, section, descriptor)
         return descriptor
 
@@ -60,20 +59,6 @@ class DescriptorParser(object):
          filePaths,
          sharedScene,
          predefinedVars)
-
-    def __parseStopBehavior(self, _, section, descriptor):
-        subSection = section['behavior-if-stopping']
-        if subSection:
-            processing = subSection['items-revert'] or {}
-            reasons = set()
-            for _, subSection in processing.items():
-                name = subSection.asString
-                if name in TUTORIAL_STOP_REASON_NAMES:
-                    reasons.add(TUTORIAL_STOP_REASON_NAMES[name])
-                raise Exception('Reason not found: {0:>s}'.format(name))
-
-            if len(reasons):
-                descriptor.setItemsRevertIfStop(reasons)
 
     def _parseBonus(self, xmlCtx, section, bonuses):
         tags = section.keys()

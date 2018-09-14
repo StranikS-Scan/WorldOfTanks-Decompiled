@@ -6,7 +6,7 @@ import aspects
 class MakeTankUnavailableInCarousel(aop.Pointcut):
 
     def __init__(self, config):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.TankCarousel', 'TankCarousel', '_getVehicleData', aspects=(aspects.MakeTankUnavailableInCarousel(config),))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider', 'CarouselDataProvider', '_getVehicleDataVO', aspects=(aspects.MakeTankUnavailableInCarousel(config),))
 
 
 class VehicleTooltipStatus(aop.Pointcut):

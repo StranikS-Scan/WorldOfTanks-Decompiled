@@ -9,6 +9,13 @@
     <forward>	37	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.04	</moving>
+    <still>	0.08	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.12	</firePenalty>
+  </invisibility>
   <repairCost>	11.131	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.442311 0.269645	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A69_T110E5/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A69_T110E5/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A69_T110E5/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -112,14 +120,14 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	usa_01	</textureSet>
-        <size>	0.46 0.72	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.6 0.75	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.5	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -186,13 +194,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12913 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A69_T110E5/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A69_T110E5/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A69_T110E5/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.51097 1.87408	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -233,36 +240,29 @@
         <gravity>	-6.2	</gravity>
         <elasticity>	1180	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
           <forwardElastK>	0.67	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.047	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	0.67	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.047	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.48	</backwardElastK>
-          <offset>	-0.193	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	0.48	</backwardElastK>
-          <offset>	-0.193	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -350,10 +350,10 @@
         </node>
       </trackNodes>
       <splineDesc>
-        <segmentModelLeft>	vehicles/american/A69_T110E5/track/T97_track1.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/american/A69_T110E5/track/T97_track1.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/american/A69_T110E5/track/T97_track2.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/american/A69_T110E5/track/T97_track2.model	</segment2ModelRight>
+        <segmentModelLeft>	vehicles/american/A69_T110E5/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A69_T110E5/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A69_T110E5/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A69_T110E5/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A69_T110E5/track/left.track	</left>
         <right>	vehicles/american/A69_T110E5/track/right.track	</right>
         <segmentLength>	0.144	</segmentLength>
@@ -427,6 +427,7 @@
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
           <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
@@ -438,7 +439,8 @@
             <exploded>	vehicles/american/A69_T110E5/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A69_T110E5/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A69_T110E5/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A69_T110E5/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -462,7 +464,8 @@
         <exploded>	vehicles/american/A69_T110E5/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A69_T110E5/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A69_T110E5/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A69_T110E5/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.39325 1.23518	</gunPosition>
       <emblemSlots>
@@ -498,9 +501,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.594 -0.017 0.766 0.646 0.445 0.500 0.355 0.500 0.000 0.100 0.157	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.445 0.445 0.38 0.36	</tiling>
       </camouflage>
@@ -515,6 +516,19 @@
   <radios>
     <AN_VRC-3>	shared	</AN_VRC-3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T110>
+        <alpha>	0.10465	</alpha>
+      </Chassis_T110>
+    </chassis>
+    <engines>
+      <AOI-1490>
+        <bravo>	231.2802	</bravo>
+      </AOI-1490>
+    </engines>
+    <armour>	1.190744623	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

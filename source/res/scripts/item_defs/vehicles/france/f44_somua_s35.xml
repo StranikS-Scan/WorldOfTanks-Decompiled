@@ -9,6 +9,13 @@
     <forward>	45	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.194	</moving>
+    <still>	0.258	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.387	</firePenalty>
+  </invisibility>
   <repairCost>	3.2	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -40,6 +47,36 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
+    <variants>
+      <hull2>
+        <turret0>	Turret_2_Somua_S35	</turret0>
+        <turretPositions>
+          <turret>	-0.001300 0.977971 0.426200	</turret>
+        </turretPositions>
+        <turretHardPoints>
+          <hardPoint>	HP_turretJoint_2	</hardPoint>
+        </turretHardPoints>
+        <emblemSlots>
+          <clan>
+            <rayStart>	0.416279 0.740442 1.91166	</rayStart>
+            <rayEnd>	0.416245 0.414581 1.6797	</rayEnd>
+            <rayUp>	0.000000 0.000000 -1	</rayUp>
+            <size>	0.24	</size>
+            <hideIfDamaged>	false	</hideIfDamaged>
+          </clan>
+          <inscription>
+            <rayStart>	-0.236374 0.709864 1.95546	</rayStart>
+            <rayEnd>	-0.236681 0.382239 1.726	</rayEnd>
+            <rayUp>	0.000000 0.000000 -1	</rayUp>
+            <size>	0.55	</size>
+            <hideIfDamaged>	true	</hideIfDamaged>
+          </inscription>
+        </emblemSlots>
+      </hull2>
+    </variants>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint_1	</hardPoint>
+    </turretHardPoints>
     <models>
       <undamaged>	vehicles/french/F44_Somua_S35/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F44_Somua_S35/crash/lod0/Hull.model	</destroyed>
@@ -56,15 +93,16 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.011963 0.977937 0.508367	</turret>
+      <turret>	-0.012 0.977971 0.5084	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F44_Somua_S35/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.379651 0.777935 1.85188	</rayStart>
-        <rayEnd>	0.379614 0.436481 1.64352	</rayEnd>
+        <rayStart>	0.417228 0.739944 1.91237	</rayStart>
+        <rayEnd>	0.417194 0.414069 1.6804	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -72,7 +110,7 @@
       <inscription>
         <rayStart>	-0.233792 0.709472 1.95305	</rayStart>
         <rayEnd>	-0.234099 0.381846 1.72359	</rayEnd>
-        <rayUp>	0.0285852 -0.000313032 -0.999591	</rayUp>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.55	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
@@ -119,7 +157,7 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.38 0.4	</size>
+        <size>	0.2 0.38	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -192,15 +230,14 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.765029 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.827688 1.48389	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.843512 1.48389	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -248,14 +285,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1311	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -382,7 +416,7 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.3 0.4	</size>
+        <size>	0.2 0.38	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -455,15 +489,14 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.765029 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.827688 1.48389	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.843512 1.48389	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -510,14 +543,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.102	</maxAmplitude>
+        <maxAmplitude>	0.095	</maxAmplitude>
         <maxOffset>	0.095	</maxOffset>
         <gravity>	-8.9	</gravity>
         <elasticity>	1311	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -670,6 +700,7 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 18 0.333333 18 0.388889 5 0.611111 5 0.666667 18 1 18	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
@@ -684,7 +715,8 @@
             <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.49 0.25 0.000000 0.000000	</tiling>
@@ -710,6 +742,7 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 18 0.333333 18 0.388889 8 0.611111 8 0.666667 18 1 18	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <shotDispersionFactors>
@@ -724,7 +757,8 @@
             <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.46 0.25 0.000000 0.000000	</tiling>
@@ -737,13 +771,14 @@
         <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.054616 0.281711 0.622936	</gunPosition>
+      <gunPosition>	-0.05458 0.28168 0.6229	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.673486 0.413209 0.407088	</rayStart>
-          <rayEnd>	-0.326389 0.26755 0.271823	</rayEnd>
+          <rayStart>	-0.680718 0.399239 0.403402	</rayStart>
+          <rayEnd>	-0.333621 0.253581 0.268138	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -756,8 +791,8 @@
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.707668 0.384063 0.365866	</rayStart>
-          <rayEnd>	0.370786 0.262553 0.187732	</rayEnd>
+          <rayStart>	0.680718 0.399239 0.403402	</rayStart>
+          <rayEnd>	0.333621 0.253581 0.268138	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
@@ -766,9 +801,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.965 0.032 1.000 0.000 0.570 0.009 0.500 0.434 0.435 0.500 0.344 0.500 0.258 0.727 0.104	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
       </camouflage>
@@ -838,6 +871,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 14 0.288889 14 0.388889 3 0.611111 3 0.711111 14 1 14	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
@@ -852,7 +886,8 @@
             <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
@@ -876,6 +911,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 16 0.288889 16 0.388889 4 0.611111 4 0.711111 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
@@ -890,7 +926,8 @@
             <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.58 0.25 0.000000 0.000000	</tiling>
@@ -916,6 +953,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 11 0.438889 11 0.458333 4 0.541667 4 0.561111 11 1 11	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.9	</reloadTime>
           <shotDispersionFactors>
@@ -930,7 +968,8 @@
             <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F44_Somua_S35/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.55 0.25 0.000000 0.000000	</tiling>
@@ -943,38 +982,37 @@
         <exploded>	vehicles/french/F44_Somua_S35/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F44_Somua_S35/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F44_Somua_S35/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F44_Somua_S35/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.165286 0.23746 0.496743	</gunPosition>
+      <gunPosition>	0.32159 0.23743 0.57891	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.679414 0.283849 0.311078	</rayStart>
-          <rayEnd>	-0.340822 0.154039 0.142275	</rayEnd>
+          <rayStart>	-0.698791 0.309517 0.356002	</rayStart>
+          <rayEnd>	-0.360199 0.179707 0.1872	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-0.611591 0.285316 -0.593105	</rayStart>
-          <rayEnd>	-0.564573 0.267051 -0.560614	</rayEnd>
+          <rayStart>	0.0774774 0.267021 -0.791973	</rayStart>
+          <rayEnd>	0.0775017 0.248514 -0.734899	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.48	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.66011 0.282479 -0.47082	</rayStart>
-          <rayEnd>	0.625502 0.270253 -0.454919	</rayEnd>
+          <rayStart>	0.779624 0.321701 -0.524545	</rayStart>
+          <rayEnd>	0.435224 0.207471 -0.356208	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
+          <size>	0.22	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.896 -0.081 1.041 0.027 0.652 0.190 1.000 0.407 0.493 0.500 0.371 0.500 0.090 0.000 0.154	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <physicsShape>	0.896 0.009 1.041 0.027 0.652 0.190 1.000 0.407 0.493 0.500 0.371 0.500 0.090 0.000 0.154	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1014,6 +1052,28 @@
     </ER_26_ter>
     <ER_27>	shared	</ER_27>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Somua_S35>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Somua_S35>
+      <Chassis_Somua_S35_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Somua_S35_2>
+    </chassis>
+    <engines>
+      <Somua_190CV_V8>
+        <bravo>	50.22086	</bravo>
+      </Somua_190CV_V8>
+      <Hispano_219CV_V8>
+        <bravo>	57.88614	</bravo>
+      </Hispano_219CV_V8>
+      <Somua_230_V8>
+        <bravo>	60.79367	</bravo>
+      </Somua_230_V8>
+    </engines>
+    <armour>	0.861312906	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

@@ -53,7 +53,7 @@ def readTutorialIntSettingTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TutorialIntSettingsTrigger)
 
 
-def _readTutorialAccountSettingTriggerSection(xmlCtx, section, _, triggerID):
+def readTutorialAccountSettingTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TutorialAccountSettingsTrigger)
 
 
@@ -140,7 +140,7 @@ def init():
      'vehicleBattlesCount': _readVehicleBattlesCountTriggerSection,
      'xpExchange': _readXpExchangeTriggerSection,
      'tutorialIntSetting': readTutorialIntSettingTriggerSection,
-     'tutorialAccountSetting': _readTutorialAccountSettingTriggerSection,
+     'tutorialAccountSetting': readTutorialAccountSettingTriggerSection,
      'chapterBonus': _readChapterBonusTriggerSection,
      'installItems': _readItemsInstallTriggerSection,
      'invalidateFlags': _readInvalidateFlagsTriggerSection,

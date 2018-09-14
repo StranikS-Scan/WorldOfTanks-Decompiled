@@ -7,6 +7,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, time_utils
 
 class FortBattlesIntroView(FortIntroMeta, FortViewHelper):
@@ -32,17 +33,18 @@ class FortBattlesIntroView(FortIntroMeta, FortViewHelper):
 
     def __makeData(self):
         data = {}
-        isBattleEnabled, clanBattleBtnSimpleTooltip, clanBattleBtnComplexTooltip, clanBattleAdditionalText = self.__getButtonData()
-        if clanBattleAdditionalText:
-            clanBattleAdditionalText = self.__makeAdditionalText(clanBattleAdditionalText)
-        data['clanBattleAdditionalText'] = clanBattleAdditionalText
-        data['clanBattleBtnSimpleTooltip'] = clanBattleBtnSimpleTooltip
-        data['clanBattleBtnComplexTooltip'] = clanBattleBtnComplexTooltip
+        isBattleEnabled, fortBattleBtnTooltip, additionalText = self.__getButtonData()
+        if additionalText:
+            additionalText = self.__makeAdditionalText(additionalText)
+        data['additionalText'] = additionalText
         data['enableBtn'] = isBattleEnabled
         data['fortBattleTitle'] = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_TITLE
         data['fortBattleDescr'] = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_DESCR
         data['fortBattleBtnTitle'] = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_BTNLABEL
+        data['fortBattleBtnTooltip'] = fortBattleBtnTooltip
+        data['listRoomBtnBtnTooltip'] = makeTooltip(None, TOOLTIPS.FORTIFICATION_INTROVIEW_SORTIE_BTNTOOLTIP)
         self.as_setIntroDataS(data)
+        return
 
     def __makeAdditionalText(self, value):
         return text_styles.alert(value)
@@ -52,42 +54,27 @@ class FortBattlesIntroView(FortIntroMeta, FortViewHelper):
             fort = self.fortCtrl.getFort()
             if not fort.isDefenceHourEnabled():
                 if self.fortCtrl.getPermissions().canChangeDefHour():
-                    clanBattleBtnSimpleTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_LEADER
+                    fortBattleBtnTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_LEADER
                 else:
-                    clanBattleBtnSimpleTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NOTLEADER
-                clanBattleAdditionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NOTACTIVATEDDEFENCETIME)
-                return (False,
-                 clanBattleBtnSimpleTooltip,
-                 '',
-                 clanBattleAdditionalText)
+                    fortBattleBtnTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NOTLEADER
+                additionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NOTACTIVATEDDEFENCETIME)
+                return (False, makeTooltip(None, fortBattleBtnTooltip), additionalText)
             attacksInOneDay = fort.getAttacksIn(timePeriod=time_utils.ONE_DAY)
             defencesInOneDay = fort.getDefencesIn(timePeriod=time_utils.ONE_DAY)
             if attacksInOneDay or defencesInOneDay:
-                return (True,
-                 '',
-                 TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED,
-                 None)
+                return (True, TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_ENABLED, None)
             battlesInTwoWeeks = fort.getAttacksAndDefencesIn(timePeriod=2 * time_utils.ONE_WEEK)
             if battlesInTwoWeeks:
                 closestBattle = battlesInTwoWeeks[0]
                 battleDate = BigWorld.wg_getLongDateFormat(closestBattle.getStartTime())
-                clanBattleAdditionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLE, nextDate=battleDate)
-                clanBattleBtnSimpleTooltip = i18n.makeString(TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NEXTBATTLE, currentDate=battleDate)
-                return (False,
-                 clanBattleBtnSimpleTooltip,
-                 '',
-                 clanBattleAdditionalText)
+                additionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLE, nextDate=battleDate)
+                fortBattleBtnTooltip = i18n.makeString(TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NEXTBATTLE, currentDate=battleDate)
+                return (False, makeTooltip(None, fortBattleBtnTooltip), additionalText)
             if self.fortCtrl.getPermissions().canPlanAttack():
-                clanBattleBtnSimpleTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_LEADERNOACTION
+                fortBattleBtnTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_LEADERNOACTION
             else:
-                clanBattleBtnSimpleTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NOTLEADERNOACTION
-            clanBattleAdditionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NOTACTIVATED)
-            return (False,
-             clanBattleBtnSimpleTooltip,
-             '',
-             clanBattleAdditionalText)
+                fortBattleBtnTooltip = TOOLTIPS.FORTIFICATION_INTROVIEW_CLANBATTLEBTN_DISABLED_NOTLEADERNOACTION
+            additionalText = i18n.makeString(FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NOTACTIVATED)
+            return (False, makeTooltip(None, fortBattleBtnTooltip), additionalText)
         else:
-            return (False,
-             '',
-             '',
-             None)
+            return (False, '', None)

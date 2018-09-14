@@ -4,8 +4,10 @@ import types
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.money import Money, ZERO_MONEY
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from tutorial.logger import LOG_ERROR
 from tutorial.data.conditions import CONDITION_STATE
@@ -97,12 +99,7 @@ def getCurrentVehicleViewState():
 
 
 def _getTankmanPrice(index, prices):
-    if index < len(prices):
-        price = prices[index]
-        result = (price['gold'], price['credits'])
-    else:
-        result = (0, 0)
-    return result
+    return Money(**prices[index]) if index < len(prices) else ZERO_MONEY
 
 
 def getTankmanCurrentPrice(index):
@@ -190,7 +187,7 @@ def _getEquipmentForCreditsCD(tag):
     if tag is None:
         return
     else:
-        equipments = g_itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, REQ_CRITERIA.CUSTOM(lambda eq: tag in eq.tags and eq.buyPrice[0] > 0))
+        equipments = g_itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, REQ_CRITERIA.CUSTOM(lambda eq: tag in eq.tags and eq.buyPrice.credits > 0))
         if equipments:
             result, _ = equipments.popitem()
         else:

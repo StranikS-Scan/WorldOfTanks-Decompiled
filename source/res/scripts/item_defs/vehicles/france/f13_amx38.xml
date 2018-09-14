@@ -1,0 +1,701 @@
+<f13_amx38.xml>
+  <crew>
+    <commander>	radioman
+			gunner
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	25	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.21	</moving>
+    <still>	0.28	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.42	</firePenalty>
+  </invisibility>
+  <repairCost>	4.2	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/french/F13_AMX38/AMX38_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	60	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_6>	25	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	15	</armor_8>
+      <armor_9>	60	</armor_9>
+      <armor_10>	60	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	9500	</weight>
+    <maxHealth>	176	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F13_AMX38/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34.00 0.34 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.28 34.00 0.34 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.657473 0.345932	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F13_AMX38/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.410419 0.421809 1.62398	</rayStart>
+        <rayEnd>	0.410419 0.044474 1.49124	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.0174885 -0.0834486 2.46475	</rayStart>
+        <rayEnd>	0.0174885 -0.0899718 1.86479	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.6	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F13_AMX38/AMX38_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_AMX38>
+      <userString>	#france_vehicles:Chassis_AMX38	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	500	</price>
+      <unlocks>
+        <chassis>	Chassis_AMX38_2	  <cost>	315	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	16000	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F13_AMX38/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.36 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.04	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.305464	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R15	</name>
+          <radius>	0.112295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.323125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.11543	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	7	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.305464	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L15	</name>
+          <radius>	0.112295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.323125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.11543	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.824999 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F13_AMX38/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.802386 1.78541	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.635510 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.237500 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.784560	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_AMX38>
+    <Chassis_AMX38_2>
+      <userString>	#france_vehicles:Chassis_AMX38_2	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	1850	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	3000	</weight>
+      <maxLoad>	18000	</maxLoad>
+      <terrainResistance>	1.3 1.4 2.5	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F13_AMX38/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.36 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.04	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.305464	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R15	</name>
+          <radius>	0.112295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.323125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.11543	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	7	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.305464	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	8	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L15	</name>
+          <radius>	0.112295	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.323125	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0946907	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.11543	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.119502	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.824999 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F13_AMX38/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.802386 1.78541	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.640680 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.237500 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.784560	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_AMX38_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_AMX38>
+      <userString>	#france_vehicles:Turret_1_AMX38	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	600.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	60	</armor_1>
+        <armor_2>	40	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	8	</armor_8>
+        <armor_9>	20	</armor_9>
+        <armor_10>	30	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2500	</weight>
+      <maxHealth>	44	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_SA38>	shared	  <maxAmmo>	162	</maxAmmo>
+          <reloadTime>	2.4	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <unlocks>
+            <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
+            </gun>
+            <gun>	_47mm_SA34	  <cost>	95	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -17 1 -17	</minPitch>
+            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_SA38>
+        <_25mm_Canon_Raccourci_Mle.1934>	shared	  <maxAmmo>	258	</maxAmmo>
+          <reloadTime>	1.8	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 2 1 2	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.336	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+        </_25mm_Canon_Raccourci_Mle.1934>
+        <_47mm_SA34>	shared	  <maxAmmo>	148	</maxAmmo>
+          <reloadTime>	3.2	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.18	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <gun>	_47mm_SA35	  <cost>	265	</cost>
+            </gun>
+            <vehicle>	F14_AMX40	  <cost>	4610	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+        </_47mm_SA34>
+        <_47mm_SA35>	shared	  <maxAmmo>	120	</maxAmmo>
+          <armor>
+            <armor_1>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.2	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 0.353005 6 0.416667 2 0.583333 2 0.646995 6 1 6	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/french/F13_AMX38/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F13_AMX38/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Gun_08.model	</collisionModelClient>
+          </hitTester>
+        </_47mm_SA35>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F13_AMX38/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F13_AMX38/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F13_AMX38/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F13_AMX38/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F13_AMX38/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.096935 0.263714 0.605178	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.492881 0.546226 0.467839	</rayStart>
+          <rayEnd>	-0.179574 0.315432 0.375249	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.829519 0.31681 -0.0240129	</rayStart>
+          <rayEnd>	0.330721 -0.0166553 -0.0240129	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.6	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.563969 0.536739 0.42029	</rayStart>
+          <rayEnd>	0.231115 0.314933 0.423414	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.006 0.000 0.705 0.081 0.500 0.595 0.425 0.500 0.731 0.500 0.384 0.679 0.118	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_AMX38>
+  </turrets0>
+  <engines>
+    <Aster>	shared	  <unlocks>
+        <engine>	Aster_M	  <cost>	340	</cost>
+        </engine>
+      </unlocks>
+    </Aster>
+    <Aster_M>	shared	</Aster_M>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <ER_52>	shared	  <unlocks>
+        <radio>	ER_53	  <cost>	610	</cost>
+        </radio>
+      </unlocks>
+    </ER_52>
+    <ER_53>	shared	</ER_53>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX38>
+        <alpha>	0.1288	</alpha>
+      </Chassis_AMX38>
+      <Chassis_AMX38_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_AMX38_2>
+    </chassis>
+    <engines>
+      <Aster>
+        <bravo>	39.64804	</bravo>
+      </Aster>
+      <Aster_M>
+        <bravo>	42.29124	</bravo>
+      </Aster_M>
+    </engines>
+    <armour>	0.861356293	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	french_rose	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</f13_amx38.xml>

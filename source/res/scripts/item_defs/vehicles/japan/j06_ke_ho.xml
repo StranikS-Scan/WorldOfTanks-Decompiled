@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	22	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.337	</moving>
+    <still>	0.337	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.506	</firePenalty>
+  </invisibility>
   <repairCost>	4.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	0.12351 0.556509 0.00739	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -186,13 +194,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.753255 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.981209 1.35665	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -529,13 +536,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.753255 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.981209 1.35665	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -614,6 +620,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/japan/J06_Ke_Ho/normal/lod0/Gun_01.model	</undamaged>
@@ -621,7 +628,8 @@
             <exploded>	vehicles/japan/J06_Ke_Ho/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.415 0.25 0.000000 0.000000	</tiling>
@@ -649,6 +657,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.347222 10 0.361111 6 0.638889 6 0.652778 10 1 10	</maxPitch>
@@ -660,7 +669,8 @@
             <exploded>	vehicles/japan/J06_Ke_Ho/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.385 0.25 0.000000 0.000000	</tiling>
@@ -673,7 +683,8 @@
         <exploded>	vehicles/japan/J06_Ke_Ho/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J06_Ke_Ho/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J06_Ke_Ho/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J06_Ke_Ho/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.123506 0.27699 0.691322	</gunPosition>
       <emblemSlots>
@@ -709,9 +720,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.928 -0.071 1.027 0.000 0.505 0.116 0.752 0.620 0.289 0.500 0.134 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
       </camouflage>
@@ -741,6 +750,22 @@
     </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ke_Ho>
+        <alpha>	0.0644	</alpha>
+      </Chassis_Ke_Ho>
+      <Chassis_Ke_Ho_2>
+        <alpha>	0.05635	</alpha>
+      </Chassis_Ke_Ho_2>
+    </chassis>
+    <engines>
+      <_Type100_V6_Kakyuu>
+        <bravo>	39.64804	</bravo>
+      </_Type100_V6_Kakyuu>
+    </engines>
+    <armour>	0.740631829	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

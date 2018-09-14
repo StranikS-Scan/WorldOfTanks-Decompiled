@@ -15,9 +15,9 @@ class SfQuestsProxy(SfLobbyProxy):
         super(SfQuestsProxy, self).__init__(effects_player.EffectsPlayer(effects))
         self._commands = GUICommandsFactory()
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         self._commands = None
-        super(SfQuestsProxy, self).fini(isItemsRevert)
+        super(SfQuestsProxy, self).fini()
         return
 
     def getViewSettings(self):

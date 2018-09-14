@@ -8,7 +8,7 @@ from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO, makeUserVO, makeStaticFormationPlayerVO
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO, makeUserVO, makeStaticFormationPlayerVO, makeClanBattlePlayerVO
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -24,8 +24,9 @@ from gui.shared.view_helpers import UsersInfoHelper
 from shared_utils import findFirst
 from helpers import i18n
 from messenger import g_settings
-from messenger.m_constants import USER_GUI_TYPE
+from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE
 from messenger.storage import storage_getter
+from messenger.proto import proto_getter
 from gui.shared.gui_items.dossier import dumpDossier
 
 class CandidatesDataProvider(DAAPIDataProvider):
@@ -35,7 +36,7 @@ class CandidatesDataProvider(DAAPIDataProvider):
         self.clear()
 
     def init(self, app, flashObject, candidates):
-        self.seEnvironment(app)
+        self.setEnvironment(app)
         self.setFlashObject(flashObject)
         self.rebuild(candidates)
 
@@ -51,15 +52,16 @@ class CandidatesDataProvider(DAAPIDataProvider):
     def collection(self):
         return self._list
 
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        return None
+
     def buildList(self, candidates):
         self.clear()
         self._buildData(candidates)
 
     def _buildData(self, candidates):
-        if self.app is not None:
-            isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
-        else:
-            isPlayerSpeaking = lambda dbID: False
+        isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors
         mapping = map(lambda pInfo: (pInfo, userGetter(pInfo.dbID)), candidates.itervalues())
@@ -68,8 +70,6 @@ class CandidatesDataProvider(DAAPIDataProvider):
             dbID = pInfo.dbID
             self._mapping[dbID] = len(self._list)
             self._list.append(self._makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking(dbID)))
-
-        return
 
     def _makePlayerVO(self, pInfo, user, colorGetter, isPlayerSpeaking):
         return makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
@@ -95,6 +95,12 @@ class SortieCandidatesDP(CandidatesDataProvider):
 
     def _makePlayerVO(self, pInfo, user, colorGetter, isPlayerSpeaking):
         return makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
+
+
+class ClanBattleCandidatesDP(CandidatesDataProvider):
+
+    def _makePlayerVO(self, pInfo, user, colorGetter, isPlayerSpeaking):
+        return makeClanBattlePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
 
 
 class SortieCandidatesLegionariesDP(SortieCandidatesDP):

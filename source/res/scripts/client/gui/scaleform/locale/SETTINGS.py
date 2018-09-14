@@ -3,6 +3,12 @@
 
 
 class SETTINGS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     LANGUAGE_CODE = '#settings:LANGUAGE_CODE'
     WINDOWTITLE = '#settings:windowTitle'
     TITLE = '#settings:title'
@@ -36,6 +42,7 @@ class SETTINGS(object):
     GRAPHICSSETTINGSOPTIONS_BILINEAR = '#settings:graphicsSettingsOptions/BILINEAR'
     GRAPHICSSETTINGSOPTIONS_POINT = '#settings:graphicsSettingsOptions/POINT'
     GRAPHICSSETTINGSOPTIONS_CUSTOM = '#settings:graphicsSettingsOptions/CUSTOM'
+    GRAPHICSSETTINGSOPTIONS_ULTRA = '#settings:graphicsSettingsOptions/ULTRA'
     GRAPHICSSETTINGSOPTIONS_VERY_HIGH = '#settings:graphicsSettingsOptions/VERY_HIGH'
     GRAPHICSSETTINGSOPTIONS_MAX = '#settings:graphicsSettingsOptions/MAX'
     GRAPHICSSETTINGSOPTIONS_VERYHIGH = '#settings:graphicsSettingsOptions/VERYHIGH'
@@ -108,6 +115,10 @@ class SETTINGS(object):
     SEMITRANSPARENT_LEAVES_ENABLED_DESCRIPTION = '#settings:SEMITRANSPARENT_LEAVES_ENABLED/description'
     DYNAMICCAMERA = '#settings:dynamicCamera'
     GAME_HORSTABILIZATIONSNP = '#settings:game/horStabilizationSnp'
+    GAME_INCREASEDZOOM_BASE = '#settings:game/increasedZoom/base'
+    GAME_INCREASEDZOOM_ZOOMSTR = '#settings:game/increasedZoom/zoomStr'
+    GAME_INCREASEDZOOM_DELIMETER = '#settings:game/increasedZoom/delimeter'
+    GAME_SNIPERMODEBYSHIFT = '#settings:game/sniperModeByShift'
     POST_PROCESSING_QUALITY = '#settings:POST_PROCESSING_QUALITY'
     POST_PROCESSING_QUALITY_DESCRIPTION = '#settings:POST_PROCESSING_QUALITY/description'
     RESOLUTION = '#settings:resolution'
@@ -216,6 +227,9 @@ class SETTINGS(object):
     SOUND_DYNAMICRANGE_BROAD = '#settings:sound/dynamicRange/broad'
     SOUND_DYNAMICRANGE_NARROW = '#settings:sound/dynamicRange/narrow'
     SOUND_DYNAMICRANGE_NIGHTMODE = '#settings:sound/dynamicRange/nightMode'
+    SOUND_SOUNDDEVICE_ACOUSTICS = '#settings:sound/soundDevice/acoustics'
+    SOUND_SOUNDDEVICE_HEADPHONES = '#settings:sound/soundDevice/headphones'
+    SOUND_SOUNDDEVICE_LAPTOP = '#settings:sound/soundDevice/laptop'
     SOUND_SOUNDMODES_DEFAULT = '#settings:sound/soundModes/default'
     SOUND_SOUNDMODES_NATIONALDEFAULT = '#settings:sound/soundModes/nationalDefault'
     SOUND_SOUNDMODES_U01 = '#settings:sound/soundModes/U01'
@@ -242,7 +256,6 @@ class SETTINGS(object):
     CHAT_INVITESFROMFRIENDSONLY = '#settings:chat/invitesFromFriendsOnly'
     CHAT_RECEIVECLANINVITESNOTIFICATIONS = '#settings:chat/receiveClanInvitesNotifications'
     CHAT_CHATCONTACTSLISTONLY = '#settings:chat/chatContactsListOnly'
-    CHAT_STORERECEIVERINBATTLE = '#settings:chat/storeReceiverInBattle'
     CHAT_DISABLEBATTLECHAT = '#settings:chat/disableBattleChat'
     GAME_SHOWLANGUAGEBAR = '#settings:game/showLanguageBar'
     GAME_ENABLEVOIP = '#settings:game/enableVoIP'
@@ -254,6 +267,7 @@ class SETTINGS(object):
     GAME_FIELDSET_HEADERCHAT = '#settings:game/fieldset/headerChat'
     GAME_FIELDSET_HEADERGAMEPLAY = '#settings:game/fieldset/headerGameplay'
     GAME_SHOWBATTLEEFFICIENCYRIBBONS = '#settings:game/showBattleEfficiencyRibbons'
+    GAME_SHOWSIMPLIFIEDVEHPARAMS = '#settings:game/showSimplifiedVehParams'
     GAMEPLAY_CTF = '#settings:gameplay/ctf'
     GAMEPLAY_DOMINATION = '#settings:gameplay/domination'
     GAMEPLAY_ASSAULT = '#settings:gameplay/assault'
@@ -273,97 +287,55 @@ class SETTINGS(object):
     CURSOR_ARCADETITLE = '#settings:cursor/ArcadeTitle'
     CURSOR_SNIPPERTITLE = '#settings:cursor/SnipperTitle'
     CURSOR_SERVERAIM = '#settings:cursor/ServerAim'
-    ARCADE_MIXING = '#settings:arcade/mixing'
-    ARCADE_MIXING_TYPE0 = '#settings:arcade/mixing/type0'
-    ARCADE_MIXING_TYPE1 = '#settings:arcade/mixing/type1'
-    ARCADE_MIXING_TYPE2 = '#settings:arcade/mixing/type2'
-    ARCADE_MIXING_TYPE3 = '#settings:arcade/mixing/type3'
-    ARCADE_MIXING_TYPE4 = '#settings:arcade/mixing/type4'
-    ARCADE_MIXING_TYPE5 = '#settings:arcade/mixing/type5'
-    ARCADE_GUNTAG = '#settings:arcade/gunTag'
-    ARCADE_GUNTAG_TYPE0 = '#settings:arcade/gunTag/type0'
-    ARCADE_GUNTAG_TYPE1 = '#settings:arcade/gunTag/type1'
-    ARCADE_GUNTAG_TYPE2 = '#settings:arcade/gunTag/type2'
-    ARCADE_GUNTAG_TYPE3 = '#settings:arcade/gunTag/type3'
-    ARCADE_GUNTAG_TYPE4 = '#settings:arcade/gunTag/type4'
-    ARCADE_GUNTAG_TYPE5 = '#settings:arcade/gunTag/type5'
-    ARCADE_GUNTAG_TYPE6 = '#settings:arcade/gunTag/type6'
-    ARCADE_GUNTAG_TYPE7 = '#settings:arcade/gunTag/type7'
-    ARCADE_GUNTAG_TYPE8 = '#settings:arcade/gunTag/type8'
-    ARCADE_GUNTAG_TYPE9 = '#settings:arcade/gunTag/type9'
-    ARCADE_GUNTAG_TYPE10 = '#settings:arcade/gunTag/type10'
-    ARCADE_GUNTAG_TYPE11 = '#settings:arcade/gunTag/type11'
-    ARCADE_GUNTAG_TYPE12 = '#settings:arcade/gunTag/type12'
-    ARCADE_GUNTAG_TYPE13 = '#settings:arcade/gunTag/type13'
-    ARCADE_GUNTAG_TYPE14 = '#settings:arcade/gunTag/type14'
-    ARCADE_CENTRALTAG = '#settings:arcade/centralTag'
-    ARCADE_CENTRALTAG_TYPE0 = '#settings:arcade/centralTag/type0'
-    ARCADE_CENTRALTAG_TYPE1 = '#settings:arcade/centralTag/type1'
-    ARCADE_CENTRALTAG_TYPE2 = '#settings:arcade/centralTag/type2'
-    ARCADE_CENTRALTAG_TYPE3 = '#settings:arcade/centralTag/type3'
-    ARCADE_CENTRALTAG_TYPE4 = '#settings:arcade/centralTag/type4'
-    ARCADE_CENTRALTAG_TYPE5 = '#settings:arcade/centralTag/type5'
-    ARCADE_CENTRALTAG_TYPE6 = '#settings:arcade/centralTag/type6'
-    ARCADE_CENTRALTAG_TYPE7 = '#settings:arcade/centralTag/type7'
-    ARCADE_CENTRALTAG_TYPE8 = '#settings:arcade/centralTag/type8'
-    ARCADE_CENTRALTAG_TYPE9 = '#settings:arcade/centralTag/type9'
-    ARCADE_CENTRALTAG_TYPE10 = '#settings:arcade/centralTag/type10'
-    ARCADE_CENTRALTAG_TYPE11 = '#settings:arcade/centralTag/type11'
-    ARCADE_CENTRALTAG_TYPE12 = '#settings:arcade/centralTag/type12'
-    ARCADE_CENTRALTAG_TYPE13 = '#settings:arcade/centralTag/type13'
-    ARCADE_NET = '#settings:arcade/net'
-    ARCADE_NET_TYPE0 = '#settings:arcade/net/type0'
-    ARCADE_NET_TYPE1 = '#settings:arcade/net/type1'
-    ARCADE_NET_TYPE2 = '#settings:arcade/net/type2'
-    ARCADE_NET_TYPE3 = '#settings:arcade/net/type3'
-    ARCADE_RELOADER = '#settings:arcade/reloader'
-    ARCADE_RELOADERTIMER = '#settings:arcade/reloaderTimer'
-    ARCADE_CONDITION = '#settings:arcade/condition'
-    ARCADE_CASSETTE = '#settings:arcade/cassette'
-    SNIPER_NET = '#settings:sniper/net'
-    SNIPER_NET_TYPE0 = '#settings:sniper/net/type0'
-    SNIPER_NET_TYPE1 = '#settings:sniper/net/type1'
-    SNIPER_NET_TYPE2 = '#settings:sniper/net/type2'
-    SNIPER_NET_TYPE3 = '#settings:sniper/net/type3'
-    SNIPER_CENTRALTAG = '#settings:sniper/centralTag'
-    SNIPER_CENTRALTAG_TYPE0 = '#settings:sniper/centralTag/type0'
-    SNIPER_CENTRALTAG_TYPE1 = '#settings:sniper/centralTag/type1'
-    SNIPER_CENTRALTAG_TYPE2 = '#settings:sniper/centralTag/type2'
-    SNIPER_CENTRALTAG_TYPE3 = '#settings:sniper/centralTag/type3'
-    SNIPER_CENTRALTAG_TYPE4 = '#settings:sniper/centralTag/type4'
-    SNIPER_CENTRALTAG_TYPE5 = '#settings:sniper/centralTag/type5'
-    SNIPER_CENTRALTAG_TYPE6 = '#settings:sniper/centralTag/type6'
-    SNIPER_CENTRALTAG_TYPE7 = '#settings:sniper/centralTag/type7'
-    SNIPER_CENTRALTAG_TYPE8 = '#settings:sniper/centralTag/type8'
-    SNIPER_CENTRALTAG_TYPE9 = '#settings:sniper/centralTag/type9'
-    SNIPER_CENTRALTAG_TYPE10 = '#settings:sniper/centralTag/type10'
-    SNIPER_CENTRALTAG_TYPE11 = '#settings:sniper/centralTag/type11'
-    SNIPER_CENTRALTAG_TYPE12 = '#settings:sniper/centralTag/type12'
-    SNIPER_CENTRALTAG_TYPE13 = '#settings:sniper/centralTag/type13'
-    SNIPER_RELOADER = '#settings:sniper/reloader'
-    SNIPER_RELOADERTIMER = '#settings:sniper/reloaderTimer'
-    SNIPER_CONDITION = '#settings:sniper/condition'
-    SNIPER_MIXING = '#settings:sniper/mixing'
-    SNIPER_MIXING_TYPE0 = '#settings:sniper/mixing/type0'
-    SNIPER_MIXING_TYPE1 = '#settings:sniper/mixing/type1'
-    SNIPER_MIXING_TYPE2 = '#settings:sniper/mixing/type2'
-    SNIPER_GUNTAG = '#settings:sniper/gunTag'
-    SNIPER_GUNTAG_TYPE0 = '#settings:sniper/gunTag/type0'
-    SNIPER_GUNTAG_TYPE1 = '#settings:sniper/gunTag/type1'
-    SNIPER_GUNTAG_TYPE2 = '#settings:sniper/gunTag/type2'
-    SNIPER_GUNTAG_TYPE3 = '#settings:sniper/gunTag/type3'
-    SNIPER_GUNTAG_TYPE4 = '#settings:sniper/gunTag/type4'
-    SNIPER_GUNTAG_TYPE5 = '#settings:sniper/gunTag/type5'
-    SNIPER_GUNTAG_TYPE6 = '#settings:sniper/gunTag/type6'
-    SNIPER_GUNTAG_TYPE7 = '#settings:sniper/gunTag/type7'
-    SNIPER_GUNTAG_TYPE8 = '#settings:sniper/gunTag/type8'
-    SNIPER_GUNTAG_TYPE9 = '#settings:sniper/gunTag/type9'
-    SNIPER_GUNTAG_TYPE10 = '#settings:sniper/gunTag/type10'
-    SNIPER_GUNTAG_TYPE11 = '#settings:sniper/gunTag/type11'
-    SNIPER_GUNTAG_TYPE12 = '#settings:sniper/gunTag/type12'
-    SNIPER_GUNTAG_TYPE13 = '#settings:sniper/gunTag/type13'
-    SNIPER_GUNTAG_TYPE14 = '#settings:sniper/gunTag/type14'
-    SNIPER_CASSETTE = '#settings:sniper/cassette'
+    AIM_MIXING = '#settings:aim/mixing'
+    AIM_MIXING_TYPE0 = '#settings:aim/mixing/type0'
+    AIM_MIXING_TYPE1 = '#settings:aim/mixing/type1'
+    AIM_MIXING_TYPE2 = '#settings:aim/mixing/type2'
+    AIM_MIXING_TYPE3 = '#settings:aim/mixing/type3'
+    AIM_MIXING_TYPE4 = '#settings:aim/mixing/type4'
+    AIM_MIXING_TYPE5 = '#settings:aim/mixing/type5'
+    AIM_MIXING_TYPE6 = '#settings:aim/mixing/type6'
+    AIM_GUNTAG = '#settings:aim/gunTag'
+    AIM_GUNTAG_TYPE0 = '#settings:aim/gunTag/type0'
+    AIM_GUNTAG_TYPE1 = '#settings:aim/gunTag/type1'
+    AIM_GUNTAG_TYPE2 = '#settings:aim/gunTag/type2'
+    AIM_GUNTAG_TYPE3 = '#settings:aim/gunTag/type3'
+    AIM_GUNTAG_TYPE4 = '#settings:aim/gunTag/type4'
+    AIM_GUNTAG_TYPE5 = '#settings:aim/gunTag/type5'
+    AIM_GUNTAG_TYPE6 = '#settings:aim/gunTag/type6'
+    AIM_GUNTAG_TYPE7 = '#settings:aim/gunTag/type7'
+    AIM_GUNTAG_TYPE8 = '#settings:aim/gunTag/type8'
+    AIM_GUNTAG_TYPE9 = '#settings:aim/gunTag/type9'
+    AIM_GUNTAG_TYPE10 = '#settings:aim/gunTag/type10'
+    AIM_GUNTAG_TYPE11 = '#settings:aim/gunTag/type11'
+    AIM_GUNTAG_TYPE12 = '#settings:aim/gunTag/type12'
+    AIM_GUNTAG_TYPE13 = '#settings:aim/gunTag/type13'
+    AIM_GUNTAG_TYPE14 = '#settings:aim/gunTag/type14'
+    AIM_CENTRALTAG = '#settings:aim/centralTag'
+    AIM_CENTRALTAG_TYPE0 = '#settings:aim/centralTag/type0'
+    AIM_CENTRALTAG_TYPE1 = '#settings:aim/centralTag/type1'
+    AIM_CENTRALTAG_TYPE2 = '#settings:aim/centralTag/type2'
+    AIM_CENTRALTAG_TYPE3 = '#settings:aim/centralTag/type3'
+    AIM_CENTRALTAG_TYPE4 = '#settings:aim/centralTag/type4'
+    AIM_CENTRALTAG_TYPE5 = '#settings:aim/centralTag/type5'
+    AIM_CENTRALTAG_TYPE6 = '#settings:aim/centralTag/type6'
+    AIM_CENTRALTAG_TYPE7 = '#settings:aim/centralTag/type7'
+    AIM_CENTRALTAG_TYPE8 = '#settings:aim/centralTag/type8'
+    AIM_CENTRALTAG_TYPE9 = '#settings:aim/centralTag/type9'
+    AIM_CENTRALTAG_TYPE10 = '#settings:aim/centralTag/type10'
+    AIM_CENTRALTAG_TYPE11 = '#settings:aim/centralTag/type11'
+    AIM_CENTRALTAG_TYPE12 = '#settings:aim/centralTag/type12'
+    AIM_CENTRALTAG_TYPE13 = '#settings:aim/centralTag/type13'
+    AIM_NET = '#settings:aim/net'
+    AIM_NET_TYPE0 = '#settings:aim/net/type0'
+    AIM_NET_TYPE1 = '#settings:aim/net/type1'
+    AIM_NET_TYPE2 = '#settings:aim/net/type2'
+    AIM_NET_TYPE3 = '#settings:aim/net/type3'
+    AIM_RELOADER = '#settings:aim/reloader'
+    AIM_RELOADERTIMER = '#settings:aim/reloaderTimer'
+    AIM_CONDITION = '#settings:aim/condition'
+    AIM_CASSETTE = '#settings:aim/cassette'
+    AIM_ZOOMINDICATOR = '#settings:aim/zoomIndicator'
     MARKER_ALLYTITLE = '#settings:marker/AllyTitle'
     MARKER_ENEMYTITLE = '#settings:marker/EnemyTitle'
     MARKER_DEADTITLE = '#settings:marker/DeadTitle'
@@ -476,55 +448,59 @@ class SETTINGS(object):
     ALTERNATIVEVOICES_FIELDSET_HEADER = '#settings:alternativeVoices/fieldset/header'
     ALTERNATIVEVOICES_LABELS_VOICEBATTLE = '#settings:alternativeVoices/labels/voiceBattle'
     DEFAULTNAMEPREFIX = '#settings:defaultNamePrefix'
-    SOUND_DYNAMICRANGE_TITLE = '#settings:sound/dynamicRange/title'
+    SOUND_PRESETS_TITLE = '#settings:sound/presets/title'
     SOUND_DYNAMICRANGE_LABEL = '#settings:sound/dynamicRange/label'
-    ARCADE_ENUM = (ARCADE_MIXING,
-     ARCADE_MIXING_TYPE0,
-     ARCADE_MIXING_TYPE1,
-     ARCADE_MIXING_TYPE2,
-     ARCADE_MIXING_TYPE3,
-     ARCADE_MIXING_TYPE4,
-     ARCADE_MIXING_TYPE5,
-     ARCADE_GUNTAG,
-     ARCADE_GUNTAG_TYPE0,
-     ARCADE_GUNTAG_TYPE1,
-     ARCADE_GUNTAG_TYPE2,
-     ARCADE_GUNTAG_TYPE3,
-     ARCADE_GUNTAG_TYPE4,
-     ARCADE_GUNTAG_TYPE5,
-     ARCADE_GUNTAG_TYPE6,
-     ARCADE_GUNTAG_TYPE7,
-     ARCADE_GUNTAG_TYPE8,
-     ARCADE_GUNTAG_TYPE9,
-     ARCADE_GUNTAG_TYPE10,
-     ARCADE_GUNTAG_TYPE11,
-     ARCADE_GUNTAG_TYPE12,
-     ARCADE_GUNTAG_TYPE13,
-     ARCADE_GUNTAG_TYPE14,
-     ARCADE_CENTRALTAG,
-     ARCADE_CENTRALTAG_TYPE0,
-     ARCADE_CENTRALTAG_TYPE1,
-     ARCADE_CENTRALTAG_TYPE2,
-     ARCADE_CENTRALTAG_TYPE3,
-     ARCADE_CENTRALTAG_TYPE4,
-     ARCADE_CENTRALTAG_TYPE5,
-     ARCADE_CENTRALTAG_TYPE6,
-     ARCADE_CENTRALTAG_TYPE7,
-     ARCADE_CENTRALTAG_TYPE8,
-     ARCADE_CENTRALTAG_TYPE9,
-     ARCADE_CENTRALTAG_TYPE10,
-     ARCADE_CENTRALTAG_TYPE11,
-     ARCADE_CENTRALTAG_TYPE12,
-     ARCADE_CENTRALTAG_TYPE13,
-     ARCADE_NET,
-     ARCADE_NET_TYPE0,
-     ARCADE_NET_TYPE1,
-     ARCADE_NET_TYPE2,
-     ARCADE_NET_TYPE3,
-     ARCADE_RELOADER,
-     ARCADE_RELOADERTIMER,
-     ARCADE_CONDITION,
-     ARCADE_CASSETTE)
+    SOUND_SOUNDDEVICE_LABEL = '#settings:sound/soundDevice/label'
+    SOUND_BASSBOOST_LABEL = '#settings:sound/bassBoost/label'
+    AIM_ENUM = (AIM_MIXING,
+     AIM_MIXING_TYPE0,
+     AIM_MIXING_TYPE1,
+     AIM_MIXING_TYPE2,
+     AIM_MIXING_TYPE3,
+     AIM_MIXING_TYPE4,
+     AIM_MIXING_TYPE5,
+     AIM_MIXING_TYPE6,
+     AIM_GUNTAG,
+     AIM_GUNTAG_TYPE0,
+     AIM_GUNTAG_TYPE1,
+     AIM_GUNTAG_TYPE2,
+     AIM_GUNTAG_TYPE3,
+     AIM_GUNTAG_TYPE4,
+     AIM_GUNTAG_TYPE5,
+     AIM_GUNTAG_TYPE6,
+     AIM_GUNTAG_TYPE7,
+     AIM_GUNTAG_TYPE8,
+     AIM_GUNTAG_TYPE9,
+     AIM_GUNTAG_TYPE10,
+     AIM_GUNTAG_TYPE11,
+     AIM_GUNTAG_TYPE12,
+     AIM_GUNTAG_TYPE13,
+     AIM_GUNTAG_TYPE14,
+     AIM_CENTRALTAG,
+     AIM_CENTRALTAG_TYPE0,
+     AIM_CENTRALTAG_TYPE1,
+     AIM_CENTRALTAG_TYPE2,
+     AIM_CENTRALTAG_TYPE3,
+     AIM_CENTRALTAG_TYPE4,
+     AIM_CENTRALTAG_TYPE5,
+     AIM_CENTRALTAG_TYPE6,
+     AIM_CENTRALTAG_TYPE7,
+     AIM_CENTRALTAG_TYPE8,
+     AIM_CENTRALTAG_TYPE9,
+     AIM_CENTRALTAG_TYPE10,
+     AIM_CENTRALTAG_TYPE11,
+     AIM_CENTRALTAG_TYPE12,
+     AIM_CENTRALTAG_TYPE13,
+     AIM_NET,
+     AIM_NET_TYPE0,
+     AIM_NET_TYPE1,
+     AIM_NET_TYPE2,
+     AIM_NET_TYPE3,
+     AIM_RELOADER,
+     AIM_RELOADERTIMER,
+     AIM_CONDITION,
+     AIM_CASSETTE,
+     AIM_ZOOMINDICATOR)
     KEYBOARD_KEYSBLOCKS_COMMAND_ENUM = (KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD,
      KEYBOARD_KEYSBLOCKS_COMMAND_FORWARD_CRUISE,
      KEYBOARD_KEYSBLOCKS_COMMAND_BACKWARD,
@@ -590,6 +566,7 @@ class SETTINGS(object):
      GRAPHICSSETTINGSOPTIONS_BILINEAR,
      GRAPHICSSETTINGSOPTIONS_POINT,
      GRAPHICSSETTINGSOPTIONS_CUSTOM,
+     GRAPHICSSETTINGSOPTIONS_ULTRA,
      GRAPHICSSETTINGSOPTIONS_VERY_HIGH,
      GRAPHICSSETTINGSOPTIONS_MAX,
      GRAPHICSSETTINGSOPTIONS_VERYHIGH,
@@ -624,29 +601,45 @@ class SETTINGS(object):
      KEYBOARD_KEYSBLOCKS_GROUP_MINIMAP)
 
     @staticmethod
-    def arcade(key):
-        outcome = '#settings:arcade/%s' % key
-        if outcome not in SETTINGS.ARCADE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+    def aim(key):
+        """
+        :param key:
+        :return String:
+        """
+        outcome = '#settings:aim/%s' % key
+        if outcome not in SETTINGS.AIM_ENUM:
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def keyboard_keysblocks_command(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#settings:keyboard/keysBlocks/command/%s' % key
         if outcome not in SETTINGS.KEYBOARD_KEYSBLOCKS_COMMAND_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def graphicssettingsoptions(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#settings:graphicsSettingsOptions/%s' % key
         if outcome not in SETTINGS.GRAPHICSSETTINGSOPTIONS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def keyboard_keysblocks_group(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#settings:keyboard/keysBlocks/group/%s' % key
         if outcome not in SETTINGS.KEYBOARD_KEYSBLOCKS_GROUP_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

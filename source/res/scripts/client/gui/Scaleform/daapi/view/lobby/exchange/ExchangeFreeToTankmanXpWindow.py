@@ -8,6 +8,8 @@ from gui.shared.events import SkillDropEvent
 from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor
 from gui.shared.gui_items.serializers import packTankmanSkill
 from gui.shared.utils import decorators
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.money import Money
 from gui import SystemMessages, game_control
 from items.tankmen import MAX_SKILL_LEVEL
 
@@ -78,7 +80,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         self.as_setInitDataS(data)
 
     def __getCurrentTankmanLevelCost(self, tankman):
-        if tankman.roleLevel != MAX_SKILL_LEVEL or not tankman.hasNewSkill:
+        if tankman.roleLevel != MAX_SKILL_LEVEL or len(tankman.skills) and tankman.descriptor.lastSkillLevel != MAX_SKILL_LEVEL:
             tankmanDescriptor = tankman.descriptor
             lastSkillNumberValue = tankmanDescriptor.lastSkillNumber - tankmanDescriptor.freeSkillsNumber
             if lastSkillNumberValue == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:
@@ -119,12 +121,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
                 defaultXpForConvert = self.__selectedXpForConvert
             actionPriceData = None
             if self.__selectedXpForConvert != defaultXpForConvert:
-                actionPriceData = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                 'key': 'freeXPToTManXPRate',
-                 'isBuying': True,
-                 'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-                 'newPrice': (0, self.__selectedXpForConvert),
-                 'oldPrice': (0, defaultXpForConvert)}
+                actionPriceData = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'freeXPToTManXPRate', True, Money(gold=self.__selectedXpForConvert), Money(gold=defaultXpForConvert))
             self.as_setCalcValueResponseS(self.__selectedXpForConvert, actionPriceData)
             return
 

@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
 from collections import defaultdict
+import operator
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
-from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH
+from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
 from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
+from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from items import _xml, vehicles, getTypeOfCompactDescr
 import nations
 import ResMgr
@@ -504,6 +507,27 @@ class _TechTreeDataProvider(object):
                 items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
 
         return items
+
+    def getAllVehiclePossibleXP(self, nodeCD, unlockStats):
+        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
+        eliteVehicles = g_itemsCache.items.getVehicles(criteria)
+        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
+        exchangeRate = g_itemsCache.items.shop.freeXPConversion[0]
+        result = min(int(dirtyResult / exchangeRate) * exchangeRate, g_itemsCache.items.stats.gold * exchangeRate)
+        result += unlockStats.getVehTotalXP(nodeCD)
+        return result
+
+    def isVehicleAvailableToUnlock(self, nodeCD):
+        unlocks = g_itemsCache.items.stats.unlocks
+        xps = g_itemsCache.items.stats.vehiclesXPs
+        freeXP = g_itemsCache.items.stats.actualFreeXP
+        allPossibleXp = self.getAllVehiclePossibleXP(nodeCD, UnlockStats(unlocks, xps, freeXP))
+        isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
+        return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
+
+    def getUnlockProps(self, vehicleCD):
+        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=g_itemsCache.items.stats.unlocks, xps=g_itemsCache.items.stats.vehiclesXPs, freeXP=g_itemsCache.items.stats.actualFreeXP)
+        return unlockProps
 
 
 g_techTreeDP = _TechTreeDataProvider()

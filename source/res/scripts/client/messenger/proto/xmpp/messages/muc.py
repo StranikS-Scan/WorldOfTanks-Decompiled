@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages/muc.py
+from debug_utils import LOG_DEBUG
 from gui.shared import utils
 from messenger import g_settings
 from messenger.m_constants import CLIENT_ACTION_ID, CLIENT_ERROR_ID
@@ -25,20 +26,23 @@ class ENTRY_STEP(object):
 
 class ACTION_RESULT(object):
     DO_NOTHING = 0
-    ADD_TO_STORAGE = 1
-    REMOVE_FROM_STORAGE = 2
-    SHOW_ROOM = 4
+    LAZY_JOIN = 1
+    LAZY_LEAVE = 2
+    ADD_TO_STORAGE = 4
+    REMOVE_FROM_STORAGE = 8
+    SHOW_ROOM = 16
 
 
 class _RoomAction(ClientHolder):
-    __slots__ = ('_room', '_iqID', '_step', '_result')
+    __slots__ = ('_room', '_iqID', '_step', '_result', '_name')
 
-    def __init__(self, room, initResult=ACTION_RESULT.DO_NOTHING):
+    def __init__(self, room, name='', initResult=ACTION_RESULT.DO_NOTHING):
         super(_RoomAction, self).__init__()
         self._room = room
         self._iqID = ''
         self._step = ENTRY_STEP.UNDEFINED
         self._result = initResult
+        self._name = name
 
     def clear(self, full=True):
         if self._room is not None:
@@ -238,15 +242,33 @@ class JoinAction(_RoomAction):
 
     def _setIQResult(self, tag):
         if self._step == ENTRY_STEP.GET_DISCO_INFO:
-            identity, features = disco.DiscoInfoHandler().handleTag(tag)
+            identity, features, createdBy = disco.DiscoInfoHandler().handleTag(tag)
             if identity is None or identity.category != 'conference':
                 g_logOutput.warning(_LOG.MESSAGE, 'Room info is not found', tag.getXml())
                 self.clear()
                 return
-            self._room.setName(identity.name)
+            if not self._name and identity.name:
+                roomName = identity.name
+            else:
+                roomName = self._name
+            self._room.setName(roomName)
             self._step = ENTRY_STEP.SEND_PRESENCE
             self._sendPresence(chat_ext.MUCEntryQuery(self._getUserJID()))
         return
+
+
+class LazyJoinAction(JoinAction):
+    """
+    Lazy join action doesn't request disco info, and doesn't place channel to channelStorage
+    """
+
+    def _doStart(self):
+        self._step = ENTRY_STEP.SEND_PRESENCE
+        self._sendPresence(chat_ext.MUCEntryQuery(self._getUserJID()))
+
+    def _join(self, info):
+        self._step = ENTRY_STEP.UNDEFINED
+        self._result |= ACTION_RESULT.LAZY_JOIN
 
 
 class LeaveAction(_RoomAction):
@@ -259,10 +281,22 @@ class LeaveAction(_RoomAction):
         return CLIENT_ACTION_ID.LEAVE_USER_ROOM
 
     def _leave(self, resource):
+        self._step = ENTRY_STEP.UNDEFINED
         self._remove()
 
     def _join(self, resource):
         self.clear()
+        self._step = ENTRY_STEP.UNDEFINED
+
+
+class LazyLeaveAction(LeaveAction):
+    """
+    Lazy leave action doesn't remove channel from channelStorage
+    """
+
+    def _leave(self, resource):
+        self._step = ENTRY_STEP.UNDEFINED
+        self._result |= ACTION_RESULT.LAZY_LEAVE
 
 
 class MUCProvider(ChatProvider):
@@ -271,6 +305,34 @@ class MUCProvider(ChatProvider):
     def __init__(self):
         super(MUCProvider, self).__init__()
         self.__actions = {}
+
+    @staticmethod
+    def createJoinAction(channel, initResult, name=''):
+        """
+        Fabric method for join action
+        :param channel: message channel
+        :param initResult: initial result for action
+        :param name: temp param, room name as 'room_name (room owner)'
+        :return: join action (_RoomAction)
+        """
+        if channel.isLazy():
+            action = LazyJoinAction(channel, name=name, initResult=ACTION_RESULT.DO_NOTHING)
+        else:
+            action = JoinAction(channel, name=name, initResult=initResult)
+        return action
+
+    @staticmethod
+    def createLeaveAction(channel):
+        """
+        fabric method, get action for channel
+        :param channel: channel
+        :return: action
+        """
+        if channel.isLazy():
+            action = LazyLeaveAction(channel)
+        else:
+            action = LeaveAction(channel)
+        return action
 
     def clear(self):
         while self.__actions:
@@ -283,7 +345,7 @@ class MUCProvider(ChatProvider):
         if not g_settings.server.XMPP.isMucServiceAllowed():
             return
         for channel in self._getChannelsIterator(MESSAGE_TYPE.GROUPCHAT):
-            self.joinToRoom(channel.getID(), channel.getPassword(), ACTION_RESULT.DO_NOTHING)
+            self.joinToRoom(channel.getID(), channel.getPassword(), initResult=ACTION_RESULT.DO_NOTHING)
 
         super(MUCProvider, self).release()
 
@@ -304,6 +366,8 @@ class MUCProvider(ChatProvider):
             if exists is not None:
                 return (False, ClientChannelError(CHANNEL_ERROR_ID.NAME_ALREADY_EXISTS, name))
             if roomJID not in self.__actions:
+                from gui.shared.utils import getPlayerName
+                name = '{0} ({1})'.format(name, getPlayerName())
                 action = CreateAction(roomJID, name, password, initResult)
                 self.__actions[roomJID] = action
                 action.start()
@@ -311,8 +375,8 @@ class MUCProvider(ChatProvider):
                 return (False, ClientActionError(CLIENT_ACTION_ID.CREATE_USER_ROOM, CLIENT_ERROR_ID.LOCKED))
             return (True, None)
 
-    def joinToRoom(self, roomJID, password='', initResult=ACTION_RESULT.SHOW_ROOM):
-        if not g_settings.server.XMPP.isMucServiceAllowed(roomJID.getDomain()):
+    def joinToRoom(self, roomJID, password='', name='', initResult=ACTION_RESULT.SHOW_ROOM):
+        if not g_settings.server.XMPP.isMucServiceAllowed(hostname=roomJID.getDomain()):
             return (False, ClientActionError(CLIENT_ACTION_ID.JOIN_USER_ROOM, CLIENT_ERROR_ID.NOT_SUPPORTED))
         else:
             entry, exists = self._searchChannel(roomJID)
@@ -324,7 +388,7 @@ class MUCProvider(ChatProvider):
             if roomJID not in self.__actions:
                 if password:
                     entry.setPassword(password)
-                action = JoinAction(entry, initResult)
+                action = self.createJoinAction(entry, initResult, name=name)
                 self.__actions[roomJID] = action
                 action.start()
             else:
@@ -344,7 +408,7 @@ class MUCProvider(ChatProvider):
             entry = self.__actions.pop(roomJID, None)
             if entry is not None:
                 entry.clear()
-            action = LeaveAction(exists)
+            action = self.createLeaveAction(exists)
             self.__actions[roomJID] = action
             action.start()
             return
@@ -360,7 +424,7 @@ class MUCProvider(ChatProvider):
                 if result:
                     isConnected = self.client().isConnected()
                     if self._addChannel(created, isJoined=isConnected) and isConnected:
-                        self.joinToRoom(created.getID(), created.getPassword(), ACTION_RESULT.DO_NOTHING)
+                        self.joinToRoom(created.getID(), created.getPassword(), initResult=ACTION_RESULT.DO_NOTHING)
             return result
 
     def addMessage(self, jid, message):
@@ -374,7 +438,7 @@ class MUCProvider(ChatProvider):
 
     def handlePresence(self, jid, resource):
         result = False
-        if g_settings.server.XMPP.isMucServiceAllowed(jid.getDomain()):
+        if g_settings.server.XMPP.isMucServiceAllowed(hostname=jid.getDomain()):
             presence = resource.presence
             mucInfo = resource.getMucInfo()
             dbID = resource.getWgDatabaseID()
@@ -419,14 +483,15 @@ class MUCProvider(ChatProvider):
 
     def __removeMember(self, jid, dbID, nickname):
         _, found = self._searchChannel(jid.getBareJID())
-        if dbID:
-            leave = utils.getPlayerDatabaseID() == dbID
-        else:
-            leave = utils.getPlayerName() == nickname
-        if leave:
-            self._removeChannel(found)
-        else:
-            found.removeMember(jid)
+        if found:
+            if dbID:
+                leave = utils.getPlayerDatabaseID() == dbID
+            else:
+                leave = utils.getPlayerName() == nickname
+            if leave:
+                self._removeChannel(found)
+            else:
+                found.removeMember(jid)
 
     def __filterActions(self):
         for jid, action in self.__actions.items()[:]:
@@ -438,7 +503,14 @@ class MUCProvider(ChatProvider):
             if room is None and result != ACTION_RESULT.DO_NOTHING:
                 g_logOutput.error(_LOG.MESSAGE, 'Action is failed', jid)
                 continue
-            if result & ACTION_RESULT.ADD_TO_STORAGE > 0:
+            if result & ACTION_RESULT.LAZY_JOIN > 0:
+                LOG_DEBUG('LAZY_JOIN')
+                room.setJoined(True)
+            elif result & ACTION_RESULT.LAZY_LEAVE > 0:
+                LOG_DEBUG('LAZY_LEAVE')
+                room.clearHistory()
+                room.setJoined(False)
+            elif result & ACTION_RESULT.ADD_TO_STORAGE > 0:
                 self._addChannel(room, byAction=result & ACTION_RESULT.SHOW_ROOM > 0)
             elif result & ACTION_RESULT.REMOVE_FROM_STORAGE > 0:
                 self._removeChannel(room)

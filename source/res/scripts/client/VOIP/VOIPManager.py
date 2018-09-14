@@ -17,10 +17,13 @@ from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
 
 class VOIPManager(VOIPHandler):
+    """
+    VOIP manager class. It is a bridge between C++ code and the client.
+    """
 
     def __init__(self):
         LOG_VOIP_INT('VOIPManager.Create')
-        VOIPHandler.__init__(self)
+        super(VOIPManager, self).__init__()
         self.__initialized = False
         self.__enabled = False
         self.__voipDomain = ''
@@ -37,7 +40,7 @@ class VOIPManager(VOIPHandler):
         self.__captureDevices = []
         self.__currentCaptureDevice = ''
         self.__channelUsers = {}
-        self.OnCaptureDevicesUpdated = Event.Event()
+        self.onCaptureDevicesUpdated = Event.Event()
         self.onPlayerSpeaking = Event.Event()
         self.onInitialized = Event.Event()
         self.onStateToggled = Event.Event()
@@ -48,10 +51,19 @@ class VOIPManager(VOIPHandler):
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
+        """
+        Returns instance of chat plugin to have access to VOIP Provider.
+        This provider contains methods: requestCredentials, logVivoxLogin.
+        :return: instance of chat plugin
+        """
         return None
 
     @storage_getter('users')
     def usersStorage(self):
+        """
+        Returns instance of UsersStorage from messenger package.
+        :return: instance of UsersStorage
+        """
         return None
 
     def destroy(self):
@@ -67,6 +79,11 @@ class VOIPManager(VOIPHandler):
         return self.__initialized
 
     def isNotInitialized(self):
+        """
+        Check if the manager is initialized and has appropriate state.
+        :return: True if it is initialized and does not start initializing process,
+        otherwise - False.
+        """
         return not self.__initialized and self.getState() == STATE.NONE
 
     def getVOIPDomain(self):
@@ -239,10 +256,10 @@ class VOIPManager(VOIPHandler):
         self.setMicrophoneVolume(int(round(SoundGroups.g_instance.getVolume(KEY_VOIP_MIC) * 100)))
 
     def __muffleMasterVolume(self):
-        SoundGroups.g_instance.muffleVolume()
+        SoundGroups.g_instance.muffleWWISEVolume()
 
     def __restoreMasterVolume(self):
-        SoundGroups.g_instance.restoreVolume()
+        SoundGroups.g_instance.restoreWWISEVolume()
 
     def setVoiceActivation(self, enabled):
         LOG_VOIP_INT('VOIPManager.SetVoiceActivation: %s' % str(enabled))
@@ -378,7 +395,7 @@ class VOIPManager(VOIPHandler):
             self.__captureDevices.append(str(data[KEY_CAPTURE_DEVICES + '_' + str(i)]))
 
         self.__currentCaptureDevice = str(data[KEY_CURRENT_CAPTURE_DEVICE])
-        self.OnCaptureDevicesUpdated()
+        self.onCaptureDevicesUpdated()
 
     def onSetCaptureDevice(self, data):
         assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
@@ -471,26 +488,38 @@ class VOIPManager(VOIPHandler):
         if dbid == -1:
             return
         talking = int(data[KEY_IS_SPEAKING])
-        channelUser = self.__channelUsers[dbid]
         if dbid in self.__channelUsers:
+            channelUser = self.__channelUsers[dbid]
             if channelUser['talking'] != talking:
                 channelUser['talking'] = talking
                 self.__muffleMasterVolume() if self.__isAnyoneTalking() else self.__restoreMasterVolume()
         self.onPlayerSpeaking(dbid, talking)
 
     def __me_onChannelEntered(self, uri, pwd):
+        """
+        Listener of event g_messengerEvents.voip.onChannelEntered.
+        """
         if not self.__inTesting:
             self.__enterChannel(uri, pwd)
 
     def __me_onChannelLeft(self):
+        """
+        Listener of event g_messengerEvents.voip.onChannelLeft.
+        """
         if not self.__inTesting:
             self.__leaveChannel()
 
     def __me_onCredentialReceived(self, name, pwd):
+        """
+        Listener of event g_messengerEvents.voip.onCredentialReceived.
+        """
         LOG_VOIP_INT("VOIPManager.OnUserCredentials: '%s' '%s'" % (name, pwd))
         self.__login(name, pwd)
 
     def __me_onUsersListReceived(self, tags):
+        """
+        Listener of event g_messengerEvents.users.onUsersListReceived.
+        """
         if USER_TAG.MUTED not in tags:
             return
         for user in self.usersStorage.getList(MutedFindCriteria()):
@@ -499,5 +528,8 @@ class VOIPManager(VOIPHandler):
                 self.__muteParticipantForMe(dbID, True)
 
     def __me_onUserActionReceived(self, actionID, user):
+        """
+        Listener of event g_messengerEvents.users.onUserActionReceived.
+        """
         if actionID in (USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET):
             self.__onChatActionMute(user.getID(), user.isMuted())

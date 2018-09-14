@@ -32,6 +32,7 @@ class CircularFlyer(BigWorld.UserDataObject):
         self.__updateCallbackId = None
         if self.__sound is not None:
             self.__sound.stop()
+            self.__sound.releaseMatrix()
             self.__sound = None
         if self.__model is not None:
             BigWorld.delModel(self.__model)

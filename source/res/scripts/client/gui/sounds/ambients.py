@@ -3,9 +3,10 @@
 import weakref
 from collections import defaultdict
 from Event import Event
-import MusicController as _MC
+import MusicControllerWWISE as _MC
 from constants import FORT_BUILDING_TYPE as FBT, ARENA_PERIOD as _PERIOD
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON as _BUR
+from shared_utils import BoundMethodWeakref
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier, Notifiable
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE as _CFS
@@ -48,6 +49,9 @@ class SoundEvent(Notifiable):
         self.onStarted = Event()
         self.onFinished = Event()
 
+    def __del__(self):
+        self.clearNotification()
+
     def getID(self):
         return self._soundEventID
 
@@ -68,7 +72,7 @@ class SoundEvent(Notifiable):
             SOUND_DEBUG('Start playing sound event', self._soundEventID, self._params)
             _MC.g_musicController.play(self._soundEventID, self._params)
             if self._checkFinish:
-                self.addNotificators(PeriodicNotifier(self._getNotificationDelta, self._onCheckAmbientNotification, (PLAYING_SOUND_CHECK_PERIOD,)))
+                self.addNotificators(PeriodicNotifier(BoundMethodWeakref(self._getNotificationDelta), BoundMethodWeakref(self._onCheckAmbientNotification), (PLAYING_SOUND_CHECK_PERIOD,)))
                 self.startNotification()
                 self.onStarted()
         else:
@@ -183,17 +187,20 @@ class SoundEnv(object):
     the sound system at @start method
     """
 
-    def __init__(self, music=None, ambient=None, filters=None):
+    def __init__(self, soundsCtrl, envId, music=None, ambient=None, filters=None):
+        self._soundsCtrl = soundsCtrl
         self._music = music or EmptySound()
         self._ambient = ambient or EmptySound()
         self._filters = filters or []
+        self.__envID = envId
         self.onChanged = Event()
 
     def start(self):
-        pass
+        self._soundsCtrl.system.onEnvStart(self.__envID)
 
     def stop(self):
         self.onChanged.clear()
+        self._soundsCtrl.system.onEnvStop(self.__envID)
 
     def getMusicEvent(self):
         """:return: SoundEvent object instance
@@ -230,21 +237,25 @@ class SoundEnv(object):
 
 class EmptySpaceEnv(SoundEnv):
 
-    def __init__(self):
-        super(EmptySpaceEnv, self).__init__()
+    def __init__(self, soundsCtrl):
+        super(EmptySpaceEnv, self).__init__(soundsCtrl, 'empty')
 
 
 class LoginSpaceEnv(SoundEnv):
 
-    def __init__(self):
-        super(LoginSpaceEnv, self).__init__(music=SoundEvent(_MC.MUSIC_EVENT_LOGIN), ambient=NoAmbient())
+    def __init__(self, soundsCtrl):
+        super(LoginSpaceEnv, self).__init__(soundsCtrl, 'login', music=SoundEvent(_MC.MUSIC_EVENT_LOGIN), ambient=NoAmbient())
 
 
 class LobbySpaceEnv(SoundEnv):
 
-    def __init__(self):
-        super(LobbySpaceEnv, self).__init__(music=SoundEvent(_MC.MUSIC_EVENT_LOBBY, checkFinish=True), ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY))
+    def __init__(self, soundsCtrl):
+        super(LobbySpaceEnv, self).__init__(soundsCtrl, 'lobby', music=SoundEvent(_MC.MUSIC_EVENT_LOBBY, checkFinish=True), ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY))
         self._music.onFinished += self._onMusicFinished
+
+    def stop(self):
+        self._music.onFinished -= self._onMusicFinished
+        super(LobbySpaceEnv, self).stop()
 
     def _onMusicFinished(self, isCompleted=False):
         if isCompleted:
@@ -254,8 +265,8 @@ class LobbySpaceEnv(SoundEnv):
 
 class BattleLoadingSpaceEnv(SoundEnv):
 
-    def __init__(self):
-        super(BattleLoadingSpaceEnv, self).__init__(music=SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOADING), ambient=NoAmbient())
+    def __init__(self, soundsCtrl):
+        super(BattleLoadingSpaceEnv, self).__init__(soundsCtrl, 'battleLoading', music=SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOADING), ambient=NoAmbient())
 
 
 class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
@@ -263,13 +274,13 @@ class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
     only after BEFOREBATTLE period on arena
     """
 
-    def __init__(self):
-        super(BattleSpaceEnv, self).__init__(music=SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOADING), ambient=SoundEvent(_MC.AMBIENT_EVENT_COMBAT))
+    def __init__(self, soundsCtrl):
+        super(BattleSpaceEnv, self).__init__(soundsCtrl, 'battle', music=SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOADING), ambient=SoundEvent(_MC.AMBIENT_EVENT_COMBAT))
 
     def start(self):
         super(BattleSpaceEnv, self).start()
         g_sessionProvider.addArenaCtrl(self)
-        periodCtrl = g_sessionProvider.getPeriodCtrl()
+        periodCtrl = g_sessionProvider.shared.arenaPeriod
         if periodCtrl is not None:
             self._updateBattleAmbient(periodCtrl.getPeriod())
         return
@@ -297,22 +308,28 @@ class BattleSpaceEnv(SoundEnv, IArenaPeriodController):
 
 class LobbySubViewEnv(SoundEnv):
 
-    def __init__(self):
-        super(LobbySubViewEnv, self).__init__(filters=(SoundFilters.FILTERED_HANGAR,))
+    def __init__(self, soundsCtrl):
+        super(LobbySubViewEnv, self).__init__(soundsCtrl, 'lobbySubView', filters=(SoundFilters.FILTERED_HANGAR,))
+
+
+class BattleQueueEnv(SoundEnv):
+
+    def __init__(self, soundsCtrl):
+        super(BattleQueueEnv, self).__init__(soundsCtrl, 'queue', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
 class ShopEnv(SoundEnv):
 
-    def __init__(self):
-        super(ShopEnv, self).__init__(ambient=SoundEvent(_MC.AMBIENT_EVENT_SHOP), filters=(SoundFilters.FILTERED_HANGAR,))
+    def __init__(self, soundsCtrl):
+        super(ShopEnv, self).__init__(soundsCtrl, 'shop', ambient=SoundEvent(_MC.AMBIENT_EVENT_SHOP), filters=(SoundFilters.FILTERED_HANGAR,))
 
 
 class ModalWindowEnv(SoundEnv):
     """Enable Hangar sound filter for modal window
     """
 
-    def __init__(self):
-        super(ModalWindowEnv, self).__init__(filters=(SoundFilters.FILTERED_HANGAR,))
+    def __init__(self, soundsCtrl):
+        super(ModalWindowEnv, self).__init__(soundsCtrl, 'modal', filters=(SoundFilters.FILTERED_HANGAR,))
 
 
 class FortEnv(SoundEnv, FortViewHelper):
@@ -320,9 +337,9 @@ class FortEnv(SoundEnv, FortViewHelper):
     parameters on runtime according to the fortification events.
     """
 
-    def __init__(self):
+    def __init__(self, soundsCtrl):
         self.filter = weakref.proxy(snd_filters.get(SoundFilters.FORT_FILTER))
-        super(FortEnv, self).__init__(ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT, {self.filter.getDefencePeriodField(): 0,
+        super(FortEnv, self).__init__(soundsCtrl, 'fort', ambient=SoundEvent(_MC.AMBIENT_EVENT_LOBBY_FORT, {self.filter.getDefencePeriodField(): 0,
          self.filter.getBuildNumberField(): 0,
          self.filter.getTransportModeField(): 0}), filters=(SoundFilters.FORT_FILTER, SoundFilters.FILTERED_HANGAR))
 
@@ -334,7 +351,10 @@ class FortEnv(SoundEnv, FortViewHelper):
     def stop(self):
         g_eventBus.removeListener(events.FortEvent.IS_IN_TRANSPORTING_MODE, self.__onTransportingModeChanged, scope=EVENT_BUS_SCOPE.FORT)
         self.stopFortListening()
+        if self._soundsCtrl is not None:
+            self._soundsCtrl.system.sendGlobalEvent('fa_music_global_unmute')
         super(FortEnv, self).stop()
+        return
 
     def onClientStateChanged(self, state):
         if state.getStateID() in (_CFS.WIZARD, _CFS.HAS_FORT):
@@ -370,6 +390,9 @@ class BattleResultsEnv(SoundEnv):
     _sounds = {WinStatus.WIN: SoundEvent(_MC.MUSIC_EVENT_COMBAT_VICTORY, checkFinish=True),
      WinStatus.DRAW: SoundEvent(_MC.MUSIC_EVENT_COMBAT_DRAW, checkFinish=True),
      WinStatus.LOSE: SoundEvent(_MC.MUSIC_EVENT_COMBAT_LOSE, checkFinish=True)}
+
+    def __init__(self, soundsCtrl):
+        super(BattleResultsEnv, self).__init__(soundsCtrl, 'battleResults')
 
     def start(self):
         super(BattleResultsEnv, self).start()
@@ -411,24 +434,25 @@ class GuiAmbientsCtrl(object):
     ambient events walking through all active environments from @__customEnvs in priority order.
     Any ambient can fire onChanged event and starts restart this algo.
     """
-    _spaces = {_SPACE_ID.LOGIN: LoginSpaceEnv,
-     _SPACE_ID.LOBBY: LobbySpaceEnv,
+    _spaces = {_SPACE_ID.LOBBY: LobbySpaceEnv,
      _SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
      _SPACE_ID.BATTLE: BattleSpaceEnv}
 
-    def __init__(self):
-        self._spaceEnv = EmptySpaceEnv()
+    def __init__(self, soundsCtrl):
+        self._spaceEnv = EmptySpaceEnv(soundsCtrl)
         self._filters = defaultdict(int)
+        self._soundsCtrl = soundsCtrl
         self._customEnvs = defaultdict(dict)
 
     def init(self):
-        g_appLoader.onGUISpaceChanged += self.__onGUISpaceChanged
+        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
 
     def fini(self):
-        g_appLoader.onGUISpaceChanged -= self.__onGUISpaceChanged
+        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         self.stopAllSounds()
         self._clearSoundEnv(self._spaceEnv)
         self._spaceEnv = None
+        self._soundsCtrl = None
         return
 
     def start(self):
@@ -481,7 +505,7 @@ class GuiAmbientsCtrl(object):
             event.start()
 
     def _buildSoundEnv(self, soundEnvClass):
-        env = soundEnvClass()
+        env = soundEnvClass(self._soundsCtrl)
         env.start()
         env.onChanged += self.__onAmbientChanged
         for fID in env.getFilters():
@@ -505,7 +529,7 @@ class GuiAmbientsCtrl(object):
 
         return env
 
-    def __onGUISpaceChanged(self, spaceID):
+    def __onGUISpaceEntered(self, spaceID):
         SOUND_DEBUG('GUI space has been changed', spaceID, spaceID in self._spaces)
         if spaceID in self._spaces:
             self._clearSoundEnv(self._spaceEnv)

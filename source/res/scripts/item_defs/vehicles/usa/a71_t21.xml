@@ -1,0 +1,683 @@
+<a71_t21.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	56.3	</forward>
+    <backward>	21	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.268	</moving>
+    <still>	0.268	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.402	</firePenalty>
+  </invisibility>
+  <repairCost>	7.04	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A71_T21/T21_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	28.6	</armor_1>
+      <armor_2>	28.6	</armor_2>
+      <armor_3>	25.4	</armor_3>
+      <armor_4>	22.2	</armor_4>
+      <armor_5>	22.2	</armor_5>
+      <armor_6>	25.4	</armor_6>
+      <armor_7>	12.7	</armor_7>
+      <armor_8>	12.7	</armor_8>
+      <armor_9>	12.7	</armor_9>
+      <armor_10>	0	</armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10847	</weight>
+    <maxHealth>	480	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A71_T21/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A71_T21/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A71_T21/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.537315 0.463775	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A71_T21/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A71_T21/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00108195 0.188451 2.47847	</rayStart>
+        <rayEnd>	-0.0010817 -0.108852 2.21087	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A71_T21/T21_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_T21>
+      <userString>	#usa_vehicles:Chassis_T21	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8300.0	</price>
+      <unlocks>
+        <chassis>	Chassis_T21_2	  <cost>	4800	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	5300	</weight>
+      <maxLoad>	23200	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.9	</terrainResistance>
+      <brakeForce>	25000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	58	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A71_T21/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A71_T21/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A71_T21/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.42	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.283099	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.108439	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.339338	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.278795	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.283099	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.108439	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.339338	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.278795	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.921393 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A71_T21/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A71_T21/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.28339 1.93112	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.251680 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.382090 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.338260	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T21>
+    <Chassis_T21_2>
+      <userString>	#usa_vehicles:Chassis_T21_2	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	16000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	5300	</weight>
+      <maxLoad>	26000	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.5	</terrainResistance>
+      <brakeForce>	27500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	60	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	135	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A71_T21/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A71_T21/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A71_T21/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.44 0.42	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.9	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.283099	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.108439	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.339338	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.278795	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.283099	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.108439	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.339338	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.278795	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.921393 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A71_T21/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A71_T21/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.28339 1.93112	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.250180 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.382090 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.338260	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_T21_2>
+  </chassis>
+  <turrets0>
+    <Turret_2_T21>
+      <userString>	#usa_vehicles:Turret_2_T21	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17050	</price>
+      <armor>
+        <armor_1>	28.6	</armor_1>
+        <armor_2>	28.6	</armor_2>
+        <armor_3>	25.4	</armor_3>
+        <armor_4>	25.4	</armor_4>
+        <armor_5>	22.2	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	12.7	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	12.7	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4500	</weight>
+      <maxHealth>	120	</maxHealth>
+      <rotationSpeed>	42	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_Gun_M3_L37>	shared	  <maxAmmo>	70	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	QF_6_pounder_Mk_III	  <cost>	1880	</cost>
+            </gun>
+            <gun>	_76mm_Gun_M1A1	  <cost>	4600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	3.5	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00329883 -0.00694397 1.37964	</rayStart>
+              <rayEnd>	-0.038092 -0.0713613 1.37744	</rayEnd>
+              <rayUp>	0.065 0.06 0.000000	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_Gun_M3_L37>
+        <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	150	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00354454 -0.00719016 1.32311	</rayStart>
+              <rayEnd>	-0.0459543 -0.0269935 1.32311	</rayEnd>
+              <rayUp>	0.053 0.053 0.000000	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
+          </camouflage>
+        </QF_6_pounder_Mk_III>
+        <_76mm_Gun_M1A1>	shared	  <maxAmmo>	70	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_76mm_Gun_M1A2	  <cost>	5800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0032987 -0.00694355 1.79789	</rayStart>
+              <rayEnd>	-0.0288462 0.000859982 1.79626	</rayEnd>
+              <rayUp>	0.074 0.072 1	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.715 0.715 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A1>
+        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	70	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 10 0.394671 10 0.458333 6 0.541667 6 0.605329 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	A103_T71E1	  <cost>	60000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	28.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	20	</gun>
+          </armor>
+          <reloadTime>	3.2	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A71_T21/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/american/A71_T21/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/american/A71_T21/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A71_T21/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A71_T21/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00354242 -0.00644796 1.763	</rayStart>
+              <rayEnd>	-0.0286302 -0.0119803 1.76127	</rayEnd>
+              <rayUp>	0.076 0.07 1	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A2>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A71_T21/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A71_T21/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A71_T21/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A71_T21/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A71_T21/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.001037 0.363161 0.839931	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.16847 0.438265 -0.331715	</rayStart>
+          <rayEnd>	-0.784239 0.412529 -0.223524	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.16847 0.438265 -0.331715	</rayStart>
+          <rayEnd>	0.784239 0.412529 -0.223524	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.12895 0.434826 0.398282	</rayStart>
+          <rayEnd>	-0.749455 0.409004 0.27454	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.12895 0.434826 0.398282	</rayStart>
+          <rayEnd>	0.749455 0.409004 0.27454	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.729 0.091 0.803 0.518 0.500 0.500 0.072 0.500 0.048 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.85 0.85 0.67 0.42	</tiling>
+      </camouflage>
+    </Turret_2_T21>
+  </turrets0>
+  <engines>
+    <Ford_GAA>	shared	  <unlocks>
+        <engine>	Ford_GAN	  <cost>	11500.0	</cost>
+        </engine>
+      </unlocks>
+    </Ford_GAA>
+    <Ford_GAN>	shared	</Ford_GAN>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <SCR_508>	shared	  <unlocks>
+        <radio>	SCR_538	  <cost>	3800.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_508>
+    <SCR_538>	shared	  <unlocks>
+        <radio>	SCR_528	  <cost>	9000.0	</cost>
+        </radio>
+      </unlocks>
+    </SCR_538>
+    <SCR_528>	shared	</SCR_528>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T21>
+        <alpha>	0.08855	</alpha>
+      </Chassis_T21>
+      <Chassis_T21_2>
+        <alpha>	0.07245	</alpha>
+      </Chassis_T21_2>
+    </chassis>
+    <engines>
+      <Ford_GAA>
+        <bravo>	137.4465	</bravo>
+      </Ford_GAA>
+      <Ford_GAN>
+        <bravo>	148.0194	</bravo>
+      </Ford_GAN>
+    </engines>
+    <armour>	0.821367162	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a71_t21.xml>

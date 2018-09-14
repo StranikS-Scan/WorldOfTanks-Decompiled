@@ -10,6 +10,13 @@
     <forward>	24	</forward>
     <backward>	8	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.105	</moving>
+    <still>	0.175	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.263	</firePenalty>
+  </invisibility>
   <repairCost>	11.02	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -75,7 +82,8 @@
       <turret>	-0.001154 0.65571 2.06073	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A85_T110E3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A85_T110E3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A85_T110E3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -116,9 +124,6 @@
       </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/american/A85_T110E3/T110E3_HangarShadowMap.dds	</hangarShadowTexture>
-    <camouflage>
-      <exclusionMask></exclusionMask>
-    </camouflage>
   </hull>
   <chassis>
     <Chassis_T110E3>
@@ -153,8 +158,8 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	usa_01	</textureSet>
-        <size>	0.46 0.76	</size>
+        <textureSet>	t97	</textureSet>
+        <size>	0.67 0.8	</size>
       </traces>
       <splineDesc>
         <segmentModelLeft>	vehicles/american/A85_T110E3/track/segment1.model	</segmentModelLeft>
@@ -164,7 +169,7 @@
         <left>	vehicles/american/A85_T110E3/track/left.track	</left>
         <right>	vehicles/american/A85_T110E3/track/right.track	</right>
         <segmentLength>	0.163	</segmentLength>
-        <segmentOffset>	0.117	</segmentOffset>
+        <segmentOffset>	0.206	</segmentOffset>
         <segment2Offset>	0.086	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
@@ -176,7 +181,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.51	</textureScale>
+        <textureScale>	-2.85	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -264,9 +269,6 @@
         <gravity>	-6.2	</gravity>
         <elasticity>	1180	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -366,13 +368,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12769 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A85_T110E3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A85_T110E3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A85_T110E3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.51104 2.00881	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -443,6 +444,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <turretYawLimits>	-8 8	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A85_T110E3/normal/lod0/Gun_04.model	</undamaged>
@@ -450,7 +452,8 @@
             <exploded>	vehicles/american/A85_T110E3/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A85_T110E3/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A85_T110E3/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A85_T110E3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -473,15 +476,14 @@
         <exploded>	vehicles/american/A85_T110E3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A85_T110E3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A85_T110E3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A85_T110E3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000499 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_T110E3>
   </turrets0>
   <engines>
@@ -493,6 +495,19 @@
   <radios>
     <AN_VRC-3>	shared	</AN_VRC-3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T110E3>
+        <alpha>	0.13685	</alpha>
+      </Chassis_T110E3>
+    </chassis>
+    <engines>
+      <AOI-1490>
+        <bravo>	231.2802	</bravo>
+      </AOI-1490>
+    </engines>
+    <armour>	1.1133635	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

@@ -29,6 +29,14 @@ def neutral(text):
     return _formatText('neutralText', text)
 
 
+def goodPing(text):
+    return _formatText('goodPingText', text)
+
+
+def standartPing(text):
+    return _formatText('standartPingText', text)
+
+
 def stats(text):
     return _formatText('statsText', text)
 
@@ -131,6 +139,23 @@ def tutorial(text):
 
 def playerOnline(text):
     return _formatText('playerOnline', text)
+
+
+def alignText(text, align):
+    return _getStyle('alignText', {'message': text,
+     'align': align})
+
+
+def alignStandartText(text, align):
+    return alignText(standard(text), align)
+
+
+def vehicleStatusInfoText(text):
+    return _formatText('vehicleStatusInfoText', text)
+
+
+def vehicleStatusCriticalText(text):
+    return _formatText('vehicleStatusCriticalText', text)
 
 
 def getRawStyles(names):

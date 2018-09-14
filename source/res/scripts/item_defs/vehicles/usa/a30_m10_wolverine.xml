@@ -10,6 +10,13 @@
     <forward>	48	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.187	</moving>
+    <still>	0.312	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.468	</firePenalty>
+  </invisibility>
   <repairCost>	6.43	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.000000 0.839219 -0.141891	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -131,7 +139,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.58	</textureScale>
+        <textureScale>	-3.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -198,13 +206,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.947403 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05187 1.89241	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -262,9 +269,6 @@
         <gravity>	-8.8	</gravity>
         <elasticity>	1038	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -385,7 +389,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.58	</textureScale>
+        <textureScale>	-3.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -452,13 +456,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.947403 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.05187 1.89241	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -515,9 +518,6 @@
         <gravity>	-8.8	</gravity>
         <elasticity>	1038	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -608,7 +608,7 @@
       <userString>	#usa_vehicles:Turret_1_M10_Wolverine	</userString>
       <tags>	cannotDetach	</tags>
       <level>	4	</level>
-      <price>	4400.0	</price>
+      <price>	4400	</price>
       <armor>
         <armor_1>	19.1	</armor_1>
         <armor_2>	0	</armor_2>
@@ -640,7 +640,7 @@
             </gun>
             <gun>	_105mm_AT_SPH_M4_L23	  <cost>	1500	</cost>
             </gun>
-            <vehicle>	M18_Hellcat	  <cost>	25500	</cost>
+            <vehicle>	A41_M18_Hellcat	  <cost>	25500	</cost>
             </vehicle>
           </unlocks>
           <reloadTime>	4.2	</reloadTime>
@@ -667,13 +667,15 @@
           </pitchLimits>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -713,13 +715,15 @@
           </pitchLimits>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -764,13 +768,15 @@
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -811,6 +817,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
@@ -818,7 +825,8 @@
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -841,7 +849,8 @@
         <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.362378 1.04756	</gunPosition>
       <emblemSlots>
@@ -863,9 +872,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.835 0.101 1.137 0.000 0.604 0.245 1.000 0.187 0.511 0.475 0.237 0.482 0.000 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.775 0.775 0.000000 0.000000	</tiling>
       </camouflage>
@@ -877,7 +884,7 @@
       <level>	5	</level>
       <price>	10300	</price>
       <unlocks>
-        <vehicle>	M36_Slagger	  <cost>	21850	</cost>
+        <vehicle>	A31_M36_Slagger	  <cost>	21850	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -938,13 +945,15 @@
           </pitchLimits>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -985,13 +994,15 @@
           </pitchLimits>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1027,13 +1038,15 @@
             <maxPitch>	0 10 0.430556 10 0.436111 9 0.483333 9 0.488889 4.3 0.511111 4.3 0.516667 9 0.563889 9 0.569444 10 1 10	</maxPitch>
           </pitchLimits>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1069,6 +1082,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/american/A30_M10_Wolverine/normal/lod0/Gun_07.model	</undamaged>
@@ -1076,7 +1090,8 @@
             <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1099,7 +1114,8 @@
         <exploded>	vehicles/american/A30_M10_Wolverine/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A30_M10_Wolverine/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A30_M10_Wolverine/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A30_M10_Wolverine/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.362378 1.04756	</gunPosition>
       <emblemSlots>
@@ -1121,9 +1137,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.920 0.000 1.040 0.000 0.625 0.205 1.000 0.335 0.500 0.500 0.148 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.73 0.73 0.000000 0.18	</tiling>
       </camouflage>
@@ -1158,6 +1172,31 @@
     </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_M10_Wolverine>
+        <alpha>	0.13685	</alpha>
+      </Chassis_M10_Wolverine>
+      <Chassis_M10_Wolverine_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_M10_Wolverine_2>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975EC2>
+        <bravo>	92.5121	</bravo>
+      </Wright_Continental_R-975EC2>
+      <Wright_Continental_R-975C1>
+        <bravo>	105.7281	</bravo>
+      </Wright_Continental_R-975C1>
+      <GMC_6046>
+        <bravo>	111.0145	</bravo>
+      </GMC_6046>
+      <Ford_GAA_R>
+        <bravo>	132.1601	</bravo>
+      </Ford_GAA_R>
+    </engines>
+    <armour>	0.847232066	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

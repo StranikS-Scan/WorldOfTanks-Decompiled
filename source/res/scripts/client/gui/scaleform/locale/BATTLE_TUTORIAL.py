@@ -3,6 +3,12 @@
 
 
 class BATTLE_TUTORIAL(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     BOT_1 = '#battle_tutorial:bot_1'
     BOT_2 = '#battle_tutorial:bot_2'
     BOT_3 = '#battle_tutorial:bot_3'

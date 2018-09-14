@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/restrictions/__init__.py
-from UnitBase import ROSTER_TYPE
 from constants import PREBATTLE_TYPE
 from prebattle_shared import decodeRoster
+from gui.server_events import g_eventsCache
 
 def createPermissions(functional, pID=None):
     clazz = functional._permClass
@@ -24,7 +24,10 @@ def createUnitActionValidator(prbType, rosterSettings, proxy):
     elif prbType == PREBATTLE_TYPE.CLUBS:
         validator = limits.ClubsActionValidator(rosterSettings, proxy)
     elif prbType == PREBATTLE_TYPE.SQUAD:
-        validator = limits.SquadActionValidator(rosterSettings)
+        if g_eventsCache.isBalancedSquadEnabled():
+            validator = limits.BalancedSquadActionValidator(rosterSettings)
+        else:
+            validator = limits.SquadActionValidator(rosterSettings)
     elif prbType == PREBATTLE_TYPE.EVENT:
         validator = limits.EventSquadActionValidator(rosterSettings)
     elif prbType == PREBATTLE_TYPE.FALLOUT:

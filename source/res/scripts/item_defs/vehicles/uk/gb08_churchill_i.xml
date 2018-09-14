@@ -10,6 +10,13 @@
     <forward>	25.7	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.071	</moving>
+    <still>	0.142	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.213	</firePenalty>
+  </invisibility>
   <repairCost>	5.66	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -66,7 +73,8 @@
       <turret>	0.012 0.609593 0.041554	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -305,13 +313,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	-0.012 0.940605 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.0882 1.89761	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -542,13 +549,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	-0.012 0.940605 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.0882 1.89761	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -623,6 +629,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -634,7 +641,8 @@
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -668,13 +676,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -697,7 +707,8 @@
         <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.107054 0.356028 0.752321	</gunPosition>
       <emblemSlots>
@@ -726,9 +737,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.981 -0.071 0.910 -0.004 0.738 0.088 0.742 0.358 0.344 0.797 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
       </camouflage>
@@ -789,6 +798,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -800,7 +810,8 @@
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -836,13 +847,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -882,13 +895,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -930,13 +945,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -976,13 +993,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB08_Churchill_I/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1013,6 +1032,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1024,7 +1044,8 @@
             <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Gun_08.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Gun_08.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Gun_08.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1047,7 +1068,8 @@
         <exploded>	vehicles/british/GB08_Churchill_I/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB08_Churchill_I/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB08_Churchill_I/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB08_Churchill_I/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.023538 0.403442 0.640064	</gunPosition>
       <emblemSlots>
@@ -1076,9 +1098,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.995 0.010 1.000 0.000 0.725 0.112 0.935 0.368 0.350 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
     </Turret_2_GB08_Churchill_I>
   </turrets0>
   <engines>
@@ -1105,6 +1125,25 @@
     </N19Mk2>
     <N19Mk3>	shared	</N19Mk3>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB08_Churchill_I>
+        <alpha>	0.1127	</alpha>
+      </Chassis_GB08_Churchill_I>
+      <Chassis_GB08_Churchill_I_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB08_Churchill_I_2>
+    </chassis>
+    <engines>
+      <Meadows_DAV>
+        <bravo>	79.29608	</bravo>
+      </Meadows_DAV>
+      <Vauxhall_Bedford_Twin_Six>
+        <bravo>	92.5121	</bravo>
+      </Vauxhall_Bedford_Twin_Six>
+    </engines>
+    <armour>	0.762143905	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

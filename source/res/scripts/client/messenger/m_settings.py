@@ -6,6 +6,7 @@ from debug_utils import LOG_ERROR
 from helpers.html.templates import XMLCollection
 from messenger import doc_loaders
 from messenger.doc_loaders.html_templates import MessageTemplates
+from messenger.m_constants import BATTLE_CHANNEL
 
 def _getAccountRepository():
     import Account
@@ -71,10 +72,10 @@ class _LobbySettings(object):
             return self.__messageFormats[key]
         except KeyError:
             LOG_ERROR('Message formatter not found', key)
-            return self.messageRawFormat % {'user': '000000'}
+            return self.messageRawFormat
 
-    def _onSettingsLoaded(self, root):
-        for key in ['groups', 'rosters']:
+    def onSettingsLoaded(self, root):
+        for key in ('groups', 'rosters'):
             colorScheme = root.getColorScheme(key)
             for name, userColor in colorScheme.iterHexs():
                 if name == 'breaker':
@@ -88,7 +89,7 @@ class _LobbySettings(object):
 _BattleMessageLifeCycle = namedtuple('_MessageInBattle', ('lifeTime', 'alphaSpeed'))
 
 class _BattleSettings(object):
-    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages')
+    __slots__ = ('messageLifeCycle', 'messageFormat', 'targetFormat', 'inactiveStateAlpha', 'hintText', 'toolTipText', 'numberOfMessagesInHistory', 'receivers', 'alphaForLastMessages', 'chatIsLockedToolTipText', 'recoveredLatestMessages', 'lifeTimeRecoveredMessages', 'lastReceiver')
 
     def __init__(self):
         super(_BattleSettings, self).__init__()
@@ -104,6 +105,7 @@ class _BattleSettings(object):
         self.alphaForLastMessages = 20
         self.recoveredLatestMessages = 5
         self.lifeTimeRecoveredMessages = 1
+        self.lastReceiver = BATTLE_CHANNEL.TEAM.name
 
 
 _UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat', 'chatContactsListOnly', 'receiveFriendshipRequest', 'receiveInvitesInBattle'))
@@ -139,7 +141,7 @@ class MessengerSettings(object):
         from messenger.proto import ServerSettings
         self.server = ServerSettings()
         doc_loaders.load(self)
-        self.lobby._onSettingsLoaded(self)
+        self.lobby.onSettingsLoaded(self)
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged += self.__accs_onSettingsChanged
 
@@ -182,6 +184,10 @@ class MessengerSettings(object):
         if doc_loaders.user_prefs.flush(self, data) or not self.__isUserPrefsInited:
             self.__isUserPrefsInited = True
             self.onUserPreferencesUpdated()
+
+    def resetBattleReceiverIfNeed(self):
+        if not self.userPrefs.storeReceiverInBattle:
+            self.battle.lastReceiver = BATTLE_CHANNEL.TEAM.name
 
     def __accs_onSettingsChanged(self, diff):
         if 'isColorBlind' in diff:

@@ -10,6 +10,13 @@
     <forward>	29	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.009	</moving>
+    <still>	0.018	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.027	</firePenalty>
+  </invisibility>
   <repairCost>	4.492	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.876409 0.67641	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A45_M6A2E1/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A45_M6A2E1/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A45_M6A2E1/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -197,13 +205,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.33169 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A45_M6A2E1/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A45_M6A2E1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A45_M6A2E1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.19438 2.40554	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -243,9 +250,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -353,7 +357,7 @@
       <tags></tags>
       <level>	8	</level>
       <notInShop>	true	</notInShop>
-      <price>	19200.0	</price>
+      <price>	19200	</price>
       <armor>
         <armor_1>	229	</armor_1>
         <armor_2>	152.4	</armor_2>
@@ -409,13 +413,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.369444 10 0.433333 9 0.566667 9 0.630556 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A45_M6A2E1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A45_M6A2E1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A45_M6A2E1/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A45_M6A2E1/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A45_M6A2E1/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A45_M6A2E1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -438,7 +444,8 @@
         <exploded>	vehicles/american/A45_M6A2E1/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A45_M6A2E1/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A45_M6A2E1/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A45_M6A2E1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.519008 1.21299	</gunPosition>
       <emblemSlots>
@@ -474,9 +481,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.958 -0.068 1.000 0.000 0.875 -0.084 0.697 0.625 0.335 0.500 0.054 0.500 0.039 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
       </camouflage>
@@ -491,6 +496,19 @@
   <radios>
     <SCR_508_1>	shared	</SCR_508_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_M6A2E1>
+        <alpha>	0.119945	</alpha>
+      </Chassis_M6A2E1>
+    </chassis>
+    <engines>
+      <Wright_G200_m_781C9GC5>
+        <bravo>	253.7475	</bravo>
+      </Wright_G200_m_781C9GC5>
+    </engines>
+    <armour>	1.000684301	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

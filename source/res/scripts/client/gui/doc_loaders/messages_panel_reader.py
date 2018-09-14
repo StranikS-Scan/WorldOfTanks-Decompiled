@@ -1,16 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/messages_panel_reader.py
-from collections import namedtuple
 from helpers import html
 import resource_helper
-_MessagesSettings = namedtuple('_MessagesSettings', ('maxLinesCount', 'direction', 'lifeTime', 'alphaSpeed', 'showUniqueOnly'))
 
 def _getDefaultSettings():
-    return {'maxLinesCount': -1,
-     'direction': 'up',
-     'lifeTime': 0.0,
-     'alphaSpeed': 0.0,
-     'showUniqueOnly': False}
+    return {'direction': 'up',
+     'lifeTime': 1000,
+     'alphaSpeed': 1000,
+     'maxLinesCount': 5,
+     'poolSettings': (),
+     'textBottomPadding': 0.0,
+     'textRightPadding': 0.0,
+     'useHtml': False,
+     'showUniqueOnly': False,
+     'messageGap': 0}
 
 
 def _readSettings(ctx, root):
@@ -20,7 +23,7 @@ def _readSettings(ctx, root):
         item = resource_helper.readItem(ctx, subSection, 'setting')
         settings[item.name] = item.value
 
-    return _MessagesSettings(**settings)
+    return settings
 
 
 def _readMessages(ctx, root):
@@ -37,27 +40,14 @@ def _readMessages(ctx, root):
     return messages
 
 
-def _readXML(path):
-    with resource_helper.root_generator(path) as ctx, root:
-        settings = _readSettings(ctx, root)
-        messages = _readMessages(ctx, root)
-    return (settings, messages)
-
-
-def _initCache(*paths):
-    cache = {}
-    for path in paths:
-        cache[path] = _readXML(path)
-
-    return cache
-
-
-_cache = _initCache('gui/player_messages_panel.xml', 'gui/vehicle_errors_panel.xml', 'gui/vehicle_messages_panel.xml')
+_cache = {}
 
 def readXML(path):
     global _cache
     if path in _cache:
         return _cache[path]
-    result = _readXML(path)
-    _cache[path] = result
-    return result
+    ctx, root = resource_helper.getRoot(path)
+    settings = _readSettings(ctx, root)
+    messages = _readMessages(ctx, root)
+    _cache[path] = (settings, messages)
+    return (settings, messages)

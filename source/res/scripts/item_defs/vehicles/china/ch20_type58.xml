@@ -10,6 +10,13 @@
     <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.184	</moving>
+    <still>	0.245	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.368	</firePenalty>
+  </invisibility>
   <repairCost>	7.04	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -61,7 +68,8 @@
       <turret>	0.005466 0.722964 0.70202	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -74,7 +82,6 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch20_Type58/Type58_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <exclusionMask></exclusionMask>
       <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
@@ -83,7 +90,7 @@
       <userString>	#china_vehicles:Chassis_Ch20_Type58	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	7730.0	</price>
+      <price>	7730	</price>
       <unlocks>
         <chassis>	Chassis_Ch20_Type58_2	  <cost>	5400	</cost>
         </chassis>
@@ -115,7 +122,7 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_02	</textureSet>
-        <size>	0.4 0.53	</size>
+        <size>	0.4 0.553	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -174,13 +181,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.81689 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22506 1.90589	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -544,13 +550,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.81689 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22506 1.90589	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -829,7 +834,7 @@
       <userString>	#china_vehicles:Turret_1_Ch20_Type58	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	8500.0	</price>
+      <price>	8500	</price>
       <unlocks>
         <turret>	Turret_2_Ch20_Type58	  <cost>	4500	</cost>
         </turret>
@@ -867,8 +872,8 @@
       <guns>
         <_85mm_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
-            <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+            <minPitch>	0 -22 1 -22	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -891,13 +896,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch20_Type58/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -911,7 +918,6 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
-            <exclusionMask></exclusionMask>
           </camouflage>
         </_85mm_S-53>
       </guns>
@@ -921,7 +927,8 @@
         <exploded>	vehicles/chinese/Ch20_Type58/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.007481 0.429605 1.01064	</gunPosition>
       <emblemSlots>
@@ -957,11 +964,8 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.027 -0.035 1.080 0.000 0.650 0.000 0.827 0.483 0.416 0.500 0.190 0.500 0.097 0.504 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
-        <exclusionMask></exclusionMask>
         <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_Ch20_Type58>
@@ -969,7 +973,7 @@
       <userString>	#china_vehicles:Turret_2_Ch20_Type58	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	16000.0	</price>
+      <price>	16000	</price>
       <unlocks>
         <gun>	_85mm_Tip_56-85JT	  <cost>	6100	</cost>
         </gun>
@@ -1009,8 +1013,8 @@
       <guns>
         <_85mm_S-53>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
-            <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+            <minPitch>	0 -22 1 -22	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1033,13 +1037,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch20_Type58/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1052,14 +1058,13 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_85mm_S-53>
         <_85mm_Tip_56-85JT>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
-            <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+            <minPitch>	0 -22 1 -22	</minPitch>
+            <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
             <vehicle>	Ch10_IS2	  <cost>	52000	</cost>
@@ -1086,13 +1091,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch20_Type58/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/chinese/Ch20_Type58/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1105,7 +1112,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
           </camouflage>
         </_85mm_Tip_56-85JT>
@@ -1116,7 +1122,8 @@
         <exploded>	vehicles/chinese/Ch20_Type58/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch20_Type58/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch20_Type58/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch20_Type58/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.007481 0.429605 1.01064	</gunPosition>
       <emblemSlots>
@@ -1152,12 +1159,9 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.053 -0.018 1.133 0.000 0.743 0.053 0.892 0.450 0.411 0.500 0.289 0.500 0.117 0.631 0.150	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
-        <exclusionMask></exclusionMask>
       </camouflage>
     </Turret_2_Ch20_Type58>
   </turrets0>
@@ -1185,6 +1189,28 @@
     </_9R>
     <_9RM_shop>	shared	</_9RM_shop>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch20_Type58>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Ch20_Type58>
+      <Chassis_Ch20_Type58_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Ch20_Type58_2>
+    </chassis>
+    <engines>
+      <V-2-34>
+        <bravo>	132.1601	</bravo>
+      </V-2-34>
+      <_Type_102S1>
+        <bravo>	132.1601	</bravo>
+      </_Type_102S1>
+      <_12150L>
+        <bravo>	137.4465	</bravo>
+      </_12150L>
+    </engines>
+    <armour>	1.110845508	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

@@ -5,7 +5,8 @@ from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import Vehicl
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO, makeFiltersVO
 from gui.Scaleform.daapi.view.meta.RosterSlotSettingsWindowMeta import RosterSlotSettingsWindowMeta
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.ItemsCache import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.events import CSRosterSlotSettingsWindow
 from gui.shared.formatters import text_styles, icons
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -125,7 +126,8 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
             vehicle = g_itemsCache.items.getItemByCD(int(currentSlotSetting.selectedVehicle))
             return (makeVehicleVO(vehicle, self.__convertLevelsRange(self.__levelsRange), self.__vehicleTypes), VEHICLE_SELECTOR_TAB_ID)
         elif currentSlotSetting.nationIDRange or currentSlotSetting.vTypeRange or currentSlotSetting.vLevelRange:
-            return (makeFiltersVO(currentSlotSetting.nationIDRange, currentSlotSetting.vTypeRange, self.__convertLevelsRange(currentSlotSetting.vLevelRange)), RANGE_SELECTOR_TAB_ID)
+            levelsRange = self.__convertLevelsRange(currentSlotSetting.vLevelRange or self.__levelsRange)
+            return (makeFiltersVO(currentSlotSetting.nationIDRange, currentSlotSetting.vTypeRange, levelsRange), RANGE_SELECTOR_TAB_ID)
         else:
             return (None, None)
             return

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortSoundController.py
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
+import WWISE
 
 class _FortSoundController(object):
 
@@ -85,7 +86,7 @@ class _FortSoundController(object):
         self.__playSound(SoundEffectsId.FORT_CLAN_WAR_DECLARED)
 
     def playFortClanWarResult(self, result):
-        self.__playSound('fortClanWarResult_' + result)
+        self.__playSound(SoundEffectsId.getFortClanWarResult(result))
 
     def __playSound(self, soundID):
         app = self.app

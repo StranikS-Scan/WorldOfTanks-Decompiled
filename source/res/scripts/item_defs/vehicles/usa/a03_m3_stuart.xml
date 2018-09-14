@@ -9,6 +9,13 @@
     <forward>	61	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.267	</moving>
+    <still>	0.267	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.401	</firePenalty>
+  </invisibility>
   <repairCost>	5.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.01 0.76017 0.15933	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -203,13 +211,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.94852 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.933481 1.50665	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -443,13 +450,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.94852 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.933481 1.50665	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -644,13 +650,15 @@
           </armor>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.355 0.355 0.000000 0.000000	</tiling>
@@ -677,13 +685,15 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
@@ -696,7 +706,8 @@
         <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0002 0.22471 0.71052	</gunPosition>
       <emblemSlots>
@@ -718,9 +729,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.888 -0.035 0.928 0.000 0.599 0.363 0.698 0.396 0.481 0.500 0.000 0.500 0.055 0.100 0.380	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
       </camouflage>
@@ -731,7 +740,7 @@
       <level>	3	</level>
       <price>	2000	</price>
       <unlocks>
-        <vehicle>	M5_Stuart	  <cost>	4500	</cost>
+        <vehicle>	A22_M5_Stuart	  <cost>	4500	</cost>
         </vehicle>
         <gun>	_37mm_M-6_L53	  <cost>	350	</cost>
         </gun>
@@ -785,13 +794,15 @@
           </armor>
           <aimingTime>	1.6	</aimingTime>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
@@ -819,13 +830,15 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
@@ -853,13 +866,15 @@
           </armor>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A03_M3_Stuart/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
@@ -872,7 +887,8 @@
         <exploded>	vehicles/american/A03_M3_Stuart/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A03_M3_Stuart/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A03_M3_Stuart/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A03_M3_Stuart/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0254 0.22471 0.71052	</gunPosition>
       <emblemSlots>
@@ -894,9 +910,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.963 -0.040 1.000 0.000 0.427 0.294 1.000 0.560 0.333 0.500 0.090 0.500 0.053 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
       </camouflage>
@@ -933,6 +947,28 @@
     </SCR_210>
     <SCR_506>	shared	</SCR_506>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <chassisE1>
+        <alpha>	0.10465	</alpha>
+      </chassisE1>
+      <chassisE2>
+        <alpha>	0.08855	</alpha>
+      </chassisE2>
+    </chassis>
+    <engines>
+      <Guiberson_T-1020-4>
+        <bravo>	64.75847	</bravo>
+      </Guiberson_T-1020-4>
+      <Continental_W-670>
+        <bravo>	69.25191	</bravo>
+      </Continental_W-670>
+      <Continental_R-975-C1>
+        <bravo>	92.5121	</bravo>
+      </Continental_R-975-C1>
+    </engines>
+    <armour>	0.813244384	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

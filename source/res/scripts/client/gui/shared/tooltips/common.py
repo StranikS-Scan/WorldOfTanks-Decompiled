@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
+from collections import namedtuple
 import types
 import math
 from operator import methodcaller, itemgetter
@@ -9,6 +10,9 @@ import BigWorld
 import constants
 import ArenaType
 import fortified_regions
+from account_helpers.settings_core import g_settingsCore
+from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
+from gui.goodies.GoodiesCache import g_goodiesCache
 from shared_utils import findFirst, CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
@@ -27,10 +31,12 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.tooltips import efficiency
+from gui.shared.money import Money, Currency
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName, makeContactStatusDescription
-from predefined_hosts import g_preDefinedHosts
+from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, getPingStatus, PING_STATUSES
+from ConnectionManager import connectionManager
 from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
-from debug_utils import LOG_WARNING
+from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -57,6 +63,8 @@ from items import vehicles
 from messenger.storage import storage_getter
 from messenger.m_constants import USER_TAG
 from gui.shared.tooltips import formatters
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+_UNAVAILABLE_DATA_PLACEHOLDER = '--'
 
 class FortOrderParamField(ToolTipParameterField):
 
@@ -252,7 +260,7 @@ class ContactTooltipData(ToolTipBaseData):
             currentUnit = ''
             if USER_TAG.IGNORED in tags:
                 currentUnit += self.__makeIconUnitStr('contactIgnored.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_IGNORED)
-            elif USER_TAG.SUB_TO not in tags and (userEntity.isFriend() or USER_TAG.SUB_PENDING_IN in tags):
+            elif USER_TAG.SUB_TO not in tags and (USER_TAG.SUB_PENDING_IN in tags or userEntity.isFriend() and USER_TAG.SUB_FROM not in tags):
                 currentUnit += self.__addBR(currentUnit)
                 currentUnit += self.__makeIconUnitStr('contactConfirmNeeded.png', TOOLTIPS.CONTACT_UNITS_STATUS_DESCRIPTION_PENDINGFRIENDSHIP)
             if USER_TAG.BAN_CHAT in tags:
@@ -317,8 +325,12 @@ class SortieDivisionTooltipData(ToolTipBaseData):
         divisions = makeDivisionData()
         for division in divisions:
             minLvl, maxLvl = division['vehLvls']
+            if maxLvl == minLvl:
+                divisLevels = fort_formatters.getTextLevel(maxLvl)
+            else:
+                divisLevels = fort_formatters.getTextLevel(minLvl) + ' - ' + fort_formatters.getTextLevel(maxLvl)
             divisionsData.append({'divisName': division['label'],
-             'divisLevels': text_styles.main(fort_formatters.getTextLevel(minLvl) + ' - ' + fort_formatters.getTextLevel(maxLvl)),
+             'divisLevels': text_styles.main(divisLevels),
              'divisBonus': self.__getBonusStr(division['profit']),
              'divisPlayers': self.__getPlayerLimitsStr(*self.__getPlayerLimits(division['level']))})
 
@@ -368,32 +380,74 @@ class SettingsControlTooltipData(ToolTipBaseData):
         return result
 
 
-class SettingsButtonTooltipData(ToolTipBaseData):
+class SettingsButtonTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(SettingsButtonTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self.item = None
+        self._setContentMargin(top=15, left=19, bottom=5, right=10)
+        self._setMargins(afterBlock=15, afterSeparator=15)
+        self._setWidth(295)
+        return
 
-    def getDisplayableData(self):
-        from ConnectionManager import connectionManager
-        serverName = ''
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        items = super(SettingsButtonTooltipData, self)._packBlocks(*args, **kwargs)
+        items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(TOOLTIPS.HEADER_MENU_HEADER)), formatters.packTextBlockData(text_styles.standard(TOOLTIPS.HEADER_MENU_DESCRIPTION))]))
+        serverBlocks = list()
+        serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_SERVER), padding=formatters.packPadding(0, 0, 4)))
+        simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
+        pings = g_preDefinedHosts.getPingResult()
+        isColorBlind = g_settingsCore.getSetting('isColorBlind')
         if connectionManager.peripheryID == 0:
-            serverName = connectionManager.serverUserName
-        else:
-            hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
-            for key, name, csisStatus, peripheryID in hostsList:
-                if connectionManager.peripheryID == peripheryID:
-                    serverName = name
-                    break
+            serverBlocks.append(self.__packServerBlock(self.__wrapServerName(connectionManager.serverUserName), pings.get(connectionManager.url, -1), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
+        if len(simpleHostList):
+            currServUrl = connectionManager.url
+            for key, name, csisStatus, peripheryID in simpleHostList:
+                serverBlocks.append(self.__packServerBlock(name, pings.get(key, -1), csisStatus, currServUrl == key, isColorBlind))
 
+        items.append(formatters.packBuildUpBlockData(serverBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         serversStats = None
         if constants.IS_SHOW_SERVER_STATS:
             serversStats, _ = game_control.g_instance.serverStats.getFormattedStats()
-        return {'name': i18n.makeString(TOOLTIPS.HEADER_MENU_HEADER),
-         'description': i18n.makeString(TOOLTIPS.HEADER_MENU_DESCRIPTION),
-         'serverHeader': i18n.makeString(TOOLTIPS.HEADER_MENU_SERVER),
-         'serverName': serverName,
-         'playersOnServer': i18n.makeString(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER),
-         'serversStats': serversStats}
+        if not constants.IS_CHINA:
+            items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER)), formatters.packImageTextBlockData('', serversStats, RES_ICONS.MAPS_ICONS_LIBRARY_CREW_ONLINE, imgPadding=formatters.packPadding(-4, -10), padding=formatters.packPadding(5))]))
+        return items
+
+    @classmethod
+    def __packServerBlock(cls, name, ping, csisStatus, isSelected=False, isColorBlind=False):
+        separator = '  '
+        pingStatus = getPingStatus(ping)
+        if csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE and pingStatus != PING_STATUSES.UNDEFINED:
+            if pingStatus == PING_STATUSES.LOW:
+                formattedPing = text_styles.success(ping)
+            else:
+                formattedPing = text_styles.main(ping) if isSelected else text_styles.standard(ping)
+        else:
+            ping = _UNAVAILABLE_DATA_PLACEHOLDER
+            pingStatus = PING_STATUSES.UNDEFINED
+            formattedPing = text_styles.standard(ping)
+        colorBlindName = ''
+        if isColorBlind and pingStatus == PING_STATUSES.HIGH:
+            colorBlindName = '_color_blind'
+        pingStatusIcon = cls.__formatPingStatusIcon(RES_ICONS.maps_icons_pingstatus_stairs_indicator(str(pingStatus) + colorBlindName + '.png'))
+        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), text_styles.concatStylesToSingleLine(formattedPing, separator, pingStatusIcon), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
+    def __formatServerName(cls, name, isSelected=False):
+        if isSelected:
+            result = text_styles.main(name + ' ' + ms(TOOLTIPS.HEADER_MENU_SERVER_CURRENT))
+        else:
+            result = text_styles.standard(name)
+        return result
+
+    @classmethod
+    def __formatPingStatusIcon(cls, icon):
+        return icons.makeImageTag(icon, 16, 16, -4)
+
+    @staticmethod
+    def __wrapServerName(name):
+        return makeHtmlString('html_templates:lobby/serverStats', 'serverName', {'name': name}) if constants.IS_CHINA else name
 
 
 class CustomizationItemTooltipData(ToolTipBaseData):
@@ -894,8 +948,8 @@ class ActionTooltipData(ToolTipBaseData):
         actionNames = None
         body = ''
         descr = ''
-        newCredits, newGold = newPrice
-        oldCredits, oldGold = oldPrice
+        newPrice = Money(*newPrice)
+        oldPrice = Money(*oldPrice)
         newPriceValue = 0
         newPriceCurrency = None
         oldPriceValue = 0
@@ -904,9 +958,9 @@ class ActionTooltipData(ToolTipBaseData):
         rentCompensation = None
         if type == ACTION_TOOLTIPS_TYPE.ECONOMICS:
             actions = g_eventsCache.getEconomicsAction(key)
-            newPriceValue = newCredits if forCredits else newGold
-            oldPriceValue = oldCredits if forCredits else oldGold
-            newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
+            newPriceValue = newPrice.credits if forCredits else newPrice.gold
+            oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
+            newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
             if actions:
                 actionNames = map(lambda x: x[1], actions)
                 if key == 'freeXPToTManXPRate':
@@ -916,16 +970,15 @@ class ActionTooltipData(ToolTipBaseData):
             actions = g_eventsCache.getRentAction(item, rentPackage)
             if actions:
                 actionNames = map(itemgetter(1), actions)
-                newPriceValue = newCredits if forCredits else newGold
-                oldPriceValue = oldCredits if forCredits else oldGold
-                newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
+                newPriceValue = newPrice.credits if forCredits else newPrice.gold
+                oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
+                newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
         elif type == ACTION_TOOLTIPS_TYPE.ITEM:
             item = g_itemsCache.items.getItemByCD(int(key))
             useGold = item.isPremium and not forCredits and isBuying
-            newPriceValue = newGold if useGold else newCredits
-            newPriceCurrency = 'gold' if useGold else 'credits'
-            oldPriceValue = oldGold if useGold else oldCredits
-            oldPriceCurrency = 'gold' if useGold else 'credits'
+            newPriceValue = newPrice.gold if useGold else newPrice.credits
+            oldPriceValue = oldPrice.gold if useGold else oldPrice.credits
+            newPriceCurrency = oldPriceCurrency = Currency.GOLD if useGold else Currency.CREDITS
             actions = g_eventsCache.getItemAction(item, True, forCredits)
             if item.itemTypeID in (GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT) and item.isPremium and not useGold:
                 actions += g_eventsCache.getEconomicsAction('exchangeRateForShellsAndEqs')
@@ -944,28 +997,28 @@ class ActionTooltipData(ToolTipBaseData):
 
                     sellForGoldAction = findFirst(filter, sellingActions)
                     if sellForGoldAction:
-                        newPriceValue = newGold
-                        newPriceCurrency = 'gold'
+                        newPriceValue = newPrice.gold
+                        newPriceCurrency = Currency.GOLD
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and isBuying:
-                if item.isRented and not item.rentalIsOver and item.rentCompensation[1] > 0:
+                if item.isRented and not item.rentalIsOver and item.rentCompensation.gold > 0:
                     hasRentCompensation = True
-                    rentCompensation = item.rentCompensation[1]
+                    rentCompensation = item.rentCompensation.gold
         elif type == ACTION_TOOLTIPS_TYPE.CAMOUFLAGE:
             intCD, type = cPickle.loads(key)
             actions = g_eventsCache.getCamouflageAction(intCD) + g_eventsCache.getEconomicsAction(type)
             if actions:
                 actionNames = map(lambda x: x[1], actions)
-                newPriceValue = newCredits if forCredits else newGold
-                oldPriceValue = oldCredits if forCredits else oldGold
-                newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
+                newPriceValue = newPrice.credits if forCredits else newPrice.gold
+                oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
+                newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
         elif type == ACTION_TOOLTIPS_TYPE.EMBLEMS:
             group, type = cPickle.loads(key)
             actions = g_eventsCache.getEmblemsAction(group) + g_eventsCache.getEconomicsAction(type)
             if actions:
                 actionNames = map(lambda x: x[1], actions)
-                newPriceValue = newCredits if forCredits else newGold
-                oldPriceValue = oldCredits if forCredits else oldGold
-                newPriceCurrency = oldPriceCurrency = 'credits' if forCredits else 'gold'
+                newPriceValue = newPrice.credits if forCredits else newPrice.gold
+                oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
+                newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
         elif type == ACTION_TOOLTIPS_TYPE.AMMO:
             item = g_itemsCache.items.getItemByCD(int(key))
             actions = []
@@ -974,9 +1027,17 @@ class ActionTooltipData(ToolTipBaseData):
 
             if actions:
                 actionNames = map(lambda x: x[1], actions)
-                newPriceValue = newCredits
-                oldPriceValue = oldCredits
-                newPriceCurrency = oldPriceCurrency = 'credits'
+                newPriceValue = newPrice.credits
+                oldPriceValue = newPrice.credits
+                newPriceCurrency = oldPriceCurrency = Currency.CREDITS
+        elif type == ACTION_TOOLTIPS_TYPE.BOOSTER:
+            booster = g_goodiesCache.getBooster(int(key))
+            actions = g_eventsCache.getBoosterAction(booster, isBuying, forCredits)
+            if actions:
+                actionNames = map(lambda x: x[1], actions)
+                newPriceValue = newPrice.credits if forCredits else newPrice.gold
+                oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
+                newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
         if actionNames:
             actionNames = set(actionNames)
         if newPriceCurrency and oldPriceCurrency and newPriceValue is not None and oldPriceValue:
@@ -1071,13 +1132,6 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
             columns = [col1Str, col2Str]
         return {'name': makeString(TOOLTIPS.QUESTS_VEHICLESBONUS_TITLE),
          'columns': columns}
-
-
-class FortConsumableOrderTooltipData(ToolTipData):
-
-    def __init__(self, context):
-        super(FortConsumableOrderTooltipData, self).__init__(context, TOOLTIP_TYPE.EQUIPMENT)
-        self.fields = (ToolTipAttrField(self, 'name', 'userName'), ToolTipMethodField(self, 'type', 'getUserType'), FortOrderParamField(self, 'params'))
 
 
 class LadderTooltipData(ToolTipBaseData):
@@ -1203,6 +1257,23 @@ class SettingsMinimapCircles(BlocksTooltipData):
         return blocks
 
 
+class SquadRestrictionsInfo(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SquadRestrictionsInfo, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setContentMargin(top=15, left=19, bottom=6, right=20)
+        self._setMargins(afterBlock=14)
+        self._setWidth(364)
+
+    def _packBlocks(self, *args):
+        tooltipBlocks = super(SquadRestrictionsInfo, self)._packBlocks()
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_HEADER)))
+        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE0), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY0), RES_ICONS.MAPS_ICONS_LIBRARY_DONE, imgPadding=formatters.packPadding(left=-21, right=10), padding=formatters.packPadding(-22, 20)))
+        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE1), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY1), RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLEDBIG, imgPadding=formatters.packPadding(left=-21, right=12), padding=formatters.packPadding(-22, 20, 1)))
+        tooltipBlocks.append(formatters.packImageTextBlockData(text_styles.stats(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_TITLE2), text_styles.standard(TOOLTIPS.SQUADWINDOW_INFOICON_TECHRESTRICTIONS_BODY2), RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_32X32, imgPadding=formatters.packPadding(left=-21, right=10), padding=formatters.packPadding(-22, 20, 11)))
+        return tooltipBlocks
+
+
 class LadderRegulations(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1252,3 +1323,67 @@ class LadderRegulations(ToolTipBaseData):
              'allRules': '\n'.join(allRules),
              'hasRules': len(allRules) != 0})
         return data
+
+
+_CurrencySetting = namedtuple('_CurrencySetting', 'text, icon, textStyle, frame')
+
+class CURRENCY_SETTINGS(object):
+    BUY_CREDITS_PRICE = 'buyCreditsPrice'
+    BUY_GOLD_PRICE = 'buyGoldPrice'
+    RENT_CREDITS_PRICE = 'rentCreditsPrice'
+    RENT_GOLD_PRICE = 'rentGoldPrice'
+    SELL_PRICE = 'sellPrice'
+    UNLOCK_PRICE = 'unlockPrice'
+
+    @classmethod
+    def getRentSetting(cls, currency):
+        return cls.RENT_CREDITS_PRICE if currency == Currency.CREDITS else cls.RENT_GOLD_PRICE
+
+    @classmethod
+    def getBuySetting(cls, currency):
+        return cls.BUY_CREDITS_PRICE if currency == Currency.CREDITS else cls.BUY_GOLD_PRICE
+
+
+_OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
+ CURRENCY_SETTINGS.BUY_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
+ CURRENCY_SETTINGS.RENT_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
+ CURRENCY_SETTINGS.RENT_GOLD_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_MINRENTALSPRICE, icons.gold(), text_styles.gold, ICON_TEXT_FRAMES.GOLD),
+ CURRENCY_SETTINGS.SELL_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_SELL_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
+ CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xp(), text_styles.expText, ICON_TEXT_FRAMES.XP)}
+
+def _getCurrencySetting(key):
+    if key in _OPERATIONS_SETTINGS:
+        return _OPERATIONS_SETTINGS[key]
+    else:
+        LOG_ERROR('Unsupported currency type "' + key + '"!')
+        return None
+        return None
+
+
+def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61):
+    _int = BigWorld.wg_getIntegralFormat
+    needFormatted = ''
+    oldPriceText = ''
+    hasAction = percent != 0
+    settings = _getCurrencySetting(currencySetting)
+    if settings is None:
+        return
+    else:
+        valueFormatted = settings.textStyle(_int(price))
+        icon = settings.icon
+        if neededValue is not None:
+            needFormatted = settings.textStyle(_int(neededValue))
+        if hasAction:
+            oldPriceText = text_styles.concatStylesToSingleLine(icon, settings.textStyle(_int(oldPrice)))
+        neededText = ''
+        if neededValue is not None:
+            neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
+        text = text_styles.concatStylesWithSpace(text_styles.main(settings.text), neededText)
+        if hasAction:
+            actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
+            text = text_styles.concatStylesToMultiLine(text, actionText)
+            newPrice = Money(gold=price) if settings.frame == ICON_TEXT_FRAMES.GOLD else Money(credits=price)
+            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice,
+             'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding))
+        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
+        return

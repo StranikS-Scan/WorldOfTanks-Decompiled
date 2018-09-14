@@ -9,6 +9,7 @@ from account_helpers.settings_core import g_settingsCore
 from adisp import process
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_ERROR
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.game_control.controllers import Controller
 from gui.prb_control.context import unit_ctx
@@ -19,6 +20,7 @@ from gui.server_events import g_eventsCache
 from gui.shared import g_itemsCache
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.formatters.ranges import toRomanRangeString
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import int2roman, i18n
 from shared_utils import findFirst
 
@@ -101,7 +103,7 @@ class _UserDataStorage(_BaseDataStorage):
             self.falloutStorage.validateSelectedVehicles()
 
     def addSelectedVehicle(self, vehInvID):
-        canSelect, _ = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
+        canSelect = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
         if not canSelect:
             LOG_ERROR('Selected vehicle in invalid!', vehInvID)
             return
@@ -171,6 +173,7 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
         self.__battleType, _ = findFirst(lambda (k, v): v == rosterType, FALLOUT_QUEUE_TYPE_TO_ROSTER.iteritems(), (QUEUE_TYPE.UNKNOWN, None))
         self.__updateVehicles()
         self.startGlobalListening()
+        g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesUpdated})
         if self.isEnabled():
             g_eventDispatcher.addFalloutToCarousel()
         super(_SquadDataStorage, self).init()
@@ -178,6 +181,7 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
 
     def fini(self):
         self.stopGlobalListening()
+        g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self.__vehicles = []
         self.__battleType = QUEUE_TYPE.UNKNOWN
 
@@ -195,7 +199,7 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
             self.__setFalloutType(battleType)
 
     def addSelectedVehicle(self, vehInvID):
-        canSelect, _ = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
+        canSelect = self._proxy.canSelectVehicle(g_itemsCache.items.getVehicle(vehInvID))
         if not canSelect:
             LOG_ERROR('Selected vehicle in invalid!', vehInvID)
             return
@@ -257,17 +261,24 @@ class _SquadDataStorage(_BaseDataStorage, GlobalListener):
     def __updateVehicles(self):
         maxVehs = self.unitFunctional.getRoster().MAX_VEHICLES
         valid = [INV_ID_CLEAR_VEHICLE] * maxVehs
-        slots = self.unitFunctional.getVehiclesInfo()
-        vehicles = map(lambda vInfo: vInfo.vehInvID, slots)
-        vehGetter = g_itemsCache.items.getVehicle
-        for idx, invID in enumerate(vehicles[:maxVehs]):
-            invVehicle = vehGetter(invID)
-            if invVehicle is not None:
-                valid[idx] = invID
+        if self._proxy.getConfig().hasRequiredVehicles():
+            slots = self.unitFunctional.getVehiclesInfo()
+            vehicles = map(lambda vInfo: vInfo.vehInvID, slots)
+            vehGetter = g_itemsCache.items.getVehicle
+            for idx, invID in enumerate(vehicles[:maxVehs]):
+                invVehicle = vehGetter(invID)
+                if invVehicle is not None:
+                    valid[idx] = invID
 
         if self.__vehicles != valid:
             self.__vehicles = valid
-        return
+            return True
+        else:
+            return False
+
+    def __onVehiclesUpdated(self, *args):
+        if self.__updateVehicles():
+            self.__setVehicles(self.__vehicles)
 
 
 class FalloutController(Controller, GlobalListener):
@@ -367,7 +378,9 @@ class FalloutController(Controller, GlobalListener):
             return False
         if not vehicle.isFalloutAvailable:
             return False
-        return False if self.mustSelectRequiredVehicle() and vehicle.level != cfg.vehicleLevelRequired else (True, '')
+        if vehicle.isInBattle:
+            return False
+        return False if self.mustSelectRequiredVehicle() and vehicle.level != cfg.vehicleLevelRequired else True
 
     def mustSelectRequiredVehicle(self):
         return len(self.getEmptySlots()) == 1 and not self.requiredVehicleSelected()
@@ -412,3 +425,6 @@ class FalloutController(Controller, GlobalListener):
             self.__dataStorage = _SquadDataStorage(self)
             self.__dataStorage.init()
         return
+
+    def isSuitableVeh(self, vehicle):
+        return not (self.isSelected() and not vehicle.isFalloutAvailable) and vehicle.getCustomState() not in Vehicle.VEHICLE_STATE.CUSTOM

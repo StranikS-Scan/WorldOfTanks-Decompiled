@@ -3,5 +3,11 @@
 
 
 class FALLOUT_ALIASES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     FALLOUT_BATTLE_SELECTOR_WINDOW = 'falloutBattleSelectorWindow'
     FALLOUT_BATTLE_SELECTOR_WINDOW_SWF = 'falloutBattleSelectorWindow.swf'

@@ -4,6 +4,7 @@ import BigWorld
 DRR_MIN_SCALE_VALUE = 0.6
 DRR_MAX_SCALE_VALUE = 1.0
 DRR_MAX_STEP_VALUE = 0.05
+DRR_EPSILON_VALUE = DRR_MAX_STEP_VALUE - 0.01
 PERCENT_MODIFIER = 100.0
 
 def normalizeScale(value):
@@ -22,7 +23,7 @@ def changeScaleByStep(offset):
     result = None
     scale = BigWorld.getDRRScale()
     newScale = normalizeScale(scale + offset)
-    if normalizeScale(scale) != newScale:
+    if abs(scale - newScale) >= DRR_EPSILON_VALUE:
         BigWorld.setDRRScale(newScale)
         if normalizeScale(BigWorld.getDRRScale()) == newScale:
             result = newScale

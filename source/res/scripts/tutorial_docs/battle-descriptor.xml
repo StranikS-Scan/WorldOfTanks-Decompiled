@@ -1,11 +1,6 @@
 <battle-descriptor.xml>
   <gui>	gui/tutorial-battle-gui.xml	</gui>
   <initial-chapter>	VehicleControl	</initial-chapter>
-  <behavior-if-stopping>
-    <items-revert>
-      <reason>	CRITICAL_ERROR	</reason>
-    </items-revert>
-  </behavior-if-stopping>
   <chapters>
     <chapter>
       <title>	_(#battle_tutorial:chapters/vehicle-control/title)	</title>

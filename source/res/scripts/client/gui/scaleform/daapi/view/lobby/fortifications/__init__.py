@@ -4,22 +4,22 @@ from adisp import process
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.fortifications import FortClanStatisticsData
-from gui.Scaleform.framework.package_layout import PackageBusinessHandler
-from gui.app_loader.settings import APP_NAME_SPACE
-from shared_utils import CONST_CONTAINER
-from gui.Scaleform.framework.ScopeTemplates import SimpleScope, VIEW_SCOPE
+from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
 from gui.Scaleform.framework.ScopeTemplates import LOBBY_SUB_SCOPE, MultipleScope
+from gui.Scaleform.framework.ScopeTemplates import SimpleScope, VIEW_SCOPE
 from gui.Scaleform.framework.ScopeTemplates import WINDOW_SCOPE
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.framework.managers import context_menu
+from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.app_loader.settings import APP_NAME_SPACE
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import EVENT_BUS_SCOPE
-from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
-from gui.Scaleform.framework import ScopeTemplates
 from gui.shared.events import ShowDialogEvent
 from gui.shared.utils.functions import getViewName
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.Scaleform.managers.context_menu import ContextMenuManager
+from shared_utils import CONST_CONTAINER
 
 class FORT_SCOPE_TYPE(CONST_CONTAINER):
     FORT_WINDOWED_MULTISCOPE = 'FortWindowed'
@@ -31,7 +31,10 @@ class FortifiedWindowScopes(object):
     FORT_WINDOWED_MULTISCOPE = MultipleScope(FORT_SCOPE_TYPE.FORT_WINDOWED_MULTISCOPE, (WINDOW_SCOPE, FORT_MAIN_SCOPE))
 
 
-ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.FORT_BUILDING, 'gui.Scaleform.daapi.view.lobby.fortifications.FortContextMenuHandler', 'FortContextMenuHandler')
+def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.fortifications.FortContextMenuHandler import FortContextMenuHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.FORT_BUILDING, FortContextMenuHandler),)
+
 
 class FortificationEffects(object):
     NONE_STATE = 'none'

@@ -50,7 +50,8 @@
       <turret>	0.000000 0.660854 0.463634	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G119_Panzer58/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -173,11 +174,10 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
       <hullPosition>	0.000000 0.95558 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G119_Panzer58/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24276 1.96289	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -308,8 +308,8 @@
           <name>	Track_VD_L1	</name>
         </node>
       </trackNodes>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
     </Chassis_G119_Panzer58>
   </chassis>
   <turrets0>
@@ -350,6 +350,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 10 0.0722222 10 0.075 8.6 0.0777778 7.7 0.0805556 7.7 0.0833333 8.2 0.0861111 9.2 0.0888889 10 0.0916667 10 0.0944444 7.3 0.0972222 6 0.1 6.2 0.101111 7 0.101389 7.5 0.102778 10 0.416667 10 0.419444 9.8 0.422222 9.6 0.425 9.4 0.427778 9 0.430556 8.8 0.433333 8.6 0.436111 8.2 0.438889 7.8 0.441667 7.5 0.444444 7.3 0.588889 7.3 0.591667 7.4 0.594444 7.6 0.597222 8 0.6 8.4 0.602778 8.6 0.605556 8.7 0.608333 8.8 0.613889 9 0.616667 9.1 0.619444 9.2 0.622222 9.4 0.625 9.6 0.627778 9.7 0.630556 9.8 0.633333 10 0.911111 10 0.913889 9.3 0.916667 8.2 0.919444 8 0.922222 8.3 0.925 9.4 0.927778 10 0.930556 10 0.933333 7.4 0.936111 6.5 0.938889 6.5 0.941667 8 0.944444 9.8 0.947222 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
@@ -364,7 +365,8 @@
             <exploded>	vehicles/german/G119_Panzer58/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G119_Panzer58/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -426,7 +428,8 @@
         <exploded>	vehicles/german/G119_Panzer58/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G119_Panzer58/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G119_Panzer58/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G119_Panzer58/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.267142 1.13856	</gunPosition>
       <emblemSlots>
@@ -461,8 +464,6 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	0.985 0.049 1.000 0.000 0.512 0.010 0.640 0.502 0.498 0.500 0.374 0.500 0.128 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
@@ -480,6 +481,13 @@
     <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.186	</moving>
+    <still>	0.248	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.372	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -492,6 +500,19 @@
   <radios>
     <Kdo_Funkstation_SE_407>	shared	</Kdo_Funkstation_SE_407>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G119_Panzer58>
+        <alpha>	0.05635	</alpha>
+      </Chassis_G119_Panzer58>
+    </chassis>
+    <engines>
+      <MB-837-Ba-600>
+        <bravo>	158.5922	</bravo>
+      </MB-837-Ba-600>
+    </engines>
+    <armour>	0.919060182	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

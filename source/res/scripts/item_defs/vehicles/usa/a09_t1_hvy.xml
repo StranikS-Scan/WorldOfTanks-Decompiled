@@ -11,6 +11,13 @@
     <forward>	35.4	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.04	</moving>
+    <still>	0.08	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.12	</firePenalty>
+  </invisibility>
   <repairCost>	5.16	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.000000 0.800435 0.85952	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A09_T1_hvy/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -162,6 +170,12 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.188284	</radius>
+          <isLeading>	false	</isLeading>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L6	</name>
           <radius>	0.400842	</radius>
@@ -180,6 +194,12 @@
           <name>	WD_R0	</name>
           <radius>	0.400842	</radius>
           <syncAngle>	25.7143	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.188284	</radius>
+          <isLeading>	false	</isLeading>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -202,13 +222,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.36456 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A09_T1_hvy/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.19413 2.40785	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -419,15 +438,23 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.400842	</radius>
+          <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <radius>	0.188284	</radius>
           <isLeading>	false	</isLeading>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_L6	</name>
           <radius>	0.400842	</radius>
+          <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -438,15 +465,23 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.400842	</radius>
+          <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <radius>	0.188284	</radius>
           <isLeading>	false	</isLeading>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
           <name>	WD_R6	</name>
           <radius>	0.400842	</radius>
+          <syncAngle>	25.7143	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -462,13 +497,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.36456 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A09_T1_hvy/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.19413 2.40785	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -672,6 +706,7 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_02.model	</undamaged>
@@ -679,7 +714,8 @@
             <exploded>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A09_T1_hvy/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -702,7 +738,8 @@
         <exploded>	vehicles/american/A09_T1_hvy/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A09_T1_hvy/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.083692 0.328974 0.810805	</gunPosition>
       <emblemSlots>
@@ -724,9 +761,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.923 -0.032 1.000 0.000 0.604 0.077 0.500 0.272 0.401 0.615 0.058 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.4 0.4 0.39 0.49	</tiling>
       </camouflage>
@@ -780,6 +815,7 @@
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <effects>	shot_medium	</effects>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_04.model	</undamaged>
@@ -787,7 +823,8 @@
             <exploded>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A09_T1_hvy/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -814,13 +851,15 @@
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A09_T1_hvy/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/american/A09_T1_hvy/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A09_T1_hvy/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -843,7 +882,8 @@
         <exploded>	vehicles/american/A09_T1_hvy/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A09_T1_hvy/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A09_T1_hvy/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A09_T1_hvy/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.053431 0.366751 0.92436	</gunPosition>
       <emblemSlots>
@@ -865,9 +905,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.908 -0.044 0.946 -0.000 0.774 0.088 0.580 0.247 0.448 0.574 0.000 0.500 0.000 0.100 0.080	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.46 0.46 0.61 0.46	</tiling>
       </camouflage>
@@ -882,7 +920,7 @@
     <Wright_G2X_m_781C9GC1>	shared	  <unlocks>
         <engine>	Wright_G200_m_781C9GC1	  <cost>	15100	</cost>
         </engine>
-        <vehicle>	M6	  <cost>	27850	</cost>
+        <vehicle>	A10_M6	  <cost>	27850	</cost>
         </vehicle>
       </unlocks>
     </Wright_G2X_m_781C9GC1>
@@ -899,6 +937,28 @@
     </SCR_508>
     <SCR_538>	shared	</SCR_538>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <HVSST31>
+        <alpha>	0.13685	</alpha>
+      </HVSST31>
+      <HVSST35>
+        <alpha>	0.1127	</alpha>
+      </HVSST35>
+    </chassis>
+    <engines>
+      <Wright_G200_m_795C9GC1>
+        <bravo>	185.0242	</bravo>
+      </Wright_G200_m_795C9GC1>
+      <Wright_G2X_m_781C9GC1>
+        <bravo>	218.0642	</bravo>
+      </Wright_G2X_m_781C9GC1>
+      <Wright_G200_m_781C9GC1>
+        <bravo>	253.7475	</bravo>
+      </Wright_G200_m_781C9GC1>
+    </engines>
+    <armour>	1.038658905	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

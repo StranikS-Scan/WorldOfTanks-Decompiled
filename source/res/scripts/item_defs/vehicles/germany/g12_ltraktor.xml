@@ -1,0 +1,424 @@
+<g12_ltraktor.xml>
+  <crew>
+    <commander>	radioman
+			gunner	</commander>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	36	</forward>
+    <backward>	9	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.168	</moving>
+    <still>	0.224	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.336	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G12_Ltraktor/Ltraktor_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	14	</armor_1>
+      <armor_2>	12	</armor_2>
+      <armor_3>	12	</armor_3>
+      <armor_4>	12	</armor_4>
+      <armor_5>	12	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_7>	5	</armor_7>
+      <armor_8>	5	</armor_8>
+      <armor_9>	0	</armor_9>
+      <armor_10>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_10>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4300	</weight>
+    <maxHealth>	104	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G12_Ltraktor/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G12_Ltraktor/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 36.00 0.34 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.30 36.00 0.34 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.89	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.630238 -0.922017	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.193142 0.55812 1.44585	</rayStart>
+        <rayEnd>	-0.193142 0.165908 1.3673	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	1.24215 -0.2227 0.77752	</rayStart>
+        <rayEnd>	0.842155 -0.2227 0.77752	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-1.24215 -0.2227 0.77752	</rayStart>
+        <rayEnd>	-0.842155 -0.2227 0.77752	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.64	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G12_Ltraktor/Ltraktor_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <LeichtertaktorkettenB>
+      <userString>	#germany_vehicles:LeichtertaktorkettenB	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	2000	</weight>
+      <maxLoad>	9500	</maxLoad>
+      <terrainResistance>	0.9 1.2 2.1	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	66	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.36	</vehicleMovement>
+        <vehicleRotation>	0.36	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G12_Ltraktor/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G12_Ltraktor/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.34 0.24	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.51	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.106142	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.106142	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.316142	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.086142	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.106142	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.302864	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.316142	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.086142	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.106142	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.302864	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.9033 1.34201	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.921480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.099640	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </LeichtertaktorkettenB>
+  </chassis>
+  <turrets0>
+    <Swedish_Bofors>
+      <userString>	#germany_vehicles:Swedish_Bofors	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	14	</armor_1>
+        <armor_2>	12	</armor_2>
+        <armor_3>	12	</armor_3>
+        <armor_4>	12	</armor_4>
+        <armor_5>	8	</armor_5>
+        <armor_6>	6	</armor_6>
+        <armor_7>	6	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	6	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	700	</weight>
+      <maxHealth>	26	</maxHealth>
+      <rotationSpeed>	39	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	310	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	150	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <gun>	_20mm_Breda	  <cost>	35	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G12_Ltraktor/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G12_Ltraktor/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_KwK_L46>
+        <_20mm_Breda>	shared	  <maxAmmo>	420	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -30 1 -30	</minPitch>
+            <maxPitch>	0 7 0.083333 7 0.146995 10 0.853005 10 0.916667 7 1 7	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.4	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	1.4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <unlocks>
+            <vehicle>	G93_GW_Mk_VIe	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G21_PanzerJager_I	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G07_Pz35t	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G06_PzII	  <cost>	275	</cost>
+            </vehicle>
+            <vehicle>	G53_PzI	  <cost>	275	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G12_Ltraktor/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G12_Ltraktor/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_20mm_Breda>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G12_Ltraktor/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G12_Ltraktor/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G12_Ltraktor/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G12_Ltraktor/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G12_Ltraktor/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.317756 0.596126	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.825742 0.343852 0.162335	</rayStart>
+          <rayEnd>	-0.440288 0.256972 0.100068	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.825742 0.343852 0.162335	</rayStart>
+          <rayEnd>	0.440288 0.256972 0.100068	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.926 0.000 1.032 0.000 0.457 0.149 0.601 0.457 0.500 0.500 0.186 0.500 0.160 0.399 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+    </Swedish_Bofors>
+  </turrets0>
+  <engines>
+    <Krupp_M311>	shared	</Krupp_M311>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <FuG2>	shared	</FuG2>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <LeichtertaktorkettenB>
+        <alpha>	0.0966	</alpha>
+      </LeichtertaktorkettenB>
+    </chassis>
+    <engines>
+      <Krupp_M311>
+        <bravo>	22.46722	</bravo>
+      </Krupp_M311>
+    </engines>
+    <armour>	0.779134266	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.84	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g12_ltraktor.xml>

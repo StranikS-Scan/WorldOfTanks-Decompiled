@@ -9,6 +9,7 @@ from gui.shared.formatters import icons
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class ShowMiniclientInfo(aop.Aspect):
 
@@ -66,11 +67,13 @@ class DeviceButtonsFlickering(aop.Aspect):
     def atCall(self, cd):
         if g_currentVehicle.isPresent() and not self.__vehicle_is_available(g_currentVehicle.item):
             original_args = list(cd._args)
-            device = original_args[0]
-            device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-            device['tooltip'] = makeTooltip(None, None, None, MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP)
-            cd.avoid()
-            return False
+            devices = original_args[0]['devices']
+            for device in devices:
+                device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
+                device['tooltip'] = makeTooltip(None, None, None, MINICLIENT.AMMUNITION_PANEL_WARN_TOOLTIP)
+
+            cd.change()
+            return (original_args, cd.kwargs)
         else:
             return
             return
@@ -119,3 +122,11 @@ class EnableCrew(aop.Aspect):
         else:
             return None
             return None
+
+
+class ChangeLobbyMenuTooltip(aop.Aspect):
+
+    def atReturn(self, cd):
+        original = cd.returned
+        original['tooltip'] = makeTooltip(TOOLTIPS.LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_HEADER, TOOLTIPS.LOBBYMENU_VERSIONINFOBUTTON_MINICLIENT_BODY)
+        return original

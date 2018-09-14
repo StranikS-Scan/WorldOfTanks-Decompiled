@@ -39,7 +39,6 @@ _STATES = {_RES.NO_RESTRICTIONS: _stateVO(True, enabledRequestBtn=True),
  _RES.ALREADY_IN_CLAN: _stateVO(False, addStatus=_status('inAnotherClan', text_styles.success)),
  _RES.FORBIDDEN_ACCOUNT_TYPE: _stateVO(False, addStatus=_status('banned', text_styles.error)),
  _RES.CLAN_IS_FULL: _stateVO(False, addStatus=_status('banned', text_styles.error)),
- _RES.CLAN_LEAVE_COOLDOWN: _stateVO(True, mainStatus=_status('isInCooldown', text_styles.alert, RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON), tooltip=CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_AFTERCLANLEAVE),
  _RES.CLAN_APPLICATION_ALREADY_SENT: _stateVO(False, addStatus=_status('requestSubmitted', text_styles.success)),
  _RES.CLAN_INVITE_ALREADY_RECEIVED: _stateVO(False, addStatus=_status('invitationSubmitted', text_styles.success)),
  _RES.SENT_INVITES_LIMIT_REACHED: _stateVO(True, mainStatus=_status('inviteLimit', text_styles.alert, RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON), tooltip=CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_INVITESHASBEENREACHED),
@@ -123,10 +122,7 @@ class _FortBaseDataReceiver(object):
             self.__updateCallback(*self.__getStatsVO())
 
     def __has28dFortStatistics(self):
-        if self.__fortStats and (self.__fortStats.getFsBattlesCount28d() > 0 or self.__fortStats.getFbBattlesCount28d() > 0):
-            return True
-        else:
-            return False
+        return self.__fortStats and (self.__fortStats.getFsBattlesCount28d() > 0 or self.__fortStats.getFbBattlesCount28d() > 0)
 
 
 class _MyFortDataReceiver(_FortBaseDataReceiver):

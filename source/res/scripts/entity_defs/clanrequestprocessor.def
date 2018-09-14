@@ -1,0 +1,27 @@
+<clanrequestprocessor.def>
+  <Properties>
+    <clanrequest_consumer_tag>
+      <Type>	STRING	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	false	</Persistent>
+    </clanrequest_consumer_tag>
+  </Properties>
+  <BaseMethods>
+    <onAccountClanResponse>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+    </onAccountClanResponse>
+    <onClanChangedResponse>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	INT32	</Arg>
+    </onClanChangedResponse>
+    <onFortReply>
+      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </onFortReply>
+  </BaseMethods>
+</clanrequestprocessor.def>

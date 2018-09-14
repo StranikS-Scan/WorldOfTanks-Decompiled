@@ -10,6 +10,13 @@
     <forward>	51	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.038	</moving>
+    <still>	0.076	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.114	</firePenalty>
+  </invisibility>
   <repairCost>	5.13	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.488722 0.897251	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F65_FCM_50t/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F65_FCM_50t/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F65_FCM_50t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -182,13 +190,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.29843 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F65_FCM_50t/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F65_FCM_50t/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F65_FCM_50t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.45769 2.04529	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -379,6 +386,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	7.5	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -394,7 +402,8 @@
             <exploded>	vehicles/french/F65_FCM_50t/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F65_FCM_50t/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F65_FCM_50t/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F65_FCM_50t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -417,7 +426,8 @@
         <exploded>	vehicles/french/F65_FCM_50t/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F65_FCM_50t/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F65_FCM_50t/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F65_FCM_50t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.459195 1.05069	</gunPosition>
       <emblemSlots>
@@ -453,9 +463,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.034 0.000 0.763 -0.045 0.766 0.636 0.434 0.500 0.254 0.500 0.126 0.549 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
       </camouflage>
@@ -470,6 +478,19 @@
   <radios>
     <SCR_528A>	shared	</SCR_528A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_FCM_50t>
+        <alpha>	0.0966	</alpha>
+      </Chassis_FCM_50t>
+    </chassis>
+    <engines>
+      <Maybach_HL_234P45A>
+        <bravo>	264.3203	</bravo>
+      </Maybach_HL_234P45A>
+    </engines>
+    <armour>	0.898946663	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

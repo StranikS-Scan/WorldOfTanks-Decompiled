@@ -1,0 +1,18 @@
+<sysmessenger.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <addUserSystemMessage>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </addUserSystemMessage>
+    <addUserSystemMessageWithTimeout>
+      <Arg>	DB_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	UINT32	</Arg>
+    </addUserSystemMessageWithTimeout>
+  </BaseMethods>
+</sysmessenger.def>

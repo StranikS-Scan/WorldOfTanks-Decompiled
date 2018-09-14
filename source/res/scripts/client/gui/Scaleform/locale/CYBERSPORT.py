@@ -3,6 +3,12 @@
 from debug_utils import LOG_WARNING
 
 class CYBERSPORT(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     WINDOW_TITLE = '#cyberSport:window/title'
     TEXTLOADING_LOADING = '#cyberSport:TextLoading/loading'
     WINDOW_INTRO_TITLE = '#cyberSport:window/intro/title'
@@ -119,6 +125,7 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_FALLOUTMIN_LEVELRANGE = '#cyberSport:window/unit/message/falloutMin/levelRange'
     WINDOW_UNIT_MESSAGE_FALLOUTMIN_REQUIREDLEVEL = '#cyberSport:window/unit/message/falloutMin/requiredLevel'
     WINDOW_UNIT_MESSAGE_FALLOUTGROUPNOTREADY = '#cyberSport:window/unit/message/falloutGroupNotReady'
+    WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE = '#cyberSport:window/unit/message/fortificationNotAvailable'
     WINDOW_UNIT_READY = '#cyberSport:window/unit/ready'
     WINDOW_UNIT_NOTREADY = '#cyberSport:window/unit/notReady'
     WINDOW_UNIT_FIGHT = '#cyberSport:window/unit/fight'
@@ -375,6 +382,10 @@ class CYBERSPORT(object):
 
     @staticmethod
     def window_unit_message_invalidlevelerror(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#cyberSport:window/unit/message/invalidLevelError/%s' % key
         if outcome not in CYBERSPORT.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')

@@ -180,7 +180,7 @@ class TankmanPriceDiscountTrigger(TriggerWithSubscription):
         index = self.getVar()
         currentGoldPrice = game_vars.getTankmanCurrentPrice(index)
         defaultGoldPrice = game_vars.getTankmanDefaultPrice(index)
-        return currentGoldPrice != defaultGoldPrice and currentGoldPrice[0] == 0
+        return currentGoldPrice != defaultGoldPrice and currentGoldPrice.gold == 0
 
     def _subscribe(self):
         g_clientUpdateManager.addCallbacks({'shop': self.__onDiscountsChange,

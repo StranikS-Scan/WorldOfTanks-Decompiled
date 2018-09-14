@@ -3,6 +3,12 @@
 
 
 class ARTEFACTS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TOOLBOX_NAME = '#artefacts:toolbox/name'
     TOOLBOX_DESCR = '#artefacts:toolbox/descr'
     ANTIFRAGMENTATIONLINING_LIGHT_NAME = '#artefacts:antifragmentationLining_light/name'
@@ -170,6 +176,11 @@ class ARTEFACTS(object):
     RATION_CZECH_ONUSE = '#artefacts:ration_czech/onUse'
     RATION_CZECH_ALWAYS = '#artefacts:ration_czech/always'
     RATION_CZECH_RESTRICTION = '#artefacts:ration_czech/restriction'
+    RATION_SWEDEN_NAME = '#artefacts:ration_sweden/name'
+    RATION_SWEDEN_DESCR = '#artefacts:ration_sweden/descr'
+    RATION_SWEDEN_ONUSE = '#artefacts:ration_sweden/onUse'
+    RATION_SWEDEN_ALWAYS = '#artefacts:ration_sweden/always'
+    RATION_SWEDEN_RESTRICTION = '#artefacts:ration_sweden/restriction'
     ARTILLERY_NAME = '#artefacts:artillery/name'
     ARTILLERY_DESCR = '#artefacts:artillery/descr'
     BOMBER_NAME = '#artefacts:bomber/name'

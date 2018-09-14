@@ -9,6 +9,13 @@
     <forward>	42	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.135	</moving>
+    <still>	0.27	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.405	</firePenalty>
+  </invisibility>
   <repairCost>	6.55	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	0.000000 0.587271 -1.06566	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G23_Grille/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G23_Grille/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -212,13 +220,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.917627 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G23_Grille/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G23_Grille/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.867595 1.27598	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -481,13 +488,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.917627 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G23_Grille/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G23_Grille/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.867595 1.27598	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -695,6 +701,7 @@
           </armor>
           <shotDispersionRadius>	0.84	</shotDispersionRadius>
           <aimingTime>	6.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.44	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -707,7 +714,8 @@
             <exploded>	vehicles/german/G23_Grille/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G23_Grille/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G23_Grille/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -739,6 +747,7 @@
           <shotDispersionRadius>	0.78	</shotDispersionRadius>
           <reloadTime>	23.5	</reloadTime>
           <aimingTime>	6	</aimingTime>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.4	</turretRotation>
             <afterShot>	6.0	</afterShot>
@@ -751,7 +760,8 @@
             <exploded>	vehicles/german/G23_Grille/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G23_Grille/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G23_Grille/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -775,15 +785,14 @@
         <exploded>	vehicles/german/G23_Grille/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G23_Grille/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G23_Grille/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G23_Grille/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.668724 0.023913	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.819 0.532 1.000 0.000 0.596 0.191 0.500 0.100 0.000 0.500 0.000 0.500 0.000 0.100 0.830	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Grille_mod_1>
   </turrets0>
   <engines>
@@ -810,6 +819,25 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Grilleketten_ausf_A>
+        <alpha>	0.12075	</alpha>
+      </Grilleketten_ausf_A>
+      <Grilleketten_ausf_B>
+        <alpha>	0.1127	</alpha>
+      </Grilleketten_ausf_B>
+    </chassis>
+    <engines>
+      <Praga_EPA>
+        <bravo>	34.36164	</bravo>
+      </Praga_EPA>
+      <Praga_EPA_AC>
+        <bravo>	39.64804	</bravo>
+      </Praga_EPA_AC>
+    </engines>
+    <armour>	0.669349811	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

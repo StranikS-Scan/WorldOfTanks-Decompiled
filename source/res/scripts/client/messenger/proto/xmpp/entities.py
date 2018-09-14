@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/entities.py
+from collections import deque
 from messenger.m_constants import PROTO_TYPE, USER_TAG, GAME_ONLINE_STATUS
 from messenger.proto.entities import UserEntity, ChannelEntity, MemberEntity
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE, PRESENCE
-from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT
+from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT, XMPP_MUC_CHANNEL_TYPE, MESSAGE_LIMIT
 from messenger.proto.xmpp.xmpp_items import createItem
 
 class XMPPUserEntity(UserEntity):
@@ -106,6 +107,7 @@ class _XMPPChannelEntity(ChannelEntity):
         self._jid = jid
         self._name = name
         self._isStored = False
+        self._history = deque([], MESSAGE_LIMIT.HISTORY_MAX_LEN)
         return
 
     def getID(self):
@@ -197,10 +199,10 @@ class XMPPChatChannelEntity(_XMPPChannelEntity):
         return self._isStored
 
     def addMembers(self, members):
-        raise AssertionError('Routine addMembers is not allowed in the chat session')
+        pass
 
     def removeMembers(self, ids):
-        raise AssertionError('Routine removeMembers is not allowed in the chat session')
+        pass
 
     def setUser(self, jid, nickname, presence=PRESENCE.AVAILABLE):
         super(XMPPChatChannelEntity, self).addMembers((XMPPChatSessionGameMember(jid, nickname, presence),))
@@ -216,11 +218,26 @@ class XMPPChatChannelEntity(_XMPPChannelEntity):
 
 
 class XMPPMucChannelEntity(_XMPPChannelEntity):
-    __slots__ = ('_password',)
+    __slots__ = ('_password', '_isSystem', '_isLazy', '_isClan', '_channelType')
 
-    def __init__(self, jid, name='', password=''):
+    def __init__(self, jid, name='', password='', isSystem=False, isLazy=False, channelType=XMPP_MUC_CHANNEL_TYPE.UNKNOWN):
         super(XMPPMucChannelEntity, self).__init__(jid, name)
         self._password = password or ''
+        self._isSystem = isSystem
+        self._isLazy = isLazy
+        self._channelType = channelType
+
+    def isSystem(self):
+        return self._isSystem
+
+    def isLazy(self):
+        return self._isLazy
+
+    def isAlwaysShow(self):
+        return True if self._channelType == XMPP_MUC_CHANNEL_TYPE.STANDARD else False
+
+    def isClan(self):
+        return self._channelType == XMPP_MUC_CHANNEL_TYPE.CLANS
 
     def getMessageType(self):
         return MESSAGE_TYPE.GROUPCHAT
@@ -236,9 +253,12 @@ class XMPPMucChannelEntity(_XMPPChannelEntity):
 
     def getPersistentState(self):
         state = None
-        if self._isStored:
-            state = (self.getMessageType(), self._name, self._password)
-        return state
+        if self._isSystem and self._isLazy:
+            return
+        else:
+            if self._isStored:
+                state = (self.getMessageType(), self._name, self._password)
+            return state
 
     def setPersistentState(self, state):
         if len(state) == 3:

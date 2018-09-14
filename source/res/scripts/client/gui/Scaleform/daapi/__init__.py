@@ -5,6 +5,6 @@ from gui.Scaleform.framework.entities.View import View
 class LobbySubView(View):
     __background_alpha__ = 0.6
 
-    def seEnvironment(self, app):
+    def setEnvironment(self, app):
         app.setBackgroundAlpha(self.__background_alpha__)
-        super(LobbySubView, self).seEnvironment(app)
+        super(LobbySubView, self).setEnvironment(app)

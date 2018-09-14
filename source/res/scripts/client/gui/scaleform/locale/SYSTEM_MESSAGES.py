@@ -3,12 +3,18 @@
 from debug_utils import LOG_WARNING
 
 class SYSTEM_MESSAGES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     REPAIR_SUCCESS = '#system_messages:repair/success'
-    REPAIR_CREDIT_ERROR = '#system_messages:repair/credit_error'
+    REPAIR_CREDITS_ERROR = '#system_messages:repair/credits_error'
     REPAIR_SERVER_ERROR = '#system_messages:repair/server_error'
-    CHARGE_CREDIT_ERROR_GOLD = '#system_messages:charge/credit_error_gold'
-    CHARGE_CREDIT_ERROR_CREDITS = '#system_messages:charge/credit_error_credits'
-    CHARGE_CREDIT_ERROR = '#system_messages:charge/credit_error'
+    CHARGE_CREDITS_ERROR_GOLD = '#system_messages:charge/credits_error_gold'
+    CHARGE_CREDITS_ERROR_CREDITS = '#system_messages:charge/credits_error_credits'
+    CHARGE_CREDITS_ERROR = '#system_messages:charge/credits_error'
     CHARGE_MONEY_SPENT = '#system_messages:charge/money_spent'
     CHARGE_SUCCESS = '#system_messages:charge/success'
     CHARGE_SERVER_ERROR = '#system_messages:charge/server_error'
@@ -21,13 +27,22 @@ class SYSTEM_MESSAGES(object):
     PREMIUM_NOT_ENOUGH_GOLD = '#system_messages:premium/not_enough_gold'
     PREMIUM_WALLET_NOT_AVAILABLE = '#system_messages:premium/wallet_not_available'
     PREMIUM_POST_BATTLE_PREMIUM = '#system_messages:premium/post_battle_premium'
-    BOOSTER_ACTIVATIONSUCCESS = '#system_messages:booster/activationSuccess'
-    BOOSTER_SERVER_ERROR = '#system_messages:booster/server_error'
-    BOOSTER_NO_BOOSTERS = '#system_messages:booster/NO_BOOSTERS'
-    BOOSTER_ALREADY_USED = '#system_messages:booster/ALREADY_USED'
-    BOOSTER_DISABLED = '#system_messages:booster/DISABLED'
-    BOOSTER_EXCEPTION = '#system_messages:booster/EXCEPTION'
-    BOOSTER_WRONG_ARGS = '#system_messages:booster/WRONG_ARGS'
+    BOOSTER_ACTIVATE_SUCCESS = '#system_messages:booster_activate/success'
+    BOOSTER_ACTIVATE_SERVER_ERROR = '#system_messages:booster_activate/server_error'
+    BOOSTER_ACTIVATE_NO_BOOSTERS = '#system_messages:booster_activate/NO_BOOSTERS'
+    BOOSTER_ACTIVATE_ALREADY_USED = '#system_messages:booster_activate/ALREADY_USED'
+    BOOSTER_ACTIVATE_DISABLED = '#system_messages:booster_activate/DISABLED'
+    BOOSTER_ACTIVATE_EXCEPTION = '#system_messages:booster_activate/EXCEPTION'
+    BOOSTER_ACTIVATE_WRONG_ARGS = '#system_messages:booster_activate/WRONG_ARGS'
+    BOOSTER_BUY_SUCCESS = '#system_messages:booster_buy/success'
+    BOOSTER_BUY_SERVER_ERROR = '#system_messages:booster_buy/server_error'
+    BOOSTER_BUY_SERVER_ERROR_CENTERDOWN = '#system_messages:booster_buy/server_error_centerDown'
+    BOOSTER_BUY_NOT_ENOUGH_CREDITS = '#system_messages:booster_buy/not_enough_credits'
+    BOOSTER_BUY_NOT_ENOUGH_GOLD = '#system_messages:booster_buy/not_enough_gold'
+    BOOSTER_BUY_WALLET_NOT_AVAILABLE = '#system_messages:booster_buy/wallet_not_available'
+    BOOSTER_SELL_SUCCESS = '#system_messages:booster_sell/success'
+    BOOSTER_SELL_SERVER_ERROR = '#system_messages:booster_sell/server_error'
+    BOOSTER_SELL_SERVER_ERROR_CENTERDOWN = '#system_messages:booster_sell/server_error_centerDown'
     UPGRADETANKMAN_SUCCESS = '#system_messages:upgradeTankman/success'
     UPGRADETANKMAN_SERVER_ERROR = '#system_messages:upgradeTankman/server_error'
     ARENA_START_ERRORS_JOIN_TIME_OUT = '#system_messages:arena_start_errors/join/TIME_OUT'
@@ -38,7 +53,6 @@ class SYSTEM_MESSAGES(object):
     ARENA_START_ERRORS_JOIN_WRONG_VEHICLE = '#system_messages:arena_start_errors/join/WRONG_VEHICLE'
     ARENA_START_ERRORS_JOIN_TEAM_IS_FULL = '#system_messages:arena_start_errors/join/TEAM_IS_FULL'
     ARENA_START_ERRORS_JOIN_WRONG_ARGS = '#system_messages:arena_start_errors/join/WRONG_ARGS'
-    ARENA_START_ERRORS_JOIN_CAPTCHA = '#system_messages:arena_start_errors/join/CAPTCHA'
     ARENA_START_ERRORS_JOIN_WRONG_ARENA_STATE = '#system_messages:arena_start_errors/join/WRONG_ARENA_STATE'
     ARENA_START_ERRORS_JOIN_CANNOT_CREATE = '#system_messages:arena_start_errors/join/CANNOT_CREATE'
     ARENA_START_ERRORS_JOIN_PRIVACY = '#system_messages:arena_start_errors/join/PRIVACY'
@@ -71,6 +85,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS = '#system_messages:prebattle/vehicleInvalid/limits/shells'
     PREBATTLE_VEHICLEINVALID_LIMITS_TAGS = '#system_messages:prebattle/vehicleInvalid/limits/tags'
     PREBATTLE_VEHICLEINVALID_LIMITS_NOT_SUPPORTED = '#system_messages:prebattle/vehicleInvalid/limits/not_supported'
+    PREBATTLE_VEHICLEINVALID_NO_SELECTEDVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_selectedVehicle'
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
@@ -162,6 +177,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_CREATEERROR = '#system_messages:squad/createError'
     SQUAD_NOTSETREADYSTATUS = '#system_messages:squad/notSetReadyStatus'
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
+    SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     COMPANY_MEMBERJOINED = '#system_messages:company/memberJoined'
     COMPANY_MEMBERLEAVE = '#system_messages:company/memberLeave'
     COMPANY_MEMBERREADY = '#system_messages:company/memberReady'
@@ -476,7 +492,6 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
-    ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE = '#system_messages:artefact_buy/not for current vehicle'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -771,8 +786,6 @@ class SYSTEM_MESSAGES(object):
     CLANS_NOTIFICATIONS_INVITESENT = '#system_messages:clans/notifications/inviteSent'
     CLANS_NOTIFICATIONS_INVITESSENT = '#system_messages:clans/notifications/invitesSent'
     CLANS_NOTIFICATIONS_INVITESENDERROR = '#system_messages:clans/notifications/inviteSendError'
-    CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINCLAN = '#system_messages:clans/notifications/inviteSendError/alreadyInClan'
-    CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINVITED = '#system_messages:clans/notifications/inviteSendError/alreadyInvited'
     CLANS_NOTIFICATIONS_INVITESSENDERROR = '#system_messages:clans/notifications/invitesSendError'
     CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED = '#system_messages:clans/notifications/personal/appAccepted'
     CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED = '#system_messages:clans/notifications/personal/appDeclined'
@@ -807,6 +820,8 @@ class SYSTEM_MESSAGES(object):
     POTAPOVQUESTS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/select/server_error/LOCKED_BY_VEHICLE_QUEST'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS = '#system_messages:potapovQuests/select/server_error/SEASON_LIMIT_THE_SAME_CLASS'
     POTAPOVQUESTS_REFUSE_SUCCESS = '#system_messages:potapovQuests/refuse/success'
+    POTAPOVQUESTS_REFUSE_QUESTS = '#system_messages:potapovQuests/refuse/quests'
+    POTAPOVQUESTS_REFUSE_NO_QUESTS = '#system_messages:potapovQuests/refuse/no_quests'
     POTAPOVQUESTS_REFUSE_SERVER_ERROR = '#system_messages:potapovQuests/refuse/server_error'
     POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/refuse/server_error/LOCKED_BY_VEHICLE_QUEST'
     POTAPOVQUESTS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:potapovQuests/select/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
@@ -919,8 +934,9 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_VACATIONSET = '#system_messages:fortification/vacationSet'
     FORTIFICATION_DEFENCEHOURDEACTIVATED = '#system_messages:fortification/defenceHourDeactivated'
     FORTIFICATION_FORTBATTLEFINISHED = '#system_messages:fortification/fortBattleFinished'
+    FORTIFICATION_NOTIFICATION_TURNEDOFF = '#system_messages:fortification/notification/turnedOff'
+    FORTIFICATION_NOTIFICATION_TURNEDON = '#system_messages:fortification/notification/turnedOn'
     FORTIFICATION_ERRORS_UNKNOWN = '#system_messages:fortification/errors/UNKNOWN'
-    FORTIFICATION_ERRORS_NOT_SUPPORTED = '#system_messages:fortification/errors/NOT_SUPPORTED'
     FORTIFICATION_ERRORS_BAD_METHOD = '#system_messages:fortification/errors/BAD_METHOD'
     FORTIFICATION_ERRORS_BAD_SORTIE_TIME = '#system_messages:fortification/errors/BAD_SORTIE_TIME'
     FORTIFICATION_ERRORS_NOT_CREATED = '#system_messages:fortification/errors/NOT_CREATED'
@@ -1017,7 +1033,7 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_CANT_CREATE_CLAN = '#system_messages:fortification/errors/CANT_CREATE_CLAN'
     FORTIFICATION_ERRORS_CANT_LOOKUP_CLAN = '#system_messages:fortification/errors/CANT_LOOKUP_CLAN'
     FORTIFICATION_ERRORS_WRONG_PERIPHERY = '#system_messages:fortification/errors/WRONG_PERIPHERY'
-    FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED = '#system_messages:fortification/errors/FORT_BATTLES_DISABLED'
+    FORTIFICATION_ERRORS_FORT_DISABLED = '#system_messages:fortification/errors/FORT_DISABLED'
     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES = '#system_messages:fortification/errors/TOO_MANY_DEFENCES'
     FORTIFICATION_ERRORS_CURFEW_HOUR = '#system_messages:fortification/errors/CURFEW_HOUR'
     FORTIFICATION_ERRORS_JOIN_CTX_LOCKED = '#system_messages:fortification/errors/JOIN_CTX_LOCKED'
@@ -1135,7 +1151,6 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_CLUB_CHECKOUT_FAIL,
      UNIT_ERRORS_PREV_RATED_BATTLE_IN_PROGRESS)
     FORTIFICATION_ERRORS_ENUM = (FORTIFICATION_ERRORS_UNKNOWN,
-     FORTIFICATION_ERRORS_NOT_SUPPORTED,
      FORTIFICATION_ERRORS_BAD_METHOD,
      FORTIFICATION_ERRORS_BAD_SORTIE_TIME,
      FORTIFICATION_ERRORS_NOT_CREATED,
@@ -1232,7 +1247,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_CANT_CREATE_CLAN,
      FORTIFICATION_ERRORS_CANT_LOOKUP_CLAN,
      FORTIFICATION_ERRORS_WRONG_PERIPHERY,
-     FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED,
+     FORTIFICATION_ERRORS_FORT_DISABLED,
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
@@ -1240,7 +1255,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_FORBIDDEN_FORT_BATTLE_HOUR,
      FORTIFICATION_ERRORS_BAD_SORTIE_PERIPHERY_ID)
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
-    UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
+    UNITBROWSER_ERRORS_ENUM = (UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT,)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
@@ -1263,11 +1278,11 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_VEHICLE_DESTROYED,
      CUSTOMIZATION_VEHICLE_EXPLODED)
     all_ENUM = (REPAIR_SUCCESS,
-     REPAIR_CREDIT_ERROR,
+     REPAIR_CREDITS_ERROR,
      REPAIR_SERVER_ERROR,
-     CHARGE_CREDIT_ERROR_GOLD,
-     CHARGE_CREDIT_ERROR_CREDITS,
-     CHARGE_CREDIT_ERROR,
+     CHARGE_CREDITS_ERROR_GOLD,
+     CHARGE_CREDITS_ERROR_CREDITS,
+     CHARGE_CREDITS_ERROR,
      CHARGE_MONEY_SPENT,
      CHARGE_SUCCESS,
      CHARGE_SERVER_ERROR,
@@ -1280,13 +1295,22 @@ class SYSTEM_MESSAGES(object):
      PREMIUM_NOT_ENOUGH_GOLD,
      PREMIUM_WALLET_NOT_AVAILABLE,
      PREMIUM_POST_BATTLE_PREMIUM,
-     BOOSTER_ACTIVATIONSUCCESS,
-     BOOSTER_SERVER_ERROR,
-     BOOSTER_NO_BOOSTERS,
-     BOOSTER_ALREADY_USED,
-     BOOSTER_DISABLED,
-     BOOSTER_EXCEPTION,
-     BOOSTER_WRONG_ARGS,
+     BOOSTER_ACTIVATE_SUCCESS,
+     BOOSTER_ACTIVATE_SERVER_ERROR,
+     BOOSTER_ACTIVATE_NO_BOOSTERS,
+     BOOSTER_ACTIVATE_ALREADY_USED,
+     BOOSTER_ACTIVATE_DISABLED,
+     BOOSTER_ACTIVATE_EXCEPTION,
+     BOOSTER_ACTIVATE_WRONG_ARGS,
+     BOOSTER_BUY_SUCCESS,
+     BOOSTER_BUY_SERVER_ERROR,
+     BOOSTER_BUY_SERVER_ERROR_CENTERDOWN,
+     BOOSTER_BUY_NOT_ENOUGH_CREDITS,
+     BOOSTER_BUY_NOT_ENOUGH_GOLD,
+     BOOSTER_BUY_WALLET_NOT_AVAILABLE,
+     BOOSTER_SELL_SUCCESS,
+     BOOSTER_SELL_SERVER_ERROR,
+     BOOSTER_SELL_SERVER_ERROR_CENTERDOWN,
      UPGRADETANKMAN_SUCCESS,
      UPGRADETANKMAN_SERVER_ERROR,
      ARENA_START_ERRORS_JOIN_TIME_OUT,
@@ -1297,7 +1321,6 @@ class SYSTEM_MESSAGES(object):
      ARENA_START_ERRORS_JOIN_WRONG_VEHICLE,
      ARENA_START_ERRORS_JOIN_TEAM_IS_FULL,
      ARENA_START_ERRORS_JOIN_WRONG_ARGS,
-     ARENA_START_ERRORS_JOIN_CAPTCHA,
      ARENA_START_ERRORS_JOIN_WRONG_ARENA_STATE,
      ARENA_START_ERRORS_JOIN_CANNOT_CREATE,
      ARENA_START_ERRORS_JOIN_PRIVACY,
@@ -1330,6 +1353,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS,
      PREBATTLE_VEHICLEINVALID_LIMITS_TAGS,
      PREBATTLE_VEHICLEINVALID_LIMITS_NOT_SUPPORTED,
+     PREBATTLE_VEHICLEINVALID_NO_SELECTEDVEHICLE,
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
@@ -1421,6 +1445,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_CREATEERROR,
      SQUAD_NOTSETREADYSTATUS,
      SQUAD_KICKEDFROMQUEUE,
+     SQUAD_NOTVALIDDELETED,
      COMPANY_MEMBERJOINED,
      COMPANY_MEMBERLEAVE,
      COMPANY_MEMBERREADY,
@@ -1731,7 +1756,6 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
      ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
-     ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -2026,8 +2050,6 @@ class SYSTEM_MESSAGES(object):
      CLANS_NOTIFICATIONS_INVITESENT,
      CLANS_NOTIFICATIONS_INVITESSENT,
      CLANS_NOTIFICATIONS_INVITESENDERROR,
-     CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINCLAN,
-     CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINVITED,
      CLANS_NOTIFICATIONS_INVITESSENDERROR,
      CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED,
      CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED,
@@ -2062,6 +2084,8 @@ class SYSTEM_MESSAGES(object):
      POTAPOVQUESTS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS,
      POTAPOVQUESTS_REFUSE_SUCCESS,
+     POTAPOVQUESTS_REFUSE_QUESTS,
+     POTAPOVQUESTS_REFUSE_NO_QUESTS,
      POTAPOVQUESTS_REFUSE_SERVER_ERROR,
      POTAPOVQUESTS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
      POTAPOVQUESTS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
@@ -2174,8 +2198,9 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_VACATIONSET,
      FORTIFICATION_DEFENCEHOURDEACTIVATED,
      FORTIFICATION_FORTBATTLEFINISHED,
+     FORTIFICATION_NOTIFICATION_TURNEDOFF,
+     FORTIFICATION_NOTIFICATION_TURNEDON,
      FORTIFICATION_ERRORS_UNKNOWN,
-     FORTIFICATION_ERRORS_NOT_SUPPORTED,
      FORTIFICATION_ERRORS_BAD_METHOD,
      FORTIFICATION_ERRORS_BAD_SORTIE_TIME,
      FORTIFICATION_ERRORS_NOT_CREATED,
@@ -2272,7 +2297,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_CANT_CREATE_CLAN,
      FORTIFICATION_ERRORS_CANT_LOOKUP_CLAN,
      FORTIFICATION_ERRORS_WRONG_PERIPHERY,
-     FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED,
+     FORTIFICATION_ERRORS_FORT_DISABLED,
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
      FORTIFICATION_ERRORS_CURFEW_HOUR,
      FORTIFICATION_ERRORS_JOIN_CTX_LOCKED,
@@ -2301,6 +2326,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def prebattle_request_name(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:prebattle/request/name/%s' % key
         if outcome not in SYSTEM_MESSAGES.PREBATTLE_REQUEST_NAME_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2310,6 +2339,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def fortification_request_name(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:fortification/request/name/%s' % key
         if outcome not in SYSTEM_MESSAGES.FORTIFICATION_REQUEST_NAME_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2319,6 +2352,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def unit_errors(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:unit/errors/%s' % key
         if outcome not in SYSTEM_MESSAGES.UNIT_ERRORS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2328,6 +2365,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def fortification_errors(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:fortification/errors/%s' % key
         if outcome not in SYSTEM_MESSAGES.FORTIFICATION_ERRORS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2337,6 +2378,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def unit_notification_divisiontype(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:unit/notification/divisionType/%s' % key
         if outcome not in SYSTEM_MESSAGES.UNIT_NOTIFICATION_DIVISIONTYPE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2346,6 +2391,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def unitbrowser_errors(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:unitBrowser/errors/%s' % key
         if outcome not in SYSTEM_MESSAGES.UNITBROWSER_ERRORS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2355,6 +2404,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def unit_notification(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:unit/notification/%s' % key
         if outcome not in SYSTEM_MESSAGES.UNIT_NOTIFICATION_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2364,6 +2417,10 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def unit_warnings(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:unit/warnings/%s' % key
         if outcome not in SYSTEM_MESSAGES.UNIT_WARNINGS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -2373,14 +2430,22 @@ class SYSTEM_MESSAGES(object):
 
     @staticmethod
     def customization_vehicle(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:customization/vehicle_%s' % key
         if outcome not in SYSTEM_MESSAGES.CUSTOMIZATION_VEHICLE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def all(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#system_messages:%s' % key
         if outcome not in SYSTEM_MESSAGES.all_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

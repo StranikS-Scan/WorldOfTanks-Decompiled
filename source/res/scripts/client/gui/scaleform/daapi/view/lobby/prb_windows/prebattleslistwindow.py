@@ -3,7 +3,7 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.prb_control.prb_helpers import GlobalListener
 from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 class PrebattlesListWindow(AbstractWindowView, GlobalListener):
 

@@ -3,6 +3,12 @@
 
 
 class CONTEXT_MENU_HANDLER_TYPE(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CREW = 'crew'
     CHANNEL_LIST = 'channelList'
     VEHICLE = 'vehicle'

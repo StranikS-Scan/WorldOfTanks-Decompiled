@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/OcclusionDecal.py
 import BigWorld
+from vehicle_systems.tankStructure import TankPartNames
 
 class OcclusionDecal:
 
@@ -11,7 +12,7 @@ class OcclusionDecal:
     def __init__(self):
         self.__attached = False
         self.__vehicle = None
-        self.__desc = None
+        self.__model = None
         self.__chassisDecals = []
         self.__chassisParent = None
         self.__hullDecals = []
@@ -26,30 +27,30 @@ class OcclusionDecal:
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.onSettingsChanged
         self.__vehicle = None
-        self.__desc = None
+        self.__model = None
         self.detach()
         return
 
-    def attach(self, vehicle, desc, isSettingChanged=False):
+    def attach(self, vehicle, model, isSettingChanged=False):
         self.__vehicle = vehicle
-        self.__desc = desc
+        self.__model = model
         if not isSettingChanged:
             if not OcclusionDecal.isEnabled() or self.__attached:
                 return
         elif self.__attached:
             return
         self.__attached = True
-        self.__chassisParent = desc['chassis']['model']
+        self.__chassisParent = model.root
         for transform in vehicle.typeDescriptor.chassis['AODecals']:
             decal = OcclusionDecal.__createDecal(transform, self.__chassisParent, False)
             self.__chassisDecals.append(decal)
 
-        self.__hullParent = desc['hull']['model']
+        self.__hullParent = model.node(TankPartNames.HULL)
         for transform in vehicle.typeDescriptor.hull['AODecals']:
             decal = OcclusionDecal.__createDecal(transform, self.__hullParent, True)
             self.__hullDecals.append(decal)
 
-        self.__turretParent = desc['turret']['model']
+        self.__turretParent = model.node(TankPartNames.TURRET)
         for transform in vehicle.typeDescriptor.turret['AODecals']:
             decal = OcclusionDecal.__createDecal(transform, self.__turretParent, True)
             self.__turretDecals.append(decal)
@@ -60,17 +61,17 @@ class OcclusionDecal:
         else:
             self.__attached = False
             for decal in self.__chassisDecals:
-                self.__chassisParent.root.detach(decal)
+                self.__chassisParent.detach(decal)
 
             self.__chassisDecals = []
             self.__chassisParent = None
             for decal in self.__hullDecals:
-                self.__hullParent.root.detach(decal)
+                self.__hullParent.detach(decal)
 
             self.__hullDecals = []
             self.__hullParent = None
             for decal in self.__turretDecals:
-                self.__turretParent.root.detach(decal)
+                self.__turretParent.detach(decal)
 
             self.__turretDecals = []
             self.__turretParent = None
@@ -79,10 +80,10 @@ class OcclusionDecal:
     def __reattach(self):
         if self.__attached:
             return
-        elif self.__vehicle is None or self.__desc is None:
+        elif self.__vehicle is None or self.__model is None:
             return
         else:
-            self.attach(self.__vehicle, self.__desc, True)
+            self.attach(self.__vehicle, self.__model, True)
             return
 
     def onSettingsChanged(self, diff=None):
@@ -97,7 +98,7 @@ class OcclusionDecal:
                 self.detach()
 
     @staticmethod
-    def __createDecal(transform, parent, applyToAll):
+    def __createDecal(transform, parentNode, applyToAll):
         diffuseTexture = ''
         bumpTexture = ''
         hmTexture = ''
@@ -112,5 +113,5 @@ class OcclusionDecal:
         decal = BigWorld.WGOcclusionDecal()
         decal.create(diffuseTexture, bumpTexture, hmTexture, addTexture, priority, materialType, influence, visibilityMask, accuracy)
         decal.setLocalTransform(transform)
-        parent.root.attach(decal)
+        parentNode.attach(decal)
         return decal

@@ -80,7 +80,7 @@ class BuyAction(IGUIItemAction):
         canRentOrBuy, rentReason = item.mayRentOrBuy(money)
         canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
         if not canRentOrBuy:
-            if not canBuy and buyReason == 'credit_error':
+            if not canBuy and buyReason == 'credits_error':
                 return canBuyWithExchange
             return canBuy
         return canRentOrBuy
@@ -338,5 +338,10 @@ class SetVehicleModuleAction(BuyAction):
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
                 result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs).request()
                 processMsg(result)
+                if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
+                    newComponentItem = g_itemsCache.items.getItemByCD(int(self.__newItemCD))
+                    vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
+                    if newComponentItem.isInstalled(vehicle):
+                        yield tryToLoadDefaultShellsLayout(vehicle)
                 Waiting.hide('applyModule')
             return

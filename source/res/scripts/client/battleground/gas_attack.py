@@ -32,7 +32,7 @@ class GasAttackMapSettings(namedtuple('GasAttackMapSettings', ('cloudModel', 'cl
 
 def _getSoundSettings():
     soundSettings = ResMgr.DataSection()
-    soundSettings.createSectionFromString('\n        <soundSettings>\n            <wwalarm>fallout_gaz_alarm</wwalarm>\n            <alarm>/GUI/fallout/fallout_gaz_alarma</alarm>\n            <gascloud_close> sauron_burn_close </gascloud_close>\n            <gascloud_far> sauron_burn_far </gascloud_far>\n            <gascloud_inside> sauron_inside_burn </gascloud_inside>\n        </soundSettings>\n        ')
+    soundSettings.createSectionFromString('\n        <soundSettings>\n            <wwalarm>fallout_gaz_alarm</wwalarm>\n            <gascloud_close> sauron_burn_close </gascloud_close>\n            <gascloud_far> sauron_burn_far </gascloud_far>\n            <gascloud_inside> sauron_inside_burn </gascloud_inside>\n        </soundSettings>\n        ')
     return soundSettings
 
 
@@ -93,7 +93,6 @@ class GasCloud(object):
          mapSettings.cloudClimbTime,
          mapSettings.cloudStartHeight,
          mapSettings.cloudEndHeight,
-         math.radians(36.45),
          mapSettings.edgeToCenterAngle,
          mapSettings.edgeToCenterAngleDelta,
          mapSettings.edgeToCenterDistance,
@@ -142,7 +141,7 @@ class GasCloud(object):
         gasAttackManager().soundManager().playInsideSound(entered)
 
     def __onPostmortemVehicleChanged(self, vehicleID):
-        self.__cloud.enableEdgeFogEffects = BigWorld.player().vehicle is not None
+        self.__cloud.enableEdgeFogEffects = BigWorld.player().vehicle is not None or vehicleID != -1
         return
 
 
@@ -346,7 +345,6 @@ class GasAttackManager(CallbackDelayer):
             values = resources.values()
             if not values:
                 LOG_ERROR('No cloud model found during loading!')
-                return
             self.__cloudModelResource = values[0]
             if self.__cloud is not None:
                 self.__cloud.model = self.__cloudModelResource
@@ -367,8 +365,7 @@ def initAttackManager(arena):
     global _g_instance
     if caps.get(arena.bonusType) & caps.GAS_ATTACK_MECHANICS > 0 and arena.arenaType.gameplayName in ('fallout', 'fallout2', 'fallout3'):
         visual = getattr(arena.arenaType, 'gasAttackVisual', None)
-        if visual is None:
-            LOG_DEBUG('Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType)
+        assert visual is not None, 'Gas attack visual should be defined for arena bonus type: %d' % arena.bonusType
         _g_instance = GasAttackManager(visual)
     return
 

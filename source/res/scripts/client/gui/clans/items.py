@@ -806,7 +806,8 @@ _ClanProvinceData = namedtuple('_ClanProvinceData', ['front_name',
  'front_name_localized',
  'frontInfo',
  'pillage_cooldown',
- 'pillage_end_datetime'])
+ 'pillage_end_datetime',
+ 'arena_id'])
 _ClanProvinceData.__new__.__defaults__ = ('',
  0,
  0,
@@ -816,6 +817,8 @@ _ClanProvinceData.__new__.__defaults__ = ('',
  '',
  0,
  '',
+ None,
+ None,
  None,
  None,
  None)
@@ -859,6 +862,10 @@ class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('game_map',))
     def getArenaName(self):
         return self.game_map
+
+    @fmtUnavailableValue(fields=('arena_id',))
+    def getArenaId(self):
+        return self.arena_id
 
     @fmtUnavailableValue(fields=('turns_owned',))
     def getTurnsOwned(self):

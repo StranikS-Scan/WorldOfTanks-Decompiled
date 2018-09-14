@@ -157,7 +157,10 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'readyForBattleATSPG',
  'readyForBattleALL',
  'tankwomenProgress',
- 'testartilleryman']
+ 'testartilleryman',
+ 'maxEFC2016WinSeries',
+ 'EFC2016WinSeries',
+ 'EFC2016Goleador']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -263,7 +266,8 @@ _achievements15x15PopUps = ['warrior',
  'readyForBattleSPG',
  'readyForBattleATSPG',
  'readyForBattleALL',
- 'testartilleryman']
+ 'testartilleryman',
+ 'EFC2016Goleador']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 ACHIEVEMENTS7X7_BLOCK_LAYOUT = ['wolfAmongSheep',
  'wolfAmongSheepMedal',
@@ -359,7 +363,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'falloutPackOfWolfs',
  'falloutSteelHunter',
  'falloutAlwaysInLine',
- 'moonSphere']
+ 'moonSphere',
+ 'EFC2016']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -380,7 +385,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'falloutPackOfWolfs',
  'falloutSteelHunter',
  'falloutAlwaysInLine',
- 'moonSphere']
+ 'moonSphere',
+ 'EFC2016']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -514,3 +520,8 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _falloutCutBlockBuilder,
  _maxFalloutBlockBuilder,
  _falloutAchievementsBlockBuilder)
+ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
+ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
+ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]
+ACCOUNT_DOSSIER_DICT_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == DictBlockBuilder ]
+ACCOUNT_DOSSIER_LIST_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == ListBlockBuilder ]

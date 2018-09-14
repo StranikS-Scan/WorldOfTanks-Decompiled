@@ -108,9 +108,6 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
         elif reason == CLIENT_CLAN_RESTRICTIONS.CLAN_APPLICATION_ALREADY_SENT:
             sendRequestBtnEnabled = False
             sendRequestTooltip = CLANS.SEARCH_INFO_REQUESTALREADYSENT_TOOLTIP
-        elif reason == CLIENT_CLAN_RESTRICTIONS.CLAN_LEAVE_COOLDOWN:
-            sendRequestBtnEnabled = False
-            sendRequestTooltip = CLANS.SEARCH_INFO_COOLDOWN_TOOLTIP
         elif reason == CLIENT_CLAN_RESTRICTIONS.SENT_INVITES_LIMIT_REACHED:
             sendRequestBtnEnabled = False
             sendRequestTooltip = CLANS.SEARCH_INFO_REQUESTSLIMITEXCEEDED_TOOLTIP

@@ -26,7 +26,10 @@ class LobbyControllersFactory(IControllerFactory):
         controller = None
         msgType = channel.getMessageType()
         if msgType == MESSAGE_TYPE.CHAT:
-            controller = lobby_controllers.ChatChannelController(channel)
+            controller = lobby_controllers.ChatSessionController(channel)
         elif msgType == MESSAGE_TYPE.GROUPCHAT:
-            controller = lobby_controllers.UserRoomController(channel)
+            if channel.isLazy():
+                controller = lobby_controllers.LazyUserRoomController(channel)
+            else:
+                controller = lobby_controllers.UserRoomController(channel)
         return controller

@@ -164,6 +164,9 @@ class AccountPopover(AccountPopoverMeta, GlobalListener, MyClubListener, ClanLis
             btnEnabled = self.clansCtrl.isAvailable()
             if not btnEnabled:
                 btnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE
+        elif not g_lobbyContext.getServerSettings().isFortsEnabled():
+            btnEnabled = False
+            btnTooltip = TOOLTIPS.HEADER_ACCOUNTPOPOVER_CLANPROFILE_UNAVAILABLE
         return {'searchClanTooltip': searchClanTooltip,
          'btnEnabled': btnEnabled,
          'requestInviteBtnTooltip': requestInviteBtnTooltip,

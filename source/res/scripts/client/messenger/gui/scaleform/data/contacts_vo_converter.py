@@ -6,6 +6,7 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import i18n
 from helpers.html import escape
 from messenger import g_settings
@@ -101,17 +102,21 @@ class ContactConverter(object):
 
     def getIcons(self, tags, note):
         icons = []
-        if USER_TAG.IGNORED in tags:
-            icons.append(_CACHED_ICONS_TAGS['ignored'])
-        elif USER_TAG.FRIEND in tags:
+        if USER_TAG.IGR_BASE in tags:
+            icons.append(RES_ICONS.MAPS_ICONS_LIBRARY_BASIC_SMALL)
+        elif USER_TAG.IGR_PREMIUM in tags:
             if USER_TAG.SUB_TO not in tags:
-                icons.append(_CACHED_ICONS_TAGS['pending'])
-        elif USER_TAG.SUB_PENDING_IN in tags:
-            icons.append(_CACHED_ICONS_TAGS['pending'])
-        if tags in {USER_TAG.REFERRAL, USER_TAG.REFERRER}:
-            icons.append(_CACHED_ICONS_TAGS['refSys'])
+                icons.append(RES_ICONS.MAPS_ICONS_LIBRARY_PREMIUM_SMALL)
+        if USER_TAG.REFERRAL in tags or USER_TAG.REFERRER in tags:
+            icons.append(RES_ICONS.MAPS_ICONS_REFERRAL_REFERRALSMALLHAND)
+        if USER_TAG.IGNORED in tags:
+            icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTIGNORED)
+        elif USER_TAG.FRIEND in tags and USER_TAG.SUB_TO not in tags and USER_TAG.SUB_FROM not in tags:
+            icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTCONFIRMNEEDED)
+        if USER_TAG.BAN_CHAT in tags:
+            icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTMSGSOFF)
         if note:
-            icons.append(_CACHED_ICONS_TAGS['note'])
+            icons.append(RES_ICONS.MAPS_ICONS_MESSENGER_CONTACTNOTE)
         return icons
 
     def getColor(self, tags, isOnline):
@@ -142,6 +147,7 @@ class ContactConverter(object):
             tags.add(USER_TAG.OTHER_CLAN_MEMBER)
         baseUserProps = self.makeBaseUserProps(contact)
         baseUserProps['rgb'] = self.getColor(tags, isOnline)
+        baseUserProps['icons'] = self.getIcons(tags, note)
         baseUserProps['tags'] = list(tags)
         resourceId = contact.getResourceID() or WG_GAMES.TANKS
         if resourceId != WG_GAMES.TANKS:

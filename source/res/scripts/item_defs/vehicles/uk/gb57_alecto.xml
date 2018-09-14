@@ -9,6 +9,13 @@
     <forward>	50.5	</forward>
     <backward>	16	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.282	</moving>
+    <still>	0.469	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.704	</firePenalty>
+  </invisibility>
   <repairCost>	6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -67,7 +74,8 @@
       <turret>	0.000000 0.308375 0.873556	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB57_Alecto/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -201,13 +209,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.703595 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB57_Alecto/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.08065 1.44959	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -314,13 +321,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.703595 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB57_Alecto/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.08065 1.44959	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -389,6 +395,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -400,7 +407,8 @@
             <exploded>	vehicles/british/GB57_Alecto/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB57_Alecto/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
         </QF_6_pounder_Mk_II_AT>
         <_3.7inch_AT_Howitzer>	shared	  <maxAmmo>	48	</maxAmmo>
@@ -420,6 +428,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -431,7 +440,8 @@
             <exploded>	vehicles/british/GB57_Alecto/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB57_Alecto/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -450,6 +460,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.252	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -462,7 +473,8 @@
             <exploded>	vehicles/british/GB57_Alecto/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB57_Alecto/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
@@ -484,6 +496,7 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <recoil>
             <lodDist>	MEDIUM	</lodDist>
@@ -496,7 +509,8 @@
             <exploded>	vehicles/british/GB57_Alecto/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB57_Alecto/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -509,15 +523,14 @@
         <exploded>	vehicles/british/GB57_Alecto/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB57_Alecto/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB57_Alecto/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB57_Alecto/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.320557 0.495356	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.943 0.100 0.659 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_GB57_Alecto>
   </turrets0>
   <engines>
@@ -549,6 +562,30 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_25pdr_AT_Field_Gun>
+        <delta>	2.173913	</delta>
+      </_25pdr_AT_Field_Gun>
+    </guns>
+    <chassis>
+      <Chassis_GB57_Alecto>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB57_Alecto>
+      <Chassis_GB57_Alecto_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB57_Alecto_2>
+    </chassis>
+    <engines>
+      <Meadows_HOP>
+        <bravo>	42.81989	</bravo>
+      </Meadows_HOP>
+      <Meadows_HOP_OC>
+        <bravo>	47.57765	</bravo>
+      </Meadows_HOP_OC>
+    </engines>
+    <armour>	0.643060845	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

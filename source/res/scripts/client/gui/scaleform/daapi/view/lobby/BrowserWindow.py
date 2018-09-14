@@ -63,6 +63,8 @@ class BrowserWindow(BrowserMeta):
         self.addListener(VIEW_ALIAS.BROWSER_WINDOW, self.__onShow, EVENT_BUS_SCOPE.LOBBY)
         if not self.__isAsync:
             self.__onLoadStart(self.__url)
+        if self.__browser.isNavigationComplete:
+            self.__onLoadEnd(self.__url, self.__browser.isSuccessfulLoad)
 
     def _dispose(self):
         self.__browser.onLoadStart -= self.__onLoadStart

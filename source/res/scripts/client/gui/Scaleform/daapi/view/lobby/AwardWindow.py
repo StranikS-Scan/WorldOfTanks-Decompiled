@@ -5,6 +5,7 @@ from helpers import i18n
 from gui.Scaleform.daapi.view.meta.AwardWindowMeta import AwardWindowMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'isAwardForCompleteVisible',
  'awardReceivedText',
@@ -25,6 +26,12 @@ class AwardAbstract(object):
 
     def getBackgroundImage(self):
         pass
+
+    def useBackgroundAnimation(self):
+        return False
+
+    def getBackgroundAnimationData(self):
+        return None
 
     def getAwardImage(self):
         return None
@@ -78,6 +85,24 @@ class AwardAbstract(object):
         pass
 
 
+class ExplosionBackAward(AwardAbstract):
+
+    def __init__(self, useAnimation=True):
+        super(ExplosionBackAward, self).__init__()
+        self.__useAnimation = useAnimation
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
+
+    def useBackgroundAnimation(self):
+        return self.__useAnimation
+
+    def getBackgroundAnimationData(self):
+        return {'image': self.getAwardImage(),
+         'animationPath': AWARDWINDOW_CONSTANTS.EXPLOSION_BACK_ANIMATION_PATH,
+         'animationLinkage': AWARDWINDOW_CONSTANTS.EXPLOSION_BACK_ANIMATION_LINKAGE} if self.__useAnimation else None
+
+
 class AwardWindow(AwardWindowMeta):
 
     def __init__(self, ctx):
@@ -105,6 +130,8 @@ class AwardWindow(AwardWindowMeta):
         okBtn, closeBtn, bodyBtn = self.__award.getButtonStates()
         data = {'windowTitle': self.__award.getWindowTitle(),
          'backImage': self.__award.getBackgroundImage(),
+         'useBackAnimation': self.__award.useBackgroundAnimation(),
+         'backAnimationData': self.__award.getBackgroundAnimationData(),
          'awardImage': self.__award.getAwardImage(),
          'header': self.__award.getHeader(),
          'description': self.__award.getDescription(),

@@ -173,11 +173,15 @@ class ServerSettings(object):
         except TypeError:
             self.__eSportCurrentSeason = _ESportCurrentSeason.defaults()
 
-        self.__updateClanProfile(self.__serverSettings)
+        if 'clanProfile' in self.__serverSettings:
+            self.__updateClanProfile(self.__serverSettings)
+        else:
+            self.__clanProfile = _ClanProfile.defaults()
 
     def update(self, serverSettingsDiff):
         self.__serverSettings.update(serverSettingsDiff)
-        self.__updateClanProfile(serverSettingsDiff)
+        if 'clanProfile' in serverSettingsDiff:
+            self.__updateClanProfile(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -221,8 +225,8 @@ class ServerSettings(object):
     def isBuyPotapovQuestSlotEnabled(self):
         return self.__getGlobalSetting('isBuyPotapovQuestSlotEnabled', False)
 
-    def isFortBattlesEnabled(self):
-        return not self.__getGlobalSetting('isFortBattlesDisabled', True)
+    def isFortsEnabled(self):
+        return self.__getGlobalSetting('isFortsEnabled', True)
 
     def isClubsEnabled(self):
         return self.__getGlobalSetting('isClubsEnabled', False)
@@ -258,8 +262,5 @@ class ServerSettings(object):
         return self.__serverSettings.get(settingsName, default)
 
     def __updateClanProfile(self, targetSettings):
-        if 'clanProfile' in targetSettings:
-            cProfile = targetSettings['clanProfile']
-            self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'))
-        else:
-            self.__clanProfile = _ClanProfile.defaults()
+        cProfile = targetSettings['clanProfile']
+        self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'))

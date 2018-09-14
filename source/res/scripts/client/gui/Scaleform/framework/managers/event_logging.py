@@ -24,12 +24,18 @@ class EventLogManager(EventLogManagerMeta):
 
     def __sendPackageToServer(self, package):
         if self.__packageIdx <= PACKAGE_LIMIT:
-            self.__lastSentTime = BigWorld.time()
             record = self.__encodeEvent(EVENT_LOG_CONSTANTS.SST_EVENT_LOG, EVENT_LOG_CONSTANTS.EVENT_TYPE_DATA, 0, self.__packageIdx)
-            package.append(record)
-            LOG_DEBUG('[EventLogging] PACKAGE event code : %s' % str(tuple(itertools.chain(*package))))
-            self.__packageIdx += 1
-            BigWorld.player().logUXEvents(list(itertools.chain(*package)))
+            player = BigWorld.player()
+            if player is not None and hasattr(player, 'logUXEvents') and not player.isDestroyed:
+                self.__lastSentTime = BigWorld.time()
+                self.__packageIdx += 1
+                package.append(record)
+                package = list(itertools.chain(*package))
+                LOG_DEBUG('[EventLogging] PACKAGE event code', package)
+                BigWorld.player().logUXEvents(package)
+            else:
+                LOG_DEBUG('[EventLogging] Records were lost', package)
+        return
 
     def __sendSavedPackageToServer(self):
         self.__onAutoSending = False
@@ -62,10 +68,9 @@ class EventLogManager(EventLogManagerMeta):
     def logEvent(self, subSystemType, eventType, uiid, arg):
         if self.__packageIdx <= PACKAGE_LIMIT:
             eventRecord = self.__encodeEvent(subSystemType, eventType, uiid, arg)
-            LOG_DEBUG('[EventLogging] %s' % str(eventRecord))
             self.__currentPackage.append(eventRecord)
-            if len(self.__currentPackage) == LOG_LIMIT - 1:
-                self.__addPackageToSendList(self.__currentPackage)
+            if len(self.__currentPackage) >= LOG_LIMIT - 1:
+                self.__addPackageToSendList(self.__currentPackage[-(LOG_LIMIT - 1):])
                 self.__currentPackage = []
 
     def destroy(self):

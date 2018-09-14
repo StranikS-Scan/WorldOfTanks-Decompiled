@@ -71,8 +71,8 @@ class GUIDecorator(IGUIEntryDecorator):
     def invoke(self, method, *args, **kwargs):
         self.__current().invoke(method, *args, **kwargs)
 
-    def isEditing(self, event):
-        return self.__current().isEditing(event)
+    def handleKey(self, event):
+        return self.__current().handleKey(event)
 
     def isFocused(self):
         return self.__current().isFocused()

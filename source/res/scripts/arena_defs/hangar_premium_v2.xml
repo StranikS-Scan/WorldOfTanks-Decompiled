@@ -1,7 +1,10 @@
 <hangar_premium_v2.xml>
-  <music>	/hangar/music/hangar/lobby_premium	</music>
   <wwmusic>	hangar_prem_v2_music_lobby	</wwmusic>
-  <ambientSound>	/hangar/ambient/hangar_prem_v2/hangar_prem_v2_background	</ambientSound>
   <wwambientSound>	hangar_prem_v2_background	</wwambientSound>
-  <preloadSoundBanks>	hangar_prem_v2.bnk	</preloadSoundBanks>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_prem_v2.bnk	</bank>
+    </loadBanks>
+    <unloadBanks></unloadBanks>
+  </soundRemapping>
 </hangar_premium_v2.xml>

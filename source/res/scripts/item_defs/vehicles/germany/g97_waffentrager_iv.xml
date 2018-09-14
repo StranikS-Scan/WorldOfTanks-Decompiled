@@ -1,0 +1,976 @@
+<g97_waffentrager_iv.xml>
+  <crew>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	38	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.165	</moving>
+    <still>	0.275	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.413	</firePenalty>
+  </invisibility>
+  <repairCost>	9.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle></battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	80	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	11	</armor_6>
+      <armor_7>	10	</armor_7>
+      <armor_11>	20	</armor_11>
+      <armor_12>	10	</armor_12>
+      <armor_13>	30	</armor_13>
+      <armor_15>	30	</armor_15>
+      <armor_16>	90	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	6130	</weight>
+    <maxHealth>	1280	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.18 36.00 0.34 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.18 36.00 0.34 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.28	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.243456 -1.3246	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.142107 0.481767 2.11477	</rayStart>
+        <rayEnd>	0.142111 0.451104 1.91714	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0674981 0.402068 2.28695	</rayStart>
+        <rayEnd>	-0.0675117 0.0288121 2.14314	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.454	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G97_Waffentrager_IV/Waffentrager_IV_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Waffentrager_IV>
+      <userString>	#germany_vehicles:Chassis_Waffentrager_IV	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <unlocks>
+        <chassis>	Chassis_Waffentrager_IV_2	  <cost>	22500	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	27000	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.5	</terrainResistance>
+      <brakeForce>	27000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.44 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.542	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.396545	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.137344	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.34	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.249522	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.396545	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.137344	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.34	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.249522	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.973044 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.36 1.97672	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.413700 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.500000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.464610	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G97_Waffentrager_IV/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G97_Waffentrager_IV/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G97_Waffentrager_IV/track/left.track	</left>
+        <right>	vehicles/german/G97_Waffentrager_IV/track/right.track	</right>
+        <segmentLength>	0.116	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0168	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.06	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+      </trackNodes>
+    </Chassis_Waffentrager_IV>
+    <Chassis_Waffentrager_IV_2>
+      <userString>	#germany_vehicles:Chassis_Waffentrager_IV_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	61000	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	30000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.44 0.44	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.542	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.396545	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.137344	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.34	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.249522	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.396545	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.137344	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.34	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.249522	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.973044 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.36 1.97672	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.394120 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.500000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.464610	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G97_Waffentrager_IV/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G97_Waffentrager_IV/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G97_Waffentrager_IV/track/left.track	</left>
+        <right>	vehicles/german/G97_Waffentrager_IV/track/right.track	</right>
+        <segmentLength>	0.116	</segmentLength>
+        <segmentOffset>	0.156	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0168	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.075	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.062	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.075	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.061	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+      </trackNodes>
+    </Chassis_Waffentrager_IV_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Waffentrager_IV>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:Turret_1_Waffentrager_IV	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	9	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	10	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	320	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_128mm_K44_L55>	shared	  <maxAmmo>	45	</maxAmmo>
+          <unlocks>
+            <gun>	_128mm_K44_2_L61	  <cost>	64800	</cost>
+            </gun>
+            <gun>	_150mm_Rohr_L29_5	  <cost>	63500	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	10.6	</reloadTime>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -45 0.333333 -45 0.347222 -14 0.652778 -14 0.666667 -45 1 -45	</minPitch>
+            <maxPitch>	0 2 0.138889 2 0.152778 5 0.847222 5 0.861111 2 1 2	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00013388 0.305074 6.71181	</rayStart>
+              <rayEnd>	0.123863 0.261108 6.70515	</rayEnd>
+              <rayUp>	0.1 0.095 4	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_128mm_K44_L55>
+        <_128mm_K44_2_L61>	shared	  <maxAmmo>	40	</maxAmmo>
+          <reloadTime>	11.6	</reloadTime>
+          <unlocks>
+            <vehicle>	G121_Grille_15_L63	  <cost>	205000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -45 0.333333 -45 0.347222 -14 0.652778 -14 0.666667 -45 1 -45	</minPitch>
+            <maxPitch>	0 2 0.138889 2 0.152778 5 0.847222 5 0.861111 2 1 2	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000133873 0.304974 7.45635	</rayStart>
+              <rayEnd>	0.0774874 0.191911 7.45176	</rayEnd>
+              <rayUp>	0.098 0.095 4	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_128mm_K44_2_L61>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.70325 -1.047	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.05773 1.2624 -0.0902405	</rayStart>
+          <rayEnd>	-0.897917 1.03904 -0.250525	</rayEnd>
+          <rayUp>	0.281569 0.162488 -0.945683	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.07834 1.2912 -0.0695752	</rayStart>
+          <rayEnd>	0.877312 1.01024 -0.27119	</rayEnd>
+          <rayUp>	-0.281569 0.162488 -0.945683	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.137 0.082 0.500 0.100 0.000 0.500 0.040 0.500 0.334 1.000 0.655	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_Waffentrager_IV>
+    <Turret_2_Waffentrager_IV>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:Turret_2_Waffentrager_IV	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	9	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	10	</armor_1>
+        <armor_2>	10	</armor_2>
+        <armor_3>	10	</armor_3>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	320	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_150mm_Rohr_L29_5>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <gun>	_150mm_Rohr_L38	  <cost>	64800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	17	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -24 0.0277778 -24 0.111111 -15 0.291667 -15 0.375 0 0.625 0 0.708333 -15 0.888889 -15 0.972222 -24 1 -24	</minPitch>
+            <maxPitch>	0 4 0.0277778 4 0.111111 5 0.888889 5 0.972222 4 1 4	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000007 0.0455442 3.61533	</rayStart>
+              <rayEnd>	0.0742468 0.0617949 3.61493	</rayEnd>
+              <rayUp>	0.103 0.099 5	</rayUp>
+              <size>	0.531	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_150mm_Rohr_L29_5>
+        <_150mm_Rohr_L38>	shared	  <maxAmmo>	30	</maxAmmo>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	17	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -24 0.0277778 -24 0.111111 -15 0.291667 -15 0.375 0 0.625 0 0.708333 -15 0.888889 -15 0.972222 -24 1 -24	</minPitch>
+            <maxPitch>	0 4 0.0277778 4 0.111111 5 0.888889 5 0.972222 4 1 4	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000007 0.0455442 5.13355	</rayStart>
+              <rayEnd>	-0.033759 0.0675235 5.13313	</rayEnd>
+              <rayUp>	0.101 0.097 5	</rayUp>
+              <size>	0.531	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_150mm_Rohr_L38>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G97_Waffentrager_IV/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G97_Waffentrager_IV/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G97_Waffentrager_IV/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G97_Waffentrager_IV/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.891423 -0.195955	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.12249 1.25887 -0.20153	</rayStart>
+          <rayEnd>	-0.822034 1.07654 -0.39253	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.12249 1.25887 -0.20153	</rayStart>
+          <rayEnd>	0.822034 1.07654 -0.39253	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.10501 0.760067 0.353779	</rayStart>
+          <rayEnd>	-0.80145 0.582084 0.163593	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.934	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.432 1.150 0.000 1.000 0.000 1.000 0.100 0.500 0.500 0.430 0.500 0.615 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.34 0.34 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_Waffentrager_IV>
+  </turrets0>
+  <engines>
+    <Maybach_HL90>	shared	  <unlocks>
+        <engine>	Maybach_HL100	  <cost>	1500	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL90>
+    <Maybach_HL100>	shared	</Maybach_HL100>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <FuG_F>	shared	  <unlocks>
+        <radio>	FuG8	  <cost>	4040	</cost>
+        </radio>
+      </unlocks>
+    </FuG_F>
+    <FuG8>	shared	  <unlocks>
+        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
+        </radio>
+      </unlocks>
+    </FuG8>
+    <FuG_Spr.A>	shared	</FuG_Spr.A>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_150mm_Rohr_L29_5>
+        <delta>	1.25	</delta>
+      </_150mm_Rohr_L29_5>
+      <_150mm_Rohr_L38>
+        <delta>	1.2	</delta>
+      </_150mm_Rohr_L38>
+    </guns>
+    <chassis>
+      <Chassis_Waffentrager_IV>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Waffentrager_IV>
+      <Chassis_Waffentrager_IV_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Waffentrager_IV_2>
+    </chassis>
+    <engines>
+      <Maybach_HL90>
+        <bravo>	95.1553	</bravo>
+      </Maybach_HL90>
+      <Maybach_HL100>
+        <bravo>	105.7281	</bravo>
+      </Maybach_HL100>
+    </engines>
+    <armour>	0.739980136	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.92	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g97_waffentrager_iv.xml>

@@ -3,9 +3,23 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ReportBugPanelMeta(BaseDAAPIComponent):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends BaseDAAPIComponent
+    null
+    """
 
     def reportBug(self):
+        """
+        :return :
+        """
         self._printOverrideError('reportBug')
 
     def as_setHyperLinkS(self, value):
+        """
+        :param value:
+        :return :
+        """
         return self.flashObject.as_setHyperLink(value) if self._isDAAPIInited() else None

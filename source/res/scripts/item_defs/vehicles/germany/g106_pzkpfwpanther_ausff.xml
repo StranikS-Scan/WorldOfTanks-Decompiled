@@ -10,6 +10,13 @@
     <forward>	46	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.119	</moving>
+    <still>	0.159	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.239	</firePenalty>
+  </invisibility>
   <repairCost>	5.7	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -64,7 +71,8 @@
       <turret>	0.0283 0.662655 -0.387572	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G106_PzKpfwPanther_AusfF/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -176,7 +184,8 @@
       </effects>
       <hullPosition>	0.000000 1.24397 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G106_PzKpfwPanther_AusfF/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.36905 1.98083	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -373,9 +382,7 @@
           <leftSibling>	Track_VT_R6	</leftSibling>
         </node>
       </trackNodes>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <AODecals>
         <decal>
@@ -451,6 +458,7 @@
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 5 0.055556 5 0.083333 7 0.375 7 0.402778 4 0.597222 4 0.625 7 0.916667 7 0.944444 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <reloadTime>	6.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -465,7 +473,8 @@
             <exploded>	vehicles/german/G106_PzKpfwPanther_AusfF/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G106_PzKpfwPanther_AusfF/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -489,7 +498,8 @@
         <exploded>	vehicles/german/G106_PzKpfwPanther_AusfF/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G106_PzKpfwPanther_AusfF/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G106_PzKpfwPanther_AusfF/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0283 0.348066 1.29766	</gunPosition>
       <emblemSlots>
@@ -524,9 +534,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	0.939 -0.122 1.041 0.000 0.592 0.122 1.000 0.291 0.388 0.500 0.321 0.500 0.255 0.536 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
@@ -542,6 +550,19 @@
   <radios>
     <FuG8_1>	shared	</FuG8_1>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G106_PzKpfwPanther_AusfF>
+        <alpha>	0.0644	</alpha>
+      </Chassis_G106_PzKpfwPanther_AusfF>
+    </chassis>
+    <engines>
+      <Maybach_HL_230P30_2500rpm>
+        <bravo>	158.5922	</bravo>
+      </Maybach_HL_230P30_2500rpm>
+    </engines>
+    <armour>	0.953631965	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

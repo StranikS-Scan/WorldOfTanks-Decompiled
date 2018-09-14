@@ -4,6 +4,7 @@ import time
 import pickle
 import BigWorld
 import constants
+import Settings
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, makeHtmlString, GUI_SETTINGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -105,8 +106,9 @@ class Manager(object):
             if not AUTO_LOGIN_QUERY_ENABLED:
                 self._preferences['server_name'] = serverName
             self._preferences['session'] = session
-        self.__writePeripheryLifetime()
+        self.writePeripheryLifetime()
         self._preferences.writeLoginInfo()
+        self.__dumpUserName(name)
         self._showSecurityMessage(responseData)
 
     def _showSecurityMessage(self, responseData):
@@ -119,37 +121,35 @@ class Manager(object):
             SystemMessages.pushI18nMessage('#system_messages:securityMessage/%s' % securityWarningType, type=SystemMessages.SM_TYPE.Warning, link=securityLink)
         return
 
-    def __writePeripheryLifetime(self):
+    def writePeripheryLifetime(self):
         if AUTO_LOGIN_QUERY_ENABLED and connectionManager.peripheryID:
-            pickledData = self._preferences['peripheryLifetime']
-            try:
-                savedPeripheryID, savedExpiration = pickle.loads(pickledData)
-            except:
-                self._preferences['peripheryLifetime'] = pickle.dumps((connectionManager.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
-                return None
-
-            if not (savedPeripheryID != connectionManager.peripheryID and savedExpiration > time.time()):
-                self._preferences['peripheryLifetime'] = pickle.dumps((connectionManager.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
-        return None
+            self._preferences['peripheryLifetime'] = pickle.dumps((connectionManager.peripheryID, time.time() + _PERIPHERY_DEFAULT_LIFETIME))
 
     def _getHost(self, authMethod, hostName):
         if hostName != AUTO_LOGIN_QUERY_URL:
             return hostName
-        pickledData = self._preferences['peripheryLifetime']
-        if pickledData:
-            try:
-                peripheryID, expirationTimestamp = pickle.loads(pickledData)
-            except:
-                LOG_DEBUG("Couldn't to read pickled periphery data. Connecting to {0}.".format(hostName))
-                return hostName
-
-            if expirationTimestamp > time.time():
-                host = g_preDefinedHosts.periphery(peripheryID, False)
-                if authMethod != CONNECTION_METHOD.BASIC and host.urlToken:
-                    return host.urlToken
-                else:
-                    return host.url
-            else:
-                return hostName
         else:
+            pickledData = self._preferences['peripheryLifetime']
+            if pickledData:
+                try:
+                    peripheryID, expirationTimestamp = pickle.loads(pickledData)
+                except:
+                    LOG_DEBUG("Couldn't to read pickled periphery data. Connecting to {0}.".format(hostName))
+                    return hostName
+
+                if expirationTimestamp > time.time():
+                    host = g_preDefinedHosts.periphery(peripheryID, False)
+                    if host is None:
+                        return hostName
+                    if authMethod != CONNECTION_METHOD.BASIC and host.urlToken:
+                        return host.urlToken
+                    return host.url
             return hostName
+
+    def __dumpUserName(self, name):
+        """ Dump user name to the preferences.xml (required by WGLeague's anti-cheat).
+        
+        See WOTD-55587. This method doesn't belong to Preferences class, so it's placed here.
+        """
+        Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].writeString('user', name)
+        Settings.g_instance.save()

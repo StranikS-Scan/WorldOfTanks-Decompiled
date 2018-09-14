@@ -7,6 +7,11 @@
         <run-trigger>	FightBtnDisableTrigger	</run-trigger>
         <run-trigger>	InSandBoxOrRandomPreQueueTrigger	</run-trigger>
         <set-var>	SelectedVehicle	</set-var>
+        <refuse-training>
+          <condition>
+            <effect-triggered>	BattleButtonHint	</effect-triggered>
+          </condition>
+        </refuse-training>
       </post-effects>
       <runtime-effects>
         <run-trigger>	NeedChangeVehicleTrigger	  <condition>
@@ -18,10 +23,15 @@
             <inactive>	InSandboxOrRandom	</inactive>
           </condition>
         </show-hint>
-        <show-hint>	BattleButtonHint	  <condition>
+        <activate>	ShowBattleButtonHint	  <condition>
             <active>	BattleButtonOnScene	</active>
             <active>	InSandboxOrRandom	</active>
             <inactive>	FightBtnDisabled	</inactive>
+          </condition>
+        </activate>
+        <show-hint>	BattleButtonHint	  <condition>
+            <active>	ShowBattleButtonHint	</active>
+            <effect-not-triggered>	BattleButtonHint	</effect-not-triggered>
           </condition>
         </show-hint>
         <show-hint>	BuyVehicleHint	  <condition>
@@ -75,7 +85,13 @@
         </gui-item>
       </gui-items>
     </scene>
-    <scene>	DefaultScene	  <post-effects></post-effects>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training>
+          <condition>
+            <effect-triggered>	BattleButtonHint	</effect-triggered>
+          </condition>
+        </refuse-training>
+      </post-effects>
       <runtime-effects></runtime-effects>
       <gui-items></gui-items>
     </scene>
@@ -131,14 +147,17 @@
       </arrow>
       <actions>
         <click>	FightButton	  <effects>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
             <refuse-training></refuse-training>
           </effects>
         </click>
         <click-outside>	FightButton	  <effects>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
             <refuse-training></refuse-training>
           </effects>
         </click-outside>
         <esc>	FightButton	  <effects>
+            <global-activate>	BattleButtonHintCooldown	</global-activate>
             <refuse-training></refuse-training>
           </effects>
         </esc>

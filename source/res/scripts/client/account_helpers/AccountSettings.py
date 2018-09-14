@@ -14,8 +14,10 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
-CAROUSEL_FILTER = 'CAROUSEL_FILTER'
-FALLOUT_CAROUSEL_FILTER = 'FALLOUT_CAROUSEL_FILTER'
+CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
+CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
+FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
+FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 SHOW_BATTLE_EFFICIENCY_RIBBONS = 'SHOW_BATTLE_EFFICIENCY_RIBBONS'
@@ -33,6 +35,7 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
+PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
@@ -51,14 +54,67 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'inventory_shell': (4, 'ARMOR_PIERCING', 'ARMOR_PIERCING_CR', 'HOLLOW_CHARGE', 'HIGH_EXPLOSIVE', 'myVehicleGun', 0),
                'inventory_optionalDevice': ('myVehicle', 0, 'onVehicle'),
                'inventory_equipment': ('myVehicle', 0, 'onVehicle'),
-               CAROUSEL_FILTER: {'nation': -1,
-                                 'tankType': -1,
-                                 'ready': False,
-                                 'gameModeFilter': False},
-               FALLOUT_CAROUSEL_FILTER: {'nation': -1,
-                                         'tankType': -1,
-                                         'ready': False,
-                                         'gameModeFilter': False},
+               CAROUSEL_FILTER_1: {'ussr': False,
+                                   'germany': False,
+                                   'usa': False,
+                                   'china': False,
+                                   'france': False,
+                                   'uk': False,
+                                   'japan': False,
+                                   'czech': False,
+                                   'sweden': False,
+                                   'lightTank': False,
+                                   'mediumTank': False,
+                                   'heavyTank': False,
+                                   'SPG': False,
+                                   'AT-SPG': False,
+                                   'level_1': False,
+                                   'level_2': False,
+                                   'level_3': False,
+                                   'level_4': False,
+                                   'level_5': False,
+                                   'level_6': False,
+                                   'level_7': False,
+                                   'level_8': False,
+                                   'level_9': False,
+                                   'level_10': False},
+               CAROUSEL_FILTER_2: {'premium': False,
+                                   'elite': False,
+                                   'igr': False,
+                                   'hideRented': False,
+                                   'favorite': False,
+                                   'bonus': False},
+               FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
+                                           'germany': False,
+                                           'usa': False,
+                                           'china': False,
+                                           'france': False,
+                                           'uk': False,
+                                           'japan': False,
+                                           'czech': False,
+                                           'sweden': False,
+                                           'lightTank': False,
+                                           'mediumTank': False,
+                                           'heavyTank': False,
+                                           'SPG': False,
+                                           'AT-SPG': False,
+                                           'level_1': False,
+                                           'level_2': False,
+                                           'level_3': False,
+                                           'level_4': False,
+                                           'level_5': False,
+                                           'level_6': False,
+                                           'level_7': False,
+                                           'level_8': False,
+                                           'level_9': False,
+                                           'level_10': False},
+               FALLOUT_CAROUSEL_FILTER_2: {'premium': False,
+                                           'elite': False,
+                                           'igr': False,
+                                           'hideRented': False,
+                                           'gameMode': False,
+                                           'favorite': False,
+                                           'bonus': False},
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -103,8 +159,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
- KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': [],
-                               'selectedListVehicles': []},
+ KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
                 'fortSettings': {'clanDBID': 0,
                                  'battleConsumesIntroShown': False,
                                  'visitedBuildings': {_FBT.MILITARY_BASE,
@@ -136,6 +191,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'cassette': {'alpha': 90,
                                         'type': 0},
                            'reloaderTimer': {'alpha': 100,
+                                             'type': 0},
+                           'zoomIndicator': {'alpha': 100,
                                              'type': 0}},
                 'sniper': {'mixing': {'alpha': 90,
                                       'type': 0},
@@ -152,6 +209,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'cassette': {'alpha': 90,
                                         'type': 0},
                            'reloaderTimer': {'alpha': 100,
+                                             'type': 0},
+                           'zoomIndicator': {'alpha': 100,
                                              'type': 0}},
                 'markers': {'ally': {'markerBaseIcon': False,
                                      'markerBaseLevel': False,
@@ -210,6 +269,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'minimapViewRange': True,
                 'minimapMaxViewRange': True,
                 'minimapDrawRange': True,
+                'increasedZoom': True,
+                'sniperModeByShift': True,
                 'nationalVoices': False,
                 'enableVoIP': True,
                 'replayEnabled': 1,
@@ -232,6 +293,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
+                'simplifiedTTC': True,
+                'relativePower': False,
+                'relativeArmor': False,
+                'relativeMobility': False,
+                'relativeVisibility': False,
+                'relativeCamouflage': False,
                 'interfaceScale': 0,
                 DEFAULT_QUEUE: constants.QUEUE_TYPE.SANDBOX,
                 'medKitInstalled': False,
@@ -239,7 +306,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'fireExtinguisherInstalled': False,
                 'PveTriggerShown': False,
                 LAST_PROMO_PATCH_VERSION: '',
-                'dynamicRange': 0}}
+                'dynamicRange': 0,
+                'soundDevice': 0,
+                'bassBoost': False,
+                PREVIEW_INFO_PANEL_IDX: 0}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -257,7 +327,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 21
+    version = 24
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -505,12 +575,53 @@ class AccountSettings(object):
                 SoundGroups.g_instance.setVolume('gui', 1.0)
                 SoundGroups.g_instance.setVolume('ambient', 1.0)
                 SoundGroups.g_instance.savePreferences()
+            if currVersion < 22:
+                from gui.customization.shared import TYPE_NAME
+                from gui.customization.shared import CUSTOMIZATION_TYPE
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    oldFormatItems = {}
+                    newFormatItems = ({}, {}, {})
+                    if 'customization' in accSettings.keys():
+                        oldFormatItems = _unpack(accSettings['customization'].asString)
+                        if not isinstance(oldFormatItems, dict):
+                            oldFormatItems = {}
+                    for cTypeName, vehiclesData in oldFormatItems.items():
+                        cType = TYPE_NAME[cTypeName]
+                        for data in vehiclesData:
+                            if cType == CUSTOMIZATION_TYPE.EMBLEM:
+                                vehicleID, itemID = data
+                            else:
+                                vehicleID, _, itemID = data
+                            if vehicleID not in newFormatItems[cType]:
+                                newFormatItems[cType][vehicleID] = {}
+                            newFormatItems[cType][vehicleID][itemID] = False
+
+                    accSettings.write('customization', _pack(newFormatItems))
+
+            if currVersion < 23:
+                for key, section in _filterAccountSection(ads):
+                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
+
+            if currVersion < 24:
+                for key, section in _filterAccountSection(ads):
+                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballCustTriggerShown')
+                    AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')
+
             ads.writeInt('version', AccountSettings.version)
         return
 
     @staticmethod
     def getFilterDefault(name):
         return DEFAULT_VALUES[KEY_FILTERS].get(name, None)
+
+    @staticmethod
+    def getFilterDefaults(names):
+        result = {}
+        for name in names:
+            result.update(AccountSettings.getFilterDefault(name))
+
+        return result
 
     @staticmethod
     def getFilter(name):
@@ -557,7 +668,8 @@ class AccountSettings(object):
 
     @staticmethod
     def __setValue(name, value, type):
-        if DEFAULT_VALUES[type].has_key(name) and AccountSettings.__getValue(name, type) != value:
+        assert DEFAULT_VALUES[type].has_key(name)
+        if AccountSettings.__getValue(name, type) != value:
             fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), type)
             if DEFAULT_VALUES[type][name] != value:
                 fds.write(name, base64.b64encode(pickle.dumps(value)))

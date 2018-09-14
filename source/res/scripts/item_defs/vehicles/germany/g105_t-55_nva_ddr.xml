@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.205	</moving>
+    <still>	0.273	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.41	</firePenalty>
+  </invisibility>
   <repairCost>	10	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.520477 -0.0032	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G105_T-55_NVA_DDR/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G105_T-55_NVA_DDR/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -170,7 +178,8 @@
       </effects>
       <hullPosition>	0.000000 0.921023 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G105_T-55_NVA_DDR/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G105_T-55_NVA_DDR/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33437 1.98498	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -365,9 +374,7 @@
           <leftSibling>	Track_VT_R5	</leftSibling>
         </node>
       </trackNodes>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <AODecals>
         <decal>
@@ -437,6 +444,7 @@
             </armor_9>
             <gun>	40	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -14.25 1 -14.25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -456,7 +464,8 @@
             <exploded>	vehicles/german/G105_T-55_NVA_DDR/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G105_T-55_NVA_DDR/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G105_T-55_NVA_DDR/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -479,7 +488,8 @@
         <exploded>	vehicles/german/G105_T-55_NVA_DDR/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G105_T-55_NVA_DDR/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G105_T-55_NVA_DDR/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G105_T-55_NVA_DDR/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.3094 1.0399	</gunPosition>
       <emblemSlots>
@@ -500,9 +510,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.070 0.000 0.606 0.201 0.704 0.303 0.500 0.500 0.366 0.500 0.176 0.359 0.218	</physicsShape>
       <camouflage>
         <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
@@ -518,6 +526,19 @@
   <radios>
     <R113>	shared	</R113>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G105_T-55_NVA_DDR>
+        <alpha>	0.0644	</alpha>
+      </Chassis_G105_T-55_NVA_DDR>
+    </chassis>
+    <engines>
+      <W-55>
+        <bravo>	153.3058	</bravo>
+      </W-55>
+    </engines>
+    <armour>	0.997466558	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

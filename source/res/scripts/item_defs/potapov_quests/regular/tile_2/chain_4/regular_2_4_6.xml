@@ -9,7 +9,6 @@
           <and>
             <vehicleDamage>
               <distance>	250	</distance>
-              <whileEnemyMoving>	1	</whileEnemyMoving>
               <greaterOrEqual>	1000	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -33,11 +32,9 @@
           <and>
             <vehicleDamage>
               <distance>	250	</distance>
-              <whileEnemyMoving>	1	</whileEnemyMoving>
               <greaterOrEqual>	1000	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
-              <whileEnemyMoving>	1	</whileEnemyMoving>
               <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
           </and>

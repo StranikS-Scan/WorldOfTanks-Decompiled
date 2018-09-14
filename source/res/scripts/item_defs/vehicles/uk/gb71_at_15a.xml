@@ -11,6 +11,13 @@
     <forward>	20	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.133	</moving>
+    <still>	0.222	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.333	</firePenalty>
+  </invisibility>
   <repairCost>	6	</repairCost>
   <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -71,7 +78,8 @@
       <turret>	0.000000 0.802249 1.12953	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB71_AT_15A/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB71_AT_15A/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB71_AT_15A/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -223,13 +231,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.964235 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB71_AT_15A/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB71_AT_15A/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB71_AT_15A/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.35112 2.27355	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -429,6 +436,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.338	</invisibilityFactorAtShot>
           <turretYawLimits>	-25 25	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB71_AT_15A/normal/lod0/Gun_01.model	</undamaged>
@@ -436,7 +444,8 @@
             <exploded>	vehicles/british/GB71_AT_15A/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB71_AT_15A/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB71_AT_15A/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB71_AT_15A/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -459,15 +468,14 @@
         <exploded>	vehicles/british/GB71_AT_15A/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB71_AT_15A/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB71_AT_15A/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB71_AT_15A/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.020907 0.019102	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.037 0.014 0.500 0.448 0.500 0.500 0.000 0.500 0.000 0.100 0.169	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
       </camouflage>
@@ -482,6 +490,19 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB71_AT_15A>
+        <alpha>	0.12075	</alpha>
+      </Chassis_GB71_AT_15A>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_MkIV_A>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV_A>
+    </engines>
+    <armour>	0.863891176	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

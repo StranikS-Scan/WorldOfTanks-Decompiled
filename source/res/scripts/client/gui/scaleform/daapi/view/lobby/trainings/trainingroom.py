@@ -25,6 +25,8 @@ from helpers import int2roman, i18n
 from messenger.ext import passCensor
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from prebattle_shared import decodeRoster
 from gui.LobbyContext import g_lobbyContext
 from gui.prb_control.events_dispatcher import g_eventDispatcher
@@ -39,6 +41,10 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
 
     @storage_getter('users')
     def usersStorage(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
         return None
 
     def _populate(self):
@@ -319,7 +325,7 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, PrbListener):
 
     def __makeAccountsData(self, accounts, label=None):
         listData = []
-        isPlayerSpeaking = self.app.voiceChatManager.isPlayerSpeaking
+        isPlayerSpeaking = self.bwProto.voipController.isPlayerSpeaking
         accounts = sorted(accounts, cmp=getPlayersComparator())
         getUser = self.usersStorage.getUser
         for account in accounts:

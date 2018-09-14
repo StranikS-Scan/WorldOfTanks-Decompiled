@@ -12,13 +12,15 @@ from messenger.proto.xmpp.xmpp_constants import ANY_ITEM_LITERAL
 XMPPChannelData = namedtuple('XMPPChannelData', ('name',))
 
 class ChatMessage(object):
-    __slots__ = ('uuid', 'accountDBID', 'accountName', 'body', 'state', 'sentAt', 'requestID', 'isFinalInHistory')
+    __slots__ = ('uuid', 'accountDBID', 'accountName', 'body', 'state', 'sentAt', 'requestID', 'isFinalInHistory', 'accountAffiliation', 'accountRole')
 
-    def __init__(self, dbID=0L, name='', body='', sentAt=0):
+    def __init__(self, dbID=0L, name='', body='', sentAt=0, affiliation='none', role='none'):
         super(ChatMessage, self).__init__()
         self.uuid = ''
         self.accountDBID = dbID
         self.accountName = name
+        self.accountAffiliation = affiliation
+        self.accountRole = role
         self.body = body
         self.state = CHAT_STATE.UNDEFINED
         self.sentAt = sentAt

@@ -5,8 +5,14 @@ from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileFortificationPromoV
 from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ScopeTemplates, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+
+def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.clans import clan_cm_handlers
+    return ((CONTEXT_MENU_HANDLER_TYPE.BASE_CLAN, clan_cm_handlers.BaseClanCMHandler),)
+
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.clans.invites.ClanPersonalInvitesView import ClanPersonalInvitesView

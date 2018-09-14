@@ -3,6 +3,12 @@
 
 
 class CLANS_ALIASES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CLAN_PROFILE_MAIN_WINDOW_PY = 'clanProfileMainWindow'
     CLAN_PROFILE_MAIN_WINDOW_UI = 'clanProfileMainWindow.swf'
     CLAN_PERSONAL_INVITES_WINDOW_PY = 'clanPersonalInvitesWindow'

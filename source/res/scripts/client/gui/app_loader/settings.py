@@ -6,13 +6,10 @@ class GUI_GLOBAL_SPACE_ID(object):
     UNDEFINED = 0
     WAITING = 1
     INTRO_VIDEO = 2
-    LOGIN = 4
-    LOBBY = 8
-    BATTLE_LOADING = 16
-    BATTLE_TUT_LOADING = 32
-    FALLOUT_MULTI_TEAM_LOADING = 64
-    BATTLE = 128
-    BATTLE_LOADING_IDS = (BATTLE_LOADING, BATTLE_TUT_LOADING, FALLOUT_MULTI_TEAM_LOADING)
+    LOGIN = 3
+    LOBBY = 4
+    BATTLE_LOADING = 5
+    BATTLE = 6
 
 
 class DISCONNECT_REASON(object):
@@ -20,6 +17,7 @@ class DISCONNECT_REASON(object):
     REQUEST = 1
     EVENT = 2
     KICK = 3
+    ERROR = 4
 
 
 class APP_STATE_ID(object):
@@ -32,3 +30,4 @@ class APP_NAME_SPACE(object):
     SF_LOBBY = 'scaleform/lobby'
     SF_BATTLE = 'scaleform/battle'
     SF_LOGITECH = 'scaleform/logiTech'
+    RANGE = (SF_LOBBY, SF_BATTLE, SF_LOGITECH)

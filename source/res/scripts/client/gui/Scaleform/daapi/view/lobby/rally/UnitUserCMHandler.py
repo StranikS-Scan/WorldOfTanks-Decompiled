@@ -7,6 +7,8 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 KICK_FROM_UNIT = 'kickPlayerFromUnit'
 GIVE_LEADERSHIP = 'giveLeadership'
 TAKE_LEADERSHIP = 'takeLeadership'
@@ -16,6 +18,10 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
     def __init__(self, cmProxy, ctx=None):
         super(UnitUserCMHandler, self).__init__(cmProxy, ctx)
         self.startUnitListening()
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        return None
 
     def isSquadCreator(self):
         return self.unitFunctional.isCreator()
@@ -41,8 +47,9 @@ class UnitUserCMHandler(BaseUserCMHandler, UnitListener):
 
     def _addMutedInfo(self, option, userCMInfo):
         muted = USER.UNSET_MUTED if userCMInfo.isMuted else USER.SET_MUTED
-        if not userCMInfo.isIgnored and self.app.voiceChatManager.isVOIPEnabled():
-            option.append(self._makeItem(muted, MENU.contextmenu(muted)))
+        if not userCMInfo.isIgnored:
+            if self.bwProto.voipController.isVOIPEnabled():
+                option.append(self._makeItem(muted, MENU.contextmenu(muted)))
         return option
 
     def _addSquadInfo(self, options, isIgnored):

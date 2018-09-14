@@ -9,6 +9,13 @@
     <forward>	40	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.152	</moving>
+    <still>	0.202	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.303	</firePenalty>
+  </invisibility>
   <repairCost>	9.4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.416462 0.786877	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -257,13 +265,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.14852 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.31503 1.87808	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -449,13 +456,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.14852 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.31503 1.87808	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -539,6 +545,7 @@
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	6	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -550,7 +557,8 @@
             <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -593,6 +601,7 @@
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	5.7	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -604,7 +613,8 @@
             <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -627,7 +637,8 @@
         <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0708 0.431338 1.06242	</gunPosition>
       <emblemSlots>
@@ -648,9 +659,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.220 0.000 0.685 0.126 0.621 0.593 0.604 0.500 0.000 0.500 0.060 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.715 0.715 0.48 0.63	</tiling>
       </camouflage>
@@ -726,13 +735,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -776,13 +787,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -830,13 +843,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB24_Centurion_Mk3/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -859,7 +874,8 @@
         <exploded>	vehicles/british/GB24_Centurion_Mk3/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB24_Centurion_Mk3/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB24_Centurion_Mk3/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0708 0.431338 1.06242	</gunPosition>
       <emblemSlots>
@@ -871,8 +887,8 @@
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.40271 0.860895 -0.523703	</rayStart>
-          <rayEnd>	1.25977 0.487885 -0.502993	</rayEnd>
+          <rayStart>	1.36698 0.767643 -0.518526	</rayStart>
+          <rayEnd>	1.2955 0.581137 -0.50817	</rayEnd>
           <rayUp>	-0.902377 0.408884 0.136119	</rayUp>
           <size>	0.68	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -880,9 +896,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.111 -0.201 1.182 0.000 0.699 0.127 0.558 0.683 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.685 0.685 0.34 0.49	</tiling>
       </camouflage>
@@ -917,6 +931,33 @@
     </N22>
     <C42>	shared	</C42>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_105mm_Gun_L7>
+        <delta>	1.4005305	</delta>
+      </_105mm_Gun_L7>
+    </guns>
+    <chassis>
+      <Chassis_GB24_Centurion_Mk3>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB24_Centurion_Mk3>
+      <Chassis_GB24_Centurion_Mk3_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_GB24_Centurion_Mk3_2>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_MkIV>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV>
+      <Rolls_Royse_Meteor_MkIVC>
+        <bravo>	198.2402	</bravo>
+      </Rolls_Royse_Meteor_MkIVC>
+      <Rolls_Royce_Griffon>
+        <bravo>	251.1043	</bravo>
+      </Rolls_Royce_Griffon>
+    </engines>
+    <armour>	0.967555013	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

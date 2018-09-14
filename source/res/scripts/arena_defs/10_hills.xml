@@ -12,9 +12,7 @@
   <defaultGroundEffect>	None	</defaultGroundEffect>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
-  <loadingMusic>	/music/intro/euro_village	</loadingMusic>
   <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
-  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <water>
     <texScale>	0	</texScale>
@@ -140,10 +138,12 @@
         <level>
           <id>	1	</id>
           <scenario>	spaces/10_hills/bot_scenarios_1_lv1.xml	</scenario>
+          <scenario>	spaces/10_hills/bot_scenarios_2_lv1.xml	</scenario>
         </level>
         <level>
           <id>	2	</id>
           <scenario>	spaces/10_hills/bot_scenarios_1_lv2.xml	</scenario>
+          <scenario>	spaces/10_hills/bot_scenarios_2_lv2.xml	</scenario>
         </level>
       </battleScenarios>
     </sandbox>

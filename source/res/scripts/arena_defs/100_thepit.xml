@@ -10,9 +10,7 @@
   <minimap>	spaces/100_thepit/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
-  <loadingMusic>	/music/intro/rus_city	</loadingMusic>
   <wwloadingMusic>	music_rus_city	</wwloadingMusic>
-  <ambientSound>	/wind/wind/wind_summer_01	</ambientSound>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -53,10 +51,12 @@
         <level>
           <id>	1	</id>
           <scenario>	spaces/100_thepit/bot_scenarios_1_lv1.xml	</scenario>
+          <scenario>	spaces/100_thepit/bot_scenarios_2_lv1.xml	</scenario>
         </level>
         <level>
           <id>	2	</id>
           <scenario>	spaces/100_thepit/bot_scenarios_1_lv2.xml	</scenario>
+          <scenario>	spaces/100_thepit/bot_scenarios_2_lv2.xml	</scenario>
         </level>
       </battleScenarios>
     </sandbox>

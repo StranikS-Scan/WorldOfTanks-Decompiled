@@ -8,6 +8,13 @@
     <forward>	40	</forward>
     <backward>	17	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.135	</moving>
+    <still>	0.18	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.27	</firePenalty>
+  </invisibility>
   <repairCost>	3.000	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -54,7 +61,8 @@
       <turret>	-0.004923 1.05125 -0.561917	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A24_T2_med/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A24_T2_med/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -191,13 +199,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.937829 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A24_T2_med/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A24_T2_med/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.00181 1.46564	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -462,13 +469,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.937829 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A24_T2_med/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A24_T2_med/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.00181 1.46564	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -690,13 +696,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A24_T2_med/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
@@ -722,13 +730,15 @@
           </shotDispersionFactors>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.224	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_09.model	</undamaged>
             <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_09.model	</destroyed>
             <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_09.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_09.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A24_T2_med/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Gun_09.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
@@ -741,7 +751,8 @@
         <exploded>	vehicles/american/A24_T2_med/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A24_T2_med/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A24_T2_med/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000677 0.360255 0.766947	</gunPosition>
       <emblemSlots>
@@ -756,9 +767,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.910 -0.085 1.000 0.000 0.529 0.060 0.580 0.398 0.591 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.445 0.25 0.11 0.000000	</tiling>
       </camouflage>
@@ -820,13 +829,15 @@
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A24_T2_med/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
@@ -857,13 +868,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A24_T2_med/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
@@ -891,13 +904,15 @@
           </shotDispersionFactors>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.224	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A24_T2_med/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/american/A24_T2_med/crash/lod0/Gun_10.model	</destroyed>
             <exploded>	vehicles/american/A24_T2_med/crash/lod0/Gun_10.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A24_T2_med/collision/Gun_10.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A24_T2_med/collision/Gun_10.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Gun_10.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.28 0.28 0.000000 0.000000	</tiling>
@@ -910,7 +925,8 @@
         <exploded>	vehicles/american/A24_T2_med/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A24_T2_med/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A24_T2_med/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A24_T2_med/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.014523 0.251155 0.650847	</gunPosition>
       <emblemSlots>
@@ -924,9 +940,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.024 1.000 0.000 0.654 0.231 0.594 0.433 0.500 0.500 0.000 0.500 0.114 0.100 0.158	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.46 0.25 0.05 0.000000	</tiling>
       </camouflage>
@@ -946,6 +960,25 @@
   <radios>
     <SCR_200>	shared	</SCR_200>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T2E1>
+        <alpha>	0.1127	</alpha>
+      </T2E1>
+      <T2E4>
+        <alpha>	0.0966	</alpha>
+      </T2E4>
+    </chassis>
+    <engines>
+      <Liberty>
+        <bravo>	87.22569	</bravo>
+      </Liberty>
+      <Wright_Continental_R-975C2>
+        <bravo>	89.8689	</bravo>
+      </Wright_Continental_R-975C2>
+    </engines>
+    <armour>	0.779067102	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

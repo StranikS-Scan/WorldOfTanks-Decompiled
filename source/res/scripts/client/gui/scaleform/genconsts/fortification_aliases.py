@@ -3,6 +3,12 @@
 
 
 class FORTIFICATION_ALIASES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     FORT_BUILDING_PROCESS_WINDOW_ALIAS = 'FortBuildingProcessWindow'
     FORT_FIXED_PLAYERS_WINDOW_ALIAS = 'FortFixedPlayersWindow'
     FORTIFICATIONS_VIEW_ALIAS = 'FortificationsView'

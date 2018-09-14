@@ -315,7 +315,10 @@
       <on-effects>
         <set-var>	SelectedVehicleSetter	</set-var>
         <close-hint>	SelectRequiredVehicleHint	</close-hint>
-        <remove-action>	TankCarouselClickOutSide	</remove-action>
+        <remove-action>	TankCarouselClickOutSide	  <condition>
+            <active>	SelectRequiredVehicleClicked	</active>
+          </condition>
+        </remove-action>
         <activate>	VehicleRequiredLevelSelected	</activate>
       </on-effects>
       <off-effects>

@@ -19,8 +19,9 @@ from gui.prb_control.items.unit_seqs import UnitsListIterator
 from gui.prb_control.items.unit_seqs import UnitsUpdateIterator
 from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.settings import REQUEST_TYPE
-from gui.shared import REQ_CRITERIA, g_itemsCache
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from gui.shared.utils.scheduled_notifications import Notifiable, DeltaNotifier
 from helpers import time_utils
@@ -364,7 +365,7 @@ class InventoryVehiclesWatcher(object):
             roster = unit.getRoster()
             if not roster.checkVehicleList(vehCDs, pInfo.slotIdx) and not pInfo.isCreator():
                 self.__functional.request(unit_ctx.AssignUnitCtx(pInfo.dbID, UNIT_SLOT.REMOVE, 'prebattle/assign'))
-            else:
+            elif self.__functional.getEntityType() != PREBATTLE_TYPE.FALLOUT:
                 resultCtx = self.__functional.invalidateSelectedVehicles(vehCDs)
                 if resultCtx is not None:
                     self.__functional.request(resultCtx)
@@ -569,7 +570,7 @@ class FortBattlesScheduler(UnitScheduler, FortListener):
     def onClientStateChanged(self, state):
         if state.getStateID() == CLIENT_FORT_STATE.HAS_FORT:
             self.startNotification()
-        elif self.fortState.getStateID() == CLIENT_FORT_STATE.CENTER_UNAVAILABLE:
+        elif self.fortState.getStateID() in CLIENT_FORT_STATE.NOT_AVAILABLE_FORT:
             self.stopNotification()
 
     def onFortBattleChanged(self, cache, item, battleItem):

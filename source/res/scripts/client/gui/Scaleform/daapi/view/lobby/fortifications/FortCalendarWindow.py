@@ -99,9 +99,7 @@ class FortCalendarWindow(FortViewHelper, FortCalendarWindowMeta):
         targetDayStartTimestamp, _ = time_utils.getDayTimeBoundsForLocal(self.__selectedDate)
         eventItems, dateInfo, noEventsText = [], None, None
         dateString = _ms(MENU.DATETIME_SHORTDATEFORMATWITHOUTYEAR, weekDay=_ms('#menu:dateTime/weekDays/full/%d' % localDateTime.isoweekday()), monthDay=localDateTime.day, month=toLower(_ms('#menu:dateTime/months/full/%d' % localDateTime.month)))
-        if fort.isOnVacationAt(self.__selectedDate):
-            noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_VACATION, date=fort.getVacationDateStr())
-        elif not self._isValidTime(self.__selectedDate):
+        if not self._isValidTime(self.__selectedDate):
             noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_NOTAVAILABLE)
         else:
             for dayStartTimestamp, battles in self._getBattlesByDay().iteritems():
@@ -146,7 +144,10 @@ class FortCalendarWindow(FortViewHelper, FortCalendarWindowMeta):
                         eventItems.append(eventItem)
 
             if not len(eventItems):
-                noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_NOEVENTS)
+                if fort.isOnVacationAt(self.__selectedDate):
+                    noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_VACATION, date=fort.getVacationDateStr())
+                else:
+                    noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_NOEVENTS)
         if len(eventItems) > 0:
             dateInfo = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_INFO_BATTLESCOUNT, eventsCount=len(eventItems))
         self.as_updatePreviewDataS({'dateString': dateString,

@@ -9,6 +9,13 @@
     <forward>	58	</forward>
     <backward>	17	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.188	</moving>
+    <still>	0.25	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.375	</firePenalty>
+  </invisibility>
   <repairCost>	3.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -63,7 +70,8 @@
       <turret>	0.012258 0.759726 -0.045776	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB14_M2/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB14_M2/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -313,13 +321,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.894259 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB14_M2/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB14_M2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.921778 1.25763	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -558,13 +565,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.894259 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB14_M2/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB14_M2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.921778 1.25763	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -624,6 +630,7 @@
             </armor_2>
             <gun>	10	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.375 10 0.396997 10 0.401965 7 0.416923 6 0.420179 7 0.430045 10 0.568065 10 0.576359 8 0.584561 6 0.587841 6 0.594449 7 0.599825 10 1 10	</maxPitch>
@@ -637,7 +644,8 @@
             <exploded>	vehicles/british/GB14_M2/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB14_M2/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB14_M2/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
@@ -650,7 +658,8 @@
         <exploded>	vehicles/british/GB14_M2/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB14_M2/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB14_M2/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.024224 0.176717 0.703607	</gunPosition>
       <emblemSlots>
@@ -672,9 +681,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.011 0.000 1.000 0.000 0.261 0.416 0.720 0.383 0.572 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_0-799	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_0-799	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
       </camouflage>
@@ -726,6 +733,7 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <reloadTime>	17	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
@@ -739,7 +747,8 @@
             <exploded>	vehicles/british/GB14_M2/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB14_M2/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB14_M2/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
@@ -761,6 +770,7 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.389791 10 0.398288 10 0.401671 9 0.416667 9 0.430556 10 0.433871 10 0.574639 10 0.583333 9 0.596775 9 0.606409 10 1 10	</maxPitch>
@@ -779,7 +789,8 @@
             <exploded>	vehicles/british/GB14_M2/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB14_M2/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB14_M2/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
@@ -792,7 +803,8 @@
         <exploded>	vehicles/british/GB14_M2/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB14_M2/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB14_M2/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB14_M2/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.012114 0.24785 0.687682	</gunPosition>
       <emblemSlots>
@@ -821,9 +833,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.924 -0.023 0.993 0.000 0.352 0.362 0.771 0.400 0.469 0.500 0.082 0.500 0.032 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_800-1999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
       </camouflage>
@@ -843,6 +853,25 @@
   <radios>
     <N11>	shared	</N11>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB14_M2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_GB14_M2>
+      <Chassis_GB14_M2_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB14_M2_2>
+    </chassis>
+    <engines>
+      <Guiberson_T-1020-4>
+        <bravo>	64.75847	</bravo>
+      </Guiberson_T-1020-4>
+      <Continental_W-670-9A>
+        <bravo>	69.25191	</bravo>
+      </Continental_W-670-9A>
+    </engines>
+    <armour>	0.75811301	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

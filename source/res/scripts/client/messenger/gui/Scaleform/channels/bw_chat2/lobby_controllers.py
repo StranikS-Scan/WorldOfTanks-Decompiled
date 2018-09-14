@@ -5,14 +5,14 @@ from gui.prb_control.settings import PREBATTLE_ROSTER
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
-from messenger.gui.Scaleform.channels._layout import _LobbyLayout
+from messenger.gui.Scaleform.channels.layout import LobbyLayout
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw_chat2.entities import BWMemberEntity
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_LIMITS
 
-class UnitChannelController(_LobbyLayout):
+class UnitChannelController(LobbyLayout):
 
     def __init__(self, channel, mBuilder=None):
         super(UnitChannelController, self).__init__(channel, mBuilder)

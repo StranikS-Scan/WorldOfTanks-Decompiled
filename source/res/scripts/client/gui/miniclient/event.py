@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/event.py
+"""
+The pointcat is used to disable event battles in mini client.
+"""
 from helpers import aop
 
 class _ParametrizeInitAspect(aop.Aspect):

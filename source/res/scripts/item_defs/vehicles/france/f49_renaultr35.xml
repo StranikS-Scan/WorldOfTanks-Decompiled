@@ -9,6 +9,13 @@
     <forward>	23	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.215	</moving>
+    <still>	0.286	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.429	</firePenalty>
+  </invisibility>
   <repairCost>	3.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -61,7 +68,8 @@
       <turret>	0.000000 0.493607 -0.074134	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F49_RenaultR35/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -194,13 +202,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.828987 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F49_RenaultR35/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.788163 1.08905	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -445,13 +452,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.828987 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F49_RenaultR35/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.788163 1.08905	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -646,6 +652,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.52	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	2	</aimingTime>
@@ -655,7 +662,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.73 0.475 0.000000 0.000000	</tiling>
@@ -673,6 +681,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.291667 16 0.388889 7.5 0.611111 7.5 0.708333 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
@@ -687,7 +696,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
@@ -711,6 +721,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <reloadTime>	2.7	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <models>
@@ -719,7 +730,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
@@ -732,7 +744,8 @@
         <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F49_RenaultR35/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.102622 0.233055 0.430115	</gunPosition>
       <emblemSlots>
@@ -753,9 +766,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.095 0.000 0.896 0.027 0.507 0.081 0.448 0.500 0.416 0.500 0.258 0.500 0.416 0.480 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.55 0.28 0.000000 0.000000	</tiling>
@@ -767,7 +778,7 @@
       <level>	2	</level>
       <price>	650	</price>
       <unlocks>
-        <vehicle>	AMX38	  <cost>	1390	</cost>
+        <vehicle>	F13_AMX38	  <cost>	1390	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -812,6 +823,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	2	</aimingTime>
@@ -821,7 +833,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
@@ -839,6 +852,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.291667 16 0.388889 7.5 0.611111 7.5 0.708333 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
@@ -853,7 +867,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
@@ -873,6 +888,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <models>
@@ -881,7 +897,8 @@
             <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F49_RenaultR35/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.4 0.000000 0.000000	</tiling>
@@ -894,7 +911,8 @@
         <exploded>	vehicles/french/F49_RenaultR35/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F49_RenaultR35/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F49_RenaultR35/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F49_RenaultR35/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.102622 0.248442 0.430115	</gunPosition>
       <emblemSlots>
@@ -915,9 +933,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.525 0.081 0.507 0.500 0.312 0.500 0.321 0.500 0.371 0.575 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
@@ -938,6 +954,25 @@
   <radios>
     <ER_54>	shared	</ER_54>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_RenaultR35>
+        <alpha>	0.1127	</alpha>
+      </Chassis_RenaultR35>
+      <Chassis_RenaultR35_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_RenaultR35_2>
+    </chassis>
+    <engines>
+      <Renault_S4B>
+        <bravo>	19.5597	</bravo>
+      </Renault_S4B>
+      <Renault_V4>
+        <bravo>	21.67426	</bravo>
+      </Renault_V4>
+    </engines>
+    <armour>	0.913338886	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

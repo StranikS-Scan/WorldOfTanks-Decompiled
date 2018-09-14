@@ -1,0 +1,437 @@
+<a01_t1_cunningham_bot.xml>
+  <crew>
+    <commander>	radioman
+			gunner
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	41	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.225	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.338	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_chassis_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	9.5	</armor_1>
+      <armor_2>	6.3	</armor_2>
+      <armor_3>	6.3	</armor_3>
+      <armor_4>	6.3	</armor_4>
+      <armor_5>	6.3	</armor_5>
+      <armor_6>	6.3	</armor_6>
+      <armor_8>	0	</armor_8>
+      <armor_15>	6.3	</armor_15>
+      <armor_16>	9.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4000	</weight>
+    <maxHealth>	84	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	48	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.32 34.00 0.32 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.32 34.00 0.32 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.91	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.004522 0.703017 -0.7504	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0262288 0.170632 1.82587	</rayStart>
+        <rayEnd>	0.0262288 0.170608 1.66587	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.26	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.972806 0.430871 -1.08261	</rayStart>
+        <rayEnd>	0.772807 0.430871 -1.08261	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.52	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	-0.972806 0.430871 -1.08261	</rayStart>
+        <rayEnd>	-0.772807 0.430871 -1.08261	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.52	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A01_T1_Cunningham/T1_Cunningham_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Cunningham_E1_bot>
+      <userString>	#usa_vehicles:Cunningham_E1_bot	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	2000	</weight>
+      <maxLoad>	7600	</maxLoad>
+      <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	30	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.6	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.107951	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.379263	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.406772	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.379263	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.113702	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.406772	</radius>
+          <syncAngle>	23.2258	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A01_T1_Cunningham/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A01_T1_Cunningham/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A01_T1_Cunningham/track/left.track	</left>
+        <right>	vehicles/american/A01_T1_Cunningham/track/right.track	</right>
+        <segmentLength>	0.166	</segmentLength>
+        <segmentOffset>	0.038	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.008	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1108	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.88	</forwardElastK>
+          <backwardElastK>	1.38	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.862702 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.743125 1.02269	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.476420 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.005000 0.000000	</row1>
+            <row2>	0.000000 0.000000 4.262990	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Cunningham_E1_bot>
+  </chassis>
+  <turrets0>
+    <Cunningham_D1_bot>
+      <userString>	#usa_vehicles:Cunningham_D1_bot	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	9.5	</armor_1>
+        <armor_5>	6.4	</armor_5>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	700	</weight>
+      <maxHealth>	21	</maxHealth>
+      <rotationSpeed>	39	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	240	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_37mm_Gun_M1916_bot>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	104	</maxAmmo>
+          <armor>
+            <armor_1>	9.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <reloadTime>	2.5	</reloadTime>
+          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_37mm_Gun_M1916_bot>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A01_T1_Cunningham/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A01_T1_Cunningham/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.116975 0.208094 0.535951	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.587596 0.266962 0.157434	</rayStart>
+          <rayEnd>	-0.395072 0.266843 0.103264	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.58066 0.267611 0.193771	</rayStart>
+          <rayEnd>	0.388825 0.267494 0.137209	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.903 -0.047 0.963 0.000 0.609 0.200 0.601 0.391 0.617 0.609 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Cunningham_D1_bot>
+  </turrets0>
+  <engines>
+    <Cunningham_bot>	shared	</Cunningham_bot>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <Alarm_flags_bot>	shared	</Alarm_flags_bot>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Cunningham_E1_bot>
+        <alpha>	0.1127	</alpha>
+      </Cunningham_E1_bot>
+    </chassis>
+    <engines>
+      <Cunningham_bot>
+        <bravo>	29.07523	</bravo>
+      </Cunningham_bot>
+    </engines>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a01_t1_cunningham_bot.xml>

@@ -7,14 +7,13 @@ import BigWorld
 import Settings
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader.decorators import sf_lobby
 from gui.game_control.controllers import Controller
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher
 from gui.shared.utils import graphics
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-_GRAPHICS_SETTINGS_TAB_IDX = 1
 _Settings = namedtuple('_Settings', ['presetChangingVersion', 'lastBattleAvgFps'])
 
 class NotifyController(Controller):
@@ -72,14 +71,14 @@ class NotifyController(Controller):
             isOk = yield self.__showI18nDialog('resetGraphics')
             self.__graphicsResetShown = True
             if isOk:
-                self.__showSettingsWindow(_GRAPHICS_SETTINGS_TAB_IDX)
+                event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
         elif graphicsStatus.isShowWarning():
-            self.__showSettingsWindow(_GRAPHICS_SETTINGS_TAB_IDX)
+            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
             isOk = yield self.__showI18nDialog('changeGraphics')
             if isOk:
                 self.__updatePresetSetting()
         elif self.__isNeedToShowPresetChangingDialog():
-            self.__showSettingsWindow(_GRAPHICS_SETTINGS_TAB_IDX)
+            event_dispatcher.showSettingsWindow(redefinedKeyMode=False, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.GRAPHICS)
             isOk = yield self.__showI18nDialog('lowFpsWarning')
             if isOk:
                 BigWorld.callback(0.001, lambda : self.__downgradePresetIndex())
@@ -104,11 +103,6 @@ class NotifyController(Controller):
     def __showI18nDialog(self, key, callback):
         from gui import DialogsInterface
         return DialogsInterface.showI18nConfirmDialog(key, callback)
-
-    @classmethod
-    def __showSettingsWindow(cls, tabIdx=0):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': False,
-         'tabIndex': tabIdx}))
 
     def __getSettingsWindow(self):
         from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

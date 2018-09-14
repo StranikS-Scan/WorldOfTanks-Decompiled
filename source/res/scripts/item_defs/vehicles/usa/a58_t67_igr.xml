@@ -1,0 +1,517 @@
+<a58_t67_igr.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	61	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.245	</moving>
+    <still>	0.409	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.614	</firePenalty>
+  </invisibility>
+  <repairCost>	6.43	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	12.7	</armor_1>
+      <armor_2>	12.7	</armor_2>
+      <armor_3>	12.7	</armor_3>
+      <armor_4>	12.7	</armor_4>
+      <armor_5>	7.9	</armor_5>
+      <armor_6>	4.8	</armor_6>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7000	</weight>
+    <maxHealth>	272	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A58_T67/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A58_T67/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A58_T67/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 32.00 0.36 1.00 0.05 0.29	</pitchParams>
+      <rollParams>	1.00 0.20 32.00 0.36 1.00 0.05 0.29	</rollParams>
+      <sensitivityToImpulse>	0.32	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.001629 0.623203 0.335206	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A58_T67/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A58_T67/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0410156 0.397099 2.08355	</rayStart>
+        <rayEnd>	0.0410156 0.253232 1.94462	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A58_T67/T67_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1 1 0.25 0.09	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_T49_2_IGR>
+      <userString>	#igr_vehicles:Chassis_T49_IGR	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	2000	</weight>
+      <maxLoad>	16400	</maxLoad>
+      <terrainResistance>	1 1.1 2.1	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A58_T67/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A58_T67/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A58_T67/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.41 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.7	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.295254	</radius>
+          <syncAngle>	24.8276	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.141277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.297409	</radius>
+          <syncAngle>	24.8276	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.341418	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.295254	</radius>
+          <syncAngle>	24.8276	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.141277	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.297409	</radius>
+          <syncAngle>	24.8276	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.341418	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.940628 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A58_T67/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A58_T67/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.12508 1.45058	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.717060 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.468140 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.846650	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0809717	</minOffset>
+          <maxOffset>	0.0453075	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.082996	</minOffset>
+          <maxOffset>	0.0485437	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A58_T67/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A58_T67/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A58_T67/track/left.track	</left>
+        <right>	vehicles/american/A58_T67/track/right.track	</right>
+        <segmentLength>	0.142	</segmentLength>
+        <segmentOffset>	-0.001	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1104	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.014	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.052	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	2.04	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	2.04	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.056	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.0107	</trackThickness>
+    </Chassis_T49_2_IGR>
+  </chassis>
+  <turrets0>
+    <Turret_2_T49_IGR>
+      <ceilless>	true	</ceilless>
+      <userString>	#igr_vehicles:Turret_2_T49_IGR	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	10100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	25.4	</armor_1>
+        <armor_2>	25.4	</armor_2>
+        <armor_3>	12.7	</armor_3>
+        <armor_4>	12.7	</armor_4>
+        <armor_5>	7.9	</armor_5>
+        <armor_6>	4.8	</armor_6>
+        <armor_7>	12.7	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3300	</weight>
+      <maxHealth>	88	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	340	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.885	</invisibilityFactor>
+      <guns>
+        <_76mm_AT_Gun_M1A1_IGR>	shared	  <maxAmmo>	45	</maxAmmo>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A58_T67/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A58_T67/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A58_T67/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A58_T67/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A58_T67/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00311767 0.00497322 1.73609	</rayStart>
+              <rayEnd>	-0.161765 0.00157646 1.72901	</rayEnd>
+              <rayUp>	0.07 0.068 4	</rayUp>
+              <size>	0.45	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.4 0.4 0.4	</tiling>
+          </camouflage>
+        </_76mm_AT_Gun_M1A1_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A58_T67/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A58_T67/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A58_T67/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A58_T67/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A58_T67/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.05624 0.30204 0.832809	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.755885 0.343211 0.558774	</rayStart>
+          <rayEnd>	-0.724828 0.331009 0.545261	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.2	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.933665 0.341998 -0.118634	</rayStart>
+          <rayEnd>	-0.858572 0.314853 -0.113712	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.509	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.755885 0.343211 0.558774	</rayStart>
+          <rayEnd>	0.724828 0.331009 0.545261	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.2	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.02565 0.375249 -0.124664	</rayStart>
+          <rayEnd>	0.766583 0.281602 -0.107682	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.509	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.953 -0.065 1.030 0.000 0.382 0.463 0.591 0.432 0.553 0.500 0.194 0.500 0.109 0.978 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_T49_IGR>
+  </turrets0>
+  <engines>
+    <Wright_Continental_R-975C4_IGR>	shared	</Wright_Continental_R-975C4_IGR>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <SCR_619_IGR>	shared	</SCR_619_IGR>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T49_2_IGR>
+        <alpha>	0.08855	</alpha>
+      </Chassis_T49_2_IGR>
+    </chassis>
+    <engines>
+      <Wright_Continental_R-975C4_IGR>
+        <bravo>	121.5873	</bravo>
+      </Wright_Continental_R-975C4_IGR>
+    </engines>
+    <armour>	0.590817144	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a58_t67_igr.xml>

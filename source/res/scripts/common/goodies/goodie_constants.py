@@ -31,3 +31,9 @@ class GOODIE_RESOURCE_TYPE:
     XP = 30
     CREW_XP = 40
     FREE_XP = 50
+
+
+class GOODIE_NOTIFICATION_TYPE:
+    EMPTY = 1
+    REMOVED = 3
+    DISABLED = 4

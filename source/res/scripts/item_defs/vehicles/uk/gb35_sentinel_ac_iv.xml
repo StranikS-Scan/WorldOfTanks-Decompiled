@@ -10,6 +10,13 @@
     <forward>	60.4	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.181	</moving>
+    <still>	0.241	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.362	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -61,7 +68,8 @@
       <turret>	0.000000 0.654886 0.020993	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB35_Sentinel_AC_IV/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB35_Sentinel_AC_IV/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB35_Sentinel_AC_IV/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -121,7 +129,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.53	</textureScale>
+        <textureScale>	-3.05	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -188,13 +196,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.01817 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB35_Sentinel_AC_IV/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB35_Sentinel_AC_IV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB35_Sentinel_AC_IV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.14117 1.77881	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -210,10 +217,10 @@
         </decal>
       </AODecals>
       <splineDesc>
-        <segmentModelLeft>	vehicles/british/GB35_Sentinel_AC_IV/track/T51_track1.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/british/GB35_Sentinel_AC_IV/track/T51_track1.model	</segmentModelRight>
-        <segment2ModelLeft>	vehicles/british/GB35_Sentinel_AC_IV/track/T51_track1_1.model	</segment2ModelLeft>
-        <segment2ModelRight>	vehicles/british/GB35_Sentinel_AC_IV/track/T51_track1_1.model	</segment2ModelRight>
+        <segmentModelLeft>	vehicles/british/GB35_Sentinel_AC_IV/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB35_Sentinel_AC_IV/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB35_Sentinel_AC_IV/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB35_Sentinel_AC_IV/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/british/GB35_Sentinel_AC_IV/track/left.track	</left>
         <right>	vehicles/british/GB35_Sentinel_AC_IV/track/right.track	</right>
         <segmentLength>	0.155	</segmentLength>
@@ -234,9 +241,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -398,6 +402,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	5	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
@@ -407,7 +412,8 @@
             <exploded>	vehicles/british/GB35_Sentinel_AC_IV/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB35_Sentinel_AC_IV/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB35_Sentinel_AC_IV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB35_Sentinel_AC_IV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -430,7 +436,8 @@
         <exploded>	vehicles/british/GB35_Sentinel_AC_IV/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB35_Sentinel_AC_IV/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB35_Sentinel_AC_IV/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB35_Sentinel_AC_IV/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000063 0.399803 0.760598	</gunPosition>
       <emblemSlots>
@@ -460,8 +467,6 @@
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.000 -0.015 1.022 0.000 0.585 0.133 0.915 0.633 0.167 0.500 0.122 0.500 0.000 0.100 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
@@ -477,6 +482,19 @@
   <radios>
     <N19Mk2_Aust>	shared	</N19Mk2_Aust>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB35_Sentinel_AC_IV>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB35_Sentinel_AC_IV>
+    </chassis>
+    <engines>
+      <Cadillac_75_x_3>
+        <bravo>	87.22569	</bravo>
+      </Cadillac_75_x_3>
+    </engines>
+    <armour>	0.786914	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

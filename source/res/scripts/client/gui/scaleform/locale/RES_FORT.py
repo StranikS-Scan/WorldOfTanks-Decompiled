@@ -3,6 +3,12 @@
 
 
 class RES_FORT(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MAPS_FORT_WELCOMESCREEN = '../maps/fort/WelcomeScreen.png'
     MAPS_FORT_ABSOLUTEROSTERINTRO = '../maps/fort/absoluteRosterIntro.png'
     MAPS_FORT_BUILDINGS_LARGE_ARTILLERY_BUILDING_LEVEL1 = '../maps/fort/buildings/large/artillery_building_level1.png'

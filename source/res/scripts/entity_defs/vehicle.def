@@ -2,7 +2,7 @@
   <Implements>
     <Interface>	VehicleAI	</Interface>
     <Interface>	TeamBase_Vehicle	</Interface>
-    <Interface>	FirstAprilVehicle	</Interface>
+    <Interface>	RepairBase_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -136,7 +136,7 @@
     </arenaTypeID>
     <arenaBonusType>
       <Type>	UINT8	</Type>
-      <Flags>	CELL_PUBLIC	</Flags>
+      <Flags>	CELL_PRIVATE	</Flags>
     </arenaBonusType>
     <tkillRating>
       <Type>	FLOAT	</Type>
@@ -155,7 +155,7 @@
       <Flags>	CELL_PRIVATE	</Flags>
     </accountDBID>
     <historyLoggingFlags>
-      <Type>	UINT16	</Type>
+      <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
     <state>
@@ -170,8 +170,8 @@
   <TempProperties>
     <p></p>
     <_Vehicle__p></_Vehicle__p>
+    <_components></_components>
     <_directVisibility></_directVisibility>
-    <_vehicleAI></_vehicleAI>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -323,7 +323,6 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	TUPLE	  <of>	FLOAT32	</of>
       </Arg>
-      <Arg>	VECTOR3	</Arg>
     </receiveShot>
     <receiveExplosion>
       <Arg>	ATTACKER_INFO	</Arg>
@@ -356,6 +355,10 @@
       <Arg>	SHOT_ID	</Arg>
       <Arg>	UINT16	</Arg>
     </receiveMiss>
+    <receiveCeilingHit>
+      <Arg>	SHOT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </receiveCeilingHit>
     <receiveAttackResults>
       <Arg>	ATTACK_RESULTS	</Arg>
     </receiveAttackResults>

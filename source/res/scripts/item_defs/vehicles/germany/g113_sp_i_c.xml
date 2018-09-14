@@ -9,6 +9,13 @@
     <forward>	58	</forward>
     <backward>	22	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.308	</moving>
+    <still>	0.308	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.462	</firePenalty>
+  </invisibility>
   <repairCost>	8.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -57,7 +64,8 @@
       <turret>	0.000000 0.658303 -0.681456	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G113_SP_I_C/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -308,13 +316,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.935804 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G113_SP_I_C/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.976635 1.23674	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -551,13 +558,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.935804 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G113_SP_I_C/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.976635 1.23674	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -629,6 +635,7 @@
           <pitchLimits>	-90 90	  <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 2.7 0.061111 2.7 0.088889 8 0.375 8 0.402778 6 0.597222 6 0.625 8 0.911111 8 0.938888 2.7 1 2.7	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	7.9	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
@@ -638,7 +645,8 @@
             <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G113_SP_I_C/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -661,7 +669,8 @@
         <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G113_SP_I_C/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.146387 0.794295	</gunPosition>
       <emblemSlots>
@@ -696,9 +705,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
       <physicsShape>	1.021 0.021 0.990 0.000 0.325 0.495 0.588 0.487 0.500 0.500 0.147 0.500 0.075 0.000 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.685 0.355 0.25 0.000000	</tiling>
@@ -763,6 +770,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <reloadTime>	7.8	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
           <models>
@@ -771,7 +779,8 @@
             <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G113_SP_I_C/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -811,6 +820,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	7.9	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
@@ -820,7 +830,8 @@
             <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -838,7 +849,7 @@
         </_90mm_Mecar>
         <_90mm_Mecar_mit_Mehrladeeinrichtung>	shared	  <maxAmmo>	39	</maxAmmo>
           <unlocks>
-            <vehicle>	Indien_Panzer	  <cost>	106000	</cost>
+            <vehicle>	G88_Indien_Panzer	  <cost>	106000	</cost>
             </vehicle>
             <vehicle>	G103_RU_251	  <cost>	92700	</cost>
             </vehicle>
@@ -866,6 +877,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <reloadTime>	20	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
@@ -879,7 +891,8 @@
             <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -902,7 +915,8 @@
         <exploded>	vehicles/german/G113_SP_I_C/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G113_SP_I_C/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G113_SP_I_C/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G113_SP_I_C/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.27598 1.01753	</gunPosition>
       <emblemSlots>
@@ -937,9 +951,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.010 1.000 -0.000 0.345 0.433 0.500 0.500 0.418 0.500 0.250 0.500 0.338 0.469 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.565 0.565 0.28 0.000000	</tiling>
@@ -970,6 +982,33 @@
     </AN-GRC-4>
     <SEM25>	shared	</SEM25>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_90mm_Mecar_mit_Mehrladeeinrichtung>
+        <delta>	1.16	</delta>
+      </_90mm_Mecar_mit_Mehrladeeinrichtung>
+    </guns>
+    <chassis>
+      <Chassis_G113_SP_I_C>
+        <alpha>	0.08855	</alpha>
+      </Chassis_G113_SP_I_C>
+      <Chassis_G113_SP_I_C_2>
+        <alpha>	0.07245	</alpha>
+      </Chassis_G113_SP_I_C_2>
+    </chassis>
+    <engines>
+      <Hotchkiss_6_Zyl_Benzin_154_PS>
+        <bravo>	40.70532	</bravo>
+      </Hotchkiss_6_Zyl_Benzin_154_PS>
+      <Hotchkiss_6_Zyl_Benzin_164_PS>
+        <bravo>	43.34853	</bravo>
+      </Hotchkiss_6_Zyl_Benzin_164_PS>
+      <Hotchkiss_6_Zyl_Benzin_195_PS>
+        <bravo>	51.54245	</bravo>
+      </Hotchkiss_6_Zyl_Benzin_195_PS>
+    </engines>
+    <armour>	0.779232345	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

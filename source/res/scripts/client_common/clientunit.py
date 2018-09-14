@@ -105,11 +105,19 @@ class ClientUnit(UnitBase):
     def getVehicles(self):
         return self._vehicles
 
+    def getSelectedVehicleLevels(self):
+        lst = list(set([ vehInfo.vehLevel for vehicles in self._vehicles.itervalues() for vehInfo in vehicles ]))
+        lst.sort()
+        return lst
+
     def getRoster(self):
         return self._roster
 
     def getPlayerSlots(self):
         return self._playerSlots
+
+    def getMemberVehicles(self, dbID):
+        return self.getVehicles().get(dbID, [])
 
     def getLegionarySlots(self):
         result = {}
@@ -186,8 +194,14 @@ class ClientUnit(UnitBase):
     def isSquad(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.SQUAD
 
+    def isEvent(self):
+        return self._prebattleTypeID == PREBATTLE_TYPE.EVENT
+
     def isFalloutSquad(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.FALLOUT
+
+    def isPrebattlesSquad(self):
+        return self._prebattleTypeID in PREBATTLE_TYPE.SQUAD_PREBATTLES
 
     def isFortBattle(self):
         return self._prebattleTypeID == PREBATTLE_TYPE.FORT_BATTLE

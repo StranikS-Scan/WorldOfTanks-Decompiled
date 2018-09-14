@@ -74,6 +74,11 @@
         <texName>	gui/maps/vehicles/decals/czech_round.dds	</texName>
         <userString>	#vehicle_customization:emblem/auto/czech_round	</userString>
       </czech_round>
+      <swedish_flag>
+        <id>	15	</id>
+        <texName>	gui/maps/vehicles/decals/swedish_flag.dds	</texName>
+        <userString>	#vehicle_customization:emblem/auto/swedish_flag	</userString>
+      </swedish_flag>
     </emblems>
   </auto>
   <group1>
@@ -674,6 +679,20 @@
         <mirror>	false	</mirror>
         <qualifier>	alive_allies_count_less_6_commander	</qualifier>
       </emblem>
+      <emblem>
+        <id>	248	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/battle/sticker_53.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group2/battle_53	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	249	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/battle/sticker_54.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group2/battle_54	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
     </emblems>
   </group2>
   <group3>
@@ -978,6 +997,20 @@
         <id>	343	</id>
         <texName>	gui/maps/vehicles/decals/player_stickers/cool/sticker_43.dds	</texName>
         <userString>	#vehicle_customization:emblem/group3/cool_43	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_radioman	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	344	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/cool/sticker_44.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group3/cool_44	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_radioman	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	345	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/cool/sticker_45.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group3/cool_45	</userString>
         <mirror>	false	</mirror>
         <qualifier>	main_skill_radioman	</qualifier>
       </emblem>
@@ -1677,6 +1710,42 @@
         <userString>	#vehicle_customization:emblem/group4/signs_115	</userString>
         <qualifier>	main_skill_all_crew	</qualifier>
       </emblem>
+      <emblem>
+        <id>	4116	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_116.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_116	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	4117	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_117.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_117	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	4118	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_118.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_118	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	4119	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_119.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_119	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	4120	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_120.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_120	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	4121	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/signs/sticker_121.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group4/signs_121	</userString>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
     </emblems>
   </group4>
   <group5>
@@ -1980,7 +2049,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <priceFactor>	0.0	</priceFactor>
     <notInShop>	true	</notInShop>
-    <allow>	ussr:Object_907	</allow>
+    <allow>	ussr:R95_Object_907	</allow>
     <emblems>
       <emblem>
         <id>	1201	</id>
@@ -2024,7 +2093,7 @@
     <userString>	#vehicle_customization:emblem/special	</userString>
     <priceFactor>	0.0	</priceFactor>
     <notInShop>	true	</notInShop>
-    <allow>	usa:M60	</allow>
+    <allow>	usa:A92_M60	</allow>
     <emblems>
       <emblem>
         <id>	1401	</id>
@@ -2143,18 +2212,81 @@
       </emblem>
     </emblems>
   </group18>
-  <group19>
+  <group20>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceFactor>	1.0	</priceFactor>
+    <notInShop>	true	</notInShop>
+    <emblems>
+      <emblem>
+        <id>	2001	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_61.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group20/special_61	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	2002	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_62.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group20/special_62	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	2003	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_63.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group20/special_63	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	2004	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_64.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group20/special_64	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+    </emblems>
+  </group20>
+  <group21>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <priceFactor>	0.0	</priceFactor>
     <notInShop>	true	</notInShop>
     <emblems>
       <emblem>
-        <id>	1901	</id>
-        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_60.dds	</texName>
-        <userString>	#vehicle_customization:emblem/group19/special_60	</userString>
+        <id>	2101	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_70.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group21/special_70	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	2102	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_71.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group21/special_71	</userString>
         <mirror>	false	</mirror>
         <qualifier>	main_skill_all_crew	</qualifier>
       </emblem>
     </emblems>
-  </group19>
+  </group21>
+  <group22>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceFactor>	0.0	</priceFactor>
+    <notInShop>	true	</notInShop>
+    <emblems>
+      <emblem>
+        <id>	2201	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_80.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group22/special_80	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+      <emblem>
+        <id>	2202	</id>
+        <texName>	gui/maps/vehicles/decals/player_stickers/special/sticker_81.dds	</texName>
+        <userString>	#vehicle_customization:emblem/group22/special_81	</userString>
+        <mirror>	false	</mirror>
+        <qualifier>	main_skill_all_crew	</qualifier>
+      </emblem>
+    </emblems>
+  </group22>
 </player_emblems.xml>

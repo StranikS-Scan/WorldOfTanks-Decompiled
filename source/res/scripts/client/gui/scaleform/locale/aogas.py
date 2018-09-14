@@ -3,6 +3,12 @@
 
 
 class AOGAS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     NOTIFICATION_TITLE = '#AOGAS:NOTIFICATION/TITLE'
     NOTIFICATION_CLOSE = '#AOGAS:NOTIFICATION/CLOSE'
     AOND_1 = '#AOGAS:AOND_1'

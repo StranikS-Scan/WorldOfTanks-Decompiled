@@ -3,6 +3,12 @@
 from debug_utils import LOG_WARNING
 
 class MESSENGER(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     CONTACTS_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/tooltips/btns/search'
     CONTACTS_TOOLTIPS_BTNS_ADDGROUP = '#messenger:contacts/tooltips/btns/addGroup'
     CONTACTS_TOOLTIPS_BTNS_SETTINGS = '#messenger:contacts/tooltips/btns/settings'
@@ -140,6 +146,8 @@ class MESSENGER(object):
     DIALOGS_SQUAD_MESSAGE_GETREADY = '#messenger:dialogs/squad/message/getReady'
     DIALOGS_SQUAD_MESSAGE_GETNOTREADY = '#messenger:dialogs/squad/message/getNotReady'
     DIALOGS_SQUAD_EVENT_VEHICLE = '#messenger:dialogs/squad/event/vehicle'
+    DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL = '#messenger:dialogs/squad/message/invalidVehicleLevel'
+    DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS = '#messenger:dialogs/squad/message/vehicles/differentLevels'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES = '#messenger:dialogs/falloutSquadChannel/vehicles'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES_STEELHUNTING = '#messenger:dialogs/falloutSquadChannel/vehicles/steelHunting'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES_DOMINATION = '#messenger:dialogs/falloutSquadChannel/vehicles/domination'
@@ -149,13 +157,19 @@ class MESSENGER(object):
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFY = '#messenger:dialogs/falloutSquadChannel/vehicleNotify'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYRANGE = '#messenger:dialogs/falloutSquadChannel/vehicleNotifyRange'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYMULTITEAM = '#messenger:dialogs/falloutSquadChannel/vehicleNotifyMultiteam'
+    DIALOGS_SIMPLESQUAD_VEHICLE_RECOMMENDATIONLEVEL = '#messenger:dialogs/simpleSquad/vehicle/recommendationLevel'
     DIALOGS_SQUADCHANNEL_CHATNAME = '#messenger:dialogs/squadChannel/chatName'
+    DIALOGS_SQUADCHANNEL_SIMPLECHATNAME = '#messenger:dialogs/squadChannel/simpleChatName'
     DIALOGS_SQUADCHANNEL_MEMBERS = '#messenger:dialogs/squadChannel/members'
     DIALOGS_SQUADCHANNEL_VEHICLES = '#messenger:dialogs/squadChannel/vehicles'
+    DIALOGS_SQUADCHANNEL_VEHICLESLBL = '#messenger:dialogs/squadChannel/vehiclesLbl'
+    DIALOGS_SIMPLESQUAD_VEHICLELEVEL = '#messenger:dialogs/simpleSquad/vehicleLevel'
+    DIALOGS_EVENTSQUAD_VEHICLE = '#messenger:dialogs/eventSquad/vehicle'
     DIALOGS_SQUADCHANNEL_BATTLETYPE = '#messenger:dialogs/squadChannel/battleType'
     DIALOGS_SQUADCHANNEL_BATTLETYPEDOMINATION = '#messenger:dialogs/squadChannel/battleTypeDomination'
     DIALOGS_SQUADCHANNEL_BUTTONS_INVITE = '#messenger:dialogs/squadChannel/buttons/invite'
     DIALOGS_SQUADCHANNEL_BUTTONS_RECOMMEND = '#messenger:dialogs/squadChannel/buttons/recommend'
+    DIALOGS_SIMPLESQUAD_RECOMMENDATIONLEVEL = '#messenger:dialogs/simpleSquad/recommendationLevel'
     DIALOGS_SQUADCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/squadChannel/buttons/leave'
     DIALOGS_SQUADCHANNEL_BUTTONS_READY = '#messenger:dialogs/squadChannel/buttons/ready'
     DIALOGS_SQUADCHANNEL_BUTTONS_NOTREADY = '#messenger:dialogs/squadChannel/buttons/notReady'
@@ -163,6 +177,10 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_BUTTONS_AFK = '#messenger:dialogs/squadChannel/buttons/afk'
     DIALOGS_SQUADCHANNEL_MESSEGE_NOPREMIUM = '#messenger:dialogs/squadChannel/messege/noPremium'
     DIALOGS_SQUADCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/squadChannel/context/kickPlayer'
+    DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATION = '#messenger:dialogs/squadChannel/headerMsg/squadFormation'
+    DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/squadFormationRestriction'
+    DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/eventFormationRestriction'
+    DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD = '#messenger:dialogs/squadChannel/headerMsg/dynSquad'
     DIALOGS_TEAMCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/teamChannel/context/kickPlayer'
     DIALOGS_BSCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/bsChannel/context/kickPlayer'
     DIALOGS_TEAMCHANNEL_BUTTONS_LEAVE = '#messenger:dialogs/teamChannel/buttons/leave'
@@ -368,6 +386,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_SLOTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/slotsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BERTHSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/berthsAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_BERTHSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/berthsDebited'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_DOSSIERSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/dossiersAccrued'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_DOSSIERSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/dossiersDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION = '#messenger:serviceChannelMessages/invoiceReceived/compensation'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION_GOLD = '#messenger:serviceChannelMessages/invoiceReceived/compensation/gold'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION_CREDITS = '#messenger:serviceChannelMessages/invoiceReceived/compensation/credits'
@@ -384,6 +404,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
     SERVICECHANNELMESSAGES_PREMIUMEXPIRED = '#messenger:serviceChannelMessages/premiumExpired'
     SERVICECHANNELMESSAGES_BOOSTEREXPIRED = '#messenger:serviceChannelMessages/boosterExpired'
+    SERVICECHANNELMESSAGES_BOOSTERDISABLED = '#messenger:serviceChannelMessages/boosterDisabled'
     SERVICECHANNELMESSAGES_CREDITSANDGOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/creditsAndGoldReceivedAsGift'
     SERVICECHANNELMESSAGES_CREDITSRECEIVEDASGIFT = '#messenger:serviceChannelMessages/creditsReceivedAsGift'
     SERVICECHANNELMESSAGES_GOLDRECEIVEDASGIFT = '#messenger:serviceChannelMessages/goldReceivedAsGift'
@@ -598,6 +619,7 @@ class MESSENGER(object):
     CLIENT_ACTION_JOIN_USER_ROOM = '#messenger:client_action/JOIN_USER_ROOM'
     CLIENT_ACTION_LEAVE_USER_ROOM = '#messenger:client_action/LEAVE_USER_ROOM'
     CLIENT_ACTION_SEARCH_USER_ROOM = '#messenger:client_action/SEARCH_USER_ROOM'
+    CLIENT_ACTION_FIND_USERS_BY_PREFIX = '#messenger:client_action/FIND_USERS_BY_PREFIX'
     CUSTOM_CLIENT_ACTION_ADMIN_CHAT_COMMAND = '#messenger:custom_client_action/ADMIN_CHAT_COMMAND'
     SERVICECHANNELMESSAGES_VEHICLERENTED = '#messenger:serviceChannelMessages/vehicleRented'
     SERVICECHANNELMESSAGES_RENTALSEXPIRED = '#messenger:serviceChannelMessages/rentalsExpired'
@@ -778,7 +800,8 @@ class MESSENGER(object):
      CLIENT_ACTION_CREATE_USER_ROOM,
      CLIENT_ACTION_JOIN_USER_ROOM,
      CLIENT_ACTION_LEAVE_USER_ROOM,
-     CLIENT_ACTION_SEARCH_USER_ROOM)
+     CLIENT_ACTION_SEARCH_USER_ROOM,
+     CLIENT_ACTION_FIND_USERS_BY_PREFIX)
     CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
      CHAT_ACTION_BROADCAST_CLUB_MESSAGE,
@@ -792,6 +815,10 @@ class MESSENGER(object):
 
     @staticmethod
     def client_error_limit(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:client_error/limit/%s' % key
         if outcome not in MESSENGER.CLIENT_ERROR_LIMIT_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -801,6 +828,10 @@ class MESSENGER(object):
 
     @staticmethod
     def server_error_user_room_creation(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:server_error/user_room_creation/%s' % key
         if outcome not in MESSENGER.SERVER_ERROR_USER_ROOM_CREATION_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -810,6 +841,10 @@ class MESSENGER(object):
 
     @staticmethod
     def client_error_channel(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:client_error/channel/%s' % key
         if outcome not in MESSENGER.CLIENT_ERROR_CHANNEL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -819,6 +854,10 @@ class MESSENGER(object):
 
     @staticmethod
     def client_error_shared(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:client_error/shared/%s' % key
         if outcome not in MESSENGER.CLIENT_ERROR_SHARED_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -828,6 +867,10 @@ class MESSENGER(object):
 
     @staticmethod
     def client_error_contact(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:client_error/contact/%s' % key
         if outcome not in MESSENGER.CLIENT_ERROR_CONTACT_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -837,6 +880,10 @@ class MESSENGER(object):
 
     @staticmethod
     def command_success(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:command/success/%s' % key
         if outcome not in MESSENGER.COMMAND_SUCCESS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -846,6 +893,10 @@ class MESSENGER(object):
 
     @staticmethod
     def chat_error(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:chat_error/%s' % key
         if outcome not in MESSENGER.CHAT_ERROR_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -855,6 +906,10 @@ class MESSENGER(object):
 
     @staticmethod
     def client_action(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:client_action/%s' % key
         if outcome not in MESSENGER.CLIENT_ACTION_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -864,6 +919,10 @@ class MESSENGER(object):
 
     @staticmethod
     def chat_action(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:chat_action/%s' % key
         if outcome not in MESSENGER.CHAT_ACTION_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -873,7 +932,11 @@ class MESSENGER(object):
 
     @staticmethod
     def dialogs_squadchannel_tooltips_status(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#messenger:dialogs/squadChannel/tooltips/status/%s' % key
         if outcome not in MESSENGER.DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

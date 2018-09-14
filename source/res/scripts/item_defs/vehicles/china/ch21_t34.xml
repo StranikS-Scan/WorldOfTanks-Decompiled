@@ -9,6 +9,13 @@
     <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.19	</moving>
+    <still>	0.253	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.38	</firePenalty>
+  </invisibility>
   <repairCost>	5.34	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	0.0042 0.744781 0.556469	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch21_T34/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -78,7 +86,7 @@
       <userString>	#china_vehicles:Chassis_Ch21_T34	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	2680.0	</price>
+      <price>	2680	</price>
       <unlocks>
         <chassis>	Chassis_Ch21_T34_2	  <cost>	2000	</cost>
         </chassis>
@@ -169,13 +177,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.811766 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch21_T34/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.21844 1.85306	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -214,7 +221,7 @@
         <left>	vehicles/chinese/Ch21_T34/track/left.track	</left>
         <right>	vehicles/chinese/Ch21_T34/track/right.track	</right>
         <segmentLength>	0.142	</segmentLength>
-        <segmentOffset>	0.019	</segmentOffset>
+        <segmentOffset>	0.029	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -544,13 +551,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.811766 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch21_T34/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.21844 1.85306	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -834,7 +840,7 @@
       <userString>	#china_vehicles:Turret_1_Ch21_T34	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	3980.0	</price>
+      <price>	3980	</price>
       <unlocks>
         <turret>	Turret_2_Ch21_T34	  <cost>	1800	</cost>
         </turret>
@@ -844,12 +850,10 @@
         <armor_2>	80	</armor_2>
         <armor_3>	52	</armor_3>
         <armor_4>	45	</armor_4>
-        <armor_5>	45	</armor_5>
         <armor_6>	20	</armor_6>
         <armor_7>	52	</armor_7>
         <armor_8>	20	</armor_8>
         <armor_9>	0	</armor_9>
-        <armor_10>	16	</armor_10>
         <armor_11>	20	</armor_11>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -890,13 +894,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch21_T34/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -919,7 +925,8 @@
         <exploded>	vehicles/chinese/Ch21_T34/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch21_T34/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.004926 0.446011 0.706587	</gunPosition>
       <emblemSlots>
@@ -955,9 +962,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.046 -0.026 1.094 0.000 0.654 0.000 0.875 0.428 0.355 0.500 0.317 0.500 0.236 0.544 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1025,13 +1030,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch21_T34/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1073,13 +1080,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch21_T34/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/chinese/Ch21_T34/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch21_T34/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1102,7 +1111,8 @@
         <exploded>	vehicles/chinese/Ch21_T34/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch21_T34/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch21_T34/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch21_T34/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.004926 0.446011 0.706587	</gunPosition>
       <emblemSlots>
@@ -1138,9 +1148,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.072 0.022 1.094 0.000 0.690 0.010 0.897 0.433 0.456 0.500 0.317 0.500 0.236 0.544 0.078	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1165,6 +1173,25 @@
     </_9R>
     <_9RM_shop>	shared	</_9RM_shop>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch21_T34>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Ch21_T34>
+      <Chassis_Ch21_T34_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Ch21_T34_2>
+    </chassis>
+    <engines>
+      <V-2>
+        <bravo>	126.8737	</bravo>
+      </V-2>
+      <V-2-34>
+        <bravo>	132.1601	</bravo>
+      </V-2-34>
+    </engines>
+    <armour>	1.008597463	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

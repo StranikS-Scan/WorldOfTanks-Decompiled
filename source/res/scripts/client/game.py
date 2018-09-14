@@ -15,10 +15,9 @@ from ConnectionManager import connectionManager
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
 from gui.Scaleform.GameLoading import GameLoading
-from gui.Scaleform import VoiceChatInterface
 from gui.shared import personality as gui_personality
 from messenger import MessengerEntry
-import MusicController
+import MusicControllerWWISE
 import TriggersManager
 from helpers import RSSDownloader, OfflineMode
 import Settings
@@ -73,9 +72,9 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         g_replayCtrl = BattleReplay.g_replayCtrl = BattleReplay.BattleReplay()
         g_replayCtrl.registerWotReplayFileExtension()
         try:
-            import Vibroeffects
-            Vibroeffects.VibroManager.g_instance = Vibroeffects.VibroManager.VibroManager()
-            Vibroeffects.VibroManager.g_instance.connect()
+            from Vibroeffects import VibroManager
+            VibroManager.g_instance = VibroManager.VibroManager()
+            VibroManager.g_instance.connect()
         except:
             LOG_CURRENT_EXCEPTION()
 
@@ -107,7 +106,7 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         LcdKeyboard.enableLcdKeyboardSpecificKeys(True)
         gui_personality.init(loadingScreenGUI=loadingScreenGUI)
         AreaDestructibles.init()
-        MusicController.init()
+        MusicControllerWWISE.create()
         TriggersManager.init()
         RSSDownloader.init()
         g_postProcessing.init()
@@ -170,24 +169,13 @@ def start():
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
-            elif sys.argv[1] == 'validationTest':
+            elif sys.argv[1] == 'spinTest':
                 try:
-                    gui_personality.start()
-                    LOG_DEBUG('starting validationTest')
-                    import Cat
-                    Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
-                    BigWorld.callback(10, Cat.Tasks.Validation.startAllValidationTests)
-                except:
-                    LOG_DEBUG('Game start FAILED with:')
-                    LOG_CURRENT_EXCEPTION()
-
-            elif sys.argv[1] == 'resourcesValidationTest':
-                try:
-                    gui_personality.start()
-                    LOG_DEBUG('starting resourcesValidationTest')
-                    import Cat
-                    Cat.Tasks.Validation.ParamsObject.setResultFileName(sys.argv[2])
-                    BigWorld.callback(10, Cat.Tasks.Validation.startResourcesValidationTest)
+                    from cat.tasks.TestArena2 import TestArena2Object
+                    LOG_DEBUG(sys.argv)
+                    targetDirectory = sys.argv[4] if len(sys.argv) > 4 else 'SpinTestResult'
+                    LOG_DEBUG('starting offline test: %s %s %s', sys.argv[2], sys.argv[3], targetDirectory)
+                    TestArena2Object.startOffline(sys.argv[2], mapName=sys.argv[3], targetDirectory=targetDirectory)
                 except:
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
@@ -200,13 +188,14 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
                 gui_personality.start()
-            elif sys.argv[1] == 'bot':
+            elif sys.argv[1] == 'botInit' or sys.argv[1] == 'botExecute':
                 gui_personality.start()
                 try:
                     LOG_DEBUG('BOTNET: Playing scenario "%s" with bot "%s"...' % (sys.argv[2], sys.argv[3]))
-                    sys.path.append('scripts/bot')
-                    from client.ScenarioPlayer import ScenarioPlayerObject
-                    ScenarioPlayerObject.play(sys.argv[2], sys.argv[3])
+                    if sys.argv[1] == 'botInit':
+                        scenarioPlayer().initBot(sys.argv[3], sys.argv[2])
+                    elif sys.argv[1] == 'botExecute':
+                        scenarioPlayer().execute(sys.argv[3], sys.argv[2])
                 except:
                     LOG_DEBUG('BOTNET: Failed to start the client with:')
                     LOG_CURRENT_EXCEPTION()
@@ -222,11 +211,12 @@ def start():
             LOG_CURRENT_EXCEPTION()
 
         try:
-            import LightFx
-            if LightFx.LightManager.g_instance is not None:
-                LightFx.LightManager.g_instance.start()
-            import AuxiliaryFx
-            AuxiliaryFx.g_instance.start()
+            from LightFx import LightManager
+            if LightManager.g_instance is not None:
+                LightManager.g_instance.start()
+            from AuxiliaryFx import g_instance
+            if g_instance is not None:
+                g_instance.start()
         except:
             LOG_CURRENT_EXCEPTION()
 
@@ -238,6 +228,7 @@ def abort():
 
 
 def fini():
+    global g_scenario
     LOG_DEBUG('fini')
     if OfflineMode.enabled():
         return
@@ -250,7 +241,7 @@ def fini():
         if constants.IS_CAT_LOADED:
             import Cat
             Cat.fini()
-        MusicController.fini()
+        MusicControllerWWISE.destroy()
         if RSSDownloader.g_downloader is not None:
             RSSDownloader.g_downloader.destroy()
         connectionManager.onConnected -= onConnected
@@ -293,6 +284,8 @@ def fini():
         import SoundGroups
         SoundGroups.g_instance.destroy()
         Settings.g_instance.save()
+        if g_scenario is not None:
+            g_scenario.fini()
         return
 
 
@@ -341,7 +334,6 @@ def onDisconnected():
     gui_personality.onDisconnected()
     VOIP.getVOIPManager().logout()
     VOIP.getVOIPManager().onDisconnected()
-    VoiceChatInterface.g_instance.reset()
 
 
 def onCameraChange(oldCamera):
@@ -384,7 +376,7 @@ def handleKeyEvent(event):
             if Cat.handleKeyEventAfterGUI(isDown, key, mods, event):
                 return True
         if not isRepeat:
-            if MessengerEntry.g_instance.gui.isEditing(event):
+            if MessengerEntry.g_instance.gui.handleKey(event):
                 return True
         inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
         if inputHandler is not None:
@@ -454,7 +446,7 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'leave': 'BigWorld.player().leaveArena',
  'cv': 'import vehicles_check;vehicles_check.check',
  'cls': "print '\\n' * 100",
- 'items': 'from gui.shared import g_itemsCache, REQ_CRITERIA; items = g_itemsCache.items; items',
+ 'items': 'from gui.shared import g_itemsCache; items = g_itemsCache.items; items',
  'unlockAll': 'BigWorld.player().stats.unlockAll(lambda *args:None)',
  'hangar': 'from gui.ClientHangarSpace import g_clientHangarSpaceOverride; g_clientHangarSpaceOverride',
  'cvi': 'from CurrentVehicle import g_currentVehicle; cvi = g_currentVehicle.item; cvi',
@@ -524,12 +516,12 @@ def asyncore_call():
     BigWorld.callback(0.1, asyncore_call)
 
 
-g_scenarioPlayer = None
+g_scenario = None
 
 def scenarioPlayer():
-    global g_scenarioPlayer
-    if g_scenarioPlayer is None:
+    global g_scenario
+    if g_scenario is None:
         sys.path.append('scripts/bot')
-        from client.ScenarioPlayer import ScenarioPlayerObject
-        g_scenarioPlayer = ScenarioPlayerObject
-    return g_scenarioPlayer
+        from client.ScenarioPlayer import g_scenarioPlayer
+        g_scenario = g_scenarioPlayer
+    return g_scenario

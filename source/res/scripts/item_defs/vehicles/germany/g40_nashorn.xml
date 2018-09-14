@@ -10,6 +10,13 @@
     <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.13	</moving>
+    <still>	0.217	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.326	</firePenalty>
+  </invisibility>
   <repairCost>	7.30	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -66,7 +73,8 @@
       <turret>	0.000357 0.697303 -0.19443	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G40_Nashorn/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -221,13 +229,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.02108 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G40_Nashorn/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24239 1.79659	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -489,13 +496,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.02108 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G40_Nashorn/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24239 1.79659	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -702,6 +708,7 @@
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
           <models>
             <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_02.model	</undamaged>
@@ -709,7 +716,8 @@
             <exploded>	vehicles/german/G40_Nashorn/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G40_Nashorn/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -749,6 +757,7 @@
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
           <turretYawLimits>	-15 15	</turretYawLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <effects>	shot_main_mb	</effects>
           <models>
             <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_01.model	</undamaged>
@@ -756,7 +765,8 @@
             <exploded>	vehicles/german/G40_Nashorn/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G40_Nashorn/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -778,7 +788,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	Sturer_Emil	  <cost>	43400	</cost>
+            <vehicle>	G43_Sturer_Emil	  <cost>	43400	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -795,13 +805,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G40_Nashorn/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G40_Nashorn/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G40_Nashorn/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G40_Nashorn/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -824,15 +836,14 @@
         <exploded>	vehicles/german/G40_Nashorn/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G40_Nashorn/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G40_Nashorn/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G40_Nashorn/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000421 0.649511 -0.07975	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.030 0.015 1.000 0.000 1.059 -0.030 0.500 0.100 0.500 0.500 0.358 0.500 0.389 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
       </camouflage>
@@ -862,6 +873,33 @@
     </FuG_F>
     <FuG8>	shared	</FuG8>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_88mm_PaK_36_L56>
+        <delta>	1.088888	</delta>
+      </_88mm_PaK_36_L56>
+    </guns>
+    <chassis>
+      <Chassis_Nashorn>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Nashorn>
+      <Chassis_Nashorn_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_Nashorn_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_108_TR_R>
+        <bravo>	66.08007	</bravo>
+      </Maybach_HL_108_TR_R>
+      <Maybach_HL_120_TRM_112_R>
+        <bravo>	71.89512	</bravo>
+      </Maybach_HL_120_TRM_112_R>
+      <Maybach_HL_120_TRM_R>
+        <bravo>	79.29608	</bravo>
+      </Maybach_HL_120_TRM_R>
+    </engines>
+    <armour>	0.634307731	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

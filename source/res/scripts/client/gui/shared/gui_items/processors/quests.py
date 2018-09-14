@@ -4,6 +4,7 @@ import operator
 import BigWorld
 from debug_utils import LOG_DEBUG
 from items import tankmen
+from helpers import i18n
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
 from potapov_quests import PQ_BRANCH
 
@@ -26,21 +27,21 @@ class _PotapovQuestsSelect(Processor):
         errorI18nKey = '%s/server_error' % self._getMessagePrefix()
         if len(errStr):
             errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
-        return makeI18nError(errorI18nKey, questNames=', '.join(self.__getQuestsNames()))
+        return makeI18nError(errorI18nKey, questNames=', '.join(self._getQuestsNames()))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self.__getQuestsNames()))
+        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self._getQuestsNames()))
 
     def _request(self, callback):
-        questIDs = self.__getQuestsData(methodcaller=operator.methodcaller('getID'))
+        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
         LOG_DEBUG('Make server request to select potapov quests', questIDs)
         BigWorld.player().selectPotapovQuests(questIDs, self.__questBranch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
-    def __getQuestsData(self, methodcaller):
+    def _getQuestsData(self, methodcaller):
         return [ methodcaller(q) for q in self.__quests ]
 
-    def __getQuestsNames(self):
-        return self.__getQuestsData(methodcaller=operator.methodcaller('getUserName'))
+    def _getQuestsNames(self):
+        return self._getQuestsData(methodcaller=operator.methodcaller('getUserName'))
 
 
 class PotapovQuestSelect(_PotapovQuestsSelect):
@@ -92,6 +93,14 @@ class _PotapovQuestRefuse(_PotapovQuestsSelect):
         selectedQuests.pop(quest.getID(), None)
         super(_PotapovQuestRefuse, self).__init__(selectedQuests.values(), events_cache, questBranch)
         return
+
+    def _successHandler(self, code, ctx=None):
+        questsNames = self._getQuestsNames()
+        if questsNames:
+            quests = i18n.makeString('#system_messages:%s/quests' % self._getMessagePrefix(), questNames=', '.join(questsNames))
+        else:
+            quests = i18n.makeString('#system_messages:%s/no_quests' % self._getMessagePrefix())
+        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), quests=quests)
 
     def _getMessagePrefix(self):
         pass

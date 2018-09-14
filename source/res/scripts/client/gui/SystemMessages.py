@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/SystemMessages.py
 from abc import ABCMeta, abstractmethod
 from enumerations import Enumeration
+from gui.shared.money import Currency
 SM_TYPE = Enumeration('System message type', ['Error',
  'Warning',
  'Information',
@@ -18,6 +19,8 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'Repair',
  'CustomizationForGold',
  'CustomizationForCredits'])
+CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
+ Currency.GOLD: SM_TYPE.PurchaseForGold}
 
 class BaseSystemMessages(object):
     __metaclass__ = ABCMeta

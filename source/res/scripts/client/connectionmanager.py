@@ -5,9 +5,10 @@ import ResMgr
 import BigWorld
 import constants
 import json
-from Event import Event
+from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_NOTE
+from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage
 from account_shared import isValidClientVersion
@@ -34,6 +35,7 @@ class LOGIN_STATUS():
     LOGIN_REJECTED_BAN = 'LOGIN_REJECTED_BAN'
     LOGIN_REJECTED_NO_SUCH_USER = 'LOGIN_REJECTED_NO_SUCH_USER'
     LOGIN_REJECTED_INVALID_PASSWORD = 'LOGIN_REJECTED_INVALID_PASSWORD'
+    SESSION_END = 'SESSION_END'
     LOGIN_REJECTED_ALREADY_LOGGED_IN = 'LOGIN_REJECTED_ALREADY_LOGGED_IN'
     LOGIN_REJECTED_BAD_DIGEST = 'LOGIN_REJECTED_BAD_DIGEST'
     LOGIN_REJECTED_DB_GENERAL_FAILURE = 'LOGIN_REJECTED_DB_GENERAL_FAILURE'
@@ -44,6 +46,8 @@ class LOGIN_STATUS():
     LOGIN_REJECTED_SERVER_NOT_READY = 'LOGIN_REJECTED_SERVER_NOT_READY'
     LOGIN_REJECTED_RATE_LIMITED = 'LOGIN_REJECTED_RATE_LIMITED'
 
+
+_INVALID_PASSWORD_TOKEN2_EXPIRED = 'Invalid token2'
 
 class ConnectionData(object):
 
@@ -67,16 +71,22 @@ class ConnectionManager(object):
         self.__hostItem = g_preDefinedHosts._makeHostItem('', '', '')
         self.__retryConnectionPeriod = _MIN_RECONNECTION_TIMEOUT
         self.__retryConnectionCallbackID = None
-        g_playerEvents.onKickWhileLoginReceived += self.__reconnect
-        self.onLoggedOn = Event()
-        self.onConnected = Event()
-        self.onRejected = Event()
-        self.onDisconnected = Event()
-        self.onKickedFromServer = Event()
+        g_playerEvents.onKickWhileLoginReceived += self.__processKick
+        g_playerEvents.onLoginQueueNumberReceived += self.__processQueue
+        self.__eManager = EventManager()
+        self.onLoggedOn = Event(self.__eManager)
+        self.onConnected = Event(self.__eManager)
+        self.onRejected = Event(self.__eManager)
+        self.onDisconnected = Event(self.__eManager)
+        self.onKickedFromServer = Event(self.__eManager)
+        self.onKickWhileLoginReceived = Event(self.__eManager)
+        self.onQueued = Event(self.__eManager)
         return
 
     def __del__(self):
-        g_playerEvents.onKickWhileLoginReceived -= self.__reconnect
+        g_playerEvents.onKickWhileLoginReceived -= self.__processKick
+        g_playerEvents.onLoginQueueNumberReceived -= self.__processQueue
+        self.__eManager.clear()
         self.stopRetryConnection()
 
     def initiateConnection(self, params, password, serverName):
@@ -95,8 +105,9 @@ class ConnectionManager(object):
 
     def __connect(self):
         self.__retryConnectionCallbackID = None
-        LOG_DEBUG('Calling BigWorld.connect with params: {0}, serverName: {1}, inactivityTimeout: {2}, publicKeyPath: {3}'.format(self.__connectionData.username, self.__connectionUrl, constants.CLIENT_INACTIVITY_TIMEOUT, self.__connectionData.publicKeyPath))
-        BigWorld.connect(self.__connectionUrl, self.__connectionData, self.__serverResponseHandler)
+        if constants.IS_DEVELOPMENT:
+            LOG_DEBUG('Calling BigWorld.connect with params: {0}, serverName: {1}, inactivityTimeout: {2}, publicKeyPath: {3}'.format(self.__connectionData.username, self.__connectionUrl, constants.CLIENT_INACTIVITY_TIMEOUT, self.__connectionData.publicKeyPath))
+        nextTick(lambda : BigWorld.connect(self.__connectionUrl, self.__connectionData, self.__serverResponseHandler))()
         if g_preDefinedHosts.predefined(self.__connectionUrl) or g_preDefinedHosts.roaming(self.__connectionUrl):
             self.__hostItem = g_preDefinedHosts.byUrl(self.__connectionUrl)
         else:
@@ -108,12 +119,13 @@ class ConnectionManager(object):
         return
 
     def __serverResponseHandler(self, stage, status, responseDataJSON):
-        LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
+        if constants.IS_DEVELOPMENT:
+            LOG_DEBUG('Received server response with stage: {0}, status: {1}, responseData: {2}'.format(stage, status, responseDataJSON))
         self.__connectionStatus = status
         try:
             responseData = json.loads(responseDataJSON)
         except ValueError:
-            responseData = {}
+            responseData = {'errorMessage': responseDataJSON}
 
         if status == LOGIN_STATUS.LOGGED_ON:
             if stage == 1:
@@ -123,7 +135,10 @@ class ConnectionManager(object):
                 self.onConnected()
         else:
             if self.__retryConnectionCallbackID is None:
-                self.onRejected(self.__connectionStatus, responseData)
+                status_ = self.__connectionStatus
+                if responseData.get('errorMessage', '') == _INVALID_PASSWORD_TOKEN2_EXPIRED:
+                    status_ = LOGIN_STATUS.SESSION_END
+                self.onRejected(status_, responseData)
             if status == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:
                 self.__reconnect()
             if stage == 6:
@@ -178,6 +193,14 @@ class ConnectionManager(object):
             self.__retryConnectionPeriod += _RECONNECTION_TIMEOUT_INCREMENT
         return self.__retryConnectionPeriod
 
+    def __processKick(self, peripheryID):
+        if peripheryID > 0:
+            self.__reconnect(peripheryID)
+        self.onKickWhileLoginReceived(peripheryID)
+
+    def __processQueue(self, queueNumber):
+        self.onQueued(queueNumber)
+
     @property
     def serverUserName(self):
         return self.__hostItem.name
@@ -193,6 +216,10 @@ class ConnectionManager(object):
     @property
     def areaID(self):
         return self.__hostItem.areaID if not self.isDisconnected() else None
+
+    @property
+    def url(self):
+        return self.__hostItem.url
 
     @property
     def loginName(self):

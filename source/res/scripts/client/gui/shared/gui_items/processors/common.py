@@ -6,12 +6,13 @@ from gui.SystemMessages import SM_TYPE
 from gui.shared import g_itemsCache
 from gui.shared.formatters import formatPrice, formatGoldPrice
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.money import Money
 from helpers import i18n
 
 class TankmanBerthsBuyer(Processor):
 
     def __init__(self, berthsPrice, berthsCount):
-        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': berthsPrice[1],
+        super(TankmanBerthsBuyer, self).__init__((plugins.MessageInformator('barracksExpandNotEnoughMoney', activeHandler=lambda : not plugins.MoneyValidator(berthsPrice).validate().success), plugins.MessageConfirmator('barracksExpand', ctx={'price': berthsPrice.gold,
           'count': berthsCount}), plugins.MoneyValidator(berthsPrice)))
         self.berthsPrice = berthsPrice
 
@@ -30,7 +31,7 @@ class PremiumAccountBuyer(Processor):
 
     def __init__(self, period, price, arenaUniqueID=0, withoutBenefits=False):
         self.wasPremium = g_itemsCache.items.stats.isPremium
-        super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator((0, price))))
+        super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator(Money(gold=price))))
         self.premiumPrice = price
         self.period = period
         self.arenaUniqueID = arenaUniqueID
@@ -62,13 +63,13 @@ class GoldToCreditsExchanger(Processor):
         self.gold = gold
         self.credits = int(gold) * g_itemsCache.items.shop.exchangeRate
         super(GoldToCreditsExchanger, self).__init__(plugins=(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': BigWorld.wg_getGoldFormat(self.gold),
-          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator((0, self.gold))))
+          'resultCurrencyAmount': BigWorld.wg_getIntegralFormat(self.credits)}), plugins.MoneyValidator(Money(gold=self.gold))))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('exchange/%s' % errStr, gold=self.gold) if len(errStr) else makeI18nError('exchange/server_error', gold=self.gold)
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice((self.credits, 0)), type=SM_TYPE.FinancialTransactionWithGold)
+        return makeI18nSuccess('exchange/success', gold=BigWorld.wg_getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to exchange gold to credits')
@@ -83,7 +84,7 @@ class FreeXPExchanger(Processor):
         self.__freeConversion = bool(freeConversion)
         self.gold = round(rate[1] * xp / rate[0]) if not freeConversion else 0
         self.vehiclesCD = vehiclesCD
-        super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator((0, self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
+        super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator(Money(gold=self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('exchangeXP/%s' % errStr, xp=BigWorld.wg_getIntegralFormat(self.xp)) if len(errStr) else makeI18nError('exchangeXP/server_error', xp=BigWorld.wg_getIntegralFormat(self.xp))

@@ -3,6 +3,12 @@
 
 
 class RES_TUTORIAL(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MAPS_TUTORIAL_BATTLE_HINT_00 = '../maps/tutorial/battle-hint-00.png'
     MAPS_TUTORIAL_BATTLE_HINT_01 = '../maps/tutorial/battle-hint-01.png'
     MAPS_TUTORIAL_BATTLE_HINT_02 = '../maps/tutorial/battle-hint-02.png'

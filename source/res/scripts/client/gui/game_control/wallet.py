@@ -171,7 +171,7 @@ class ShowXPInfoDialogAspect(Aspect):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         filters = g_settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         filters['isFreeXPInfoDialogShowed'] = True
-        g_settingsCore.serverSettings.setSection(GUI_START_BEHAVIOR, filters)
+        g_settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)
         cd.avoid()
         yield DialogsInterface.showDialog(FreeXPInfoMeta())
         cd.function(*cd._packArgs(), **cd._kwargs)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorBase.py
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleBasicVO, makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
-from gui.shared.ItemsCache import REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.Scaleform import getVehicleTypeAssetPath
 from helpers import i18n

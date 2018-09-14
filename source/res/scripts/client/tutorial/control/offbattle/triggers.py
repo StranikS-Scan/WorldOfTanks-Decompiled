@@ -66,6 +66,10 @@ class TutorialQueueTrigger(Trigger, GlobalListener):
         if queueType == QUEUE_TYPE.TUTORIAL:
             self._tutorial.refuse()
 
+    def onArenaJoinFailure(self, queueType, *args):
+        if queueType == QUEUE_TYPE.TUTORIAL:
+            self._tutorial.refuse()
+
 
 class AllBonusesTrigger(Trigger):
 

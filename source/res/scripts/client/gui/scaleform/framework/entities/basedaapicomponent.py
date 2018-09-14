@@ -38,9 +38,9 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             return
         else:
             if alias in self.__components.keys():
-                LOG_WARNING('Class with alias `%s` already registered in object %s.It will be rewritten.' % (alias, str(self)))
+                LOG_WARNING('Class with alias `%s` already registered in object %s. It will be rewritten.' % (alias, str(self)))
             self.__components[alias] = componentPy
-            componentPy.seEnvironment(self.app)
+            componentPy.setEnvironment(self.app)
             componentPy.create()
             self.__fireRegisteringEvent(ComponentEvent.COMPONENT_REGISTERED, componentPy, alias)
             self._onRegisterFlashComponent(componentPy, alias)

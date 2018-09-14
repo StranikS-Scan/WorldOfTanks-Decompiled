@@ -353,10 +353,12 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
         self.__targetIDs = []
         if scope != MESSENGER_SCOPE.BATTLE:
             return
-        from gui.battle_control.arena_info import getClientArena
-        arena = getClientArena()
-        if arena:
-            arena.onVehicleKilled += self.__onVehicleKilled
+        else:
+            from gui.battle_control import g_sessionProvider
+            arena = g_sessionProvider.arenaVisitor.getArenaSubscription()
+            if arena is not None:
+                arena.onVehicleKilled += self.__onVehicleKilled
+            return
 
     def send(self, decorator):
         command = decorator.getCommand()

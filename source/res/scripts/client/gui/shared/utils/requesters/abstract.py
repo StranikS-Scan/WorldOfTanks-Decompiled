@@ -232,7 +232,7 @@ class RequestsByIDProcessor(object):
         result, requestID = False, 0
         requester = self.getSender()
         if not requester:
-            LOG_WARNING('There is not sender is present')
+            LOG_WARNING('There is not sender is present', self)
             return (result, requestID)
         method = self._getSenderMethod(requester, methodName)
         if callable(method):

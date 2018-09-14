@@ -127,10 +127,7 @@ class CallData(object):
         self._exception = None
         if wrapped.__ismethod__ is None:
             try:
-                if getattr(args[0], function.__name__).__original__ is function:
-                    wrapped.__ismethod__ = True
-                else:
-                    wrapped.__ismethod__ = False
+                wrapped.__ismethod__ = getattr(args[0], function.__name__).__original__ is function
             except BaseException:
                 wrapped.__ismethod__ = False
 

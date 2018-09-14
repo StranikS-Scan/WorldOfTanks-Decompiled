@@ -9,6 +9,13 @@
     <forward>	64.4	</forward>
     <backward>	23	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.247	</moving>
+    <still>	0.247	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.371	</firePenalty>
+  </invisibility>
   <repairCost>	8.1	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	-0.000331 0.596224 -0.171596	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A103_T71E1/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A103_T71E1/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -188,13 +196,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.886209 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A103_T71E1/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A103_T71E1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.28071 1.48582	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -435,13 +442,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.886209 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A103_T71E1/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A103_T71E1/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.28071 1.48582	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -644,13 +650,15 @@
             <count>	6	</count>
             <rate>	30	</rate>
           </clip>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A103_T71E1/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A103_T71E1/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A103_T71E1/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -673,7 +681,7 @@
             <maxPitch>	0 7 0.353005 7 0.416667 5 0.583333 5 0.646995 7 1 7	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	T69	  <cost>	118000	</cost>
+            <vehicle>	A90_T69	  <cost>	118000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -702,13 +710,15 @@
             <count>	6	</count>
             <rate>	30	</rate>
           </clip>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A103_T71E1/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A103_T71E1/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A103_T71E1/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A103_T71E1/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A103_T71E1/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -731,7 +741,8 @@
         <exploded>	vehicles/american/A103_T71E1/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A103_T71E1/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A103_T71E1/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A103_T71E1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000331 0.411451 0.002765	</gunPosition>
       <emblemSlots>
@@ -753,9 +764,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.053 0.085 0.947 0.000 1.175 0.039 0.561 0.535 0.639 0.500 0.000 0.500 0.428 0.062 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.67 0.445 0.000000 0.29	</tiling>
       </camouflage>
@@ -780,6 +789,25 @@
     </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T71>
+        <alpha>	0.07245	</alpha>
+      </Chassis_T71>
+      <Chassis_T71_2>
+        <alpha>	0.0644	</alpha>
+      </Chassis_T71_2>
+    </chassis>
+    <engines>
+      <Continental_AOI-628-1>
+        <bravo>	89.8689	</bravo>
+      </Continental_AOI-628-1>
+      <Continental_AOI-628-2>
+        <bravo>	105.7281	</bravo>
+      </Continental_AOI-628-2>
+    </engines>
+    <armour>	0.88113489	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision>	collision	</collision>
     <damagedStateGroup>	small	</damagedStateGroup>

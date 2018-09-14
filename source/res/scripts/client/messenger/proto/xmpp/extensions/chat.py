@@ -122,28 +122,65 @@ class PrivateHistoryItem(PyExtension):
         return (requestID, isFinal)
 
 
+class _MucPrivilegesExtension(PyExtension):
+
+    def __init__(self, affiliation='', role=''):
+        super(_MucPrivilegesExtension, self).__init__(_TAG.WG_MUC_PRIVILEGES)
+        self.setAttribute('affiliation', affiliation)
+        self.setAttribute('role', role)
+
+    @classmethod
+    def getDefaultData(cls):
+        pass
+
+    def parseTag(self, pyGlooxTag):
+        affiliation = pyGlooxTag.findAttribute('affiliation') or 'none'
+        role = pyGlooxTag.findAttribute('role') or 'none'
+        return (affiliation, role)
+
+
+class MessageWgSharedExtension(WgSharedExtension):
+
+    def __init__(self, includeNS=True):
+        super(MessageWgSharedExtension, self).__init__(includeNS)
+        self.setChild(_MucPrivilegesExtension())
+
+    @classmethod
+    def getDefaultData(cls):
+        return super(MessageWgSharedExtension, cls).getDefaultData()
+
+    def parseTag(self, pyGlooxTag):
+        info = super(MessageWgSharedExtension, self).parseTag(pyGlooxTag)
+        affiliation, role = self._getChildData(pyGlooxTag, 0, _MucPrivilegesExtension.getDefaultData())
+        info['affiliation'] = affiliation
+        info['role'] = role
+        return info
+
+
 class _MessageCustomExtension(PyExtension):
 
     def __init__(self, msgType, state=CHAT_STATE.UNDEFINED):
         super(_MessageCustomExtension, self).__init__(_TAG.MESSAGE)
         self.setAttribute('type', msgType)
         self.setChild(ChatStateExtension(state))
-        self.setChild(WgSharedExtension(False))
+        self.setChild(MessageWgSharedExtension(False))
         self.setChild(DelayExtension())
         self.setChild(MessageIDExtension())
         self.setChild(PrivateHistoryItem())
 
     @classmethod
-    def getDefaultData(self):
+    def getDefaultData(cls):
         return ChatMessage()
 
     def parseTag(self, pyGlooxTag):
         message = ChatMessage()
         message.state = self._getChildData(pyGlooxTag, 0, ChatStateExtension.getDefaultData())
-        info = self._getChildData(pyGlooxTag, 1, WgSharedExtension.getDefaultData())
+        info = self._getChildData(pyGlooxTag, 1, MessageWgSharedExtension.getDefaultData())
         if info:
             message.accountDBID = info['dbID']
             message.accountName = info['name']
+            message.accountRole = info['role']
+            message.accountAffiliation = info['affiliation']
         message.sentAt = self._getChildData(pyGlooxTag, 2, DelayExtension.getDefaultData())
         message.uuid = self._getChildData(pyGlooxTag, 3, MessageIDExtension.getDefaultData())
         message.requestID, message.isFinalInHistory = self._getChildData(pyGlooxTag, 4, PrivateHistoryItem.getDefaultData())

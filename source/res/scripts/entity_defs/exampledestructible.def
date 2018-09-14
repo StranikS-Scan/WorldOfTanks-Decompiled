@@ -1,0 +1,21 @@
+<exampledestructible.def>
+  <Implements>
+    <Interface>	Destructible	</Interface>
+  </Implements>
+  <Persistent>	false	</Persistent>
+  <Properties>
+    <health>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	800	</Default>
+    </health>
+  </Properties>
+  <ClientMethods>
+    <showDamage>
+      <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
+    </showDamage>
+  </ClientMethods>
+  <CellMethods></CellMethods>
+  <BaseMethods></BaseMethods>
+</exampledestructible.def>

@@ -10,6 +10,13 @@
     <forward>	28	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.02	</moving>
+    <still>	0.08	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.3	</firePenalty>
+  </invisibility>
   <repairCost>	7.524	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.682545 -0.1731	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -401,13 +409,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18716 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.39764 2.05133	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -495,7 +502,8 @@
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II_training/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -515,7 +523,8 @@
         <exploded>	vehicles/german/G16_PzVIB_Tiger_II_training/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II_training/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II_training/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4625 1.5291	</gunPosition>
       <emblemSlots>
@@ -544,9 +553,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.979 -0.088 1.064 0.000 0.842 -0.070 1.000 0.622 0.322 0.500 0.420 0.500 0.149 1.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
       </camouflage>
@@ -561,6 +568,18 @@
   <radios>
     <FuG5_T>	shared	</FuG5_T>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <PzVIB_Vetstaerktketten_T>
+        <alpha>	0.1127	</alpha>
+      </PzVIB_Vetstaerktketten_T>
+    </chassis>
+    <engines>
+      <Maybach_HL_230P45_T>
+        <bravo>	198.2402	</bravo>
+      </Maybach_HL_230P45_T>
+    </engines>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

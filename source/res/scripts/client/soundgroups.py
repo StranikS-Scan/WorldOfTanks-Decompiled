@@ -6,11 +6,13 @@ import Event
 import Settings
 import ResMgr
 import constants
+import PlayerEvents
+import MusicControllerWWISE
+from ReplayEvents import g_replayEvents
 from debug_utils import *
 from helpers import i18n
-import PlayerEvents
-import traceback
-from ReplayEvents import g_replayEvents
+from constants import ARENA_PERIOD
+from vehicle_systems.tankStructure import TankPartNames
 ENABLE_LS = True
 ENABLE_ENGINE_N_TRACKS = True
 DEBUG_TRACE_SOUND = False
@@ -24,6 +26,15 @@ SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
 LQ_RENDER_STATE_DEFAULT = 0
 LQ_RENDER_STATE_VALUES = range(3)
+_arenaPeriodState = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
+ ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
+ ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
+_envStateDefs = {'login': ('ue_01_loginscreen_enter', 'ue_01_loginscreen_exit', 0),
+ 'lobby': ('ue_02_hangar_enter', 'ue_02_hangar_exit', 1),
+ 'queue': ('ue_03_lobby_enter', 'ue_03_lobby_exit', 0),
+ 'battleLoading': ('ue_04_loadingscreen_enter', 'ue_04_loadingscreen_exit', 0),
+ 'battle': ('ue_05_arena_enter', 'ue_05_arena_exit', 0),
+ 'battleResults': ('ue_06_result_enter', 'ue_06_result_exit', 0)}
 
 class SoundModes():
     __MODES_FOLDER = 'gui/soundModes/'
@@ -40,16 +51,8 @@ class SoundModes():
             descriptionLink = dataSection.readString('description', '')
             self.description = i18n.makeString(descriptionLink)
             self.invisible = dataSection.readBool('invisible', False)
-            self.banksToBeLoaded = []
             self.wwbanksToBeLoaded = []
             self.__isValid = None
-            banksSec = dataSection['banks']
-            if banksSec is not None:
-                for bank in banksSec.values():
-                    bankName = bank.asString
-                    manualPath = bank.readString('filePath', '')
-                    self.banksToBeLoaded.append((bankName, manualPath))
-
             wwbanksSec = dataSection['wwbanks']
             if wwbanksSec is not None:
                 for bank in wwbanksSec.values():
@@ -63,12 +66,6 @@ class SoundModes():
             if self.__isValid is None:
                 self.__isValid = self.__validate(soundModes)
             return self.__isValid
-
-        def loadBanksManually(self):
-            return True
-
-        def unloadBanksManually(self):
-            pass
 
         def __validate(self, soundModes):
             prevMode = soundModes.currentMode
@@ -116,9 +113,9 @@ class SoundModes():
         if SoundModes.MEDIA_PATH is None:
             engineConfig = ResMgr.openSection('engine_config.xml')
             if engineConfig is not None:
-                SoundModes.MEDIA_PATH = engineConfig.readString('soundMgr/wwmediaPath', 'wwaudio')
+                SoundModes.MEDIA_PATH = engineConfig.readString('soundMgr/mediaPath', 'audioww')
             else:
-                SoundModes.MEDIA_PATH = 'audio'
+                SoundModes.MEDIA_PATH = 'audioww'
         self.__modes = {}
         self.__currentMode = SoundModes.DEFAULT_MODE_NAME
         self.__nationalPresets = {}
@@ -199,7 +196,6 @@ class SoundModes():
                 defaultVoiceLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].voiceLanguage
             try:
                 WWISE.setLanguage(defaultVoiceLanguage)
-                self.__modes[SoundModes.DEFAULT_MODE_NAME].loadBanksManually()
             except:
                 LOG_CURRENT_EXCEPTION()
 
@@ -210,21 +206,15 @@ class SoundModes():
         if modeName not in self.__modes:
             LOG_DEBUG('Sound mode %s does not exist' % modeName)
             return False
-        elif self.__currentMode == modeName:
+        if self.__currentMode == modeName:
             return True
-        if self.__currentMode is not None:
-            self.__modes[self.__currentMode].unloadBanksManually()
         self.__currentMode = modeName
         modeDesc = self.__modes[modeName]
         languageSet = WWISE.setLanguage(modeDesc.voiceLanguage)
         if not languageSet:
-            LOG_WARNING('Sound: Internal error in WWISE::setLanguage')
+            LOG_WARNING('Sound: Internal WWISE error in WWISE::setLanguage')
             return False
-        elif not self.__modes[self.__currentMode].loadBanksManually():
-            LOG_WARNING('Sound: Error while manual banks loading')
-            return False
-        else:
-            return True
+        return True
 
     def setCurrentNation(self, nation):
         arena = getattr(BigWorld.player(), 'arena', None)
@@ -287,7 +277,6 @@ class SoundGroups(object):
         self.__volumeByCategory = {}
         self.__masterVolume = 1.0
         self.__lqRenderState = LQ_RENDER_STATE_DEFAULT
-        self.__replace = {}
         self.__isWindowVisible = BigWorld.isWindowVisible()
         self.__handleInside = None
         self.__handleOutside = None
@@ -296,6 +285,9 @@ class SoundGroups(object):
         self.__activeStingerPriority = None
         self.__muffled = False
         self.__muffledByReplay = False
+        self.__states = []
+        from gui.app_loader import g_appLoader
+        self.__spaceID = g_appLoader.getSpaceID()
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
         self.__categories = {'vehicles': ('outside/vehicles', 'vehicles'),
          'effects': ('hits', 'outside/hits', 'inside/weapons', 'outside/weapons', 'outside/environment', 'battle_gui'),
@@ -358,17 +350,19 @@ class SoundGroups(object):
             self.defaultGroupList = settings.asString
         g_replayEvents.onMuteSound += self.__onReplayMute
         from gui.app_loader import g_appLoader
-        g_appLoader.onGUISpaceChanged += self.__onGUISpaceChanged
+        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         return
 
     def __del__(self):
         LOG_DEBUG('Deleted: %s' % self)
 
     def destroy(self):
+        self.onVolumeChanged.clear()
+        self.onMusicVolumeChanged.clear()
         PlayerEvents.g_playerEvents.onAvatarReady -= self.onAvatarReady
         g_replayEvents.onMuteSound -= self.__onReplayMute
         from gui.app_loader import g_appLoader
-        g_appLoader.onGUISpaceChanged -= self.__onGUISpaceChanged
+        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         player = BigWorld.player()
         if player:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
@@ -409,15 +403,58 @@ class SoundGroups(object):
             volume = 0.0 if mute else self.__volumeByCategory[categoryName]
             self.setVolume(categoryName, volume, False)
 
-    def __onGUISpaceChanged(self, spaceID):
+    def __onGUISpaceEntered(self, spaceID):
         from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
-        if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
-            WWISE.WG_loadLogin()
+        if WWISE.enabled:
+            if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
+                WWISE.WG_loadLogin()
+        if spaceID == GUI_GLOBAL_SPACE_ID.BATTLE:
+            BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
+        elif self.__spaceID == GUI_GLOBAL_SPACE_ID.BATTLE:
+            BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
+        self.__spaceID = spaceID
+
+    def __arenaPeriodChanged(self, *args):
+        period = BigWorld.player().arena.period
+        state = _arenaPeriodState.get(period, None)
+        if state is not None:
+            WWISE.WW_setState('STATE_arenastate', state)
+        return
+
+    def onEnvStart(self, environment):
+        state = _envStateDefs.get(environment, None)
+        if state is not None:
+            if len(self.__states) > 0:
+                prev = self.__states[-1]
+                prevState = _envStateDefs[prev]
+                if not prevState[2]:
+                    LOG_DEBUG('Set UE state: %s' % prevState[1])
+                    WWISE.WW_eventGlobalSync(prevState[1])
+            LOG_DEBUG('Set UE state: %s' % state[0])
+            WWISE.WW_eventGlobalSync(state[0])
+            self.__states.append(environment)
+        return
+
+    def onEnvStop(self, environment):
+        for i in xrange(len(self.__states) - 1, -1, -1):
+            if environment == self.__states[i]:
+                if i == len(self.__states) - 1:
+                    prevState = _envStateDefs[environment]
+                    LOG_DEBUG('Set UE state: %s' % prevState[1])
+                    WWISE.WW_eventGlobalSync(prevState[1])
+                del self.__states[i]
+                if len(self.__states) > 0:
+                    prev = self.__states[-1]
+                    prevState = _envStateDefs[prev]
+                    if not prevState[2]:
+                        LOG_DEBUG('Set UE state: %s' % prevState[0])
+                        WWISE.WW_eventGlobalSync(prevState[0])
 
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
         self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
-        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', (self.__muffledVolume if self.__muffled else self.__masterVolume) * 100.0)
+        masterVolume = (self.__muffledVolume if self.__muffled else self.__masterVolume) * 100.0
+        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_master', masterVolume)
         self.savePreferences()
         self.onMusicVolumeChanged('music', self.__masterVolume, self.getVolume('music'))
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
@@ -491,12 +528,12 @@ class SoundGroups(object):
                 newVolume = 0.0
             self.setVolume(categoryName, newVolume, updatePrefs=False)
 
-    def muffleVolume(self):
+    def muffleWWISEVolume(self):
         if not self.__muffled:
             self.__muffled = True
             self.applyPreferences()
 
-    def restoreVolume(self):
+    def restoreWWISEVolume(self):
         self.__muffled = False
         self.applyPreferences()
 
@@ -524,36 +561,17 @@ class SoundGroups(object):
             return
 
     def unloadAll(self):
-        import MusicController
-        MusicController.g_musicController.destroy()
+        MusicControllerWWISE.destroy()
 
     def preloadSoundGroups(self, arenaName):
-        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/preloadSoundBanks')
-        banks = ''
-        if settings is not None:
-            banks = settings.asString
-        settings = ResMgr.openSection('scripts/arena_defs/' + arenaName + '.xml/unloadSoundBanks')
-        unloadBanks = ''
-        if settings is not None:
-            unloadBanks = settings.asString
+        xmlPath = 'scripts/arena_defs/' + arenaName + '.xml/soundRemapping'
         from Account import PlayerAccount
         isHangar = isinstance(BigWorld.player(), PlayerAccount)
         if isHangar:
-            WWISE.WG_loadBanks(self.defaultGroupList + ';' + banks, unloadBanks, True)
+            WWISE.WG_loadBanks(xmlPath, self.defaultGroupList, True)
         else:
-            WWISE.WG_loadBanks(banks, unloadBanks, False)
-        import MusicController
-        MusicController.g_musicController.init(arenaName)
-        return
-
-    def checkAndReplace(self, event):
-        if event == '':
-            traceback.print_stack()
-            return ''
-        elif event in self.__replace:
-            return self.__replace[event]
-        else:
-            return event
+            WWISE.WG_loadBanks(xmlPath, ' ', False)
+        MusicControllerWWISE.init(arenaName)
 
     def getSound3D(self, node, event):
         if DEBUG_TRACE_SOUND is True:
@@ -561,7 +579,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return self.WWgetSound(self.checkAndReplace(event), event + ' : ' + str(node), node)
+        return self.WWgetSound(event, event + ' : ' + str(node), node)
 
     def playSound3D(self, node, event):
         if DEBUG_TRACE_SOUND is True:
@@ -569,7 +587,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        s = self.WWgetSound(self.checkAndReplace(event), event + ' : ' + str(node), node)
+        s = self.WWgetSound(event, event + ' : ' + str(node), node)
         if s is not None:
             s.play()
         return
@@ -580,7 +598,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return self.WWgetSound(self.checkAndReplace(event), None, None)
+        return self.WWgetSound(event, None, None)
 
     def playSound2D(self, event):
         if DEBUG_TRACE_SOUND is True:
@@ -588,7 +606,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_eventGlobal(self.checkAndReplace(event))
+        return WWISE.WW_eventGlobal(event)
 
     def playSoundPos(self, event, pos):
         if DEBUG_TRACE_SOUND is True:
@@ -596,7 +614,23 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_eventGlobalPos(self.checkAndReplace(event), pos)
+        return WWISE.WW_eventGlobalPos(event, pos)
+
+    def playCameraOriented(self, event, pos):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: playCameraOriented', event)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        WWISE.WW_playCameraOriented(event, pos)
+
+    def getCameraOriented(self, event, pos):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: playCameraOriented', event)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_getCameraOriented(event, pos)
 
     def WWgetSoundObject(self, objectName, matrix, local=(0.0, 0.0, 0.0)):
         if DEBUG_TRACE_SOUND is True:
@@ -604,7 +638,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_getSoundObject(self.checkAndReplace(objectName), matrix, local)
+        return WWISE.WW_getSoundObject(objectName, matrix, local)
 
     def WWgetSound(self, eventName, objectName, matrix, local=(0.0, 0.0, 0.0)):
         if DEBUG_TRACE_SOUND is True:
@@ -612,7 +646,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_getSound(self.checkAndReplace(eventName), self.checkAndReplace(objectName), matrix, local)
+        return WWISE.WW_getSound(eventName, objectName, matrix, local)
 
     def WWgetSoundCallback(self, eventName, objectName, matrix, callback):
         if DEBUG_TRACE_SOUND is True:
@@ -620,7 +654,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_getSoundCallback(self.checkAndReplace(eventName), self.checkAndReplace(objectName), matrix, callback)
+        return WWISE.WW_getSoundCallback(eventName, objectName, matrix, callback)
 
     def WWgetSoundPos(self, eventName, objectName, position):
         if DEBUG_TRACE_SOUND is True:
@@ -628,16 +662,7 @@ class SoundGroups(object):
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_getSoundPos(self.checkAndReplace(eventName), self.checkAndReplace(objectName), position)
-
-    def loadRemapping(self, arenaDescr):
-        self.__replace = {}
-        if not hasattr(arenaDescr, 'soundRemapping'):
-            return
-        for propertyName, propertySection in arenaDescr.soundRemapping.items():
-            s1 = propertySection.readString('old')
-            s2 = propertySection.readString('new')
-            self.__replace[s1] = s2
+        return WWISE.WW_getSoundPos(eventName, objectName, position)
 
     def changePlayMode(self, mode):
         if BigWorld.player().getVehicleAttached() is not None:
@@ -658,7 +683,8 @@ class SoundGroups(object):
             else:
                 WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_sniper')
             if BigWorld.player().getVehicleAttached() is not None:
-                WWISE.WWsetCameraShift(BigWorld.player().getVehicleAttached().appearance.modelsDesc['turret']['model'].matrix)
+                compoundModel = BigWorld.player().getVehicleAttached().appearance.compoundModel
+                WWISE.WWsetCameraShift(compoundModel.node(TankPartNames.TURRET))
         elif mode == 2:
             WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 2)
             WWISE.WW_setState('STATE_viewPlayMode', 'STATE_viewPlayMode_strategic')
@@ -684,10 +710,12 @@ class SoundGroups(object):
     def __getWWISECategoryName(self, categoryName):
         return 'voice_gui' if categoryName == 'gui' else categoryName
 
+    def setSwitch(self, group, switch):
+        WWISE.WW_setSwitch(group, switch)
+
 
 def reloadSoundBanks():
-    import MusicController
-    MusicController.g_musicController.restart()
+    pass
 
 
 def loadLightSoundsDB():
@@ -708,10 +736,9 @@ def loadLightSoundsDB():
             lightSoundDB.append(DBitem)
 
         WWISE.LSloadEventsDB(lightSoundDB)
-        lightSoundDB = None
         return
 
 
 def LSstartAll():
-    if ENABLE_LS:
+    if WWISE.enabled and ENABLE_LS:
         WWISE.LSstartAll()

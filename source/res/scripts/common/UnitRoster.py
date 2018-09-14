@@ -164,9 +164,7 @@ class BaseUnitRoster:
         return (False, unitSlotIdx)
 
 
-_DFLT_MASK = 255
-
-def _makeBitMask(nameList, nameIndex):
+def _makeBitMask(nameList, nameIndex, power=8):
     mask = 0
     if nameList:
         for name in nameList:
@@ -174,6 +172,7 @@ def _makeBitMask(nameList, nameIndex):
             if index >= 0:
                 mask |= 1 << index
 
+    _DFLT_MASK = (1 << power) - 1
     return mask or _DFLT_MASK
 
 
@@ -237,7 +236,7 @@ class BaseUnitRosterSlot(object):
             self.vehTypeCompDescr = vehTypeCompDescr
             if vehTypeCompDescr is not None:
                 return
-            self.nationMask = _makeBitMask(nationNames, nations.INDICES)
+            self.nationMask = _makeBitMask(nationNames, nations.INDICES, 16)
             self.vehClassMask = _makeBitMask(vehClassNames, VEHICLE_CLASS_INDICES)
             levelRange = xrange(self.DEFAULT_LEVELS[0], self.DEFAULT_LEVELS[1] + 1)
             if isinstance(levels, int) and levels in levelRange:
@@ -345,7 +344,7 @@ class BaseUnitRosterLimits(object):
                 limits['vehicleClasses'] = _makeBitMask(vehicleClasses, VEHICLE_CLASS_INDICES)
             vehicleNations = limits.pop('vehicleNations', None)
             if vehicleNations is not None:
-                limits['vehicleNations'] = _makeBitMask(vehicleNations, nations.INDICES)
+                limits['vehicleNations'] = _makeBitMask(vehicleNations, nations.INDICES, 16)
             return
 
     def __repr__(self):

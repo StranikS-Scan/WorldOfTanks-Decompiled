@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/goodies/Goodies.py
 import collections
 from WeakMethod import WeakMethod
-from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES
+from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE
 
 class GoodieException(Exception):
     pass
@@ -95,11 +95,11 @@ class Goodies(object):
             self._removeCallback = None
         return
 
-    def __updateCallback(self, goodie, showRemoveNotification=False):
+    def __updateCallback(self, goodie, notificationType=GOODIE_NOTIFICATION_TYPE.EMPTY):
         if self._updateCallback is not None:
             callbackRef = self._updateCallback()
             if callbackRef:
-                callbackRef(goodie, showRemoveNotification)
+                callbackRef(goodie, notificationType)
         return
 
     def __removeCallback(self, goodieID):
@@ -133,7 +133,7 @@ class Goodies(object):
             return
         else:
             self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie, True)
+            self.__updateCallback(goodie, GOODIE_NOTIFICATION_TYPE.REMOVED)
             return
 
     def __update(self, goodieID):
@@ -184,7 +184,10 @@ class Goodies(object):
         except KeyError:
             raise GoodieException('Goodie is not found', goodieID)
 
-        self.__append(goodieDefinition, state, expiration, counter)
+        if not goodieDefinition.enabled:
+            self.__updateCallback(goodieDefinition.createDisabledGoodie(counter), GOODIE_NOTIFICATION_TYPE.DISABLED)
+        else:
+            self.__append(goodieDefinition, state, expiration, counter)
 
     def extend(self, goodieID, state, expiration, counter):
         goodieDefinition = self.definedGoodies[goodieID]
@@ -226,7 +229,7 @@ class Goodies(object):
             if defined.isTimeLimited():
                 if defined.isExpired():
                     toRemove.append(goodieID)
-                elif goodie.isExpired():
+                elif goodie.isActive() and goodie.isExpired():
                     toUpdate.append(goodieID)
 
         for goodieID in toUpdate:

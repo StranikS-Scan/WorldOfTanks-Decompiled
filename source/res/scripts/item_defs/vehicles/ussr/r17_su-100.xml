@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.232	</moving>
+    <still>	0.387	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.581	</firePenalty>
+  </invisibility>
   <repairCost>	4.9	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -66,7 +73,8 @@
       <turret>	0.173754 0.727888 2.10176	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R17_SU-100/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -463,13 +471,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.830893 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R17_SU-100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22328 1.85607	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -839,13 +846,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.830893 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R17_SU-100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22328 1.85607	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -917,6 +923,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R17_SU-100/normal/lod0/Gun_01.model	</undamaged>
@@ -924,7 +931,8 @@
             <exploded>	vehicles/russian/R17_SU-100/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R17_SU-100/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -946,7 +954,7 @@
           </pitchLimits>
           <maxAmmo>	50	</maxAmmo>
           <unlocks>
-            <vehicle>	SU100M1	  <cost>	48200	</cost>
+            <vehicle>	R74_SU100M1	  <cost>	48200	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -963,6 +971,7 @@
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	5.7	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R17_SU-100/normal/lod0/Gun_03.model	</undamaged>
@@ -970,7 +979,8 @@
             <exploded>	vehicles/russian/R17_SU-100/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R17_SU-100/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1008,6 +1018,7 @@
           </armor>
           <reloadTime>	7.7	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R17_SU-100/normal/lod0/Gun_02.model	</undamaged>
@@ -1015,7 +1026,8 @@
             <exploded>	vehicles/russian/R17_SU-100/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R17_SU-100/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1054,6 +1066,7 @@
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <turretYawLimits>	-12 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R17_SU-100/normal/lod0/Gun_04.model	</undamaged>
@@ -1061,7 +1074,8 @@
             <exploded>	vehicles/russian/R17_SU-100/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R17_SU-100/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1084,15 +1098,14 @@
         <exploded>	vehicles/russian/R17_SU-100/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R17_SU-100/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R17_SU-100/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R17_SU-100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </SU-100>
   </turrets0>
   <engines>
@@ -1114,6 +1127,30 @@
     </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_122-mm_D-25S_with_a_piston_shutter>
+        <delta>	1.207865	</delta>
+      </_122-mm_D-25S_with_a_piston_shutter>
+    </guns>
+    <chassis>
+      <SU-100_mod_1944>
+        <alpha>	0.1288	</alpha>
+      </SU-100_mod_1944>
+      <SU-100_mod_1945>
+        <alpha>	0.1127	</alpha>
+      </SU-100_mod_1945>
+    </chassis>
+    <engines>
+      <V-2-34>
+        <bravo>	132.1601	</bravo>
+      </V-2-34>
+      <V-2-34M>
+        <bravo>	137.4465	</bravo>
+      </V-2-34M>
+    </engines>
+    <armour>	1.010345325	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

@@ -9,6 +9,13 @@
     <forward>	42	</forward>
     <backward>	14	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.069	</moving>
+    <still>	0.138	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.207	</firePenalty>
+  </invisibility>
   <repairCost>	4.8	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.562108 0.652247	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R114_Object_244/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R114_Object_244/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R114_Object_244/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -181,13 +189,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.933623 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R114_Object_244/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R114_Object_244/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R114_Object_244/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.15117 2.21284	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -522,6 +529,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.416667 5 0.430556 4.2 0.447222 4.2 0.461111 4.7 0.538889 4.7 0.552778 4.2 0.569445 4.2 0.583333 5 1 5	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	5.7	</reloadTime>
           <shotDispersionFactors>
@@ -536,7 +544,8 @@
             <exploded>	vehicles/russian/R114_Object_244/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R114_Object_244/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R114_Object_244/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R114_Object_244/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -559,7 +568,8 @@
         <exploded>	vehicles/russian/R114_Object_244/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R114_Object_244/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R114_Object_244/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R114_Object_244/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0001 0.435969 1.16365	</gunPosition>
       <emblemSlots>
@@ -594,9 +604,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <physicsShape>	1.000 0.000 1.000 0.000 0.686 -0.017 0.500 0.364 0.398 0.500 0.191 0.500 0.123 0.504 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
@@ -612,6 +620,19 @@
   <radios>
     <_10RKM>	shared	</_10RKM>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R114_Object_244>
+        <alpha>	0.12075	</alpha>
+      </Chassis_R114_Object_244>
+    </chassis>
+    <engines>
+      <V-2IS_R1>
+        <bravo>	137.4465	</bravo>
+      </V-2IS_R1>
+    </engines>
+    <armour>	1.064504903	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

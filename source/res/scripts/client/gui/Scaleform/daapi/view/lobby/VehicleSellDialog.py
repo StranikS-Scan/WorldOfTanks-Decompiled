@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleSellDialog.py
 import BigWorld
-from collections import defaultdict
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.shared.ItemsCache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from account_helpers.AccountSettings import AccountSettings
 from gui import SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
-from gui.shared import g_itemsCache, REQ_CRITERIA
-from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE, getItemActionTooltipData
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
+from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
 from gui.shared.utils import decorators, flashObject2Dict
+from gui.shared.money import Money
+from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.ClientUpdateManager import g_clientUpdateManager
 
 class VehicleSellDialog(VehicleSellDialogMeta):
@@ -61,7 +64,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
         vehicleAction = None
         if vehicle.sellPrice != vehicle.defaultSellPrice:
-            vehicleAction = getItemActionTooltipData(vehicle, False)
+            vehicleAction = packItemActionTooltipData(vehicle, False)
         vehicleData = {'intCD': vehicle.intCD,
          'userName': vehicle.userName,
          'icon': vehicle.icon,
@@ -80,7 +83,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             if o is not None:
                 action = None
                 if o.sellPrice != o.defaultSellPrice:
-                    action = getItemActionTooltipData(o, False)
+                    action = packItemActionTooltipData(o, False)
                 data = {'intCD': o.intCD,
                  'isRemovable': o.isRemovable,
                  'userName': o.userName,
@@ -95,7 +98,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             if s is not None:
                 action = None
                 if s.sellPrice != s.defaultSellPrice:
-                    action = getItemActionTooltipData(s, False)
+                    action = packItemActionTooltipData(s, False)
                 data = {'intCD': s.intCD,
                  'count': s.count,
                  'sellPrice': s.sellPrice,
@@ -111,7 +114,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             if e is not None:
                 action = None
                 if e.sellPrice != e.defaultSellPrice:
-                    action = getItemActionTooltipData(e, False)
+                    action = packItemActionTooltipData(e, False)
                 data = {'intCD': e.intCD,
                  'userName': e.userName,
                  'sellPrice': e.sellPrice,
@@ -130,7 +133,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         for s in shells:
             action = None
             if s.sellPrice != s.defaultSellPrice:
-                action = getItemActionTooltipData(s, False)
+                action = packItemActionTooltipData(s, False)
             inInventoryShells.append({'intCD': s.intCD,
              'count': s.inventoryCount,
              'sellPrice': s.sellPrice,
@@ -140,16 +143,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
              'action': action})
 
         removePrice = items.shop.paidRemovalCost
-        removePrices = (0, removePrice)
-        defRemovePrice = (0, items.shop.defaults.paidRemovalCost)
+        removePrices = Money(gold=removePrice)
+        defRemovePrice = Money(gold=items.shop.defaults.paidRemovalCost)
         removeAction = None
         if removePrices != defRemovePrice:
-            removeAction = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-             'key': 'paidRemovalCost',
-             'isBuying': True,
-             'state': (None, ACTION_TOOLTIPS_STATE.DISCOUNT),
-             'newPrice': removePrices,
-             'oldPrice': defRemovePrice}
+            removeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removePrices, defRemovePrice)
         settings = self.getDialogSettings()
         isSlidingComponentOpened = settings['isOpened']
         self.as_setDataS({'accountGold': items.stats.gold,

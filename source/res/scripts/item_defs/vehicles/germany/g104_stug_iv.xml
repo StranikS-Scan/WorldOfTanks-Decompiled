@@ -9,6 +9,13 @@
     <forward>	38	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.22	</moving>
+    <still>	0.366	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.549	</firePenalty>
+  </invisibility>
   <repairCost>	7.5	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -71,7 +78,8 @@
       <turret>	0.109075 0.634199 0.408983	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G104_Stug_IV/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G104_Stug_IV/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G104_Stug_IV/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -222,7 +230,8 @@
       </effects>
       <hullPosition>	0.000000 0.990418 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G104_Stug_IV/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G104_Stug_IV/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G104_Stug_IV/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.24631 1.68979	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -361,9 +370,7 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
     </Chassis_G104_Stug_IV>
   </chassis>
@@ -420,6 +427,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	3.7	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
@@ -429,7 +437,8 @@
             <exploded>	vehicles/german/G104_Stug_IV/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G104_Stug_IV/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G104_Stug_IV/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G104_Stug_IV/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -452,14 +461,13 @@
         <exploded>	vehicles/german/G104_Stug_IV/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G104_Stug_IV/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G104_Stug_IV/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G104_Stug_IV/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	0.900 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
     </Turret_1_G104_Stug_IV>
   </turrets0>
@@ -472,6 +480,19 @@
   <radios>
     <FuG16>	shared	</FuG16>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G104_Stug_IV>
+        <alpha>	0.0805	</alpha>
+      </Chassis_G104_Stug_IV>
+    </chassis>
+    <engines>
+      <Maybach_HL_120_TRM_C>
+        <bravo>	79.29608	</bravo>
+      </Maybach_HL_120_TRM_C>
+    </engines>
+    <armour>	0.667515871	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

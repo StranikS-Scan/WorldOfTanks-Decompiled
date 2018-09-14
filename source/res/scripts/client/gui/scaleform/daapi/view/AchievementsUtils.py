@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/AchievementsUtils.py
-from debug_utils import LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_SECTION, ACHIEVEMENT_TYPE
 from dossiers2.custom.config import RECORD_CONFIGS
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
+from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
 
 class AchievementsUtils(object):
 
@@ -80,6 +80,29 @@ class AchievementsUtils(object):
          'dossierType': dossierType,
          'dossierCompDescr': dossierCompDescr,
          'iconAlpha': iconAlpha}
+
+    @staticmethod
+    def getBattleResultAchievementData(achievement, type, customData, isUnique=False):
+        rank, i18nValue = (None, None)
+        if achievement.getType() != ACHIEVEMENT_TYPE.SERIES:
+            rank, i18nValue = achievement.getValue(), achievement.getI18nValue()
+        icons = achievement.getIcons()
+        specialIcon = icons.get(MarkOnGunAchievement.IT_95X85, None)
+        return {'type': type,
+         'block': achievement.getBlock(),
+         'inactive': False,
+         'icon': {'big': '',
+                  'small': achievement.getSmallIcon() if specialIcon is None else ''},
+         'rank': rank,
+         'localizedValue': i18nValue,
+         'unic': isUnique,
+         'isRare': False,
+         'title': achievement.getUserName(),
+         'description': achievement.getUserDescription(),
+         'rareIconId': None,
+         'isEpic': achievement.hasRibbon(),
+         'specialIcon': specialIcon,
+         'customData': customData}
 
     @staticmethod
     def getCounterType(achievement, defaultSeriesCounter=None):

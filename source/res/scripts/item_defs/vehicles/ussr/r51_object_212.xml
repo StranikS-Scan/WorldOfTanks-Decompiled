@@ -11,6 +11,13 @@
     <forward>	35	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.03	</moving>
+    <still>	0.061	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.092	</firePenalty>
+  </invisibility>
   <repairCost>	30.10	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -72,7 +79,8 @@
       <turret>	0.000000 0.680119 -1.03068	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R51_Object_212/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -224,13 +232,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.21733 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R51_Object_212/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33955 2.72214	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -479,13 +486,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.21733 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R51_Object_212/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33955 2.72214	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -689,6 +695,7 @@
             <gun>	25	</gun>
           </armor>
           <aimingTime>	6.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-4 4	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R51_Object_212/normal/lod0/Gun_01.model	</undamaged>
@@ -696,7 +703,8 @@
             <exploded>	vehicles/russian/R51_Object_212/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R51_Object_212/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -725,7 +733,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
-            <vehicle>	Object_261	  <cost>	273000	</cost>
+            <vehicle>	R52_Object_261	  <cost>	273000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -746,6 +754,7 @@
             <gun>	30	</gun>
           </armor>
           <aimingTime>	7.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
           <turretYawLimits>	-4 4	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R51_Object_212/normal/lod0/Gun_02.model	</undamaged>
@@ -753,7 +762,8 @@
             <exploded>	vehicles/russian/R51_Object_212/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R51_Object_212/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -776,15 +786,14 @@
         <exploded>	vehicles/russian/R51_Object_212/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R51_Object_212/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R51_Object_212/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R51_Object_212/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.411221 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_Object_212>
   </turrets0>
   <engines>
@@ -806,6 +815,30 @@
     </_10R>
     <_12RT>	shared	</_12RT>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_203mm_B-4>
+        <delta>	1.06	</delta>
+      </_203mm_B-4>
+    </guns>
+    <chassis>
+      <Chassis_Object_212>
+        <alpha>	0.1288	</alpha>
+      </Chassis_Object_212>
+      <Chassis_Object_212_2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Object_212_2>
+    </chassis>
+    <engines>
+      <M-17F_R>
+        <bravo>	185.0242	</bravo>
+      </M-17F_R>
+      <V-2-212>
+        <bravo>	224.6722	</bravo>
+      </V-2-212>
+    </engines>
+    <armour>	0.906774472	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

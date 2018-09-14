@@ -10,6 +10,13 @@
     <forward>	38.8	</forward>
     <backward>	16	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.189	</moving>
+    <still>	0.252	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.378	</firePenalty>
+  </invisibility>
   <repairCost>	5.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.595843 0.24971	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -188,13 +196,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.02816 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.00153 1.8424	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -439,13 +446,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.02816 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.00153 1.8424	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -650,13 +656,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J08_Chi_Nu/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -696,13 +704,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J08_Chi_Nu/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -725,7 +735,8 @@
         <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.04135 0.33929 0.673241	</gunPosition>
       <emblemSlots>
@@ -761,9 +772,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.035 0.000 1.034 0.000 0.586 0.111 1.000 0.695 0.296 0.500 0.214 0.500 0.115 0.040 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
       </camouflage>
@@ -831,13 +840,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J08_Chi_Nu/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -873,13 +884,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/japan/J08_Chi_Nu/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -914,6 +927,7 @@
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -926,7 +940,8 @@
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -944,7 +959,7 @@
         </_75mm_Gun_Type3>
         <_75mm_Gun_Type5>	shared	  <maxAmmo>	52	</maxAmmo>
           <unlocks>
-            <vehicle>	Chi_To	  <cost>	31150	</cost>
+            <vehicle>	J10_Chi_To	  <cost>	31150	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -963,6 +978,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <models>
@@ -971,7 +987,8 @@
             <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -994,7 +1011,8 @@
         <exploded>	vehicles/japan/J08_Chi_Nu/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J08_Chi_Nu/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J08_Chi_Nu/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J08_Chi_Nu/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.020625 0.350262 0.652038	</gunPosition>
       <emblemSlots>
@@ -1030,9 +1048,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.039 1.000 0.000 0.672 0.063 1.000 0.670 0.384 0.500 0.092 0.500 0.060 0.020 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1067,6 +1083,25 @@
     </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Chi_Nu>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Chi_Nu>
+      <Chassis_Chi_Nu_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Chi_Nu_2>
+    </chassis>
+    <engines>
+      <_Type100_A>
+        <bravo>	63.43687	</bravo>
+      </_Type100_A>
+      <_Type100_V12_Kakyuu>
+        <bravo>	79.29608	</bravo>
+      </_Type100_V12_Kakyuu>
+    </engines>
+    <armour>	0.691423453	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

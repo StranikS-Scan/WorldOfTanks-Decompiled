@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/lobby/queries.py
 from CurrentVehicle import g_currentVehicle
 from gui.shared import g_itemsCache
+from gui.shared.items_parameters import formatters
 from items import vehicles, ITEM_TYPE_NAMES
 from tutorial.control import ContentQuery
 from tutorial.logger import LOG_CURRENT_EXCEPTION
@@ -20,12 +21,8 @@ class VehicleItemParams(ContentQuery):
                 guiItem = g_itemsCache.items.getItemByCD(itemCD)
                 content['itemTypeName'] = guiItem.itemTypeName
                 content['itemLevel'] = guiItem.level
-                params = guiItem.getParams(g_currentVehicle.item)
-                itemParams = []
-                for param in params['parameters']:
-                    itemParams.extend(param)
-
-                content['itemParams'] = itemParams
+                params = guiItem.getParams(g_currentVehicle.item).get('parameters', dict())
+                content['itemParams'] = formatters.getFormattedParamsList(g_currentVehicle.item.descriptor, params)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 

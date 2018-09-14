@@ -4,6 +4,9 @@ from messenger.m_constants import CLIENT_ERROR_ID, CLIENT_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.migration.proxy import MigrationProxy
 from messenger.proto.shared_errors import ClientActionError
+from messenger_common_chat2 import MESSENGER_ACTION_IDS
+from gui.shared.rq_cooldown import REQUEST_SCOPE
+from gui.shared.events import CoolDownEvent, coolDownEventParams
 
 class ContactsManagerProxy(MigrationProxy):
     __slots__ = ()
@@ -63,6 +66,12 @@ class ContactsManagerProxy(MigrationProxy):
         raise NotImplementedError
 
     def removeNote(self, dbID):
+        raise NotImplementedError
+
+    def getUserSearchProcessor(self):
+        raise NotImplementedError
+
+    def getUserSearchCooldownInfo(self):
         raise NotImplementedError
 
 
@@ -136,6 +145,14 @@ class BWContactsManagerProxy(ContactsManagerProxy):
     def removeNote(self, dbID):
         _showClientActionError(CLIENT_ACTION_ID.REMOVE_NOTE)
         return False
+
+    def getUserSearchProcessor(self):
+        from messenger.proto.bw_chat2.search_processor import SearchUsersProcessor
+        return SearchUsersProcessor()
+
+    def getUserSearchCooldownInfo(self):
+        coolDown = coolDownEventParams(CoolDownEvent.BW_CHAT2, REQUEST_SCOPE.BW_CHAT2, MESSENGER_ACTION_IDS.FIND_USERS_BY_NAME)
+        return coolDown
 
 
 class XMPPContactsManagerProxy(ContactsManagerProxy):
@@ -243,3 +260,11 @@ class XMPPContactsManagerProxy(ContactsManagerProxy):
         if not result:
             g_messengerEvents.onErrorReceived(error)
         return result
+
+    def getUserSearchProcessor(self):
+        from messenger.proto.xmpp.xmpp_search_processors import SearchUsersProcessor
+        return SearchUsersProcessor()
+
+    def getUserSearchCooldownInfo(self):
+        coolDown = coolDownEventParams(CoolDownEvent.XMPP, REQUEST_SCOPE.XMPP, CLIENT_ACTION_ID.FIND_USERS_BY_PREFIX)
+        return coolDown

@@ -1,21 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/controls.py
-import BigWorld
 from functools import partial
 from operator import attrgetter
-from debug_utils import LOG_ERROR, LOG_DEBUG
+import BigWorld
 import fortified_regions
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.game_control.battle_availability import SortiesCurfewController
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.fortifications import getClientFort, getClientFortMgr
 from gui.shared.fortifications.FortFinder import FortFinder
 from gui.shared.fortifications.context import FortRequestCtx
 from gui.shared.fortifications.fort_ext import FortCooldownManager
 from gui.shared.fortifications.fort_ext import PlayerFortRequester
-from gui.game_control.battle_availability import SortiesCurfewController
 from gui.shared.fortifications.fort_seqs import SortiesCache, PublicInfoCache, FortBattlesCache
 from gui.shared.fortifications.interfaces import IFortController
-from gui.shared.fortifications.restrictions import FortPermissions, NoFortLimits, IntroFortLimits, NoFortValidators, FortValidators
-from gui.shared.fortifications.restrictions import FortLimits
+from gui.shared.fortifications.restrictions import FortLimits, FortPermissions, IntroFortLimits, NoFortLimits
+from gui.shared.fortifications.restrictions import FortValidators, NoFortValidators
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE, CLIENT_FORT_STATE
 from helpers import time_utils
 
@@ -192,7 +192,7 @@ class NoFortController(_FortController):
 
     @classmethod
     def isNext(cls, stateID, isLeader):
-        if stateID in [CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED]:
+        if stateID in (CLIENT_FORT_STATE.NO_CLAN, CLIENT_FORT_STATE.UNSUBSCRIBED):
             return True
         return True if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT else None
 
@@ -212,6 +212,34 @@ class NoFortController(_FortController):
         return
 
 
+class DisabledFortController(_FortController):
+
+    def __init__(self):
+        super(DisabledFortController, self).__init__({})
+
+    @classmethod
+    def isNext(cls, stateID, isLeader):
+        return stateID == CLIENT_FORT_STATE.DISABLED
+
+    def request(self, ctx, callback=None):
+        self._failChecking('Has been invoked DisabledFortController.request', ctx, callback)
+
+    def init(self, clan, listeners, prevController=None):
+        super(DisabledFortController, self).init(clan, listeners, prevController)
+        if prevController is not None:
+            self._sortiesCache = prevController.getSortiesCache()
+            if self._sortiesCache is not None:
+                self._sortiesCache.setController(self)
+        return
+
+    def fini(self, clearCache=True):
+        if self._sortiesCache and clearCache:
+            self._sortiesCache.stop()
+            self._sortiesCache = None
+        super(DisabledFortController, self).fini(clearCache)
+        return
+
+
 class CenterUnavailableController(_FortController):
 
     def __init__(self):
@@ -219,7 +247,7 @@ class CenterUnavailableController(_FortController):
 
     @classmethod
     def isNext(cls, stateID, isLeader):
-        if stateID in [CLIENT_FORT_STATE.CENTER_UNAVAILABLE]:
+        if stateID in (CLIENT_FORT_STATE.CENTER_UNAVAILABLE,):
             return True
         return True if not isLeader and stateID == CLIENT_FORT_STATE.NO_FORT else None
 
@@ -305,7 +333,7 @@ class FortController(_FortController):
 
     @classmethod
     def isNext(cls, stateID, _):
-        return stateID in [CLIENT_FORT_STATE.WIZARD, CLIENT_FORT_STATE.HAS_FORT]
+        return stateID in (CLIENT_FORT_STATE.WIZARD, CLIENT_FORT_STATE.HAS_FORT)
 
     def init(self, clan, listeners, prevController=None):
         super(FortController, self).init(clan, listeners, prevController)
@@ -836,11 +864,12 @@ class FortController(_FortController):
 
 
 def createInitial():
-    return NoFortController()
+    return DisabledFortController()
 
 
 def createByState(state, isLeader=False, exclude=None):
-    all = [NoFortController,
+    all = [DisabledFortController,
+     NoFortController,
      IntroController,
      FortController,
      CenterUnavailableController]

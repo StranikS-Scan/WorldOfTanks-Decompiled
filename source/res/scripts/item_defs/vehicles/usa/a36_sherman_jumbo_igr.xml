@@ -10,6 +10,13 @@
     <forward>	35	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.152	</moving>
+    <still>	0.202	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.303	</firePenalty>
+  </invisibility>
   <repairCost>	7.604	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -65,7 +72,8 @@
       <turret>	0.000000 0.893224 -0.159419	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/american/A36_Sherman_Jumbo/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/american/A36_Sherman_Jumbo/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A36_Sherman_Jumbo/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -202,13 +210,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.945076 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/american/A36_Sherman_Jumbo/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A36_Sherman_Jumbo/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A36_Sherman_Jumbo/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.09789 1.8831	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -265,9 +272,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1098	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -412,6 +416,7 @@
           </armor>
           <reloadTime>	3.3	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
             <undamaged>	vehicles/american/A36_Sherman_Jumbo/normal/lod0/Gun_04.model	</undamaged>
@@ -419,7 +424,8 @@
             <exploded>	vehicles/american/A36_Sherman_Jumbo/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/american/A36_Sherman_Jumbo/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/american/A36_Sherman_Jumbo/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A36_Sherman_Jumbo/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -432,7 +438,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+            <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_M1A2_IGR>
       </guns>
@@ -442,7 +448,8 @@
         <exploded>	vehicles/american/A36_Sherman_Jumbo/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/american/A36_Sherman_Jumbo/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/american/A36_Sherman_Jumbo/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A36_Sherman_Jumbo/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.447594 0.989264	</gunPosition>
       <emblemSlots>
@@ -464,9 +471,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.922 0.000 1.000 0.000 0.577 0.070 0.766 0.518 0.394 0.500 0.082 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.4 0.46 0.13 0.000000	</tiling>
       </camouflage>
@@ -481,6 +486,19 @@
   <radios>
     <SCR_506_IGR>	shared	</SCR_506_IGR>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Sherman_Jumbo_2_IGR>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Sherman_Jumbo_2_IGR>
+    </chassis>
+    <engines>
+      <Ford_GAA_IGR>
+        <bravo>	137.4465	</bravo>
+      </Ford_GAA_IGR>
+    </engines>
+    <armour>	1.039018702	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

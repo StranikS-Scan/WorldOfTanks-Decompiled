@@ -9,9 +9,12 @@
           <and>
             <vehicleKills>
               <classes>	SPG	</classes>
-              <enemyIsNotSpotted></enemyIsNotSpotted>
               <greaterOrEqual>	2	</greaterOrEqual>
             </vehicleKills>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
           </and>
         </postBattle>
       </conditions>
@@ -31,15 +34,17 @@
       <conditions>
         <postBattle>
           <and>
+            <vehicleKills>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
             <results>
               <key>	damageDealt	</key>
               <greaterOrEqual>	4000	</greaterOrEqual>
             </results>
-            <vehicleKills>
-              <classes>	SPG	</classes>
-              <enemyIsNotSpotted></enemyIsNotSpotted>
-              <greaterOrEqual>	2	</greaterOrEqual>
-            </vehicleKills>
           </and>
         </postBattle>
       </conditions>

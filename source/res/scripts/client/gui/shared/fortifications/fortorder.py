@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
-from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
-from gui.shared.fortifications import isFortificationBattlesEnabled
-from gui.shared.utils.ItemsParameters import g_instance as g_itemsParams
-from gui.shared.formatters import text_styles, time_formatters
+from FortifiedRegionBase import FORT_EVENT_TYPE
+from gui.LobbyContext import g_lobbyContext
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.items_parameters import params_helper, formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared.formatters import text_styles, time_formatters
 from helpers import time_utils, i18n
 
 class FortOrder(object):
@@ -117,7 +118,7 @@ class FortOrder(object):
             return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.getBuildingUIDbyID(self.buildingID))
 
     def _isSupported(self, orderID):
-        if not isFortificationBattlesEnabled():
+        if not g_lobbyContext.getServerSettings().isFortsEnabled():
             if orderID in (FORT_ORDER_TYPE.EVACUATION, FORT_ORDER_TYPE.REQUISITION):
                 return False
         return True
@@ -149,9 +150,12 @@ class FortOrder(object):
         return i18n.makeString('#fortifications:orderType/%s' % i18nKey, level=fort_formatters.getTextLevel(self.level))
 
     def getParams(self):
+        result = []
         if self.isConsumable:
             from ClientFortifiedRegion import getBattleEquipmentByOrderID
             eqDescr = getBattleEquipmentByOrderID(self.orderID, self.level)
             if eqDescr is not None:
-                return g_itemsParams.getEquipment(eqDescr, isParameters=True)['parameters']
-        return []
+                eqItem = g_itemsCache.items.getItemByCD(eqDescr['compactDescr'])
+                params = params_helper.getParameters(eqItem)
+                result = formatters.getFormattedParamsList(eqDescr, params)
+        return result

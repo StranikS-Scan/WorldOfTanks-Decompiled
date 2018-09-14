@@ -20,7 +20,11 @@ class FlagAbsorptionPoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFPointFlag
         self.checkAttribute('redFlagModel')
         LOG_DEBUG('FlagAbsorptionPoint ', self.position, self.radius, self.team)
         _CTFCheckPoint.__init__(self, self.radiusModel)
-        teamParams = self._TEAM_PARAMS[self.team in (0, BigWorld.player().team)]
+        player = BigWorld.player()
+        if player is not None:
+            teamParams = self._TEAM_PARAMS[self.team in (0, player.team)]
+        else:
+            teamParams = self._TEAM_PARAMS[0]
         flagModelName = getattr(self, teamParams[0], None)
         color = teamParams[1]
         _CTFPointFlag.__init__(self, flagModelName, self.position)
@@ -36,13 +40,15 @@ class FlagAbsorptionPoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFPointFlag
         _CTFPointFlag.__del__(self)
 
     def __isVisibleForCurrentArena(self):
-        arenaType = BigWorld.player().arena.arenaType
-        if hasattr(arenaType, 'flagAbsorptionPoints'):
-            flagAbsorptionPoints = arenaType.flagAbsorptionPoints
-            for pt in flagAbsorptionPoints:
-                if 'guid' not in pt:
-                    continue
-                if pt['guid'] == self.guid:
-                    return True
+        player = BigWorld.player()
+        if player is not None:
+            arenaType = player.arena.arenaType
+            if hasattr(arenaType, 'flagAbsorptionPoints'):
+                flagAbsorptionPoints = arenaType.flagAbsorptionPoints
+                for pt in flagAbsorptionPoints:
+                    if 'guid' not in pt:
+                        continue
+                    if pt['guid'] == self.guid:
+                        return True
 
         return False

@@ -1,0 +1,1160 @@
+<a66_m103.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	34	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.041	</moving>
+    <still>	0.081	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.122	</firePenalty>
+  </invisibility>
+  <repairCost>	9.123	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	190.5	</armor_1>
+      <armor_2>	114.3	</armor_2>
+      <armor_3>	44.5	</armor_3>
+      <armor_4>	44.5	</armor_4>
+      <armor_5>	57.2	</armor_5>
+      <armor_6>	25.4	</armor_6>
+      <armor_7>	27.9	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	31.7	</armor_9>
+      <armor_10>	139.7	</armor_10>
+      <armor_11>	31.7	</armor_11>
+      <armor_12>	228.6	</armor_12>
+      <armor_13>	59.7	</armor_13>
+      <armor_14>	127.0	</armor_14>
+      <armor_15>	63.5	</armor_15>
+      <armor_16>	94	</armor_16>
+    </armor>
+    <primaryArmor>	armor_12 armor_3 armor_4	</primaryArmor>
+    <weight>	31000	</weight>
+    <maxHealth>	1400	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A66_M103/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A66_M103/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A66_M103/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 38.00 0.36 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.24 38.00 0.36 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.14	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.368382 0.579415	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A66_M103/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A66_M103/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0178589 0.595492 3.46177	</rayStart>
+        <rayEnd>	-0.0176318 -0.30425 3.02686	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A66_M103/M103_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.12 1.12 0.09 0.27	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_M103>
+      <userString>	#usa_vehicles:Chassis_M103	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31500	</price>
+      <unlocks>
+        <chassis>	Chassis_M103_2	  <cost>	24300	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	57500	</maxLoad>
+      <terrainResistance>	1.2 1.5 2.6	</terrainResistance>
+      <brakeForce>	40500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	26	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A66_M103/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	t97	</textureSet>
+        <size>	0.5 0.8	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.4	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	32.72	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.337157	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.337157	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.329521	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.160767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.32952	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.329521	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.160767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.32952	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.27052 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A66_M103/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A66_M103/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.47351 2.24633	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.549880 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.384620 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.873460	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A66_M103/track/segment_01.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A66_M103/track/segment_01.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A66_M103/track/segment_02.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A66_M103/track/segment_02.model	</segment2ModelRight>
+        <left>	vehicles/american/A66_M103/track/left.track	</left>
+        <right>	vehicles/american/A66_M103/track/right.track	</right>
+        <segmentLength>	0.178	</segmentLength>
+        <segmentOffset>	0.321	</segmentOffset>
+        <segment2Offset>	0.081	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0039	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.07	</maxAmplitude>
+        <maxOffset>	0.07	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_M103>
+    <Chassis_M103_2>
+      <userString>	#usa_vehicles:Chassis_M103_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	61500	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	8000	</weight>
+      <maxLoad>	62500	</maxLoad>
+      <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
+      <brakeForce>	45500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	28	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A66_M103/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A66_M103/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	t97	</textureSet>
+        <size>	0.5 0.8	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.4	</textureScale>
+      </tracks>
+      <wheels>
+        <leadingWheelSyncAngle>	32.72	</leadingWheelSyncAngle>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.337157	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.337157	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.329521	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.160767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.32952	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.329521	</radius>
+          <syncAngle>	32.72	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.160767	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.32952	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.27052 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A66_M103/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A66_M103/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.47351 2.24633	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	5.549150 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.384620 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.873450	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A66_M103/track/segment_01.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A66_M103/track/segment_01.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A66_M103/track/segment_02.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A66_M103/track/segment_02.model	</segment2ModelRight>
+        <left>	vehicles/american/A66_M103/track/left.track	</left>
+        <right>	vehicles/american/A66_M103/track/right.track	</right>
+        <segmentLength>	0.178	</segmentLength>
+        <segmentOffset>	0.321	</segmentOffset>
+        <segment2Offset>	0.081	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0039	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.07	</maxAmplitude>
+        <maxOffset>	0.07	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.019	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_M103_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_M103>
+      <userString>	#usa_vehicles:Turret_1_M103	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	43500	</price>
+      <armor>
+        <armor_1>	254	</armor_1>
+        <armor_2>	147.3	</armor_2>
+        <armor_3>	134.6	</armor_3>
+        <armor_4>	53.3	</armor_4>
+        <armor_5>	113	</armor_5>
+        <armor_6>	94	</armor_6>
+        <armor_7>	86.4	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	38.1	</armor_10>
+        <armor_11>	101.6	</armor_11>
+        <armor_12>	78.7	</armor_12>
+        <armor_13>	73.7	</armor_13>
+        <armor_14>	66	</armor_14>
+        <armor_15>	120.7	</armor_15>
+        <armor_16>	47	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
+      <weight>	12000	</weight>
+      <maxHealth>	350	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	160	</maxHealth>
+        <maxRegenHealth>	80	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Gun_T5E1>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_120mm_Gun_T122	  <cost>	25000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	266.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	190.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	9.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000101904 0.000754357 3.13593	</rayStart>
+              <rayEnd>	-0.387862 -0.0980056 3.13134	</rayEnd>
+              <rayUp>	0.109 0.105 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Gun_T5E1>
+        <_120mm_Gun_T122>	shared	  <maxAmmo>	33	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_M103	  <cost>	23000	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <armor_1>	266.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	190.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <reloadTime>	11.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	2.6	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <effects>	shot_large_mb	</effects>
+          <models>
+            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00041775 3.16478	</rayStart>
+              <rayEnd>	-0.386022 -0.102784 3.16051	</rayEnd>
+              <rayUp>	0.108 0.108 5	</rayUp>
+              <size>	0.65	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_Gun_T122>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A66_M103/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A66_M103/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A66_M103/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A66_M103/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A66_M103/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.44558 1.18685	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.45737 0.713466 0.569913	</rayStart>
+          <rayEnd>	-0.605297 0.25479 0.317931	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.47035 0.693136 0.563033	</rayStart>
+          <rayEnd>	0.618275 0.234459 0.31105	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.55351 0.666331 -1.07814	</rayStart>
+          <rayEnd>	-1.23234 0.429743 -1.10763	</rayEnd>
+          <rayUp>	-0.00398655 0.998416 0.0561168	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.55351 0.666331 -1.07814	</rayStart>
+          <rayEnd>	1.23234 0.429743 -1.10763	</rayEnd>
+          <rayUp>	-0.00398655 0.998416 0.0561168	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.956 -0.080 0.593 0.290 0.500 0.500 0.466 0.500 0.130 0.569 0.354	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.61 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_M103>
+    <Turret_2_M103>
+      <userString>	#usa_vehicles:Turret_2_M103	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	55000	</price>
+      <unlocks>
+        <gun>	_120mm_Gun_M58	  <cost>	60000	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	254	</armor_1>
+        <armor_2>	158.8	</armor_2>
+        <armor_3>	147.3	</armor_3>
+        <armor_4>	53.3	</armor_4>
+        <armor_5>	133.4	</armor_5>
+        <armor_6>	116.8	</armor_6>
+        <armor_7>	99.1	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	38.1	</armor_10>
+        <armor_11>	101.6	</armor_11>
+        <armor_12>	92.7	</armor_12>
+        <armor_13>	85.1	</armor_13>
+        <armor_14>	73.7	</armor_14>
+        <armor_15>	63.5	</armor_15>
+        <armor_16>	47	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
+      <weight>	13600	</weight>
+      <maxHealth>	450	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	74	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	49	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Gun_T5E1>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	190.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	45	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	9.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00041775 2.96992	</rayStart>
+              <rayEnd>	-0.383957 -0.109616 2.96533	</rayEnd>
+              <rayUp>	0.108 0.106 5	</rayUp>
+              <size>	0.65	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Gun_T5E1>
+        <_120mm_Gun_T122>	shared	  <maxAmmo>	33	</maxAmmo>
+          <armor>
+            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	190.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <reloadTime>	11.4	</reloadTime>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.6	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <effects>	shot_large_mb	</effects>
+          <models>
+            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.00041775 3.28458	</rayStart>
+              <rayEnd>	-0.380539 -0.125187 3.28031	</rayEnd>
+              <rayUp>	0.108 0.106 5	</rayUp>
+              <size>	0.65	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_Gun_T122>
+        <_120mm_Gun_M58>	shared	  <maxAmmo>	33	</maxAmmo>
+          <armor>
+            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	190.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	50	</gun>
+          </armor>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	11.2	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/american/A66_M103/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/american/A66_M103/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/american/A66_M103/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A66_M103/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A66_M103/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000024 0.000844324 3.29181	</rayStart>
+              <rayEnd>	-0.297501 -0.26948 3.287	</rayEnd>
+              <rayUp>	0.108 0.104 5	</rayUp>
+              <size>	0.65	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large_mb	</effects>
+          <camouflage>
+            <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_120mm_Gun_M58>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A66_M103/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A66_M103/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A66_M103/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A66_M103/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A66_M103/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.44558 1.18685	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.34825 0.713424 0.823404	</rayStart>
+          <rayEnd>	-0.573003 0.271733 0.371956	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.64049 0.792427 -0.0698528	</rayStart>
+          <rayEnd>	-0.836594 0.233145 -0.272016	</rayEnd>
+          <rayUp>	0.0067817 0.999581 0.0281254	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.64049 0.792427 -0.0698528	</rayStart>
+          <rayEnd>	0.836594 0.233145 -0.272016	</rayEnd>
+          <rayUp>	0.0067817 0.999581 0.0281254	</rayUp>
+          <size>	0.78	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.34825 0.713424 0.823404	</rayStart>
+          <rayEnd>	0.573003 0.271733 0.371956	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.966 -0.082 0.535 0.380 0.500 0.500 0.500 0.500 0.125 0.476 0.351	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.5 0.5 0.04 0.56	</tiling>
+      </camouflage>
+    </Turret_2_M103>
+  </turrets0>
+  <engines>
+    <Continental_AV-1790-5B>	shared	  <unlocks>
+        <engine>	Continental_AV-1790-7C	  <cost>	45000.0	</cost>
+        </engine>
+      </unlocks>
+    </Continental_AV-1790-5B>
+    <Continental_AV-1790-7C>	shared	  <unlocks>
+        <vehicle>	A69_T110E5	  <cost>	185000	</cost>
+        </vehicle>
+      </unlocks>
+    </Continental_AV-1790-7C>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <AN-GRC-3>	shared	  <unlocks>
+        <radio>	AN-ARC-27	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </AN-GRC-3>
+    <AN-ARC-27>	shared	</AN-ARC-27>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_M103>
+        <alpha>	0.12075	</alpha>
+      </Chassis_M103>
+      <Chassis_M103_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_M103_2>
+    </chassis>
+    <engines>
+      <Continental_AV-1790-5B>
+        <bravo>	214.0994	</bravo>
+      </Continental_AV-1790-5B>
+      <Continental_AV-1790-7C>
+        <bravo>	227.3154	</bravo>
+      </Continental_AV-1790-7C>
+    </engines>
+    <armour>	0.959665224	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a66_m103.xml>

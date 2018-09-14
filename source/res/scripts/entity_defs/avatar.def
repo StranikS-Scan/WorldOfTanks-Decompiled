@@ -115,7 +115,7 @@
       <Flags>	CELL_PRIVATE	</Flags>
     </cp>
     <historyLoggingFlags>
-      <Type>	UINT16	</Type>
+      <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
     <accountDBIDOnCell>
@@ -410,7 +410,6 @@
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
     </fullyDiscloseVehicles>
-    <freezeVisibilityState></freezeVisibilityState>
     <receiveVisibilityEvents>
       <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
       </Arg>

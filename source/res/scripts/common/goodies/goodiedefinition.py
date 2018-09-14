@@ -104,3 +104,6 @@ class GoodieDefinition(object):
             if counter is None:
                 counter = self.counter
             return Goodie(self.uid, state, expiration, counter)
+
+    def createDisabledGoodie(self, counter):
+        return Goodie(self.uid, GOODIE_STATE.INACTIVE, 0, counter)

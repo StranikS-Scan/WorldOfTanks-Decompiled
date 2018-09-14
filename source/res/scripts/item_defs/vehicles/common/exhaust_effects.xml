@@ -59,25 +59,6 @@
 				particles/Tank/exhaust/large_diesel_rpm2.xml	</effects>
     </highLoad>
   </diesel_large>
-  <gas_april>
-    <start>
-      <effects>	particles/Tank/exhaust/small_gas_start.xml	</effects>
-    </start>
-    <idle>
-      <effects>	particles/Tank/exhaust/small_gas_idle.xml	</effects>
-    </idle>
-    <mainLoad>
-      <rpm>	0 0.2	</rpm>
-      <effects>	particles/Tank/exhaust/small_gas_rpm2.xml
-				particles/Tank/exhaust/small_gas_rpm1.xml	</effects>
-    </mainLoad>
-    <highLoad>
-      <rpm>	0 0.1 0.8	</rpm>
-      <effects>	particles/Tank/exhaust/small_gas_gear.xml
-				particles/Tank/exhaust/small_gas_rpm3.xml
-				particles/Tank/exhaust/small_gas_rpm2.xml	</effects>
-    </highLoad>
-  </gas_april>
   <gas_small>
     <start>
       <effects>	particles/Tank/exhaust/small_gas_start.xml	</effects>

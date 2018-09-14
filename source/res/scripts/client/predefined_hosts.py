@@ -12,13 +12,37 @@ import ResMgr
 import constants
 from Event import Event, EventManager
 from shared_utils import BitmaskHelper
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_WARNING
 from helpers import i18n
 AUTO_LOGIN_QUERY_ENABLED = not (constants.IS_DEVELOPMENT or constants.IS_CHINA)
 AUTO_LOGIN_QUERY_URL = 'auto.login.app:0000'
 AUTO_LOGIN_QUERY_TIMEOUT = 5
 CSIS_REQUEST_TIMEOUT = 10
 CSIS_REQUEST_TIMER = 10 * 60
+_PING_FORCE_COOLDOWN_TIME = 60
+_PING_COOLDOWN_TIME = 10 * 60
+UNDEFINED_PING_VAL = -1
+_DEFINED_PING_VAL = 0
+_LOW_PING_BOUNDARY_VAL = 59
+_NORM_PING_BOUNDARY_VAL = 119
+
+class PING_STATUSES(object):
+    UNDEFINED = 0
+    HIGH = 1
+    NORM = 2
+    LOW = 3
+
+
+def getPingStatus(pingVal):
+    if pingVal < _DEFINED_PING_VAL:
+        return PING_STATUSES.UNDEFINED
+    elif pingVal <= _LOW_PING_BOUNDARY_VAL:
+        return PING_STATUSES.LOW
+    elif pingVal <= _NORM_PING_BOUNDARY_VAL:
+        return PING_STATUSES.NORM
+    else:
+        return PING_STATUSES.HIGH
+
 
 class HOST_AVAILABILITY(object):
     NOT_AVAILABLE = -1
@@ -26,16 +50,6 @@ class HOST_AVAILABILITY(object):
     RECOMMENDED = 1
     UNKNOWN = 2
     IGNORED = 3
-
-    @classmethod
-    def getDefault(cls):
-        from gui import GUI_SETTINGS
-        defAvail = HOST_AVAILABILITY.IGNORED
-        if len(g_preDefinedHosts.hosts()) > 1:
-            defAvail = HOST_AVAILABILITY.UNKNOWN
-        if GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
-            defAvail = HOST_AVAILABILITY.IGNORED
-        return defAvail
 
 
 class REQUEST_RATE(object):
@@ -175,6 +189,70 @@ def getHostURL(item, token2=None, useIterator=False):
     return result
 
 
+class _PingRequester(object):
+
+    def __init__(self, pingPerformedCallback):
+        self.__pingResult = {}
+        self.__pingPerformedCallback = pingPerformedCallback
+        self.__isRequestPingInProgress = False
+        self.__lastUpdateTime = 0
+        self.__setPingCallback = False
+        try:
+            BigWorld.WGPinger.setOnPingCallback(self.__onPingPerformed)
+            self.__setPingCallback = True
+        except AttributeError:
+            LOG_CURRENT_EXCEPTION()
+
+    def request(self, peripheries, forced=False):
+        if not self.__setPingCallback:
+            self.__onPingPerformed([])
+            return
+        peripheries = map(lambda host: host.url, peripheries)
+        if not self.__isRequestPingInProgress and peripheries:
+            cooldownTime = _PING_FORCE_COOLDOWN_TIME if forced else _PING_COOLDOWN_TIME
+            if time.time() - self.__lastUpdateTime >= cooldownTime:
+                try:
+                    LOG_DEBUG('Ping starting', peripheries)
+                    self.__isRequestPingInProgress = True
+                    BigWorld.WGPinger.ping(peripheries)
+                except (AttributeError, TypeError):
+                    LOG_CURRENT_EXCEPTION()
+                    self.__onPingPerformed([])
+
+            else:
+                self.__pingPerformedCallback(self.__pingResult)
+
+    def result(self):
+        return self.__pingResult
+
+    def clear(self):
+        self.__pingResult.clear()
+
+    def fini(self):
+        self.__isRequestPingInProgress = False
+        self.__setPingCallback = False
+        self.__pingPerformedCallback = None
+        self.clear()
+        try:
+            BigWorld.WGPinger.clearOnPingCallback()
+        except AttributeError:
+            LOG_CURRENT_EXCEPTION()
+
+        return
+
+    def __onPingPerformed(self, result):
+        LOG_DEBUG('Ping performed', result)
+        self.__isRequestPingInProgress = False
+        self.__lastUpdateTime = time.time()
+        try:
+            self.__pingResult = dict(result)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+            self.__pingResult = {}
+
+        self.__pingPerformedCallback(self.__pingResult)
+
+
 class _PreDefinedHostList(object):
 
     def __init__(self):
@@ -182,13 +260,13 @@ class _PreDefinedHostList(object):
         self._eManager = EventManager()
         self.onCsisQueryStart = Event(self._eManager)
         self.onCsisQueryComplete = Event(self._eManager)
+        self.onPingPerformed = Event(self._eManager)
         self._hosts = []
         self._urlMap = {}
         self._nameMap = {}
         self._peripheryMap = {}
         self._isDataLoaded = False
         self._isCSISQueryInProgress = False
-        self.__pingResult = {}
         self.__csisUrl = ''
         self.__csisResponse = {}
         self.__lastRoamingHosts = []
@@ -198,13 +276,7 @@ class _PreDefinedHostList(object):
         self.__autoLoginQueryState = AUTO_LOGIN_QUERY_STATE.DEFAULT
         self.__csisAction = CSIS_ACTION.DEFAULT
         self.__recommended = []
-        self.__setPingCallback = False
-        try:
-            BigWorld.WGPinger.setOnPingCallback(self.__onPingPerformed)
-            self.__setPingCallback = True
-        except AttributeError:
-            LOG_CURRENT_EXCEPTION()
-
+        self.__pingRequester = _PingRequester(self.__onPingPerformed)
         return
 
     def fini(self):
@@ -213,7 +285,6 @@ class _PreDefinedHostList(object):
         self._nameMap.clear()
         self._peripheryMap.clear()
         self._isDataLoaded = False
-        self.__pingResult.clear()
         self.__csisResponse.clear()
         self.__csisUrl = ''
         self.__lastCsisUpdateTime = None
@@ -221,13 +292,8 @@ class _PreDefinedHostList(object):
         self.__autoLoginQueryState = AUTO_LOGIN_QUERY_STATE.DEFAULT
         self.__csisAction = CSIS_ACTION.DEFAULT
         self._eManager.clear()
-        self.__setPingCallback = False
+        self.__pingRequester.fini()
         self.__cleanCsisTimerCallback()
-        try:
-            BigWorld.WGPinger.clearOnPingCallback()
-        except AttributeError:
-            LOG_CURRENT_EXCEPTION()
-
         return
 
     @property
@@ -243,12 +309,18 @@ class _PreDefinedHostList(object):
         self.__csisAction = CSIS_ACTION.removeIfHas(self.__csisAction, CSIS_ACTION.UPDATE_ON_TIME)
         self.__cleanCsisTimerCallback()
 
+    def requestPing(self, forced=False):
+        self.__pingRequester.request(self._hosts, forced)
+
+    def getPingResult(self):
+        return self.__pingRequester.result()
+
     def autoLoginQuery(self, callback):
         if callback is None:
             LOG_WARNING('Callback is not defined.')
             return
         elif self.__autoLoginQueryState != AUTO_LOGIN_QUERY_STATE.DEFAULT:
-            LOG_WARNING('Auto login query in process.')
+            LOG_WARNING('Auto login query in process. Current state: {}'.format(self.__autoLoginQueryState))
             return
         elif len(self._hosts) < 2:
             callback(self.first())
@@ -262,28 +334,34 @@ class _PreDefinedHostList(object):
         else:
             self.__autoLoginQueryState = AUTO_LOGIN_QUERY_STATE.START
             self.__queryCallback = callback
-            self.__ping()
+            self.__pingRequester.request(self.peripheries())
             self.__csisAction = CSIS_ACTION.addIfNot(self.__csisAction, CSIS_ACTION.AUTO_LOGIN_REQUEST)
             self.__sendCsisQuery()
             return
 
     def resetQueryResult(self):
         self.__recommended = []
-        self.__pingResult.clear()
+        self.__pingRequester.clear()
 
-    def readScriptConfig(self, dataSection):
+    def readScriptConfig(self, dataSection, userDataSection=None):
         if self._isDataLoaded or dataSection is None:
             return
         else:
+
+            def _readSvrList(section, nodeName):
+                if section is not None and section.has_key(nodeName):
+                    return section[nodeName].items()
+                else:
+                    return []
+                    return
+
             self.__csisUrl = dataSection.readString('csisUrl')
             self._hosts = []
             self._urlMap.clear()
             self._nameMap.clear()
             self._peripheryMap.clear()
-            loginSection = dataSection['login']
-            if loginSection is None:
-                return
-            for name, subSec in loginSection.items():
+            svrList = _readSvrList(dataSection, 'login') + _readSvrList(userDataSection, 'development/login')
+            for name, subSec in svrList:
                 name = subSec.readString('name')
                 shortName = subSec.readString('short_name')
                 urls = _LoginAppUrlIterator(subSec.readStrings('url'))
@@ -301,13 +379,13 @@ class _PreDefinedHostList(object):
                     idx = len(self._hosts)
                     url = app.url
                     if url in self._urlMap:
-                        LOG_ERROR('Host url is already added. This host is ignored', url)
+                        LOG_WARNING('Host url is already added. This host is ignored', url)
                         continue
                     self._urlMap[url] = idx
                     urlToken = app.urlToken
                     if len(urlToken):
                         if urlToken in self._urlMap:
-                            LOG_ERROR('Alternative host url is already added. This url is ignored', app.url)
+                            LOG_WARNING('Alternative host url is already added. This url is ignored', app.url)
                         else:
                             self._urlMap[urlToken] = idx
                     self._nameMap[app.name] = idx
@@ -365,7 +443,7 @@ class _PreDefinedHostList(object):
 
     def getSimpleHostsList(self, hosts):
         result = []
-        defAvail = HOST_AVAILABILITY.getDefault()
+        defAvail = self.getDefaultCSISStatus()
         predefined = tuple((host.url for host in self.peripheries()))
         isInProgress = self._isCSISQueryInProgress
         csisResGetter = self.__csisResponse.get
@@ -380,6 +458,18 @@ class _PreDefinedHostList(object):
              item.peripheryID))
 
         return result
+
+    def getDefaultCSISStatus(self):
+        from gui import GUI_SETTINGS
+        if not len(self.__csisUrl):
+            defAvail = HOST_AVAILABILITY.IGNORED
+        elif GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
+            defAvail = HOST_AVAILABILITY.IGNORED
+        elif len(g_preDefinedHosts.hosts()) > 1:
+            defAvail = HOST_AVAILABILITY.UNKNOWN
+        else:
+            defAvail = HOST_AVAILABILITY.IGNORED
+        return defAvail
 
     def urlIterator(self, primary):
         result = None
@@ -431,9 +521,8 @@ class _PreDefinedHostList(object):
 
     def _determineRecommendHost(self):
         defAvail = HOST_AVAILABILITY.NOT_AVAILABLE
-        pResGetter = self.__pingResult.get
         csisResGetter = self.__csisResponse.get
-        queryResult = map(lambda host: (host, pResGetter(host.url, -1), csisResGetter(host.peripheryID, defAvail)), self.peripheries())
+        queryResult = map(lambda host: (host, self.__pingRequester.result().get(host.url, -1), csisResGetter(host.peripheryID, defAvail)), self.peripheries())
         self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.RECOMMENDED, queryResult)
         if not len(self.__recommended):
             self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED, queryResult)
@@ -454,27 +543,6 @@ class _PreDefinedHostList(object):
                 LOG_DEBUG('Recommended by ping', self.__recommended)
             result = self.__choiceFromRecommended()
         return result
-
-    def __ping(self):
-        if not self.__setPingCallback:
-            self.__onPingPerformed([])
-            return
-        try:
-            peripheries = map(lambda host: host.url, self.peripheries())
-            LOG_DEBUG('Ping starting', peripheries)
-            BigWorld.WGPinger.ping(peripheries)
-        except (AttributeError, TypeError):
-            LOG_CURRENT_EXCEPTION()
-            self.__onPingPerformed([])
-
-    def __onPingPerformed(self, result):
-        LOG_DEBUG('Ping performed', result)
-        try:
-            self.__pingResult = dict(result)
-            self.__autoLoginQueryCompleted(AUTO_LOGIN_QUERY_STATE.PING_PERFORMED)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            self.__pingResult = {}
 
     def __startCsisTimer(self):
         self.__cleanCsisTimerCallback()
@@ -524,6 +592,11 @@ class _PreDefinedHostList(object):
         if self.__csisAction & CSIS_ACTION.UPDATE_ON_TIME:
             self.__startCsisTimer()
         self.onCsisQueryComplete(self.__csisResponse)
+
+    def __onPingPerformed(self, result):
+        self.onPingPerformed(result)
+        if self.__autoLoginQueryState & AUTO_LOGIN_QUERY_STATE.START:
+            self.__autoLoginQueryCompleted(AUTO_LOGIN_QUERY_STATE.PING_PERFORMED)
 
     def __receiveAutoLoginCSISResponse(self, response):
         self.__csisAction = CSIS_ACTION.removeIfHas(self.__csisAction, CSIS_ACTION.AUTO_LOGIN_REQUEST)

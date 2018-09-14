@@ -3,6 +3,12 @@
 
 
 class PROFILE(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     TOOLTIP_DROPDOWN_BATTLETYPE = '#profile:tooltip/dropdown/battleType'
     PROFILE_SUMMARY_SIGNIFICANTAWARDS_TOOLTIP = '#profile:profile/summary/significantAwards/tooltip'
     PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP = '#profile:profile/summary/nextAwards/tooltip'
@@ -529,6 +535,10 @@ class PROFILE(object):
 
     @staticmethod
     def profile_dropdown_labels(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#profile:profile/dropdown/labels/%s' % key
         if outcome not in PROFILE.PROFILE_DROPDOWN_LABELS_ENUM:
             raise Exception('locale key "' + outcome + '" was not found')

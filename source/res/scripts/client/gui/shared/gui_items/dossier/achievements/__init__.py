@@ -65,3 +65,4 @@ from Achieved import Achieved
 from StormLordAchievement import StormLordAchievement
 from WinnerLaurelsAchievement import WinnerLaurelsAchievement
 from SauronsEyeAchievement import SauronsEyeAchievement
+from EFC2016Achievement import EFC2016Achievement

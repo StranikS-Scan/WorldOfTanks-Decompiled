@@ -10,6 +10,13 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.226	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.339	</firePenalty>
+  </invisibility>
   <repairCost>	3.7	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -60,7 +67,8 @@
       <turret>	0.000000 0.922982 0.661832	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G46_T-25/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G46_T-25/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G46_T-25/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -431,13 +439,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.82651 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G46_T-25/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G46_T-25/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G46_T-25/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.1016 1.96691	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -507,13 +514,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.380783 10 0.444444 7 0.555556 7 0.619218 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G46_T-25/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G46_T-25/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G46_T-25/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G46_T-25/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G46_T-25/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G46_T-25/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -536,7 +545,8 @@
         <exploded>	vehicles/german/G46_T-25/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G46_T-25/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G46_T-25/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G46_T-25/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.384861 0.861368	</gunPosition>
       <emblemSlots>
@@ -572,9 +582,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.996 -0.031 1.026 0.000 0.826 0.077 0.474 0.556 0.210 0.500 0.413 0.500 0.377 0.754 0.225	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.835 0.835 0.000000 0.000000	</tiling>
       </camouflage>
@@ -589,6 +597,19 @@
   <radios>
     <FuG7A>	shared	</FuG7A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T-25>
+        <alpha>	0.119945	</alpha>
+      </Chassis_T-25>
+    </chassis>
+    <engines>
+      <Praga_C9>
+        <bravo>	118.9441	</bravo>
+      </Praga_C9>
+    </engines>
+    <armour>	0.949921335	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

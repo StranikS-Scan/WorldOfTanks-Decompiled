@@ -1,0 +1,472 @@
+<g42_maus_igr.xml>
+  <crew>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	20	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.012	</moving>
+    <still>	0.025	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.038	</firePenalty>
+  </invisibility>
+  <repairCost>	9.465	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	2.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	200	</armor_1>
+      <armor_2>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_2>
+      <armor_3>	185	</armor_3>
+      <armor_4>	160	</armor_4>
+      <armor_5>	80	</armor_5>
+      <armor_6>	50	</armor_6>
+      <armor_7>	55	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_7>
+      <armor_8>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_8>
+      <armor_9>	105	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	40	</armor_10>
+      <armor_11>	50	</armor_11>
+      <armor_12>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_12>
+      <armor_13>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_13>
+      <armor_14>	100	</armor_14>
+      <armor_15>	0	</armor_15>
+      <armor_16>	100	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	89040	</weight>
+    <maxHealth>	2400	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G42_Maus/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G42_Maus/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G42_Maus/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.20 36.00 0.34 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.20 36.00 0.34 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.08	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.90625 -1.1447	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G42_Maus/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.938728 0.889875 3.86733	</rayStart>
+        <rayEnd>	-0.938728 0.563397 3.63622	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G42_Maus/Maus_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1 1 1 0.8	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Mausketten_IGR>
+      <userString>	#igr_vehicles:Mausketten_IGR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	82500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	50	</leftTrack>
+        <rightTrack>	50	</rightTrack>
+      </armor>
+      <weight>	37250	</weight>
+      <maxLoad>	192900	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.1	</terrainResistance>
+      <brakeForce>	37800	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	15	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	225	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G42_Maus/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G42_Maus/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G42_Maus/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G42_Maus/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G42_Maus/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G42_Maus/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G42_Maus/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/german/G42_Maus/track/left.track	</left>
+        <right>	vehicles/german/G42_Maus/track/right.track	</right>
+        <segmentLength>	0.318	</segmentLength>
+        <segmentOffset>	0.106	</segmentOffset>
+        <segment2Offset>	0.153	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.7 1.1	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.08	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.43901	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.471549	</radius>
+          <syncAngle>	45	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.277444	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.281562	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	10	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L11	</name>
+          <radius>	0.277049	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.43901	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.471549	</radius>
+          <syncAngle>	45	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.277444	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.281562	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	10	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R11	</name>
+          <radius>	0.277049	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.08	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.019	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.14	</maxAmplitude>
+        <maxOffset>	0.14	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	998	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.20215 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G42_Maus/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.17927 2.92483	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.784400 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.906570 0.000000	</row1>
+            <row2>	0.000000 0.000000 10.779600	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Mausketten_IGR>
+  </chassis>
+  <turrets0>
+    <Mausturm_IGR>
+      <userString>	#igr_vehicles:Mausturm_IGR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	66000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	240	</armor_1>
+        <armor_3>	210	</armor_3>
+        <armor_4>	210	</armor_4>
+        <armor_5>	90	</armor_5>
+        <armor_6>	60	</armor_6>
+        <armor_7>	210	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	60	</armor_9>
+        <armor_10>	60	</armor_10>
+        <armor_12>	210	</armor_12>
+        <armor_13>	55	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	58000	</weight>
+      <maxHealth>	600	</maxHealth>
+      <rotationSpeed>	16	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	180	</maxHealth>
+        <maxRegenHealth>	90	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_128mm_KwK44_L55_IGR>	shared	  <reloadTime>	14.9	</reloadTime>
+          <maxAmmo>	68	</maxAmmo>
+          <armor>
+            <armor_1>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_3>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	60	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -24 1 -24	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/german/G42_Maus/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G42_Maus/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.0792379 0.013159 5.02	</rayStart>
+              <rayEnd>	-0.118846 -0.378921 5.2471	</rayEnd>
+              <rayUp>	0.108 0.106 5	</rayUp>
+              <size>	0.46	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_128mm_KwK44_L55_IGR>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G42_Maus/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G42_Maus/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G42_Maus/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G42_Maus/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G42_Maus/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.073553 0.661651 1.51396	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.43527 0.724693 0.728556	</rayStart>
+          <rayEnd>	-1.08781 0.52652 0.728544	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.46089 0.679779 -0.130098	</rayStart>
+          <rayEnd>	-1.11342 0.481637 -0.130098	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.98	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.44279 0.711522 0.735732	</rayStart>
+          <rayEnd>	1.09533 0.513344 0.735717	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.34	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.46089 0.679779 -0.130098	</rayStart>
+          <rayEnd>	1.11342 0.481637 -0.130098	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.98	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.962 -0.112 1.103 0.000 0.867 -0.102 0.500 0.100 0.000 0.500 0.470 0.500 0.095 0.733 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.8 0.4 0.5 0.4	</tiling>
+      </camouflage>
+    </Mausturm_IGR>
+  </turrets0>
+  <engines>
+    <MB507_IGR>	shared	</MB507_IGR>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <_10WSc_IGR>	shared	</_10WSc_IGR>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Mausketten_IGR>
+        <alpha>	0.10465	</alpha>
+      </Mausketten_IGR>
+    </chassis>
+    <engines>
+      <MB507_IGR>
+        <bravo>	462.5605	</bravo>
+      </MB507_IGR>
+    </engines>
+    <armour>	1.012500612	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g42_maus_igr.xml>

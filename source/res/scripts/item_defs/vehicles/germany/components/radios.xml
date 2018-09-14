@@ -1,6 +1,5 @@
 <radios.xml>
   <ids>
-    <Die_Signalfahnen>	0	</Die_Signalfahnen>
     <FuG2>	1	</FuG2>
     <FuG5>	2	</FuG5>
     <FuG6>	3	</FuG6>
@@ -31,10 +30,12 @@
     <R_5a>	30	</R_5a>
     <Kdo_Funkstation_SE_407>	31	</Kdo_Funkstation_SE_407>
     <AN_GRC_8>	32	</AN_GRC_8>
+    <FuG7A_CN>	33	</FuG7A_CN>
     <FuG2_bot>	248	</FuG2_bot>
     <Die_Signalfahnen_bot>	249	</Die_Signalfahnen_bot>
     <FuG5_T>	252	</FuG5_T>
     <Radio_PzIV>	254	</Radio_PzIV>
+    <Radio_VK4502P>	255	</Radio_VK4502P>
     <Radio_Auf_Panther>	256	</Radio_Auf_Panther>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
@@ -42,18 +43,6 @@
     <_10WSc_IGR>	60004	</_10WSc_IGR>
   </ids>
   <shared>
-    <Die_Signalfahnen>
-      <userString>	#germany_vehicles:Die_Signalfahnen	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Die_Signalfahnen>
     <Die_Signalfahnen_bot>
       <userString>	#germany_vehicles:Die_Signalfahnen_bot	</userString>
       <tags></tags>
@@ -183,6 +172,18 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG7A>
+    <FuG7A_CN>
+      <userString>	#germany_vehicles:FuG7A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8160	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	70	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG7A_CN>
     <FuG8>
       <userString>	#germany_vehicles:FuG8	</userString>
       <tags></tags>
@@ -251,6 +252,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12>
+    <Radio_VK4502P>
+      <userString>	#germany_vehicles:Radio_VK4502P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </Radio_VK4502P>
     <Radio_Auf_Panther>
       <userString>	#germany_vehicles:Radio_Auf_Panther	</userString>
       <tags></tags>

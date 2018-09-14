@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/__init__.py
+import math
 import BigWorld
 import Math
-from Math import Vector3, Matrix
-import math
+from Math import Vector3
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.mathUtils import MatrixProviders
 from ProjectileMover import collideDynamicAndStatic
+from vehicle_systems.tankStructure import TankPartNames
 from debug_utils import LOG_CODEPOINT_WARNING
 
 class IAimingSystem(object):
@@ -106,8 +107,9 @@ def shootInSkyPoint(startPos, dir):
     start = startPos
     dirFromCam.normalise()
     vehicle = BigWorld.player().vehicle
-    if vehicle is not None and vehicle.inWorld and vehicle.isStarted:
-        shotPos = Math.Vector3(vehicle.appearance.modelsDesc['gun']['model'].position)
+    if vehicle is not None and vehicle.inWorld and vehicle.isStarted and not vehicle.isTurretDetached:
+        compoundModel = vehicle.appearance.compoundModel
+        shotPos = Math.Vector3(compoundModel.node(TankPartNames.GUN).position)
         shotDesc = vehicle.typeDescriptor.shot
     else:
         type = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
@@ -139,7 +141,7 @@ def __collideTerrainOnly(start, end):
     resultWater = None
     if waterHeight != -1:
         resultWater = start - Math.Vector3(0, waterHeight, 0)
-    testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, lambda matKind, collFlags, itemId, chunkId: collFlags & 8)
+    testResTerrain = BigWorld.wg_collideSegment(BigWorld.player().spaceID, start, end, 128, 8)
     result = testResTerrain[0] if testResTerrain is not None else None
     if resultWater is not None:
         distance = (result - start).length

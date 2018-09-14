@@ -10,6 +10,13 @@
     <forward>	38	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.038	</moving>
+    <still>	0.075	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.113	</firePenalty>
+  </invisibility>
   <repairCost>	7.524	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.682545 -0.1731	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -178,13 +186,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18716 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.39764 2.05133	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -521,13 +528,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18716 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.39764 2.05133	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -845,13 +851,15 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -895,13 +903,15 @@
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -941,13 +951,15 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -970,7 +982,8 @@
         <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4625 1.5291	</gunPosition>
       <emblemSlots>
@@ -999,9 +1012,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.979 -0.088 1.064 0.000 0.601 0.064 1.000 0.622 0.322 0.500 0.420 0.500 0.149 1.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.715 0.715 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1013,7 +1024,7 @@
       <level>	9	</level>
       <price>	52370.0	</price>
       <unlocks>
-        <vehicle>	E-75	  <cost>	154000	</cost>
+        <vehicle>	G55_E-75	  <cost>	154000	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -1071,13 +1082,15 @@
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1098,6 +1111,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <reloadTime>	10.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -1124,7 +1138,8 @@
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1164,13 +1179,15 @@
           </armor>
           <shotDispersionRadius>	0.31	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1193,7 +1210,8 @@
         <exploded>	vehicles/german/G16_PzVIB_Tiger_II/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G16_PzVIB_Tiger_II/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G16_PzVIB_Tiger_II/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4468 1.60868	</gunPosition>
       <emblemSlots>
@@ -1222,9 +1240,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.010 1.085 0.000 0.571 0.108 0.947 0.553 0.500 0.500 0.266 0.500 0.138 0.638 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1254,6 +1270,33 @@
     </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_105mm_KwK45_L52>
+        <delta>	1.13	</delta>
+      </_105mm_KwK45_L52>
+      <_105mm_KwK46_L68>
+        <delta>	1.1335311	</delta>
+      </_105mm_KwK46_L68>
+    </guns>
+    <chassis>
+      <PzVIB_Standardketten>
+        <alpha>	0.10465	</alpha>
+      </PzVIB_Standardketten>
+      <PzVIB_Vetstaerktketten>
+        <alpha>	0.0966	</alpha>
+      </PzVIB_Vetstaerktketten>
+    </chassis>
+    <engines>
+      <Maybach_HL_210_TRM_P45>
+        <bravo>	171.8082	</bravo>
+      </Maybach_HL_210_TRM_P45>
+      <Maybach_HL_230_TRM_P45>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230_TRM_P45>
+    </engines>
+    <armour>	0.946403743	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

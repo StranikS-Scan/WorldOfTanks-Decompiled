@@ -5,9 +5,12 @@ import operator
 from collections import namedtuple
 import BigWorld
 from constants import ARENA_PERIOD, FINISH_REASON
-from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_ERROR
+from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui.battle_control.arena_info.invitations import SquadInvitationsFilter
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
+from gui.battle_control.arena_info.settings import INVALIDATE_OP
+from gui.prb_control.prb_helpers import prbInvitesProperty
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto.events import g_messengerEvents
 
@@ -32,26 +35,30 @@ def _getPeriodAdditionalInfo(arenaDP, period, additionalInfo):
 
 
 class _Listener(object):
-    __slots__ = ('_controllers', '_arena')
+    __slots__ = ('_controllers', '_visitor', '_arenaDP')
 
     def __init__(self):
         super(_Listener, self).__init__()
-        self._arena = lambda : None
+        self._visitor = None
+        self._arenaDP = None
         self._controllers = set()
+        return
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
 
-    def addController(self, battleCtx, controller):
-        controller.setBattleCtx(battleCtx)
+    def addController(self, controller):
         self._controllers.add(weakref.ref(controller))
         return True
 
     def removeController(self, controller):
         result = False
-        controllerRef = weakref.ref(controller)
-        if controllerRef in self._controllers:
-            self._controllers.remove(controllerRef)
+        ref = weakref.ref(controller)
+        if ref in self._controllers:
+            self._controllers.remove(ref)
+            ctrl = ref()
+            if ctrl is not None:
+                ctrl.stopControl()
             result = True
         return result
 
@@ -59,44 +66,46 @@ class _Listener(object):
         while len(self._controllers):
             ref = self._controllers.pop()
             ctrl = ref()
-            if ctrl:
-                ctrl.clear()
+            if ctrl is not None:
+                ctrl.stopControl()
 
-    def start(self, arena, **kwargs):
-        self._arena = arena
+        return
+
+    def start(self, setup):
+        self._visitor = weakref.proxy(setup.arenaVisitor)
+        self._arenaDP = weakref.proxy(setup.arenaDP)
 
     def stop(self):
+        self._visitor = None
+        self._arenaDP = None
         self.clear()
-        arena = self._arena()
-        self._arena = lambda : None
-        return arena
+        return
 
     def _invokeListenersMethod(self, method, *args):
+        caller = operator.methodcaller(method, *args)
         for ref in set(self._controllers):
             controller = ref()
-            if controller:
-                operator.methodcaller(method, *args)(controller)
+            if controller is not None:
+                caller(controller)
+
+        return
 
 
 class ArenaVehiclesListener(_Listener):
-    __slots__ = ('_dataProvider', '__callbackID')
+    """Listener of vehicles on the arena"""
+    __slots__ = ('__callbackID',)
 
     def __init__(self):
         super(ArenaVehiclesListener, self).__init__()
-        self._dataProvider = None
         self.__callbackID = None
         return
 
-    def start(self, arena, arenaDP=None):
-        super(ArenaVehiclesListener, self).start(arena)
-        if arenaDP is None:
-            LOG_ERROR('Arena data provider is None')
-            return
-        else:
-            arena = self._arena()
-            self._dataProvider = arenaDP
-            self._dataProvider.buildVehiclesData(arena.vehicles, arena.guiType)
-            self._dataProvider.buildStatsData(arena.statistics)
+    def start(self, setup):
+        super(ArenaVehiclesListener, self).start(setup)
+        self._arenaDP.buildVehiclesData(self._visitor.getArenaVehicles())
+        self._arenaDP.buildStatsData(self._visitor.getArenaStatistics())
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
             arena.onNewVehicleListReceived += self.__arena_onNewVehicleListReceived
             arena.onVehicleAdded += self.__arena_onVehicleAdded
             arena.onVehicleUpdated += self.__arena_onVehicleUpdated
@@ -106,19 +115,12 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller += self.__arena_onTeamKiller
             arena.onInteractiveStats += self.__arena_onInteractiveStats
-            return
+        return
 
     def stop(self):
-        if self.__callbackID is not None:
-            BigWorld.cancelCallback(self.__callbackID)
-            self.__callbackID = None
-        if self._dataProvider is not None:
-            self._dataProvider.clear()
-            self._dataProvider = None
-        arena = super(ArenaVehiclesListener, self).stop()
-        if arena is None:
-            return
-        else:
+        self.__clearCallback()
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
             arena.onNewVehicleListReceived -= self.__arena_onNewVehicleListReceived
             arena.onVehicleAdded -= self.__arena_onVehicleAdded
             arena.onVehicleUpdated -= self.__arena_onVehicleUpdated
@@ -128,83 +130,99 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller -= self.__arena_onTeamKiller
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
-            return
-
-    def addController(self, battleCtx, controller):
-        result = super(ArenaVehiclesListener, self).addController(battleCtx, controller)
-        if result:
-            controller.setBattleCtx(battleCtx)
-            if self.__callbackID is None:
-                self.__isRequiredDataExists()
-        return result
-
-    def removeController(self, controller):
-        result = super(ArenaVehiclesListener, self).removeController(controller)
-        if result:
-            controller.setBattleCtx(None)
-        return result
-
-    def clear(self):
-        while len(self._controllers):
-            controller = self._controllers.pop()()
-            if controller:
-                controller.setBattleCtx(None)
-
+        super(ArenaVehiclesListener, self).stop()
         return
 
+    def addController(self, controller):
+        result = super(ArenaVehiclesListener, self).addController(controller)
+        if result:
+            if self.__isRequiredDataExists():
+                if self.__callbackID is not None:
+                    self.__clearCallback()
+                    self._invokeListenersMethod('invalidateArenaInfo')
+                else:
+                    controller.invalidateArenaInfo()
+            elif self.__callbackID is None:
+                self.__setCallback()
+        return result
+
     def __arena_onNewVehicleListReceived(self):
-        arena = self._arena()
-        self._dataProvider.buildVehiclesData(arena.vehicles, arena.guiType)
-        self._invokeListenersMethod('invalidateVehiclesInfo', self._dataProvider)
+        self._arenaDP.buildVehiclesData(self._visitor.getArenaVehicles())
+        self._invokeListenersMethod('invalidateVehiclesInfo', self._arenaDP)
 
-    def __arena_onVehicleAdded(self, vID):
-        arena = self._arena()
-        vo = self._dataProvider.addVehicleInfo(vID, arena.vehicles[vID], arena.guiType)
-        self._invokeListenersMethod('addVehicleInfo', vo, self._dataProvider)
+    def __arena_onVehicleAdded(self, vehicleID):
+        added, updated = self._arenaDP.addVehicleInfo(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
+        if added is not None:
+            self._invokeListenersMethod('addVehicleInfo', added, self._arenaDP)
+        if updated:
+            self._invokeListenersMethod('updateVehiclesInfo', updated, self._arenaDP)
+        return
 
-    def __arena_onVehicleUpdated(self, vID):
-        flags, vo = self._dataProvider.updateVehicleInfo(vID, self._arena().vehicles[vID], self._arena().guiType)
-        self._invokeListenersMethod('invalidateVehicleInfo', flags, vo, self._dataProvider)
+    def __arena_onVehicleUpdated(self, vehicleID):
+        updated = self._arenaDP.updateVehicleInfo(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
+        if updated:
+            self._invokeListenersMethod('updateVehiclesInfo', updated, self._arenaDP)
 
     def __arena_onVehicleKilled(self, victimID, *args):
-        flags, vo = self._dataProvider.updateVehicleStatus(victimID, self._arena().vehicles[victimID])
-        self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._dataProvider)
+        flags, vo = self._arenaDP.updateVehicleStatus(victimID, self._visitor.vehicles.getVehicleInfo(victimID))
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
 
-    def __arena_onAvatarReady(self, vID):
-        flags, vo = self._dataProvider.updateVehicleStatus(vID, self._arena().vehicles[vID])
-        self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._dataProvider)
+    def __arena_onAvatarReady(self, vehicleID):
+        flags, vo = self._arenaDP.updateVehicleStatus(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
 
     def __arena_onNewStatisticsReceived(self):
-        self._dataProvider.buildStatsData(self._arena().statistics)
-        self._invokeListenersMethod('invalidateStats', self._dataProvider)
+        self._arenaDP.buildStatsData(self._visitor.getArenaStatistics())
+        self._invokeListenersMethod('invalidateVehiclesStats', self._arenaDP)
 
-    def __arena_onVehicleStatisticsUpdate(self, vID):
-        flags, vo = self._dataProvider.updateVehicleStats(vID, self._arena().statistics[vID])
-        self._invokeListenersMethod('invalidateVehicleStats', flags, vo, self._dataProvider)
+    def __arena_onVehicleStatisticsUpdate(self, vehicleID):
+        flags, vo = self._arenaDP.updateVehicleStats(vehicleID, self._visitor.getArenaStatistics()[vehicleID])
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
 
-    def __arena_onTeamKiller(self, vID):
-        flags, vo = self._dataProvider.updatePlayerStatus(vID, self._arena().vehicles[vID])
-        self._invokeListenersMethod('invalidatePlayerStatus', flags, vo, self._dataProvider)
+    def __arena_onTeamKiller(self, vehicleID):
+        flags, vo = self._arenaDP.updatePlayerStatus(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('invalidatePlayerStatus', flags, vo, self._arenaDP)
 
     def __arena_onInteractiveStats(self, stats):
-        self._dataProvider.updateVehicleInteractiveStats(stats)
-        self._invokeListenersMethod('invalidateVehicleInteractiveStats')
+        stats, statuses = self._arenaDP.updateVehicleInteractiveStats(stats)
+        for flags, vo in statuses:
+            self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
+
+        if stats:
+            self._invokeListenersMethod('updateVehiclesStats', stats, self._arenaDP)
 
     def __isRequiredDataExists(self):
+        return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()
+
+    def __setCallback(self):
+        self.__callbackID = BigWorld.callback(0.1, self.__handleCallback)
+
+    def __clearCallback(self):
+        if self.__callbackID is not None:
+            BigWorld.cancelCallback(self.__callbackID)
+            self.__callbackID = None
+        return
+
+    def __handleCallback(self):
         self.__callbackID = None
-        if self._dataProvider is not None and self._dataProvider.isRequiredDataExists():
+        if self.__isRequiredDataExists():
             self._invokeListenersMethod('invalidateArenaInfo')
         else:
-            self.__callbackID = BigWorld.callback(0.1, self.__isRequiredDataExists)
+            self.__setCallback()
         return
 
 
 _TAGS_TO_UPDATE = {USER_TAG.FRIEND, USER_TAG.IGNORED, USER_TAG.MUTED}
 
 class ContactsListener(_Listener):
+    __slots__ = ()
 
-    def start(self, arena, **kwargs):
-        super(ContactsListener, self).start(arena)
+    def start(self, setup):
+        super(ContactsListener, self).start(setup)
         g_messengerEvents.users.onUsersListReceived += self.__me_onUsersListReceived
         g_messengerEvents.users.onUserActionReceived += self.__me_onUserActionReceived
 
@@ -227,20 +245,100 @@ class ContactsListener(_Listener):
             self._invokeListenersMethod('invalidateUserTags', user)
 
 
+class PersonalInvitationsListener(_Listener):
+    __slots__ = ('__filter',)
+
+    def __init__(self):
+        super(PersonalInvitationsListener, self).__init__()
+        self.__filter = SquadInvitationsFilter()
+
+    @prbInvitesProperty
+    def prbInvites(self):
+        return None
+
+    def start(self, setup):
+        super(PersonalInvitationsListener, self).start(setup)
+        self.__filter.setArenaUniqueID(self._visitor.getArenaUniqueID())
+        invitesManager = self.prbInvites
+        invitesManager.onReceivedInviteListModified += self.__im_onReceivedInviteModified
+        invitesManager.onSentInviteListModified += self.__im_onSentInviteListModified
+
+    def stop(self):
+        invitesManager = self.prbInvites
+        invitesManager.onReceivedInviteListModified -= self.__im_onReceivedInviteModified
+        invitesManager.onSentInviteListModified -= self.__im_onSentInviteListModified
+        super(PersonalInvitationsListener, self).stop()
+
+    def addController(self, controller):
+        result = super(PersonalInvitationsListener, self).addController(controller)
+        if result:
+            self.__updateInvitationsStatuses()
+        return result
+
+    def __updateFilteredStatuses(self, filtered):
+        update = self._arenaDP.updateInvitationStatus
+        vos = []
+        for dbID, include, exclude in filtered:
+            flags, vo = update(dbID, include=include, exclude=exclude)
+            if vo is not None and flags != INVALIDATE_OP.NONE:
+                LOG_DEBUG('Invitation status has been changed', dbID, vo.invitationDeliveryStatus)
+                vos.append(vo)
+
+        if vos:
+            self._invokeListenersMethod('invalidateInvitationsStatuses', vos, self._arenaDP)
+        return
+
+    def __updateInvitationsStatuses(self):
+        update = self._arenaDP.updateInvitationStatus
+        vos = []
+        for invite in self.prbInvites.getInvites(incoming=True):
+            accountDBID, include = self.__filter.addReceivedInvite(invite)
+            flags, vo = update(accountDBID, include=include)
+            if vo is not None and flags != INVALIDATE_OP.NONE:
+                vos.append(vo)
+
+        for invite in self.prbInvites.getInvites(incoming=False):
+            accountDBID, include = self.__filter.addSentInvite(invite)
+            flags, vo = update(accountDBID, include=include)
+            if vo is not None and flags != INVALIDATE_OP.NONE:
+                vos.append(vo)
+
+        if vos:
+            self._invokeListenersMethod('invalidateInvitationsStatuses', vos, self._arenaDP)
+        return
+
+    def __im_onReceivedInviteModified(self, added, changed, deleted):
+        filtered = self.__filter.filterReceivedInvites(self.prbInvites.getInvite, added, changed, deleted)
+        self.__updateFilteredStatuses(filtered)
+
+    def __im_onSentInviteListModified(self, added, changed, deleted):
+        filtered = self.__filter.filterSentInvites(self.prbInvites.getInvite, added, changed, deleted)
+        self.__updateFilteredStatuses(filtered)
+
+
+_MAX_PROGRESS_VALUE = 1.0
+_SPACE_INVALIDATION_PERIOD = 0.5
+_INFLUX_INVALIDATION_PERIOD = 0.5
+
+class _LOAD_STATE_FLAG(object):
+    UNDEFINED = 0
+    SPACE_LOAD_COMPLETED = 2
+    INFLUX_LOAD_COMPLETED = 4
+
+
 class ArenaSpaceLoadListener(_Listener):
-    MAX_PROGRESS_VALUE = 1.0
-    SPACE_INVALIDATION_PERIOD = 0.5
-    INFLUX_INVALIDATION_PERIOD = 0.5
+    """Listener of Arena space loading status."""
 
     def __init__(self):
         super(ArenaSpaceLoadListener, self).__init__()
         self.__progress = 0.0
+        self.__state = _LOAD_STATE_FLAG.UNDEFINED
         self.__spaceLoadCB = None
         self.__influxDrawCB = None
         return
 
-    def start(self, arena, **kwargs):
-        super(ArenaSpaceLoadListener, self).start(arena)
+    def start(self, setup):
+        super(ArenaSpaceLoadListener, self).start(setup)
         self.__onSpaceLoadStarted()
         self.__loadSpaceCallback()
 
@@ -248,6 +346,17 @@ class ArenaSpaceLoadListener(_Listener):
         self.__clearSpaceCallback()
         self.__clearInfluxCallback()
         super(ArenaSpaceLoadListener, self).stop()
+
+    def addController(self, controller):
+        result = super(ArenaSpaceLoadListener, self).addController(controller)
+        if result:
+            controller.spaceLoadStarted()
+            if self.__state != _LOAD_STATE_FLAG.UNDEFINED:
+                if self.__state & _LOAD_STATE_FLAG.SPACE_LOAD_COMPLETED > 0:
+                    controller.spaceLoadCompleted()
+                if self.__state & _LOAD_STATE_FLAG.INFLUX_LOAD_COMPLETED > 0:
+                    controller.arenaLoadCompleted()
+        return result
 
     def __loadSpaceCallback(self):
         self.__clearSpaceCallback()
@@ -258,8 +367,8 @@ class ArenaSpaceLoadListener(_Listener):
         if progress > self.__progress:
             self.__progress = progress
             self.__onSpaceLoadUpdated(progress)
-        if progress < self.MAX_PROGRESS_VALUE:
-            self.__spaceLoadCB = BigWorld.callback(self.SPACE_INVALIDATION_PERIOD, self.__loadSpaceCallback)
+        if progress < _MAX_PROGRESS_VALUE:
+            self.__spaceLoadCB = BigWorld.callback(_SPACE_INVALIDATION_PERIOD, self.__loadSpaceCallback)
             BigWorld.SetDrawInflux(False)
         else:
             self.__onSpaceLoadCompleted()
@@ -271,7 +380,7 @@ class ArenaSpaceLoadListener(_Listener):
         if BigWorld.worldDrawEnabled():
             self.__onArenaLoadCompleted()
         else:
-            self.__influxDrawCB = BigWorld.callback(self.SPACE_INVALIDATION_PERIOD, self.__loadInfluxCallback)
+            self.__influxDrawCB = BigWorld.callback(_SPACE_INVALIDATION_PERIOD, self.__loadInfluxCallback)
 
     def __clearSpaceCallback(self):
         if self.__spaceLoadCB is not None:
@@ -292,9 +401,11 @@ class ArenaSpaceLoadListener(_Listener):
         self._invokeListenersMethod('spaceLoadStarted')
 
     def __onSpaceLoadCompleted(self):
+        self.__state |= _LOAD_STATE_FLAG.SPACE_LOAD_COMPLETED
         self._invokeListenersMethod('spaceLoadCompleted')
 
     def __onArenaLoadCompleted(self):
+        self.__state |= _LOAD_STATE_FLAG.INFLUX_LOAD_COMPLETED
         self._invokeListenersMethod('arenaLoadCompleted')
 
 
@@ -304,25 +415,26 @@ class ArenaTeamBasesListener(_Listener):
     def __init__(self):
         super(ArenaTeamBasesListener, self).__init__()
 
-    def start(self, arena, **kwargs):
-        super(ArenaTeamBasesListener, self).start(arena, **kwargs)
-        arena = self._arena()
-        arena.onTeamBasePointsUpdate += self.__arena_onTeamBasePointsUpdate
-        arena.onTeamBaseCaptured += self.__arena_onTeamBaseCaptured
-        arena.onPeriodChange += self.__arena_onPeriodChange
+    def start(self, setup):
+        super(ArenaTeamBasesListener, self).start(setup)
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onTeamBasePointsUpdate += self.__arena_onTeamBasePointsUpdate
+            arena.onTeamBaseCaptured += self.__arena_onTeamBaseCaptured
+            arena.onPeriodChange += self.__arena_onPeriodChange
+        return
 
     def stop(self):
-        arena = super(ArenaTeamBasesListener, self).stop()
-        if arena is None:
-            return
-        else:
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
             arena.onTeamBasePointsUpdate -= self.__arena_onTeamBasePointsUpdate
             arena.onTeamBaseCaptured -= self.__arena_onTeamBaseCaptured
             arena.onPeriodChange -= self.__arena_onPeriodChange
-            return
+        super(ArenaTeamBasesListener, self).stop()
+        return
 
-    def __arena_onTeamBasePointsUpdate(self, team, baseID, points, capturingStopped):
-        self._invokeListenersMethod('invalidateTeamBasePoints', team, baseID, points, capturingStopped)
+    def __arena_onTeamBasePointsUpdate(self, team, baseID, points, timeLeft, invadersCnt, capturingStopped):
+        self._invokeListenersMethod('invalidateTeamBasePoints', team, baseID, points, timeLeft, invadersCnt, capturingStopped)
 
     def __arena_onTeamBaseCaptured(self, team, baseID):
         self._invokeListenersMethod('invalidateTeamBaseCaptured', team, baseID)
@@ -333,53 +445,65 @@ class ArenaTeamBasesListener(_Listener):
 
 
 class ArenaPeriodListener(_Listener):
+    __slots__ = ()
 
-    def __init__(self):
-        super(ArenaPeriodListener, self).__init__()
-        self._dataProvider = None
+    def start(self, setup):
+        super(ArenaPeriodListener, self).start(setup)
+        self.__setPeriodInfo(controller=None)
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPeriodChange += self.__arena_onPeriodChange
         return
 
-    def start(self, arena, arenaDP=None):
-        super(ArenaPeriodListener, self).start(arena)
-        self._dataProvider = arenaDP
-        arena = self._arena()
-        periodAddInfo = _getPeriodAdditionalInfo(self._dataProvider, arena.period, arena.periodAdditionalInfo)
-        self._invokeListenersMethod('setPeriodInfo', arena.period, arena.periodEndTime, arena.periodLength, periodAddInfo, arena.arenaType.battleCountdownTimerSound)
-        arena.onPeriodChange += self.__arena_onPeriodChange
-
     def stop(self):
-        arena = super(ArenaPeriodListener, self).stop()
-        self._dataProvider = None
-        if arena is None:
-            return
-        else:
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
             arena.onPeriodChange -= self.__arena_onPeriodChange
-            return
+        super(ArenaPeriodListener, self).stop()
+        return
+
+    def addController(self, controller):
+        result = super(ArenaPeriodListener, self).addController(controller)
+        if result:
+            self.__setPeriodInfo(controller)
+        return result
+
+    def __setPeriodInfo(self, controller=None):
+        if self._visitor is not None:
+            period = self._visitor.getArenaPeriod()
+            periodAddInfo = _getPeriodAdditionalInfo(self._arenaDP, period, self._visitor.getArenaPeriodAdditionalInfo())
+            if controller is not None:
+                controller.setPeriodInfo(period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo, self._visitor.type.getCountdownTimerSound())
+            else:
+                self._invokeListenersMethod('setPeriodInfo', period, self._visitor.getArenaPeriodEndTime(), self._visitor.getArenaPeriodLength(), periodAddInfo, self._visitor.type.getCountdownTimerSound())
+        return
 
     def __arena_onPeriodChange(self, period, endTime, length, additionalInfo):
-        self._invokeListenersMethod('invalidatePeriodInfo', period, endTime, length, _getPeriodAdditionalInfo(self._dataProvider, period, additionalInfo))
+        self._invokeListenersMethod('invalidatePeriodInfo', period, endTime, length, _getPeriodAdditionalInfo(self._arenaDP, period, additionalInfo))
 
 
 class ArenaRespawnListener(_Listener):
+    __slots__ = ()
 
-    def start(self, arena, **kwargs):
-        super(ArenaRespawnListener, self).start(arena, **kwargs)
-        arena = self._arena()
-        arena.onRespawnAvailableVehicles += self.__arena_onRespawnAvailableVehicles
-        arena.onRespawnCooldowns += self.__arena_onRespawnCooldowns
-        arena.onRespawnRandomVehicle += self.__arena_onRespawnRandomVehicle
-        arena.onRespawnResurrected += self.__arena_onRespawnResurrected
+    def start(self, setup):
+        super(ArenaRespawnListener, self).start(setup)
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onRespawnAvailableVehicles += self.__arena_onRespawnAvailableVehicles
+            arena.onRespawnCooldowns += self.__arena_onRespawnCooldowns
+            arena.onRespawnRandomVehicle += self.__arena_onRespawnRandomVehicle
+            arena.onRespawnResurrected += self.__arena_onRespawnResurrected
+        return
 
     def stop(self):
-        arena = super(ArenaRespawnListener, self).stop()
-        if arena is None:
-            return
-        else:
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
             arena.onRespawnAvailableVehicles -= self.__arena_onRespawnAvailableVehicles
             arena.onRespawnCooldowns -= self.__arena_onRespawnCooldowns
             arena.onRespawnRandomVehicle -= self.__arena_onRespawnRandomVehicle
             arena.onRespawnResurrected -= self.__arena_onRespawnResurrected
-            return
+        super(ArenaRespawnListener, self).stop()
+        return
 
     def __arena_onRespawnAvailableVehicles(self, vehsList):
         self._invokeListenersMethod('updateRespawnVehicles', vehsList)
@@ -394,39 +518,57 @@ class ArenaRespawnListener(_Listener):
         self._invokeListenersMethod('updateRespawnRessurectedInfo', respawnInfo)
 
 
-class ArenaFirstOfAprilListener(_Listener):
+class PositionsListener(_Listener):
+    __slots__ = ()
 
-    def start(self, arena, **kwargs):
-        super(ArenaFirstOfAprilListener, self).start(arena, **kwargs)
-        arena = self._arena()
-        arena.onFirstOfAprilAction += self.__arena_onFirstOfAprilAction
+    def start(self, setup):
+        super(PositionsListener, self).start(setup)
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPositionsUpdated += self.__arena_onPositionsUpdated
+        return
 
     def stop(self):
-        arena = super(ArenaFirstOfAprilListener, self).stop()
-        if arena is None:
-            return
-        else:
-            arena.onFirstOfAprilAction -= self.__arena_onFirstOfAprilAction
-            return
+        arena = self._visitor.getArenaSubscription()
+        if arena is not None:
+            arena.onPositionsUpdated -= self.__arena_onPositionsUpdated
+        super(PositionsListener, self).stop()
+        return
 
-    def __arena_onFirstOfAprilAction(self, actionID, actionTime):
-        self._invokeListenersMethod('processAction', actionID, actionTime)
+    def __arena_onPositionsUpdated(self):
+        positions = self._visitor.getArenaPositions()
+        if self._arenaDP is not None:
+            getter = self._arenaDP.getVehicleInfo
+        else:
+
+            def getter(_):
+                return None
+
+        def _iterator():
+            for vehicleID, position in positions.iteritems():
+                yield (getter(vehicleID), position)
+
+        self._invokeListenersMethod('updatePositions', _iterator)
+        return
 
 
 class ListenersCollection(_Listener):
-    __slots__ = ('__vehicles', '__teamsBases', '__loader', '__contacts', '__period', '__respawn', '__firstOfApril')
+    __slots__ = ('__vehicles', '__teamsBases', '__loader', '__contacts', '__period', '__respawn', '__invitations', '__positions', '__battleCtx')
 
     def __init__(self):
         super(ListenersCollection, self).__init__()
+        self.__battleCtx = None
         self.__vehicles = ArenaVehiclesListener()
         self.__teamsBases = ArenaTeamBasesListener()
         self.__contacts = ContactsListener()
         self.__loader = ArenaSpaceLoadListener()
         self.__period = ArenaPeriodListener()
         self.__respawn = ArenaRespawnListener()
-        self.__firstOfApril = ArenaFirstOfAprilListener()
+        self.__invitations = PersonalInvitationsListener()
+        self.__positions = PositionsListener()
+        return
 
-    def addController(self, battleCtx, controller):
+    def addController(self, controller):
         result = False
         try:
             scope = controller.getCtrlScope()
@@ -434,19 +576,24 @@ class ListenersCollection(_Listener):
             LOG_ERROR('Controller is not valid', controller)
             return False
 
+        controller.startControl(self.__battleCtx, self._visitor)
         if scope & _SCOPE.LOAD > 0:
-            result |= self.__loader.addController(battleCtx, controller)
+            result |= self.__loader.addController(controller)
         if scope & _SCOPE.VEHICLES > 0:
-            result |= self.__vehicles.addController(battleCtx, controller)
-            result |= self.__contacts.addController(battleCtx, controller)
+            result |= self.__vehicles.addController(controller)
+            result |= self.__contacts.addController(controller)
         if scope & _SCOPE.PERIOD > 0:
-            result |= self.__period.addController(battleCtx, controller)
+            result |= self.__period.addController(controller)
         if scope & _SCOPE.TEAMS_BASES > 0:
-            result |= self.__teamsBases.addController(battleCtx, controller)
+            result |= self.__teamsBases.addController(controller)
         if scope & _SCOPE.RESPAWN > 0:
-            result |= self.__respawn.addController(battleCtx, controller)
-        if scope & _SCOPE.FIRST_OF_APRIL > 0:
-            result |= self.__firstOfApril.addController(battleCtx, controller)
+            result |= self.__respawn.addController(controller)
+        if scope & _SCOPE.INVITATIONS > 0:
+            result |= self.__invitations.addController(controller)
+        if scope & _SCOPE.POSITIONS > 0:
+            result |= self.__positions.addController(controller)
+        if not result:
+            controller.stopControl()
         return result
 
     def removeController(self, controller):
@@ -456,23 +603,21 @@ class ListenersCollection(_Listener):
         result |= self.__loader.removeController(controller)
         result |= self.__period.removeController(controller)
         result |= self.__respawn.removeController(controller)
-        result |= self.__firstOfApril.removeController(controller)
+        result |= self.__invitations.removeController(controller)
+        result |= self.__positions.removeController(controller)
         return result
 
-    def start(self, arena, **kwargs):
-        if arena is None:
-            LOG_NOTE('ClientArena is not found')
-            return
-        else:
-            ref = weakref.ref(arena)
-            self.__vehicles.start(ref, **kwargs)
-            self.__teamsBases.start(ref, **kwargs)
-            self.__contacts.start(ref, **kwargs)
-            self.__loader.start(ref, **kwargs)
-            self.__period.start(ref, **kwargs)
-            self.__respawn.start(ref, **kwargs)
-            self.__firstOfApril.start(ref, **kwargs)
-            return
+    def start(self, setup):
+        self.__battleCtx = weakref.proxy(setup.battleCtx)
+        super(ListenersCollection, self).start(setup)
+        self.__vehicles.start(setup)
+        self.__teamsBases.start(setup)
+        self.__contacts.start(setup)
+        self.__loader.start(setup)
+        self.__period.start(setup)
+        self.__respawn.start(setup)
+        self.__invitations.start(setup)
+        self.__positions.start(setup)
 
     def stop(self):
         self.__vehicles.stop()
@@ -481,7 +626,11 @@ class ListenersCollection(_Listener):
         self.__loader.stop()
         self.__period.stop()
         self.__respawn.stop()
-        self.__firstOfApril.stop()
+        self.__invitations.stop()
+        self.__positions.stop()
+        self.__battleCtx = None
+        super(ListenersCollection, self).stop()
+        return
 
     def clear(self):
         self.__vehicles.clear()
@@ -490,4 +639,6 @@ class ListenersCollection(_Listener):
         self.__loader.clear()
         self.__period.clear()
         self.__respawn.clear()
-        self.__firstOfApril.clear()
+        self.__invitations.clear()
+        self.__positions.clear()
+        super(ListenersCollection, self).clear()

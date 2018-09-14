@@ -12,6 +12,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.prb_control.context import unit_ctx
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG, REQUEST_TYPE
@@ -20,10 +21,9 @@ from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
-from messenger.proto.events import g_messengerEvents
 from helpers import i18n
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
+from messenger.proto.events import g_messengerEvents
 
 class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 

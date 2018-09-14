@@ -7,6 +7,7 @@ from gui.Scaleform.windows import UIInterface
 import SoundGroups
 import Vibroeffects
 from gui.doc_loaders.GuiSoundsLoader import GuiSoundsLoader
+import WWISE
 
 class BUTTON_TYPES(object):
     NORMAL = 'normal'
@@ -52,7 +53,8 @@ class SoundSettings(dict):
         return res
 
     def getSoundName(self, soundType, soundId, state):
-        state = 'ww' + state
+        if WWISE.enabled:
+            state = 'ww' + state
         if len(soundId) and self.__overrides.has_key(soundId) > 0:
             sound = self.__overrides.get(soundId, {}).get(state, '')
         elif len(soundType) > 0 and self.__groups.has_key(soundType):

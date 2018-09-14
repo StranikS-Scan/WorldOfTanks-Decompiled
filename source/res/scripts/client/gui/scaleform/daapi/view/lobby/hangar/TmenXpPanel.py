@@ -37,5 +37,5 @@ class TmenXpPanel(TmenXpPanelMeta):
             LOG_DEBUG('Do not show TMenXPPanel: No current vehicle')
             return
         else:
-            self.as_setTankmenXpPanelS(vehicle.isElite and not vehicle.isOnlyForEventBattles, vehicle.isXPToTman)
+            self.as_setTankmenXpPanelS(vehicle.isElite, vehicle.isXPToTman)
             return

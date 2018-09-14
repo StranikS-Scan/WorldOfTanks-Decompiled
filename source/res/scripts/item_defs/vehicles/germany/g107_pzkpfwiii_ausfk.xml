@@ -10,6 +10,13 @@
     <forward>	40	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.204	</moving>
+    <still>	0.272	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.408	</firePenalty>
+  </invisibility>
   <repairCost>	3.50	</repairCost>
   <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -63,7 +70,8 @@
       <turret>	0.000000 0.588731 0.3345	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G107_PzKpfwIII_AusfK/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -186,13 +194,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.03757 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G107_PzKpfwIII_AusfK/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.2551 1.46365	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -382,6 +389,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	4	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
@@ -391,7 +399,8 @@
             <exploded>	vehicles/german/G107_PzKpfwIII_AusfK/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G107_PzKpfwIII_AusfK/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -414,7 +423,8 @@
         <exploded>	vehicles/german/G107_PzKpfwIII_AusfK/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G107_PzKpfwIII_AusfK/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G107_PzKpfwIII_AusfK/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.336782 0.9625	</gunPosition>
       <emblemSlots>
@@ -449,9 +459,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	0.895 0.000 0.978 -0.020 0.444 0.145 0.468 1.000 0.273 0.482 0.309 0.547 0.094 0.569 0.180	</physicsShape>
       <camouflage>
         <tiling>	0.67 0.67 0.76 0.64	</tiling>
@@ -467,6 +475,19 @@
   <radios>
     <FuG5A>	shared	</FuG5A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G107_PzKpfwIII_AusfK>
+        <alpha>	0.08855	</alpha>
+      </Chassis_G107_PzKpfwIII_AusfK>
+    </chassis>
+    <engines>
+      <Maybach_HL_120_TRM_C>
+        <bravo>	79.29608	</bravo>
+      </Maybach_HL_120_TRM_C>
+    </engines>
+    <armour>	0.907696922	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

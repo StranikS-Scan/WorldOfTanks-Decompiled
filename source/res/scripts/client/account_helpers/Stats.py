@@ -76,6 +76,7 @@ class Stats(object):
             for stat in ('unlocks', 'eliteVehicles'):
                 if stat in economicsDiff:
                     cache.setdefault(stat, set()).update(economicsDiff[stat])
+                    cache.setdefault(('initial', stat), set()).update(economicsDiff[stat])
 
         cacheDiff = diff.get('cache', None)
         if cacheDiff is not None:

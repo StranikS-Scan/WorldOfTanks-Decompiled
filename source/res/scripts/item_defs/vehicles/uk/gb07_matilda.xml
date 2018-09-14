@@ -9,6 +9,13 @@
     <forward>	24	</forward>
     <backward>	11	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.199	</moving>
+    <still>	0.265	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.398	</firePenalty>
+  </invisibility>
   <repairCost>	4.17	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	-0.00487 0.532146 0.575507	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB07_Matilda/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -195,13 +203,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.939138 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.03954 1.80844	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -402,13 +409,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.939138 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.03954 1.80844	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -568,6 +574,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -583,7 +590,8 @@
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
@@ -621,13 +629,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
@@ -661,13 +671,15 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
@@ -680,7 +692,8 @@
         <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB07_Matilda/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.39739 0.650373	</gunPosition>
       <emblemSlots>
@@ -701,9 +714,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.916 0.048 1.000 0.000 0.537 0.111 0.467 0.500 0.314 0.536 0.251 0.356 0.135 0.000 0.084	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.91 0.91 0.72 0.000000	</tiling>
       </camouflage>
@@ -766,6 +777,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -781,7 +793,8 @@
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.685 0.685 0.000000 0.000000	</tiling>
@@ -815,13 +828,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 9 0.569444 9 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
@@ -855,13 +870,15 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB07_Matilda/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.685 0.685 0.000000 0.000000	</tiling>
@@ -874,7 +891,8 @@
         <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB07_Matilda/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.39739 0.650373	</gunPosition>
       <emblemSlots>
@@ -895,9 +913,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.892 0.072 1.000 0.000 0.515 0.144 0.680 0.396 0.389 0.500 0.198 0.356 0.078 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
     </Turret_2_GB07_Matilda>
   </turrets0>
   <engines>
@@ -929,6 +945,25 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB07_Matilda>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB07_Matilda>
+      <Chassis_GB07_Matilda_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB07_Matilda_2>
+    </chassis>
+    <engines>
+      <AEC>
+        <bravo>	45.99173	</bravo>
+      </AEC>
+      <Leyland>
+        <bravo>	50.22086	</bravo>
+      </Leyland>
+    </engines>
+    <armour>	0.957555986	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

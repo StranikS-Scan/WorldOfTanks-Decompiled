@@ -107,7 +107,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
         if flightTime is not None and len(self.__models) > 0:
             self.delayCallback(flightTime, self.__onFlightEnd)
-            self._addSound(self.__models[0])
+            self._addSound(self.__models[0], self.flightSound)
         return
 
     def __onFlightEnd(self):

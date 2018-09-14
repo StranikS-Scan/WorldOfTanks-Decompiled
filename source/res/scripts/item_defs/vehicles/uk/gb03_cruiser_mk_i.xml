@@ -11,6 +11,13 @@
     <forward>	40	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.167	</moving>
+    <still>	0.223	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.335	</firePenalty>
+  </invisibility>
   <repairCost>	4.58	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	0.000000 0.714842 0.46278	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -205,13 +213,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.886552 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.10307 1.48891	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -484,13 +491,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.886552 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.10307 1.48891	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -690,13 +696,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB03_Cruiser_Mk_I/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
@@ -726,6 +734,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	96	</rate>
@@ -740,7 +749,8 @@
             <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
@@ -754,7 +764,8 @@
         <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.359504 0.51262	</gunPosition>
       <emblemSlots>
@@ -790,9 +801,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.943 -0.070 1.010 0.000 0.507 0.182 1.000 1.000 0.000 0.500 0.306 0.500 0.057 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.43 0.43 0.000000 0.000000	</tiling>
       </camouflage>
@@ -851,13 +860,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB03_Cruiser_Mk_I/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
@@ -883,6 +894,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	96	</rate>
@@ -897,7 +909,8 @@
             <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_comm	</reloadEffect>
           <camouflage>
@@ -911,7 +924,8 @@
         <exploded>	vehicles/british/GB03_Cruiser_Mk_I/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB03_Cruiser_Mk_I/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB03_Cruiser_Mk_I/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.016515 0.359549 0.520356	</gunPosition>
       <emblemSlots>
@@ -947,9 +961,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.981 -0.038 1.010 0.000 0.461 0.224 0.006 0.100 0.419 0.500 0.296 0.500 0.092 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.475 0.475 0.000000 0.000000	</tiling>
       </camouflage>
@@ -969,6 +981,30 @@
   <radios>
     <N11>	shared	</N11>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_40mm_Pom_Pom>
+        <delta>	1.7142857	</delta>
+      </_40mm_Pom_Pom>
+    </guns>
+    <chassis>
+      <Chassis_GB03_Cruiser_Mk_I>
+        <alpha>	0.1127	</alpha>
+      </Chassis_GB03_Cruiser_Mk_I>
+      <Chassis_GB03_Cruiser_Mk_I_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB03_Cruiser_Mk_I_2>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Phantom>
+        <bravo>	31.71843	</bravo>
+      </Rolls_Royse_Phantom>
+      <AEC_Type_179>
+        <bravo>	39.64804	</bravo>
+      </AEC_Type_179>
+    </engines>
+    <armour>	0.776028923	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

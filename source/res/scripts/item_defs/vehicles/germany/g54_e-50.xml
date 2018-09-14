@@ -1,0 +1,972 @@
+<g54_e-50.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.119	</moving>
+    <still>	0.159	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.239	</firePenalty>
+  </invisibility>
+  <repairCost>	9.4	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G54_E-50/E-50_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	150	</armor_1>
+      <armor_2>	100	</armor_2>
+      <armor_3>	80	</armor_3>
+      <armor_4>	80	</armor_4>
+      <armor_5>	80	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	40	</armor_7>
+      <armor_8>	40	</armor_8>
+      <armor_9>	25	</armor_9>
+      <armor_10>	0	</armor_10>
+      <armor_11>	40	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	32450	</weight>
+    <maxHealth>	1320	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G54_E-50/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G54_E-50/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G54_E-50/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.24 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.2	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.973389 -0.139453	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G54_E-50/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.962572 0.868872 2.77265	</rayStart>
+        <rayEnd>	-0.962572 0.656178 2.66147	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.0144274 0.628104 3.23326	</rayStart>
+        <rayEnd>	-0.0144272 0.415407 3.12208	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.88	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G54_E-50/E-50_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_E-50>
+      <userString>	#germany_vehicles:Chassis_E-50	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	32900	</price>
+      <unlocks>
+        <chassis>	Chassis_E-50_2	  <cost>	23500	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	60000	</maxLoad>
+      <terrainResistance>	0.9 1.1 2.3	</terrainResistance>
+      <brakeForce>	54000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G54_E-50/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G54_E-50/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G54_E-50/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.44 0.80	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.503529	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.405263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.503529	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.405263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G54_E-50/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.35032 1.96327	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.966110 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.460420	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_E-50>
+    <Chassis_E-50_2>
+      <userString>	#germany_vehicles:Chassis_E-50_2	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	62900	</price>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	15000	</weight>
+      <maxLoad>	66000	</maxLoad>
+      <terrainResistance>	0.8 1 2.1	</terrainResistance>
+      <brakeForce>	60000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	32	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G54_E-50/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G54_E-50/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G54_E-50/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_02	</textureSet>
+        <size>	0.44 0.80	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.56	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.503529	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.405263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.503529	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.405263	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G54_E-50/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.35032 1.96327	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.951920 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.460420	</row2>
+            <row3>	0.000000 0.000000 -0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_E-50_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_E-50>
+      <userString>	#germany_vehicles:Turret_1_E-50	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31700	</price>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	120	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	60	</armor_5>
+        <armor_6>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	30	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	120	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8438	</weight>
+      <maxHealth>	330	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	80	</maxAmmo>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_KwK45_L100	  <cost>	16100	</cost>
+            </gun>
+            <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000490769 -0.00985078 4.11844	</rayStart>
+              <rayEnd>	0.131982 -0.110866 4.11222	</rayEnd>
+              <rayUp>	0.06 0.054 2	</rayUp>
+              <size>	0.4	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_L70>
+        <_75mm_KwK45_L100>	shared	  <maxAmmo>	80	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	4.2	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00106793 -0.00813225 6.12614	</rayStart>
+              <rayEnd>	0.137991 -0.104344 6.12239	</rayEnd>
+              <rayUp>	0.058 0.054 2	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK45_L100>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	60	</maxAmmo>
+          <reloadTime>	7.3	</reloadTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <turret>	Turret_2_E-50	  <cost>	23670	</cost>
+            </turret>
+            <gun>	_88mm_KwK_L100	  <cost>	43500	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.7	</aimingTime>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00127331 -0.00398685 4.88457	</rayStart>
+              <rayEnd>	0.0570724 -0.153709 4.88091	</rayEnd>
+              <rayUp>	0.067 0.063 2	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_43_L71>
+        <_88mm_KwK_L100>	shared	  <maxAmmo>	66	</maxAmmo>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	6.9	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.188	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_09.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_09.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_09.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_09.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_09.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00157359 -0.00555413 7.45383	</rayStart>
+              <rayEnd>	0.0376456 -0.159384 7.45202	</rayEnd>
+              <rayUp>	0.063 0.062 2	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_88mm_KwK_L100>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G54_E-50/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G54_E-50/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G54_E-50/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G54_E-50/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.016286 0.379702 0.861847	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.03047 0.486388 0.559274	</rayStart>
+          <rayEnd>	-0.514236 0.223869 0.402477	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.33	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	1.03471 0.44446 -0.0962534	</rayStart>
+          <rayEnd>	0.82512 0.344331 -0.156641	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.03047 0.486388 0.559274	</rayStart>
+          <rayEnd>	0.514236 0.223869 0.402477	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.33	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.036 0.000 0.606 0.072 0.931 0.240 0.388 0.500 0.353 0.500 0.248 0.559 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_E-50>
+    <Turret_2_E-50>
+      <userString>	#germany_vehicles:Turret_2_E-50	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	52000.0	</price>
+      <unlocks>
+        <gun>	_105mm_KwK45_L52_ausf_B	  <cost>	59400	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	185	</armor_1>
+        <armor_2>	150	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	80	</armor_5>
+        <armor_6>	40	</armor_6>
+        <armor_7>	40	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	40	</armor_10>
+        <armor_11>	150	</armor_11>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	10500	</weight>
+      <maxHealth>	430	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_KwK_L70>	shared	  <maxAmmo>	90	</maxAmmo>
+          <reloadTime>	3.5	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00392769 -0.0118762 4.03187	</rayStart>
+              <rayEnd>	0.067489 -0.166105 4.02695	</rayEnd>
+              <rayUp>	0.059 0.054 2	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.865 0.865 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_L70>
+        <_75mm_KwK45_L100>	shared	  <maxAmmo>	90	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00450484 -0.0101576 6.05132	</rayStart>
+              <rayEnd>	0.144465 -0.102964 6.04833	</rayEnd>
+              <rayUp>	0.057 0.054 2	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK45_L100>
+        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	68	</maxAmmo>
+          <reloadTime>	7	</reloadTime>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	2.7	</aimingTime>
+          <effects>	shot_main	</effects>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00471022 -0.00601224 4.86164	</rayStart>
+              <rayEnd>	-0.143729 -0.448627 4.85545	</rayEnd>
+              <rayUp>	0.064 0.062 2	</rayUp>
+              <size>	0.432	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_43_L71>
+        <_88mm_KwK_L100>	shared	  <maxAmmo>	74	</maxAmmo>
+          <reloadTime>	6.6	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.188	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	35	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_07.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_07.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00184531 -0.00778948 7.36299	</rayStart>
+              <rayEnd>	-0.316998 -0.345242 7.35869	</rayEnd>
+              <rayUp>	0.064 0.061 2	</rayUp>
+              <size>	0.498	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_88mm_KwK_L100>
+        <_105mm_KwK45_L52_ausf_B>	shared	  <maxAmmo>	48	</maxAmmo>
+          <unlocks>
+            <vehicle>	G73_E50_Ausf_M	  <cost>	183010	</cost>
+            </vehicle>
+          </unlocks>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.058333 5 0.072222 8 0.416667 8 0.430556 0.9 0.569444 0.9 0.583333 8 0.927778 8 0.941667 5 1 5	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	185	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	9.6	</reloadTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G54_E-50/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/german/G54_E-50/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/german/G54_E-50/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G54_E-50/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Gun_08.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00882625 -0.00898836 4.27117	</rayStart>
+              <rayEnd>	-0.131886 -0.444831 4.26254	</rayEnd>
+              <rayUp>	0.076 0.072 2	</rayUp>
+              <size>	0.498	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_KwK45_L52_ausf_B>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G54_E-50/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G54_E-50/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G54_E-50/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G54_E-50/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G54_E-50/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.016015 0.387148 1.0062	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.45129 0.677646 -0.0874493	</rayStart>
+          <rayEnd>	-0.490634 0.218679 -0.363971	</rayEnd>
+          <rayUp>	0.00855127 0.999497 0.0305428	</rayUp>
+          <size>	0.33	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.45129 0.677646 -0.0874493	</rayStart>
+          <rayEnd>	0.490634 0.218679 -0.363971	</rayEnd>
+          <rayUp>	0.00855127 0.999497 0.0305428	</rayUp>
+          <size>	0.33	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.00126 0.488553 -1.18637	</rayStart>
+          <rayEnd>	0.788665 0.404221 -1.11365	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.88	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.091 -0.094 1.000 0.000 0.611 0.070 0.945 0.468 0.386 0.500 0.309 0.500 0.185 0.482 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_E-50>
+  </turrets0>
+  <engines>
+    <Maybach_HL_230_TRM_P30>	shared	  <unlocks>
+        <engine>	Maybach_HL_234_TRM_P30	  <cost>	24500	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_230_TRM_P30>
+    <Maybach_HL_234_TRM_P30>	shared	</Maybach_HL_234_TRM_P30>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG12>	shared	</FuG12>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_E-50>
+        <alpha>	0.08855	</alpha>
+      </Chassis_E-50>
+      <Chassis_E-50_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_E-50_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_230_TRM_P30>
+        <bravo>	185.0242	</bravo>
+      </Maybach_HL_230_TRM_P30>
+      <Maybach_HL_234_TRM_P30>
+        <bravo>	237.8883	</bravo>
+      </Maybach_HL_234_TRM_P30>
+    </engines>
+    <armour>	1.058194521	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g54_e-50.xml>

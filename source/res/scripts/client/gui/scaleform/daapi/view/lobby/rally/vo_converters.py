@@ -1,30 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
+from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
-from gui.LobbyContext import g_lobbyContext
+from debug_utils import LOG_DEBUG
 from gui import makeHtmlString
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES as FORT_ALIAS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import getFalloutCtrl
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.prb_control.settings import UNIT_RESTRICTION
+from gui.server_events import g_eventsCache
 from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
-from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES, Vehicle
+from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED, Vehicle
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, int2roman
 from messenger import g_settings
-from messenger.m_constants import USER_GUI_TYPE
+from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
-from gui.shared.utils.functions import makeTooltip
-from gui.shared.formatters import icons, text_styles
 
 def getPlayerStatus(slotState, pInfo):
     if slotState.isClosed:
@@ -100,7 +104,7 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
          'shortUserName': vehicle.shortUserName,
          'level': vehicle.level,
          'type': vehicle.type,
-         'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES[vehicle.type],
+         'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[vehicle.type],
          'smallIconPath': '../maps/icons/vehicle/small/{0}.png'.format(vehicle.name.replace(':', '-')),
          'isReadyToFight': True,
          'enabled': enabled,
@@ -231,10 +235,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
     colorGetter = g_settings.getColorScheme('rosters').getColors
     vehicleGetter = g_itemsCache.items.getItemByCD
     canTakeSlot = not pInfo.isLegionary()
-    if app:
-        isPlayerSpeaking = app.voiceChatManager.isPlayerSpeaking
-    else:
-        isPlayerSpeaking = lambda dbID: False
+    bwPlugin = proto_getter(PROTO_TYPE.BW_CHAT2)(None)
+    isPlayerSpeaking = bwPlugin.voipController.isPlayerSpeaking
     falloutCtrl = getFalloutCtrl()
     isFallout = falloutCtrl.isEnabled()
     if isFallout:
@@ -253,6 +255,12 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
         makeVO = makeStaticFormationPlayerVO
     else:
         makeVO = makePlayerVO
+    rosterSlots = {}
+    isDefaultSlot = False
+    if unit is not None:
+        roster = unit.getRoster()
+        rosterSlots = roster.slots
+        isDefaultSlot = roster.isDefaultSlot
     for slotInfo in slotsIter:
         index = slotInfo.index
         slotState = slotInfo.state
@@ -276,12 +284,12 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
         else:
             isRequired = falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM
             slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
-        if unit.isSquad() or unit.isFalloutSquad() or unit.isEvent():
+        if unit.isPrebattlesSquad():
             playerStatus = getSquadPlayerStatus(slotState, player)
         else:
             playerStatus = getPlayerStatus(slotState, player)
         if unit is not None:
-            restrictions = makeUnitRosterVO(unit, pInfo, index=index, isSortie=unit.isSortie(), levelsRange=levelsRange)['conditions']
+            restrictions = makeUnitRosterConditions(rosterSlots, isDefaultSlot, index=index, isSortie=unit.isSortie(), levelsRange=levelsRange)
         else:
             restrictions = []
         slot = {'rallyIdx': unitIdx,
@@ -298,6 +306,55 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
          'selectedVehicleLevel': 1 if slotState.isClosed else slotLevel,
          'restrictions': restrictions,
          'isFallout': isFallout}
+        if unit.isSquad():
+            if g_eventsCache.isBalancedSquadEnabled():
+                isVisibleAdtMsg = player and player.isCurrentPlayer() and not isPlayerCreator and not vehicle and unit and bool(unit.getMemberVehicles(unit.getCommanderDBID()))
+                if isVisibleAdtMsg:
+                    rangeString = toRomanRangeString(levelsRange, 1)
+                    additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SIMPLESQUAD_VEHICLELEVEL, level=rangeString))
+                else:
+                    additionMsg = ''
+                slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
+                 'additionalMsg': additionMsg})
+            elif g_eventsCache.isSquadXpFactorsEnabled():
+                vehicles = unit.getVehicles()
+                levels = unit.getSelectedVehicleLevels()
+                isVisibleAdtMsg = False
+                additionalMsg = ''
+                unitHasXpBonus = True
+                unitHasXpPenalty = False
+                if vehicles:
+                    distance = levels[-1] - levels[0]
+                    unitHasXpBonus = distance in g_eventsCache.getSquadBonusLevelDistance()
+                    unitHasXpPenalty = distance in g_eventsCache.getSquadPenaltyLevelDistance()
+                    isVisibleAdtMsg = unitHasXpBonus and player and player.isCurrentPlayer() and not vehicle
+                    if isVisibleAdtMsg:
+                        maxDistance = max(g_eventsCache.getSquadBonusLevelDistance())
+                        minLevel = max(MIN_VEHICLE_LEVEL, levels[0] - maxDistance)
+                        maxLevel = min(MAX_VEHICLE_LEVEL, levels[0] + maxDistance)
+                        rangeString = toRomanRangeString(range(minLevel, maxLevel + 1), 1)
+                        additionalMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SIMPLESQUAD_VEHICLELEVEL, level=rangeString))
+                slotNotificationIcon = ''
+                slotNotificationIconTooltip = ''
+                if vehicle:
+                    if unitHasXpPenalty:
+                        slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_ALERTICON
+                        slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_BODY, None, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_ALERT_ALERT)
+                    elif not unitHasXpBonus:
+                        slotNotificationIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON
+                        slotNotificationIconTooltip = makeTooltip(TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_HEADER, TOOLTIPS.SQUADWINDOW_SIMPLESLOTNOTIFICATION_INFO_BODY)
+                slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
+                 'additionalMsg': additionalMsg,
+                 'slotNotificationIconTooltip': slotNotificationIconTooltip,
+                 'slotNotificationIcon': slotNotificationIcon})
+        if unit.isEvent():
+            isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
+            additionMsg = ''
+            if isVisibleAdtMsg:
+                vehiclesNames = [ veh.userName for veh in g_eventsCache.getEventVehicles() ]
+                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
+            slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
+             'additionalMsg': additionMsg})
         if isFallout:
             vehiclesNotify = [None, None, None]
             selectedVehicles = [None, None, None]
@@ -307,7 +364,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRa
                 if isCurrentPlayer:
                     statusTemplate = None
                     if falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM:
-                        if len(falloutCtrl.getSelectedVehicles()) < falloutCfg.minVehiclesPerPlayer:
+                        minVehiclesPerPlayer = falloutCfg.minVehiclesPerPlayer
+                        if len(falloutCtrl.getSelectedVehicles()) < minVehiclesPerPlayer:
                             statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYMULTITEAM)
                     elif falloutCtrl.mustSelectRequiredVehicle():
                         statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFY, level=text_styles.main(int2roman(falloutCfg.vehicleLevelRequired)))
@@ -376,10 +434,14 @@ def makeSortieShortVO(unitFunctional, unitIdx=None, app=None):
         division = getDivisionNameByType(unit.getRosterTypeID())
         divisionTypeStr = i18n.makeString(FORTIFICATIONS.sortie_division_name(division))
         unit, unitState, _, pInfo, slotsIter = fullData
+        if divisionTypeStr:
+            description = divisionTypeStr
+        else:
+            description = unitFunctional.getCensoredComment(unitIdx=unitIdx)
         return {'isFreezed': unitState.isLocked(),
          'hasRestrictions': unit.isRosterSet(ignored=settings.CREATOR_ROSTER_SLOT_INDEXES),
          'slots': _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app, unitFunctional.getRosterSettings().getLevelsRange()),
-         'description': divisionTypeStr if divisionTypeStr else unitFunctional.getCensoredComment(unitIdx=unitIdx)}
+         'description': description}
 
 
 def makeMsg(value):
@@ -529,10 +591,20 @@ def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
     vehicleGetter = g_itemsCache.items.getItemByCD
     if index is None:
         vehiclesData = pInfo.getVehiclesToSlots().keys()
-        conditions = [None, None]
     else:
-        slots = unit.getRoster().slots
-        isDefaultSlot = unit.getRoster().isDefaultSlot
+        vehiclesData = pInfo.getVehiclesToSlot(index)
+    vehicleVOs = map(lambda vehTypeCD: makeVehicleVO(vehicleGetter(vehTypeCD)), vehiclesData)
+    roster = unit.getRoster()
+    rosterSlots = roster.slots
+    isDefaultSlot = roster.isDefaultSlot
+    return getUnitRosterModel(vehicleVOs, makeUnitRosterConditions(rosterSlots, isDefaultSlot, index, isSortie, levelsRange), pInfo.isCreator())
+
+
+def makeUnitRosterConditions(slots, isDefaultSlot, index=None, isSortie=False, levelsRange=None):
+    if index is None:
+        return [None, None]
+    else:
+        vehicleGetter = g_itemsCache.items.getItemByCD
         rosterSlotConditions = [None, None]
         rosterSlotIdx = index * 2
         if rosterSlotIdx in slots:
@@ -565,9 +637,7 @@ def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
                 conditions.append(params)
             conditions.append(None)
 
-        vehiclesData = pInfo.getVehiclesToSlot(index)
-    vehicleVOs = map(lambda vehTypeCD: makeVehicleVO(vehicleGetter(vehTypeCD)), vehiclesData)
-    return getUnitRosterModel(vehicleVOs, conditions, pInfo.isCreator())
+        return conditions
 
 
 def getUnitRosterModel(vehiclesData, conditions, isCreator):

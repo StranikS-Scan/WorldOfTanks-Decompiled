@@ -80,7 +80,7 @@ class Crew(CrewMeta):
                      'active': skill.isEnable and skill.isActive})
 
                 newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-                if newSkillsCount > 0 and not vehicle.isOnlyForEventBattles:
+                if newSkillsCount > 0:
                     skillsList.append({'buy': True,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})
@@ -119,7 +119,7 @@ class Crew(CrewMeta):
         return
 
     def onShowRecruitWindowClick(self, rendererData, menuEnabled):
-        self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData,
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.RECRUIT_WINDOW, ctx={'data': rendererData.clone(),
          'menuEnabled': menuEnabled,
          'currentVehicleId': g_currentVehicle.invID}))
 

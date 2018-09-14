@@ -77,11 +77,14 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInPrebattle() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
-        elif funcState.isInPreQueue():
-            entityName = getPreQueueName(funcState.entityTypeID)
         else:
-            LOG_ERROR('Can not resolve name of entity', funcState)
-            return ''
+            if funcState.isInFallout():
+                return ''
+            if funcState.isInPreQueue():
+                entityName = getPreQueueName(funcState.entityTypeID)
+            else:
+                LOG_ERROR('Can not resolve name of entity', funcState)
+                return ''
         if isAnotherPeriphery:
             key = I18N_INVITES.invites_note_change_and_leave(entityName)
             kwargs = {'host': g_lobbyContext.getPeripheryName(peripheryID) or ''}

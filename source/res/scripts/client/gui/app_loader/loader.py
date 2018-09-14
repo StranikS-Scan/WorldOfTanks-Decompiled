@@ -4,6 +4,7 @@ import BigWorld
 from ConnectionManager import connectionManager
 import Event
 from constants import ARENA_GUI_TYPE
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from debug_utils import LOG_DEBUG
 from gui.app_loader.interfaces import IAppFactory
 from gui.shared import g_eventBus, events
@@ -13,18 +14,20 @@ from gui.app_loader.settings import DISCONNECT_REASON as _DSN_REASON
 from gui.app_loader.states import StartState
 from gui.shared.utils.decorators import ReprInjector
 
-@ReprInjector.simple('guiSpace', 'appsStates', 'dsnReason', 'dsnDesc')
+@ReprInjector.simple('guiSpaceID', 'appsStates', 'dsnReason', 'dsnDesc')
 class _GlobalCtx(object):
-    __slots__ = ('guiSpace', 'appsStates', 'dsnReason', 'dsnDesc')
+    __slots__ = ('guiSpaceID', 'arenaGuiType', 'appsStates', 'dsnReason', 'dsnDesc')
 
     def __init__(self):
         super(_GlobalCtx, self).__init__()
-        self.guiSpace = _SPACE_ID.UNDEFINED
+        self.guiSpaceID = _SPACE_ID.UNDEFINED
+        self.arenaGuiType = ARENA_GUI_TYPE.UNKNOWN
         self.appsStates = {}
         self.dsnReason = _DSN_REASON.UNDEFINED
         self.dsnDesc = ()
 
-    def isConnected(self):
+    @staticmethod
+    def isConnected():
         return connectionManager.isConnected()
 
     def resetDsn(self):
@@ -37,16 +40,21 @@ class _EmptyFactory(IAppFactory):
 
 
 class _AppLoader(object):
-    __slots__ = ('__state', '__ctx', '__appFactory', 'onGUISpaceChanged')
+    __slots__ = ('__state', '__ctx', '__appFactory', 'onGUISpaceLeft', 'onGUISpaceEntered')
 
     def __init__(self):
         super(_AppLoader, self).__init__()
         self.__state = StartState()
         self.__ctx = _GlobalCtx()
         self.__appFactory = _EmptyFactory()
-        self.onGUISpaceChanged = Event.Event()
+        self.onGUISpaceLeft = Event.Event()
+        self.onGUISpaceEntered = Event.Event()
 
     def init(self, appFactory):
+        """
+        Initialization.
+        :param appFactory: instance of IAppFactory.
+        """
         self.__appFactory = appFactory
         add = g_eventBus.addListener
         appEvent = events.AppLifeCycleEvent
@@ -57,6 +65,9 @@ class _AppLoader(object):
         add(spaceEvent.GO_NEXT, self.__onGoNextSpace)
 
     def fini(self):
+        """
+        Finalization.
+        """
         if self.__appFactory:
             self.__appFactory.destroy()
             self.__appFactory = None
@@ -70,7 +81,7 @@ class _AppLoader(object):
         return
 
     def getSpaceID(self):
-        return self.__ctx.guiSpace
+        return self.__ctx.guiSpaceID
 
     def getPackageImporter(self):
         importer = None
@@ -88,12 +99,20 @@ class _AppLoader(object):
         return app
 
     def getDefLobbyApp(self):
+        """
+        It's shortcut for default lobby app.
+        :return: instance of application or None.
+        """
         app = None
         if self.__appFactory:
             app = self.__appFactory.getDefLobbyApp()
         return app
 
     def getDefBattleApp(self):
+        """
+        It's shortcut for default battle app.
+        :return: instance of application or None.
+        """
         app = None
         if self.__appFactory:
             app = self.__appFactory.getDefBattleApp()
@@ -104,10 +123,13 @@ class _AppLoader(object):
         self.__updateState()
 
     def startBattle(self):
-        self.__appFactory.createBattle()
+        self.__appFactory.createBattle(self.__ctx.arenaGuiType)
+
+    def startLogitech(self):
+        self.__appFactory.createLogitech()
 
     def changeSpace(self, spaceID):
-        self.__ctx.guiSpace = spaceID
+        self.__ctx.guiSpaceID = spaceID
         return self.__updateState()
 
     def showLogin(self):
@@ -116,22 +138,24 @@ class _AppLoader(object):
     def showLobby(self):
         return self.changeSpace(_SPACE_ID.LOBBY)
 
-    def showBattleLoading(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN, isMultiTeam=False):
-        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
-            spaceID = _SPACE_ID.BATTLE_TUT_LOADING
-        elif isMultiTeam:
-            spaceID = _SPACE_ID.FALLOUT_MULTI_TEAM_LOADING
-        else:
-            spaceID = _SPACE_ID.BATTLE_LOADING
-        return self.changeSpace(spaceID)
+    def showBattleLoading(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+        self.__ctx.arenaGuiType = arenaGuiType
+        return self.changeSpace(_SPACE_ID.BATTLE_LOADING)
 
     def showBattle(self):
         return self.changeSpace(_SPACE_ID.BATTLE)
 
     def destroyBattle(self):
+        self.__ctx.arenaGuiType = ARENA_GUI_TYPE.UNKNOWN
         return False if self.__ctx.dsnReason != _DSN_REASON.UNDEFINED else self.changeSpace(_SPACE_ID.WAITING)
 
     def goToLoginByRQ(self, forced=False):
+        """
+        Goes to login screen by player request - he clicks to button or exit
+        from login queue.
+        :param forced: bool.
+        :return: True if state is changed, otherwise - False.
+        """
         if self.__ctx.dsnReason != _DSN_REASON.REQUEST or forced:
             LOG_DEBUG('Disconnects from server by request')
             self.__ctx.dsnReason = _DSN_REASON.REQUEST
@@ -139,34 +163,66 @@ class _AppLoader(object):
         return self.showLogin()
 
     def goToLoginByEvent(self):
+        """
+        Goes to login screen by server event "disconnect".
+        :return: True if state is changed, otherwise - False.
+        """
         if self.__ctx.dsnReason not in (_DSN_REASON.REQUEST, _DSN_REASON.KICK):
             LOG_DEBUG('Disconnects from server by connection manager event')
-            if self.__ctx.guiSpace != _SPACE_ID.LOGIN:
+            if self.__ctx.guiSpaceID != _SPACE_ID.LOGIN:
                 self.__ctx.dsnReason = _DSN_REASON.EVENT
-        return self.showLogin()
+            return self.showLogin()
+        else:
+            return False
 
     def goToLoginByKick(self, reason, isBan, expiryTime):
+        """
+        Goes to login screen by server event "kick".
+        :param reason: reason why player has been kicked.
+        :param isBan: True if player is banned.
+        :param expiryTime: ban expiry time. 0 - infinite ban.
+        :return: True if state is changed, otherwise - False.
+        """
         if self.__ctx.dsnReason != _DSN_REASON.KICK:
             LOG_DEBUG('Disconnects from server by kick')
             self.__ctx.dsnReason = _DSN_REASON.KICK
             self.__ctx.dsnDesc = (reason, isBan, expiryTime)
         return self.showLogin()
 
-    def quitFromGame(self):
+    def goToLoginByError(self, reason):
+        """
+        Goes to login screen by client error.
+        :param reason: reason describing the error that occurred.
+        :return: True if state is changed, otherwise - False.
+        """
+        LOG_DEBUG('Disconnects from server by client error')
+        self.__ctx.dsnReason = _DSN_REASON.ERROR
+        self.__ctx.dsnDesc = (reason, False, 0)
+        connectionManager.disconnect()
+        return self.showLogin()
+
+    @staticmethod
+    def quitFromGame():
         BigWorld.quit()
 
-    def attachCursor(self, appNS):
-        self.__appFactory.attachCursor(appNS)
+    def attachCursor(self, appNS, flags=_CTRL_FLAG.CURSOR_VISIBLE):
+        self.__appFactory.attachCursor(appNS, flags=flags)
 
     def detachCursor(self, appNS):
         self.__appFactory.detachCursor(appNS)
+
+    def syncCursor(self, appNS, flags=_CTRL_FLAG.CURSOR_VISIBLE):
+        self.__appFactory.syncCursor(appNS, flags=flags)
+
+    def handleKeyInBattle(self, isDown, key, mods):
+        return self.__appFactory.handleKeyInBattle(isDown, key, mods)
 
     def __updateState(self):
         result = False
         newState = self.__state.goNext(self.__ctx)
         if newState:
-            LOG_DEBUG('State is changed', newState)
-            self.__state = self.__state
+            LOG_DEBUG('State is changed (from, to)', self.__state, newState)
+            self.onGUISpaceLeft(self.__state.getSpaceID())
             self.__state.fini(self.__ctx)
             self.__state.hideGUI(self.__appFactory)
             self.__state = newState
@@ -175,7 +231,7 @@ class _AppLoader(object):
                 self.__state.showGUI(self.__appFactory, appNS, appState)
 
             result = True
-            self.onGUISpaceChanged(self.__ctx.guiSpace)
+            self.onGUISpaceEntered(self.__ctx.guiSpaceID)
         else:
             for appNS, appState in self.__getCreatedApps():
                 self.__state.update(self.__ctx)

@@ -29,22 +29,16 @@ from gui.shared.events import LobbySimpleEvent
 from ConnectionManager import connectionManager
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 
 class Hangar(LobbySubView, HangarMeta, GlobalListener):
     __background_alpha__ = 0.0
-
-    class COMPONENTS:
-        CAROUSEL = 'tankCarousel'
-        PARAMS = 'params'
-        CREW = 'crew'
-        AMMO_PANEL = 'ammunitionPanel'
-        RESEARCH_PANEL = 'researchPanel'
-        TMEN_XP_PANEL = 'tmenXpPanel'
 
     def __init__(self, _=None):
         LobbySubView.__init__(self, 0)
         self.__isCursorOver3dScene = False
         self.__selected3DEntity = None
+        self.__currentCarouselAlias = None
         return
 
     def _populate(self):
@@ -54,6 +48,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
+        game_control.g_instance.fallout.onSettingsChanged += self.__switchCarousels
         g_itemsCache.onSyncCompleted += self.onCacheResync
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
@@ -62,7 +57,8 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
          'stats.gold': self.onMoneyUpdate,
          'stats.vehicleSellsLeft': self.onFittingUpdate,
-         'stats.slots': self.onFittingUpdate})
+         'stats.slots': self.onFittingUpdate,
+         'goodies': self.onFittingUpdate})
         self.startGlobalListening()
         self.__onIgrTypeChanged()
         if IS_SHOW_SERVER_STATS:
@@ -119,6 +115,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrTypeChanged
         game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
+        game_control.g_instance.fallout.onSettingsChanged -= self.__switchCarousels
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
@@ -130,6 +127,19 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.stopGlobalListening()
         LobbySubView._dispose(self)
         return
+
+    def __switchCarousels(self):
+        prevCarouselAlias = self.__currentCarouselAlias
+        if game_control.g_instance.fallout.isSelected():
+            linkage = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL_UI
+            newCarouselAlias = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL
+        else:
+            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
+            newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
+        if prevCarouselAlias != newCarouselAlias:
+            self.as_setCarouselS(linkage, newCarouselAlias)
+            self.__currentCarouselAlias = newCarouselAlias
+            self.__updateCarouselVehicles()
 
     def __updateAmmoPanel(self):
         if self.ammoPanel:
@@ -203,23 +213,23 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     @property
     def tankCarousel(self):
-        return self.components.get(self.COMPONENTS.CAROUSEL)
+        return self.getComponent(self.__currentCarouselAlias)
 
     @property
     def ammoPanel(self):
-        return self.components.get(self.COMPONENTS.AMMO_PANEL)
+        return self.getComponent(HANGAR_ALIASES.AMMUNITION_PANEL)
 
     @property
     def paramsPanel(self):
-        return self.components.get(self.COMPONENTS.PARAMS)
+        return self.getComponent(HANGAR_ALIASES.VEHICLE_PARAMETERS)
 
     @property
     def crewPanel(self):
-        return self.components.get(self.COMPONENTS.CREW)
+        return self.getComponent(HANGAR_ALIASES.CREW)
 
     @property
     def researchPanel(self):
-        return self.components.get(self.COMPONENTS.RESEARCH_PANEL)
+        return self.getComponent(HANGAR_ALIASES.RESEARCH_PANEL)
 
     def onCacheResync(self, reason, diff):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
@@ -228,6 +238,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         else:
             if reason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
                 self.__updateCarouselParams()
+                self.__updateCarouselEnabled()
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 self.__updateCarouselVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
                 self.__updateAmmoPanel()
@@ -254,6 +265,12 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
     def onUnitFunctionalFinished(self):
         self.__onFunctionalChanged()
 
+    def onEnqueued(self, queueType, *args):
+        self.__onFunctionalChanged()
+
+    def onDequeued(self, queueType, *args):
+        self.__onFunctionalChanged()
+
     def __onVehicleBecomeElite(self, vehTypeCompDescr):
         self.__updateCarouselVehicles([vehTypeCompDescr])
 
@@ -266,6 +283,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __updateAll(self):
         Waiting.show('updateVehicle')
+        self.__switchCarousels()
         self.__updateState()
         self.__updateAmmoPanel()
         self.__updateCarouselVehicles()
@@ -291,6 +309,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if type == IGR_TYPE.PREMIUM else 'basic', {})
         self.as_setIsIGRS(type != IGR_TYPE.NONE, i18n.makeString(MENU.IGR_INFO, igrIcon=icon))
         self.__updateVehIGRStatus()
+        self.__updateParams()
 
     def __updateVehIGRStatus(self):
         vehicleIgrTimeLeft = ''
@@ -304,14 +323,18 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
 
     def __updateState(self):
         state = g_currentVehicle.getViewState()
-        self.as_setCrewEnabledS(state.isCrewOpsEnabled() and not g_currentVehicle.isOnlyForEventBattles())
-        self.as_setCarouselEnabledS(not state.isLocked())
+        self.as_setCrewEnabledS(state.isCrewOpsEnabled())
+        self.__updateCarouselEnabled()
         if state.isOnlyForEventBattles():
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
         else:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
         self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), state.isCustomizationEnabled(), customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
+
+    def __updateCarouselEnabled(self):
+        state = g_currentVehicle.getViewState()
+        self.as_setCarouselEnabledS(not state.isLocked())
 
     def __onStatsReceived(self, stats):
         if IS_SHOW_SERVER_STATS:

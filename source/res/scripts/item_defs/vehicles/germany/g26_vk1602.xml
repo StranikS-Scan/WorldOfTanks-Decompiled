@@ -9,6 +9,13 @@
     <forward>	60	</forward>
     <backward>	22	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.291	</moving>
+    <still>	0.291	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.437	</firePenalty>
+  </invisibility>
   <repairCost>	6	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -59,7 +66,8 @@
       <turret>	0.009661 0.660133 -0.178526	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G26_VK1602/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G26_VK1602/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -171,13 +179,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12086 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22052 1.2007	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -442,13 +449,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.12086 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G26_VK1602/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22052 1.2007	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -683,13 +689,15 @@
           <reloadTime>	2.7	</reloadTime>
           <aimingTime>	1.4	</aimingTime>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G26_VK1602/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -729,13 +737,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G26_VK1602/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G26_VK1602/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G26_VK1602/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -770,6 +780,7 @@
           <reloadTime>	17.5	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.21	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	2	</afterShot>
@@ -789,7 +800,8 @@
             <exploded>	vehicles/german/G26_VK1602/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G26_VK1602/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G26_VK1602/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -812,7 +824,8 @@
         <exploded>	vehicles/german/G26_VK1602/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G26_VK1602/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G26_VK1602/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G26_VK1602/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.04818 0.25983 0.805451	</gunPosition>
       <emblemSlots>
@@ -848,9 +861,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.036 0.000 0.394 0.333 0.878 0.500 0.365 0.500 0.324 0.500 0.245 0.559 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
       </camouflage>
@@ -868,7 +879,7 @@
       </unlocks>
     </Maybach_HL_120_TRM>
     <Maybach_HL_157P>	shared	  <unlocks>
-        <vehicle>	VK2801	  <cost>	28500	</cost>
+        <vehicle>	G66_VK2801	  <cost>	28500	</cost>
         </vehicle>
       </unlocks>
     </Maybach_HL_157P>
@@ -889,6 +900,28 @@
     </FuG7>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Leopardketten_Ausf_A>
+        <alpha>	0.0966	</alpha>
+      </Leopardketten_Ausf_A>
+      <Leopardketten_Ausf_B>
+        <alpha>	0.08855	</alpha>
+      </Leopardketten_Ausf_B>
+    </chassis>
+    <engines>
+      <Maybach_HL_120_TR>
+        <bravo>	92.5121	</bravo>
+      </Maybach_HL_120_TR>
+      <Maybach_HL_120_TRM>
+        <bravo>	116.3009	</bravo>
+      </Maybach_HL_120_TRM>
+      <Maybach_HL_157P>
+        <bravo>	154.6274	</bravo>
+      </Maybach_HL_157P>
+    </engines>
+    <armour>	0.820202972	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

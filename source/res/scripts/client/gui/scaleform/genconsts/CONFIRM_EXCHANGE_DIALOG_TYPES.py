@@ -3,6 +3,12 @@
 
 
 class CONFIRM_EXCHANGE_DIALOG_TYPES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     VEHICLE_ICON = 1
     MODULE_ICON = 2
     NORMAL_STATE = 1

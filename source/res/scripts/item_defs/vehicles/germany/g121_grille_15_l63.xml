@@ -11,7 +11,14 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
-  <repairCost>	10.50	</repairCost>
+  <invisibility>
+    <moving>	0.083	</moving>
+    <still>	0.138	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.207	</firePenalty>
+  </invisibility>
+  <repairCost>	10.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
@@ -60,7 +67,8 @@
       <turret>	0.000000 0.379761 -1.48536	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G121_Grille_15_L63/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G121_Grille_15_L63/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G121_Grille_15_L63/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -99,10 +107,10 @@
       <terrainResistance>	1.1 1.2 2	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -190,13 +198,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18466 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G121_Grille_15_L63/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G121_Grille_15_L63/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G121_Grille_15_L63/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.20846 1.83512	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -458,13 +465,13 @@
       <primaryArmor>	armor_1 armor_3 armor_8	</primaryArmor>
       <weight>	3000	</weight>
       <maxHealth>	360	</maxHealth>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	20	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -481,21 +488,23 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.105	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.27	</shotDispersionRadius>
-          <reloadTime>	15	</reloadTime>
+          <reloadTime>	16.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.4	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.5	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G121_Grille_15_L63/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G121_Grille_15_L63/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G121_Grille_15_L63/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G121_Grille_15_L63/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G121_Grille_15_L63/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G121_Grille_15_L63/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -518,7 +527,8 @@
         <exploded>	vehicles/german/G121_Grille_15_L63/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G121_Grille_15_L63/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G121_Grille_15_L63/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G121_Grille_15_L63/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.938655 -0.397613	</gunPosition>
       <emblemSlots>
@@ -545,8 +555,6 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	0.629 0.350 0.965 0.042 1.007 0.003 0.000 0.500 0.000 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
       <camouflage>
@@ -563,6 +571,19 @@
   <radios>
     <_10WSc>	shared	</_10WSc>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G121_Grille_15_L63>
+        <alpha>	0.12	</alpha>
+      </Chassis_G121_Grille_15_L63>
+    </chassis>
+    <engines>
+      <Maybach_HL_234>
+        <bravo>	237.8882	</bravo>
+      </Maybach_HL_234>
+    </engines>
+    <armour>	0.830065053	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

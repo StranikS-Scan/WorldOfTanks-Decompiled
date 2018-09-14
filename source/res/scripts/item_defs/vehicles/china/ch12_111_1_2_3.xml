@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	15	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.057	</moving>
+    <still>	0.113	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.17	</firePenalty>
+  </invisibility>
   <repairCost>	8.945	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -60,7 +67,8 @@
       <turret>	-0.000000 0.63725 0.694592	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -179,13 +187,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34861 2.41017	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -302,13 +309,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.34861 2.41017	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -397,13 +403,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch12_111_1_2_3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -447,13 +455,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch12_111_1_2_3/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -476,7 +486,8 @@
         <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.0464 0.35 1.3259	</gunPosition>
       <emblemSlots>
@@ -512,9 +523,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.054 1.045 0.000 0.671 0.163 0.568 0.378 0.500 0.500 0.580 0.500 0.296 0.852 0.302	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
       </camouflage>
@@ -582,13 +591,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch12_111_1_2_3/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -628,13 +639,15 @@
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
           <reloadTime>	8.5	</reloadTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch12_111_1_2_3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -674,13 +687,15 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch12_111_1_2_3/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -703,7 +718,8 @@
         <exploded>	vehicles/chinese/Ch12_111_1_2_3/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/chinese/Ch12_111_1_2_3/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/chinese/Ch12_111_1_2_3/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/chinese/Ch12_111_1_2_3/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.308284 1.28579	</gunPosition>
       <emblemSlots>
@@ -739,9 +755,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.066 1.009 0.000 0.622 0.163 0.616 0.363 0.500 0.500 0.356 0.500 0.124 0.882 0.311	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
       </camouflage>
@@ -771,6 +785,28 @@
     </A-220_1>
     <A-220B>	shared	</A-220B>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Ch12_111_1_2_3>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Ch12_111_1_2_3>
+      <Chassis_Ch12_111_1_2_3_2>
+        <alpha>	0.0805	</alpha>
+      </Chassis_Ch12_111_1_2_3_2>
+    </chassis>
+    <engines>
+      <_12150L>
+        <bravo>	137.4465	</bravo>
+      </_12150L>
+      <_12150LS>
+        <bravo>	153.3058	</bravo>
+      </_12150LS>
+      <_12150LT>
+        <bravo>	158.5922	</bravo>
+      </_12150LT>
+    </engines>
+    <armour>	1.234685699	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

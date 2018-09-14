@@ -4,7 +4,7 @@ import Event
 from InterfaceScaleManager import InterfaceScaleManager
 from Vibroeffects import VibroManager
 from account_helpers.AccountSettings import AccountSettings
-from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
+from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from adisp import process
 from debug_utils import LOG_DEBUG
 
@@ -25,17 +25,17 @@ class _SettingsCore(object):
         self.__serverSettings = ServerSettingsManager(self)
         self.interfaceScale = InterfaceScaleManager(self)
         VIDEO_SETTINGS_STORAGE = settings_storages.VideoSettingsStorage(self.serverSettings, self)
-        GAME_SETTINGS_STORAGE = settings_storages.GameSettingsStorage(self.serverSettings, self)
-        EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ExtendedGameSettingsStorage(self.serverSettings, self)
-        TUTORIAL_SETTINGS_STORAGE = settings_storages.TutorialStorage(self.serverSettings, self)
-        GAMEPLAY_SETTINGS_STORAGE = settings_storages.GameplaySettingsStorage(self.serverSettings, self)
-        GRAPHICS_SETTINGS_STORAGE = settings_storages.GraphicsSettingsStorage(self.serverSettings, self)
-        SOUND_SETTINGS_STORAGE = settings_storages.SoundSettingsStorage(self.serverSettings, self)
+        GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME)
+        EXTENDED_GAME_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAME_EXTENDED)
+        TUTORIAL_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.TUTORIAL)
+        GAMEPLAY_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GAMEPLAY)
+        GRAPHICS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.GRAPHICS)
+        SOUND_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.SOUND)
         KEYBOARD_SETTINGS_STORAGE = settings_storages.KeyboardSettingsStorage(self.serverSettings, self)
-        CONTROLS_SETTINGS_STORAGE = settings_storages.ControlsSettingsStorage(self.serverSettings, self)
+        CONTROLS_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.CONTROLS)
         AIM_SETTINGS_STORAGE = settings_storages.AimSettingsStorage(self.serverSettings, self)
         MARKERS_SETTINGS_STORAGE = settings_storages.MarkersSettingsStorage(self.serverSettings, self)
-        MARK_ON_GUN_SETTINGS_STORAGE = settings_storages.MarksOnGunSettingsStorage(self.serverSettings, self)
+        MARK_ON_GUN_SETTINGS_STORAGE = settings_storages.ServerSettingsStorage(self.serverSettings, self, SETTINGS_SECTIONS.MARKS_ON_GUN)
         FOV_SETTINGS_STORAGE = settings_storages.FOVSettingsStorage(self.serverSettings, self)
         MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(GAME_SETTINGS_STORAGE)
         EXTENDED_MESSENGER_SETTINGS_STORAGE = settings_storages.MessengerSettingsStorage(EXTENDED_GAME_SETTINGS_STORAGE)
@@ -64,8 +64,11 @@ class _SettingsCore(object):
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, options.ExcludeInReplayAccountSetting(GAME.SHOW_BATTLE_EFFICIENCY_RIBBONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.BATTLE_LOADING_INFO, options.BattleLoadingTipSetting(GAME.BATTLE_LOADING_INFO, GAME.BATTLE_LOADING_INFO)),
+         (GAME.SIMPLIFIED_TTC, options.StorageAccountSetting(GAME.SIMPLIFIED_TTC, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_MARKS_ON_GUN, options.ShowMarksOnGunSetting(GAME.SHOW_MARKS_ON_GUN, storage=MARK_ON_GUN_SETTINGS_STORAGE)),
          (GAME.DYNAMIC_CAMERA, options.DynamicCamera(GAME.DYNAMIC_CAMERA, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.INCREASED_ZOOM, options.IncreasedZoomSetting(GAME.INCREASED_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.SNIPER_MODE_BY_SHIFT, options.SnipereModeByShiftSetting(GAME.SNIPER_MODE_BY_SHIFT, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_MODE_STABILIZATION, options.SniperModeStabilization(GAME.SNIPER_MODE_STABILIZATION, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_OL_FILTER, options.MessengerSetting(GAME.ENABLE_OL_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.ENABLE_SPAM_FILTER, options.MessengerSetting(GAME.ENABLE_SPAM_FILTER, storage=MESSENGER_SETTINGS_STORAGE)),
@@ -75,7 +78,6 @@ class _SettingsCore(object):
          (GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS, options.ClansSetting(GAME.RECEIVE_CLAN_INVITES_NOTIFICATIONS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.RECEIVE_FRIENDSHIP_REQUEST, options.MessengerSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.RECEIVE_INVITES_IN_BATTLE, options.MessengerSetting(GAME.RECEIVE_INVITES_IN_BATTLE, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
-         (GAME.STORE_RECEIVER_IN_BATTLE, options.MessengerSetting(GAME.STORE_RECEIVER_IN_BATTLE, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.DISABLE_BATTLE_CHAT, options.MessengerSetting(GAME.DISABLE_BATTLE_CHAT, storage=MESSENGER_SETTINGS_STORAGE)),
          (GAME.CHAT_CONTACTS_LIST_ONLY, options.MessengerSetting(GAME.CHAT_CONTACTS_LIST_ONLY, storage=EXTENDED_MESSENGER_SETTINGS_STORAGE)),
          (GAME.PLAYERS_PANELS_SHOW_LEVELS, options.PlayersPanelSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS, 'players_panel', 'showLevels', storage=GAME_SETTINGS_STORAGE)),
@@ -152,7 +154,9 @@ class _SettingsCore(object):
          (SOUND.VOIP_MIC, options.VOIPMicSoundSetting(True)),
          (SOUND.CAPTURE_DEVICES, options.VOIPCaptureDevicesSetting()),
          (SOUND.VOIP_SUPPORTED, options.VOIPSupportSetting()),
+         (SOUND.BASS_BOOST, options.BassBoostSetting()),
          (SOUND.DYNAMIC_RANGE, options.DynamicSoundPresetSetting(SOUND.DYNAMIC_RANGE, SOUND.DYNAMIC_RANGE)),
+         (SOUND.SOUND_DEVICE, options.SoundDevicePresetSetting(SOUND.SOUND_DEVICE, SOUND.SOUND_DEVICE)),
          (SOUND.ALT_VOICES, options.AltVoicesSetting(SOUND.ALT_VOICES, storage=SOUND_SETTINGS_STORAGE)),
          (CONTROLS.MOUSE_ARCADE_SENS, options.MouseSensitivitySetting('arcade')),
          (CONTROLS.MOUSE_SNIPER_SENS, options.MouseSensitivitySetting('sniper')),

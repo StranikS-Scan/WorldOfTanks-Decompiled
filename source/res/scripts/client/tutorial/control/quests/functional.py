@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/quests/functional.py
 import copy
 from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -18,7 +19,7 @@ class SaveTutorialSettingEffect(FunctionalEffect):
             LOG_ERROR('Tutorial setting is not found', self._effect.getTargetID())
             return
         else:
-            g_settingsCore.serverSettings.setTutorialSetting({setting.getSettingName(): setting.getSettingValue()})
+            g_settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.TUTORIAL, {setting.getSettingName(): setting.getSettingValue()})
             return
 
 
@@ -43,7 +44,7 @@ class SelectVehicleInHangar(FunctionalEffect):
             return
         else:
             minLvl, maxLvl = vehicleCriteria.get('levelsRange', (1, 10))
-            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(range(minLvl, maxLvl)) | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             vehicles = sorted(g_itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level)
             vehicle = findFirst(None, vehicles)
             if vehicle is not None:

@@ -519,10 +519,7 @@ class _AbstractTween(AbstractTweenMeta):
         self.isComplete = False
 
     def isInStart(self):
-        if self.position == -self.getDelay():
-            return True
-        else:
-            return False
+        return self.position == -self.getDelay()
 
     def getDataForAnim(self):
         resultData = [self,

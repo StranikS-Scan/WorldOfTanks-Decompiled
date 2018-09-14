@@ -16,9 +16,9 @@ class SfChainsProxy(SfLobbyProxy):
         super(SfChainsProxy, self).__init__(effects_player.EffectsPlayer(effects))
         self._commands = GUICommandsFactory()
 
-    def fini(self, isItemsRevert=True):
+    def fini(self):
         self._commands = None
-        super(SfChainsProxy, self).fini(isItemsRevert)
+        super(SfChainsProxy, self).fini()
         return
 
     def getViewSettings(self):

@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/fortifications.py
 from gui.shared.formatters import icons, text_styles
+from gui.shared.items_parameters import params_helper, formatters as params_formatters, NO_DATA
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from helpers import i18n
+from helpers.i18n import makeString as _ms
 
 def _packTimeLimitsBlock(block, limits):
     textOffset = 30
     for limit in limits:
-        text = i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT, startTime=limit.startTime, endTime=limit.endTime)
+        text = _ms(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_TIMELIMITFORMAT, startTime=limit.startTime, endTime=limit.endTime)
         block.append(formatters.packImageTextBlockData(title=text_styles.error(text), txtOffset=textOffset))
 
 
@@ -85,8 +86,79 @@ class SortiesServerLimitPacker(FortListViewTooltipData):
 
     def _packMainBlock(self, serverName, timeLimits):
         blocksGap = 20
-        blocksList = [formatters.packImageTextBlockData(title=text_styles.main(i18n.makeString(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMIT, server=text_styles.error(serverName))))]
+        blocksList = [formatters.packImageTextBlockData(title=text_styles.main(_ms(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMIT, server=text_styles.error(serverName))))]
         if timeLimits:
             blocksList.append(formatters.packImageTextBlockData(title=text_styles.main(TOOLTIPS.FORTIFICATION_SORTIE_LISTROOM_REGULATION_SERVERLIMITTIMEDESCR)))
         mainBlock = [formatters.packBuildUpBlockData(blocksList, blocksGap)]
         return mainBlock
+
+
+class FortConsumableOrderTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(FortConsumableOrderTooltipData, self).__init__(context, TOOLTIP_TYPE.EQUIPMENT)
+        self.item = None
+        self._setContentMargin(top=0, left=0, bottom=20, right=20)
+        self._setMargins(10, 15)
+        self._setWidth(400)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        items = super(FortConsumableOrderTooltipData, self)._packBlocks()
+        item = self.item
+        statsConfig = self.context.getStatsConfiguration(item)
+        paramsConfig = self.context.getParamsConfiguration(item)
+        leftPadding = 20
+        rightPadding = 20
+        topPadding = 20
+        textGap = -2
+        items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(item, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
+        items.append(formatters.packBuildUpBlockData(CommonStatsBlockConstructor(item, paramsConfig, 80, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding), gap=textGap))
+        return items
+
+
+class ConsumableOrderTooltipBlockConstructor(object):
+
+    def __init__(self, item, configuration, leftPadding=20, rightPadding=20):
+        self.item = item
+        self.configuration = configuration
+        self.leftPadding = leftPadding
+        self.rightPadding = rightPadding
+
+    def construct(self):
+        return None
+
+
+class HeaderBlockConstructor(ConsumableOrderTooltipBlockConstructor):
+
+    def __init__(self, item, configuration, leftPadding, rightPadding):
+        super(HeaderBlockConstructor, self).__init__(item, configuration, leftPadding, rightPadding)
+
+    def construct(self):
+        item = self.item
+        block = []
+        title = item.userName
+        desc = item.getUserType()
+        block.append(formatters.packImageTextBlockData(title=text_styles.highTitle(title), desc=text_styles.main(desc), img=item.icon, imgPadding=formatters.packPadding(left=12), txtGap=-4, txtOffset=100 - self.leftPadding))
+        return block
+
+
+class CommonStatsBlockConstructor(ConsumableOrderTooltipBlockConstructor):
+
+    def __init__(self, item, configuration, valueWidth, leftPadding, rightPadding):
+        super(CommonStatsBlockConstructor, self).__init__(item, configuration, leftPadding, rightPadding)
+        self._valueWidth = valueWidth
+
+    def construct(self):
+        block = []
+        item = self.item
+        block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
+        params = item.getParams()
+        for paramName, paramValue in params:
+            block.append(self.__packParameterBloc(_ms('#menu:moduleInfo/params/' + paramName), paramValue, params_formatters.measureUnitsForParameter(paramName)))
+
+        return block
+
+    def __packParameterBloc(self, name, value, measureUnits):
+        return formatters.packTextParameterBlockData(name=text_styles.main(name) + text_styles.standard(measureUnits), value=text_styles.stats(value), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5))

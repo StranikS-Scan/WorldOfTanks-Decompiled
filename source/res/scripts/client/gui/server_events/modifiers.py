@@ -6,6 +6,7 @@ import BigWorld
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 import constants
+from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.shared.economics import getActionPrc
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
@@ -13,7 +14,8 @@ from items import vehicles, ITEM_TYPE_NAMES
 from helpers import i18n
 from shared_utils import BoundMethodWeakref as bwr, CONST_CONTAINER
 from gui import nationCompareByName, makeHtmlString
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.server_events import formatters
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -33,6 +35,8 @@ class ACTION_SECTION_TYPE(CONST_CONTAINER):
     ALL = 2
     ITEM = 3
     CUSTOMIZATION = 4
+    BOOSTER = 5
+    ALL_BOOSTERS = 6
 
 
 def _getDiscountByValue(value, default):
@@ -926,6 +930,101 @@ class VehSellPriceSet(_VehiclePrice, _SellPriceMul):
         pass
 
 
+class _BoosterPrice(_DiscountsListAction, _PriceOpAbstract):
+
+    def __init__(self, name, params):
+        super(_BoosterPrice, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT, ACTION_SECTION_TYPE.BOOSTER)
+
+    def format(self, event=None):
+        result = []
+        for item, value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+            dv, _ = self._getDiscountParams(item, value)
+            result.append(formatters.packDiscount(self._makeLabelString(item), value=dv, discountType=_DT.PERCENT))
+
+        return result
+
+    def getValues(self, action):
+        result = {}
+        for booster, value in self.parse().iteritems():
+            result[booster.boosterID] = [(value, action.getID())]
+
+        return result
+
+    def _makeLabelString(self, booster):
+        return i18n.makeString('#quests:details/modifiers/booster', boosterName=booster.userName)
+
+    def _getParamName(self, idx):
+        return 'goodieID%d' % idx
+
+    def _getMultName(self, idx):
+        return 'price%d' % idx
+
+    def _makeResultItem(self, strBoosterID):
+        try:
+            if strBoosterID.isdigit():
+                boosterID = int(strBoosterID)
+            else:
+                _, boosterIdPart = strBoosterID.split('_')
+                boosterID = int(boosterIdPart)
+            return g_goodiesCache.getBooster(boosterID)
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+
+        return None
+
+
+class BoosterPriceSet(_BoosterPrice, _BuyPriceSet):
+    pass
+
+
+class BoosterPriceMul(_BoosterPrice, _BuyPriceMul):
+
+    def _getMultName(self, idx):
+        return 'priceMultiplier%d' % idx
+
+
+class BoostersPriceAll(ActionModifier):
+    DEFAULT_PRICE_MULT = 1.0
+
+    def __init__(self, name, params):
+        super(BoostersPriceAll, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT, ACTION_SECTION_TYPE.ALL_BOOSTERS)
+
+    def format(self, event=None):
+        result = []
+        fmtData = sorted(self.parse().iteritems(), key=operator.itemgetter(0))
+        for multName, mulVal in fmtData:
+            result.append(self._packMultiplier(multName, mulVal))
+
+        return result
+
+    def _parse(self):
+        result = {}
+        if self._getGoldMultName() in self._params:
+            result[self._getGoldMultName()] = float(self._params[self._getGoldMultName()])
+        if self._getCreditsMultName() in self._params:
+            result[self._getCreditsMultName()] = float(self._params[self._getCreditsMultName()])
+        return result
+
+    def _getGoldMultName(self):
+        pass
+
+    def _getCreditsMultName(self):
+        pass
+
+    def _getLabelString(self, multName):
+        return i18n.makeString('#quests:details/modifiers/boosters/%s' % multName)
+
+    def _packMultiplier(self, multName, multVal):
+        return formatters.packDiscount(self._getLabelString(multName), int(round((1 - float(multVal)) * 100)), _DT.PERCENT)
+
+    def getValues(self, action):
+        result = defaultdict(list)
+        for multType, value in self.parse().iteritems():
+            result[nations.NONE_INDEX].append(((multType, value), action.getID()))
+
+        return result
+
+
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('cond_VehPrice', VehPriceCond),
@@ -950,7 +1049,10 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_ShellPrice', ShellPriceMul),
  ('set_ShellPrice', ShellPriceSet),
  ('mul_CamouflagePriceFactor', CamouflagePriceMul),
- ('mul_EmblemPriceFactorByGroups', EmblemPriceByGroupsMul))
+ ('mul_EmblemPriceFactorByGroups', EmblemPriceByGroupsMul),
+ ('set_GoodiePrice', BoosterPriceSet),
+ ('mul_GoodiePrice', BoosterPriceMul),
+ ('mul_GoodiePriceAll', BoostersPriceAll))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

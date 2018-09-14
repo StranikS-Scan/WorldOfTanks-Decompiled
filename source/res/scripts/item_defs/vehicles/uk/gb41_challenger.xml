@@ -10,6 +10,13 @@
     <forward>	52	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.15	</moving>
+    <still>	0.251	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.377	</firePenalty>
+  </invisibility>
   <repairCost>	7.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	0.000000 0.694479 0.39641	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB41_Challenger/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -99,10 +107,10 @@
       <terrainResistance>	1.1 1.2 1.8	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
@@ -182,13 +190,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.944132 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB41_Challenger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.18661 2.27722	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -484,8 +491,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	190	</maxHealth>
@@ -565,13 +572,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.944132 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB41_Challenger/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.18661 2.27722	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -900,6 +906,7 @@
           <armor>
             <gun>	30	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -918,7 +925,8 @@
             <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB41_Challenger/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -939,12 +947,13 @@
           <armor>
             <gun>	30	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <reloadTime>	4.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -957,7 +966,8 @@
             <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB41_Challenger/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -977,7 +987,8 @@
         <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB41_Challenger/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.008166 0.549053 0.785555	</gunPosition>
       <emblemSlots>
@@ -1012,9 +1023,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <physicsShape>	1.000 -0.070 1.004 0.000 0.545 0.381 0.642 0.716 0.447 0.500 0.000 0.510 0.074 0.089 0.000	</physicsShape>
     </Turret_1_GB41_Challenger>
     <Turret_2_GB41_Challenger>
@@ -1065,6 +1074,7 @@
           <armor>
             <gun>	30	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -1083,7 +1093,8 @@
             <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB41_Challenger/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1100,25 +1111,27 @@
           <armor>
             <gun>	30	</gun>
           </armor>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	4.1	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <models>
             <undamaged>	vehicles/british/GB41_Challenger/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB41_Challenger/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB41_Challenger/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1138,7 +1151,8 @@
         <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB41_Challenger/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.003579 0.497747 1.10468	</gunPosition>
       <emblemSlots>
@@ -1173,9 +1187,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	0.926 -0.039 1.000 0.000 0.576 0.412 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
     </Turret_2_GB41_Challenger>
   </turrets0>
@@ -1203,6 +1215,25 @@
     </N19Mk3>
     <N22>	shared	</N22>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB41_Challenger>
+        <alpha>	0.0966	</alpha>
+      </Chassis_GB41_Challenger>
+      <Chassis_GB41_Challenger_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_GB41_Challenger_2>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor>
+        <bravo>	158.5922	</bravo>
+      </Rolls_Royse_Meteor>
+      <Rolls_Royse_Meteor_MkIV>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV>
+    </engines>
+    <armour>	0.64427038	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

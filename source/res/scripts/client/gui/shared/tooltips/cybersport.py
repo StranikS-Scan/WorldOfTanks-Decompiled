@@ -63,13 +63,18 @@ class CybersportSlotSelectedToolTipData(CybersportToolTipData):
 
 class SquadSlotSelectedToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, playerID):
+    def getDisplayableData(self, index, unitIdx=None):
+        if unitIdx is not None:
+            unitIdx = int(unitIdx)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            functional = dispatcher.getPrbFunctional()
-            playerInfo = functional.getPlayerInfo(pID=playerID)
-            if playerInfo.isVehicleSpecified():
-                return vo_converters.makeVehicleVO(playerInfo.getVehicle())
+            functional = dispatcher.getUnitFunctional()
+            _, unit = functional.getUnit(unitIdx)
+            accountDBID = unit.getMembers()[index]['accountDBID']
+            vehicles = unit.getVehicles()[accountDBID]
+            if vehicles:
+                vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
+                return vo_converters.makeVehicleVO(vehicle)
         super(SquadSlotSelectedToolTipData, self).getDisplayableData()
         return
 

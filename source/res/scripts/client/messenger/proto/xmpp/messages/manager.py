@@ -3,8 +3,8 @@
 from messenger import g_settings
 from messenger.m_constants import USER_TAG, CLIENT_ACTION_ID, PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
-from messenger.proto.interfaces import IProtoLimits
 from messenger.proto.shared_errors import ChatCoolDownError
+from messenger.proto.xmpp import entities
 from messenger.proto.xmpp import find_criteria
 from messenger.proto.xmpp import jid as jid_entity
 from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
@@ -12,23 +12,12 @@ from messenger.proto.xmpp.decorators import xmpp_query, QUERY_SIGN
 from messenger.proto.xmpp.extensions import chat as chat_ext
 from messenger.proto.xmpp.gloox_constants import GLOOX_EVENT as _EVENT, MESSAGE_TYPE, MESSAGE_TYPE_TO_ATTR
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
+from messenger.proto.xmpp.jid import makeSystemRoomJID
 from messenger.proto.xmpp.messages.chat_session import ChatSessionsProvider
-from messenger.proto.xmpp.messages.muc import MUCProvider
-from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
+from messenger.proto.xmpp.messages.muc import MUCProvider, ACTION_RESULT
+from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
+from messenger.proto.xmpp.xmpp_limits import MessageLimits
 from messenger.storage import storage_getter
-
-class _MessageLimits(IProtoLimits):
-
-    def getMessageMaxLength(self):
-        return MESSAGE_LIMIT.MESSAGE_MAX_SIZE
-
-    def getBroadcastCoolDown(self):
-        return MESSAGE_LIMIT.COOLDOWN
-
-    def getHistoryMaxLength(self):
-        return MESSAGE_LIMIT.HISTORY_MAX_LEN
-
-
 _REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
 
 class MessagesManager(ClientEventsHandler):
@@ -37,7 +26,7 @@ class MessagesManager(ClientEventsHandler):
     def __init__(self):
         super(MessagesManager, self).__init__()
         self.__msgFilters = None
-        self.__limits = _MessageLimits()
+        self.__limits = MessageLimits()
         self.__chatSessions = ChatSessionsProvider(self.__limits)
         self.__muc = MUCProvider()
         self.__receivedTags = set()
@@ -115,8 +104,8 @@ class MessagesManager(ClientEventsHandler):
         return self.__muc.createRoom(name, password=password)
 
     @xmpp_query()
-    def joinToMUC(self, jid, password=''):
-        return self.__muc.joinToRoom(jid.getBareJID(), password=password)
+    def joinToMUC(self, jid, password='', name=''):
+        return self.__muc.joinToRoom(jid.getBareJID(), password=password, name=name, initResult=ACTION_RESULT.DO_NOTHING)
 
     def leaveFromMUC(self, jid):
         self.__muc.leaveFromRoom(jid.getBareJID())
@@ -130,6 +119,30 @@ class MessagesManager(ClientEventsHandler):
             return
         self.__muc.sendMessage(jid_entity.ContactBareJID(jid), body, self.__msgFilters)
         self.__cooldown.process(CLIENT_ACTION_ID.SEND_MESSAGE)
+
+    def _addSysChannelsToStorage(self):
+        self._addCommonChannelToStorage()
+        self._addCompanyChannelToStorage()
+
+    def _addCommonChannelToStorage(self):
+        sysChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.STANDARD)
+        if sysChannelConfig is not None and sysChannelConfig['enabled']:
+            channelJid = makeSystemRoomJID(channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD)
+            channelName = sysChannelConfig['userString'] or channelJid.getDomain()
+            sysChannelEntity = entities.XMPPMucChannelEntity(channelJid, channelName, isSystem=True, isLazy=True, channelType=XMPP_MUC_CHANNEL_TYPE.STANDARD)
+            if self.channelsStorage.addChannel(sysChannelEntity):
+                g_messengerEvents.channels.onChannelInited(sysChannelEntity)
+        return
+
+    def _addCompanyChannelToStorage(self):
+        companyChannelConfig = g_settings.server.XMPP.getChannelByType(XMPP_MUC_CHANNEL_TYPE.COMPANY)
+        if companyChannelConfig is not None and companyChannelConfig['enabled']:
+            channelJid = makeSystemRoomJID(channelType=XMPP_MUC_CHANNEL_TYPE.COMPANY)
+            channelName = companyChannelConfig['userString'] or channelJid.getDomain()
+            companyChannelEntity = entities.XMPPMucChannelEntity(channelJid, channelName, isSystem=True, isLazy=True, channelType=XMPP_MUC_CHANNEL_TYPE.COMPANY)
+            if self.channelsStorage.addChannel(companyChannelEntity):
+                g_messengerEvents.channels.onChannelInited(companyChannelEntity)
+        return
 
     def __clearData(self):
         self.__chatSessions.clear()
@@ -145,6 +158,7 @@ class MessagesManager(ClientEventsHandler):
     def __handleLogin(self):
         self.__chatSessions.release()
         self.__muc.release()
+        self._addSysChannelsToStorage()
 
     def __handleDisconnected(self, reason, description):
         self.__chatSessions.suspend()

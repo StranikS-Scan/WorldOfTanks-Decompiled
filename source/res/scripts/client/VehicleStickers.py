@@ -1,17 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleStickers.py
-import BigWorld
 from collections import namedtuple
 import math
-import constants
 import Account
+from AvatarInputHandler import mathUtils
 from gui.LobbyContext import g_lobbyContext
 import items
 from items import vehicles
 import Math
 import BattleReplay
 from debug_utils import *
-from VehicleEffects import TankComponentNames
+from vehicle_systems import stricted_loading
+from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 
 class StickerAttributes():
@@ -39,6 +39,7 @@ class ModelStickers():
         self.__clanID = 0
         self.__vehicleDescriptor = vDesc
         self.__model = None
+        self.__toPartRootMatrix = mathUtils.createIdentityMatrix()
         self.__parentNode = None
         self.__isDamaged = False
         self.__calcTexParams(vDesc, emblemSlots, onHull, insigniaRank)
@@ -103,11 +104,14 @@ class ModelStickers():
         self.__isLoadingClanEmblems = False
         self.detachStickers()
 
-    def attachStickers(self, model, parentNode, isDamaged):
+    def attachStickers(self, model, parentNode, isDamaged, toPartRootMatrix=None):
         self.detachStickers()
         self.__model = model
+        if toPartRootMatrix is not None:
+            self.__toPartRootMatrix = toPartRootMatrix
         self.__parentNode = parentNode
         self.__isDamaged = isDamaged
+        self.__stickerModel.setupSuperModel(self.__model, self.__toPartRootMatrix)
         self.__parentNode.attach(self.__stickerModel)
         replayCtrl = BattleReplay.g_replayCtrl
         for slotType, slots in self.__slotsByType.iteritems():
@@ -135,7 +139,8 @@ class ModelStickers():
                     LOG_ERROR('Failed to attach stickers to the vehicle - server returned incorrect url format: %s' % clan_emblems['url_template'])
                     continue
 
-                fileCache.get(url, self.__onClanEmblemLoaded)
+                clanCallback = stricted_loading.makeCallbackWeak(self.__onClanEmblemLoaded)
+                fileCache.get(url, clanCallback)
 
         return
 
@@ -143,7 +148,8 @@ class ModelStickers():
         if self.__model is None:
             return
         else:
-            self.__parentNode.detach(self.__stickerModel)
+            if self.__stickerModel.attached:
+                self.__parentNode.detach(self.__stickerModel)
             self.__stickerModel.clear()
             self.__model = None
             self.__parentNode = None
@@ -151,7 +157,7 @@ class ModelStickers():
             return
 
     def addDamageSticker(self, stickerID, segStart, segEnd):
-        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, self.__model, segStart, segEnd)
+        return 0 if self.__model is None else self.__stickerModel.addDamageSticker(stickerID, segStart, segEnd)
 
     def delDamageSticker(self, handle):
         if self.__model is not None:
@@ -192,7 +198,7 @@ class ModelStickers():
                     stickerAttributes |= StickerAttributes.IS_MIRRORED
                 if slot.isUVProportional:
                     stickerAttributes |= StickerAttributes.IS_UV_PROPORTIONAL
-                self.__stickerModel.addSticker(texName, bumpTexName, self.__model, slot.rayStart, slot.rayEnd, sizes, slot.rayUp, stickerAttributes)
+                self.__stickerModel.addSticker(texName, bumpTexName, slot.rayStart, slot.rayEnd, sizes, slot.rayUp, stickerAttributes)
 
             return
 
@@ -242,7 +248,7 @@ class VehicleStickers(object):
             componentStickers.stickers.setAlpha(actualAlpha)
             componentStickers.alpha = multipliedAlpha
 
-    alpha = property(lambda self: self.__stickers[TankComponentNames.HULL].alpha, __setAlpha)
+    alpha = property(lambda self: self.__stickers[TankPartNames.HULL].alpha, __setAlpha)
 
     def __setShow(self, show):
         self.__show = show
@@ -251,7 +257,7 @@ class VehicleStickers(object):
             componentStickers.stickers.setAlpha(alpha)
 
     show = property(lambda self: self.__show, __setShow)
-    COMPONENT_NAMES = (TankComponentNames.HULL, TankComponentNames.TURRET, TankComponentNames.GUN)
+    COMPONENT_NAMES = ((TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION))
     __INSIGNIA_NODE_NAME = 'G'
 
     def __init__(self, vehicleDesc, insigniaRank=0):
@@ -260,24 +266,27 @@ class VehicleStickers(object):
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun['animateEmblemSlots']
         self.__currentInsigniaRank = insigniaRank
-        componentSlots = ((TankComponentNames.HULL, vehicleDesc.hull['emblemSlots']),
-         (TankComponentNames.GUN if self.__showEmblemsOnGun else TankComponentNames.TURRET, vehicleDesc.turret['emblemSlots']),
-         (TankComponentNames.TURRET if self.__showEmblemsOnGun else TankComponentNames.GUN, []),
+        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull['emblemSlots']),
+         (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret['emblemSlots']),
+         (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []),
          ('gunInsignia', vehicleDesc.gun['emblemSlots']))
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
-            modelStickers = ModelStickers(vehicleDesc, emblemSlots, componentName == TankComponentNames.HULL, insigniaRank)
+            modelStickers = ModelStickers(vehicleDesc, emblemSlots, componentName == TankPartNames.HULL, self.__currentInsigniaRank)
             self.__stickers[componentName] = ComponentStickers(modelStickers, {}, 1.0)
 
     def getCurrentInsigniaRank(self):
         return self.__currentInsigniaRank
 
-    def attach(self, modelsWithParentNodes, isDamaged, showDamageStickers):
-        for componentName, (model, parentNode) in zip(VehicleStickers.COMPONENT_NAMES, modelsWithParentNodes):
-            if model is None or parentNode is None:
+    def attach(self, compoundModel, isDamaged, showDamageStickers):
+        for componentName, attachNodeName in VehicleStickers.COMPONENT_NAMES:
+            idx = TankPartNames.getIdx(componentName)
+            node = compoundModel.node(attachNodeName)
+            if node is None:
                 continue
+            geometryLink = compoundModel.getPartGeometryLink(idx)
             componentStickers = self.__stickers[componentName]
-            componentStickers.stickers.attachStickers(model, parentNode, isDamaged)
+            componentStickers.stickers.attachStickers(geometryLink, node, isDamaged)
             if showDamageStickers:
                 for damageSticker in componentStickers.damageStickers.itervalues():
                     if damageSticker.handle is not None:
@@ -286,20 +295,18 @@ class VehicleStickers(object):
                         LOG_WARNING('Adding %s damage sticker to occupied slot' % componentName)
                     damageSticker.handle = componentStickers.stickers.addDamageSticker(damageSticker.stickerID, damageSticker.rayStart, damageSticker.rayEnd)
 
-        gunModel, gunNode = modelsWithParentNodes[-1]
-        if gunModel is None or gunNode is None:
+        if self.__animateGunInsignia:
+            gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION) if isDamaged else compoundModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
+        else:
+            gunNode = compoundModel.node(TankNodeNames.GUN_INCLINATION)
+        if gunNode is None:
             return
         else:
-            if self.__animateGunInsignia:
-                try:
-                    gunNode = gunModel.root if isDamaged else gunModel.node(VehicleStickers.__INSIGNIA_NODE_NAME)
-                except:
-                    LOG_ERROR('Cannot attach gun decals to model "%s" - it does not have node named "G"' % gunModel.sources[0])
-                    return
-
-            else:
-                gunNode = gunModel.root
-            self.__stickers['gunInsignia'].stickers.attachStickers(gunModel, gunNode, isDamaged)
+            gunGeometry = compoundModel.getPartGeometryLink(TankPartIndexes.GUN)
+            toPartRoot = Math.Matrix(gunNode)
+            toPartRoot.invert()
+            toPartRoot.preMultiply(compoundModel.node(TankNodeNames.GUN_INCLINATION))
+            self.__stickers['gunInsignia'].stickers.attachStickers(gunGeometry, gunNode, isDamaged, toPartRoot)
             return
 
     def detach(self):

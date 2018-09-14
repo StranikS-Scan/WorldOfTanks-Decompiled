@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.meta.RetrainCrewWindowMeta import RetrainCrewWindo
 from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.gui_items.processors.tankman import TankmanCrewRetraining
 from gui.shared.utils import decorators
+from gui.shared.money import Money
 from gui import SystemMessages
 from items import tankmen
 from gui.shared.formatters import text_styles
@@ -102,7 +103,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
                     crewInfo.append(self.__getTankmanRoleInfo(tMan))
 
         crewSize = len(crewInfo)
-        price = (crewSize * currentSelection['credits'], crewSize * currentSelection['gold'])
+        price = crewSize * Money(**currentSelection)
         self.as_setCrewDataS({'price': price,
          'crew': crewInfo,
          'crewMembersText': text_styles.concatStylesWithSpace(_ms(RETRAIN_CREW.LABEL_CREWMEMBERS), text_styles.middleTitle(crewSize))})

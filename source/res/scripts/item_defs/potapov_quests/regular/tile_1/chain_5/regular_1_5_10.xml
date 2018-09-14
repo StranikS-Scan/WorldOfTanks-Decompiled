@@ -34,10 +34,9 @@
               <classes>	SPG	</classes>
               <greaterOrEqual>	1	</greaterOrEqual>
             </vehicleKills>
-            <results>
-              <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
-            </results>
+            <vehicleKills>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </vehicleKills>
           </and>
         </postBattle>
       </conditions>

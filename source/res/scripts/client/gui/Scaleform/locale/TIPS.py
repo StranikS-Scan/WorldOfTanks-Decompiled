@@ -3,6 +3,12 @@
 
 
 class TIPS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     PAYATTENTION = '#tips:payAttention'
     USEFULFEATURES = '#tips:usefulFeatures'
     FOLLOWTHERULES = '#tips:followTheRules'
@@ -122,7 +128,6 @@ class TIPS(object):
     TIP109 = '#tips:tip109'
     TIP110 = '#tips:tip110'
     TIP111_PAYATTENTION_TACTICS_50_500_EXCEPT_7_ALL_ALL_ALL = '#tips:tip111/payAttention/tactics/50_500/except_7/all/all/all'
-    TIP112_PAYATTENTION_ECONOMICS_0_100_EXCEPT_7_ALL_ALL_ALL = '#tips:tip112/payAttention/economics/0_100/except_7/all/all/all'
     TIP113 = '#tips:tip113'
     TIP114_FOLLOWTHERULES_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip114/followTheRules/security/0_infinity/all/all/all/all'
     TIP115_FOLLOWTHERULES_RULES_100_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip115/followTheRules/rules/100_infinity/all/all/all/all'
@@ -190,7 +195,7 @@ class TIPS(object):
     TIP177_FOLLOWTHERULES_RULES_100_INFINITY_EXCEPT_7_ALL_ALL_ALL = '#tips:tip177/followTheRules/rules/100_infinity/except_7/all/all/all'
     TIP178_FOLLOWTHERULES_RULES_100_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip178/followTheRules/rules/100_infinity/all/all/all/all'
     TIP179_BECAREFUL_SECURITY_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip179/beCareful/security/0_infinity/all/all/all/all'
-    SANDBOX01 = '#tips:sandbox01'
-    SANDBOX02 = '#tips:sandbox02'
+    SANDBOX0 = '#tips:sandbox0'
+    SANDBOX1 = '#tips:sandbox1'
     EVENTTITLE = '#tips:eventTitle'
     EVENTMESSAGE = '#tips:eventMessage'

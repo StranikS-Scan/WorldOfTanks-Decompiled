@@ -10,6 +10,13 @@
     <forward>	35	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.053	</moving>
+    <still>	0.105	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.158	</firePenalty>
+  </invisibility>
   <repairCost>	6.78	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -62,7 +69,8 @@
       <turret>	0.000000 0.674665 0.49638	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -216,13 +224,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.01164 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.3 2.2072	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -491,13 +498,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.01164 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.3 2.2072	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -697,6 +703,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.347222 10 0.388889 10 0.402778 6 0.597222 6 0.611111 10 0.652778 10 0.666667 10 1 10	</maxPitch>
@@ -708,7 +715,8 @@
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -747,6 +755,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.347222 10 0.388889 10 0.402778 6 0.597222 6 0.611111 10 0.652778 10 0.666667 10 1 10	</maxPitch>
@@ -758,7 +767,8 @@
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -787,6 +797,7 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -14 1 -14	</minPitch>
             <maxPitch>	0 10 0.333333 10 0.347222 10 0.388889 10 0.402778 6 0.597222 6 0.611111 10 0.652778 10 0.666667 10 1 10	</maxPitch>
@@ -797,7 +808,8 @@
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -820,7 +832,8 @@
         <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.565037 1.18279	</gunPosition>
       <emblemSlots>
@@ -849,9 +862,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.955 -0.128 1.043 0.000 0.723 -0.022 1.000 0.638 0.303 0.500 0.266 0.500 0.069 0.654 0.074	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_4000-5999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -921,6 +932,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <aimingTime>	2.3	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Gun_03.model	</undamaged>
@@ -928,7 +940,8 @@
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -966,6 +979,7 @@
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <aimingTime>	2.3	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Gun_04.model	</undamaged>
@@ -973,7 +987,8 @@
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1013,13 +1028,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1059,13 +1076,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F07_AMX_M4_1945/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1088,7 +1107,8 @@
         <exploded>	vehicles/french/F07_AMX_M4_1945/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F07_AMX_M4_1945/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F07_AMX_M4_1945/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F07_AMX_M4_1945/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.4108 0.86926	</gunPosition>
       <emblemSlots>
@@ -1117,9 +1137,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.986 0.000 1.020 0.000 0.682 0.063 0.822 0.582 0.387 0.500 0.195 0.500 0.060 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1149,6 +1167,28 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_M4_1945>
+        <alpha>	0.1288	</alpha>
+      </Chassis_AMX_M4_1945>
+      <Chassis_AMX_M4_1945_2>
+        <alpha>	0.12075	</alpha>
+      </Chassis_AMX_M4_1945_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_230>
+        <bravo>	151.9842	</bravo>
+      </Maybach_HL_230>
+      <Maybach_HL_230P45>
+        <bravo>	198.2402	</bravo>
+      </Maybach_HL_230P45>
+      <Maybach_HL_295>
+        <bravo>	224.6722	</bravo>
+      </Maybach_HL_295>
+    </engines>
+    <armour>	1.150655622	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

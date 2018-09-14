@@ -9,6 +9,13 @@
     <forward>	24	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.235	</moving>
+    <still>	0.313	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.47	</firePenalty>
+  </invisibility>
   <repairCost>	4.17	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -58,7 +65,8 @@
       <turret>	-0.007229 0.49301 0.674881	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB04_Valentine/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -201,13 +209,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -348,13 +355,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -423,6 +429,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -434,7 +441,8 @@
             <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
         </_2pdr_Gun_Mk_X>
       </guns>
@@ -444,7 +452,8 @@
         <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB04_Valentine/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000007 0.302635 0.5624	</gunPosition>
       <emblemSlots>
@@ -466,9 +475,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.893 0.000 1.000 0.000 0.520 0.264 0.736 0.589 0.463 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
       </camouflage>
@@ -524,6 +531,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
@@ -535,7 +543,8 @@
             <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
         </_2pdr_Gun_Mk_X>
         <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	44	</maxAmmo>
@@ -556,13 +565,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
@@ -590,13 +601,15 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
         </QF_6_pounder_Mk_V>
         <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
@@ -612,13 +625,15 @@
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	6.6	</reloadTime>
           <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB04_Valentine/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
         </_75mm_Gun_Mk_V>
       </guns>
@@ -628,7 +643,8 @@
         <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB04_Valentine/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000013 0.23939 0.729812	</gunPosition>
       <emblemSlots>
@@ -649,9 +665,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.010 -0.055 1.000 0.000 0.507 0.258 0.780 0.600 0.597 0.500 0.036 0.500 0.078 0.000 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
     </Turret_2_GB04_Valentine>
   </turrets0>
   <engines>
@@ -699,6 +713,36 @@
     </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_2pdr_Gun_Mk_X>
+        <delta>	0.602272	</delta>
+      </_2pdr_Gun_Mk_X>
+    </guns>
+    <chassis>
+      <Chassis_GB04_Valentine>
+        <alpha>	0.10465	</alpha>
+      </Chassis_GB04_Valentine>
+      <Chassis_GB04_Valentine_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_GB04_Valentine_2>
+    </chassis>
+    <engines>
+      <AEC_A189>
+        <bravo>	35.68324	</bravo>
+      </AEC_A189>
+      <AEC_A1909>
+        <bravo>	34.62596	</bravo>
+      </AEC_A1909>
+      <GMC_6-71_Mk10>
+        <bravo>	36.4762	</bravo>
+      </GMC_6-71_Mk10>
+      <GMC_6-71_Mk11>
+        <bravo>	43.61285	</bravo>
+      </GMC_6-71_Mk11>
+    </engines>
+    <armour>	0.788942471	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

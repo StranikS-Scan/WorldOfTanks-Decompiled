@@ -1,19 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/xmpp/lobby_controllers.py
+import BigWorld
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
-from messenger.gui.Scaleform.channels._layout import _LobbyLayout
+from messenger.gui.Scaleform.channels.layout import LobbyLayout
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.jid import makeContactJID
+from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
+_LAZY_EXIT_DELAY = 10.0
 
-class _ChannelController(_LobbyLayout):
+class _ChannelController(LobbyLayout):
 
     def __init__(self, channel, mBuilder=None):
-        super(_ChannelController, self).__init__(channel, mBuilder)
+        super(_ChannelController, self).__init__(channel, mBuilder or XmppLobbyMessageBuilder())
         self._hasUnreadMessages = False
         self.fireInitEvent()
 
@@ -29,10 +32,7 @@ class _ChannelController(_LobbyLayout):
 
     def addMessage(self, message, doFormatting=True):
         activated = super(_ChannelController, self).addMessage(message, doFormatting)
-        if not activated:
-            self._hasUnreadMessages = True
-        else:
-            self._hasUnreadMessages = False
+        self._hasUnreadMessages = not activated
         return activated
 
     def hasUnreadMessages(self):
@@ -42,7 +42,7 @@ class _ChannelController(_LobbyLayout):
         if not doFormatting:
             return message.text
         dbID = message.accountDBID
-        return self._mBuilder.setGuiType(dbID).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).build()
+        return self._mBuilder.setGuiType(dbID).setRole(message.accountRole).setAffiliation(message.accountAffiliation).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).build()
 
     def _onConnectStateChanged(self, _):
         if self._view:
@@ -71,10 +71,10 @@ class _ChannelController(_LobbyLayout):
         g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-class ChatChannelController(_ChannelController):
+class ChatSessionController(_ChannelController):
 
     def __init__(self, channel, mBuilder=None):
-        super(ChatChannelController, self).__init__(channel, mBuilder)
+        super(ChatSessionController, self).__init__(channel, mBuilder)
         self._isHistoryRqRequired = True
 
     def isJoined(self):
@@ -83,24 +83,24 @@ class ChatChannelController(_ChannelController):
     def activate(self):
         if self._isHistoryRqRequired:
             self.proto.messages.requestChatSessionHistory(self._channel.getID())
-        super(ChatChannelController, self).activate()
+        super(ChatSessionController, self).activate()
 
     def exit(self):
         self.proto.messages.stopChatSession(self._channel.getID())
 
     def setHistory(self, history):
-        super(ChatChannelController, self).setHistory(history)
+        super(ChatSessionController, self).setHistory(history)
         if self._isHistoryRqRequired:
             self._isHistoryRqRequired = False
             self._onConnectStateChanged(self._channel)
 
     def _addListeners(self):
-        super(ChatChannelController, self)._addListeners()
+        super(ChatSessionController, self)._addListeners()
         g_messengerEvents.users.onUserStatusUpdated += self.__onUserStatusUpdated
 
     def _removeListeners(self):
         g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
-        super(ChatChannelController, self)._removeListeners()
+        super(ChatSessionController, self)._removeListeners()
 
     def _broadcast(self, message):
         self.proto.messages.sendChatMessage(self._channel.getID(), message)
@@ -143,3 +143,56 @@ class UserRoomController(_ChannelController):
 
     def __me_onUserActionReceived(self, _, contact):
         self._refreshMembersDP()
+
+
+class LazyUserRoomController(_ChannelController):
+
+    def __init__(self, channel):
+        super(LazyUserRoomController, self).__init__(channel)
+        self.__exitCallbackID = None
+        return
+
+    def activate(self):
+        super(LazyUserRoomController, self).activate()
+        self.__clearExitCallback()
+        self.join()
+
+    def deactivate(self, entryClosing=False):
+        super(LazyUserRoomController, self).deactivate()
+        self.__clearExitCallback()
+        if not entryClosing:
+            if self._channel.isJoined():
+                self.__exitCallbackID = BigWorld.callback(_LAZY_EXIT_DELAY, self.__exitFromLazyChannel)
+        else:
+            self.__exitFromLazyChannel()
+
+    def addMessage(self, message, doFormatting=True):
+        return super(LazyUserRoomController, self).addMessage(message, doFormatting)
+
+    def join(self):
+        if not self._channel.isJoined():
+            self.proto.messages.joinToMUC(self._channel.getID())
+
+    def exit(self):
+        self.proto.messages.leaveFromMUC(self._channel.getID())
+
+    def _broadcast(self, message):
+        self.proto.messages.sendGroupChatMessage(self._channel.getID(), message)
+
+    def _fireInitEvent(self):
+        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LAZY_CHANNEL_CTRL_INITED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _fireDestroyEvent(self):
+        g_eventBus.handleEvent(MessengerEvent(MessengerEvent.LAZY_CHANNEL_CTRL_DESTROYED, {'controller': self}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __clearExitCallback(self):
+        if self.__exitCallbackID is not None:
+            BigWorld.cancelCallback(self.__exitCallbackID)
+            self.__exitCallbackID = None
+        return
+
+    def __exitFromLazyChannel(self):
+        self.__exitCallbackID = None
+        if self._channel and self._channel.isJoined():
+            self.exit()
+        return

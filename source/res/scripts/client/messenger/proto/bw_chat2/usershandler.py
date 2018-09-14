@@ -45,7 +45,7 @@ class UsersHandler(provider.ResponseDictHandler):
                 if user.isCurrentPlayer():
                     received = user
                 elif user.isOnline():
-                    received.update(tags=user.getTags(), gosBit=GAME_ONLINE_STATUS.IN_SEARCH)
+                    received.update(tags=user.getTags(), gosBit=GAME_ONLINE_STATUS.ONLINE)
                 else:
                     received.update(tags=user.getTags())
             else:

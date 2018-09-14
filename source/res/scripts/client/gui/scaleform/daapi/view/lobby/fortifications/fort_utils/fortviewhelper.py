@@ -13,7 +13,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_listener import FortListener
 from gui.shared.formatters import icons, text_styles, time_formatters
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from helpers import i18n, time_utils

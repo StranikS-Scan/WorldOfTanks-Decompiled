@@ -120,6 +120,13 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
     def channelsStorage(self):
         return None
 
+    def _dispose(self):
+        if self.__membersDP:
+            self.__membersDP.fini()
+            self.__membersDP = None
+        super(ClanProfilePersonnelView, self)._dispose()
+        return
+
     @process
     def setClanDossier(self, clanDossier):
         super(ClanProfilePersonnelView, self).setClanDossier(clanDossier)

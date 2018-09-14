@@ -24,11 +24,11 @@
     <Interface>	AccountGlobalMapConnector	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91400>
+    <requiredVersion_91510>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.14_3	</Default>
-    </requiredVersion_91400>
+      <Default>	ru_0.9.15_10	</Default>
+    </requiredVersion_91510>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -118,6 +118,7 @@
       <Type>	INT32	</Type>
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
+      <Indexed>	true	</Indexed>
     </peripheryID>
     <saveTime>
       <Type>	INT32	</Type>
@@ -374,6 +375,7 @@
       <Arg>	UINT64	</Arg>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
     </onTutorialCreated>
     <onKickedFromQueue>
       <Arg>	UINT8	</Arg>

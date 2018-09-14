@@ -306,7 +306,7 @@ class DebugViewItem():
         self._guiName.text = self.__name + self.__divider
 
     def getName(self):
-        return self._name
+        return self.__name
 
     def setValue(self, value):
         self.__value = str(value)
@@ -397,14 +397,12 @@ class DebugViewItem():
 
     def _rebuild(self):
         saved_font2 = self.getFont()
-        saved_colour2 = self.getColour()
-        saved_materialFX2 = self.getMaterialFX()
+        saved_colour2 = ((255.0, 255.0, 255.0, 255.0), (255.0, 255.0, 255.0, 255.0))
         saved_position2 = self._getPosition()
         saved_visible = self.getVisible()
         self.__createGUI()
         self.setFont(saved_font2)
         self.setColour(saved_colour2)
-        self.setMaterialFX(saved_materialFX2)
         self._setPosition(saved_position2)
         self.setVisible(saved_visible)
 

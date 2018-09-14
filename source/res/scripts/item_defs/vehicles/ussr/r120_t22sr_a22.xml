@@ -9,6 +9,13 @@
     <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.206	</moving>
+    <still>	0.274	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.411	</firePenalty>
+  </invisibility>
   <repairCost>	13.00	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -59,7 +66,8 @@
       <turret>	-0.000000 0.5308 0.012624	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R120_T22SR_A22/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R120_T22SR_A22/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R120_T22SR_A22/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -88,13 +96,13 @@
       </armor>
       <weight>	6500	</weight>
       <maxLoad>	39000	</maxLoad>
-      <terrainResistance>	0.6 0.7 1.5	</terrainResistance>
+      <terrainResistance>	0.9 1 2	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	54	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -168,13 +176,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.921454 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R120_T22SR_A22/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R120_T22SR_A22/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R120_T22SR_A22/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.412 2.12602	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -480,7 +487,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
       <maxHealth>	380	</maxHealth>
-      <rotationSpeed>	48	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -518,21 +525,23 @@
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 5 0.380556 5 0.383333 4.7 0.391667 4.6 0.394444 4.5 0.397222 4.2 0.4 4 0.402778 3.8 0.405556 3.6 0.408333 3.5 0.411111 3.2 0.413889 3 0.419444 2.7 0.422222 2.4 0.436111 2.4 0.438889 1 0.441667 0 0.444444 0 0.447222 -0.1 0.458333 -0.1 0.461111 0 0.463889 0.6 0.466667 1 0.533333 1 0.536111 0.6 0.538889 0 0.541667 -0.1 0.552778 -0.1 0.555556 0 0.558333 0 0.561111 1 0.563889 2.4 0.577778 2.4 0.580556 2.7 0.586111 3 0.588889 3.2 0.591667 3.5 0.594444 3.6 0.597222 3.8 0.6 4 0.602778 4.2 0.605556 4.5 0.608333 4.6 0.616667 4.7 0.619444 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	8.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R120_T22SR_A22/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R120_T22SR_A22/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R120_T22SR_A22/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R120_T22SR_A22/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R120_T22SR_A22/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R120_T22SR_A22/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -555,7 +564,8 @@
         <exploded>	vehicles/russian/R120_T22SR_A22/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R120_T22SR_A22/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R120_T22SR_A22/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R120_T22SR_A22/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.263174 1.40638	</gunPosition>
       <emblemSlots>
@@ -590,8 +600,6 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_8000-11999	</turretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_8000-11999	</turretRotatorSoundGear>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	0.988 -0.063 1.002 0.000 0.659 0.199 0.500 0.500 0.598 0.500 0.392 0.500 0.278 0.502 0.191	</physicsShape>
     </Turret_1_R120_T22SR_A22>
@@ -605,6 +613,19 @@
   <radios>
     <R123A>	shared	</R123A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_R120_T22SR_A22>
+        <alpha>	0.05635	</alpha>
+      </Chassis_R120_T22SR_A22>
+    </chassis>
+    <engines>
+      <V-12-5_shortened>
+        <bravo>	198.2402	</bravo>
+      </V-12-5_shortened>
+    </engines>
+    <armour>	1.297795959	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

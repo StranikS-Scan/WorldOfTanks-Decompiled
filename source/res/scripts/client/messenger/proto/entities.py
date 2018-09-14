@@ -174,6 +174,9 @@ class ChannelEntity(ChatEntity, ChannelEvents):
     def isPrebattle(self):
         return False
 
+    def isLazy(self):
+        return False
+
     def getPrebattleType(self):
         pass
 

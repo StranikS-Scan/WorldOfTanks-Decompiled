@@ -3,16 +3,16 @@
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.prb_windows import companies_dps
 from gui.Scaleform.daapi.view.lobby.prb_windows.PrebattlesListWindow import PrebattlesListWindow
+from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
 from gui.Scaleform.managers.windows_stored_data import DATA_TYPE, TARGET_ID
 from gui.Scaleform.managers.windows_stored_data import stored_window
+from gui.prb_control.context import prb_ctx
 from gui.prb_control.functional.default import PrbRosterRequester
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
-from gui.prb_control.context import prb_ctx
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.Scaleform.daapi.view.meta.CompaniesWindowMeta import CompaniesWindowMeta
 from gui.shared.events import FocusEvent
 from messenger.ext import channel_num_gen
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import LAZY_CHANNEL
 
 @stored_window(DATA_TYPE.CAROUSEL_WINDOW, TARGET_ID.CHANNEL_CAROUSEL)

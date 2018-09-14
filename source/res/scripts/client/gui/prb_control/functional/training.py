@@ -362,11 +362,10 @@ class TrainingFunctional(default.PrbFunctional):
         else:
             self.setPlayerState(prb_ctx.SetPlayerStateCtx(True, waitingID='prebattle/player_ready'), self.__onPlayerReady)
 
-    @staticmethod
-    def __onPlayerReady(result):
+    def __onPlayerReady(self, result):
         if result:
             g_eventDispatcher.loadTrainingRoom()
-        else:
+        elif self.hasEntity():
             g_eventDispatcher.loadHangar()
             g_eventDispatcher.removeTrainingFromCarousel()
             g_eventDispatcher.addTrainingToCarousel(False)

@@ -31,7 +31,7 @@ class TutorialManager(TutorialManagerMeta):
         self._isEnabled = isEnabled
         self._aliases = {}
         self._components = set()
-        self.seEnvironment(app)
+        self.setEnvironment(app)
         if isEnabled:
             self._config = gui_config.readConfig(path)
         else:

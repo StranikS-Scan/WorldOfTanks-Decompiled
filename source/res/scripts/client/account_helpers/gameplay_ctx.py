@@ -17,8 +17,9 @@ def getDefaultMask():
 
 
 def getMask():
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.settings_core.SettingsCore import g_settingsCore
-    settingsMask = userMask = g_settingsCore.serverSettings.getGameplaySetting('gameplayMask', getDefaultMask())
+    settingsMask = userMask = g_settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 'gameplayMask', getDefaultMask())
     ctfMask = 1 << constants.ARENA_GAMEPLAY_IDS['ctf']
     nationsMask = 1 << constants.ARENA_GAMEPLAY_IDS['nations']
     if not userMask:
@@ -52,5 +53,6 @@ def isCreationEnabled(gameplayName):
 
 
 def _setMask(gameplayMask):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.settings_core.SettingsCore import g_settingsCore
-    g_settingsCore.serverSettings.setGameplaySettings({'gameplayMask': gameplayMask})
+    g_settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, {'gameplayMask': gameplayMask})

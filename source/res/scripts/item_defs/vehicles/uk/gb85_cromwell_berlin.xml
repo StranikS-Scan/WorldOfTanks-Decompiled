@@ -10,6 +10,13 @@
     <forward>	64	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.19	</moving>
+    <still>	0.253	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.38	</firePenalty>
+  </invisibility>
   <repairCost>	4.0	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
@@ -64,7 +71,8 @@
       <turret>	0.000000 0.595397 0.50324	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/british/GB85_Cromwell_Berlin/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/british/GB85_Cromwell_Berlin/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/british/GB85_Cromwell_Berlin/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -417,13 +425,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.904602 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/british/GB85_Cromwell_Berlin/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB85_Cromwell_Berlin/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB85_Cromwell_Berlin/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.2494 1.86766	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -485,13 +492,15 @@
             <maxPitch>	0 8 0.347222 8 0.430556 -2 0.569444 -2 0.652778 8 1 8	</maxPitch>
           </pitchLimits>
           <reloadTime>	3.9	</reloadTime>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB85_Cromwell_Berlin/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/british/GB85_Cromwell_Berlin/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/british/GB85_Cromwell_Berlin/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/british/GB85_Cromwell_Berlin/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/british/GB85_Cromwell_Berlin/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB85_Cromwell_Berlin/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -514,7 +523,8 @@
         <exploded>	vehicles/british/GB85_Cromwell_Berlin/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/british/GB85_Cromwell_Berlin/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/british/GB85_Cromwell_Berlin/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/british/GB85_Cromwell_Berlin/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.3 0.86	</gunPosition>
       <emblemSlots>
@@ -535,9 +545,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_4000-5999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_4000-5999	</turretRotatorSoundGear>
       <physicsShape>	1.020 -0.013 1.007 0.000 0.543 0.278 1.000 0.364 0.318 0.464 0.000 0.000 0.000 0.000 0.093	</physicsShape>
       <camouflage>
         <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -553,6 +561,19 @@
   <radios>
     <British_Wireless_set_N19>	shared	</British_Wireless_set_N19>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_GB85_Cromwell_Berlin>
+        <alpha>	0.0483	</alpha>
+      </Chassis_GB85_Cromwell_Berlin>
+    </chassis>
+    <engines>
+      <Rolls_Royse_Meteor_MkIV_A>
+        <bravo>	171.8082	</bravo>
+      </Rolls_Royse_Meteor_MkIV_A>
+    </engines>
+    <armour>	0.896736835	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

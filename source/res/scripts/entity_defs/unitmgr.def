@@ -1,0 +1,149 @@
+<unitmgr.def>
+  <Implements>
+    <Interface>	ChatProvider_chat2	</Interface>
+  </Implements>
+  <Properties>
+    <webID>
+      <Type>	UINT64	</Type>
+      <Flags>	BASE	</Flags>
+    </webID>
+    <bp>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </bp>
+    <settings>
+      <Type>	PYTHON	</Type>
+      <Flags>	BASE	</Flags>
+    </settings>
+  </Properties>
+  <BaseMethods>
+    <addPlayer>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	BOOL	</Arg>
+    </addPlayer>
+    <checkPlayerJoined>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+    </checkPlayerJoined>
+    <addInvite>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+    </addInvite>
+    <updatePlayerInfo>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </updatePlayerInfo>
+    <kickAll>
+      <Arg>	UINT8	</Arg>
+    </kickAll>
+    <removePlayer>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+    </removePlayer>
+    <setIgnoreList>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	ARRAY	  <of>	UINT64	</of>
+      </Arg>
+    </setIgnoreList>
+    <callUnitMethod>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </callUnitMethod>
+    <callUnitPlayerMethod>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </callUnitPlayerMethod>
+    <onEnqueued>
+      <Arg>	UINT8	</Arg>
+    </onEnqueued>
+    <onDequeued>
+      <Arg>	UINT8	</Arg>
+    </onDequeued>
+    <onKickedFromQueue>
+      <Arg>	UINT8	</Arg>
+    </onKickedFromQueue>
+    <onPlayerInArena>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onPlayerInArena>
+    <onUnitAssembled>
+      <Arg>	PYTHON	</Arg>
+    </onUnitAssembled>
+    <onCenterAccountReadyAgain>
+      <Arg>	MAILBOX	</Arg>
+    </onCenterAccountReadyAgain>
+    <start>
+      <Arg>	UINT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </start>
+    <stop>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </stop>
+    <startAutoSearch>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </startAutoSearch>
+    <stopAutoSearch>
+      <Arg>	INT32	</Arg>
+      <Arg>	MAILBOX	</Arg>
+    </stopAutoSearch>
+    <onArenaCreated>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </onArenaCreated>
+    <onArenaStarted>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onArenaStarted>
+    <onArenaFinished>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	PREBATTLE_RESULTS	</Arg>
+    </onArenaFinished>
+    <onArenaJoined>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+    </onArenaJoined>
+    <updateUnitExtras>
+      <Arg>	STRING	</Arg>
+    </updateUnitExtras>
+    <onUnitAssemblerCrash>
+      <Arg>	UINT8	</Arg>
+    </onUnitAssemblerCrash>
+    <onPublish></onPublish>
+    <onUnpublish></onUnpublish>
+    <onPublisherError>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </onPublisherError>
+  </BaseMethods>
+</unitmgr.def>

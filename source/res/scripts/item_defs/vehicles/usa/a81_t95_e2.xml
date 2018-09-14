@@ -1,0 +1,611 @@
+<a81_t95_e2.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader>	radioman	</loader>
+  </crew>
+  <speedLimits>
+    <forward>	56	</forward>
+    <backward>	21	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.125	</moving>
+    <still>	0.167	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.251	</firePenalty>
+  </invisibility>
+  <repairCost>	9.0	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/american/A81_T95_E2/T95_E2_chassis_01_AM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	114.3	</armor_1>
+      <armor_2>	95.2	</armor_2>
+      <armor_3>	50.8	</armor_3>
+      <armor_4>	19	</armor_4>
+      <armor_5>	76.2	</armor_5>
+      <armor_6>	19	</armor_6>
+      <armor_7>	31.7	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	152.4	</armor_9>
+      <armor_10>	78.7	</armor_10>
+      <armor_11>	25.4	</armor_11>
+      <armor_12>	101.6	</armor_12>
+      <armor_13>	50.8	</armor_13>
+      <armor_14>	12.7	</armor_14>
+      <armor_15>	71.1	</armor_15>
+      <armor_16>	48.3	</armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	14769	</weight>
+    <maxHealth>	1200	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A81_T95_E2/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A81_T95_E2/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A81_T95_E2/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 38.00 0.36 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.24 38.00 0.36 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.14	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.002 0.535073 0.0527	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A81_T95_E2/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A81_T95_E2/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.00137329 0.223337 2.55729	</rayStart>
+        <rayEnd>	0.00137329 0.187083 2.54038	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A81_T95_E2/T95_E2_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.5 1.5 0.25 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_T95_E2>
+      <userString>	#usa_vehicles:Chassis_T95_E2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	16300	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11500	</weight>
+      <maxLoad>	39750	</maxLoad>
+      <terrainResistance>	0.9 1.1 1.9	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	36	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A81_T95_E2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A81_T95_E2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A81_T95_E2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.48 0.55	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.8	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.309134	</radius>
+          <syncAngle>	36	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.331481	</radius>
+          <syncAngle>	36	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.309134	</radius>
+          <syncAngle>	36	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.331481	</radius>
+          <syncAngle>	36	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.926227 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A81_T95_E2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A81_T95_E2/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.29079 2.0155	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.506530 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.290150	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.078125	</minOffset>
+          <maxOffset>	0.078125	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.078125	</minOffset>
+          <maxOffset>	0.078125	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A81_T95_E2/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A81_T95_E2/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A81_T95_E2/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A81_T95_E2/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/american/A81_T95_E2/track/left.track	</left>
+        <right>	vehicles/american/A81_T95_E2/track/right.track	</right>
+        <segmentLength>	0.196	</segmentLength>
+        <segmentOffset>	0.01	</segmentOffset>
+        <segment2Offset>	0.098	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0097	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1099	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.21	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.49	</backwardElastK>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.61	</backwardElastK>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+          <rightSibling>	Track_VT_L7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.71	</backwardElastK>
+          <leftSibling>	Track_VT_L6	</leftSibling>
+          <rightSibling>	Track_VT_L8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <leftSibling>	Track_VT_L7	</leftSibling>
+          <rightSibling>	Track_VT_L9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L9	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <leftSibling>	Track_VT_L8	</leftSibling>
+          <rightSibling>	Track_VT_L10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L10	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <leftSibling>	Track_VT_L9	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.21	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.49	</backwardElastK>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.61	</backwardElastK>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+          <rightSibling>	Track_VT_R7	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R7	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.71	</backwardElastK>
+          <leftSibling>	Track_VT_R6	</leftSibling>
+          <rightSibling>	Track_VT_R8	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R8	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <leftSibling>	Track_VT_R7	</leftSibling>
+          <rightSibling>	Track_VT_R9	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R9	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <leftSibling>	Track_VT_R8	</leftSibling>
+          <rightSibling>	Track_VT_R10	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R10	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <leftSibling>	Track_VT_R9	</leftSibling>
+        </node>
+      </trackNodes>
+    </Chassis_T95_E2>
+  </chassis>
+  <turrets0>
+    <Turret_1_T95_E2>
+      <userString>	#usa_vehicles:Turret_1_T95_E2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	21800	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	177.8	</armor_1>
+        <armor_2>	139.7	</armor_2>
+        <armor_3>	76.2	</armor_3>
+        <armor_4>	50.8	</armor_4>
+        <armor_5>	127	</armor_5>
+        <armor_6>	114.3	</armor_6>
+        <armor_7>	101.6	</armor_7>
+        <armor_8>	88.9	</armor_8>
+        <armor_9>	63.5	</armor_9>
+        <armor_10>	76.2	</armor_10>
+        <armor_11>	25.4	</armor_11>
+        <armor_12>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_12>
+        <armor_13>	0	</armor_13>
+        <armor_14>	76.2	</armor_14>
+        <armor_15>	76.2	</armor_15>
+        <armor_16>	50.8	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8200	</weight>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_90mm_Gun_M41E1>	shared	  <maxAmmo>	64	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -19 1 -19	</minPitch>
+            <maxPitch>	0 9 0.386111 9 0.413889 3 0.586111 3 0.613889 9 1 9	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <gun>	35	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A81_T95_E2/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A81_T95_E2/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A81_T95_E2/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A81_T95_E2/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A81_T95_E2/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000000 -0.114224 1.881	</rayStart>
+              <rayEnd>	-0.488963 0.136016 1.88058	</rayEnd>
+              <rayUp>	0.088 0.088 5	</rayUp>
+              <size>	0.476	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.6 0.3 0.09 0.000000	</tiling>
+          </camouflage>
+        </_90mm_Gun_M41E1>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A81_T95_E2/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A81_T95_E2/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A81_T95_E2/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A81_T95_E2/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A81_T95_E2/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.002 0.4127 1.1856	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-1.35236 0.383437 -0.395399	</rayStart>
+          <rayEnd>	-0.995858 0.202341 -0.405818	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.694	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-1.25593 0.436034 0.567578	</rayStart>
+          <rayEnd>	-0.933896 0.272332 0.395844	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.25593 0.436035 0.567578	</rayStart>
+          <rayEnd>	0.933896 0.272332 0.395844	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	1.35236 0.383437 -0.395399	</rayStart>
+          <rayEnd>	0.995858 0.202341 -0.405818	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.694	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.981 -0.024 0.964 -0.008 0.512 0.071 0.310 0.482 0.471 0.339 0.226 0.589 0.244 0.446 0.036	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_T95_E2>
+  </turrets0>
+  <engines>
+    <Continental_AOI-1195-5>	shared	</Continental_AOI-1195-5>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <AN_GRC_8>	shared	</AN_GRC_8>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_T95_E2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_T95_E2>
+    </chassis>
+    <engines>
+      <Continental_AOI-1195-5>
+        <bravo>	148.0194	</bravo>
+      </Continental_AOI-1195-5>
+    </engines>
+    <armour>	1.078487088	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</a81_t95_e2.xml>

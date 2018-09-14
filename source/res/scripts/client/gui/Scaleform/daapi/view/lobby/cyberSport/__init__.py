@@ -1,16 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ViewSettings
+from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
-from gui.Scaleform.framework import GroupedViewSettings, ViewTypes, ViewSettings
-from gui.Scaleform.framework import ScopeTemplates
-from gui.Scaleform.managers.context_menu import ContextMenuManager
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent
-ContextMenuManager.registerHandler(CONTEXT_MENU_HANDLER_TYPE.CLUB_STAFF, 'gui.Scaleform.daapi.view.lobby.cyberSport.ClubUserCMHandler', 'ClubUserCMHandler')
 
 class PLAYER_GUI_STATUS(object):
     NORMAL = 0
@@ -28,6 +26,11 @@ class SLOT_LABEL(object):
     NOT_ALLOWED = 'notAllowed'
     EMPTY = 'emptySlot'
     REQUIRED = 'required'
+
+
+def getContextMenuHandlers():
+    from gui.Scaleform.daapi.view.lobby.cyberSport.ClubUserCMHandler import ClubUserCMHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.CLUB_STAFF, ClubUserCMHandler),)
 
 
 def getViewSettings():

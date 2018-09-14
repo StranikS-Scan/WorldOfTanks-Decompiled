@@ -99,7 +99,7 @@ class LoaderManager(LoaderManagerMeta):
             pyEntity, factoryIdx = g_entitiesFactories.factory(alias, *args, **kwargs)
             if pyEntity is not None:
                 pyEntity.setUniqueName(name)
-                pyEntity.seEnvironment(self.__app)
+                pyEntity.setEnvironment(self.__app)
                 self.__nameToLoadingItem[name] = _LoadingItem(name, pyEntity, factoryIdx, args, kwargs)
                 self.onViewLoadInit(pyEntity)
                 self.as_loadViewS(pyEntity.settings._asdict(), alias, name, viewTutorialID)

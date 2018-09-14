@@ -3,6 +3,12 @@
 
 
 class ICON_TEXT_FRAMES(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     EMPTY = 'empty'
     CREDITS = 'credits'
     GOLD = 'gold'

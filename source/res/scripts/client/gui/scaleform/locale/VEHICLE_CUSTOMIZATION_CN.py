@@ -3,6 +3,12 @@
 
 
 class VEHICLE_CUSTOMIZATION_CN(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     EMBLEM_CHINESE = '#vehicle_customization_cn:emblem/chinese'
     EMBLEM_GROUP1_STAR = '#vehicle_customization_cn:emblem/group1/star'
     EMBLEM_ANIMALS = '#vehicle_customization_cn:emblem/animals'

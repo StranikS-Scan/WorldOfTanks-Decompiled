@@ -376,6 +376,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def onArenaJoinFailure(self, errorCode, errorStr):
         LOG_DEBUG('onArenaJoinFailure', errorCode, errorStr)
+        self.isInRandomQueue = False
+        self.isInTutorialQueue = False
+        self.isInEventBattles = False
+        self.isInFalloutClassic = False
+        self.isInFalloutMultiteam = False
+        self.isInSandboxQueue = False
         events.isPlayerEntityChanging = False
         events.onPlayerEntityChangeCanceled()
         events.onArenaJoinFailure(errorCode, errorStr)
@@ -799,11 +805,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if events.isPlayerEntityChanging:
             return
         self._doCmdInt3(AccountCommands.CMD_PRB_CH_GAMEPLAYSMASK, gameplaysMask, 0, 0, lambda requestID, resultID, errorStr: callback(resultID))
-
-    def challengeCaptcha(self, challenge, response, callback):
-        if events.isPlayerEntityChanging:
-            return
-        self._doCmdInt2Str(AccountCommands.CMD_CAPTCHA_CHALLENGE, len(challenge), 0, challenge + response, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def setLanguage(self, language):
         self._doCmdStr(AccountCommands.CMD_SET_LANGUAGE, language, None)

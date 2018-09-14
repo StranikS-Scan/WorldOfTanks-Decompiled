@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/SoundEffectsId.py
-from debug_utils import LOG_DEBUG
+from shared_utils import CONST_CONTAINER
 
-class SoundEffectsId(object):
+class SoundEffectsId(CONST_CONTAINER):
     SPEND_CREDITS_GOLD = 'wwspend_credits_and_gold'
     SPEND_CREDITS = 'wwspend_credits'
     SPEND_GOLD = 'wwspend_gold'
@@ -39,18 +39,26 @@ class SoundEffectsId(object):
     MY_DIRECTION_SELECTED = 'wwmyDirection_selected'
     FORT_CLAN_WAR_DECLARED = 'wwfortClanWar_declared'
     BATTLE_ROOM_TIMER_ALERT = 'wwbattleRoom_timerAlert'
-    FORT_CLAN_WAR_RESULT_WIN = 'wwfortClanWarResult_win'
-    FORT_CLAN_WAR_RESULT_LOSE = 'wwfortClanWarResult_lose'
-    FORT_CLAN_WAR_RESULT_DRAW = 'wwfortClanWarResult_draw'
+    _FORT_CLAN_WAR_RESULT_PREFIX = 'wwfortClanWarResult_'
     CS_ANIMATION_LEAGUE_UP = 'wwcs_animation_league_up'
     CS_ANIMATION_LEAGUE_DOWN = 'wwcs_animation_league_down'
     CS_ANIMATION_DIVISION_UP = 'wwcs_animation_division_up'
     CS_ANIMATION_DIVISION_UP_ALT = 'wwcs_animation_division_up_alt'
     CS_ANIMATION_DIVISION_DOWN = 'wwcs_animation_division_down'
     DYN_SQUAD_STARTING_DYNAMIC_PLATOON = 'wwdyn_squad_starting_dynamic_platoon'
+    SELECT_RADIAL_BUTTON = 'wwselect_radial_button'
     RUDY_DOG = 'wwrody_dog'
 
     @classmethod
     def getEndBuildingProcess(cls, buildingID):
-        result = 'ww' + buildingID + cls.END_BUILDING_PROCESS_POSTFIX
+        result = 'ww%s%s' % (buildingID, cls.END_BUILDING_PROCESS_POSTFIX)
+        return result
+
+    @classmethod
+    def getFortClanWarResult(cls, battleResult):
+        """
+        :param battleResult: battle result win/lose/draw
+        :return: String with battle result
+        """
+        result = '%s%s' % (cls._FORT_CLAN_WAR_RESULT_PREFIX, battleResult)
         return result

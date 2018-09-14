@@ -9,6 +9,8 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.serializers import packTankman
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.processors.tankman import TankmanDropSkills
+from gui.shared.money import Money, Currency
+from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.Scaleform.daapi.view.meta.SkillDropMeta import SkillDropMeta
 from gui.shared import events, g_itemsCache
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -32,21 +34,12 @@ class SkillDropWindow(SkillDropMeta):
             for k in sorted(items.shop.dropSkillsCost.keys()):
                 skillCost = items.shop.dropSkillsCost[k]
                 defaultSkillCots = items.shop.defaults.dropSkillsCost[k]
-                price = (skillCost['credits'], skillCost['gold'])
-                defaultPrice = (defaultSkillCots['credits'], defaultSkillCots['gold'])
-                isPremium = skillCost['gold'] != 0
+                price = Money(**skillCost)
+                defaultPrice = Money(**defaultSkillCots)
                 action = None
                 if price != defaultPrice:
-                    key = 'goldDropSkillsCost' if isPremium else 'creditsDropSkillsCost'
-                    newPrice = (0, skillCost['gold']) if isPremium else (skillCost['credits'], 0)
-                    oldPrice = (0, defaultSkillCots['gold']) if isPremium else (defaultSkillCots['credits'], 0)
-                    state = (None, ACTION_TOOLTIPS_STATE.DISCOUNT) if isPremium else (ACTION_TOOLTIPS_STATE.DISCOUNT, None)
-                    action = {'type': ACTION_TOOLTIPS_TYPE.ECONOMICS,
-                     'key': key,
-                     'isBuying': True,
-                     'state': state,
-                     'newPrice': newPrice,
-                     'oldPrice': oldPrice}
+                    key = '{}DropSkillsCost'.format(price.getCurrency(byWeight=True))
+                    action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, key, True, price, defaultPrice)
                 skillCost['action'] = action
                 dropSkillsCost.append(skillCost)
 

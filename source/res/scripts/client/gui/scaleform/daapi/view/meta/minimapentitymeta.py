@@ -3,6 +3,16 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class MinimapEntityMeta(BaseDAAPIComponent):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends BaseDAAPIComponent
+    null
+    """
 
     def as_updatePointsS(self):
+        """
+        :return :
+        """
         return self.flashObject.as_updatePoints() if self._isDAAPIInited() else None

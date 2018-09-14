@@ -1,0 +1,562 @@
+<g95_pz_sfl_ivb.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	10	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.147	</moving>
+    <still>	0.294	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.441	</firePenalty>
+  </invisibility>
+  <repairCost>	7.70	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G95_Pz_Sfl_IVb/Pz_Sfl_IVb_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	20	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	14.5	</armor_3>
+      <armor_4>	14.5	</armor_4>
+      <armor_5>	14.5	</armor_5>
+      <armor_6>	14.5	</armor_6>
+      <armor_7>	14.5	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	8	</armor_9>
+      <armor_10>	8	</armor_10>
+      <armor_11>	8	</armor_11>
+      <armor_12>	20	</armor_12>
+      <armor_13>	10	</armor_13>
+      <armor_14>	14.5	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	4515	</weight>
+    <maxHealth>	160	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	35	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.36 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.36 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.000000 0.56645 -0.16366	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.75922 0.442071 1.42458	</rayStart>
+        <rayEnd>	0.75922 0.429859 1.34552	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G95_Pz_Sfl_IVb/Pz_Sfl_IVb_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_Pz_Sfl_IVb>
+      <userString>	#germany_vehicles:Chassis_Pz_Sfl_IVb	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <unlocks>
+        <chassis>	Chassis_Pz_Sfl_IVb_2	  <cost>	1080	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	18000	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	16000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.43	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.78	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.391454	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.130806	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.290653	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.274491	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.391454	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.130806	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.290971	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.274491	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2348 1.41136	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.086870 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.363170	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Pz_Sfl_IVb>
+    <Chassis_Pz_Sfl_IVb_2>
+      <userString>	#germany_vehicles:Chassis_Pz_Sfl_IVb_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4750	</price>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	20000	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	18000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.4 0.43	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.78	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.391454	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.130806	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.290653	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.274491	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.391454	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.130806	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.290971	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.274491	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	smallTankDust	</dust>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2348 1.41136	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.092740 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.363170	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_Pz_Sfl_IVb_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_Pz_Sfl_IVb>
+      <ceilless>	true	</ceilless>
+      <userString>	#germany_vehicles:Turret_1_Pz_Sfl_IVb	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	4	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	20	</armor_1>
+        <armor_2>	20	</armor_2>
+        <armor_3>	14.5	</armor_3>
+        <armor_4>	14.5	</armor_4>
+        <armor_5>	8	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	14.5	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2000	</weight>
+      <maxHealth>	40	</maxHealth>
+      <rotationSpeed>	10	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_leFH16_L22>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -40 1 -40	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_105mm_leFH18_L28	  <cost>	2400	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <reloadTime>	15.5	</reloadTime>
+          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionRadius>	0.76	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.5	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <turretYawLimits>	-35 35	</turretYawLimits>
+          <effects>	shot_main_mb	</effects>
+          <recoil>
+            <lodDist>	MEDIUM	</lodDist>
+            <amplitude>	0.24	</amplitude>
+            <recoilEffect>	main	</recoilEffect>
+          </recoil>
+          <models>
+            <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </_105mm_leFH16_L22>
+        <_105mm_leFH18_L28>	shared	  <maxAmmo>	60	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -40 1 -40	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	G23_Grille	  <cost>	14600	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.72	</shotDispersionRadius>
+          <reloadTime>	15.5	</reloadTime>
+          <aimingTime>	5.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.46	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <turretYawLimits>	-35 35	</turretYawLimits>
+          <effects>	shot_main_mb	</effects>
+          <recoil>
+            <lodDist>	MEDIUM	</lodDist>
+            <amplitude>	0.32	</amplitude>
+            <recoilEffect>	main	</recoilEffect>
+          </recoil>
+          <models>
+            <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+        </_105mm_leFH18_L28>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G95_Pz_Sfl_IVb/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G95_Pz_Sfl_IVb/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G95_Pz_Sfl_IVb/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G95_Pz_Sfl_IVb/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.39215 0.78528	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.786993 0.321195 -1.08349	</rayStart>
+          <rayEnd>	-0.679943 0.279275 -1.0491	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-0.928472 0.393393 0.0595994	</rayStart>
+          <rayEnd>	-0.890976 0.379463 0.0596511	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.841598 0.64223 0.630949	</rayStart>
+          <rayEnd>	0.570772 0.503411 0.371378	</rayEnd>
+          <rayUp>	-0.0225045 0.999464 0.0237668	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	0.928472 0.393393 0.0595994	</rayStart>
+          <rayEnd>	0.890976 0.379463 0.0596511	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 -0.061 1.026 0.000 0.607 0.268 0.644 0.588 0.358 0.500 0.285 0.500 0.075 0.467 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_Pz_Sfl_IVb>
+  </turrets0>
+  <engines>
+    <Maybach_HL62TR>	shared	  <unlocks>
+        <engine>	Maybach_HL66P	  <cost>	700	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL62TR>
+    <Maybach_HL66P>	shared	</Maybach_HL66P>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG_Spr.A	  <cost>	4500	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG_Spr.A>	shared	</FuG_Spr.A>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Pz_Sfl_IVb>
+        <alpha>	0.12075	</alpha>
+      </Chassis_Pz_Sfl_IVb>
+      <Chassis_Pz_Sfl_IVb_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_Pz_Sfl_IVb_2>
+    </chassis>
+    <engines>
+      <Maybach_HL62TR>
+        <bravo>	37.00484	</bravo>
+      </Maybach_HL62TR>
+      <Maybach_HL66P>
+        <bravo>	47.57765	</bravo>
+      </Maybach_HL66P>
+    </engines>
+    <armour>	0.789172888	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g95_pz_sfl_ivb.xml>

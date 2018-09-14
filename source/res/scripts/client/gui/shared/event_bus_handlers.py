@@ -48,6 +48,7 @@ class EventBusListener(type):
                     raise ValueError('Event %s is handled multiple times in %s' % (event, cls))
 
         cls.__event_bus_handlers__ = handlers
+        cls.__event_bus_bound_handlers__ = {}
         return cls
 
 
@@ -69,7 +70,9 @@ def _populateWrapper(method):
     @wraps(method)
     def wrapped(self, *args, **kwargs):
         for (event, scope), handler in self.__event_bus_handlers__.items():
-            self.addListener(event, partial(handler, self), scope)
+            boundHandler = partial(handler, self)
+            self.addListener(event, boundHandler, scope)
+            self.__event_bus_bound_handlers__[event, scope] = boundHandler
 
         return method(self, *args, **kwargs)
 
@@ -82,8 +85,8 @@ def _disposeWrapper(method):
 
     @wraps(method)
     def wrapped(self, *args, **kwargs):
-        for (event, scope), handler in self.__event_bus_handlers__.items():
-            self.removeListener(event, partial(handler, self), scope)
+        for (event, scope), boundHandler in self.__event_bus_bound_handlers__.items():
+            self.removeListener(event, boundHandler, scope)
 
         return method(self, *args, **kwargs)
 

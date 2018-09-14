@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/validators.py
-from gui.shared.fortifications import isFortificationEnabled
+
 
 def questHasThisAchievementAsBonus(name, block):
     from gui.server_events import g_eventsCache
@@ -16,7 +16,8 @@ def alreadyAchieved(achievementClass, name, block, dossier):
 
 
 def requiresFortification():
-    return isFortificationEnabled()
+    from gui.LobbyContext import g_lobbyContext
+    return g_lobbyContext.getServerSettings().isFortsEnabled()
 
 
 def accountIsRoaming(dossier):

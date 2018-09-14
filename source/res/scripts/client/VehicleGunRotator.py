@@ -15,6 +15,8 @@ from projectile_trajectory import computeProjectileTrajectory
 import BattleReplay
 from gun_rotation_shared import calcPitchLimitsFromDesc
 import SoundGroups
+from vehicle_systems.tankStructure import TankPartNames
+from helpers import gEffectsDisabled
 _ENABLE_TURRET_ROTATOR_SOUND = True
 _ENABLE_RELATIVE_SHOT_POINT = True
 g__attachToCam = False
@@ -49,7 +51,10 @@ class VehicleGunRotator(object):
         self.__gunMatrixAnimator = _MatrixAnimator(self.__avatar)
         self.__isLocked = False
         self.estimatedTurretRotationTime = 0
-        self.__turretRotationSoundEffect = _PlayerTurretRotationSoundEffectWWISE()
+        if not gEffectsDisabled():
+            self.__turretRotationSoundEffect = _PlayerTurretRotationSoundEffectWWISE()
+        else:
+            self.__turretRotationSoundEffect = None
         g__attachToCam = False
         return
 
@@ -82,7 +87,7 @@ class VehicleGunRotator(object):
                 self.__time = BigWorld.time()
                 if self.__showServerMarker:
                     self.__avatar.inputHandler.showGunMarker2(True)
-            if self.__turretRotationSoundEffect is None:
+            if self.__turretRotationSoundEffect is None and not gEffectsDisabled:
                 self.__turretRotationSoundEffect = _PlayerTurretRotationSoundEffectWWISE()
             BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
             return
@@ -795,7 +800,8 @@ class _PlayerTurretRotationSoundEffectWWISE(CallbackDelayer):
 
     def __init_sound(self):
         if BigWorld.player() is not None and BigWorld.player().getVehicleAttached() is not None:
-            self.connectSoundToMatrix(BigWorld.player().getVehicleAttached().appearance.modelsDesc['turret']['model'].matrix)
+            compoundModel = BigWorld.player().getVehicleAttached().appearance.compoundModel
+            self.connectSoundToMatrix(compoundModel.node(TankPartNames.TURRET))
         else:
             self.connectSoundToMatrix(mathUtils.createIdentityMatrix())
         self.delayCallback(self.__updatePeriod, self.__update)
@@ -803,23 +809,30 @@ class _PlayerTurretRotationSoundEffectWWISE(CallbackDelayer):
 
     def connectSoundToMatrix(self, matrixProvider):
         if self.__manualSound is not None:
-            self.__manualSound.stop()
+            self.__manualSound.stopAll()
             self.__manualSound = None
         event = BigWorld.player().vehicleTypeDescriptor.turret['turretRotatorSoundManual']
-        self.__manualSound = SoundGroups.g_instance.WWgetSound(event, 'player_turret', matrixProvider, Math.Vector3(0.0, 0.0, 0.0))
+        self.__manualSound = SoundGroups.g_instance.WWgetSoundObject('player_turret', matrixProvider)
         if self.__manualSound is None:
             return
         else:
             self.__manualSound.setRTPC('RTPC_ext_turret_speed', 0)
             self.__manualSound.setRTPC('RTPC_ext_turret_angle', 0)
             self.__manualSound.setRTPC('RTPC_ext_turret_weight', BigWorld.player().vehicleTypeDescriptor.turret['weight'] / 1000.0)
-            self.__manualSound.play()
+            self.__manualSound.play(event)
             return
+
+    def lockSoundMatrix(self):
+        if self.__manualSound is not None:
+            provider = self.__manualSound.matrixProvider
+            self.__manualSound.matrixProvider = Math.Matrix(provider)
+        return
 
     def destroy(self):
         CallbackDelayer.destroy(self)
         if self.__manualSound is not None:
-            self.__manualSound.stop()
+            self.__manualSound.stopAll()
+            self.__manualSound = None
         self.__stateTable = None
         return
 

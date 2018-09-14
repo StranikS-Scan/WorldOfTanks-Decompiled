@@ -2,19 +2,19 @@
 # Embedded file name: scripts/client/tutorial/loader.py
 import weakref
 import BigWorld
-from ConnectionManager import connectionManager
+import account_helpers
 from constants import IS_TUTORIAL_ENABLED
-from PlayerEvents import g_playerEvents
-from tutorial import Tutorial, LOG_DEBUG
+from tutorial import Tutorial
 from tutorial import settings as _settings
 from tutorial import cache as _cache
 from tutorial.control.context import GLOBAL_FLAG, GlobalStorage
+from tutorial.control.listener import AppLoaderListener
 from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
-from tutorial.logger import LOG_ERROR
-_STOP_REASON = _settings.TUTORIAL_STOP_REASON
+from tutorial.logger import LOG_ERROR, LOG_DEBUG
 _SETTINGS = _settings.TUTORIAL_SETTINGS
 _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
+_BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
 
 class RunCtx(object):
     __slots__ = ('cache', 'isFirstStart', 'databaseID', 'isAfterBattle', 'restart', 'bonusCompleted', 'battlesCount', 'newbieBattlesCount', 'initialChapter', 'globalFlags')
@@ -22,7 +22,7 @@ class RunCtx(object):
     def __init__(self, cache, **kwargs):
         super(RunCtx, self).__init__()
         self.cache = cache
-        self.databaseID = kwargs.get('databaseID', 0)
+        self.databaseID = kwargs.get('databaseID', 0L)
         self.restart = kwargs.get('restart', False)
         self.isFirstStart = kwargs.get('isFirstStart', False)
         self.isAfterBattle = kwargs.get('isAfterBattle', False)
@@ -49,21 +49,28 @@ class TutorialLoader(object):
         self.__restoreID = None
         self.__settings = _settings.createSettingsCollection()
         self.__hintsManager = None
+        self.__listener = None
         return
 
     def init(self):
-        g_playerEvents.onGuiCacheSyncCompleted += self.__pe_onGuiCacheSyncCompleted
-        g_playerEvents.onAvatarBecomePlayer += self.__pe_onAvatarBecomePlayer
-        connectionManager.onDisconnected += self.__cm_onDisconnected
+        """
+        Initialization of tutorial loader.
+        """
+        self.__listener = AppLoaderListener()
+        self.__listener.start(weakref.proxy(self))
 
     def fini(self):
-        g_playerEvents.onGuiCacheSyncCompleted -= self.__pe_onGuiCacheSyncCompleted
-        g_playerEvents.onAvatarBecomePlayer -= self.__pe_onAvatarBecomePlayer
-        connectionManager.onDisconnected -= self.__cm_onDisconnected
+        """
+        Tutorial loader finalizes work: stops training process, saving state,
+        # if tutorial is running.
+        """
+        if self.__listener is not None:
+            self.__listener.stop()
         if self.__hintsManager is not None:
             self.__hintsManager.stop()
-        if self.__tutorial is not None:
+        if self.__dispatcher is not None:
             self.__dispatcher.stop()
+        if self.__tutorial is not None:
             self.__tutorial.onStopped -= self.__onTutorialStopped
             self.__tutorial.stop()
         self.__loggedDBIDs.clear()
@@ -82,9 +89,9 @@ class TutorialLoader(object):
 
     @property
     def tutorialID(self):
-        result = 0
+        result = ''
         if self.__tutorial is not None:
-            result = not self.__tutorial.getID()
+            result = self.__tutorial.getID()
         return result
 
     @property
@@ -106,14 +113,14 @@ class TutorialLoader(object):
         
         :param settingsID: string containing settings ID of required tutorial.
         :param state: dict(
-                        reloadIfRun : bool - just reload tutorial if it's running,
-                        afterBattle : bool - tutorial should load scenario that is played
-                                when player left battle,
-                        initialChapter : str - name of initial chapter,
-                        restoreIfRun: bool - current tutorial will be started again
-                                if required tutorial stop.
-                        globalFlags : dict(GLOBAL_FLAG.* : bool,)
-                )
+                reloadIfRun : bool - just reload tutorial if it's running,
+                afterBattle : bool - tutorial should load scenario that is played
+                    when player left battle,
+                initialChapter : str - name of initial chapter,
+                restoreIfRun: bool - current tutorial will be started again
+                    if required tutorial stop.
+                globalFlags : dict(GLOBAL_FLAG.* : bool,)
+            )
         :return: True if tutorial has started, otherwise - False.
         """
         settings = self.__settings.getSettings(settingsID)
@@ -141,27 +148,16 @@ class TutorialLoader(object):
                 else:
                     LOG_ERROR('Tutorial already is running', self.__tutorial.getID())
                     return False
-            if self.__dispatcher is None:
-                self.__setDispatcher(settings.dispatcher)
-            cache = _cache.TutorialCache(BigWorld.player().name)
-            cache.read()
             state.setdefault('isAfterBattle', self.__afterBattle)
             state.setdefault('restart', True)
-            result = self.__doRun(settings, RunCtx(cache, **state), byRequest=True)
+            state['byRequest'] = True
+            result = self.__doRun(settings, state)
             if not result:
                 self.__restoreID = None
             return result
 
-    def areSettingsEnabled(self, settingsID):
-        settings = self.__settings.getSettings(settingsID)
-        if settings is None:
-            LOG_ERROR('Can not find settings', settingsID)
-            return False
-        else:
-            return _settings.createTutorialElement(settings.reqs).isEnabled()
-
     def stop(self, restore=True):
-        self.__doStop(reason=_STOP_REASON.PLAYER_ACTION)
+        self.__doStop()
         self.__doStopHints()
         if restore:
             self.__doRestore()
@@ -174,12 +170,40 @@ class TutorialLoader(object):
             self.__tutorial.refuse()
         return
 
-    def __doAutoRun(self, seq, runCtx):
+    def goToLobby(self):
+        databaseID = account_helpers.getAccountDatabaseID()
+        assert databaseID, 'Acoount database ID is not defined'
+        isFirstStart = databaseID not in self.__loggedDBIDs
+        self.__loggedDBIDs.add(databaseID)
+        state = {'isFirstStart': isFirstStart,
+         'isAfterBattle': self.__afterBattle}
+        self.__setDispatcher(_LOBBY_DISPATCHER)
+        self.__restoreID = _SETTINGS.QUESTS.id
+        self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS), state)
+        self.__hintsManager = HintsManager()
+        self.__hintsManager.start()
+
+    def leaveLobby(self):
+        self.stop(restore=False)
+
+    def goToBattle(self, battleSettings=_SETTINGS.BATTLE):
+        self.__afterBattle = True
+        self.__doClear()
+        self.__doAutoRun((battleSettings, _SETTINGS.BATTLE_QUESTS), {})
+
+    def leaveBattle(self):
+        self.stop(restore=False)
+
+    def goToLogin(self):
+        self.__afterBattle = False
+        self.__doClear()
+
+    def __doAutoRun(self, seq, state):
         for settings in seq:
-            if self.__doRun(settings, runCtx):
+            if self.__doRun(settings, state):
                 return
 
-    def __doRun(self, settings, runCtx, byRequest=False):
+    def __doRun(self, settings, state):
         if not settings.enabled:
             return False
         else:
@@ -190,13 +214,18 @@ class TutorialLoader(object):
             if descriptor is None:
                 LOG_ERROR('Descriptor is not valid. Tutorial is not available', settings)
                 return False
-            runCtx.cache.setSpace(settings.space)
-            if byRequest:
-                runCtx.cache.setRefused(False)
+            cache = _cache.TutorialCache(BigWorld.player().name)
+            cache.read()
+            cache.setSpace(settings.space)
+            if state.get('byRequest', False):
+                cache.setRefused(False)
+            runCtx = RunCtx(cache, **state)
             reqs.prepare(runCtx)
             if not reqs.process(descriptor, runCtx):
                 return False
             self.clear()
+            if self.__dispatcher is None:
+                self.__setDispatcher(settings.dispatcher)
             tutorial = Tutorial(settings, descriptor)
             result = tutorial.run(weakref.proxy(self.__dispatcher), runCtx)
             if result:
@@ -204,10 +233,10 @@ class TutorialLoader(object):
                 self.__tutorial.onStopped += self.__onTutorialStopped
             return result
 
-    def __doStop(self, reason=_STOP_REASON.DEFAULT):
+    def __doStop(self):
         if self.__tutorial is not None:
             self.__tutorial.onStopped -= self.__onTutorialStopped
-            self.__tutorial.stop(reason=reason)
+            self.__tutorial.stop()
             self.__tutorial = None
         return
 
@@ -216,9 +245,9 @@ class TutorialLoader(object):
             self.__hintsManager.stop()
         return
 
-    def __doClear(self, reason=_STOP_REASON.DEFAULT):
+    def __doClear(self):
         self.__restoreID = None
-        self.__doStop(reason=reason)
+        self.__doStop()
         self.__doStopHints()
         if self.__dispatcher is not None:
             self.__dispatcher.stop()
@@ -240,37 +269,21 @@ class TutorialLoader(object):
         self.__dispatcher.start(weakref.proxy(self))
         return
 
-    def __pe_onGuiCacheSyncCompleted(self, ctx):
-        if 'databaseID' in ctx:
-            databaseID = ctx['databaseID']
-            isFirstStart = databaseID not in self.__loggedDBIDs
-            self.__loggedDBIDs.add(databaseID)
-        else:
-            isFirstStart = False
-        cache = _cache.TutorialCache(BigWorld.player().name)
-        cache.read()
-        runCtx = RunCtx(cache, isFirstStart=isFirstStart, isAfterBattle=self.__afterBattle, **ctx)
-        self.__setDispatcher(_LOBBY_DISPATCHER)
-        self.__restoreID = _SETTINGS.QUESTS.id
-        self.__doAutoRun((_SETTINGS.OFFBATTLE, _SETTINGS.QUESTS), runCtx)
-        self.__hintsManager = HintsManager()
-        self.__hintsManager.start()
-
-    def __pe_onAvatarBecomePlayer(self):
-        self.__afterBattle = True
-        self.__doClear()
-
-    def __cm_onDisconnected(self):
-        self.__afterBattle = False
-        self.__doClear(reason=_STOP_REASON.DISCONNECT)
-
     def __onTutorialStopped(self):
+        """
+        Listener for event Tutorial.onStopped.
+        """
         self.__doRestore()
 
 
 g_loader = None
 
 def init():
+    """
+    Initialization tutorial loader.
+    
+    Routine must invoke in BWPersonality module.
+    """
     global g_loader
     if IS_TUTORIAL_ENABLED:
         g_loader = TutorialLoader()
@@ -278,6 +291,12 @@ def init():
 
 
 def fini():
+    """
+    Tutorial loader finalizes work: stops training process, saving state,
+    if tutorial is running.
+    
+    Routine must invoke in BWPersonality module.
+    """
     global g_loader
     if IS_TUTORIAL_ENABLED:
         if g_loader is not None:

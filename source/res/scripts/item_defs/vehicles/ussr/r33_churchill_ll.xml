@@ -1,0 +1,366 @@
+<r33_churchill_ll.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <radioman></radioman>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	28	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.071	</moving>
+    <still>	0.141	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.212	</firePenalty>
+  </invisibility>
+  <repairCost>	3.5	</repairCost>
+  <premiumVehicleXPFactor>	0.4	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R33_Churchill_LL/Churchill_LL_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	176	</armor_1>
+      <armor_2>	88	</armor_2>
+      <armor_3>	76.2	</armor_3>
+      <armor_4>	50.8	</armor_4>
+      <armor_5>	114.3	</armor_5>
+      <armor_6>	38.1	</armor_6>
+      <armor_7>	63	</armor_7>
+      <armor_8>	50.6	</armor_8>
+      <armor_9>	25.4	</armor_9>
+      <armor_10>	19.05	</armor_10>
+      <armor_11>	15.87	</armor_11>
+      <armor_12>	15.87	</armor_12>
+      <armor_13>	0	</armor_13>
+      <armor_14>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
+      <armor_15>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+      <armor_16>	15.87	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	20869	</weight>
+    <maxHealth>	560	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R33_Churchill_LL/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R33_Churchill_LL/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R33_Churchill_LL/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 34.00 0.40 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.40 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.364959 0.41676	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	1.03892 0.640199 2.81966	</rayStart>
+        <rayEnd>	1.03892 0.240276 2.82749	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R33_Churchill_LL/Churchill_LL_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Churchll>
+      <userString>	#ussr_vehicles:Churchll	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	4150.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
+      </armor>
+      <weight>	9000	</weight>
+      <maxLoad>	41950	</maxLoad>
+      <terrainResistance>	1.14 1.26 2.29	</terrainResistance>
+      <brakeForce>	42500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R33_Churchill_LL/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R33_Churchill_LL/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R33_Churchill_LL/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.42 0.48	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.96	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.16704	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.16704	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.368134	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.16704	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.368134	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.368134	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.16704	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.368134	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.15966 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.05597 1.57548	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.624970 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.739490 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.986820	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Churchll>
+  </chassis>
+  <turrets0>
+    <Churchll_mk_III>
+      <userString>	#ussr_vehicles:Churchll_mk_III	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	9450.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	88	</armor_1>
+        <armor_2>	88	</armor_2>
+        <armor_3>	88	</armor_3>
+        <armor_4>	76.2	</armor_4>
+        <armor_5>	76.2	</armor_5>
+        <armor_6>	25.4	</armor_6>
+        <armor_7>	25.4	</armor_7>
+        <armor_8>	19.05	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	19.05	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7500	</weight>
+      <maxHealth>	140	</maxHealth>
+      <rotationSpeed>	34.13	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	350	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <QF_6_pounder_Mk_III>	shared	  <armor>
+            <armor_1>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	108.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	15	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -12 1 -12	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R33_Churchill_LL/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R33_Churchill_LL/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R33_Churchill_LL/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.120179 0.000098 1.04	</rayStart>
+              <rayEnd>	0.164268 -0.0147788 1.10711	</rayEnd>
+              <rayUp>	0.05 0.05 2	</rayUp>
+              <size>	0.372	</size>
+              <hideIfDamaged>	true	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </QF_6_pounder_Mk_III>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R33_Churchill_LL/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R33_Churchill_LL/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R33_Churchill_LL/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.097831 0.401167 0.671695	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	1.03357 0.452614 0.42022	</rayStart>
+          <rayEnd>	0.6389 0.451599 0.355151	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <player>
+          <rayStart>	-0.999646 0.407676 0.625278	</rayStart>
+          <rayEnd>	-0.604976 0.406661 0.560209	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	0.90473 0.627039 -0.72801	</rayStart>
+          <rayEnd>	0.53854 0.627039 -0.567062	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	-1.09763 0.407792 0.0309681	</rayStart>
+          <rayEnd>	-0.702959 0.406776 -0.0341008	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.030 0.015 1.022 0.000 0.708 0.175 0.967 0.376 0.296 0.595 0.000 0.500 0.000 0.000 0.172	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Churchll_mk_III>
+  </turrets0>
+  <engines>
+    <Bedford_Twin-Six>	shared	</Bedford_Twin-Six>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <Mk19R>	shared	</Mk19R>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Churchll>
+        <alpha>	0.10143	</alpha>
+      </Churchll>
+    </chassis>
+    <engines>
+      <Bedford_Twin-Six>
+        <bravo>	98.85579	</bravo>
+      </Bedford_Twin-Six>
+    </engines>
+    <armour>	0.743615214	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r33_churchill_ll.xml>

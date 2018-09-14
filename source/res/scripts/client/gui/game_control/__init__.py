@@ -14,7 +14,6 @@ from gui.game_control.events_notifications import EventsNotificationsController
 from gui.game_control.gc_constants import CONTROLLER
 from gui.game_control.relogin_controller import ReloginController
 from gui.game_control.AOGAS import AOGASController
-from gui.game_control.captcha_control import CaptchaController
 from gui.game_control.GameSessionController import GameSessionController
 from gui.game_control.IGR import IGRController
 from gui.game_control.wallet import WalletController
@@ -24,6 +23,7 @@ from gui.game_control.ServerStats import ServerStats
 from gui.game_control.ChinaController import ChinaController
 from gui.game_control.AwardController import AwardController
 from gui.game_control.fallout_controller import FalloutController
+from gui.game_control.clan_lock_controller import ClanLockController
 
 class _GameControllers(ControllersCollection):
 
@@ -31,7 +31,6 @@ class _GameControllers(ControllersCollection):
         super(_GameControllers, self).__init__({CONTROLLER.RELOGIN: ReloginController,
          CONTROLLER.AOGAS: AOGASController,
          CONTROLLER.GAME_SESSION: GameSessionController,
-         CONTROLLER.CAPTCHA: CaptchaController,
          CONTROLLER.RENTALS: RentalsController,
          CONTROLLER.IGR: IGRController,
          CONTROLLER.WALLET: WalletController,
@@ -46,7 +45,8 @@ class _GameControllers(ControllersCollection):
          CONTROLLER.EVENTS_NOTIFICATION: EventsNotificationsController,
          CONTROLLER.AWARD: AwardController,
          CONTROLLER.BOOSTERS: BoostersController,
-         CONTROLLER.FALLOUT: FalloutController})
+         CONTROLLER.FALLOUT: FalloutController,
+         CONTROLLER.CLAN_LOCK: ClanLockController})
         if constants.IS_CHINA:
             self._addController(CONTROLLER.CHINA, ChinaController)
         self.__collectUiStats = True

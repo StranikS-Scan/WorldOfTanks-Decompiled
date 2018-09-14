@@ -23,9 +23,9 @@ def getChildren(xmlCtx, section, subsectionName):
     return subsection.items()
 
 
-def getSubsection(xmlCtx, section, subsectionName):
+def getSubsection(xmlCtx, section, subsectionName, throwIfMissing=True):
     subsection = section[subsectionName]
-    if subsection is None:
+    if subsection is None and throwIfMissing:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return subsection
 

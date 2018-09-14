@@ -1,0 +1,42 @@
+<unitfinder.def>
+  <Properties></Properties>
+  <BaseMethods>
+    <browserSubscribe>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </browserSubscribe>
+    <browserUnsubscribe>
+      <Arg>	MAILBOX	</Arg>
+    </browserUnsubscribe>
+    <browserRecenter>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+    </browserRecenter>
+    <browserMoveCmd>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT8	</Arg>
+    </browserMoveCmd>
+    <browserRestore>
+      <Arg>	MAILBOX	</Arg>
+    </browserRestore>
+    <unitPublish>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </unitPublish>
+    <unitUnpublish>
+      <Arg>	MAILBOX	</Arg>
+    </unitUnpublish>
+    <unitUpdate>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </unitUpdate>
+    <unitRestore>
+      <Arg>	MAILBOX	</Arg>
+    </unitRestore>
+  </BaseMethods>
+</unitfinder.def>

@@ -1,32 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ProjectileMover.py
 from collections import namedtuple
-import itertools
-import BigWorld
 from DetachedTurret import DetachedTurret
 import Math
-import math
-from ModelHitTester import segmentMayHitVehicle
-import items
 import constants
-import ClientArena
 import TriggersManager
-import AreaDestructibles
 from TriggersManager import TRIGGER_TYPE
-from ClientArena import Plane
 from debug_utils import *
-from projectile_trajectory import computeProjectileTrajectory
-from constants import DESTRUCTIBLE_MATKIND
-import AvatarInputHandler
 import FlockManager
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames
+from helpers import gEffectsDisabled
 
 def ownVehicleGunPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
-    if ownVehicle is not None:
-        model = ownVehicle.appearance.modelsDesc['gun']['model']
-        if model is not None:
-            return model.position
-    return Math.Vector3(0.0, 0.0, 0.0)
+    if ownVehicle:
+        compoundModel = ownVehicle.appearance.compoundModel
+        if compoundModel is None:
+            return Math.Vector3(0.0, 0.0, 0.0)
+        gunMat = ownVehicle.appearance.compoundModel.node(TankPartNames.GUN)
+        if gunMat is None:
+            gunMat = ownVehicle.appearance.compoundModel.node(TankNodeNames.TURRET_JOINT)
+        return Math.Matrix(gunMat).translation
+    else:
+        return Math.Vector3(0.0, 0.0, 0.0)
+        return
 
 
 class ProjectileMover(object):
@@ -45,7 +42,8 @@ class ProjectileMover(object):
         return
 
     def destroy(self):
-        BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
+        if BigWorld.player().inputHandler is not None:
+            BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
         self.__ballistics = None
         for shotID in self.__projectiles.keys():
             self.__delProjectile(shotID)
@@ -75,11 +73,12 @@ class ProjectileMover(object):
              'autoScaleProjectile': isOwnShoot,
              'attackerID': attackerID,
              'effectsData': {}}
-            BigWorld.player().addModel(model)
-            model.addMotor(projectileMotor)
-            model.visible = False
-            model.visibleAttachments = True
-            projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False)
+            if not gEffectsDisabled():
+                BigWorld.player().addModel(model)
+                model.addMotor(projectileMotor)
+                model.visible = False
+                model.visibleAttachments = True
+                projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
             return

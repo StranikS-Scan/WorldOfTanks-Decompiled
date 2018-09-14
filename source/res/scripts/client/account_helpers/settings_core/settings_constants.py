@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
 from shared_utils import CONST_CONTAINER
+VERSION = 'VERSION'
 
 class GRAPHICS(CONST_CONTAINER):
     MONITOR = 'monitor'
@@ -59,6 +60,7 @@ class GAME(CONST_CONTAINER):
     RECEIVE_CLAN_INVITES_NOTIFICATIONS = 'receiveClanInvitesNotifications'
     RECEIVE_INVITES_IN_BATTLE = 'receiveInvitesInBattle'
     BATTLE_LOADING_INFO = 'battleLoadingInfo'
+    SIMPLIFIED_TTC = 'simplifiedTTC'
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'
     DISABLE_BATTLE_CHAT = 'disableBattleChat'
@@ -73,6 +75,8 @@ class GAME(CONST_CONTAINER):
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     DYNAMIC_CAMERA = 'dynamicCamera'
     SNIPER_MODE_STABILIZATION = 'horStabilizationSnp'
+    INCREASED_ZOOM = 'increasedZoom'
+    SNIPER_MODE_BY_SHIFT = 'sniperModeByShift'
     SHOW_BATTLE_EFFICIENCY_RIBBONS = 'showBattleEfficiencyRibbons'
     PLAYERS_PANELS_SHOW_LEVELS = 'ppShowLevels'
     PLAYERS_PANELS_SHOW_TYPES = 'ppShowTypes'
@@ -119,12 +123,14 @@ class SOUND(CONST_CONTAINER):
     NATIONS_VOICES = 'nationalVoices'
     ALT_VOICES = 'alternativeVoices'
     DYNAMIC_RANGE = 'dynamicRange'
+    SOUND_DEVICE = 'soundDevice'
     CAPTURE_DEVICES = 'captureDevice'
     VOIP_ENABLE = 'enableVoIP'
     VOIP_MASTER = 'masterVivoxVolume'
     VOIP_MIC = 'micVivoxVolume'
     VOIP_MASTER_FADE = 'masterFadeVivoxVolume'
     VOIP_SUPPORTED = 'voiceChatSupported'
+    BASS_BOOST = 'bassBoost'
 
 
 class CONTROLS(CONST_CONTAINER):

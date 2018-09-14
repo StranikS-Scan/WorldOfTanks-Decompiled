@@ -10,25 +10,40 @@ from tutorial.control import functional, g_tutorialWeaver
 from tutorial.control.context import GlobalStorage
 from tutorial.data import chapter
 from tutorial.logger import LOG_WARNING, LOG_ERROR, LOG_DEBUG, LOG_MEMORY
-from tutorial.settings import TUTORIAL_SETTINGS, TUTORIAL_STOP_REASON
+from tutorial.settings import TUTORIAL_SETTINGS
 from tutorial.settings import createTutorialElement
 
 class INITIAL_FLAG(object):
+    """
+    Tutorial initial state flags.
+    """
     GUI_LOADED = 1
     CHAPTER_RESOLVED = 2
     INITIALIZED = GUI_LOADED | CHAPTER_RESOLVED
 
 
 class Tutorial(object):
+    """
+    Tutorial core class.
+    Computation state in each moment may will be represented:
+    <D, CTRL, S, IN, OUT>, where
+        - D is abstract representation of training.
+        - CTRL is control state of the tutorial's core: wait scene,
+            play effects, leaning, ...
+        - S is tutorial state. It included set of active/inactive flags, values
+            of vars.
+        - IN is the input stream. Action witch receives from GUI.
+        - OUT is the output stream. Commands witch sends to GUI.
+    """
 
-    def __init__(self, settings, descriptor):
+    def __init__(self, settings_, descriptor):
         super(Tutorial, self).__init__()
         self._cache = None
         self.__callbackID = None
         self._currentChapter = None
         self._currentState = None
-        self._settings = settings
-        self._ctrlFactory = createTutorialElement(settings.ctrl)
+        self._settings = settings_
+        self._ctrlFactory = createTutorialElement(settings_.ctrl)
         self._descriptor = descriptor
         self._data = None
         self._stopped = True
@@ -55,6 +70,10 @@ class Tutorial(object):
         return self._stopped
 
     def run(self, dispatcher, ctx):
+        """
+        Begins the process of training.
+        :param ctx: instance of RunCtx.
+        """
         self._cache = ctx.cache
         if self._cache is None:
             LOG_ERROR('Cache is not init.')
@@ -88,7 +107,11 @@ class Tutorial(object):
             self.onStarted()
             return True
 
-    def stop(self, finished=False, reason=TUTORIAL_STOP_REASON.DEFAULT):
+    def stop(self, finished=False):
+        """
+        Stops the process of training.
+        :param finished: if it equals True than training completed.
+        """
         if self._stopped:
             return
         else:
@@ -104,7 +127,7 @@ class Tutorial(object):
                 self._sound.stop()
             self._sound = None
             if self._gui is not None:
-                self._gui.fini(isItemsRevert=self._descriptor.isItemsRevertIfStop(reason))
+                self._gui.fini()
             self._gui = None
             if finished:
                 self._cache.setFinished(True).write()
@@ -122,15 +145,27 @@ class Tutorial(object):
             return
 
     def refuse(self):
+        """
+        Player refuses training.
+        """
         self._cache.setRefused(True).write()
-        self.stop(reason=TUTORIAL_STOP_REASON.PLAYER_ACTION)
+        self.stop()
 
     def restart(self, dispatcher, ctx):
+        """
+        Restart training if player refused training and he wants training again.
+        :param dispatcher: instance of dispatcher.
+        :param ctx: see Tutorial.run.
+        """
         if ctx.cache:
             ctx.cache.setRefused(False)
         self.run(dispatcher, ctx)
 
     def reload(self, afterBattle=False):
+        """
+        Reloads tutorial.
+        :param afterBattle: bool.
+        """
         if not self._stopped:
             self._funcScene.reload()
             self._sound.stop()
@@ -143,17 +178,23 @@ class Tutorial(object):
             LOG_ERROR('Tutorial is not running.')
 
     def loadCurrentChapter(self, initial=False):
+        """
+        Loads current chapter: gets chapter summary from descriptor, loads
+        full chapter data, creates the flags, creates the vars, gets initial
+        scene ID and waits when this scene is loaded.
+        :param initial: bool.
+        """
         afterBattle = self._cache.isAfterBattle()
         LOG_DEBUG('Chapter is loading', self._currentChapter, afterBattle)
         self._gui.showWaiting('chapter-loading', isSingle=True)
         if self._data is not None:
             self._data.clear()
-        chapter = self._descriptor.getChapter(self._currentChapter)
-        self._data = doc_loader.loadChapterData(chapter, self._settings.chapterParser, afterBattle=afterBattle, initial=initial)
+        chapter_ = self._descriptor.getChapter(self._currentChapter)
+        self._data = doc_loader.loadChapterData(chapter_, self._settings.chapterParser, afterBattle=afterBattle, initial=initial)
         if self._data is None:
             LOG_ERROR('Chapter documentation is not valid. Tutorial is stopping', self._currentChapter)
             self._gui.hideWaiting('chapter-loading')
-            self.stop(reason=TUTORIAL_STOP_REASON.CRITICAL_ERROR)
+            self.stop()
             return
         else:
             self._flags = summary.FlagSummary(self._data.getFlags(), initial=self._cache.flags())
@@ -169,6 +210,10 @@ class Tutorial(object):
             return
 
     def setState(self, stateID):
+        """
+        Sets tutorial state: loading, play effects, leaning, ...
+        :param stateID: state ID (@see tutorial.control.states.STATE_*)
+        """
         state = states.factory(stateID)
         if state is not None:
             LOG_DEBUG('Set new state', state.__name__)
@@ -178,6 +223,10 @@ class Tutorial(object):
         return
 
     def evaluateState(self):
+        """
+        Evaluate current state, if queue of effects is not empty than current
+        state is play effects, otherwise - leaning.
+        """
         if len(self._effectsQueue):
             if not isinstance(self._currentState, states.TutorialStateRunEffects):
                 self.setState(states.STATE_RUN_EFFECTS)
@@ -185,6 +234,11 @@ class Tutorial(object):
             self.setState(states.STATE_LEARNING)
 
     def getFirstElementOfTop(self):
+        """
+        Gets top item (list of effects) from effect queue and them removes from
+        queue.
+        :return: list or None.
+        """
         result = None
         if len(self._effectsQueue):
             top = self._effectsQueue[0]
@@ -197,6 +251,13 @@ class Tutorial(object):
         return result
 
     def storeEffectsInQueue(self, effects, benefit=False):
+        """
+        Stores a series of effects in the queue, and changes the state of
+            tutorial.
+        :param effects: list of effects.
+        :param benefit: True - effects insert to head of queue,
+            otherwise - tail of queue.
+        """
         if effects is None or len(effects) == 0:
             LOG_ERROR('Effect list is not defined')
         else:
@@ -210,6 +271,9 @@ class Tutorial(object):
         return
 
     def removeEffectsInQueue(self):
+        """
+        Removes all effects from queue.
+        """
         self._effectsQueue = []
 
     def getSettings(self):
@@ -237,30 +301,58 @@ class Tutorial(object):
         return self._gui
 
     def getFlags(self):
+        """
+        Gets tutorial flag summary.
+        :return: object (@see tutorial.control.flags.FlagSummary).
+        """
         return self._flags
 
     def getVars(self):
+        """
+        Gets tutorial var summary.
+        :return: object (@see tutorial.control.gameVars.VarSummary).
+        """
         return self._vars
 
     def invalidateFlags(self):
+        """
+        Tutorials need to update because value of flag was changed.
+        """
         self._funcInfo.invalidate()
         if self._funcScene is not None:
             self._funcScene.invalidate()
         return
 
     def goToNextChapter(self, chapterID):
+        """
+        Goes to next chapter.
+        :param chapterID: chapter ID (string).
+        """
         self._cache.clearChapterData().write()
         self.removeEffectsInQueue()
         self._currentChapter = chapterID
         self._nextChapter = True
 
     def getNextScene(self, sceneID):
+        """
+        Gets next loading scene ID.
+        :param sceneID: string containing unique scene ID.
+        :return: tuple(scene ID (str), is in scene (bool)).
+        """
         return (self._nextScene, self._data.isInScene(self._nextScene, sceneID))
 
     def getFunctionalScene(self):
+        """
+        Gets object controlled scene.
+        :return: object of tutorial.functional.FunctionalScene.
+        """
         return self._funcScene
 
     def setFunctionalScene(self, scene):
+        """
+        Sets object controlled scene.
+        :param scene: object of tutorial.data.Scene.
+        """
         if self._funcScene is not None:
             self._funcScene.leave()
         self._funcScene = self._ctrlFactory.createFuncScene(scene)
@@ -287,6 +379,20 @@ class Tutorial(object):
             self.loadCurrentChapter()
 
     def __resolveInitialChapter(self, ctx):
+        """
+        Resolves initial chapter when tutorial is loading by following steps:
+            1. Double check: received bonuses in the tutorial scenario.
+                If they are in the scenario than go to step 2, otherwise
+                tutorial is stopping.
+            2. Gets current chapter from cache. If current chapter is exists
+                in cache and valid then chapter is found, otherwise go to
+                step 3.
+            3. Resolves chapter by received bonuses.
+            4. Double check: current chapter found. If it not found than
+                tutorial is stopping.
+        :param ctx: @see run.
+        :return: True - if initial chapter resolved, otherwise - False.
+        """
         self._currentChapter = None
         if ctx.initialChapter is not None:
             self._currentChapter = ctx.initialChapter
@@ -294,22 +400,27 @@ class Tutorial(object):
         completed = self._bonuses.getCompleted()
         fromCache = self._cache.currentChapter()
         if fromCache is not None and self._settings.findChapterInCache:
-            chapter = self._descriptor.getChapter(fromCache)
-            if self._descriptor.isChapterInitial(chapter, completed):
+            chapter_ = self._descriptor.getChapter(fromCache)
+            if self._descriptor.isChapterInitial(chapter_, completed):
                 self._currentChapter = fromCache
             else:
                 self._cache.clearChapterData()
-                LOG_WARNING('Initial chapter not found in cache or bonuses is invalid', fromCache, chapter.getBonusID() if chapter is not None else None, completed)
+                LOG_WARNING('Initial chapter not found in cache or bonuses is invalid', fromCache, chapter_.getBonusID() if chapter_ is not None else None, completed)
         if self._currentChapter is None:
             self._currentChapter = self._descriptor.getInitialChapterID(completed=completed)
         if self._currentChapter is None:
             LOG_ERROR('Initial chapter not found. Tutorial is stopping')
-            self.stop(reason=TUTORIAL_STOP_REASON.CRITICAL_ERROR)
+            self.stop()
             return False
         else:
             return True
 
     def __tryRunFirstState(self, nextFlag):
+        """
+        Starts training process when GUI is loaded and initial chapter is
+            resolved.
+        :param nextFlag: one of INITIAL_FLAG.*.
+        """
         self._initialized |= nextFlag
         if self._initialized == INITIAL_FLAG.INITIALIZED:
             self._currentState = states.TutorialStateLoading()

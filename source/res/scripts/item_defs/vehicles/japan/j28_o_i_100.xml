@@ -11,6 +11,13 @@
     <forward>	25	</forward>
     <backward>	10	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.001	</moving>
+    <still>	0.001	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.001	</firePenalty>
+  </invisibility>
   <repairCost>	5.80	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -29,7 +36,7 @@
       <armor_7>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	35	</armor_9>
+      <armor_9>	42	</armor_9>
       <armor_10>	175	</armor_10>
       <armor_11>	75	</armor_11>
       <armor_12>	150	</armor_12>
@@ -65,7 +72,8 @@
       <turret>	0.006047 1.32755 -0.478268	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/japan/J28_O_I_100/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -191,13 +199,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.36195 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.70148 3.3633	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -436,13 +443,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.36195 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.70148 3.3633	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -640,6 +646,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.0166667 10 0.0194444 9 0.0222222 8.8 0.025 8.8 0.0277778 9.5 0.0416667 9.5 0.0444444 10 0.95 10 0.952778 9.5 0.972222 9.5 0.975 9 0.977778 8.8 0.980556 9 0.983333 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	11	</reloadTime>
           <shotDispersionFactors>
@@ -659,7 +666,8 @@
             <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -693,6 +701,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.0166667 10 0.0194444 9 0.0222222 8.8 0.025 8.8 0.0277778 9.5 0.0416667 9.5 0.0444444 10 0.95 10 0.952778 9.5 0.975 9 0.977778 8.8 0.980556 9 0.983333 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
@@ -707,7 +716,8 @@
             <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -737,6 +747,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.00277778 10 0.00416667 7 0.00555556 6 0.00833333 6 0.0111111 5 0.0472222 5 0.05 6 0.0722222 6 0.0777778 7 0.0805556 8 0.0833333 10 0.916667 10 0.919444 7 0.927778 6 0.944444 6 0.947222 5 0.963889 5 0.966667 6 0.994444 6 0.997222 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.56	</shotDispersionRadius>
           <reloadTime>	23	</reloadTime>
           <shotDispersionFactors>
@@ -751,7 +762,8 @@
             <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/japan/J28_O_I_100/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -771,7 +783,8 @@
         <exploded>	vehicles/japan/J28_O_I_100/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/japan/J28_O_I_100/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/japan/J28_O_I_100/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/japan/J28_O_I_100/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.006047 0.680627 1.3452	</gunPosition>
       <emblemSlots>
@@ -806,9 +819,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_12000-more	</turretRotatorSoundGear>
       <physicsShape>	0.974 -0.099 1.015 0.000 0.805 -0.029 0.706 0.606 0.428 0.500 0.157 0.500 0.117 0.668 0.000	</physicsShape>
     </Turret_1_J28_O_I_100>
   </turrets0>
@@ -836,6 +847,25 @@
     </_Type96_Bo>
     <_Type3_Otsu>	shared	</_Type3_Otsu>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_J28_O_I_100>
+        <alpha>	0.1127	</alpha>
+      </Chassis_J28_O_I_100>
+      <Chassis_J28_O_I_100_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_J28_O_I_100_2>
+    </chassis>
+    <engines>
+      <_Type98_V12_x2_1100>
+        <bravo>	290.7523	</bravo>
+      </_Type98_V12_x2_1100>
+      <_Type98_V12_x2_1200>
+        <bravo>	317.1843	</bravo>
+      </_Type98_V12_x2_1200>
+    </engines>
+    <armour>	0.957480026	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

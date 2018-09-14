@@ -3,6 +3,16 @@
 from gui.Scaleform.daapi.view.lobby.clans.profile.ClanProfileBaseView import ClanProfileBaseView
 
 class ClanProfilePersonnelViewMeta(ClanProfileBaseView):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends ClanProfileBaseView
+    null
+    """
 
     def as_getMembersDPS(self):
+        """
+        :return Object:
+        """
         return self.flashObject.as_getMembersDP() if self._isDAAPIInited() else None

@@ -4,9 +4,9 @@ import time
 import items
 import calendar
 from account_shared import validateCustomizationItem
-from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, DictBlockBuilder, ListBlockBuilder, BinarySetDossierBlockBuilder
+from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, DOSSIER_TYPE
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
@@ -170,19 +170,12 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
 
 def __readBonus_rent(bonus, _name, section):
     rent = {}
-    if section.has_key('expires'):
-        rent['expires'] = {}
-        subsection = section['expires']
-        if subsection.has_key('after'):
-            rent['expires']['after'] = subsection['after'].asInt
-        elif subsection.has_key('at'):
-            rent['expires']['at'] = subsection['at'].asInt
-        elif subsection.has_key('battles'):
-            rent['expires']['battles'] = subsection['battles'].asInt
-        elif subsection.has_key('state'):
-            rent['expires']['state'] = subsection['state'].asBool
-        else:
-            raise Exception("'expires' section must contain 'at', 'after', 'battles' or 'state' sub-section")
+    if section.has_key('time'):
+        rent['time'] = section['time'].asFloat
+    if section.has_key('battles'):
+        rent['battles'] = section['battles'].asInt
+    if section.has_key('wins'):
+        rent['wins'] = section['wins'].asInt
     if section.has_key('compensation'):
         credits = section['compensation'].readInt('credits', 0)
         gold = section['compensation'].readInt('gold', 0)
@@ -271,20 +264,16 @@ def __readBonus_dossier(bonus, _name, section):
     unique = False
     if section.has_key('unique'):
         unique = section['unique'].asBool
-    for blockBuilder in accountDossierLayout + vehicleDossierLayout:
-        if blockBuilder.name == blockName:
-            blockType = type(blockBuilder)
-            if blockType in (StaticSizeBlockBuilder, BinarySetDossierBlockBuilder):
-                if (record in blockBuilder.recordsLayout or record.startswith('tankExpert') or record.startswith('mechanicEngineer')) and operation in ('add', 'set'):
-                    break
-            elif blockType == DictBlockBuilder and operation == 'add':
-                break
-            elif blockType == ListBlockBuilder and operation == 'append':
-                break
+    dossierType = DOSSIER_TYPE.ACCOUNT
+    if section.has_key('dossierType'):
+        dossierType = section['dossierType'].asInt
+    if dossierType == DOSSIER_TYPE.ACCOUNT:
+        isValid, message = checkAccountDossierOperation(dossierType, blockName, record, operation)
+        if not isValid:
+            raise Exception('Invalid dossier bonus %s: %s' % (blockName + ':' + record, message))
     else:
-        raise Exception('Invalid dossier record %s or unsupported block' % (blockName + ':' + record,))
-
-    bonus.setdefault('dossier', {})[blockName, record] = {'value': value,
+        raise Exception('Dossier type %s not supported in bonus reader' % dossierType)
+    bonus.setdefault('dossier', {}).setdefault(dossierType, {})[blockName, record] = {'value': value,
      'unique': unique,
      'type': operation}
 

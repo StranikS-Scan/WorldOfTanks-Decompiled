@@ -29,7 +29,8 @@ class BoundMethodWeakref(object):
         self.wrefCls = weakref.ref(func.__self__)
 
     def __call__(self, *args, **kwargs):
-        return getattr(self.wrefCls(), self.methodName)(*args, **kwargs)
+        ref = self.wrefCls()
+        return getattr(ref, self.methodName)(*args, **kwargs) if ref is not None else None
 
 
 def forEach(function, sequence):
@@ -157,3 +158,14 @@ def isDefaultDict(sourceDict, defaultDict):
             return False
 
     return True
+
+
+def nextTick(func):
+    """
+    Moves function calling to the next frame
+    """
+
+    def wrapper(*args, **kwargs):
+        BigWorld.callback(0.01, lambda : func(*args, **kwargs))
+
+    return wrapper

@@ -32,14 +32,18 @@ class ResourcePoint(BigWorld.UserDataObject, _CTFCheckPoint, _CTFResourcePointMo
         _CTFCheckPoint.__del__(self)
 
     def __isVisibleForCurrentArena(self):
-        arenaType = BigWorld.player().arena.arenaType
-        if hasattr(arenaType, 'resourcePoints'):
-            resourcePoints = arenaType.resourcePoints
-            for rp in resourcePoints:
-                if 'guid' not in rp:
-                    continue
-                guid = rp['guid']
-                if guid == self.guid:
-                    return True
+        player = BigWorld.player()
+        if player is None:
+            return False
+        else:
+            arenaType = player.arena.arenaType
+            if hasattr(arenaType, 'resourcePoints'):
+                resourcePoints = arenaType.resourcePoints
+                for rp in resourcePoints:
+                    if 'guid' not in rp:
+                        continue
+                    guid = rp['guid']
+                    if guid == self.guid:
+                        return True
 
-        return False
+            return False

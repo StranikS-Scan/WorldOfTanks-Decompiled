@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_getters.py
 import BigWorld
-from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTLE_TYPE, DEFAULT_LANGUAGE, ACCOUNT_ATTR
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 
 def isInRandomQueue():
@@ -270,3 +270,15 @@ def getUnit(unitIdx, safe=False):
 
 def hasModalEntity():
     return getClientPrebattle() or getUnitIdx()
+
+
+def getTrainingBattleRoundLimits(accountAttrs):
+    """Returns training battle round limits in seconds.
+    They depend on account attributes. See base/Prebattle.py
+    
+    @return: (min_length, max_length)
+    """
+    if accountAttrs & ACCOUNT_ATTR.DAILY_BONUS_1:
+        return (60, 14400)
+    else:
+        return (300, 1800)

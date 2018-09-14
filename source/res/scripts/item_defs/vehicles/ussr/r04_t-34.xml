@@ -9,6 +9,13 @@
     <forward>	56	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.216	</moving>
+    <still>	0.288	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.432	</firePenalty>
+  </invisibility>
   <repairCost>	5.34	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -61,7 +68,8 @@
       <turret>	0.0042 0.627922 0.5565	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/russian/R04_T-34/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/russian/R04_T-34/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -435,13 +443,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <wwsoundPC>	trds_t34_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22626 1.85467	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -811,13 +818,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
       <wwsoundPC>	trds_t34_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.923078 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R04_T-34/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.22626 1.85467	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -895,13 +901,15 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 0.319671 6 0.383333 1 0.616667 1 0.680329 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -922,7 +930,7 @@
           <unlocks>
             <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
             </gun>
-            <vehicle>	A43	  <cost>	29660	</cost>
+            <vehicle>	R57_A43	  <cost>	29660	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -940,13 +948,15 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 0.297449 6 0.361111 -3 0.638889 -3 0.702551 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -979,13 +989,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.297449 8 0.361111 -3 0.638889 -3 0.702551 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1008,7 +1020,8 @@
         <exploded>	vehicles/russian/R04_T-34/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R04_T-34/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R04_T-34/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.0038 0.3219 0.675046	</gunPosition>
       <emblemSlots>
@@ -1044,9 +1057,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.025 1.048 0.000 0.580 0.106 0.638 0.450 0.389 0.500 0.407 0.500 0.146 0.881 0.082	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.295 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1111,13 +1122,15 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1150,13 +1163,15 @@
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1189,13 +1204,15 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.325227 8 0.388889 7 0.611111 7 0.674773 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_06.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1216,7 +1233,7 @@
           <unlocks>
             <vehicle>	R02_SU-85	  <cost>	23500	</cost>
             </vehicle>
-            <vehicle>	T-34-85	  <cost>	27825	</cost>
+            <vehicle>	R07_T-34-85	  <cost>	27825	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -1236,13 +1253,15 @@
             <minPitch>	0 -26 1 -26	</minPitch>
             <maxPitch>	0 8 0.325227 8 0.388889 7 0.611111 7 0.674773 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R04_T-34/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R04_T-34/crash/lod0/Gun_07.model	</destroyed>
             <exploded>	vehicles/russian/R04_T-34/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/russian/R04_T-34/collision/Gun_07.model	</collisionModel>
+            <collisionModelServer>	vehicles/russian/R04_T-34/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -1265,7 +1284,8 @@
         <exploded>	vehicles/russian/R04_T-34/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/russian/R04_T-34/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/russian/R04_T-34/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R04_T-34/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.00497 0.450286 0.706573	</gunPosition>
       <emblemSlots>
@@ -1301,9 +1321,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 -0.057 1.101 0.000 0.684 -0.040 0.817 0.481 0.370 0.500 0.325 0.500 0.177 0.661 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.715 0.31 0.000000 0.000000	</tiling>
       </camouflage>
@@ -1327,11 +1345,30 @@
       </unlocks>
     </_9R>
     <_9RM>	shared	  <unlocks>
-        <vehicle>	MT25	  <cost>	34210	</cost>
+        <vehicle>	R101_MT25	  <cost>	34210	</cost>
         </vehicle>
       </unlocks>
     </_9RM>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <T-34_mod_1941>
+        <alpha>	0.13685	</alpha>
+      </T-34_mod_1941>
+      <T-34_mod_1943>
+        <alpha>	0.10465	</alpha>
+      </T-34_mod_1943>
+    </chassis>
+    <engines>
+      <V-2>
+        <bravo>	126.8737	</bravo>
+      </V-2>
+      <V-2-34>
+        <bravo>	132.1601	</bravo>
+      </V-2-34>
+    </engines>
+    <armour>	0.986516759	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

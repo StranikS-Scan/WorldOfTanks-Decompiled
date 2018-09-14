@@ -3,6 +3,12 @@
 from debug_utils import LOG_WARNING
 
 class FORTIFICATIONS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     BUILDINGDIRECTION_TOOLTIP = '#fortifications:BuildingDirection/tooltip'
     FORTINTELLIGENCE_HEADERBLOCK = '#fortifications:FortIntelligence/headerBlock'
     FORTINTELLIGENCE_HEADERBLOCKNODEFPERIOD = FORTINTELLIGENCE_HEADERBLOCK + 'NoDefPeriod'
@@ -336,7 +342,6 @@ class FORTIFICATIONS(object):
     SORTIE_INTROVIEW_DESCR = '#fortifications:sortie/introView/descr'
     SORTIE_INTROVIEW_FORTBATTLES_TITLE = '#fortifications:sortie/introView/fortBattles/title'
     SORTIE_INTROVIEW_FORTBATTLES_DESCR = '#fortifications:sortie/introView/fortBattles/descr'
-    SORTIE_INTROVIEW_FORTBATTLES_BTNTITLE = '#fortifications:sortie/introView/fortBattles/btnTitle'
     SORTIE_INTROVIEW_FORTBATTLES_BTNLABEL = '#fortifications:sortie/introView/fortBattles/btnLabel'
     SORTIE_INTROVIEW_SORTIE_TITLE = '#fortifications:sortie/introView/sortie/title'
     SORTIE_INTROVIEW_SORTIE_DESCR = '#fortifications:sortie/introView/sortie/descr'
@@ -388,6 +393,7 @@ class FORTIFICATIONS(object):
     SORTIE_ROOM_READY = '#fortifications:sortie/room/ready'
     SORTIE_ROOM_NOTREADY = '#fortifications:sortie/room/notReady'
     SORTIE_ROOM_FIGHT = '#fortifications:sortie/room/fight'
+    SORTIE_ROOM_LEVEL = '#fortifications:sortie/room/level'
     SORTIE_VEHICLESELECTOR_DESCRIPTION = '#fortifications:sortie/vehicleSelector/description'
     BUILDINGSPROCESS_SHORTDESCR_WARSCHOOL_BUILDING = '#fortifications:BuildingsProcess/shortDescr/warSchool_building'
     BUILDINGSPROCESS_SHORTDESCR_OFFICE_BUILDING = '#fortifications:BuildingsProcess/shortDescr/office_building'
@@ -523,6 +529,7 @@ class FORTIFICATIONS(object):
     CHOICEDIVISION_DIVISIONTYPE_ABSOLUTEDIVISION = '#fortifications:ChoiceDivision/divisionType/absoluteDivision'
     CHOICEDIVISION_DIVISIONPROFIT = '#fortifications:ChoiceDivision/divisionProfit'
     CHOICEDIVISION_VEHICLELEVEL = '#fortifications:ChoiceDivision/vehicleLevel'
+    CHOICEDIVISION_VEHICLELEVELSINGLE = '#fortifications:ChoiceDivision/vehicleLevelSingle'
     DISCONNECTED_WARNING = '#fortifications:disconnected/Warning'
     DISCONNECTED_WARNINGDESCRIPTIONROAMING = '#fortifications:disconnected/WarningDescriptionRoaming'
     DISCONNECTED_WARNINGDESCRIPTIONCENTERUNAVAILABLE = '#fortifications:disconnected/WarningDescriptionCenterUnavailable'
@@ -841,6 +848,10 @@ class FORTIFICATIONS(object):
 
     @staticmethod
     def fortconsumableorder_descr(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:fortConsumableOrder/descr/%s' % key
         if outcome not in FORTIFICATIONS.FORTCONSUMABLEORDER_DESCR_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -850,6 +861,10 @@ class FORTIFICATIONS(object):
 
     @staticmethod
     def sortie_division_name(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:sortie/division_name/%s' % key
         if outcome not in FORTIFICATIONS.SORTIE_DIVISION_NAME_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -859,6 +874,10 @@ class FORTIFICATIONS(object):
 
     @staticmethod
     def general_ordertype(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:General/orderType/%s' % key
         if outcome not in FORTIFICATIONS.GENERAL_ORDERTYPE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -868,126 +887,198 @@ class FORTIFICATIONS(object):
 
     @staticmethod
     def buildings_defresinfo(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:Buildings/defResInfo/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGS_DEFRESINFO_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingpopover_header_titlestatus(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingPopover/header/titleStatus/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_HEADER_TITLESTATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def fortclanbattlelist_renderdayofbattle(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:FortClanBattleList/renderDayOfBattle/%s' % key
         if outcome not in FORTIFICATIONS.FORTCLANBATTLELIST_RENDERDAYOFBATTLE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def fortclanbattlelist_renderbattlename(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:FortClanBattleList/renderBattleName/%s' % key
         if outcome not in FORTIFICATIONS.FORTCLANBATTLELIST_RENDERBATTLENAME_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def choicedivision_divisiontype(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:ChoiceDivision/divisionType/%s' % key
         if outcome not in FORTIFICATIONS.CHOICEDIVISION_DIVISIONTYPE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def orders_orderpopover_ordertype(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:Orders/orderPopover/orderType/%s' % key
         if outcome not in FORTIFICATIONS.ORDERS_ORDERPOPOVER_ORDERTYPE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def fortmainview(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:FortMainView/%s' % key
         if outcome not in FORTIFICATIONS.FORTMAINVIEW_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def orders_specialmission_possibleaward_description_level(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:Orders/specialMission/possibleAward/description/level/%s' % key
         if outcome not in FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD_DESCRIPTION_LEVEL_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingpopover_soldierstatus_bodystatus(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingPopover/soldierStatus/bodyStatus/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_SOLDIERSTATUS_BODYSTATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingsprocess_longdescr(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingsProcess/longDescr/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGSPROCESS_LONGDESCR_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingpopover_commanderstatus_bodystatus(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingPopover/commanderStatus/bodyStatus/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGPOPOVER_COMMANDERSTATUS_BODYSTATUS_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def settingswindow_blockcondition(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:SettingsWindow/blockCondition/%s' % key
         if outcome not in FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def settingswindow_blockdescr(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:SettingsWindow/blockDescr/%s' % key
         if outcome not in FORTIFICATIONS.SETTINGSWINDOW_BLOCKDESCR_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildings_buildingname(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:Buildings/buildingName/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGS_BUILDINGNAME_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingsprocess_shortdescr(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingsProcess/shortDescr/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGSPROCESS_SHORTDESCR_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildingdirection_label(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:BuildingDirection/label1%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGDIRECTION_LABEL_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def fortintelligence_clantypes(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:FortIntelligence/clanTypes/%s' % key
         if outcome not in FORTIFICATIONS.FORTINTELLIGENCE_CLANTYPES_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def buildings_processorderinfo(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#fortifications:Buildings/processOrderInfo/%s' % key
         if outcome not in FORTIFICATIONS.BUILDINGS_PROCESSORDERINFO_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

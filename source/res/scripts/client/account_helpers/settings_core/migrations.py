@@ -3,7 +3,7 @@
 from account_helpers.settings_core.SettingsCache import g_settingsCache
 import constants
 import BigWorld
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS
+from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION
 from adisp import process, async
 from debug_utils import LOG_DEBUG
 
@@ -192,6 +192,37 @@ def _migrateTo19(core, data, initialized):
     data['gameExtData'][GAME.MINIMAP_VIEW_RANGE] = True
 
 
+def _migrateTo20(core, data, initialized):
+    data['gameData'][GAME.STORE_RECEIVER_IN_BATTLE] = True
+
+
+def _migrateTo21(core, data, initialized):
+    aimData = data['aimData']
+    for settingName in ('arcade', 'sniper'):
+        if settingName not in aimData:
+            data['aimData'].update({settingName: core.getSetting(settingName)})
+
+    aimData['arcade']['zoomIndicator'] = 100
+    aimData['sniper']['zoomIndicator'] = 100
+
+
+def _migrateTo22(core, data, initialized):
+    data['gameExtData'][GAME.SIMPLIFIED_TTC] = True
+
+
+def _migrateTo23(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    settingOffset = 1610612736
+    currentValue = (storedValue & settingOffset) >> 29
+    if currentValue == 0:
+        data['gameData'][GAME.SHOW_VEH_MODELS_ON_MAP] = 2
+
+
+def _migrateTo24(core, data, initialized):
+    data['carousel_filter']['event'] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -263,6 +294,26 @@ _versions = ((1,
  (19,
   _migrateTo19,
   False,
+  False),
+ (20,
+  _migrateTo20,
+  False,
+  False),
+ (21,
+  _migrateTo21,
+  False,
+  False),
+ (22,
+  _migrateTo22,
+  False,
+  False),
+ (23,
+  _migrateTo23,
+  False,
+  False),
+ (24,
+  _migrateTo24,
+  False,
   False))
 
 @async
@@ -271,13 +322,15 @@ def migrateToVersion(fromVersion, core, data, callback=None):
     yield lambda callback: callback(None)
     initialized = False
     for version, migration, isInitialize, isAsync in _versions:
-        if fromVersion < version and (not isInitialize or not initialized):
-            if isAsync:
-                yield migration(core, data, initialized)
-            else:
-                migration(core, data, initialized)
+        if fromVersion < version:
+            if not isInitialize or not initialized:
+                if isAsync:
+                    yield migration(core, data, initialized)
+                else:
+                    migration(core, data, initialized)
+                if isInitialize:
+                    initialized = True
+            data[VERSION] = version
             LOG_DEBUG('Migrated to version: ', version, data)
-            if isInitialize:
-                initialized = True
 
     callback(data)

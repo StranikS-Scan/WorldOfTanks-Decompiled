@@ -3,6 +3,12 @@
 
 
 class DIALOGS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     GATHERINGXPFORM_SORTBY_VEHICLE = '#dialogs:gatheringXPForm/sortBy/vehicle'
     GATHERINGXPFORM_SORTBY_XP = '#dialogs:gatheringXPForm/sortBy/xp'
     GRAPHICSPRESETNOTINSTALLED = '#dialogs:graphicsPresetNotInstalled'
@@ -211,6 +217,7 @@ class DIALOGS(object):
     RECRUITWINDOW_NATIONDROPDOWN_GERMANY = '#dialogs:recruitWindow/nationDropdown/germany'
     RECRUITWINDOW_NATIONDROPDOWN_USA = '#dialogs:recruitWindow/nationDropdown/usa'
     RECRUITWINDOW_NATIONDROPDOWN_CZECH = '#dialogs:recruitWindow/nationDropdown/czech'
+    RECRUITWINDOW_NATIONDROPDOWN_SWEDEN = '#dialogs:recruitWindow/nationDropdown/sweden'
     RECRUITWINDOW_SPECIALIZATION = '#dialogs:recruitWindow/specialization'
     RECRUITWINDOW_VEHICLECLASS = '#dialogs:recruitWindow/vehicleClass'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL = '#dialogs:recruitWindow/vehicleClassDropdown/all'
@@ -727,6 +734,9 @@ class DIALOGS(object):
     FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE = '#dialogs:fortModernizationAbsoluteDivision/message'
     FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT = '#dialogs:fortModernizationAbsoluteDivision/submit'
     FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL = '#dialogs:fortModernizationAbsoluteDivision/cancel'
+    FORTTURNEDOFF_CANCEL = '#dialogs:fortTurnedOff/cancel'
+    FORTTURNEDOFF_TITLE = '#dialogs:fortTurnedOff/title'
+    FORTTURNEDOFF_MESSAGE = '#dialogs:fortTurnedOff/message'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_TITLE = '#dialogs:staticFormation/staffView/removeMemberConfirmation/title'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_MESSAGE = '#dialogs:staticFormation/staffView/removeMemberConfirmation/message'
     STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_SUBMIT = '#dialogs:staticFormation/staffView/removeMemberConfirmation/submit'
@@ -840,6 +850,9 @@ class DIALOGS(object):
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_MESSAGE = '#dialogs:customization/install_invoice_item/permanent_last/message'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_SUBMIT = '#dialogs:customization/install_invoice_item/permanent_last/submit'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_CANCEL = '#dialogs:customization/install_invoice_item/permanent_last/cancel'
+    FORTDISABLED_TITLE = '#dialogs:fortDisabled/title'
+    FORTDISABLED_MESSAGE = '#dialogs:fortDisabled/message'
+    FORTDISABLED_CANCEL = '#dialogs:fortDisabled/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1055,6 +1068,7 @@ class DIALOGS(object):
      RECRUITWINDOW_NATIONDROPDOWN_GERMANY,
      RECRUITWINDOW_NATIONDROPDOWN_USA,
      RECRUITWINDOW_NATIONDROPDOWN_CZECH,
+     RECRUITWINDOW_NATIONDROPDOWN_SWEDEN,
      RECRUITWINDOW_SPECIALIZATION,
      RECRUITWINDOW_VEHICLECLASS,
      RECRUITWINDOW_VEHICLETYPE,
@@ -1560,6 +1574,9 @@ class DIALOGS(object):
      FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE,
      FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT,
      FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL,
+     FORTTURNEDOFF_CANCEL,
+     FORTTURNEDOFF_TITLE,
+     FORTTURNEDOFF_MESSAGE,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_TITLE,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_MESSAGE,
      STATICFORMATION_STAFFVIEW_REMOVEMEMBERCONFIRMATION_SUBMIT,
@@ -1672,25 +1689,40 @@ class DIALOGS(object):
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_TITLE,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_MESSAGE,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_SUBMIT,
-     CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_CANCEL)
+     CUSTOMIZATION_INSTALL_INVOICE_ITEM_PERMANENT_LAST_CANCEL,
+     FORTDISABLED_TITLE,
+     FORTDISABLED_MESSAGE,
+     FORTDISABLED_CANCEL)
 
     @staticmethod
     def recruitwindow_vehicleclassdropdown(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#dialogs:recruitWindow/vehicleClassDropdown/%s' % key
         if outcome not in DIALOGS.RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def vehicleselldialog_vehicletype(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#dialogs:vehicleSellDialog/vehicleType/%s' % key
         if outcome not in DIALOGS.VEHICLESELLDIALOG_VEHICLETYPE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def all(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#dialogs:%s' % key
         if outcome not in DIALOGS.all_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

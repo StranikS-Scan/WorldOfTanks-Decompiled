@@ -9,6 +9,13 @@
     <forward>	24	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.182	</moving>
+    <still>	0.242	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.363	</firePenalty>
+  </invisibility>
   <repairCost>	3.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -64,7 +71,8 @@
       <turret>	0.000000 0.554143 0.586154	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -216,13 +224,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.905126 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.788766 1.30635	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -489,13 +496,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.905126 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.788766 1.30635	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -704,6 +710,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 17 0.347222 17 0.486111 -1 0.513889 -1 0.652778 17 1 17	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	2	</aimingTime>
@@ -713,7 +720,8 @@
             <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.79 0.43 0.000000 0.000000	</tiling>
@@ -735,6 +743,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 17 0.363889 17 0.438889 2 0.561111 2 0.636111 17 1 17	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
@@ -749,7 +758,8 @@
             <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.72 0.835 0.000000 0.000000	</tiling>
@@ -757,7 +767,7 @@
         </_25mm_Canon_Raccourci_Mle.1934>
         <_37mm_SA38>	shared	  <maxAmmo>	102	</maxAmmo>
           <unlocks>
-            <vehicle>	AMX38	  <cost>	1270	</cost>
+            <vehicle>	F13_AMX38	  <cost>	1270	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -775,6 +785,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 9 0.083333 9 0.222222 17 0.272222 17 0.411111 -8 0.588889 -8 0.727778 17 0.777778 17 0.916667 9 1 9	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <reloadTime>	2.8	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <models>
@@ -783,7 +794,8 @@
             <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.6 0.895 0.000000 0.000000	</tiling>
@@ -796,7 +808,8 @@
         <exploded>	vehicles/french/F50_FCM36_20t/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F50_FCM36_20t/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F50_FCM36_20t/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F50_FCM36_20t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.027454 0.197953 0.531556	</gunPosition>
       <emblemSlots>
@@ -817,9 +830,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
       <physicsShape>	1.026 -0.010 1.026 -0.010 0.487 0.383 0.580 0.549 0.383 0.534 0.632 0.497 0.663 0.466 0.000	</physicsShape>
       <camouflage>
         <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
@@ -840,6 +851,25 @@
   <radios>
     <ER_54>	shared	</ER_54>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_FCM36_20t>
+        <alpha>	0.1127	</alpha>
+      </Chassis_FCM36_20t>
+      <Chassis_FCM36_20t_2>
+        <alpha>	0.10465	</alpha>
+      </Chassis_FCM36_20t_2>
+    </chassis>
+    <engines>
+      <Berliet_MDPA>
+        <bravo>	24.05315	</bravo>
+      </Berliet_MDPA>
+      <Berliet_Ricardo>
+        <bravo>	27.75363	</bravo>
+      </Berliet_Ricardo>
+    </engines>
+    <armour>	0.948227893	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

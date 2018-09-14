@@ -9,6 +9,13 @@
     <forward>	65	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.325	</moving>
+    <still>	0.325	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.488	</firePenalty>
+  </invisibility>
   <repairCost>	4	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -57,7 +64,8 @@
       <turret>	0.000000 0.603709 -0.148531	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -169,13 +177,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.846031 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.982898 0.936485	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -432,13 +439,12 @@
         <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_1	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_1	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.846031 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	0.982898 0.936485	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -647,6 +653,7 @@
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -657,7 +664,8 @@
             <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
@@ -675,6 +683,7 @@
           </armor>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -685,7 +694,8 @@
             <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.715 0.715 0.000000 0.000000	</tiling>
@@ -698,7 +708,8 @@
         <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.233544 0.558653	</gunPosition>
       <emblemSlots>
@@ -727,9 +738,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.986 -0.052 1.000 0.000 0.440 0.298 0.822 0.482 0.187 0.500 0.287 0.500 0.145 0.955 0.212	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.97 0.58 0.000000 0.000000	</tiling>
       </camouflage>
@@ -788,6 +797,7 @@
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <reloadTime>	3.5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -798,7 +808,8 @@
             <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.79 0.79 0.000000 0.000000	</tiling>
@@ -819,6 +830,7 @@
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -829,7 +841,8 @@
             <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
@@ -867,13 +880,15 @@
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.21	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G82_Pz_II_AusfG/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_05.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
@@ -886,7 +901,8 @@
         <exploded>	vehicles/german/G82_Pz_II_AusfG/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G82_Pz_II_AusfG/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G82_Pz_II_AusfG/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G82_Pz_II_AusfG/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.183385 0.627162	</gunPosition>
       <emblemSlots>
@@ -922,9 +938,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	0.953 -0.052 1.019 0.000 0.412 0.284 0.972 0.482 0.162 0.500 0.320 0.500 0.033 0.384 0.218	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_800-1999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_800-1999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	1.06 0.595 0.000000 0.000000	</tiling>
       </camouflage>
@@ -954,6 +968,25 @@
     </FuG7>
     <FuG_Spr.A>	shared	</FuG_Spr.A>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Pz_II_AusfG>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Pz_II_AusfG>
+      <Chassis_Pz_II_AusfG_2>
+        <alpha>	0.0966	</alpha>
+      </Chassis_Pz_II_AusfG_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_45P>
+        <bravo>	39.64804	</bravo>
+      </Maybach_HL_45P>
+      <Maybach_HL66P>
+        <bravo>	47.57765	</bravo>
+      </Maybach_HL66P>
+    </engines>
+    <armour>	0.799956007	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	small	</damagedStateGroup>

@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
+import importlib
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from ids_generators import SequenceIDGenerator
-_SF_SETTING_NAME = '__init__'
-_SF_SETTING_PATH = '{0:>s}.' + _SF_SETTING_NAME
 _addListener = g_eventBus.addListener
 _removeListener = g_eventBus.removeListener
 
@@ -81,12 +82,13 @@ class PackageBusinessHandler(object):
 
 
 class PackageImporter(object):
-    __slots__ = ('_aliases', '_handlers')
+    __slots__ = ('_aliases', '_handlers', '_contextMenuTypes')
 
     def __init__(self):
         super(PackageImporter, self).__init__()
         self._aliases = {}
         self._handlers = {}
+        self._contextMenuTypes = {}
 
     def isPackageLoaded(self, path):
         return path in self._handlers
@@ -119,6 +121,7 @@ class PackageImporter(object):
         for path in seq:
             if not isLoaded(path):
                 continue
+            LOG_DEBUG('Tries to unload GUI package', path)
             handlers = self._handlers.pop(path)
             for handler in handlers:
                 handler.fini()
@@ -126,20 +129,37 @@ class PackageImporter(object):
             aliases = self._aliases.pop(path)
             if aliases:
                 clearSettings(aliases)
+            contextMenuTypes = self._contextMenuTypes.pop(path)
+            if contextMenuTypes:
+                context_menu.unregisterHandlers(*contextMenuTypes)
 
         return
 
     def _loadPackage(self, path):
         if self.isPackageLoaded(path):
             return
-        imported = __import__(_SF_SETTING_PATH.format(path), fromlist=[_SF_SETTING_NAME])
+        LOG_DEBUG('Tries to load GUI package', path)
+        imported = importlib.import_module(path)
         try:
             settings = imported.getViewSettings()
         except AttributeError:
+            LOG_CURRENT_EXCEPTION()
             raise Exception('Package {0} does not have method getViewSettings'.format(path))
 
         aliases = g_entitiesFactories.initSettings(settings)
-        handlers = imported.getBusinessHandlers()
+        try:
+            handlers = imported.getContextMenuHandlers()
+        except AttributeError:
+            LOG_CURRENT_EXCEPTION()
+            raise Exception('Package {0} does not have method getContextMenuHandlers'.format(path))
+
+        contextMenuTypes = context_menu.registerHandlers(*handlers)
+        try:
+            handlers = imported.getBusinessHandlers()
+        except AttributeError:
+            LOG_CURRENT_EXCEPTION()
+            raise Exception('Package {0} does not have method getBusinessHandlers'.format(path))
+
         processed = set()
         for handler in handlers:
             if not isinstance(handler, PackageBusinessHandler):
@@ -152,3 +172,4 @@ class PackageImporter(object):
 
         self._aliases[path] = aliases
         self._handlers[path] = processed
+        self._contextMenuTypes[path] = contextMenuTypes

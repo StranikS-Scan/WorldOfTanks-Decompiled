@@ -1,0 +1,556 @@
+<r26_su-8.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	48	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.072	</moving>
+    <still>	0.144	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.216	</firePenalty>
+  </invisibility>
+  <repairCost>	7.27	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R26_SU-8/SU-8_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	30	</armor_1>
+      <armor_2>	15	</armor_2>
+      <armor_3>	20	</armor_3>
+      <armor_4>	20	</armor_4>
+      <armor_5>	0	</armor_5>
+      <armor_6>	10	</armor_6>
+      <armor_7>	6	</armor_7>
+      <armor_8>	8	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	13417	</weight>
+    <maxHealth>	216	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.38 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.38 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.62	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.008913 0.551955 -0.975109	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.687341 0.717314 2.54236	</rayStart>
+        <rayEnd>	-0.687341 0.356344 2.37002	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.0131394 0.299821 3.41683	</rayStart>
+        <rayEnd>	0.0131394 -0.0611484 3.24449	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.78	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.54717 0.453786 -0.15051	</rayStart>
+        <rayEnd>	-1.14717 0.453786 -0.15051	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <player>
+        <rayStart>	1.57117 0.455285 -0.201718	</rayStart>
+        <rayEnd>	1.17117 0.455285 -0.201718	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.34	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R26_SU-8/SU-8_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <SU-8>
+      <userString>	#ussr_vehicles:SU-8	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	8500	</price>
+      <unlocks>
+        <chassis>	SU-8Bis	  <cost>	4100	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5160	</weight>
+      <maxLoad>	21800	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	20000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.34 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.01	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.188797	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.188797	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.422112	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.16	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.432644	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.422112	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.16	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.432644	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	-0.012 1.22536 -0.003962	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.17247 2.5715	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.946660 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.838040 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.771690	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </SU-8>
+    <SU-8Bis>
+      <userString>	#ussr_vehicles:SU-8Bis	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	13600	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	5160	</weight>
+      <maxLoad>	24500	</maxLoad>
+      <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
+      <brakeForce>	22000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	22	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.34	</vehicleMovement>
+        <vehicleRotation>	0.34	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.34 0.4	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.01	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.188797	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.188797	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.422112	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.16	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.432644	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.422112	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.16	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.432644	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	-0.012 1.22536 -0.003962	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.17247 2.5715	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.929300 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.838040 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.771700	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </SU-8Bis>
+  </chassis>
+  <turrets0>
+    <Su-8>
+      <ceilless>	true	</ceilless>
+      <userString>	#ussr_vehicles:SU-8	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	6	</level>
+      <price>	500	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	15	</armor_1>
+        <armor_2>	10	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	54	</maxHealth>
+      <rotationSpeed>	18	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	320	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_122mm_howitzer_A-19>	shared	  <pitchLimits>
+            <minPitch>	0 -44 1 -44	</minPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_152mm_howitzer_ML-20_mod_1931	  <cost>	6600	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.84	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
+          <aimingTime>	6.0	</aimingTime>
+          <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.44	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-5 12	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.00284284 0.0754916 2.67647	</rayStart>
+              <rayEnd>	0.179697 0.0697718 2.67292	</rayEnd>
+              <rayUp>	0.116 0.109 1	</rayUp>
+              <size>	0.776	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_howitzer_A-19>
+        <_152mm_howitzer_ML-20_mod_1931>	shared	  <pitchLimits>
+            <minPitch>	0 -44 1 -44	</minPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <vehicle>	R91_SU14_1	  <cost>	62200	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.84	</shotDispersionRadius>
+          <reloadTime>	27.5	</reloadTime>
+          <aimingTime>	7	</aimingTime>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.44	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <turretYawLimits>	-5 12	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000000 0.0763531 2.11933	</rayStart>
+              <rayEnd>	0.138332 0.0876411 2.11212	</rayEnd>
+              <rayUp>	0.164 0.152 1	</rayUp>
+              <size>	0.885	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_152mm_howitzer_ML-20_mod_1931>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R26_SU-8/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R26_SU-8/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R26_SU-8/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R26_SU-8/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R26_SU-8/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.003087 0.700656 -0.168097	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.332 0.500 0.690 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+    </Su-8>
+  </turrets0>
+  <engines>
+    <M-5-400F>	shared	  <unlocks>
+        <engine>	M-17T	  <cost>	200	</cost>
+        </engine>
+      </unlocks>
+    </M-5-400F>
+    <M-17T>	shared	  <unlocks>
+        <engine>	M-17F	  <cost>	850	</cost>
+        </engine>
+      </unlocks>
+    </M-17T>
+    <M-17F>	shared	</M-17F>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <_10R>	shared	  <unlocks>
+        <radio>	_12RT	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </_10R>
+    <_12RT>	shared	</_12RT>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <SU-8>
+        <alpha>	0.12075	</alpha>
+      </SU-8>
+      <SU-8Bis>
+        <alpha>	0.1127	</alpha>
+      </SU-8Bis>
+    </chassis>
+    <engines>
+      <M-5-400F>
+        <bravo>	116.3009	</bravo>
+      </M-5-400F>
+      <M-17T>
+        <bravo>	118.9441	</bravo>
+      </M-17T>
+      <M-17F>
+        <bravo>	132.1601	</bravo>
+      </M-17F>
+    </engines>
+    <armour>	0.786373558	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.88	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r26_su-8.xml>

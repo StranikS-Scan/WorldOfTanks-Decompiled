@@ -49,7 +49,7 @@
       <drawOrder>	10	</drawOrder>
     </node>
     <node>
-      <name>	HP_turretJoint	</name>
+      <name>	DM_Mid_Trail	</name>
       <model>	hull	</model>
       <waterY>	False	</waterY>
       <drawOrder>	0	</drawOrder>
@@ -104,11 +104,11 @@
       </constant>
       <constant>
         <name>	_sandDustStartSpeedOp	</name>
-        <value>	-4	</value>
+        <value>	-8	</value>
       </constant>
       <constant>
         <name>	_sandDustStartSpeedPos	</name>
-        <value>	4	</value>
+        <value>	8	</value>
       </constant>
       <constant>
         <name>	_sandSlipMinStart	</name>
@@ -124,11 +124,11 @@
       </constant>
       <constant>
         <name>	_groundDustStartSpeedOp	</name>
-        <value>	-6	</value>
+        <value>	-12	</value>
       </constant>
       <constant>
         <name>	_groundDustStartSpeedPos	</name>
-        <value>	6	</value>
+        <value>	12	</value>
       </constant>
       <constant>
         <name>	_groundSlipMinStart	</name>
@@ -144,11 +144,11 @@
       </constant>
       <constant>
         <name>	_snowDustStartSpeedOp	</name>
-        <value>	-5	</value>
+        <value>	-10	</value>
       </constant>
       <constant>
         <name>	_snowDustStartSpeedPos	</name>
-        <value>	5	</value>
+        <value>	10	</value>
       </constant>
       <constant>
         <name>	_snowSlipMinStart	</name>
@@ -164,11 +164,11 @@
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedOp	</name>
-        <value>	-8	</value>
+        <value>	-16	</value>
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedPos	</name>
-        <value>	8	</value>
+        <value>	16	</value>
       </constant>
       <constant>
         <name>	_stoneSlipMinStart	</name>
@@ -231,11 +231,11 @@
       </constant>
       <constant>
         <name>	_sandDustStartSpeedOp	</name>
-        <value>	-4	</value>
+        <value>	-6	</value>
       </constant>
       <constant>
         <name>	_sandDustStartSpeedPos	</name>
-        <value>	4	</value>
+        <value>	6	</value>
       </constant>
       <constant>
         <name>	_sandSlipMinStart	</name>
@@ -251,11 +251,11 @@
       </constant>
       <constant>
         <name>	_groundDustStartSpeedOp	</name>
-        <value>	-6	</value>
+        <value>	-9	</value>
       </constant>
       <constant>
         <name>	_groundDustStartSpeedPos	</name>
-        <value>	6	</value>
+        <value>	9	</value>
       </constant>
       <constant>
         <name>	_groundSlipMinStart	</name>
@@ -271,11 +271,11 @@
       </constant>
       <constant>
         <name>	_snowDustStartSpeedOp	</name>
-        <value>	-5	</value>
+        <value>	-7.5	</value>
       </constant>
       <constant>
         <name>	_snowDustStartSpeedPos	</name>
-        <value>	5	</value>
+        <value>	7.5	</value>
       </constant>
       <constant>
         <name>	_snowSlipMinStart	</name>
@@ -291,11 +291,11 @@
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedOp	</name>
-        <value>	-8	</value>
+        <value>	-12	</value>
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedPos	</name>
-        <value>	8	</value>
+        <value>	12	</value>
       </constant>
       <constant>
         <name>	_stoneSlipMinStart	</name>
@@ -358,11 +358,11 @@
       </constant>
       <constant>
         <name>	_sandDustStartSpeedOp	</name>
-        <value>	-4	</value>
+        <value>	-5	</value>
       </constant>
       <constant>
         <name>	_sandDustStartSpeedPos	</name>
-        <value>	4	</value>
+        <value>	5	</value>
       </constant>
       <constant>
         <name>	_sandSlipMinStart	</name>
@@ -378,11 +378,11 @@
       </constant>
       <constant>
         <name>	_groundDustStartSpeedOp	</name>
-        <value>	-6	</value>
+        <value>	-7.5	</value>
       </constant>
       <constant>
         <name>	_groundDustStartSpeedPos	</name>
-        <value>	6	</value>
+        <value>	7.5	</value>
       </constant>
       <constant>
         <name>	_groundSlipMinStart	</name>
@@ -398,11 +398,11 @@
       </constant>
       <constant>
         <name>	_snowDustStartSpeedOp	</name>
-        <value>	-5	</value>
+        <value>	-6	</value>
       </constant>
       <constant>
         <name>	_snowDustStartSpeedPos	</name>
-        <value>	5	</value>
+        <value>	6	</value>
       </constant>
       <constant>
         <name>	_snowSlipMinStart	</name>
@@ -418,11 +418,11 @@
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedOp	</name>
-        <value>	-8	</value>
+        <value>	-10	</value>
       </constant>
       <constant>
         <name>	_stoneDustStartSpeedPos	</name>
-        <value>	8	</value>
+        <value>	10	</value>
       </constant>
       <constant>
         <name>	_stoneSlipMinStart	</name>
@@ -435,17 +435,6 @@
       <constant>
         <name>	_stoneSlipMaxStart	</name>
         <value>	6	</value>
-      </constant>
-    </constantsGroup>
-    <constantsGroup>
-      <name>	moon	</name>
-      <constant>
-        <name>	_fileDescriptor	</name>
-        <value>	large	</value>
-      </constant>
-      <constant>
-        <name>	_moonSlipMinStart	</name>
-        <value>	0.5	</value>
       </constant>
     </constantsGroup>
   </constants>
@@ -2365,160 +2354,290 @@
       </selector>
     </template>
     <template>
-      <name>	Slip_moon	</name>
+      <name>	Slip_NPC	</name>
       <selector>
-        <type>	discrete	</type>
-        <variable>	_isUnderWater	</variable>
+        <type>	matkind	</type>
+        <variable>	_matkind	</variable>
         <selector>
-          <key>	0	</key>
-          <type>	matkind	</type>
-          <variable>	_matkind	</variable>
+          <key>	sand	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
           <selector>
-            <key>	ground	</key>
-            <type>	discrete	</type>
-            <variable>	_direction	</variable>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
             <selector>
-              <key>	_const1	</key>
-              <type>	range	</type>
-              <variable>	_delta	</variable>
+              <key>	-500	</key>
+              <type>	union	</type>
               <selector>
-                <key>	0	</key>
-                <type>	range	</type>
-                <variable>	_speed	</variable>
-                <selector>
-                  <key>	-500	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
-                <selector>
-                  <key>	-2	</key>
-                  <type>	union	</type>
-                </selector>
-                <selector>
-                  <key>	2	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
-                <key>	_moonSlipMinStart	</key>
-                <type>	union	</type>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
-                  <effectHP>	_TrackRear	</effectHP>
-                </selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
-          </selector>
-          <selector>
-            <key>	stone	</key>
-            <type>	discrete	</type>
-            <variable>	_direction	</variable>
             <selector>
-              <key>	_const1	</key>
-              <type>	range	</type>
-              <variable>	_delta	</variable>
+              <key>	_sandDustStartSpeedOp	</key>
+              <type>	union	</type>
               <selector>
-                <key>	0	</key>
-                <type>	range	</type>
-                <variable>	_speed	</variable>
-                <selector>
-                  <key>	-500	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
-                <selector>
-                  <key>	-2	</key>
-                  <type>	union	</type>
-                </selector>
-                <selector>
-                  <key>	2	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
-              </selector>
-              <selector>
-                <key>	_moonSlipMinStart	</key>
-                <type>	union	</type>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
-                  <effectHP>	_TrackRear	</effectHP>
-                </selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
               </selector>
             </selector>
-          </selector>
-          <selector>
-            <key>	sand	</key>
-            <type>	discrete	</type>
-            <variable>	_direction	</variable>
             <selector>
-              <key>	_const1	</key>
-              <type>	range	</type>
-              <variable>	_delta	</variable>
+              <key>	-2	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	union	</type>
               <selector>
-                <key>	0	</key>
-                <type>	range	</type>
-                <variable>	_speed	</variable>
-                <selector>
-                  <key>	-500	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
-                <selector>
-                  <key>	-2	</key>
-                  <type>	union	</type>
-                </selector>
-                <selector>
-                  <key>	2	</key>
-                  <type>	union	</type>
-                  <selector>
-                    <type>	effect	</type>
-                    <name>	particles/Tank/movement/moon_dust/move_trackrear.xml	</name>
-                    <effectHP>	_TrackRear	</effectHP>
-                  </selector>
-                </selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_sandDustStartSpeedPos	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
               </selector>
               <selector>
-                <key>	_moonSlipMinStart	</key>
-                <type>	union	</type>
-                <selector>
-                  <type>	effect	</type>
-                  <name>	particles/Tank/movement/moon_dust/slip_trackrear.xml	</name>
-                  <effectHP>	_TrackRear	</effectHP>
-                </selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/sand/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
               </selector>
             </selector>
           </selector>
         </selector>
         <selector>
-          <key>	1	</key>
-          <type>	union	</type>
+          <key>	ground	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
           <selector>
-            <type>	effect	</type>
-            <name>	particles/Tank/destruction/april_lava_fall.xml	</name>
-            <effectHP>	_TrackRear	</effectHP>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_groundDustStartSpeedOp	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_groundDustStartSpeedPos	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/ground/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	snow	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_snowDustStartSpeedOp	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_snowDustStartSpeedPos	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/snow/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	stone	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	range	</type>
+            <variable>	_speed	</variable>
+            <selector>
+              <key>	-500	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_stoneDustStartSpeedOp	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	-2	</key>
+              <type>	union	</type>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+            </selector>
+            <selector>
+              <key>	_stoneDustStartSpeedPos	</key>
+              <type>	union	</type>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/trail_{0}.xml	</name>
+                <effectHP>	_TrackRear	</effectHP>
+              </selector>
+              <selector>
+                <type>	effect	</type>
+                <name>	particles/Tank/movement/stone/dust_{0}.xml	</name>
+                <effectHP>	_TankDust	</effectHP>
+              </selector>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <key>	water	</key>
+          <type>	discrete	</type>
+          <variable>	_direction	</variable>
+          <selector>
+            <key>	_const1	</key>
+            <type>	discrete	</type>
+            <variable>	_isUnderWater	</variable>
+            <selector>
+              <key>	0	</key>
+              <type>	range	</type>
+              <variable>	_delta	</variable>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	_speed	</variable>
+                <selector>
+                  <key>	-500	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+                <selector>
+                  <key>	-2	</key>
+                  <type>	union	</type>
+                </selector>
+                <selector>
+                  <key>	2	</key>
+                  <type>	union	</type>
+                  <selector>
+                    <type>	effect	</type>
+                    <name>	particles/Tank/movement/water/trail_{0}.xml	</name>
+                    <effectHP>	_TrackRear	</effectHP>
+                  </selector>
+                </selector>
+              </selector>
+            </selector>
           </selector>
         </selector>
       </selector>
@@ -2527,6 +2646,7 @@
       <name>	TrackEffect1	</name>
       <selector>
         <type>	union	</type>
+        <isPC>	true	</isPC>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
@@ -2537,7 +2657,7 @@
 				_hullAngle:hullAngle;
 				_TrackFront:HP_Track_RFront;
 				_TrackRear:HP_Track_RRear;
-				_Turret:HP_turretJoint	</parameters>
+				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2549,7 +2669,7 @@
 				_hullAngle:hullAngle;
 				_TrackFront:HP_Track_LFront;
 				_TrackRear:HP_Track_LRear;
-				_Turret:HP_turretJoint	</parameters>
+				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2561,7 +2681,7 @@
 				_hullAngle:hullAngle;
 				_TrackFront:HP_Track_RRear;
 				_TrackRear:HP_Track_RFront;
-				_Turret:HP_turretJoint	</parameters>
+				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2573,7 +2693,7 @@
 				_hullAngle:hullAngle;
 				_TrackFront:HP_Track_LRear;
 				_TrackRear:HP_Track_LFront;
-				_Turret:HP_turretJoint	</parameters>
+				_Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2636,7 +2756,7 @@
 				_TrackFront:HP_Track_RFront;
 				_TrackUpRear:HP_TrackUp_RRear;
 				_TrackUpFront:HP_TrackUp_RFront;
-				_TankDust:HP_turretJoint	</parameters>
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2651,7 +2771,7 @@
 				_TrackFront:HP_Track_LFront;
 				_TrackUpRear:HP_TrackUp_LRear;
 				_TrackUpFront:HP_TrackUp_LFront;
-				_TankDust:HP_turretJoint	</parameters>
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2666,7 +2786,7 @@
 				_TrackFront:HP_Track_RRear;
 				_TrackUpRear:HP_TrackUp_RFront;
 				_TrackUpFront:HP_TrackUp_RRear;
-				_TankDust:HP_turretJoint	</parameters>
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -2681,57 +2801,62 @@
 				_TrackFront:HP_Track_LRear;
 				_TrackUpRear:HP_TrackUp_LFront;
 				_TrackUpFront:HP_TrackUp_LRear;
-				_TankDust:HP_turretJoint	</parameters>
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>
     <template>
-      <name>	TrackEffect1_moon	</name>
+      <name>	TrackEffect1_NPC	</name>
       <selector>
         <type>	union	</type>
+        <isPC>	false	</isPC>
         <selector>
           <type>	template	</type>
-          <name>	Slip_moon	</name>
+          <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindR;
 				_direction:directionR;
 				_const1:1;
 				_delta:deltaR;
 				_speed:speed;
 				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RRear	</parameters>
+				_TrackRear:HP_Track_RRear;
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
-          <name>	Slip_moon	</name>
+          <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindL;
 				_direction:directionL;
 				_const1:1;
 				_delta:deltaL;
 				_speed:speed;
 				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LRear	</parameters>
+				_TrackRear:HP_Track_LRear;
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
-          <name>	Slip_moon	</name>
+          <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindR;
 				_direction:directionR;
 				_const1:-1;
 				_delta:deltaR;
 				_speed:speed;
 				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RFront	</parameters>
+				_TrackRear:HP_Track_RFront;
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
-          <name>	Slip_moon	</name>
+          <name>	Slip_NPC	</name>
           <parameters>	_matkind:matkindL;
 				_direction:directionL;
 				_const1:-1;
 				_delta:deltaL;
 				_speed:speed;
 				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LFront	</parameters>
+				_TrackRear:HP_Track_LFront;
+				_TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>
@@ -2739,38 +2864,63 @@
   <effects>
     <default>
       <selector>
-        <type>	template	</type>
-        <name>	TrackEffect1	</name>
-        <constantsGroup>	medium	</constantsGroup>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1_NPC	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
       </selector>
     </default>
     <smallTankMud>
       <selector>
-        <type>	template	</type>
-        <name>	TrackEffect1	</name>
-        <constantsGroup>	small	</constantsGroup>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1	</name>
+          <constantsGroup>	small	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1_NPC	</name>
+          <constantsGroup>	small	</constantsGroup>
+        </selector>
       </selector>
     </smallTankMud>
     <mediumTankMud>
       <selector>
-        <type>	template	</type>
-        <name>	TrackEffect1	</name>
-        <constantsGroup>	medium	</constantsGroup>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1_NPC	</name>
+          <constantsGroup>	medium	</constantsGroup>
+        </selector>
       </selector>
     </mediumTankMud>
     <largeTankMud>
       <selector>
-        <type>	template	</type>
-        <name>	TrackEffect1	</name>
-        <constantsGroup>	large	</constantsGroup>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1	</name>
+          <constantsGroup>	large	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1_NPC	</name>
+          <constantsGroup>	large	</constantsGroup>
+        </selector>
       </selector>
     </largeTankMud>
-    <moonTankMud>
-      <selector>
-        <type>	template	</type>
-        <name>	TrackEffect1_moon	</name>
-        <constantsGroup>	moon	</constantsGroup>
-      </selector>
-    </moonTankMud>
   </effects>
 </trackslip_effects.xml>

@@ -1,0 +1,13 @@
+<clubunitmgr.def>
+  <Parent>	UnitMgr	</Parent>
+  <BaseMethods>
+    <onQueueMatched>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </onQueueMatched>
+    <onPlayerClubChanged>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+    </onPlayerClubChanged>
+  </BaseMethods>
+</clubunitmgr.def>

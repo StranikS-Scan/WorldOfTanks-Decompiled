@@ -183,7 +183,7 @@
     <description>	#gb_vehicles:GB23_Centurion_descr	</description>
     <shortUserString>	#gb_vehicles:GB23_Centurion_short	</shortUserString>
     <price>	2350000	</price>
-    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD	</tags>
     <level>	8	</level>
   </GB23_Centurion>
   <GB13_FV215b>
@@ -287,7 +287,7 @@
     <description>	#gb_vehicles:GB48_FV215b_183_descr	</description>
     <shortUserString>	#gb_vehicles:GB48_FV215b_183_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user	</tags>
+    <tags>	AT-SPG heavyAT-SPG largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	10	</level>
   </GB48_FV215b_183>
   <GB74_AT8>
@@ -339,7 +339,7 @@
     <description>	#gb_vehicles:GB28_Bishop_descr	</description>
     <shortUserString>	#gb_vehicles:GB28_Bishop_short	</shortUserString>
     <price>	405000	</price>
-    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user enhancedVertical_springs_user HD	</tags>
     <level>	5	</level>
   </GB28_Bishop>
   <GB29_Crusader_5inch>
@@ -366,7 +366,7 @@
     <description>	#gb_vehicles:GB77_FV304_descr	</description>
     <shortUserString>	#gb_vehicles:GB77_FV304_short	</shortUserString>
     <price>	930000	</price>
-    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user HD	</tags>
     <level>	6	</level>
   </GB77_FV304>
   <GB79_FV206>
@@ -577,8 +577,7 @@
     <shortUserString>	#gb_vehicles:GB70_N_FV4202_105_short	</shortUserString>
     <price>	7300	  <gold></gold>
     </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank secret aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD inGame	</tags>
+    <tags>	mediumTank aimingStabilizer_Mk1_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD inGame	</tags>
     <level>	8	</level>
   </GB70_N_FV4202_105>
   <GB85_Cromwell_Berlin>
@@ -597,12 +596,23 @@
     <userString>	#gb_vehicles:GB35_Sentinel_AC_IV	</userString>
     <description>	#gb_vehicles:GB35_Sentinel_AC_IV_descr	</description>
     <shortUserString>	#gb_vehicles:GB35_Sentinel_AC_IV_short	</shortUserString>
+    <price>	3550	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD	</tags>
+    <level>	6	</level>
+  </GB35_Sentinel_AC_IV>
+  <GB88_T95_Chieftain_turret>
+    <id>	220	</id>
+    <userString>	#gb_vehicles:GB88_T95_Chieftain_turret	</userString>
+    <description>	#gb_vehicles:GB88_T95_Chieftain_turret_descr	</description>
+    <shortUserString>	#gb_vehicles:GB88_T95_Chieftain_turret_short	</shortUserString>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedHorizontal_springs_class2_user HD secret testTank	</tags>
-    <level>	6	</level>
-  </GB35_Sentinel_AC_IV>
+    <tags>	heavyTank special aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret testTank	</tags>
+    <level>	10	</level>
+  </GB88_T95_Chieftain_turret>
   <GB23_Centurion_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:GB23_Centurion_IGR	</userString>
@@ -636,7 +646,7 @@
     <description>	#igr_vehicles:GB77_FV304_IGR_descr	</description>
     <shortUserString>	#igr_vehicles:GB77_FV304_IGR_short	</shortUserString>
     <price>	1	</price>
-    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user premiumIGR secret	</tags>
+    <tags>	SPG lightSPG mediumCaliberHowitzerRammer_user improvedVentilation_class1_user wetCombatPack_class1_user premiumIGR secret HD	</tags>
     <level>	6	</level>
   </GB77_FV304_IGR>
   <GB72_AT15_IGR>

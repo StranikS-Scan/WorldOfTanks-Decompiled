@@ -579,19 +579,15 @@ class AimMarker(EntityMarker):
 
 class AreaMarker(AimMarker):
 
-    def __init__(self, entityID, varRef, modelData, groundData, worldData, minimapData, createInd=True):
+    def __init__(self, entityID, varRef, modelData, groundData, worldData, createInd=True):
         super(AreaMarker, self).__init__(entityID, varRef, modelData, worldData, createInd=createInd)
         self.__groundData = groundData
-        self.__minimapData = minimapData
 
     def getTypeID(self):
         return TRIGGER_TYPE.AREA
 
     def getGroundData(self):
         return self.__groundData
-
-    def getMinimapData(self):
-        return self.__minimapData
 
 
 class VehicleMarker(EntityMarker):

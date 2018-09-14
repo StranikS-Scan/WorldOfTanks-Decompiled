@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
-from ConnectionManager import connectionManager, CONNECTION_METHOD
+from ConnectionManager import connectionManager
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.LobbyContext import g_lobbyContext

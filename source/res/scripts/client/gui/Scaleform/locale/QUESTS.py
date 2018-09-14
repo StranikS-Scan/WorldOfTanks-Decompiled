@@ -3,6 +3,12 @@
 
 
 class QUESTS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -45,6 +51,7 @@ class QUESTS(object):
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
+    BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
     QUESTS_TITLE_UNGOUPEDQUESTS = '#quests:quests/title/ungoupedQuests'
@@ -677,6 +684,9 @@ class QUESTS(object):
     DETAILS_MODIFIERS_VEHICLE_RENT_NATION_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/vehicle/rent/nation/creditsPriceMultiplier'
     DETAILS_MODIFIERS_CUSTOMIZATION_VEHCAMOUFLAGE = '#quests:details/modifiers/customization/vehCamouflage'
     DETAILS_MODIFIERS_CUSTOMIZATION_GROUPEMBLEM = '#quests:details/modifiers/customization/groupEmblem'
+    DETAILS_MODIFIERS_BOOSTER = '#quests:details/modifiers/booster'
+    DETAILS_MODIFIERS_BOOSTERS_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/boosters/goldPriceMultiplier'
+    DETAILS_MODIFIERS_BOOSTERS_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/boosters/creditsPriceMultiplier'
     CLASSES_LIGHTTANK = '#quests:classes/lightTank'
     CLASSES_MEDIUMTANK = '#quests:classes/mediumTank'
     CLASSES_HEAVYTANK = '#quests:classes/heavyTank'
@@ -765,21 +775,33 @@ class QUESTS(object):
 
     @staticmethod
     def questscontrol_additionaltitle(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#quests:questsControl/additionalTitle/%s' % key
         if outcome not in QUESTS.QUESTSCONTROL_ADDITIONALTITLE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def questspersonalwelcomeview_textblock_body(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#quests:QuestsPersonalWelcomeView/textBlock/body/%s' % key
         if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_BODY_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def questspersonalwelcomeview_textblock_header(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#quests:QuestsPersonalWelcomeView/textBlock/header/%s' % key
         if outcome not in QUESTS.QUESTSPERSONALWELCOMEVIEW_TEXTBLOCK_HEADER_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

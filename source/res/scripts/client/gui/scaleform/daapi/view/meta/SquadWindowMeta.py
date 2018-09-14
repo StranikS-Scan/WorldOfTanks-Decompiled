@@ -3,9 +3,24 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyMainWindow import BaseRallyMainWindow
 
 class SquadWindowMeta(BaseRallyMainWindow):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends BaseRallyMainWindow
+    null
+    """
 
     def as_setComponentIdS(self, componentId):
+        """
+        :param componentId:
+        :return :
+        """
         return self.flashObject.as_setComponentId(componentId) if self._isDAAPIInited() else None
 
-    def as_updateEventTitleS(self):
-        return self.flashObject.as_updateEventTitle() if self._isDAAPIInited() else None
+    def as_setWindowTitleS(self, value):
+        """
+        :param value:
+        :return :
+        """
+        return self.flashObject.as_setWindowTitle(value) if self._isDAAPIInited() else None

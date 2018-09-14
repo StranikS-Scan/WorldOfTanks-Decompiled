@@ -6,7 +6,6 @@ class CONTROLLER(CONST_CONTAINER):
     RELOGIN = 'relogin'
     AOGAS = 'aogas'
     GAME_SESSION = 'gameSession'
-    CAPTCHA = 'captcha'
     RENTALS = 'rentals'
     IGR = 'igr'
     WALLET = 'wallet'
@@ -24,6 +23,7 @@ class CONTROLLER(CONST_CONTAINER):
     AWARD = 'award'
     BOOSTERS = 'boosters'
     FALLOUT = 'fallout'
+    CLAN_LOCK = 'clanLock'
 
 
 class BROWSER(CONST_CONTAINER):

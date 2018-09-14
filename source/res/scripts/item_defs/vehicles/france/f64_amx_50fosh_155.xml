@@ -9,6 +9,13 @@
     <forward>	50	</forward>
     <backward>	13	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.146	</moving>
+    <still>	0.243	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <camouflageNetBonus>	0.15	</camouflageNetBonus>
+    <firePenalty>	0.365	</firePenalty>
+  </invisibility>
   <repairCost>	11.32	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -81,7 +88,8 @@
       <turret>	-0.0044 0.527809 2.16238	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F64_AMX_50Fosh_155/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F64_AMX_50Fosh_155/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F64_AMX_50Fosh_155/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -227,13 +235,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.13999 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F64_AMX_50Fosh_155/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F64_AMX_50Fosh_155/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F64_AMX_50Fosh_155/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.33198 2.23938	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -540,6 +547,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <turretYawLimits>	-6 6	</turretYawLimits>
           <models>
             <undamaged>	vehicles/french/F64_AMX_50Fosh_155/normal/lod0/Gun_02.model	</undamaged>
@@ -547,7 +555,8 @@
             <exploded>	vehicles/french/F64_AMX_50Fosh_155/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F64_AMX_50Fosh_155/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F64_AMX_50Fosh_155/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F64_AMX_50Fosh_155/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -571,15 +580,14 @@
         <exploded>	vehicles/french/F64_AMX_50Fosh_155/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F64_AMX_50Fosh_155/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F64_AMX_50Fosh_155/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F64_AMX_50Fosh_155/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
-      <turretRotatorSoundManual></turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_man_trav_07	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear></turretRotatorSoundGear>
     </Turret_1_AMX_50Fosh_155>
   </turrets0>
   <engines>
@@ -591,6 +599,24 @@
   <radios>
     <SCR_619>	shared	</SCR_619>
   </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_155mm_SA_58_AC>
+        <delta>	1.164677	</delta>
+      </_155mm_SA_58_AC>
+    </guns>
+    <chassis>
+      <Chassis_AMX_50Fosh_155_2>
+        <alpha>	0.1288	</alpha>
+      </Chassis_AMX_50Fosh_155_2>
+    </chassis>
+    <engines>
+      <Saurer>
+        <bravo>	264.3203	</bravo>
+      </Saurer>
+    </engines>
+    <armour>	1.16343034	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

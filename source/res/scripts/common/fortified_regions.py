@@ -132,10 +132,9 @@ class FortDivision(object):
 
 
 class FortifiedRegionCache(object):
-    __slots__ = ('isSupported', 'clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'defenseHourShutdownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'battleConsumablesCount', 'buildings', 'orders', 'orderTypeIDToBuildTypeID', 'transportLevels', 'defenceConditions', 'divisions', 'fort_divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'maxSorties', 'consumablesSlotCount', 'maxLifetimeConsumable', 'bonusFactors', 'equipmentToOrder', 'fortInfluencePointsFactors')
+    __slots__ = ('clanMembersForStart', 'startResource', 'maxDirections', 'clanMembersPerDirection', 'defenseHourPreorderTime', 'defenseHourCooldownTime', 'defenseHourShutdownTime', 'offdayPreorderTime', 'offdayCooldownTime', 'minVacationPreorderTime', 'maxVacationPreorderTime', 'minVacationDuration', 'maxVacationDuration', 'vacationCooldownTime', 'vacationCooldownTime', 'allowSortieLegionaries', 'maxLegionariesCount', 'battleConsumablesCount', 'buildings', 'orders', 'orderTypeIDToBuildTypeID', 'transportLevels', 'defenceConditions', 'divisions', 'fort_divisions', 'fortBattleMaps', 'isFirstDirectionFree', 'openDirAttacksTime', 'attackCooldownTime', 'attackPreorderTime', 'attackMaxTime', 'mapCooldownTime', 'changePeripheryCooldownTime', 'maxSorties', 'consumablesSlotCount', 'maxLifetimeConsumable', 'bonusFactors', 'equipmentToOrder', 'fortInfluencePointsFactors')
 
     def __init__(self):
-        self.isSupported = False
         self.clanMembersForStart = 0
         self.startResource = 0
         self.maxDirections = 0
@@ -185,7 +184,6 @@ def init():
     geometryNamesToIDs = dict([ (arenaType.geometryName, arenaType.geometryID) for arenaType in ArenaType.g_cache.itervalues() if not arenaType.explicitRequestOnly ])
     g_cache = FortifiedRegionCache()
     section = ResMgr.openSection(_CONFIG_FILE)
-    g_cache.isSupported = section['is_supported'].asBool
     g_cache.clanMembersForStart = section['clan_members_for_start'].asInt
     g_cache.startResource = section['start_resource'].asInt
     g_cache.maxDirections = section['max_directions'].asInt

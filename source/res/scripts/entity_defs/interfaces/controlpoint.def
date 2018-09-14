@@ -1,29 +1,8 @@
 <controlpoint.def>
-  <Properties>
-    <arenaBase>
-      <Type>	MAILBOX	</Type>
-      <Flags>	CELL_PRIVATE	</Flags>
-    </arenaBase>
-    <arena>
-      <Type>	MAILBOX	</Type>
-      <Flags>	BASE	</Flags>
-    </arena>
-    <radius>
-      <Type>	FLOAT32	</Type>
-      <Flags>	CELL_PUBLIC	</Flags>
-      <Default>	25.0	</Default>
-      <Editable>	true	</Editable>
-    </radius>
-    <isActive>
-      <Type>	BOOL	</Type>
-      <Flags>	CELL_PUBLIC	</Flags>
-    </isActive>
-  </Properties>
-  <CellMethods>
-    <start></start>
-    <stop></stop>
-  </CellMethods>
-  <BaseMethods>
-    <smartDestroy></smartDestroy>
-  </BaseMethods>
+  <Implements>
+    <Interface>	EntityTrap	</Interface>
+  </Implements>
+  <TempProperties>
+    <_ControlPoint__p></_ControlPoint__p>
+  </TempProperties>
 </controlpoint.def>

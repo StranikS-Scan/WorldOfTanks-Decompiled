@@ -1,7 +1,6 @@
 <radios.xml>
   <ids>
     <_Type94_Hei_1>	0	</_Type94_Hei_1>
-    <Alarm_flags>	1	</Alarm_flags>
     <_Type94_Otsu>	2	</_Type94_Otsu>
     <_Type94_Hei>	3	</_Type94_Hei>
     <_Hei>	4	</_Hei>
@@ -20,18 +19,6 @@
     <_Type67_IGR>	60003	</_Type67_IGR>
   </ids>
   <shared>
-    <Alarm_flags_bot>
-      <userString>	#japan_vehicles:Alarm_flags_bot	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	24	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Alarm_flags_bot>
     <_Type94_Hei_1>
       <userString>	#japan_vehicles:_Type94_Hei_1	</userString>
       <tags></tags>
@@ -44,8 +31,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </_Type94_Hei_1>
-    <Alarm_flags>
-      <userString>	#japan_vehicles:Alarm_flags	</userString>
+    <Alarm_flags_bot>
+      <userString>	#japan_vehicles:Alarm_flags_bot	</userString>
       <tags></tags>
       <level>	1	</level>
       <price>	0	</price>
@@ -55,7 +42,7 @@
       <maxHealth>	40	</maxHealth>
       <maxRegenHealth>	24	</maxRegenHealth>
       <repairCost>	0	</repairCost>
-    </Alarm_flags>
+    </Alarm_flags_bot>
     <_Type94_Otsu>
       <userString>	#japan_vehicles:_Type94_Otsu	</userString>
       <tags></tags>

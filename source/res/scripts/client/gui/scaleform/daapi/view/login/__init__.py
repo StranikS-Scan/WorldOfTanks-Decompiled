@@ -8,6 +8,10 @@ from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.shared.events import LoginEventEx, LoginCreateEvent
 
+def getContextMenuHandlers():
+    pass
+
+
 def getViewSettings():
     from gui.Scaleform.daapi.view.login.EULA import EULADlg
     from gui.Scaleform.daapi.view.login.IntroPage import IntroPage

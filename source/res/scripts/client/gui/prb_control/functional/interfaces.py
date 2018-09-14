@@ -262,6 +262,9 @@ class IPreQueueListener(object):
     def onKickedFromArena(self, queueType, *args):
         pass
 
+    def onArenaJoinFailure(self, queueType, *args):
+        pass
+
     def onPreQueueSettingsChanged(self, diff):
         pass
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportRespawnView.py
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -7,10 +8,9 @@ from gui.Scaleform.daapi.view.meta.CyberSportRespawnViewMeta import CyberSportRe
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.utils.functions import getArenaGeomentryName
-from messenger.gui import events_dispatcher
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
 from messenger.ext import channel_num_gen
-from constants import PREBATTLE_TYPE
+from messenger.gui import events_dispatcher
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 class CyberSportRespawnView(CyberSportRespawnViewMeta, LobbySubView, UnitListener):
     __background_alpha__ = 1.0

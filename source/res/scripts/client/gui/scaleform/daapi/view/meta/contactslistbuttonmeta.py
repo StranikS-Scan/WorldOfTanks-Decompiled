@@ -3,6 +3,17 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class ContactsListButtonMeta(BaseDAAPIComponent):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    @extends BaseDAAPIComponent
+    null
+    """
 
     def as_setContactsCountS(self, num):
+        """
+        :param num:
+        :return :
+        """
         return self.flashObject.as_setContactsCount(num) if self._isDAAPIInited() else None

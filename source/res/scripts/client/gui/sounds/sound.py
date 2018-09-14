@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/sounds/sound.py
 import BigWorld
 import SoundGroups
-from debug_utils import LOG_DEBUG
 
 class Sound(object):
 
@@ -18,7 +17,7 @@ class Sound(object):
         return self.__isPlaying
 
     @property
-    def fmodSound(self):
+    def sound(self):
         return self.__sndTick
 
     def play(self):
@@ -32,6 +31,11 @@ class Sound(object):
 
 
 class SoundSequence(object):
+    """
+    :param sounds: [list of strings] sounds pathes
+    :param beforePlayCB: method with one argument @snd. Must be called before start playing
+    :param afterPlayCB: the same as @beforePlayCB, but must be called after stop playing
+    """
 
     def __init__(self, sounds, beforePlayCB=None, afterPlayCB=None):
         assert sounds is not None
@@ -71,7 +75,7 @@ class SoundSequence(object):
     def __clear(self):
         self.__soundsIter = None
         if self.__curPlayingSnd is not None:
-            self.__curPlayingSnd.fmodSound.setCallback('EVENTFINISHED', None)
+            self.__curPlayingSnd.sound.setCallback('EVENTFINISHED', None)
             self.__curPlayingSnd.stop()
             self.__curPlayingSnd = None
         self.__clearCallback()
@@ -84,7 +88,7 @@ class SoundSequence(object):
         try:
             self.__curPlayingSnd = Sound(next(self.__soundsIter))
             self.__notifyBeforePlay(self.__curPlayingSnd)
-            self.__curPlayingSnd.fmodSound.setCallback('EVENTFINISHED', self.__finishCallback)
+            self.__curPlayingSnd.sound.setCallback('EVENTFINISHED', self.__finishCallback)
             self.__curPlayingSnd.play()
         except StopIteration:
             self.__clear()

@@ -22,6 +22,7 @@ from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.shared.gui_items.dossier import getAchievementFactory
 from dossiers2.ui import achievements
 from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
+from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
 
 class FortBattleResultsWindow(FortBattleResultsWindowMeta):
 
@@ -66,25 +67,7 @@ class FortBattleResultsWindow(FortBattleResultsWindowMeta):
 
     @classmethod
     def _packAchievement(cls, achieve, isUnique=False):
-        icons = achieve.getIcons()
-        rank, i18nValue = (None, None)
-        if achieve.getType() != ACHIEVEMENT_TYPE.SERIES:
-            rank, i18nValue = achieve.getValue(), achieve.getI18nValue()
-        specialIcon = icons.get(MarkOnGunAchievement.IT_95X85, None)
-        return {'type': achieve.getName(),
-         'block': achieve.getBlock(),
-         'inactive': False,
-         'icon': achieve.getSmallIcon() if specialIcon is None else '',
-         'rank': rank,
-         'localizedValue': i18nValue,
-         'unic': isUnique,
-         'rare': False,
-         'title': achieve.getUserName(),
-         'description': achieve.getUserDescription(),
-         'rareIconId': None,
-         'isEpic': achieve.hasRibbon(),
-         'specialIcon': specialIcon,
-         'customData': []}
+        return AchievementsUtils.getBattleResultAchievementData(achieve, achieve.getName(), [], isUnique)
 
     def __populatePersonalMedals(self):
         self.__data['dossierType'] = None

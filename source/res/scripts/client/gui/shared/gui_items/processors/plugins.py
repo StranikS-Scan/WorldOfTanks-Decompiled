@@ -1,14 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
 from collections import namedtuple
-from constants import MAX_VEHICLE_LEVEL
 from adisp import process, async
+from debug_utils import LOG_WARNING
 from account_helpers.AccountSettings import AccountSettings
 from gui import DialogsInterface
-from gui.shared import g_itemsCache, REQ_CRITERIA
+from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.money import Currency
 from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, DismissTankmanDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
+_SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
+ Currency.GOLD: 'SHELLS_NO_GOLD'}
+_EQS_MONEY_ERRORS = {Currency.CREDITS: 'EQS_NO_CREDITS',
+ Currency.GOLD: 'EQS_NO_GOLD'}
 PluginResult = namedtuple('PluginResult', 'success errorMsg ctx')
 
 def makeSuccess(**kwargs):
@@ -243,11 +249,16 @@ class MoneyValidator(SyncValidator):
 
     def _validate(self):
         stats = g_itemsCache.items.stats
-        if stats.credits < self.price[0]:
-            return makeError('not_enough_credits')
-        if self.price[1] and not stats.mayConsumeWalletResources:
-            return makeError('wallet_not_available')
-        return makeError('not_enough_gold') if stats.gold < self.price[1] else makeSuccess()
+        delta = self.price - stats.money
+        delta = delta.toNonNegative()
+        if delta:
+            currency = delta.getCurrency(byWeight=False)
+            if currency == Currency.GOLD and not stats.mayConsumeWalletResources:
+                error = 'wallet_not_available'
+            else:
+                error = 'not_enough_{}'.format(currency)
+            return makeError(error)
+        return makeSuccess()
 
 
 class WalletValidator(SyncValidator):
@@ -278,16 +289,25 @@ class VehicleLayoutValidator(SyncValidator):
         self.eqsPrice = eqsPrice
 
     def _validate(self):
-        credits, gold = g_itemsCache.items.stats.money
-        if gold < self.shellsPrice[1]:
-            return makeError('SHELLS_NO_GOLD')
-        gold -= self.shellsPrice[1]
-        if credits < self.shellsPrice[0]:
-            return makeError('SHELLS_NO_CREDITS')
-        credits -= self.shellsPrice[0]
-        if gold < self.eqsPrice[1]:
-            return makeError('EQS_NO_GOLD')
-        return makeError('EQS_NO_CREDITS') if credits < self.eqsPrice[0] else makeSuccess()
+        money = g_itemsCache.items.stats.money
+        error = self.__checkMoney(money, self.shellsPrice, _SHELLS_MONEY_ERRORS)
+        if error is not None:
+            return error
+        else:
+            money = money - self.shellsPrice
+            error = self.__checkMoney(money, self.eqsPrice, _EQS_MONEY_ERRORS)
+            return error if error is not None else makeSuccess()
+
+    def __checkMoney(self, money, price, errors):
+        shortage = money.getShortage(price)
+        if shortage:
+            currency, value = shortage[0]
+            if currency in errors:
+                return makeError(errors[currency])
+            else:
+                LOG_WARNING('Unexpected case: unknown currency!')
+                return makeError()
+        return None
 
 
 class BarracksSlotsValidator(SyncValidator):
@@ -306,6 +326,19 @@ class FreeTankmanValidator(SyncValidator):
 
     def _validate(self):
         return makeError('free_tankmen_limit') if not g_itemsCache.items.stats.freeTankmenLeft else makeSuccess()
+
+
+class TankmanDropSkillValidator(SyncValidator):
+    """
+    Validates that there is at least one skill for dropping.
+    """
+
+    def __init__(self, tankman, isEnabled=True):
+        super(TankmanDropSkillValidator, self).__init__(isEnabled)
+        self.__tankman = tankman
+
+    def _validate(self):
+        return makeSuccess() if self.__tankman is not None and len(self.__tankman.skills) else makeError('server_error')
 
 
 class GroupOperationsValidator(SyncValidator):
@@ -468,7 +501,7 @@ class VehicleFreeLimitConfirmator(MessageInformator):
         self.crewType = crewType
 
     def _activeHandler(self):
-        return self.vehicle.buyPrice == (0, 0) and self.crewType < 1 and not g_itemsCache.items.stats.freeVehiclesLeft
+        return not self.vehicle.buyPrice and self.crewType < 1 and not g_itemsCache.items.stats.freeVehiclesLeft
 
 
 class PotapovQuestValidator(SyncValidator):

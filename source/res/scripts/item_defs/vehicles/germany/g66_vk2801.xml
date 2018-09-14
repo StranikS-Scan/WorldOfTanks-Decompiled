@@ -1,0 +1,971 @@
+<g66_vk2801.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	68	</forward>
+    <backward>	22	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.25	</moving>
+    <still>	0.25	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.375	</firePenalty>
+  </invisibility>
+  <repairCost>	6.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/german/G66_VK2801/VK2801_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	50	</armor_2>
+      <armor_3>	30	</armor_3>
+      <armor_4>	30	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	50	</armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	10688	</weight>
+    <maxHealth>	440	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/german/G66_VK2801/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.42 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.42 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	-0.0023 0.973985 -0.076	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/german/G66_VK2801/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.563529 1.06144 2.55078	</rayStart>
+        <rayEnd>	-0.563529 0.238473 1.98269	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/german/G66_VK2801/VK2801_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_VK2801>
+      <userString>	#germany_vehicles:Chassis_VK2801	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_VK2801_short	</shortUserString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	4450.0	</price>
+      <unlocks>
+        <chassis>	Chassis_VK2801_2	  <cost>	5600	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	24	</leftTrack>
+        <rightTrack>	24	</rightTrack>
+      </armor>
+      <weight>	7200	</weight>
+      <maxLoad>	26500	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.9	</terrainResistance>
+      <brakeForce>	27000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G66_VK2801/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.46 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.68	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.407979	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.334639	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.408152	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.334545	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.433831	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.438399	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.779015 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G66_VK2801/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2618 1.63169	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.383040 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.168520 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.200420	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_VK2801>
+    <Chassis_VK2801_2>
+      <userString>	#germany_vehicles:Chassis_VK2801_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_VK2801_2_short	</shortUserString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <armor>
+        <leftTrack>	24	</leftTrack>
+        <rightTrack>	24	</rightTrack>
+      </armor>
+      <weight>	7200	</weight>
+      <maxLoad>	29000	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.7	</terrainResistance>
+      <brakeForce>	30000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	46	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	155	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/german/G66_VK2801/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	smallTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.46 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.68	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.407979	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.334639	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.44	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.408152	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.334545	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.433831	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.438399	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.779015 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G66_VK2801/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.2618 1.63169	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.408450 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.168520 0.000000	</row1>
+            <row2>	0.000000 0.000000 6.200420	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_VK2801_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_VK2801>
+      <userString>	#germany_vehicles:Turret_1_VK2801	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	4500	</price>
+      <unlocks>
+        <turret>	Turret_2_VK2801	  <cost>	5340	</cost>
+        </turret>
+      </unlocks>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	15	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	50	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	40	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5300	</weight>
+      <maxHealth>	110	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_50mm_KwK_39_L60>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_KwK_37_L24	  <cost>	800	</cost>
+            </gun>
+          </unlocks>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0110828 -0.0181859 2.05824	</rayStart>
+              <rayEnd>	-0.135935 -0.113693 2.05527	</rayEnd>
+              <rayUp>	0.04 0.038 1	</rayUp>
+              <size>	0.427	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_50mm_KwK_39_L60>
+        <_75mm_KwK_37_L24>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_KwK_40_L43	  <cost>	2140	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0114957 -0.0126768 0.980591	</rayStart>
+              <rayEnd>	-0.029933 -0.163705 0.959179	</rayEnd>
+              <rayUp>	0.062 0.053 1	</rayUp>
+              <size>	0.198	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_KwK_37_L24>
+        <_75mm_KwK_40_L43>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <unlocks>
+            <gun>	_75mm_KwK_40_L48	  <cost>	3400	</cost>
+            </gun>
+          </unlocks>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0111227 -0.0182759 2.19	</rayStart>
+              <rayEnd>	-0.12065 -0.105632 2.21411	</rayEnd>
+              <rayUp>	0.06 0.055 1	</rayUp>
+              <size>	0.301	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L43>
+        <_75mm_KwK_40_L48>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 0.5 0.569444 0.5 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0106516 -0.0330084 2.19	</rayStart>
+              <rayEnd>	0.00436115 -0.189998 2.15926	</rayEnd>
+              <rayUp>	0.063 0.057 1	</rayUp>
+              <size>	0.301	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.835 0.835 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L48>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/german/G66_VK2801/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G66_VK2801/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.0023 0.316 0.938	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.277 0.577121 0.609583	</rayStart>
+          <rayEnd>	-0.365895 0.168769 0.553601	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.23152 0.54931 -0.334542	</rayStart>
+          <rayEnd>	-0.345554 0.143166 -0.110702	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.23152 0.54931 -0.334542	</rayStart>
+          <rayEnd>	0.345554 0.143166 -0.110702	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.277 0.577121 0.609583	</rayStart>
+          <rayEnd>	0.365895 0.168769 0.553601	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 0.562 0.191 0.297 1.000 0.459 0.500 0.300 0.500 0.172 0.653 0.069	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_1_VK2801>
+    <Turret_2_VK2801>
+      <userString>	#germany_vehicles:Turret_2_VK2801	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	17500	</price>
+      <unlocks>
+        <gun>	_105mm_StuH42_L28Pz	  <cost>	3800.0	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	30	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	15	</armor_5>
+        <armor_6>	15	</armor_6>
+        <armor_7>	50	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	0	</armor_9>
+        <armor_10>	50	</armor_10>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	5500	</weight>
+      <maxHealth>	170	</maxHealth>
+      <rotationSpeed>	44	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	120	</maxHealth>
+        <maxRegenHealth>	60	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_50mm_KwK_39_L60>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0110828 -0.0181859 2.19	</rayStart>
+              <rayEnd>	0.0694547 -0.184778 2.13047	</rayEnd>
+              <rayUp>	0.039 0.036 1	</rayUp>
+              <size>	0.274	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_50mm_KwK_39_L60>
+        <_75mm_KwK_37_L24>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	10	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0114957 -0.0106769 0.97	</rayStart>
+              <rayEnd>	-0.0301948 -0.167665 0.978305	</rayEnd>
+              <rayUp>	0.063 0.054 1	</rayUp>
+              <size>	0.181	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_75mm_KwK_37_L24>
+        <_75mm_KwK_40_L43>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0111227 -0.0172759 2.24	</rayStart>
+              <rayEnd>	-0.0432988 -0.168824 2.20551	</rayEnd>
+              <rayUp>	0.06 0.055 2	</rayUp>
+              <size>	0.263	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L43>
+        <_75mm_KwK_40_L48>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 0.5 0.569444 0.5 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0106516 -0.0330084 2.25	</rayStart>
+              <rayEnd>	0.0203158 -0.194517 2.23004	</rayEnd>
+              <rayUp>	0.06 0.055 2	</rayUp>
+              <size>	0.203	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_75mm_KwK_40_L48>
+        <_105mm_StuH42_L28Pz>	shared	  <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.055556 5 0.119218 10 0.366894 10 0.430556 1 0.569444 1 0.633106 10 0.880782 10 0.944444 5 1 5	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G66_VK2801/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/german/G66_VK2801/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0109281 -0.01547 1.54688	</rayStart>
+              <rayEnd>	-0.0137225 -0.157129 1.53164	</rayEnd>
+              <rayUp>	0.083 0.076 1	</rayUp>
+              <size>	0.279	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_105mm_StuH42_L28Pz>
+      </guns>
+      <models>
+        <undamaged>	vehicles/german/G66_VK2801/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/german/G66_VK2801/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/german/G66_VK2801/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/german/G66_VK2801/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G66_VK2801/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.0023 0.316 0.938	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.00436 0.452628 0.596027	</rayStart>
+          <rayEnd>	-0.639916 0.289286 0.573634	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <inscription>
+          <rayStart>	-1.22261 0.546656 -0.374619	</rayStart>
+          <rayEnd>	-0.336644 0.140512 -0.15078	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.22261 0.546656 -0.374619	</rayStart>
+          <rayEnd>	0.336644 0.140512 -0.15078	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.74	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.00436 0.452628 0.596027	</rayStart>
+          <rayEnd>	0.639916 0.289286 0.573634	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.970 0.000 1.000 0.000 0.479 0.102 0.297 1.000 0.459 0.500 0.300 0.500 0.159 0.536 0.185	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+    </Turret_2_VK2801>
+  </turrets0>
+  <engines>
+    <Argus_12LD330H>	shared	  <unlocks>
+        <engine>	Maybach_HL_210_TRM_P30	  <cost>	11250	</cost>
+        </engine>
+      </unlocks>
+    </Argus_12LD330H>
+    <Maybach_HL_210_TRM_P30>	shared	  <unlocks>
+        <vehicle>	G113_SP_I_C	  <cost>	43100	</cost>
+        </vehicle>
+      </unlocks>
+    </Maybach_HL_210_TRM_P30>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <FuG5>	shared	  <unlocks>
+        <radio>	FuG7	  <cost>	1360.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG5>
+    <FuG7>	shared	  <unlocks>
+        <radio>	FuG_Spr.A	  <cost>	4500.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG7>
+    <FuG_Spr.A>	shared	  <unlocks>
+        <radio>	FuG12	  <cost>	7200.0	</cost>
+        </radio>
+      </unlocks>
+    </FuG_Spr.A>
+    <FuG12>	shared	</FuG12>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_VK2801>
+        <alpha>	0.07245	</alpha>
+      </Chassis_VK2801>
+      <Chassis_VK2801_2>
+        <alpha>	0.0644	</alpha>
+      </Chassis_VK2801_2>
+    </chassis>
+    <engines>
+      <Argus_12LD330H>
+        <bravo>	145.3762	</bravo>
+      </Argus_12LD330H>
+      <Maybach_HL_210_TRM_P30>
+        <bravo>	171.8082	</bravo>
+      </Maybach_HL_210_TRM_P30>
+    </engines>
+    <armour>	0.913737201	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	germany_cross	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</g66_vk2801.xml>

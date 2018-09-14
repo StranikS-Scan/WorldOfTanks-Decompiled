@@ -12,6 +12,10 @@ from debug_utils import *
 _divisionToRecordNames = {'MIDDLE': ('middleBattlesCount', 'fortResourceInMiddle', 'middleWins'),
  'CHAMPION': ('championBattlesCount', 'fortResourceInChampion', 'championWins'),
  'ABSOLUTE': ('absoluteBattlesCount', 'fortResourceInAbsolute', 'absoluteWins')}
+_saveRecordsInAccountDescr = {BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15: [{'block': 'achievements',
+                                          'records': ('maxInvincibleSeries', 'maxDiehardSeries', 'maxSniperSeries', 'maxKillingSeries', 'maxPiercingSeries', 'maxAimerSeries')}],
+ BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7: [{'block': 'achievements7x7',
+                                        'records': ('maxTacticalBreakthroughSeries',)}]}
 
 def updateFortSortieDossier(dossierDescr, divisionName, winner, fortResource, isCommander):
     if divisionName not in _divisionToRecordNames:
@@ -127,11 +131,10 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
     bonusCaps = BONUS_CAPS.get(battleResults['bonusType'])
     maxValuesChanged, frags8p = __updateDossierCommonPart(DOSSIER_TYPE.ACCOUNT, dossierDescr, battleResults, dossierXP, winnerTeam)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
-        for serieName in INBATTLE_SERIES:
-            maxSeriesAchievementName = 'max' + serieName.capitalize() + 'Series'
-            dossierDescr['achievements'][maxSeriesAchievementName] = max(dossierDescr['achievements'][maxSeriesAchievementName], reduce(max, [ vd[1]['achievements'][maxSeriesAchievementName] for vd in vehDossiers.itervalues() ], 0))
+        for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
+            __updateAccountRecords(bonusCaps, dossierDescr, vehDossierDescr)
 
-    if bool(bonusCaps & BONUS_CAPS.DOSSIER_15X15):
+    if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15):
         _updatePerBattleSeries(dossierDescr['achievements'], 'reliableComradeSeries', battleResults['tdamageDealt'] == 0 and not battleResults['tdestroyedModules'])
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_7X7):
         __updateCapturePointsWithBaseCapture(dossierDescr, battleResults)
@@ -215,6 +218,18 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
 
     for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
         __updateAccountDossierCuts(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr)
+
+
+def __updateAccountRecords(bonusCaps, dossierDescr, vehDossierDescr):
+    for cap, descr in _saveRecordsInAccountDescr.iteritems():
+        if bool(bonusCaps & cap):
+            for item in descr:
+                blockName = item['block']
+                achievements = dossierDescr[blockName]
+                vehAchievements = vehDossierDescr[blockName]
+                for recordName in item['records']:
+                    if vehAchievements[recordName] > achievements[recordName]:
+                        achievements[recordName] = vehAchievements[recordName]
 
 
 def updateRated7x7Dossier(dossierDescr, battleResults, dossierXP):

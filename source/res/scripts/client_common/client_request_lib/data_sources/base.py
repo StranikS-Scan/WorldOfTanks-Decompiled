@@ -209,6 +209,7 @@ class BaseDataAccessor(object):
                 - prime_time
                 - game_map
                 - turns_owned
+                - arena_id
         """
         pass
 

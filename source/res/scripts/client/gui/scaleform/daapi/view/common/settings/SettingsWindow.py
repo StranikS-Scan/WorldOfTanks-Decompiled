@@ -1,29 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
-import BigWorld
 import VOIP
-import SoundGroups
 from debug_utils import *
 from gui.GraphicsPresets import GraphicsPresets
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
-from gui.battle_control import g_sessionProvider
 from gui.shared.utils import flashObject2Dict, decorators
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from account_helpers.settings_core.options import APPLY_METHOD
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
+_PAGES = (SETTINGS.GAMETITLE,
+ SETTINGS.GRAFICTITLE,
+ SETTINGS.SOUNDTITLE,
+ SETTINGS.KEYBOARDTITLE,
+ SETTINGS.CURSORTITLE,
+ SETTINGS.MARKERTITLE)
+_PAGES_INDICES = dict(((v, k) for k, v in enumerate(_PAGES)))
+_g_lastTabIdx = 0
+
+def _getLastTabIndex():
+    global _g_lastTabIdx
+    return _g_lastTabIdx
+
+
+def _setLastTabIndex(idx):
+    global _g_lastTabIdx
+    _g_lastTabIdx = idx
+
 
 class SettingsWindow(SettingsWindowMeta):
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
         self.__redefinedKeyModeEnabled = ctx.get('redefinedKeyMode', True)
-        self.__initialTabIdx = ctx.get('tabIndex', -1)
+        if 'tabIndex' in ctx and ctx['tabIndex'] is not None:
+            _setLastTabIndex(ctx['tabIndex'])
         self.params = SettingsParams()
+        return
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def bwProto(self):
+        """
+        Returns instance of chat plugin to have access to VOIP Controller
+        :return: instance of chat plugin
+        """
+        return None
 
     def __getSettings(self):
         settings = {'GameSettings': self.params.getGameSettings(),
@@ -76,10 +103,13 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __restartGame(self):
         BigWorld.savePreferences()
+        BigWorld.worldDrawEnabled(False)
         BigWorld.restartGame()
 
     def _populate(self):
         super(SettingsWindow, self)._populate()
+        if self.__redefinedKeyModeEnabled:
+            BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
         self._update()
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
@@ -90,9 +120,11 @@ class SettingsWindow(SettingsWindowMeta):
     def _update(self):
         self.as_setDataS(self.__getSettings())
         self.as_updateVideoSettingsS(self.__currentSettings)
-        self.as_openTabS(self.__initialTabIdx)
+        self.as_openTabS(_getLastTabIndex())
 
     def _dispose(self):
+        if self.__redefinedKeyModeEnabled:
+            BigWorld.wg_setRedefineKeysMode(False)
         g_guiResetters.discard(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)
         self.stopVoicesPreview()
@@ -109,7 +141,11 @@ class SettingsWindow(SettingsWindowMeta):
 
     def onTabSelected(self, tabId):
         if tabId == SETTINGS.SOUNDTITLE:
-            self.app.voiceChatManager.checkForInitialization()
+            self.bwProto.voipController.invalidateInitialization()
+        if tabId in _PAGES_INDICES:
+            _setLastTabIndex(_PAGES_INDICES[tabId])
+        else:
+            LOG_WARNING("Unknown settings window's page id", tabId)
 
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
@@ -154,10 +190,6 @@ class SettingsWindow(SettingsWindowMeta):
             self.as_updateVideoSettingsS(result)
         return
 
-    def useRedifineKeysMode(self, isUse):
-        if self.__redefinedKeyModeEnabled:
-            BigWorld.wg_setRedefineKeysMode(isUse)
-
     def autodetectQuality(self):
         result = BigWorld.autoDetectGraphicsSettings()
         self.onRecreateDevice()
@@ -171,7 +203,7 @@ class SettingsWindow(SettingsWindowMeta):
 
     @decorators.process('__updateCaptureDevices')
     def updateCaptureDevices(self):
-        yield self.app.voiceChatManager.requestCaptureDevices()
+        yield self.bwProto.voipController.requestCaptureDevices()
         opt = g_settingsCore.options.getSetting(settings_constants.SOUND.CAPTURE_DEVICES)
         self.as_setCaptureDevicesS(opt.get(), opt.getOptions())
 
@@ -201,6 +233,17 @@ class SettingsWindow(SettingsWindowMeta):
                 self.onWindowClose()
 
         DialogsInterface.showI18nConfirmDialog(dialogID, callback)
+
+    def onRecreateDevice(self):
+        actualSettings = self.params.getMonitorSettings()
+        curDrr = self.__currentSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
+        actualDrr = actualSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
+        self.__currentSettings = actualSettings
+        result = self.__currentSettings.copy()
+        if curDrr == actualDrr:
+            result[settings_constants.GRAPHICS.DYNAMIC_RENDERER] = None
+        self.as_updateVideoSettingsS(result)
+        return
 
     def __updateInterfaceScale(self):
         self.as_setDataS(self.__getSettings())

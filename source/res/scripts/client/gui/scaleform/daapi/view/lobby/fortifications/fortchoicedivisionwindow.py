@@ -103,7 +103,11 @@ class FortChoiceDivisionWindow(FortChoiceDivisionWindowMeta):
             divisionType['divisionName'] = highTitle(i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONFULLNAME, divisionType=title))
             divisionType['divisionProfit'] = standard(i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONPROFIT, defResCount=profit))
             minVehLvl, maxVehLvl = item['vehLvls']
-            divisionType['vehicleLevel'] = standard(i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_VEHICLELEVEL, minLevel=_getTextLevels(minVehLvl), maxLevel=_getTextLevels(maxVehLvl)))
+            if maxVehLvl == minVehLvl:
+                vehicleLevel = i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_VEHICLELEVELSINGLE, level=_getTextLevels(maxVehLvl))
+            else:
+                vehicleLevel = i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_VEHICLELEVEL, minLevel=_getTextLevels(minVehLvl), maxLevel=_getTextLevels(maxVehLvl))
+            divisionType['vehicleLevel'] = standard(vehicleLevel)
             divisionType['divisionID'] = divisionID
             if divisionID == SORTIE_DIVISION.MIDDLE:
                 minCount, maxCount = self.playersRange[0]

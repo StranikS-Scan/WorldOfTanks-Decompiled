@@ -182,3 +182,7 @@ def WG_isMSR(*args, **kwargs):
 
 def WW_setVolumeThreshold(*args, **kwargs):
     pass
+
+
+def WW_setSoundSystem(*args, **kwargs):
+    pass

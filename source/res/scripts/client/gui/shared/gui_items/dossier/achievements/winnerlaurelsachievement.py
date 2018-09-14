@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/WinnerLaurelsAchievement.py
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
+from abstract.mixins import Deprecated, NoProgressBar
 
-class WinnerLaurelsAchievement(ClassProgressAchievement):
+class WinnerLaurelsAchievement(Deprecated, NoProgressBar, ClassProgressAchievement):
 
     def __init__(self, dossier, value=None):
         super(WinnerLaurelsAchievement, self).__init__('winnerLaurels', _AB.FALLOUT, dossier, value)

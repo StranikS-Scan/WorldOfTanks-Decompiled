@@ -10,10 +10,10 @@ from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
+from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
 from helpers import i18n
 
-class ResearchAward(AwardAbstract):
+class ResearchAward(ExplosionBackAward):
 
     def __init__(self, vehiclesCount, messageNumber):
         super(ResearchAward, self).__init__()
@@ -22,9 +22,6 @@ class ResearchAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_SPECIALACHIEVEMENT)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return RES_ICONS.MAPS_ICONS_AWARDS_VEHICLESRESEARCH
@@ -36,7 +33,7 @@ class ResearchAward(AwardAbstract):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/research/description%d' % self.messageNumber, vehiclesCount=self.vehiclesCount))
 
 
-class VictoryAward(AwardAbstract):
+class VictoryAward(ExplosionBackAward):
 
     def __init__(self, victoriesCount, messageNumber):
         super(VictoryAward, self).__init__()
@@ -45,9 +42,6 @@ class VictoryAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_SPECIALACHIEVEMENT)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return RES_ICONS.MAPS_ICONS_AWARDS_VICTORY
@@ -59,7 +53,7 @@ class VictoryAward(AwardAbstract):
         return text_styles.main(i18n.makeString('#menu:awardWindow/specialAchievement/victory/description%d' % self.messageNumber, victoriesCount=BigWorld.wg_getIntegralFormat(self.victoriesCount)))
 
 
-class BattleAward(AwardAbstract):
+class BattleAward(ExplosionBackAward):
 
     def __init__(self, battlesCount, messageNumber):
         super(BattleAward, self).__init__()
@@ -68,9 +62,6 @@ class BattleAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_SPECIALACHIEVEMENT)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return RES_ICONS.MAPS_ICONS_AWARDS_BATTLESWORDS
@@ -97,7 +88,7 @@ class PvEBattleAward(BattleAward):
         shared_events.runTutorialChain('PvE_Chain')
 
 
-class BoosterAward(AwardAbstract):
+class BoosterAward(ExplosionBackAward):
 
     def __init__(self, booster):
         super(BoosterAward, self).__init__()
@@ -105,9 +96,6 @@ class BoosterAward(AwardAbstract):
 
     def getWindowTitle(self):
         return i18n.makeString(MENU.AWARDWINDOW_TITLE_BOOSTERAWARD)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
 
     def getAwardImage(self):
         return self._booster.bigIcon
@@ -178,10 +166,7 @@ class FalloutAwardWindow(AwardAbstract):
             return super(FalloutAwardWindow, self).getAdditionalText()
 
     def getHasDashedLine(self):
-        if not self._isMaxLvl:
-            return True
-        else:
-            return False
+        return not self._isMaxLvl
 
     def getBodyButtonText(self):
         return i18n.makeString(self.BTN_ACTION_KEY + self._typeID)

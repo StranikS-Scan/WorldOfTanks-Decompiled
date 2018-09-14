@@ -4,7 +4,6 @@ from constants import ARENA_GUI_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_control.arena_info import hasGasAttack
 from gui.shared.tooltips import formatters
 from helpers.i18n import makeString as ms
 from gui.shared.formatters import text_styles

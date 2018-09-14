@@ -9,6 +9,13 @@
     <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.148	</moving>
+    <still>	0.197	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.296	</firePenalty>
+  </invisibility>
   <repairCost>	7.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -57,7 +64,8 @@
       <turret>	0.000000 0.897355 0.6768	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/czech/Cz08_T_25/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -169,13 +177,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.826545 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz08_T_25/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.1016 1.96691	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -454,13 +461,12 @@
         <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.826545 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz08_T_25/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.1016 1.96691	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -705,6 +711,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	5	</reloadTime>
           <shotDispersionFactors>
@@ -719,7 +726,8 @@
             <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz08_T_25/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -758,6 +766,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <clip>
             <count>	3	</count>
             <rate>	45	</rate>
@@ -776,7 +785,8 @@
             <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz08_T_25/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -799,7 +809,8 @@
         <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz08_T_25/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000061 0.487929 0.910343	</gunPosition>
       <emblemSlots>
@@ -834,9 +845,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	1.012 -0.048 1.024 0.000 0.788 0.133 0.988 0.555 0.242 0.500 0.309 0.500 0.364 0.694 0.206	</physicsShape>
       <camouflage>
         <tiling>	0.91 0.91 0.53 0.67	</tiling>
@@ -897,6 +906,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.416667 10 0.419444 9.8 0.422222 9 0.425 8.8 0.427778 8.2 0.441667 8 0.558333 8 0.572222 8.2 0.575 8.8 0.577778 9 0.580556 9.8 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	4.7	</reloadTime>
           <shotDispersionFactors>
@@ -911,7 +921,8 @@
             <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz08_T_25/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -944,6 +955,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.416667 10 0.419444 9.8 0.422222 9 0.425 8.8 0.427778 8.2 0.441667 8 0.558333 8 0.572222 8.2 0.575 8.8 0.577778 9 0.580556 9.8 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <clip>
             <count>	3	</count>
             <rate>	45	</rate>
@@ -962,7 +974,8 @@
             <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/czech/Cz08_T_25/collision/Gun_04.model	</collisionModel>
+            <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -985,7 +998,8 @@
         <exploded>	vehicles/czech/Cz08_T_25/crash/lod0/Turret_02.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/czech/Cz08_T_25/collision/Turret_02.model	</collisionModel>
+        <collisionModelServer>	vehicles/czech/Cz08_T_25/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz08_T_25/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	0.000000 0.407363 0.921907	</gunPosition>
       <emblemSlots>
@@ -1020,9 +1034,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_2000-3999	</turretRotatorSoundGear>
       <physicsShape>	0.958 -0.073 1.012 0.000 0.842 0.085 0.258 0.133 0.242 0.500 0.409 0.500 0.382 0.782 0.255	</physicsShape>
       <camouflage>
         <tiling>	1.06 1.06 0.41 0.37	</tiling>
@@ -1053,6 +1065,25 @@
     </Radiostanice_Fu_7>
     <Radiostanice_Fu_12>	shared	</Radiostanice_Fu_12>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_Cz08_T_25>
+        <alpha>	0.10465	</alpha>
+      </Chassis_Cz08_T_25>
+      <Chassis_Cz08_T_25_2>
+        <alpha>	0.08855	</alpha>
+      </Chassis_Cz08_T_25_2>
+    </chassis>
+    <engines>
+      <Skoda_V12_19_8_liter_450>
+        <bravo>	118.9441	</bravo>
+      </Skoda_V12_19_8_liter_450>
+      <Skoda_V12_19_8_liter_500>
+        <bravo>	132.1601	</bravo>
+      </Skoda_V12_19_8_liter_500>
+    </engines>
+    <armour>	0.846393724	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	medium	</damagedStateGroup>

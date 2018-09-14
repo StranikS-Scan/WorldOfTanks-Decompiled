@@ -9,6 +9,13 @@
     <forward>	65	</forward>
     <backward>	20	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.035	</moving>
+    <still>	0.07	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.105	</firePenalty>
+  </invisibility>
   <repairCost>	8.740	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
@@ -59,7 +66,8 @@
       <turret>	0.000000 0.757634 0.141277	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -220,13 +228,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.00485 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.35457 2.21679	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -530,13 +537,12 @@
         <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.00485 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.35457 2.21679	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -768,6 +774,7 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	30	</reloadTime>
           <aimingTime>	2.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -787,7 +794,8 @@
             <exploded>	vehicles/french/F09_AMX_50_120/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -835,6 +843,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
             <count>	6	</count>
             <rate>	22	</rate>
@@ -849,7 +858,8 @@
             <exploded>	vehicles/french/F09_AMX_50_120/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Gun_02.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -896,6 +906,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.14	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	18	</rate>
@@ -911,7 +922,8 @@
             <exploded>	vehicles/french/F09_AMX_50_120/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Gun_03.model	</collisionModel>
+            <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
@@ -931,7 +943,8 @@
         <exploded>	vehicles/french/F09_AMX_50_120/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/french/F09_AMX_50_120/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/french/F09_AMX_50_120/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F09_AMX_50_120/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
       <gunPosition>	-0.000000 0.80996 -0.086297	</gunPosition>
       <emblemSlots>
@@ -960,9 +973,7 @@
       </emblemSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
       <physicsShape>	1.565 -0.621 0.936 0.000 1.362 0.136 0.904 0.720 0.181 0.500 0.000 0.500 0.316 0.008 0.025	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_12000-more	</turretRotatorSoundManual>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_hydraulic_traverse/turret_hydraulic_traverse_12000-more	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
       </camouflage>
@@ -987,6 +998,25 @@
     </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_AMX_50_120>
+        <alpha>	0.12075	</alpha>
+      </Chassis_AMX_50_120>
+      <Chassis_AMX_50_120_2>
+        <alpha>	0.1127	</alpha>
+      </Chassis_AMX_50_120_2>
+    </chassis>
+    <engines>
+      <Maybach_HL_295>
+        <bravo>	224.6722	</bravo>
+      </Maybach_HL_295>
+      <Saurer>
+        <bravo>	264.3203	</bravo>
+      </Saurer>
+    </engines>
+    <armour>	1.161288356	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

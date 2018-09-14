@@ -11,13 +11,20 @@
     <forward>	44	</forward>
     <backward>	12	</backward>
   </speedLimits>
+  <invisibility>
+    <moving>	0.194	</moving>
+    <still>	0.258	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.387	</firePenalty>
+  </invisibility>
   <repairCost>	2.50	</repairCost>
   <premiumVehicleXPFactor>	0.6	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G100_Gtraktor_Krupp/Gtraktor_Krupp_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -52,19 +59,20 @@
       <sensitivityToImpulse>	0.48	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.403735 0.794652	</turret>
+      <turret>	0.002543 0.380672 0.756836	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Hull.model	</collisionModel>
+      <collisionModelServer>	vehicles/german/G100_Gtraktor_Krupp/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/german/G100_Gtraktor_Krupp/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.553919 0.321839 2.40941	</rayStart>
-        <rayEnd>	-0.553919 -0.070399 2.331	</rayEnd>
+        <rayStart>	-0.534728 0.260204 2.68714	</rayStart>
+        <rayEnd>	-0.534728 -0.131241 2.60485	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -105,149 +113,126 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_02	</textureSet>
-        <size>	0.3 0.5	</size>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.43	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.02	</textureScale>
+        <textureScale>	-1.9	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.134088	</radius>
-          <startIndex>	4	</startIndex>
-          <count>	2	</count>
-        </group>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R7	</name>
-          <radius>	0.385104	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.137887	</radius>
-          <startIndex>	6	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_R12	</name>
-          <radius>	0.154222	</radius>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.400998	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.134088	</radius>
-          <startIndex>	4	</startIndex>
+          <radius>	0.120596	</radius>
+          <startIndex>	1	</startIndex>
           <count>	2	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.149764	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	3	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.48	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
           <isLeading>	false	</isLeading>
-          <name>	WD_L7	</name>
-          <radius>	0.385104	</radius>
+          <name>	W_L0	</name>
+          <radius>	0.184768	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.137887	</radius>
-          <startIndex>	6	</startIndex>
-          <count>	6	</count>
+          <radius>	0.16	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	11	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	false	</isLeading>
           <name>	W_L12	</name>
-          <radius>	0.154222	</radius>
+          <radius>	0.184768	</radius>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.36	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.109833	</radius>
+          <radius>	0.400998	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	WD_R	</template>
-          <radius>	0.133468	</radius>
-          <startIndex>	2	</startIndex>
+          <radius>	0.120596	</radius>
+          <startIndex>	1	</startIndex>
           <count>	2	</count>
         </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.149764	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.48	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	false	</isLeading>
           <name>	W_R0	</name>
-          <radius>	0.154222	</radius>
+          <radius>	0.184768	</radius>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.137887	</radius>
+          <radius>	0.16	</radius>
           <startIndex>	1	</startIndex>
-          <count>	5	</count>
+          <count>	11	</count>
         </group>
         <wheel>
-          <isLeft>	true	</isLeft>
+          <isLeft>	false	</isLeft>
           <isLeading>	false	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.36	</radius>
+          <name>	W_R12	</name>
+          <radius>	0.184768	</radius>
         </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.109833	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.133468	</radius>
-          <startIndex>	2	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_L0	</name>
-          <radius>	0.154221	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.137887	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	5	</count>
-        </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
-        <mud>	mediumTankMud	</mud>
+        <dust>	largeTankDust	</dust>
+        <mud>	largeTankMud	</mud>
       </effects>
-      <soundPC>	/vehicles/tanks_pc/treads/treads_2	</soundPC>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
-      <soundNPC>	/vehicles/tanks_npc/treads/treads_2	</soundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.34408 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.50153 0.000000	</hullPosition>
       <hitTester>
-        <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Chassis.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G100_Gtraktor_Krupp/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G100_Gtraktor_Krupp/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.04367 2.09184	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.1031 2.18	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -260,6 +245,127 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G100_Gtraktor_Krupp/track/Gtractor_Krupp_segment_track.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G100_Gtraktor_Krupp/track/Gtractor_Krupp_segment_track.model	</segmentModelRight>
+        <left>	vehicles/german/G100_Gtraktor_Krupp/track/left.track	</left>
+        <right>	vehicles/german/G100_Gtraktor_Krupp/track/right.track	</right>
+        <segmentLength>	0.169	</segmentLength>
+        <segmentOffset>	0.205	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.014	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.3	</maxAmplitude>
+        <maxOffset>	0.3	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.078	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.09	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	12	</startIndex>
+          <count>	1	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	0.000000	</minOffset>
+          <maxOffset>	0.000000	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	12	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.09	</minOffset>
+          <maxOffset>	0.095	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	12	</startIndex>
+          <count>	1	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	0.000000	</minOffset>
+          <maxOffset>	0.000000	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_G100_Gtraktor_Krupp>
   </chassis>
   <turrets0>
@@ -273,14 +379,11 @@
         <armor_1>	14	</armor_1>
         <armor_2>	6	</armor_2>
         <armor_3>	8	</armor_3>
-        <armor_4>	8	</armor_4>
         <armor_5>	6	</armor_5>
         <armor_6>	6	</armor_6>
-        <armor_7>	8	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	6	</armor_9>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	2000	</weight>
       <maxHealth>	64	</maxHealth>
       <rotationSpeed>	41	</rotationSpeed>
@@ -302,6 +405,8 @@
             </armor_1>
             <armor_2>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <pitchLimits>
@@ -309,6 +414,7 @@
             <maxPitch>	0 12 0.347222 12 0.375 0 0.625 0 0.652778 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.55	</shotDispersionRadius>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <aimingTime>	2.2	</aimingTime>
           <reloadTime>	5.5	</reloadTime>
           <shotDispersionFactors>
@@ -322,8 +428,12 @@
             <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Gun_01.model	</collisionModel>
+            <collisionModelServer>	vehicles/german/G100_Gtraktor_Krupp/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G100_Gtraktor_Krupp/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_37_L24A>
       </guns>
       <models>
@@ -332,40 +442,39 @@
         <exploded>	vehicles/german/G100_Gtraktor_Krupp/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModel>	vehicles/german/G100_Gtraktor_Krupp/collision/Turret_01.model	</collisionModel>
+        <collisionModelServer>	vehicles/german/G100_Gtraktor_Krupp/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/german/G100_Gtraktor_Krupp/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.00128 0.271287 0.586905	</gunPosition>
+      <gunPosition>	0.005157 0.375194 0.671704	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.733157 0.329128 0.535009	</rayStart>
-          <rayEnd>	-0.388142 0.246913 0.350063	</rayEnd>
+          <rayStart>	-0.778684 0.346057 0.597539	</rayStart>
+          <rayEnd>	-0.423321 0.278427 0.426833	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.26	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.883302 0.344653 -0.0895008	</rayStart>
-          <rayEnd>	0.495586 0.259398 -0.0404189	</rayEnd>
+          <rayStart>	0.944236 0.347968 -0.0879343	</rayStart>
+          <rayEnd>	0.553118 0.270769 -0.0552542	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.733157 0.329128 0.535009	</rayStart>
-          <rayEnd>	0.388142 0.246913 0.350063	</rayEnd>
+          <rayStart>	0.778684 0.346057 0.597539	</rayStart>
+          <rayEnd>	0.423321 0.278427 0.426833	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.26	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.979 0.000 0.371 0.427 0.500 0.517 0.353 0.500 0.170 0.500 0.234 0.426 0.000	</physicsShape>
-      <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_2000-3999	</turretRotatorSoundManual>
+      <physicsShape>	1.116 0.014 1.025 0.000 0.529 0.176 0.763 0.517 0.353 0.500 0.170 0.500 0.234 0.426 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_2000-3999	</turretRotatorSoundGear>
       <camouflage>
-        <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+        <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_G100_Gtraktor_Krupp>
   </turrets0>
@@ -378,9 +487,22 @@
   <radios>
     <FuG6>	shared	</FuG6>
   </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_G100_Gtraktor_Krupp>
+        <alpha>	0.09177	</alpha>
+      </Chassis_G100_Gtraktor_Krupp>
+    </chassis>
+    <engines>
+      <BMW>
+        <bravo>	66.08007	</bravo>
+      </BMW>
+    </engines>
+    <armour>	0.894389834	</armour>
+  </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	medium	</damagedStateGroup>
+    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	germany_cross	</default>

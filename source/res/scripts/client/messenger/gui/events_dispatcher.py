@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/messenger/gui/events_dispatcher.py
 from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from messenger.ext import channel_num_gen
 from gui.shared.utils.functions import getViewName
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.ext import channel_num_gen
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 def showLobbyChannelWindow(clientID):
     g_eventBus.handleEvent(events.LoadViewEvent(MESSENGER_VIEW_ALIAS.LOBBY_CHANNEL_WINDOW, ctx={'clientID': clientID}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -57,3 +57,7 @@ def rqExitFromLazyChannel(name):
         LOG_ERROR('Client ID is not found', name)
     else:
         rqExitFromChannel(clientID)
+
+
+def setMessageFadingEnabled(isEnabled):
+    g_eventBus.handleEvent(events.ChannelManagementEvent(0, events.ChannelManagementEvent.MESSAGE_FADING_ENABLED, {'isEnabled': isEnabled}), scope=EVENT_BUS_SCOPE.GLOBAL)

@@ -5,7 +5,7 @@ from gui.Scaleform.framework import ViewTypes, g_entitiesFactories
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from messenger.gui.Scaleform.view import MESSENGER_VIEW_ALIAS
+from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 
 class MessengerBar(MessengerBarMeta):
 

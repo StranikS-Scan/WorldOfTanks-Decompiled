@@ -1,19 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortBattlesRoomView.py
 import BigWorld
-from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import MIN_MAX_VEH_LVLS_MAPPING
+from gui.LobbyContext import g_lobbyContext
+from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import i18n
 from UnitBase import UNIT_OP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import event_dispatcher
 from gui.shared.formatters import icons, text_styles
+from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import MIN_MAX_VEH_LVLS_MAPPING
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.FortRoomMeta import FortRoomMeta
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
+from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.prb_control.prb_helpers import UnitListener
@@ -112,6 +114,10 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         self.as_highlightSlotsS(availableSlots)
         return availableSlots
 
+    def onClientStateChanged(self, state):
+        if self.unitFunctional.getID() > 0 and state.getStateID() == CLIENT_FORT_STATE.DISABLED:
+            self._setActionButtonState()
+
     def isPlayerLeginary(self, databaseID=None):
         pInfo = self.unitFunctional.getPlayerInfo(dbID=databaseID)
         return pInfo.isLegionary
@@ -132,13 +138,20 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
 
     def _populate(self):
         super(FortBattlesRoomView, self)._populate()
+        self.startFortListening()
         minLevel, maxLvl = self._getDivisionLvls()
-        self._updateVehiclesLabel(minLevel, maxLvl)
+        if maxLvl == minLevel:
+            self.__updateVehiclesLabelSingle(fort_formatters.getTextLevel(maxLvl))
+        else:
+            self._updateVehiclesLabel(fort_formatters.getTextLevel(minLevel), fort_formatters.getTextLevel(maxLvl))
+        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
         self.addListener(events.CoolDownEvent.PREBATTLE, self._handleChangedDivision, scope=EVENT_BUS_SCOPE.LOBBY)
         self._setChangeDivisionCooldown()
 
     def _dispose(self):
         super(FortBattlesRoomView, self)._dispose()
+        self.stopFortListening()
+        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
         self.removeListener(events.CoolDownEvent.PREBATTLE, self._handleChangedDivision, scope=EVENT_BUS_SCOPE.LOBBY)
         self._cancelChangeDivisionCooldown()
 
@@ -168,10 +181,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         _, unit = self.unitFunctional.getUnit(self.unitFunctional.getUnitIdx())
         type_id = unit.getRosterTypeID()
         division = getDivisionNameByType(type_id)
-        minLvl, maxLvl = MIN_MAX_VEH_LVLS_MAPPING[getDivisionLevel(division)].DEFAULT_LEVELS
-        minLevel = fort_formatters.getTextLevel(minLvl)
-        maxLevel = fort_formatters.getTextLevel(maxLvl)
-        return (minLevel, maxLevel)
+        return MIN_MAX_VEH_LVLS_MAPPING[getDivisionLevel(division)].DEFAULT_LEVELS
 
     def _getVehicleSelectorDescription(self):
         return FORTIFICATIONS.SORTIE_VEHICLESELECTOR_DESCRIPTION
@@ -183,6 +193,11 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
 
     def _setActionButtonState(self):
         self.as_setActionButtonStateS(ActionButtonStateVO(self.unitFunctional))
+
+    def __updateVehiclesLabelSingle(self, level):
+        vehicleLvl = text_styles.main(i18n.makeString(FORTIFICATIONS.SORTIE_ROOM_LEVEL, level=level))
+        vehicleLbl = text_styles.standard(i18n.makeString(CYBERSPORT.WINDOW_UNIT_TEAMVEHICLESLBL, levelsRange=vehicleLvl))
+        self.as_setVehiclesTitleS(vehicleLbl, {})
 
     def __updateLabels(self):
         if not self.isPlayerInSlot() and self.isPlayerLeginary():
@@ -216,3 +231,7 @@ class FortBattlesRoomView(FortRoomMeta, FortViewHelper, UnitListener):
         unitPermissions = self.unitFunctional.getPermissions()
         activeConsumes = self.unitFunctional.getExtra().getConsumables()
         self.as_showOrdersBgS(bool(not unitPermissions.canChangeConsumables() and len(activeConsumes)))
+
+    def __onSettingsChanged(self, diff):
+        if 'isFortsEnabled' in diff:
+            self._setActionButtonState()

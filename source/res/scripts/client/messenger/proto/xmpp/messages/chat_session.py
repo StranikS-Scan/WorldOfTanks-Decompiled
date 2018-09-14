@@ -176,6 +176,8 @@ class ChatSessionsProvider(ChatProvider):
         created, exists = self._searchChannel(jid, name)
         if exists is None:
             self.__addSession(created, dbID, byAction=True)
+        else:
+            g_messengerEvents.channels.onPlayerEnterChannelByAction(exists)
         return
 
     def stopSession(self, jid):

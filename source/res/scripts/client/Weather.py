@@ -315,25 +315,21 @@ class Weather(Listenable):
         m.duration = self.fadeSpeed
         m.target = (0, 0, 0, 0)
         m.time = m.duration
-        BigWorld.weatherController(m)
         self.weatherController = m
         m = Math.Vector4Morph()
         m.duration = self.fadeSpeed
         m.target = (1, 1, 1, 1)
         m.time = m.duration
-        BigWorld.sunlightController(m)
         self.sunlightController = m
         m = Math.Vector4Morph()
         m.duration = self.fadeSpeed
         m.target = (1, 1, 1, 1)
         m.time = m.duration
-        BigWorld.ambientController(m)
         self.ambientController = m
         m = Math.Vector4Morph()
         m.duration = self.fadeSpeed
         m.target = (1, 1, 1, 1)
         m.time = m.duration
-        BigWorld.fogController(m)
         self.fogController = m
 
     def summon(self, systemName, immediate=False, serverSync=False, resummon=False):

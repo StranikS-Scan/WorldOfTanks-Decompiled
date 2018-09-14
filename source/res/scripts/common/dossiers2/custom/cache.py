@@ -38,7 +38,7 @@ def buildCache():
     _g_cache.update({'vehiclesByLevel': vehiclesByLevel,
      'vehicles8+': vehicles8p,
      'vehiclesByTag': vehiclesByTag,
-     'mausTypeCompDescr': vehicles.makeVehicleTypeCompDescrByName('germany:Maus'),
+     'mausTypeCompDescr': vehicles.makeVehicleTypeCompDescrByName('germany:G42_Maus'),
      'vehiclesInTreesByNation': vehiclesInTreeByNation,
      'vehiclesInTrees': vehiclesInTree,
      'nationsWithVehiclesInTree': nationsWithVehiclesInTree})

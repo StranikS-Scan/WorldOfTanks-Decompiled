@@ -118,7 +118,8 @@ class GmAccessor(BaseAccessor):
                     'prime_time': '',
                     'province_id': 'some_province',
                     'revenue': 324,
-                    'turns_owned': 12
+                    'turns_owned': 12,
+                    'arena_id': 5,
                 }
             ],
             200,

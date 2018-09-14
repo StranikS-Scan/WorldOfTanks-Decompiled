@@ -88,8 +88,10 @@ class SearchChannelsDataProvider(SearchDataProvider):
 
 class SearchUsersDataProvider(SearchDataProvider):
 
-    def __init__(self, exclude=None):
-        super(SearchUsersDataProvider, self).__init__(SearchUsersProcessor())
+    def __init__(self, searchProcessor=None, exclude=None):
+        if searchProcessor is None:
+            searchProcessor = SearchUsersProcessor()
+        super(SearchUsersDataProvider, self).__init__(searchProcessor)
         self._converter = ContactConverter()
         if exclude is not None:
             self.__exclude = exclude

@@ -3,6 +3,12 @@
 
 
 class WAITING(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     FLASH = '#waiting:Flash'
     DISCONNECT = '#waiting:disconnect'
     LOADPAGE = '#waiting:loadPage'
@@ -28,9 +34,6 @@ class WAITING(object):
     LOADSTATS = '#waiting:loadStats'
     TRANSFERMONEY = '#waiting:transferMoney'
     EXCHANGEVEHICLESXP = '#waiting:exchangeVehiclesXP'
-    REQUESTCAPTCHA = '#waiting:requestCaptcha'
-    RELOADCAPTCHA = '#waiting:reloadCaptcha'
-    VERIFYCAPTCHA = '#waiting:verifyCaptcha'
     RECRUTING = '#waiting:recruting'
     EQUIPPING = '#waiting:equipping'
     UNLOADING = '#waiting:unloading'
@@ -186,6 +189,10 @@ class WAITING(object):
 
     @staticmethod
     def message(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#waiting:message/%s' % key
         if outcome not in WAITING.MESSAGE_ENUM:
             raise Exception('locale key "' + outcome + '" was not found')
@@ -193,6 +200,10 @@ class WAITING(object):
 
     @staticmethod
     def titles(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#waiting:titles/%s' % key
         if outcome not in WAITING.TITLES_ENUM:
             raise Exception('locale key "' + outcome + '" was not found')

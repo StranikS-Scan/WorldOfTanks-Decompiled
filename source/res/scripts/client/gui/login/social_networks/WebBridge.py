@@ -3,9 +3,9 @@
 import base64
 import socket
 from ConnectionManager import connectionManager
-from urllib import urlencode
+from urllib import urlencode, quote_plus
 import BigWorld
-import constants
+from constants import HAS_DEV_RESOURCES
 from Event import Event
 from DataServer import ThreadedDataServer, EncryptingThreadedDataServer
 from gui import GUI_SETTINGS
@@ -35,7 +35,7 @@ class WebBridge(object):
         connectionManager.onConnected -= self.__finiDataServer
         connectionManager.onRejected -= self.__finiDataServer
         connectionManager.onDisconnected -= self.__finiDataServer
-        if constants.IS_DEVELOPMENT:
+        if HAS_DEV_RESOURCES:
             from gui.development.mock.social_network_login import fini as finalizeWGNIServerMock
             finalizeWGNIServerMock()
 
@@ -51,7 +51,9 @@ class WebBridge(object):
         if serverStatus == _STATUS.OK:
             baseUrl = self.__getWgniBaseURL(isRegistration)
             loginParams = self.__getWgniParams(isExternal, isRegistration)
-            url = baseUrl + ('&' if isRegistration else '?') + urlencode(loginParams)
+            url = baseUrl + '?' + urlencode(loginParams)
+            if isRegistration and GUI_SETTINGS.registrationProxyURL:
+                url = GUI_SETTINGS.registrationProxyURL + '&lpurl=' + quote_plus(url)
             if not BigWorld.wg_openWebBrowser(url):
                 serverStatus = _STATUS.WEB_BROWSER_ERROR
         return serverStatus == _STATUS.OK
@@ -81,10 +83,10 @@ class WebBridge(object):
             baseUrl = GUI_SETTINGS.registrationURL.replace('$LANGUAGE_CODE', getLanguageCode())
         else:
             baseUrl = GUI_SETTINGS.socialNetworkLogin['initialLoginURL']
-        if constants.IS_DEVELOPMENT:
+        if HAS_DEV_RESOURCES:
             from gui.development.mock.social_network_login import getServer as getWGNIServerMock
             if getWGNIServerMock() is not None:
-                baseUrl = 'http://127.0.0.1:{0}/{1}'.format(getWGNIServerMock().server_port, '?dummy=1' if isRegistration else '')
+                baseUrl = 'http://127.0.0.1:{0}/'.format(getWGNIServerMock().server_port)
         return baseUrl
 
     def __initDataServer(self, enableEncryption):

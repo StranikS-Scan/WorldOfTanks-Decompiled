@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/app_factory.py
 import BattleReplay
+from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface, GUI_SETTINGS
-from gui.Scaleform.LobbyEntry import LobbyEntry
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.Scaleform.Battle import Battle
-from gui.Scaleform.LogitechMonitor import LogitechMonitor
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.battle_entry import BattleEntry
+from gui.Scaleform.lobby_entry import LobbyEntry
 from gui.Scaleform.daapi.settings import config as sf_config
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.package_layout import PackageImporter
+from gui.Scaleform.logitech_monitor import LogitechMonitorEntry
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.app_loader.interfaces import IAppFactory
 from gui.app_loader.settings import APP_NAME_SPACE as _SPACE
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from shared_utils import AlwaysValidObject
 
 class NoAppFactory(AlwaysValidObject, IAppFactory):
@@ -23,7 +26,7 @@ class NoAppFactory(AlwaysValidObject, IAppFactory):
     def destroyLobby(self):
         LOG_DEBUG('NoAppFactory.destroyLobby')
 
-    def createBattle(self):
+    def createBattle(self, _):
         LOG_DEBUG('NoAppFactory.createBattle')
 
     def destroyBattle(self):
@@ -31,15 +34,13 @@ class NoAppFactory(AlwaysValidObject, IAppFactory):
 
 
 class AS3_AS2_AppFactory(IAppFactory):
-    __slots__ = ('__apps', '__importer')
+    __slots__ = ('__apps', '__packages', '__importer')
 
     def __init__(self):
         super(AS3_AS2_AppFactory, self).__init__()
-        self.__apps = {_SPACE.SF_LOBBY: None,
-         _SPACE.SF_BATTLE: None,
-         _SPACE.SF_LOGITECH: None}
+        self.__apps = dict.fromkeys(_SPACE.RANGE)
+        self.__packages = dict.fromkeys(_SPACE.RANGE)
         self.__importer = PackageImporter()
-        return
 
     def getPackageImporter(self):
         return self.__importer
@@ -66,14 +67,17 @@ class AS3_AS2_AppFactory(IAppFactory):
 
     def createLobby(self):
         LOG_DEBUG('Creating app', _SPACE.SF_LOBBY)
+        self.createLogitech()
         lobby = self.__apps[_SPACE.SF_LOBBY]
-        if not lobby:
+        if lobby is None:
             lobby = LobbyEntry(_SPACE.SF_LOBBY)
-            self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + sf_config.LOBBY_PACKAGES)
+            self.__packages[_SPACE.SF_LOBBY] = sf_config.LOBBY_PACKAGES
+            self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + self.__packages[_SPACE.SF_LOBBY])
             self.__apps[_SPACE.SF_LOBBY] = lobby
         lobby.active(True)
         g_windowsStoredData.start()
         BattleReplay.g_replayCtrl.onCommonSwfLoaded()
+        return
 
     def destroyLobby(self):
         LOG_DEBUG('Destroying app', _SPACE.SF_LOBBY)
@@ -81,7 +85,7 @@ class AS3_AS2_AppFactory(IAppFactory):
             lobby = self.__apps[_SPACE.SF_LOBBY]
             if lobby:
                 lobby.close()
-                self.__importer.unload(sf_config.LOBBY_PACKAGES)
+                self.__importer.unload(self.__packages[_SPACE.SF_LOBBY])
                 self.__apps[_SPACE.SF_LOBBY] = None
         g_windowsStoredData.stop()
         BattleReplay.g_replayCtrl.onCommonSwfUnloaded()
@@ -97,17 +101,20 @@ class AS3_AS2_AppFactory(IAppFactory):
         self._setActive(_SPACE.SF_LOBBY, False)
         BattleReplay.g_replayCtrl.onCommonSwfUnloaded()
 
-    def createBattle(self):
+    def createBattle(self, arenaGuiType):
         LOG_DEBUG('Creating app', _SPACE.SF_BATTLE)
-        LogitechMonitor.onScreenChange('battle')
+        self.createLogitech()
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
             battle = self._getBattleAppInstance()
-            self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + sf_config.BATTLE_PACKAGES)
+            packages = self._getBattlePackages(arenaGuiType)
+            self.__packages[_SPACE.SF_BATTLE] = packages
+            self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
             self.__apps[_SPACE.SF_BATTLE] = battle
         BattleReplay.g_replayCtrl.onBattleSwfLoaded()
         battle.active(True)
         battle.component.visible = False
+        battle.detachCursor()
 
     def destroyBattle(self):
         LOG_DEBUG('Destroying app', _SPACE.SF_BATTLE)
@@ -115,18 +122,26 @@ class AS3_AS2_AppFactory(IAppFactory):
             battle = self.__apps[_SPACE.SF_BATTLE]
             if battle:
                 battle.close()
-            self.__importer.unload(sf_config.BATTLE_PACKAGES)
+            self.__importer.unload(self.__packages[_SPACE.SF_BATTLE])
             self.__apps[_SPACE.SF_BATTLE] = None
         return
 
-    def attachCursor(self, appNS):
+    def createLogitech(self):
+        logitech = self.__apps[_SPACE.SF_LOGITECH]
+        if logitech is None:
+            logitech = LogitechMonitorEntry()
+            self.__apps[_SPACE.SF_LOGITECH] = logitech
+        logitech.activate()
+        return
+
+    def attachCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):
         if appNS not in self.__apps:
             return
         else:
             LOG_DEBUG('Attach cursor', appNS)
             app = self.__apps[appNS]
             if app is not None:
-                app.attachCursor()
+                app.attachCursor(flags=flags)
             else:
                 LOG_DEBUG('Can not attach cursor because of app is not found', appNS)
             return
@@ -143,6 +158,18 @@ class AS3_AS2_AppFactory(IAppFactory):
                 LOG_DEBUG('Can not detach cursor because of app is not found', appNS)
             return
 
+    def syncCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):
+        if appNS not in self.__apps:
+            return
+        else:
+            LOG_DEBUG('Attach cursor', appNS)
+            app = self.__apps[appNS]
+            if app is not None:
+                app.syncCursor(flags=flags)
+            else:
+                LOG_DEBUG('Can not attach cursor because of app is not found', appNS)
+            return
+
     def destroy(self):
         for appNS in self.__apps.iterkeys():
             LOG_DEBUG('Destroying app', appNS)
@@ -151,6 +178,7 @@ class AS3_AS2_AppFactory(IAppFactory):
                 entry.close()
             self.__apps[appNS] = None
 
+        self.__packages = dict.fromkeys(_SPACE.RANGE)
         g_windowsStoredData.stop()
         if self.__importer is not None:
             self.__importer.unload()
@@ -172,27 +200,23 @@ class AS3_AS2_AppFactory(IAppFactory):
             return
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY), EVENT_BUS_SCOPE.LOBBY)
 
-    def goToBattleLoading(self, appNS):
+    def goToBattleLoading(self, appNS, arenaGuiType):
         if appNS != _SPACE.SF_LOBBY:
             return
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE_LOADING), EVENT_BUS_SCOPE.LOBBY)
+        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
+            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_LOADING)
+        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING)
+        else:
+            event = events.LoadViewEvent(VIEW_ALIAS.BATTLE_LOADING)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
-    def goToTutorialLoading(self, appNS):
-        if appNS != _SPACE.SF_LOBBY:
-            return
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_LOADING), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def goToFalloutMultiTeamLoading(self, appNS):
-        if appNS != _SPACE.SF_LOBBY:
-            return
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTI_TEAM_BATTLE_LOADING), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def goToBattle(self, appNS):
+    def goToBattle(self, appNS, arenaGuiType):
         if appNS != _SPACE.SF_BATTLE:
             return
         battle = self.__apps[_SPACE.SF_BATTLE]
         if battle:
-            self._loadBattlePage()
+            self._loadBattlePage(arenaGuiType)
             battle.component.visible = True
 
     def showDisconnectDialog(self, appNS, description):
@@ -202,7 +226,10 @@ class AS3_AS2_AppFactory(IAppFactory):
     def _getBattleAppInstance(self):
         return Battle(_SPACE.SF_BATTLE)
 
-    def _loadBattlePage(self):
+    def _getBattlePackages(self, arenaGuiType):
+        pass
+
+    def _loadBattlePage(self, arenaGuiType):
         pass
 
     def _setActive(self, appNS, isActive):
@@ -213,12 +240,33 @@ class AS3_AS2_AppFactory(IAppFactory):
 
 class AS3_AppFactory(AS3_AS2_AppFactory):
 
+    def handleKeyInBattle(self, isDown, key, mods):
+        battle = self.getApp(appNS=_SPACE.SF_BATTLE)
+        if battle is not None:
+            battle.handleKey(isDown, key, mods)
+        return
+
     def _getBattleAppInstance(self):
-        from gui.development.ui.Scaleform.BattleEntry import BattleEntry
         return BattleEntry(_SPACE.SF_BATTLE)
 
-    def _loadBattlePage(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BATTLE), EVENT_BUS_SCOPE.BATTLE)
+    def _getBattlePackages(self, arenaGuiType):
+        packages = sf_config.BATTLE_PACKAGES
+        if arenaGuiType in sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE:
+            packages += sf_config.BATTLE_PACKAGES_BY_ARENA_TYPE[arenaGuiType]
+        else:
+            packages += sf_config.BATTLE_PACKAGES_BY_DEFAULT
+        return packages
+
+    def _loadBattlePage(self, arenaGuiType):
+        if arenaGuiType == ARENA_GUI_TYPE.TUTORIAL:
+            event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
+            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
+        elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+            event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
+        else:
+            event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
+        g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)
 
 
 def createAppFactory():

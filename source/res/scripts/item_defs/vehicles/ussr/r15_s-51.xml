@@ -1,0 +1,570 @@
+<r15_s-51.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	30	</forward>
+    <backward>	8	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.041	</moving>
+    <still>	0.082	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.123	</firePenalty>
+  </invisibility>
+  <repairCost>	11.00	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask>	vehicles/russian/R15_S-51/S-51_CM.dds	</exclusionMask>
+  </camouflage>
+  <hull>
+    <fakeTurrets>
+      <lobby>	0	</lobby>
+      <battle>	0	</battle>
+    </fakeTurrets>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	15	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
+    <weight>	30800	</weight>
+    <maxHealth>	280	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R15_S-51/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 34.00 0.38 1.00 0.05 0.30	</pitchParams>
+      <rollParams>	1.00 0.26 34.00 0.38 1.00 0.05 0.30	</rollParams>
+      <sensitivityToImpulse>	0.62	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.828314 2.33386	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/russian/R15_S-51/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.628383 0.449558 3.2753	</rayStart>
+        <rayEnd>	0.628383 0.266698 2.91955	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.24	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <player>
+        <rayStart>	1.1623 1.44536 2.34776	</rayStart>
+        <rayEnd>	1.1623 1.36361 1.9562	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </player>
+      <inscription>
+        <rayStart>	-0.986798 2.08898 2.12923	</rayStart>
+        <rayEnd>	-0.986798 1.89921 1.77712	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.68	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <player>
+        <rayStart>	-1.1623 1.44536 2.34776	</rayStart>
+        <rayEnd>	-1.1623 1.36361 1.9562	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.28	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </player>
+      <inscription>
+        <rayStart>	0.986798 2.08898 2.12923	</rayStart>
+        <rayEnd>	0.986798 1.89921 1.77712	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.68	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R15_S-51/S-51_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <S-51>
+      <userString>	#ussr_vehicles:S-51	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	14600	</price>
+      <unlocks>
+        <chassis>	S-51bis	  <cost>	7965	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	12500	</weight>
+      <maxLoad>	52000	</maxLoad>
+      <terrainResistance>	1.4 1.6 2.7	</terrainResistance>
+      <brakeForce>	45000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	18	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.33	</vehicleMovement>
+        <vehicleRotation>	0.33	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R15_S-51/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.69	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.302	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.302	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.348	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.196	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.457	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.348	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.196	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.457	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.868525 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R15_S-51/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.29948 2.20907	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.656570 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.302790 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.394460	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </S-51>
+    <S-51bis>
+      <userString>	#ussr_vehicles:S-51bis	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	19800	</price>
+      <unlocks>
+        <vehicle>	R27_SU-14	  <cost>	127700	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	12500	</weight>
+      <maxLoad>	52500	</maxLoad>
+      <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
+      <brakeForce>	50000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	20	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R15_S-51/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.48 0.62	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-0.69	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.302	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.302	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.348	</radius>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.196	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.457	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.348	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.196	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.457	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <dust>	mediumTankDust	</dust>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.868525 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R15_S-51/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.29948 2.20907	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.648850 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.302790 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.394470	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </S-51bis>
+  </chassis>
+  <turrets0>
+    <S-51_01>
+      <ceilless>	true	</ceilless>
+      <userString>	#ussr_vehicles:S-51_01	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	7	</level>
+      <price>	1200	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	0	</armor_1>
+        <armor_2>	0	</armor_2>
+        <armor_3>	0	</armor_3>
+        <armor_4>	0	</armor_4>
+        <armor_5>	0	</armor_5>
+        <armor_6>	0	</armor_6>
+        <armor_7>	0	</armor_7>
+        <armor_8>	15	</armor_8>
+      </armor>
+      <weight>	100	</weight>
+      <maxHealth>	70	</maxHealth>
+      <rotationSpeed>	12	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	70	</maxHealth>
+        <maxRegenHealth>	35	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_152mm_BR-2>	shared	  <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	27.9	</reloadTime>
+          <unlocks>
+            <gun>	_203mm_B-4	  <cost>	64000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	25	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.76	</shotDispersionRadius>
+          <aimingTime>	7	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.52	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -58 1 -58	</minPitch>
+            <maxPitch>	0 1.5 1 1.5	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-4 4	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R15_S-51/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R15_S-51/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00207423 -0.00206431 2.3	</rayStart>
+              <rayEnd>	0.0588264 -0.0703012 2.34736	</rayEnd>
+              <rayUp>	0.174 0.151 2	</rayUp>
+              <size>	0.842	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_152mm_BR-2>
+        <_203mm_B-4>	shared	  <maxAmmo>	12	</maxAmmo>
+          <reloadTime>	55.5	</reloadTime>
+          <armor>
+            <gun>	30	</gun>
+            <gunBreech>	0	</gunBreech>
+          </armor>
+          <shotDispersionRadius>	0.9	</shotDispersionRadius>
+          <aimingTime>	8	</aimingTime>
+          <invisibilityFactorAtShot>	0.086	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.64	</turretRotation>
+            <afterShot>	6.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -58 1 -58	</minPitch>
+            <maxPitch>	0 1.5 1 1.5	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-4 4	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R15_S-51/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R15_S-51/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000338003 -0.00661215 2.33704	</rayStart>
+              <rayEnd>	0.0638657 -0.0750868 2.32815	</rayEnd>
+              <rayUp>	0.162 0.144 2	</rayUp>
+              <size>	0.842	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.66 1.66 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_203mm_B-4>
+      </guns>
+      <models>
+        <undamaged>	vehicles/russian/R15_S-51/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R15_S-51/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R15_S-51/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/russian/R15_S-51/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R15_S-51/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.92917 -0.518486	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.103 -0.073 1.000 0.000 1.141 0.073 0.500 0.100 0.000 0.500 0.000 0.500 0.967 0.332 1.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_man_trav_05	</wwturretRotatorSoundManual>
+    </S-51_01>
+  </turrets0>
+  <engines>
+    <V-2K>	shared	  <unlocks>
+        <engine>	V-2IS_R	  <cost>	6100	</cost>
+        </engine>
+      </unlocks>
+    </V-2K>
+    <V-2IS_R>	shared	  <unlocks>
+        <engine>	V-16	  <cost>	11200	</cost>
+        </engine>
+      </unlocks>
+    </V-2IS_R>
+    <V-16>	shared	</V-16>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <_10R>	shared	  <unlocks>
+        <radio>	_12RT	  <cost>	5600	</cost>
+        </radio>
+      </unlocks>
+    </_10R>
+    <_12RT>	shared	</_12RT>
+  </radios>
+  <clientAdjustmentFactors>
+    <guns>
+      <_203mm_B-4>
+        <delta>	1.05	</delta>
+      </_203mm_B-4>
+    </guns>
+    <chassis>
+      <S-51>
+        <alpha>	0.1288	</alpha>
+      </S-51>
+      <S-51bis>
+        <alpha>	0.12075	</alpha>
+      </S-51bis>
+    </chassis>
+    <engines>
+      <V-2K>
+        <bravo>	132.1601	</bravo>
+      </V-2K>
+      <V-2IS_R>
+        <bravo>	137.4465	</bravo>
+      </V-2IS_R>
+      <V-16>
+        <bravo>	158.5922	</bravo>
+      </V-16>
+    </engines>
+    <armour>	0.684481834	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</r15_s-51.xml>

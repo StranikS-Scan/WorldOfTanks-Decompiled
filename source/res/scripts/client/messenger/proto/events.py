@@ -3,6 +3,10 @@
 import Event
 
 class _ChannelsSharedEvents(object):
+    """
+    Class declares channels shared events available in g_messengerEvents.channels.
+    """
+    __slots__ = ('__eventManager', 'onChannelInited', 'onPlayerEnterChannelByAction', 'onChannelDestroyed', 'onConnectingToSecureChannel', 'onChannelInfoUpdated', 'onConnectStateChanged', 'onMessageReceived', 'onHistoryReceived', 'onCommandReceived')
 
     def __init__(self):
         super(_ChannelsSharedEvents, self).__init__()
@@ -22,6 +26,9 @@ class _ChannelsSharedEvents(object):
 
 
 class ChannelEvents(object):
+    """
+    Class declares events for a specific channel.
+    """
     __slots__ = ('onConnectStateChanged', 'onChannelInfoUpdated', 'onMembersListChanged', 'onMemberStatusChanged', '__eventManager')
 
     def __init__(self):
@@ -37,6 +44,9 @@ class ChannelEvents(object):
 
 
 class MemberEvents(object):
+    """
+    Class declares events for a specific member in channel.
+    """
     __slots__ = ('onMemberStatusChanged', '__eventManager')
 
     def __init__(self):
@@ -49,6 +59,10 @@ class MemberEvents(object):
 
 
 class _VOIPSharedEvents(object):
+    """
+    Class declares shared voice events.
+    """
+    __slots__ = ('__eventManager', 'onCredentialReceived', 'onChannelEntered', 'onChannelLeft', 'onVoiceChatInitSucceeded', 'onVoiceChatInitFailed', 'onPlayerSpeaking', 'onStateToggled')
 
     def __init__(self):
         super(_VOIPSharedEvents, self).__init__()
@@ -56,12 +70,19 @@ class _VOIPSharedEvents(object):
         self.onCredentialReceived = Event.Event()
         self.onChannelEntered = Event.Event(self.__eventManager)
         self.onChannelLeft = Event.Event(self.__eventManager)
+        self.onVoiceChatInitSucceeded = Event.Event(self.__eventManager)
+        self.onVoiceChatInitFailed = Event.Event(self.__eventManager)
+        self.onPlayerSpeaking = Event.Event(self.__eventManager)
+        self.onStateToggled = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()
 
 
 class _UsersSharedEvents(object):
+    """
+    Class declares shared users events.
+    """
     __slots__ = ('__eventManager', 'onUsersListReceived', 'onFriendsReceived', 'onIgnoredReceived', 'onMutedReceived', 'onUserActionReceived', 'onUserStatusUpdated', 'onEmptyGroupsChanged', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed', 'onNotesListReceived', 'onFriendshipRequestsAdded', 'onFriendshipRequestsUpdated')
 
     def __init__(self):
@@ -86,6 +107,9 @@ class _UsersSharedEvents(object):
 
 
 class _ServiceChannelEvents(object):
+    """
+    Class declares service shared events available in g_messengerEvents.serviceChannel.
+    """
     __slots__ = ('__eventManager', 'onServerMessageReceived', 'onCustomMessageDataReceived', 'onClientMessageReceived', 'onChatMessageReceived')
 
     def __init__(self):
@@ -101,6 +125,9 @@ class _ServiceChannelEvents(object):
 
 
 class _MessengerEvents(object):
+    """
+    Class declares messenger shared events.
+    """
     __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onErrorReceived', 'onWarningReceived', 'onPluginConnected', 'onPluginDisconnected', 'onPluginConnectFailed')
 
     def __init__(self):

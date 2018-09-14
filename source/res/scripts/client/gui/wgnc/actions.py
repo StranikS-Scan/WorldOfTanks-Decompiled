@@ -3,7 +3,7 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
-from gui.game_control import getBrowserCtrl
+from gui.game_control import getBrowserCtrl, getPromoController
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
@@ -71,20 +71,34 @@ class OpenInternalBrowser(_OpenBrowser):
         return
 
     def invoke(self, _, actor=None):
-        ctrl = getBrowserCtrl()
+        ctrl = self._getContoller()
         if ctrl:
             if actor:
                 title = actor.getTopic()
             else:
                 title = None
-            self.__doInvoke(ctrl, title)
+            self._doInvoke(ctrl, title)
         else:
             LOG_ERROR('Browser controller is not found')
         return
 
+    def _getContoller(self):
+        return getBrowserCtrl()
+
     @process
-    def __doInvoke(self, ctrl, title):
+    def _doInvoke(self, ctrl, title):
         self._browserID = yield ctrl.load(self._url, browserID=self._browserID, title=title)
+
+
+@ReprInjector.withParent()
+class OpenPromoBrowser(OpenInternalBrowser):
+
+    def _getContoller(self):
+        return getPromoController()
+
+    @process
+    def _doInvoke(self, ctrl, title):
+        ctrl.showPromo(self._url, title)
 
 
 @ReprInjector.withParent()

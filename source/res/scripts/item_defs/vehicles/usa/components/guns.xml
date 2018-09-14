@@ -97,6 +97,7 @@
     <_90mm_Gun_T7>	116	</_90mm_Gun_T7>
     <_76mm_Gun_T185_A>	117	</_76mm_Gun_T185_A>
     <_76mm_Gun_T185E1>	118	</_76mm_Gun_T185E1>
+    <_90mm_Gun_T7E1>	120	</_90mm_Gun_T7E1>
     <_12.7mm_T23>	255	</_12.7mm_T23>
     <_76mm_Gun_T185_IGR>	60001	</_76mm_Gun_T185_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
@@ -3209,6 +3210,64 @@
         </_90mm_HE_M71>
       </shots>
     </_90mm_Gun_M3>
+    <_90mm_Gun_T7E1>
+      <userString>	#usa_vehicles:_90mm_Gun_T7E1	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	975	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_HVAP_T30E15>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1021	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 210	</piercingPower>
+        </_90mm_HVAP_T30E15>
+        <_90mm_HVAP_T30E16>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1021	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	259 228	</piercingPower>
+        </_90mm_HVAP_T30E16>
+        <_90mm_HE_M71>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	823	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_HE_M71>
+      </shots>
+    </_90mm_Gun_T7E1>
     <_90mm_Gun_M3A1>
       <userString>	#usa_vehicles:_90mm_Gun_M3A1	</userString>
       <tags></tags>

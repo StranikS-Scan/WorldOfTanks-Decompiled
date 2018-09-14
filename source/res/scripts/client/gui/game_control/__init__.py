@@ -125,6 +125,10 @@ def getEncyclopediaController():
     return _getController(CONTROLLER.ENCYCLOPEDIA)
 
 
+def getPromoController():
+    return _getController(CONTROLLER.PROMO)
+
+
 def getRestoreController():
     return _getController(CONTROLLER.RESTORE)
 

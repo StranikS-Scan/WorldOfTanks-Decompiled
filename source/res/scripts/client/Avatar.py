@@ -1454,7 +1454,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                 return
             if self.__shotWaitingTimerID is not None:
                 return
-            if self.isGunLocked or self.__isOwnBarrelUnderWater():
+            if self.isGunLocked or self.__isOwnBarrelUnderWater() or self.__isShootPositionInsideOtherVehicle():
                 if not isRepeat:
                     self.__showVehicleError(self.__cantShootCriticals['gun_locked'])
                 return

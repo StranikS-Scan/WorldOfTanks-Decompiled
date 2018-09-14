@@ -120,6 +120,7 @@
     <_100mm_LB-1A>	143	</_100mm_LB-1A>
     <_107mm_ZiS-24_A>	144	</_107mm_ZiS-24_A>
     <_152mm_M_53>	146	</_152mm_M_53>
+    <_122-mm_D-25T_with_wedges_shutter_A>	148	</_122-mm_D-25T_with_wedges_shutter_A>
     <Gun_01_KV>	200	</Gun_01_KV>
     <Gun_T-50-2>	201	</Gun_T-50-2>
     <Observer>	202	</Observer>
@@ -5108,6 +5109,64 @@
         </_122mm_UOF-471>
       </shots>
     </_122-mm_D-25T_with_wedges_shutter>
+    <_122-mm_D-25T_with_wedges_shutter_A>
+      <userString>	#ussr_vehicles:_122-mm_D-25T_with_wedges_shutter_A	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125140	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	12.3428571428571	</reloadTime>
+      <maxAmmo>	24	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	2590	</weight>
+      <maxHealth>	192	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.457142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_UBR-471>
+          <defaultPortion>	0.60	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	175 152	</piercingPower>
+        </_122mm_UBR-471>
+        <_122mm_UBR-471P>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	975	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	217 204	</piercingPower>
+        </_122mm_UBR-471P>
+        <_122mm_UOF-471>
+          <defaultPortion>	0.40	</defaultPortion>
+          <speed>	780	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	61 61	</piercingPower>
+        </_122mm_UOF-471>
+      </shots>
+    </_122-mm_D-25T_with_wedges_shutter_A>
     <_122-mm_D-25T_with_wedges_shutter_B>
       <userString>	#ussr_vehicles:_122-mm_D-25T_with_wedges_shutter_B	</userString>
       <tags></tags>

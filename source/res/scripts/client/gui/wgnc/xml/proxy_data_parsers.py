@@ -84,15 +84,6 @@ class _EncyclopediaContentParser(SectionParser):
         return proxy_data.EncyclopediaContentItem(section.readInt('content_id'))
 
 
-class _PlaySoundParser(SectionParser):
-
-    def getTagName(self):
-        pass
-
-    def parse(self, section):
-        return proxy_data.PlaySoundItem(self._readString('event_id', section))
-
-
 class _ProxyDataItemsParser(ParsersCollection):
 
     def getTagName(self):
@@ -115,5 +106,4 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ClanAppAcceptedParser(),
          _ClanInviteDeclinedParser(),
          _ClanInviteAcceptedParser(),
-         _EncyclopediaContentParser(),
-         _PlaySoundParser()))
+         _EncyclopediaContentParser()))

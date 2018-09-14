@@ -54,3 +54,22 @@ def createSwingingAnimator(vehicleDesc, basisMatrix=None, worldMProv=None, lodLi
     swingingAnimator.worldMatrix = worldMProv if worldMProv is not None else mathUtils.createIdentityMatrix()
     swingingAnimator.lodLink = lodLink
     return swingingAnimator
+
+
+def assembleRecoil(appearance, lodLink):
+    gunAnimatorNode = appearance.compoundModel.node(TankNodeNames.GUN_RECOIL)
+    localGunMatrix = gunAnimatorNode.localMatrix
+    appearance.gunRecoil = gunRecoil = createGunAnimator(appearance.typeDescriptor, localGunMatrix, lodLink)
+    gunRecoilMProv = gunRecoil.animatedMProv
+    appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
+    appearance.fashions.gun.inclinationMatrix = appearance.gunMatrix
+    appearance.fashions.gun.gunLocalMatrix = gunRecoilMProv
+
+
+def setupTurretRotations(appearance):
+    compoundModel = appearance.compoundModel
+    compoundModel.node(TankPartNames.TURRET, appearance.turretMatrix)
+    if not appearance.damageState.isCurrentModelDamaged:
+        compoundModel.node(TankNodeNames.GUN_INCLINATION, appearance.gunMatrix)
+    else:
+        compoundModel.node(TankPartNames.GUN, appearance.gunMatrix)

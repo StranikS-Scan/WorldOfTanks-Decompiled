@@ -690,6 +690,7 @@ class _VehicleAppearance():
         for resID, resource in resourceRefs.items():
             if resID not in failedIDs:
                 resources[resID] = resource
+                continue
             LOG_ERROR('Could not load %s' % resID)
             succesLoaded = False
 

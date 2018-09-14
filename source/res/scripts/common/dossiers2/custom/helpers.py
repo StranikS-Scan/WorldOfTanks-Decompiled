@@ -40,6 +40,14 @@ def getRecordMaxValue(block, record):
     return recordPacking[4]
 
 
+def updateTankExpert(dossierDescr, vehTypeFrags, nationID):
+    res = getTankExpertRequirements(vehTypeFrags, nationID)
+    for record, value in res.iteritems():
+        if len(value) == 0:
+            dossierDescr['achievements'][record] = True
+            dossierDescr.addPopUp('achievements', record, True)
+
+
 def updateMechanicEngineer(dossierDescr, defaultUnlocks, unlocks, nationID):
     res = getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID)
     for record, value in res.iteritems():

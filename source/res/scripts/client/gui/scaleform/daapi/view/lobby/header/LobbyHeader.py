@@ -208,10 +208,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         self.as_setWalletStatusS(game_control.g_instance.wallet.componentsStatuses)
         self.as_setPremShopDataS(RES_ICONS.MAPS_ICONS_LOBBY_ICON_PREMSHOP, MENU.HEADERBUTTONS_BTNLABEL_PREMSHOP, TOOLTIPS.HEADER_PREMSHOP, TOOLTIP_TYPES.COMPLEX)
         self.as_initOnlineCounterS(constants.IS_SHOW_SERVER_STATS)
-        game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
+        if constants.IS_SHOW_SERVER_STATS:
+            game_control.g_instance.serverStats.onStatsReceived += self.__onStatsReceived
+            self.__onStatsReceived()
         self.updateAccountInfo()
         self.__updateServerData()
-        self.__onStatsReceived()
         if not isTimeToShowGoldFishPromo():
             enabledVal = isGoldFishActionActive()
             tooltip = TOOLTIPS.HEADER_REFILL_ACTION if enabledVal else TOOLTIPS.HEADER_REFILL
@@ -244,7 +245,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         self.__falloutCtrl.onSettingsChanged -= self.__updateFalloutSettings
         self.__falloutCtrl = None
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
-        game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
+        if constants.IS_SHOW_SERVER_STATS:
+            game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
         game_control.g_instance.boosters.onBoosterChangeNotify -= self.__onUpdateGoodies
         g_preDefinedHosts.onPingPerformed -= self.__onPingPerformed
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged

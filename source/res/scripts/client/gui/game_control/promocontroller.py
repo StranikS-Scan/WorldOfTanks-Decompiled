@@ -61,6 +61,11 @@ class PromoController(Controller):
         promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
         self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
+    @process
+    def showPromo(self, url, title):
+        promoUrl = yield self.__urlMacros.parse(url)
+        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
+
     def isPatchPromoAvailable(self):
         return self.__currentVersionPromoUrl is not None and GUI_SETTINGS.isPatchPromoEnabled
 

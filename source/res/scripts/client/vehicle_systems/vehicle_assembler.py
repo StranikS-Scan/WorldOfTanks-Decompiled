@@ -118,9 +118,9 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         appearance.lodCalculator = lodCalcInst
         lodLink = DataLinks.createFloatLink(lodCalcInst, 'lodDistance')
         if not appearance.damageState.isCurrentModelDamaged:
-            _assembleRecoil(appearance, lodLink)
+            model_assembler.assembleRecoil(appearance, lodLink)
             _assembleSwinging(appearance, lodLink)
-        _setupTurretRotations(appearance)
+        model_assembler.setupTurretRotations(appearance)
 
 
 def _createEffects(appearance):
@@ -132,16 +132,6 @@ def _createEffects(appearance):
         return
 
 
-def _assembleRecoil(appearance, lodLink):
-    gunAnimatorNode = appearance.compoundModel.node(TankNodeNames.GUN_RECOIL)
-    localGunMatrix = gunAnimatorNode.localMatrix
-    appearance.gunRecoil = gunRecoil = model_assembler.createGunAnimator(appearance.typeDescriptor, localGunMatrix, lodLink)
-    gunRecoilMProv = gunRecoil.animatedMProv
-    appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
-    appearance.fashions.gun.inclinationMatrix = appearance.gunMatrix
-    appearance.fashions.gun.gunLocalMatrix = gunRecoilMProv
-
-
 def _assembleSwinging(appearance, lodLink):
     compoundModel = appearance.compoundModel
     appearance.swingingAnimator = swingingAnimator = model_assembler.createSwingingAnimator(appearance.typeDescriptor, compoundModel.node(TankPartNames.HULL).localMatrix, appearance.compoundModel.matrix, lodLink)
@@ -149,12 +139,3 @@ def _assembleSwinging(appearance, lodLink):
     appearance.fashions.chassis.setupSwinging(swingingAnimator, 'V')
     if hasattr(appearance.filter, 'placingCompensationMatrix'):
         swingingAnimator.placingCompensationMatrix = appearance.filter.placingCompensationMatrix
-
-
-def _setupTurretRotations(appearance):
-    compoundModel = appearance.compoundModel
-    compoundModel.node(TankPartNames.TURRET, appearance.turretMatrix)
-    if not appearance.damageState.isCurrentModelDamaged:
-        compoundModel.node(TankNodeNames.GUN_INCLINATION, appearance.gunMatrix)
-    else:
-        compoundModel.node(TankPartNames.GUN, appearance.gunMatrix)

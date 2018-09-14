@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
-import SoundGroups
 from gui.awards.event_dispatcher import showClanJoinAward
 from gui.game_control import getEncyclopediaController
 from gui.wgnc.events import g_wgncEvents
@@ -155,18 +154,6 @@ class EncyclopediaContentItem(_ProxyDataItem):
 
     def show(self, _):
         getEncyclopediaController().addEncyclopediaRecommendation(self.__contentId)
-
-
-class PlaySoundItem(_ProxyDataItem):
-
-    def __init__(self, eventID):
-        self.__eventID = eventID
-
-    def getType(self):
-        return WGNC_DATA_PROXY_TYPE.UNDEFINED
-
-    def show(self, _):
-        SoundGroups.g_instance.playSound2D(self.__eventID)
 
 
 class ProxyDataHolder(object):

@@ -31,7 +31,7 @@ import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG
 
 def async(func):
     """
@@ -248,7 +248,8 @@ class _Future(object):
     def set_timeout(self, timeout):
         assert self.__timerID is None
         assert timeout >= 0
-        self.__timerID = BigWorld.addTimer(self.__expire, timeout)
+        if not self.__result_set:
+            self.__timerID = BigWorld.addTimer(self.__expire, timeout)
         return
 
     def __cancel_timeout(self):

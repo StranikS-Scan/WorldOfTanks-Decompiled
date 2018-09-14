@@ -1,19 +1,19 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
-import weakref
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 from account_shared import LayoutIterator
 import dossiers2
+from parsers.ShopDataParser import ShopDataParser
 import nations
 import constants
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from adisp import async, process
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils.requesters.StatsRequesterr import StatsRequesterr
-from gui.shared.utils.requesters.ShopRequester import ShopRequester
-from gui.shared.utils.requesters.InventoryRequester import InventoryRequester
-from gui.shared.utils.requesters.DossierRequester import DossierRequester
+from StatsRequester import StatsRequester
+from ShopRequester import ShopRequester
+from InventoryRequester import InventoryRequester
+from DossierRequester import DossierRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret
@@ -112,6 +112,11 @@ class REQ_CRITERIA:
         SPECIFIC_BY_CD = staticmethod(lambda typeCompDescrs: RequestCriteria(PredicateCondition(lambda item: item.intCD in typeCompDescrs)))
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
         SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs = None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
+        ACTIVE_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
+        EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
+        EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
+        DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
+        IN_PREMIUM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isPremiumIGR))
 
     class TANKMAN:
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -137,7 +142,7 @@ class ItemsRequester(object):
     def __init__(self):
         self.shop = ShopRequester()
         self.inventory = InventoryRequester()
-        self.stats = StatsRequesterr()
+        self.stats = StatsRequester()
         self.dossiers = DossierRequester()
         self.__itemsCache = defaultdict(dict)
 
@@ -283,7 +288,6 @@ class ItemsRequester(object):
             return
 
     def getItems(self, itemTypeID = None, criteria = REQ_CRITERIA.EMPTY, nationID = None):
-        from gui.shared.utils.requesters import ShopDataParser
         shopParser = ShopDataParser(self.shop.getItemsData())
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
@@ -345,12 +349,14 @@ class ItemsRequester(object):
         @return: TankmanDossier object
         """
         tankman = self.getTankman(tmanInvID)
-        tmanDossier = self.__getTankmanDossierDescr(tmanInvID)
+        tmanDossierDescr = self.__getTankmanDossierDescr(tmanInvID)
+        currentVehicleItem = None
         if tankman.isInTank:
             extDossier = self.getVehicleDossier(tankman.vehicleDescr.type.compactDescr)
+            currentVehicleItem = self.getItemByCD(tankman.vehicleDescr.type.compactDescr)
         else:
             extDossier = self.getAccountDossier()
-        return TankmanDossier(tankman.descriptor, tmanDossier, extDossier)
+        return TankmanDossier(tankman.descriptor, tmanDossierDescr, extDossier, currentVehicleItem=currentVehicleItem)
 
     def getVehicleDossier(self, vehTypeCompDescr, databaseID = None):
         """

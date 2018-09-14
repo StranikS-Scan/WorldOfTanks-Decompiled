@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/ClientFortMgr.py
-from FortifiedRegionBase import FORT_CLIENT_METHOD, makeDirPosByte, SECONDS_PER_DAY, SECONDS_PER_HOUR
+from FortifiedRegionBase import FORT_CLIENT_METHOD, makeDirPosByte, SECONDS_PER_DAY, SECONDS_PER_HOUR, ALL_DIRS
 from ClientFortifiedRegion import ClientFortifiedRegion
 import Event
 from debug_utils import LOG_DAN, LOG_DEBUG, LOG_ERROR
@@ -51,12 +51,14 @@ class ClientFortMgr(object):
 
     def onFortUpdate(self, packedOps, packedUpdate):
         LOG_DAN('onFortUpdate: packedOps len=%s, packedUpdate len=%s' % (len(packedOps), len(packedUpdate)))
+        isFullUpdate = False
         if packedUpdate:
             self._fort.unpack(packedUpdate)
+            isFullUpdate = True
         elif packedOps:
             self._fort.unpackOps(packedOps)
         self._fort.refresh()
-        self.onFortUpdateReceived()
+        self.onFortUpdateReceived(isFullUpdate)
         LOG_DAN('after onFortUpdate:', self._fort)
 
     def onFortStateDiff(self, newState):
@@ -104,9 +106,9 @@ class ClientFortMgr(object):
         self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DMG_BUILDING, buildingTypeID, damage, 0)
         return requestID
 
-    def deletePlannedBattles(self, timeStart, timeFinish):
+    def deletePlannedBattles(self, timeStart = 1, timeFinish = 2000000000, dir = ALL_DIRS):
         requestID = self.__getNextRequestID()
-        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DELETE_PLANNED_BATTLES, timeStart, timeFinish, 0)
+        self.__callFortMethod(requestID, FORT_CLIENT_METHOD.DELETE_PLANNED_BATTLES, timeStart, timeFinish, dir)
         return requestID
 
     def changeAttackResult(self, attackResult, attackResource, attackTime):

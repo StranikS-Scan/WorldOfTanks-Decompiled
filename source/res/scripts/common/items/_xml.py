@@ -150,6 +150,21 @@ def readPrice(xmlCtx, section, subsectionName):
         return (readInt(xmlCtx, section, subsectionName, 0), 0)
 
 
+def readRentPrice(xmlCtx, section, subsectionName):
+    res = {}
+    if section[subsectionName] is not None:
+        for _, subSection in section[subsectionName].items():
+            days = readInt(xmlCtx, subSection, 'days', 1)
+            price = readPrice(xmlCtx, subSection, 'cost')
+            compensation = readPrice(xmlCtx, subSection, 'compensation')
+            if days in res:
+                raiseWrongXml(xmlCtx, '', 'Rent duration is not unique.')
+            res[days] = {'cost': price,
+             'compensation': compensation}
+
+    return res
+
+
 def readIcon(xmlCtx, section, subsectionName):
     strings = getSubsection(xmlCtx, section, subsectionName).asString.split()
     try:

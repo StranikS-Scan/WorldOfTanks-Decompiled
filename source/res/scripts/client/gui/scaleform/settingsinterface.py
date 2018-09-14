@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/SettingsInterface.py
-import sys
 from functools import partial
 import BigWorld
 import itertools
 import BattleReplay
 import SoundGroups
+from gui.battle_control import g_sessionProvider
 import nations
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData
@@ -12,7 +12,6 @@ from account_helpers.settings_core.options import APPLY_METHOD
 from account_helpers.settings_core.settings_constants import SOUND
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui import GUI_SETTINGS, g_guiResetters
-from gui.BattleContext import g_battleContext
 from gui.GraphicsPresets import GraphicsPresets
 from gui.GraphicsResolutions import g_graficsResolutions
 from gui.shared.utils.key_mapping import getScaleformKey
@@ -184,7 +183,7 @@ class SettingsInterface(UIInterface):
     def altVoicesPreview(self, soundMode):
         if not self.__altVoiceSetting.isOptionEnabled():
             return True
-        if not g_battleContext.isInBattle:
+        if not g_sessionProvider.getCtx().isInBattle:
             SoundGroups.g_instance.enableVoiceSounds(True)
         self.__altVoiceSetting.preview(soundMode)
         return self.__altVoiceSetting.playPreviewSound(self.uiHolder.soundManager)
@@ -653,7 +652,7 @@ class SettingsInterface(UIInterface):
     def onDialogClose(self, _):
         if self.__altVoiceSetting.isOptionEnabled():
             self.__altVoiceSetting.revert()
-        if not g_battleContext.isInBattle:
+        if not g_sessionProvider.getCtx().isInBattle:
             SoundGroups.g_instance.enableVoiceSounds(False)
         elif hasattr(BigWorld.player(), 'vehicle'):
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[BigWorld.player().vehicle.typeDescriptor.type.id[0]])

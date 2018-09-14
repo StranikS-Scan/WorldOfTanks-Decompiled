@@ -47,6 +47,7 @@ class _FortController(IFortController):
 
     def fini(self):
         self._removeFortListeners()
+        self.stopProcessing()
         if self._requester:
             self._requester.fini()
             self._requester = None
@@ -57,6 +58,11 @@ class _FortController(IFortController):
             self._validators = None
         self.clear()
         self._handlers.clear()
+        return
+
+    def stopProcessing(self):
+        if self._requester is not None:
+            self._requester.stopProcessing()
         return
 
     def getFort(self):
@@ -213,7 +219,8 @@ class FortController(_FortController):
          FORT_REQUEST_TYPE.ADD_FAVORITE: self.addFavorite,
          FORT_REQUEST_TYPE.REMOVE_FAVORITE: self.removeFavorite,
          FORT_REQUEST_TYPE.PLAN_ATTACK: self.planAttack,
-         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle})
+         FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE: self.createOrJoinFortBattle,
+         FORT_REQUEST_TYPE.ATTACK_AND_REQUEST_CARD: self.attackClanAndRequestItsCard})
         self.__cooldownCallback = None
         self.__cooldownBuildings = []
         self.__cooldownPassed = False
@@ -248,6 +255,12 @@ class FortController(_FortController):
             self._publicInfoCache.stop()
             self._publicInfoCache = None
         super(FortController, self).fini()
+        return
+
+    def stopProcessing(self):
+        if self._finder is not None:
+            self._finder.stopProcessing()
+        super(FortController, self).stopProcessing()
         return
 
     def openDirection(self, ctx, callback = None):
@@ -496,7 +509,8 @@ class FortController(_FortController):
         limit = ctx.getLimit()
         lvlFrom = ctx.getLvlFrom()
         lvlTo = ctx.getLvlTo()
-        ownStartDefHourFrom, ownStartDefHourTo = fort.defenceHour, fort.defenceHour + 1
+        ownStartDefHourFrom = fort.defenceHour
+        nextOwnStartDefHourFrom, defHourChangeDay = fort.getNextDefenceHourData()
         extStartDefHourFrom = ctx.getStartDefHourFrom()
         extStartDefHourTo = ctx.getStartDefHourTo()
         attackDay = ctx.getAttackDay()
@@ -510,13 +524,14 @@ class FortController(_FortController):
         if validBuildingLevels:
             avgBuildingLevel10 = int(float(sum(validBuildingLevels)) / len(validBuildingLevels) * 10)
         ownBattleCountForFort = battleStats.getBattlesCount()
+        firstDefaultQuery = ctx.isFirstDefaultQuery()
         electedClanDBIDs = tuple(fort.favorites)
         val = self.getValidators()
         validationResult, validationReason = val.validate(ctx.getRequestType(), filterType, abbrevPattern)
         if not validationResult:
             self._listeners.notify('onFortPublicInfoValidationError', validationReason)
             return self._failChecking('Player input is invalid', ctx, callback)
-        return self._finder.request(filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs, callback)
+        return self._finder.request(filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourFrom + 1, nextOwnStartDefHourFrom, nextOwnStartDefHourFrom + 1, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs, callback)
 
     def requestClanCard(self, ctx, callback = None):
         perm = self.getPermissions()
@@ -524,6 +539,24 @@ class FortController(_FortController):
             return self._failChecking('Player can not request clan card', ctx, callback)
         clanDBID = ctx.getClanDBID()
         return self._requester.doRequestEx(ctx, callback, 'getEnemyClanCard', clanDBID)
+
+    def attackClanAndRequestItsCard(self, ctx, callback = None):
+        requestsChain = []
+        perm = self.getPermissions()
+        if not perm.canRequestClanCard():
+            return self._failChecking('Player can not request clan card', ctx, callback)
+        if not perm.canPlanAttack():
+            return self._failChecking('Player can not plan attack', ctx, callback)
+        clanDBID = ctx.getClanDBID()
+        timeAttack = ctx.getTimeAttack()
+        dirFrom = ctx.getDirFrom()
+        dirTo = ctx.getDirTo()
+        requestsChain.append(('planAttack', (clanDBID,
+          timeAttack,
+          dirFrom,
+          dirTo), {}))
+        requestsChain.append(('getEnemyClanCard', (clanDBID,), {}))
+        return self._requester.doRequestChainEx(ctx, callback, requestsChain)
 
     def addFavorite(self, ctx, callback = None):
         perm = self.getPermissions()
@@ -573,14 +606,20 @@ class FortController(_FortController):
         fort.onTransport += self.__fort_onTransport
         fort.onDirectionOpened += self.__fort_onDirectionOpened
         fort.onDirectionClosed += self.__fort_onDirectionClosed
+        fort.onDirectionLockChanged += self.__fort_onDirectionLockChanged
         fort.onStateChanged += self.__fort_onStateChanged
         fort.onOrderReady += self.__fort_onOrderReady
         fort.onDossierChanged += self.__fort_onDossierChanged
         fort.onPlayerAttached += self.__fort_onPlayerAttached
+        fort.onPeripheryChanged += self.__fort_onPeripheryChanged
         fort.onDefenceHourChanged += self.__fort_onDefenceHourChanged
+        fort.onOffDayChanged += self.__fort_onOffDayChanged
+        fort.onVacationChanged += self.__fort_onVacationChanged
         fort.onFavoritesChanged += self.__fort_onFavoritesChanged
         fort.onEnemyClanCardReceived += self.__fort_onEnemyClanCardReceived
         fort.onShutdownDowngrade += self.__fort_onShutdownDowngrade
+        fort.onDefenceHourShutdown += self.__fort_onDefenceHourShutdown
+        fort.onEmergencyRestore += self.__fort_onEmergencyRestore
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to subscribe')
@@ -601,14 +640,20 @@ class FortController(_FortController):
         fort.onTransport -= self.__fort_onTransport
         fort.onDirectionOpened -= self.__fort_onDirectionOpened
         fort.onDirectionClosed -= self.__fort_onDirectionClosed
+        fort.onDirectionLockChanged -= self.__fort_onDirectionLockChanged
         fort.onStateChanged -= self.__fort_onStateChanged
         fort.onOrderReady -= self.__fort_onOrderReady
         fort.onDossierChanged -= self.__fort_onDossierChanged
         fort.onPlayerAttached -= self.__fort_onPlayerAttached
+        fort.onPeripheryChanged -= self.__fort_onPeripheryChanged
         fort.onDefenceHourChanged -= self.__fort_onDefenceHourChanged
+        fort.onOffDayChanged -= self.__fort_onOffDayChanged
+        fort.onVacationChanged -= self.__fort_onVacationChanged
         fort.onFavoritesChanged -= self.__fort_onFavoritesChanged
         fort.onEnemyClanCardReceived -= self.__fort_onEnemyClanCardReceived
         fort.onShutdownDowngrade -= self.__fort_onShutdownDowngrade
+        fort.onDefenceHourShutdown -= self.__fort_onDefenceHourShutdown
+        fort.onEmergencyRestore -= self.__fort_onEmergencyRestore
         fortMgr = getClientFortMgr()
         if not fortMgr:
             LOG_ERROR('No fort manager to unsubscribe')
@@ -679,6 +724,9 @@ class FortController(_FortController):
     def __fort_onDirectionClosed(self, dir):
         self._listeners.notify('onDirectionClosed', dir)
 
+    def __fort_onDirectionLockChanged(self):
+        self._listeners.notify('onDirectionLockChanged')
+
     def __fort_onStateChanged(self, state):
         self._listeners.notify('onStateChanged', state)
 
@@ -691,25 +739,45 @@ class FortController(_FortController):
     def __fort_onPlayerAttached(self, buildingTypeID):
         self._listeners.notify('onPlayerAttached', buildingTypeID)
 
+    def __fort_onPeripheryChanged(self, peripheryID):
+        self._listeners.notify('onPeripheryChanged', peripheryID)
+
     def __fort_onDefenceHourChanged(self, hour):
         self._listeners.notify('onDefenceHourChanged', hour)
+        self.__processDefencePeriodCallback()
+
+    def __fort_onOffDayChanged(self, offDay):
+        self._listeners.notify('onOffDayChanged', offDay)
+        self.__processDefencePeriodCallback()
+
+    def __fort_onVacationChanged(self, vacationStart, vacationEnd):
+        self._listeners.notify('onVacationChanged', vacationStart, vacationEnd)
         self.__processDefencePeriodCallback()
 
     def __fort_onFavoritesChanged(self, clanDBID):
         self._listeners.notify('onFavoritesChanged', clanDBID)
 
     def __fort_onEnemyClanCardReceived(self, card):
+        if self._publicInfoCache is not None:
+            self._publicInfoCache.storeSelectedClanCard(card)
         self._listeners.notify('onEnemyClanCardReceived', card)
+        return
 
     def __fort_onShutdownDowngrade(self):
         self._listeners.notify('onShutdownDowngrade')
 
-    def __fortMgr_onFortUpdateReceived(self):
-        self.__refreshCooldowns(False)
+    def __fort_onDefenceHourShutdown(self):
+        self._listeners.notify('onDefenceHourShutdown')
+
+    def __fortMgr_onFortUpdateReceived(self, isFullUpdate = False):
+        self.__refreshCooldowns(isFullUpdate)
 
     def __fortMgr_onFortPublicInfoReceived(self, requestID, errorID, resultSet):
         self._finder.response(requestID, errorID, resultSet)
         self._listeners.notify('onFortPublicInfoReceived', bool(resultSet))
+
+    def __fort_onEmergencyRestore(self):
+        self.stopProcessing()
 
 
 def createInitial():

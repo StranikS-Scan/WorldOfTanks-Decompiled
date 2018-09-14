@@ -2,8 +2,9 @@
 from collections import defaultdict
 import weakref
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION
 from messenger.proto.xmpp.jid import ContactJID
+from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 XmppClient = BigWorld.XmppClient
 
 class PRESENCE(object):
@@ -39,6 +40,11 @@ class SUBSCRIPTION(object):
 
 
 SUBSCRIPTION_NAMES = dict([ (v, k) for k, v in SUBSCRIPTION.__dict__.iteritems() if not k.startswith('_') ])
+
+class CONNECTION_IMPL_TYPE(object):
+    TCP = 1
+    BOSH = 2
+
 
 class CONNECTION_STATE(object):
     DISCONNECTED = XmppClient.STATE_DISCONNECTED
@@ -111,15 +117,15 @@ class ClientDecorator(object):
         ClientHolder._clearClient()
         for handlerName, listenerName in _GLOOX_EVENTS_LISTENERS:
             if not hasattr(client, handlerName):
-                LOG_ERROR('XMPPClient::Client, handler no is found', handlerName)
+                g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler no is found', handlerName)
                 continue
             handler = getattr(client, handlerName)
             if handler:
-                LOG_WARNING('XMPPClient::Client, handler already is set', handlerName)
+                g_logOutput.warning(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler already is set', handlerName)
                 continue
             listener = getattr(self, listenerName, None)
             if listener is None or not callable(listener):
-                LOG_ERROR('XMPPClient::Client, listener no is found', listenerName)
+                g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Listener no is found', listenerName)
                 continue
             setattr(client, handlerName, listener)
 
@@ -132,12 +138,17 @@ class ClientDecorator(object):
             setattr(client, handlerName, None)
 
         self.__handlers.clear()
+        g_logOutput.clear()
         ClientHolder._clearClient()
         return
 
     def connect(self, jid, host = '', port = -1):
         self.__address = (jid, host, port)
         self.__client.connect(jid, host, port)
+
+    def connectBosh(self, jid, host = '', port = -1, url = ''):
+        self.__address = (jid, url)
+        self.__client.connectBosh(jid, host, port, url)
 
     def login(self, password):
         self.__client.login(password)
@@ -166,7 +177,7 @@ class ClientDecorator(object):
 
     def setClientPresence(self, presence):
         if presence not in PRESENCE.RANGE:
-            LOG_ERROR('Value of presence is invalid.', presence)
+            g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Value of presence is invalid', presence)
             return
         self.__client.presence = presence
 
@@ -192,17 +203,17 @@ class ClientDecorator(object):
         if event in GLOOX_EVENT.ALL:
             handlers = self.__handlers[event]
             if handler in handlers:
-                LOG_WARNING('XMPPClient::Client, handler already exists', event, handler)
+                g_logOutput.warning(CLIENT_LOG_AREA.PY_WRAPPER, 'handler already exists', event, handler)
             else:
                 if not hasattr(handler, '__self__') or not isinstance(handler.__self__, ClientEventsHandler):
-                    LOG_ERROR('XMPPClient::Client, class of handler is not subclass of ClientEventsHandler', handler)
+                    g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Class of handler is not subclass of ClientEventsHandler', handler)
                     return
                 if callable(handler):
                     handlers.add(handler)
                 else:
-                    LOG_ERROR('XMPPClient::Client, handler is invalid', handler)
+                    g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Handler is invalid', handler)
         else:
-            LOG_ERROR('XMPPClient::Client, event is not found', event)
+            g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Event is not found', event)
 
     def unregisterHandler(self, event, handler):
         if event in GLOOX_EVENT.ALL:
@@ -210,7 +221,7 @@ class ClientDecorator(object):
             if handler in handlers:
                 handlers.remove(handler)
         else:
-            LOG_ERROR('XMPPClient::Client, event is not found', event)
+            g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, 'Event is not found', event)
 
     def onConnected(self):
         self.__handleEvent(GLOOX_EVENT.CONNECTED)
@@ -248,7 +259,7 @@ class ClientDecorator(object):
             try:
                 handler(*args, **kwargs)
             except TypeError:
-                LOG_ERROR('XMPPClient::Client, handler invoked with error', handler)
+                g_logOutput.error(CLIENT_LOG_AREA.PY_WRAPPER, ' Handler is invoked with error', handler)
                 LOG_CURRENT_EXCEPTION()
 
 

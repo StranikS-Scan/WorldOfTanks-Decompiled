@@ -14,6 +14,7 @@ from messenger.ext.channel_num_gen import SPECIAL_CLIENT_WINDOWS
 from messenger.m_constants import LAZY_CHANNEL
 from collections import namedtuple
 import weakref
+TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
  'isNotified',
@@ -22,8 +23,9 @@ _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'criteria',
  'viewType',
  'openHandler',
- 'readyData'])
-_defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, viewType=ViewTypes.WINDOW, openHandler=None, readyData=None)
+ 'readyData',
+ 'tooltipData'])
+_defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, viewType=ViewTypes.WINDOW, openHandler=None, readyData=None, tooltipData=None)
 _LOCKED_SCREENS = (events.LoadEvent.LOAD_TRAINING_ROOM, events.LoadEvent.LOAD_TRAININGS)
 
 class EventDispatcher(AppRef):
@@ -146,7 +148,7 @@ class EventDispatcher(AppRef):
         if not clientID:
             LOG_ERROR('Client ID not found', 'addSquadToCarousel')
             return
-        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_SQUAD, icon=RES_ICONS.MAPS_ICONS_MESSENGER_SQUAD_ICON, criteria={POP_UP_CRITERIA.VIEW_ALIAS: guiFactory.getAliasByEvent(events.ShowWindowEvent.SHOW_SQUAD_WINDOW)}, openHandler=self.showSquadWindow, readyData=self.__getReadyPrbData(isReady))
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=CHAT.CHANNELS_SQUAD, icon=RES_ICONS.MAPS_ICONS_MESSENGER_SQUAD_ICON, criteria={POP_UP_CRITERIA.VIEW_ALIAS: guiFactory.getAliasByEvent(events.ShowWindowEvent.SHOW_SQUAD_WINDOW)}, openHandler=self.showSquadWindow, readyData=self.__getReadyPrbData(isReady), tooltipData=self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP))
         self._handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def removeSquadFromCarousel(self):
@@ -307,6 +309,10 @@ class EventDispatcher(AppRef):
          'value': readyData,
          'isShowByReq': False,
          'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.ChannelManagementEvent(clientID, events.ChannelManagementEvent.REQUEST_TO_CHANGE, {'key': 'tooltipData',
+         'value': self.__getTooltipPrbData(CHAT.CHANNELS_SQUADREADY_TOOLTIP if isTeamReady else CHAT.CHANNELS_SQUADNOTREADY_TOOLTIP),
+         'isShowByReq': False,
+         'showIfClosed': True}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
@@ -378,6 +384,9 @@ class EventDispatcher(AppRef):
 
     def __getReadyPrbData(self, isReady):
         return {'isReady': isReady}
+
+    def __getTooltipPrbData(self, tooltipId, label = ''):
+        return TOOLTIP_PRB_DATA(tooltipId=tooltipId, label=label)._asdict()
 
     def __getCompanyWindowContext(self):
         return {'clientID': self.__getClientIDForCompany()}

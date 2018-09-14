@@ -11,6 +11,8 @@ from chat_shared import CHAT_ACTIONS, CHAT_RESPONSES, USERS_ROSTER_VOICE_MUTED
 from ChatManager import chatManager
 import sys
 from datetime import datetime
+from messenger.proto import bw_proto_getter
+from messenger.proto.events import g_messengerEvents
 g_useVivoxlog = None
 g_vivoxLogFile = None
 
@@ -85,8 +87,6 @@ class VOIPManager:
         self.vivoxDomain = ''
         self.testChannel = ''
         self.inTesting = False
-        self.channelID = -1
-        self.mainChannel = ['', '']
         self.__activateMicByVoice = False
         self.__enableVoiceNormalization = False
         self.usersRoster = {}
@@ -105,7 +105,10 @@ class VOIPManager:
         self.channelsMgr.onLogined += self.onLogined
         self.channelsMgr.onStateChanged += self.onStateChanged
         self.oldMasterVolume = FMOD.getMasterVolume()
-        self.muffled = False
+
+    @bw_proto_getter()
+    def bwProto(self):
+        return None
 
     def destroy(self):
         self.channelsMgr.onParticipantAdded -= self._onParticipantAdded
@@ -121,10 +124,13 @@ class VOIPManager:
 
     def onConnected(self):
         LOG_VOIP_INT('VOIPManager.subscribe')
-        chatManager.subscribeChatAction(self.__onEnterChatChannel, CHAT_ACTIONS.VOIPSettings)
-        chatManager.subscribeChatAction(self.__onLeftChatChannel, CHAT_ACTIONS.channelDestroyed)
-        chatManager.subscribeChatAction(self.__onLeftChatChannel, CHAT_ACTIONS.selfLeave)
-        chatManager.subscribeChatAction(self.__onUserCredentials, CHAT_ACTIONS.VOIPCredentials)
+        voipEvents = g_messengerEvents.voip
+        voipEvents.onChannelEntered += self.__onChatChannelEntered
+        voipEvents.onChannelLeft += self.__onChatChannelLeft
+        voipEvents.onCredentialReceived += self.__onCredentialReceived
+        params = self.bwProto.voipProvider.getChannelParams()
+        if params[0]:
+            self.__onChatChannelEntered(*params)
         chatManager.subscribeChatAction(self.__onRequestUsersRoster, CHAT_ACTIONS.requestUsersRoster)
         chatManager.subscribeChatAction(self.__onChatActionSetMuted, CHAT_ACTIONS.setMuted)
         chatManager.subscribeChatAction(self.__onChatActionUnsetMuted, CHAT_ACTIONS.unsetMuted)
@@ -134,10 +140,10 @@ class VOIPManager:
 
     def onDisconnected(self):
         LOG_VOIP_INT('VOIPManager.unsubscribe')
-        chatManager.unsubscribeChatAction(self.__onEnterChatChannel, CHAT_ACTIONS.VOIPSettings)
-        chatManager.unsubscribeChatAction(self.__onLeftChatChannel, CHAT_ACTIONS.channelDestroyed)
-        chatManager.unsubscribeChatAction(self.__onLeftChatChannel, CHAT_ACTIONS.selfLeave)
-        chatManager.unsubscribeChatAction(self.__onUserCredentials, CHAT_ACTIONS.VOIPCredentials)
+        voipEvents = g_messengerEvents.voip
+        voipEvents.onChannelEntered -= self.__onChatChannelEntered
+        voipEvents.onChannelLeft -= self.__onChatChannelLeft
+        voipEvents.onCredentialReceived -= self.__onCredentialReceived
         chatManager.unsubscribeChatAction(self.__onRequestUsersRoster, CHAT_ACTIONS.requestUsersRoster)
         chatManager.unsubscribeChatAction(self.__onChatActionSetMuted, CHAT_ACTIONS.setMuted)
         chatManager.unsubscribeChatAction(self.__onChatActionUnsetMuted, CHAT_ACTIONS.unsetMuted)
@@ -169,24 +175,20 @@ class VOIPManager:
     def __leaveChannel(self):
         self.channelsMgr.leaveChannel()
 
-    def __onEnterChatChannel(self, data):
-        if not data['channel'] or data['data']['URL'] == '' or data['data']['password'] == '':
-            return
-        if self.mainChannel[0] == data['data']['URL']:
-            return
-        self.channelID = data['channel']
-        self.mainChannel = [data['data']['URL'], data['data']['password']]
+    def __onChatChannelEntered(self, uri, pwd):
+        LOG_VOIP_INT('VOIPManager.onChatChannelEntered')
         if not self.inTesting:
-            self.__enterChannel(self.mainChannel[0], self.mainChannel[1])
+            self.__enterChannel(uri, pwd)
 
-    def __onLeftChatChannel(self, data):
-        if self.channelID != data['channel']:
-            return
-        verify(self.mainChannel[0])
+    def __onChatChannelLeft(self):
+        LOG_VOIP_INT('VOIPManager.onChatChannelLeft')
         if not self.inTesting:
             self.__leaveChannel()
-        self.channelID = -1
-        self.mainChannel = ['', '']
+
+    def __onCredentialReceived(self, name, pwd):
+        LOG_VOIP_INT("VOIPManager.onUserCredentials: '%s' '%s'" % (name, pwd))
+        self.channelsMgr.login(name, pwd)
+        BigWorld.player().requestUsersRoster(USERS_ROSTER_VOICE_MUTED)
 
     def enterTestChannel(self):
         if self.inTesting:
@@ -200,21 +202,15 @@ class VOIPManager:
             return
         LOG_VOIP_INT('VOIPManager.leaveTestChannel')
         self.inTesting = False
-        if self.mainChannel[0]:
-            verify(self.channelID != -1)
-            self.__enterChannel(self.mainChannel[0], self.mainChannel[1])
+        params = self.bwProto.voipProvider.getChannelParams()
+        if params[0]:
+            self.__enterChannel(*params)
         else:
-            verify(self.channelID == -1)
             self.__leaveChannel()
 
     def requestVOIPCredentials(self):
         LOG_VOIP_INT('VOIPManager.requestVOIPCredentials')
-        BigWorld.player().requestVOIPCredentials()
-
-    def __onUserCredentials(self, data):
-        LOG_VOIP_INT("VOIPManager.onUserCredentials: '%s' '%s'" % (data['data'][0], data['data'][1]))
-        self.channelsMgr.login(data['data'][0], data['data'][1])
-        BigWorld.player().requestUsersRoster(USERS_ROSTER_VOICE_MUTED)
+        self.bwProto.voipProvider.requestCredentials()
 
     def logout(self):
         LOG_VOIP_INT('VOIPManager.logout')
@@ -325,14 +321,10 @@ class VOIPManager:
         return
 
     def muffleMasterVolume(self):
-        if not self.muffled:
-            self.oldMasterVolume = FMOD.getMasterVolume()
-            FMOD.setMasterVolume(self.oldMasterVolume * SoundGroups.g_instance.getVolume('masterFadeVivox'))
-            self.muffled = True
+        SoundGroups.g_instance.muffleFMODVolume()
 
     def restoreMasterVolume(self):
-        self.muffled = False
-        FMOD.setMasterVolume(self.oldMasterVolume)
+        SoundGroups.g_instance.restoreFMODVolume()
 
     def isAnyoneTalking(self):
         for info in self.channelUsers.values():
@@ -389,7 +381,7 @@ class VOIPManager:
         self.restoreMasterVolume()
 
     def onLogined(self):
-        BigWorld.player().logVivoxLogin()
+        self.bwProto.voipProvider.logVivoxLogin()
 
     def onStateChanged(self, old, new):
         if new == self.channelsMgr.STATE_JOINING_CHANNEL:

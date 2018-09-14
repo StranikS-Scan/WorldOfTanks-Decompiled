@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/AccountPopover.py
 import BigWorld
 from adisp import process
+from gui import game_control
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale import RES_ICONS
 from gui.prb_control.dispatcher import g_prbLoader
@@ -30,6 +31,10 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
         self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
+    def openReferralManagement(self):
+        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_REFERRAL_MANAGEMENT_WINDOW, {}))
+        self.destroy()
+
     def _populate(self):
         g_playerEvents.onCenterIsLongDisconnected += self.__onCenterIsLongDisconnected
         super(AccountPopover, self)._populate()
@@ -43,6 +48,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
     def __populateUserInfo(self):
         self.__setUserInfo()
         self.__syncUserInfo()
+        self.__setReferralData()
 
     @process
     def __populateClanEmblem(self):
@@ -83,7 +89,7 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
              'value': value,
              'icon': iconPath}
 
-        self.__achieves = [_packStats('rating', BigWorld.wg_getIntegralFormat(items.stats.getGlobalRating()), RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_RATING), _packStats('battles', BigWorld.wg_getIntegralFormat(randomStats.getBattlesCount()), RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_RATIO), _packStats('wins', winsEffLabel, RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_FIGHTS)]
+        self.__achieves = [_packStats('rating', BigWorld.wg_getIntegralFormat(items.stats.globalRating), RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_RATING), _packStats('battles', BigWorld.wg_getIntegralFormat(randomStats.getBattlesCount()), RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_RATIO), _packStats('wins', winsEffLabel, RES_ICONS.RES_ICONS.MAPS_ICONS_STATISTIC_FIGHTS)]
         return
 
     def __setClanData(self):
@@ -121,3 +127,11 @@ class AccountPopover(AccountPopoverMeta, SmartPopOverView, View, AppRef):
     def __onCenterIsLongDisconnected(self, *args):
         self.__setClanData()
         self.__syncUserInfo()
+
+    def __setReferralData(self):
+        refferals = game_control.g_instance.refSystem.getReferrals()
+        if refferals:
+            invitedText = makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(refferals))
+            moreInfoText = makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO)
+            self.as_setReferralDataS({'invitedText': invitedText,
+             'moreInfoText': moreInfoText})

@@ -67,6 +67,10 @@ class AbstractRallyWindow(View, AbstractRallyWindowMeta, AbstractWindowView):
     def getPythonAliases(self):
         return []
 
+    def minimizing(self):
+        for component in self.components.itervalues():
+            component.isMinimising = True
+
     def _dispose(self):
         self._viewToUnload = None
         self._viewToLoad = None

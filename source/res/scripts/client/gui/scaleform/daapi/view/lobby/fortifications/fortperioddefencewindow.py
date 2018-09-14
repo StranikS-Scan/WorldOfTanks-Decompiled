@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortPeriodDefenceWindow.py
+from FortifiedRegionBase import NOT_ACTIVATED
 import constants
 from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -6,8 +7,9 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.meta.FortPeriodDefenceWindowMeta import FortPeriodDefenceWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.shared.fortifications.context import SettingsCtx
+from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC, adjustOffDayToUTC
 from helpers import i18n
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
@@ -32,7 +34,20 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
     def onWindowClose(self):
         self.onCancel()
 
-    def onUpdated(self):
+    def onShutdownDowngrade(self):
+        self.__updateData()
+
+    def onDefenceHourChanged(self, hour):
+        if not self.isDisposed():
+            self.__updateData()
+
+    def onOffDayChanged(self, offDay):
+        self.__updateData()
+
+    def onPeripheryChanged(self, peripheryID):
+        self.__updateData()
+
+    def onVacationChanged(self, vacationStart, vacationEnd):
         self.__updateData()
 
     def _populate(self):
@@ -45,6 +60,8 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
         super(FortPeriodDefenceWindow, self)._dispose()
 
     def __updateData(self):
+        if self.fortCtrl.getFort().isDefenceHourEnabled():
+            return self.destroy()
         self.as_setTextsS(self.__createTexts())
         self.as_setDataS(self.__createData())
 
@@ -52,13 +69,13 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
         self.__textsCreated = True
         gt = self.__getHTMLText
         return {'windowLbl': FORTIFICATIONS.PERIODDEFENCEWINDOW_HEADERLBL,
-         'headerLbl': gt(fort_text.HIGH_TITLE, FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
-         'peripheryLbl': gt(fort_text.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
-         'peripheryDescr': gt(fort_text.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
-         'hourDefenceLbl': gt(fort_text.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
-         'hourDefenceDescr': gt(fort_text.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
-         'holidayLbl': gt(fort_text.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
-         'holidayDescr': gt(fort_text.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
+         'headerLbl': gt(TextType.HIGH_TITLE, FORTIFICATIONS.PERIODDEFENCEWINDOW_READY),
+         'peripheryLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY),
+         'peripheryDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_PERIPHERY_DESCRIPTION),
+         'hourDefenceLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE),
+         'hourDefenceDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOURDEFENCE_DESCRIPTION),
+         'holidayLbl': gt(TextType.NEUTRAL_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY),
+         'holidayDescr': gt(TextType.STANDARD_TEXT, FORTIFICATIONS.PERIODDEFENCEWINDOW_HOLIDAY_DESCRIPTION),
          'acceptBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_ACTIVATE,
          'cancelBtn': FORTIFICATIONS.PERIODDEFENCEWINDOW_BTN_NOTNOW}
 
@@ -70,14 +87,14 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
         return {'peripheryData': self.__getPeripheryList(),
          'peripherySelectedID': fort.peripheryID,
          'holidayData': self._getDayoffsList(),
-         'holidaySelectedID': fort.offDay,
+         'holidaySelectedID': fort.getLocalOffDay(),
          'hour': fort.getLocalDefenceHour(),
          'skipValues': skipValues,
          'isTwelveHoursFormat': False}
 
     def __getHTMLText(self, style, localText):
         text = i18n.makeString(localText)
-        return fort_text.getText(style, text)
+        return self.app.utilsManager.textManager.getText(style, text)
 
     def __getPeripheryList(self):
         result = []
@@ -93,7 +110,11 @@ class FortPeriodDefenceWindow(View, AbstractWindowView, FortPeriodDefenceWindowM
 
     @process
     def __setup(self, defHour, offDay, peripheryID):
-        result = yield self.fortProvider.sendRequest(SettingsCtx(defHour, offDay, peripheryID, waitingID='fort/settings'))
+        defHourUTC = adjustDefenceHourToUTC(defHour)
+        offDayUTC = offDay
+        if offDay != NOT_ACTIVATED:
+            offDayUTC = adjustOffDayToUTC(offDay, defHour)
+        result = yield self.fortProvider.sendRequest(SettingsCtx(defHourUTC, offDayUTC, peripheryID, waitingID='fort/settings'))
         if result:
             g_fortSoundController.playDefencePeriodActivated()
-            self.destroy()
+        self.destroy()

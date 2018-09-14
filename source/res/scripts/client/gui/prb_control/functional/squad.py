@@ -212,7 +212,7 @@ class SquadFunctional(PrbFunctional):
             if account.isVehicleSpecified():
                 curTotalLevel += account.getVehicle().level
 
-        return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, self.SLOTS_COUNT * constants.MAX_VEHICLE_LEVEL)
+        return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, [], 1, self.SLOTS_COUNT * constants.MAX_VEHICLE_LEVEL)
 
     def _getSlotsIterator(self, accounts):
         for slotIdx, account in enumerate(sorted(accounts, cmp=prb_items.getPlayersComparator())):

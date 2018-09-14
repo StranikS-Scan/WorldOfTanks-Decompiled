@@ -2,7 +2,7 @@
 import ResMgr
 import ArenaType
 from debug_utils import *
-from constants import FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_OBLIGATORY_BONUS_NAMES
+from constants import FORT_BUILDING_TYPE, FORT_ORDER_TYPE
 _CONFIG_FILE = 'scripts/item_defs/fortified_regions.xml'
 
 def _getInt(section, name, default = 0):
@@ -143,6 +143,7 @@ class FortifiedRegionCache:
         self.changePeripheryCooldownTime = 0
         self.buildings = {}
         self.orders = {}
+        self.orderTypeIDToBuildTypeID = {}
         self.transportLevels = {}
         self.defenceConditions = None
         self.divisions = {}
@@ -217,13 +218,15 @@ def init():
         g_cache.fortBattleMaps.add(geometryNamesToIDs[name])
 
     g_cache.buildings = buildings = {}
+    g_cache.orderTypeIDToBuildTypeID = orderTypeIDToBuildTypeID = {}
     for buildName, subsection in section['buildings'].items():
         buildTypeID = getattr(FORT_BUILDING_TYPE, buildName, None)
         if not buildTypeID:
             raise Exception, 'Unknown building name (%s)' % (buildName,)
         if buildTypeID in buildings:
             raise Exception, 'Duplicate building type (%s)' % (buildTypeID,)
-        buildings[buildTypeID] = BuildingType(buildTypeID, buildName, subsection)
+        buildings[buildTypeID] = buildingType = BuildingType(buildTypeID, buildName, subsection)
+        orderTypeIDToBuildTypeID[buildingType.orderType] = buildTypeID
 
     g_cache.orders = orders = {}
     for orderName, subsection in section['orders'].items():
@@ -239,10 +242,9 @@ def init():
         level = subsection.asInt
         factors.setdefault(level, {})
         for bonusName, bonusSubsection in subsection.items():
-            if not FORT_OBLIGATORY_BONUS_NAMES.count(bonusName):
-                raise Exception, 'Unknown bonus name (%s)' % (bonusName,)
-            bonusID = FORT_OBLIGATORY_BONUS_NAMES.index(bonusName)
-            factors[level][bonusID] = bonusSubsection.asFloat
+            if bonusName not in ('tankmenXP', 'tankmenXPFactor', 'xp', 'credits', 'freeXP', 'premium', 'gold', 'items'):
+                raise Exception, 'Unsupported fort bonus factor (%s)' % (bonusName,)
+            factors[level][bonusName] = bonusSubsection.asFloat
 
     if len(factors) != len(buildings[FORT_BUILDING_TYPE.OFFICE].levels):
         raise Exception, 'Number of levels in fort_bonus_factors must be equal to number of OFFICE levels'

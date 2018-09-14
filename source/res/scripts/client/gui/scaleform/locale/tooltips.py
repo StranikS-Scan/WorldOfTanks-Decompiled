@@ -69,10 +69,15 @@ class TOOLTIPS(object):
     EQUIPMENT_AUTO = '#tooltips:equipment/auto'
     EQUIPMENT_EMPTY = '#tooltips:equipment/empty'
     CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP = '#tooltips:customization/camouflage/current/drop'
+    CUSTOMIZATION_CAMOUFLAGE_CURRENT_DISMOUNT = '#tooltips:customization/camouflage/current/dismount'
     CUSTOMIZATION_EMBLEMLEFT_CURRENT_DROP = '#tooltips:customization/emblemLeft/current/drop'
+    CUSTOMIZATION_EMBLEMLEFT_CURRENT_DISMOUNT = '#tooltips:customization/emblemLeft/current/dismount'
     CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DROP = '#tooltips:customization/emblemRight/current/drop'
+    CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DISMOUNT = '#tooltips:customization/emblemRight/current/dismount'
     CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DROP = '#tooltips:customization/inscriptionLeft/current/drop'
+    CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DISMOUNT = '#tooltips:customization/inscriptionLeft/current/dismount'
     CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DROP = '#tooltips:customization/inscriptionRight/current/drop'
+    CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DISMOUNT = '#tooltips:customization/inscriptionRight/current/dismount'
     CUSTOMIZATION_CAMOUFLAGE_IGR = '#tooltips:customization/camouflage/igr'
     CUSTOMIZATION_EMBLEM_IGR = '#tooltips:customization/emblem/igr'
     CUSTOMIZATION_INSCRIPTION_IGR = '#tooltips:customization/inscription/igr'
@@ -215,13 +220,14 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTSETTINGSWINDOW_INFOICON = '#tooltips:fortification/fortSettingsWindow/infoIcon'
     FORTIFICATION_FORTSETTINGSWINDOW_DISABLEDEFENCEPERIOD = '#tooltips:fortification/fortSettingsWindow/disableDefencePeriod'
     FORTIFICATION_POPOVER_UPGRADEBTN_DISABLEDBYDESTROY = '#tooltips:fortification/popOver/upgradeBtn_DisabledByDestroy'
-    HEADERTUTORIAL_BREAKTUTORIAL = '#tooltips:headerTutorial/breakTutorial'
-    HEADERTUTORIAL_NEXT = '#tooltips:headerTutorial/next'
-    HEADERTUTORIAL_BACK = '#tooltips:headerTutorial/back'
     FORTIFICATION_CLANSTATS_PERIODDEFENCE_BATTLES_BATTLESCOUNT = '#tooltips:fortification/clanStats/periodDefence/battles/battlesCount'
     FORTIFICATION_FORTCLANBATTLELIST_BATTLENAME = '#tooltips:fortification/fortClanBattleList/battleName'
     FORTIFICATION_FORTCLANBATTLELIST_BATTLEDATE = '#tooltips:fortification/fortClanBattleList/battleDate'
     FORTIFICATION_FORTCLANBATTLELIST_BATTLETIME = '#tooltips:fortification/fortClanBattleList/battleTime'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED = '#tooltips:ReferralManagementWindow/createSquadBtn/enabled'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/isOffline'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL = '#tooltips:ReferralManagementWindow/createSquadBtn/disabled/squadIsFull'
+    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE = '#tooltips:ReferralManagementWindow/table/experience'
     SQUADWINDOW_BATTLETYPEINFO_HEADER = SQUADWINDOW_BATTLETYPEINFO + '/header'
     SQUADWINDOW_BATTLETYPEINFO_BODY = SQUADWINDOW_BATTLETYPEINFO + '/body'
     SQUADWINDOW_BUTTONS_BTNNOTREADY_HEADER = SQUADWINDOW_BUTTONS_BTNNOTREADY + '/header'
@@ -251,6 +257,7 @@ class TOOLTIPS(object):
     ACTIONPRICE_ACTIONNAME = '#tooltips:actionPrice/actionName'
     ACTIONPRICE_FORACTION = '#tooltips:actionPrice/forAction'
     ACTIONPRICE_FORACTIONS = '#tooltips:actionPrice/forActions'
+    ACTIONPRICE_RENTCOMPENSATION = '#tooltips:actionPrice/rentCompensation'
     ACTIONPRICE_SELL_HEADER = '#tooltips:actionPrice/sell/header'
     ACTIONPRICE_SELL_BODY = '#tooltips:actionPrice/sell/body'
     ACTIONPRICE_SELL_TYPE_VEHICLE = '#tooltips:actionPrice/sell/type/vehicle'
@@ -290,7 +297,9 @@ class TOOLTIPS(object):
     CYBERSPORT_UNITLEVEL_BODY_RECOMMENDED = '#tooltips:cyberSport/unitLevel/body/recommended'
     CYBERSPORT_UNITLEVEL_BODY_RECOMMENDEDSTATUS = '#tooltips:cyberSport/unitLevel/body/recommendedStatus'
     CYBERSPORT_UNITLEVEL_BODY_NOTRECOMMENDED = '#tooltips:cyberSport/unitLevel/body/notrecommended'
-    CYBERSPORT_UNITLEVEL_BODY_NOTRECOMMENDEDSTATUS = '#tooltips:cyberSport/unitLevel/body/notrecommendedStatus'
+    CYBERSPORT_UNITLEVEL_BODY_TOTALLEVEL = '#tooltips:cyberSport/unitLevel/body/totalLevel'
+    CYBERSPORT_UNITLEVEL_BODY_MINTOTALLEVELERROR = '#tooltips:cyberSport/unitLevel/body/minTotalLevelError'
+    CYBERSPORT_UNITLEVEL_BODY_MAXTOTALLEVELERROR = '#tooltips:cyberSport/unitLevel/body/maxTotalLevelError'
     CYBERSPORT_UNITLEVEL_BODY_ERROR = '#tooltips:cyberSport/unitLevel/body/error'
     CYBERSPORT_UNITLEVEL_BODY_ERRORSTATUS = '#tooltips:cyberSport/unitLevel/body/errorStatus'
     CYBERSPORT_UNITLEVEL_BACK_HEADER = CYBERSPORT_UNITLEVEL_BACK + '/header'
@@ -327,6 +336,8 @@ class TOOLTIPS(object):
     REDBUTTON_DISABLED_VEHICLE_INBATTLE_BODY = '#tooltips:redButton/disabled/vehicle/inBattle/body'
     REDBUTTON_DISABLED_VEHICLE_ROAMING_HEADER = '#tooltips:redButton/disabled/vehicle/roaming/header'
     REDBUTTON_DISABLED_VEHICLE_ROAMING_BODY = '#tooltips:redButton/disabled/vehicle/roaming/body'
+    REDBUTTON_DISABLED_VEHICLE_RENTALSISOVER_HEADER = '#tooltips:redButton/disabled/vehicle/rentalsIsOver/header'
+    REDBUTTON_DISABLED_VEHICLE_RENTALSISOVER_BODY = '#tooltips:redButton/disabled/vehicle/rentalsIsOver/body'
     REDBUTTON_DISABLED_VEHICLE_NOT_SUPPORTED_HEADER = '#tooltips:redButton/disabled/vehicle/not_supported/header'
     REDBUTTON_DISABLED_VEHICLE_NOT_SUPPORTED_BODY = '#tooltips:redButton/disabled/vehicle/not_supported/body'
     REDBUTTON_DISABLED_CREW_NOTFULL_HEADER = '#tooltips:redButton/disabled/crew/notFull/header'
@@ -420,6 +431,7 @@ class TOOLTIPS(object):
     HANGAR_TUNING_BODY = HANGAR_TUNING + '/body'
     HANGAR_MENU_HEADER = '#tooltips:hangar/menu/header'
     HANGAR_MENU_BODY = '#tooltips:hangar/menu/body'
+    HANGAR_STATUS_TORENT = '#tooltips:hangar/status/toRent'
     HANGAR_CREW_ASSIGNEDTO = '#tooltips:hangar/crew/assignedTo'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER = '#tooltips:hangar/crew/new_skill_available/header'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT = '#tooltips:hangar/crew/new_skill_available/text'
@@ -462,6 +474,7 @@ class TOOLTIPS(object):
     MODULEFITS_CREDIT_ERROR_TEXT = '#tooltips:moduleFits/credit_error/text'
     MODULEFITS_GOLD_ERROR_HEADER = '#tooltips:moduleFits/gold_error/header'
     MODULEFITS_GOLD_ERROR_TEXT = '#tooltips:moduleFits/gold_error/text'
+    MODULEFITS_OPERATION_ERROR_HEADER = '#tooltips:moduleFits/operation_error/header'
     MODULEFITS_NEED_TURRET_HEADER = '#tooltips:moduleFits/need_turret/header'
     MODULEFITS_NEED_TURRET_TEXT = '#tooltips:moduleFits/need_turret/text'
     MODULEFITS_TOO_HEAVY_HEADER = '#tooltips:moduleFits/too_heavy/header'
@@ -541,6 +554,8 @@ class TOOLTIPS(object):
     LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = LOBY_MESSENGER_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/body'
     LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_HEADER = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/header'
     LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT_BODY = LOBY_MESSENGER_NEW_CHANNELS_CAROUSEL_BUTTON_RIGHT + '/body'
+    LOBBY_MESSENGER_REFERRAL_BODY = '#tooltips:lobby_messenger/referral/body'
+    LOBBY_MESSENGER_REFERRER_BODY = '#tooltips:lobby_messenger/referrer/body'
     TRAINING_CREATE_INVITES_CHECKBOX_HEADER = TRAINING_CREATE_INVITES_CHECKBOX + '/header'
     TRAINING_CREATE_INVITES_CHECKBOX_BODY = TRAINING_CREATE_INVITES_CHECKBOX + '/body'
     TRAINING_OBSERVER_BTN_HEADER = TRAINING_OBSERVER_BTN + '/header'
@@ -604,16 +619,26 @@ class TOOLTIPS(object):
     SETTINGS_DIALOG_SOUND_SOUNDMODEINVALID = '#tooltips:settings_dialog/sound/soundModeInvalid'
     CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP_HEADER = CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP + '/header'
     CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP_BODY = CUSTOMIZATION_CAMOUFLAGE_CURRENT_DROP + '/body'
+    CUSTOMIZATION_CAMOUFLAGE_CURRENT_DISMOUNT_HEADER = CUSTOMIZATION_CAMOUFLAGE_CURRENT_DISMOUNT + '/header'
+    CUSTOMIZATION_CAMOUFLAGE_CURRENT_DISMOUNT_BODY = CUSTOMIZATION_CAMOUFLAGE_CURRENT_DISMOUNT + '/body'
     CUSTOMIZATION_HORN_CURRENT_DROP_HEADER = '#tooltips:customization/horn/current/drop/header'
     CUSTOMIZATION_HORN_CURRENT_DROP_BODY = '#tooltips:customization/horn/current/drop/body'
     CUSTOMIZATION_EMBLEMLEFT_CURRENT_DROP_HEADER = CUSTOMIZATION_EMBLEMLEFT_CURRENT_DROP + '/header'
     CUSTOMIZATION_EMBLEMLEFT_CURRENT_DROP_BODY = CUSTOMIZATION_EMBLEMLEFT_CURRENT_DROP + '/body'
+    CUSTOMIZATION_EMBLEMLEFT_CURRENT_DISMOUNT_HEADER = CUSTOMIZATION_EMBLEMLEFT_CURRENT_DISMOUNT + '/header'
+    CUSTOMIZATION_EMBLEMLEFT_CURRENT_DISMOUNT_BODY = CUSTOMIZATION_EMBLEMLEFT_CURRENT_DISMOUNT + '/body'
     CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DROP_HEADER = CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DROP + '/header'
     CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DROP_BODY = CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DROP + '/body'
+    CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DISMOUNT_HEADER = CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DISMOUNT + '/header'
+    CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DISMOUNT_BODY = CUSTOMIZATION_EMBLEMRIGHT_CURRENT_DISMOUNT + '/body'
     CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DROP_HEADER = CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DROP + '/header'
     CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DROP_BODY = CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DROP + '/body'
+    CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DISMOUNT_HEADER = CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DISMOUNT + '/header'
+    CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DISMOUNT_BODY = CUSTOMIZATION_INSCRIPTIONLEFT_CURRENT_DISMOUNT + '/body'
     CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DROP_HEADER = CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DROP + '/header'
     CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DROP_BODY = CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DROP + '/body'
+    CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DISMOUNT_HEADER = CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DISMOUNT + '/header'
+    CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DISMOUNT_BODY = CUSTOMIZATION_INSCRIPTIONRIGHT_CURRENT_DISMOUNT + '/body'
     CUSTOMIZATION_CAMOUFLAGE_WINTER = '#tooltips:customization/camouflage/winter'
     CUSTOMIZATION_CAMOUFLAGE_SUMMER = '#tooltips:customization/camouflage/summer'
     CUSTOMIZATION_CAMOUFLAGE_DESERT = '#tooltips:customization/camouflage/desert'
@@ -653,6 +678,7 @@ class TOOLTIPS(object):
     VEHICLE_UNLOCK_PRICE = '#tooltips:vehicle/unlock_price'
     VEHICLE_BUY_PRICE = '#tooltips:vehicle/buy_price'
     VEHICLE_ACTION_PRC = '#tooltips:vehicle/action_prc'
+    VEHICLE_MINRENTALSPRICE = '#tooltips:vehicle/minRentalsPrice'
     VEHICLE_BUY_PRICE_ACTION = '#tooltips:vehicle/buy_price_action'
     VEHICLE_SELL_PRICE = '#tooltips:vehicle/sell_price'
     VEHICLE_EQUIPMENTS = '#tooltips:vehicle/equipments'
@@ -664,6 +690,11 @@ class TOOLTIPS(object):
     VEHICLE_TURRETROTATIONSPEED = '#tooltips:vehicle/turretRotationSpeed'
     VEHICLE_RADIODISTANCE = '#tooltips:vehicle/radioDistance'
     VEHICLE_TEXTDELIMITER_OR = '#tooltips:vehicle/textDelimiter/or'
+    VEHICLE_RENTLEFT_DAYS = '#tooltips:vehicle/rentLeft/days'
+    VEHICLE_RENTLEFT_HOURS = '#tooltips:vehicle/rentLeft/hours'
+    VEHICLEIGR_SPECIALABILITY = '#tooltips:vehicleIgr/specialAbility'
+    VEHICLEIGR_DAYS = '#tooltips:vehicleIgr/days'
+    VEHICLEIGR_HOURS = '#tooltips:vehicleIgr/hours'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
     BUYSKILL_PARTLY = '#tooltips:buySkill/partly'
     BUYSKILL_HEADER = '#tooltips:buySkill/header'
@@ -684,6 +715,9 @@ class TOOLTIPS(object):
     QUESTS_NOTIFIER_BODY = QUESTS_NOTIFIER + '/body'
     VEHICLESTATUS_BATTLE_HEADER = '#tooltips:vehicleStatus/battle/header'
     VEHICLESTATUS_LOCKED_HEADER = '#tooltips:vehicleStatus/locked/header'
+    VEHICLESTATUS_RENTALISOVER_HEADER = '#tooltips:vehicleStatus/rentalIsOver/header'
+    VEHICLESTATUS_IGRRENTALISOVER_HEADER = '#tooltips:vehicleStatus/igrRentalIsOver/header'
+    VEHICLESTATUS_INPREMIUMIGRONLY_HEADER = '#tooltips:vehicleStatus/inPremiumIgrOnly/header'
     VEHICLESTATUS_INPREBATTLE_HEADER = '#tooltips:vehicleStatus/inPrebattle/header'
     VEHICLESTATUS_CLANLOCKED_HEADER = '#tooltips:vehicleStatus/clanLocked/header'
     VEHICLESTATUS_AMMONOTFULL_HEADER = '#tooltips:vehicleStatus/ammoNotFull/header'
@@ -1175,16 +1209,44 @@ class TOOLTIPS(object):
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYFROZEN_BODY = '#tooltips:fortification/fortCreateDirWin/newDirBtn/disabledByFrozen/body'
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYPLAYERS_HEADER = '#tooltips:fortification/fortCreateDirWin/newDirBtn/disabledByPlayers/header'
     FORTIFICATION_FORTCREATEDIRWIN_NEWDIRBTN_DISABLEDBYPLAYERS_BODY = '#tooltips:fortification/fortCreateDirWin/newDirBtn/disabledByPlayers/body'
-    HEADERTUTORIAL_BREAKTUTORIAL_HEADER = HEADERTUTORIAL_BREAKTUTORIAL + '/header'
-    HEADERTUTORIAL_BREAKTUTORIAL_BODY = HEADERTUTORIAL_BREAKTUTORIAL + '/body'
-    HEADERTUTORIAL_NEXT_HEADER = HEADERTUTORIAL_NEXT + '/header'
-    HEADERTUTORIAL_NEXT_BODY = HEADERTUTORIAL_NEXT + '/body'
-    HEADERTUTORIAL_BACK_HEADER = HEADERTUTORIAL_BACK + '/header'
-    HEADERTUTORIAL_BACK_BODY = HEADERTUTORIAL_BACK + '/body'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_HEADER = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/header'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_BODY = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/body'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_HEADER = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/noBattle/header'
     FORTIFICATION_FORTBUILDINGCARDPOPOVER_MAPINFO_NOBATTLE_BODY = '#tooltips:fortification/fortBuildingCardPopover/mapInfo/noBattle/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED + '/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_ENABLED + '/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE + '/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_ISOFFLINE + '/body'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_HEADER = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL + '/header'
+    REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL_BODY = REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL + '/body'
+    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_HEADER = REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE + '/header'
+    REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE_BODY = REFERRALMANAGEMENTWINDOW_TABLE_EXPERIENCE + '/body'
+    TOOLTIPREFSYSAWARDS_TITLE_GENERAL = '#tooltips:ToolTipRefSysAwards/title/general'
+    TOOLTIPREFSYSAWARDS_TITLE_CREDITS = '#tooltips:ToolTipRefSysAwards/title/credits'
+    TOOLTIPREFSYSAWARDS_TITLE_TANKMAN = '#tooltips:ToolTipRefSysAwards/title/tankman'
+    TOOLTIPREFSYSAWARDS_TITLE_UNIQUETANK = '#tooltips:ToolTipRefSysAwards/title/uniqueTank'
+    TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS = '#tooltips:ToolTipRefSysAwards/infoBody/requirements'
+    TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGHMSG = '#tooltips:ToolTipRefSysAwards/infoBody/requirements/notEnoughMsg'
+    TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGH = '#tooltips:ToolTipRefSysAwards/infoBody/requirements/notEnough'
+    TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS = '#tooltips:ToolTipRefSysAwards/infoBody/conditions'
+    TOOLTIPREFSYSAWARDS_INFOBODY_ACCESS = '#tooltips:ToolTipRefSysAwards/infoBody/access'
+    TOOLTIPREFSYSAWARDS_INFOBODY_NOTACCESS = '#tooltips:ToolTipRefSysAwards/infoBody/notAccess'
+    TOOLTIPREFSYSDESCRIPTION_HEADER_TITLETF = '#tooltips:ToolTipRefSysDescription/header/titleTF'
+    TOOLTIPREFSYSDESCRIPTION_HEADER_ACTIONTF = '#tooltips:ToolTipRefSysDescription/header/actionTF'
+    TOOLTIPREFSYSDESCRIPTION_HEADER_AWARDSTITLETF = '#tooltips:ToolTipRefSysDescription/header/awardsTitleTF'
+    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS = '#tooltips:ToolTipRefSysDescription/awards/descr/credits'
+    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN = '#tooltips:ToolTipRefSysDescription/awards/descr/tankman'
+    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN = '#tooltips:ToolTipRefSysDescription/awards/descr/vehicleWithTankmen'
+    TOOLTIPREFSYSDESCRIPTION_BOTTOM_BOTTOMTF = '#tooltips:ToolTipRefSysDescription/bottom/bottomTF'
+    TOOLTIPREFSYSXPMULTIPLIER_TITLE = '#tooltips:ToolTipRefSysXPMultiplier/title'
+    TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION = '#tooltips:ToolTipRefSysXPMultiplier/description'
+    TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS = '#tooltips:ToolTipRefSysXPMultiplier/conditions'
+    TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_HOURS = '#tooltips:ToolTipRefSysXPMultiplier/conditions/hours'
+    TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_DAYS = '#tooltips:ToolTipRefSysXPMultiplier/conditions/days'
+    TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_OTHER = '#tooltips:ToolTipRefSysXPMultiplier/conditions/other'
+    TOOLTIPREFSYSXPMULTIPLIER_BOTTOM = '#tooltips:ToolTipRefSysXPMultiplier/bottom'
+    CALENDAR_NEXTMONTH = '#tooltips:Calendar/nextMonth'
+    CALENDAR_PREVMONTH = '#tooltips:Calendar/prevMonth'
     TECHTREEPAGE_NATIONS_ENUM = (TECHTREEPAGE_NATIONS_USSR,
      TECHTREEPAGE_NATIONS_GERMANY,
      TECHTREEPAGE_NATIONS_USA,
@@ -1245,6 +1307,7 @@ class TOOLTIPS(object):
      SQUADWINDOW_STATUS_READY,
      SQUADWINDOW_STATUS_INBATTLE,
      SQUADWINDOW_STATUS_LOCKED)
+    TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM = (TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_CREDITS, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_TANKMAN, TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_VEHICLEWITHTANKMEN)
     LEVEL_ENUM = (LEVEL_1,
      LEVEL_2,
      LEVEL_3,
@@ -1283,6 +1346,7 @@ class TOOLTIPS(object):
      VEHICLE_UNLOCK_PRICE,
      VEHICLE_BUY_PRICE,
      VEHICLE_ACTION_PRC,
+     VEHICLE_MINRENTALSPRICE,
      VEHICLE_BUY_PRICE_ACTION,
      VEHICLE_SELL_PRICE,
      VEHICLE_EQUIPMENTS,
@@ -1294,8 +1358,16 @@ class TOOLTIPS(object):
      VEHICLE_TURRETROTATIONSPEED,
      VEHICLE_RADIODISTANCE,
      VEHICLE_TEXTDELIMITER_OR,
+     VEHICLE_RENTLEFT_DAYS,
+     VEHICLE_RENTLEFT_HOURS,
+     VEHICLEIGR_SPECIALABILITY,
+     VEHICLEIGR_DAYS,
+     VEHICLEIGR_HOURS,
      VEHICLESTATUS_BATTLE_HEADER,
      VEHICLESTATUS_LOCKED_HEADER,
+     VEHICLESTATUS_RENTALISOVER_HEADER,
+     VEHICLESTATUS_IGRRENTALISOVER_HEADER,
+     VEHICLESTATUS_INPREMIUMIGRONLY_HEADER,
      VEHICLESTATUS_INPREBATTLE_HEADER,
      VEHICLESTATUS_CLANLOCKED_HEADER,
      VEHICLESTATUS_AMMONOTFULL_HEADER,
@@ -1376,6 +1448,13 @@ class TOOLTIPS(object):
     def squadwindow_status(key):
         outcome = '#tooltips:squadWindow/status/%s' % key
         if outcome not in TOOLTIPS.SQUADWINDOW_STATUS_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def tooltiprefsysdescription_awards_descr(key):
+        outcome = '#tooltips:ToolTipRefSysDescription/awards/descr/%s' % key
+        if outcome not in TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_AWARDS_DESCR_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

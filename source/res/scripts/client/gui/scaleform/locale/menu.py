@@ -2,6 +2,7 @@
 from debug_utils import LOG_WARNING
 
 class MENU(object):
+    TIME_TIMEVALUE = '#menu:Time/timeValue'
     TRAINING_INFO_STATES_STATE = '#menu:training/info/states/state'
     COPY = '#menu:copy'
     LEGAL = '#menu:legal'
@@ -193,6 +194,9 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_NOT_SUITABLE = '#menu:tankCarousel/vehicleStates/not_suitable'
     TANKCAROUSEL_VEHICLESTATES_SERVERRESTRICTION = '#menu:tankCarousel/vehicleStates/serverRestriction'
     TANKCAROUSEL_VEHICLESTATES_CREWNOTFULL = '#menu:tankCarousel/vehicleStates/crewNotFull'
+    TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER = '#menu:tankCarousel/vehicleStates/igrRentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:tankCarousel/vehicleStates/inPremiumIgrOnly'
     TANKCAROUSEL_VEHICLESTATES_BUYTANK = '#menu:tankCarousel/vehicleStates/buyTank'
     TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT = '#menu:tankCarousel/vehicleStates/buyTankEmptyCount'
     TANKCAROUSEL_VEHICLESTATES_BUYSLOT = '#menu:tankCarousel/vehicleStates/buySlot'
@@ -204,6 +208,9 @@ class MENU(object):
     STORE_VEHICLESTATES_DAMAGED = '#menu:store/vehicleStates/damaged'
     STORE_VEHICLESTATES_DESTROYED = '#menu:store/vehicleStates/destroyed'
     STORE_VEHICLESTATES_EXPLODED = '#menu:store/vehicleStates/exploded'
+    STORE_VEHICLESTATES_RENTALISOVER = '#menu:store/vehicleStates/rentalIsOver'
+    STORE_VEHICLESTATES_IGRRENTALISOVER = '#menu:store/vehicleStates/igrRentalIsOver'
+    STORE_VEHICLESTATES_INPREMIUMIGRONLY = '#menu:store/vehicleStates/inPremiumIgrOnly'
     STORE_VEHICLESTATES_NOTPRESENT = '#menu:store/vehicleStates/notpresent'
     STORE_VEHICLESTATES_UNDAMAGED = '#menu:store/vehicleStates/undamaged'
     STORE_VEHICLESTATES_SERVERRESTRICTION = '#menu:store/vehicleStates/serverRestriction'
@@ -213,6 +220,9 @@ class MENU(object):
     STORE_VEHICLESTATES_BUYSLOT = '#menu:store/vehicleStates/buySlot'
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
+    CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
+    CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
+    CURRENTVEHICLESTATUS_INPREMIUMIGRONLY = '#menu:currentVehicleStatus/inPremiumIgrOnly'
     CURRENTVEHICLESTATUS_SERVERRESTRICTION = '#menu:currentVehicleStatus/serverRestriction'
     CURRENTVEHICLESTATUS_LOCKED = '#menu:currentVehicleStatus/locked'
     CURRENTVEHICLESTATUS_CLANLOCKED = '#menu:currentVehicleStatus/clanLocked'
@@ -285,6 +295,7 @@ class MENU(object):
     NATIONS_JAPAN = '#menu:nations/japan'
     NATIONS_UK = '#menu:nations/uk'
     NATIONS_ALL = '#menu:nations/all'
+    CAROUSELFILTER_IGR = '#menu:carouselFilter/igr'
     LEVELS_1 = '#menu:levels/1'
     LEVELS_2 = '#menu:levels/2'
     LEVELS_3 = '#menu:levels/3'
@@ -478,9 +489,12 @@ class MENU(object):
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_COMMANDER = '#menu:header/account/popover/crew/position/commander'
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_PRIVATE = '#menu:header/account/popover/crew/position/private'
     HEADER_ACCOUNT_POPOVER_CREW_POSITION_RECRUIT = '#menu:header/account/popover/crew/position/recruit'
+    HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED = '#menu:header/account/popover/referral/invited'
+    HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO = '#menu:header/account/popover/referral/moreInfo'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_RATING = '#menu:header/account/popover/achieves/rating'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_BATTLES = '#menu:header/account/popover/achieves/battles'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_WINS = '#menu:header/account/popover/achieves/wins'
+    MODULEFITS_NEED_GUN = '#menu:moduleFits/need_gun'
     COMMON_PREMIUMBUY = '#menu:common/premiumBuy'
     COMMON_PREMIUMCONTINUE = '#menu:common/premiumContinue'
     MODULEFITS_CREDIT_ERROR = '#menu:moduleFits/credit_error'
@@ -560,6 +574,7 @@ class MENU(object):
     PROFILE_STATS_ITEMS_XP = '#menu:profile/stats/items/xp'
     PROFILE_STATS_ITEMS_FRAGS = '#menu:profile/stats/items/frags'
     PROFILE_STATS_ITEMS_UNKNOWN = '#menu:profile/stats/items/unknown'
+    PROFILE_STATS_ITEMS_EMPTY = '#menu:profile/stats/items/empty'
     PROFILE_STATS_ITEMS_READY = '#menu:profile/stats/items/ready'
     PROFILE_STATS_ITEMS_FRAGSBEAST = '#menu:profile/stats/items/fragsBeast'
     PROFILE_STATS_ITEMS_AVGEXPERIENCE = '#menu:profile/stats/items/avgExperience'
@@ -670,6 +685,8 @@ class MENU(object):
     RESEARCH_PREMIUM_BENEFITS_THIRD = '#menu:research/premium/benefits/third'
     RESEARCH_PREMIUM_BENEFITS_FOURTH = '#menu:research/premium/benefits/fourth'
     RESEARCH_PREMIUM_BENEFITS_FIFTH = '#menu:research/premium/benefits/fifth'
+    RESEARCH_PREMIUM_BENEFITS_PREMIUMVEHICLEFIRST = '#menu:research/premium/benefits/premiumVehicleFirst'
+    RESEARCH_PREMIUM_BENEFITS_PREMIUMVEHICLESECOND = '#menu:research/premium/benefits/premiumVehicleSecond'
     RESEARCH_PREMIUM_DESCRIPTION_TITTE = '#menu:research/premium/description/titte'
     RESEARCH_LABELS_BUTTON_SHOWINHANGAR = '#menu:research/labels/button/showInHangar'
     RESEARCH_LABELS_VEHXP = '#menu:research/labels/vehXP'
@@ -709,6 +726,8 @@ class MENU(object):
     INVENTORY_MENU_VEHICLE_EXTRA_NAME = '#menu:inventory/menu/vehicle/extra/name'
     INVENTORY_MENU_VEHICLE_EXTRA_BROCKEN_NAME = '#menu:inventory/menu/vehicle/extra/brocken/name'
     INVENTORY_MENU_VEHICLE_EXTRA_LOCKED_NAME = '#menu:inventory/menu/vehicle/extra/locked/name'
+    INVENTORY_MENU_VEHICLE_EXTRA_RENTALS_NAME = '#menu:inventory/menu/vehicle/extra/rentals/name'
+    INVENTORY_MENU_VEHICLE_EXTRA_PREMIUMIGR_NAME = '#menu:inventory/menu/vehicle/extra/premiumIGR/name'
     INVENTORY_MENU_MODULE_NAME = '#menu:inventory/menu/module/name'
     INVENTORY_MENU_MODULE_TYPES_NAME = '#menu:inventory/menu/module/types/name'
     INVENTORY_MENU_MODULE_TYPES_VEHICLECHASSIS_NAME = '#menu:inventory/menu/module/types/vehicleChassis/name'
@@ -763,6 +782,7 @@ class MENU(object):
     SHOP_MENU_VEHICLE_EXTRA_NAME = '#menu:shop/menu/vehicle/extra/name'
     SHOP_MENU_VEHICLE_EXTRA_LOCKED_NAME = '#menu:shop/menu/vehicle/extra/locked/name'
     SHOP_MENU_VEHICLE_EXTRA_INHANGAR_NAME = '#menu:shop/menu/vehicle/extra/inHangar/name'
+    SHOP_MENU_VEHICLE_EXTRA_RENTALS_NAME = '#menu:shop/menu/vehicle/extra/rentals/name'
     SHOP_MENU_MODULE_NAME = '#menu:shop/menu/module/name'
     SHOP_MENU_MODULE_TYPES_NAME = '#menu:shop/menu/module/types/name'
     SHOP_MENU_MODULE_TYPES_VEHICLECHASSIS_NAME = '#menu:shop/menu/module/types/vehicleChassis/name'
@@ -814,6 +834,10 @@ class MENU(object):
     SHOP_TABLE_HEADER_PRICE = '#menu:shop/table/header/price'
     SHOP_TABLE_BUTTONBUY = '#menu:shop/table/buttonBuy'
     SHOP_TABLE_BUYACTIONOR = '#menu:shop/table/buyActionOr'
+    VEHICLE_RENTLEFT_DAYS = '#menu:vehicle/rentLeft/days'
+    VEHICLE_RENTLEFT_HOURS = '#menu:vehicle/rentLeft/hours'
+    SHOP_MENU_VEHICLE_RENT_DAYS = '#menu:shop/menu/vehicle/rent/days'
+    SHOP_MENU_VEHICLE_RENT_FOREVER = '#menu:shop/menu/vehicle/rent/forever'
     SPECPREBETLES_TITLE = '#menu:specPrebetles/title'
     SPECPREBETLES_LISTTITLE = '#menu:specPrebetles/listTitle'
     SPECPREBETLES_OWNERTITLE = '#menu:specPrebetles/ownerTitle'
@@ -982,6 +1006,8 @@ class MENU(object):
     CONTEXTMENU_VEHICLERESEARCH = '#menu:contextMenu/vehicleResearch'
     CONTEXTMENU_VEHICLECHECK = '#menu:contextMenu/vehicleCheck'
     CONTEXTMENU_VEHICLEUNCHECK = '#menu:contextMenu/vehicleUncheck'
+    CONTEXTMENU_VEHICLEBUY = '#menu:contextMenu/vehicleBuy'
+    CONTEXTMENU_VEHICLEREMOVE = '#menu:contextMenu/vehicleRemove'
     CONTEXTMENU_USERINFO = '#menu:contextMenu/userInfo'
     CONTEXTMENU_MONEYTRANSFER = '#menu:contextMenu/moneyTransfer'
     CONTEXTMENU_CREATEPRIVATECHANNEL = '#menu:contextMenu/createPrivateChannel'
@@ -1017,6 +1043,9 @@ class MENU(object):
     CONTEXTMENU_FORBIDDENNICK = '#menu:contextMenu/forbiddenNick'
     CONTEXTMENU_BOT = '#menu:contextMenu/bot'
     CONTEXTMENU_PERSONALCASE = '#menu:contextMenu/personalCase'
+    CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE = '#menu:contextMenu/personalCase/statsBlockTitle'
+    CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO = '#menu:contextMenu/personalCase/stats/firstInfo'
+    CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO = '#menu:contextMenu/personalCase/stats/secondInfo'
     CONTEXTMENU_TANKMANUNLOAD = '#menu:contextMenu/tankmanUnload'
     CONTEXTMENU_TANKMANUNLOADALL = '#menu:contextMenu/tankmanUnloadAll'
     CONTEXTMENU_DISMISS = '#menu:contextMenu/dismiss'
@@ -1068,6 +1097,8 @@ class MENU(object):
     DEMONSTRATOR_WINDOW_TITLE = '#menu:demonstrator/window/title'
     DEMONSTRATOR_WINDOW_INFO = '#menu:demonstrator/window/info'
     IGR_INFO = '#menu:igr/info'
+    VEHICLEIGR_DAYS = '#menu:vehicleIgr/days'
+    VEHICLEIGR_HOURS = '#menu:vehicleIgr/hours'
     BONUSTYPE_0 = '#menu:bonusType/0'
     BONUSTYPE_1 = '#menu:bonusType/1'
     BONUSTYPE_2 = '#menu:bonusType/2'
@@ -1130,7 +1161,62 @@ class MENU(object):
     DATETIME_MONTHS_SHORT_12 = '#menu:dateTime/months/short/12'
     DATETIME_SHORTDATEFORMATWITHOUTYEAR = '#menu:dateTime/shortDateFormatWithoutYear'
     VALIDATION_PUBLICINFO_ABBREV_INVALID = '#menu:validation/publicInfo/abbrev/invalid'
+    VALIDATION_PUBLICINFO_ABBREV_INVALID_KR_CN = '#menu:validation/publicInfo/abbrev/invalid/KR_CN'
     VALIDATION_PUBLICINFO_ABBREV_OURS = '#menu:validation/publicInfo/abbrev/ours'
+    AWARDWINDOW_TITLE_NEWTANKMAN = '#menu:awardWindow/title/newTankman'
+    AWARDWINDOW_TITLE_NEWVEHICLE = '#menu:awardWindow/title/newVehicle'
+    AWARDWINDOW_OKBUTTON = '#menu:awardWindow/okButton'
+    AWARDWINDOW_REFERRAL_TANKMAN_HEADER = '#menu:awardWindow/referral/tankman/header'
+    AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NORMAL = '#menu:awardWindow/referral/tankman/description/normal'
+    AWARDWINDOW_REFERRAL_TANKMAN_DESCRIPTION_NOXP = '#menu:awardWindow/referral/tankman/description/noXp'
+    AWARDWINDOW_REFERRAL_VEHICLE_HEADER = '#menu:awardWindow/referral/vehicle/header'
+    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NORMAL = '#menu:awardWindow/referral/vehicle/description/normal'
+    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_NOXP = '#menu:awardWindow/referral/vehicle/description/noXp'
+    AWARDWINDOW_REFERRAL_VEHICLE_DESCRIPTION_BOUGHT = '#menu:awardWindow/referral/vehicle/description/bought'
+    AWARDWINDOW_REFERRAL_NEXTTANKMAN = '#menu:awardWindow/referral/nextTankman'
+    AWARDWINDOW_REFERRAL_COMPLETE = '#menu:awardWindow/referral/complete'
+    REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
+    REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
+    REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
+    REFERRALMANAGEMENTWINDOW_DESCRIPTION = '#menu:ReferralManagementWindow/description'
+    REFERRALMANAGEMENTWINDOW_INVITEDPLAYERS = '#menu:ReferralManagementWindow/invitedPlayers'
+    REFERRALMANAGEMENTWINDOW_INVITEMANAGEMENTLINK = '#menu:ReferralManagementWindow/inviteManagementLink'
+    REFERRALMANAGEMENTWINDOW_CLOSEBTNLABEL = '#menu:ReferralManagementWindow/closeBtnLabel'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_NICK = '#menu:ReferralManagementWindow/referralsTable/nick'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXP = '#menu:ReferralManagementWindow/referralsTable/exp'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EXPMULTIPLIER = '#menu:ReferralManagementWindow/referralsTable/expMultiplier'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME = '#menu:ReferralManagementWindow/referralsTable/leftTime'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTHOURS = '#menu:ReferralManagementWindow/referralsTable/leftHours'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTDAYS = '#menu:ReferralManagementWindow/referralsTable/leftDays'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_CREATESQUADBTN_LABEL = '#menu:ReferralManagementWindow/referralsTable/createSquadBtn/label'
+    REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_EMPTYLINE = '#menu:ReferralManagementWindow/referralsTable/emptyLine'
+    REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_PROGRESS = '#menu:ReferralManagementWindow/progressIndicator/progress'
+    REFERRALMANAGEMENTWINDOW_PROGRESSINDICATOR_COMPLETE = '#menu:ReferralManagementWindow/progressIndicator/complete'
+    REFERRALMANAGEMENTWINDOW_PROGRESSNOTAVAILABLE = '#menu:ReferralManagementWindow/progressNotAvailable'
+    REFERRALREFERRERINTROWINDOW_WINDOWTITLE = '#menu:ReferralReferrerIntroWindow/windowTitle'
+    REFERRALREFERRERINTROWINDOW_APPLYBUTTON_LABEL = '#menu:ReferralReferrerIntroWindow/applyButton/label'
+    REFERRALREFERRERINTROWINDOW_TITLEMESSAGE = '#menu:ReferralReferrerIntroWindow/titleMessage'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_INVITE_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/invite_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/invite_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_SQUAD_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/squad_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/squad_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_REFERRALS_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_title/referrals_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK = '#menu:ReferralReferrerIntroWindow/textBlock_body/referrals_block'
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_LINK = '#menu:ReferralReferrerIntroWindow/textBlock_link'
+    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_TITLE = '#menu:ReferralReferralsIntroWindow/text_block/title'
+    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_REFERRALS = '#menu:ReferralReferralsIntroWindow/text_block/body/referrals'
+    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_PHENIX = '#menu:ReferralReferralsIntroWindow/text_block/body/phenix'
+    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_SQUAD_TEXT = '#menu:ReferralReferralsIntroWindow/text_block/squad_text'
+    VEHICLE_IGRRENTLEFT_DAYS = '#menu:vehicle/igrRentLeft/days'
+    VEHICLE_IGRRENTLEFT_HOURS = '#menu:vehicle/igrRentLeft/hours'
+    TIME_TIMEVALUE_DAYS = TIME_TIMEVALUE + '/days'
+    TIME_TIMEVALUE_HOURS = TIME_TIMEVALUE + '/hours'
+    TIME_TIMEVALUE_MIN = TIME_TIMEVALUE + '/min'
+    TIME_TIMEVALUE_LESSMIN = TIME_TIMEVALUE + '/lessMin'
+    PROMOPREMIUMIGRWINDOW_WINDOWTITLE = '#menu:PromoPremiumIgrWindow/windowTitle'
+    PROMOPREMIUMIGRWINDOW_TITLE = '#menu:PromoPremiumIgrWindow/title'
+    PROMOPREMIUMIGRWINDOW_TEXT = '#menu:PromoPremiumIgrWindow/text'
+    PROMOPREMIUMIGRWINDOW_APPLYBUTTONLABEL = '#menu:PromoPremiumIgrWindow/applyButtonLabel'
     NATION_TREE_TITLE_ENUM = (NATION_TREE_TITLE_USSR,
      NATION_TREE_TITLE_GERMANY,
      NATION_TREE_TITLE_USA,
@@ -1207,6 +1293,8 @@ class MENU(object):
      INVENTORY_MENU_VEHICLE_EXTRA_NAME,
      INVENTORY_MENU_VEHICLE_EXTRA_BROCKEN_NAME,
      INVENTORY_MENU_VEHICLE_EXTRA_LOCKED_NAME,
+     INVENTORY_MENU_VEHICLE_EXTRA_RENTALS_NAME,
+     INVENTORY_MENU_VEHICLE_EXTRA_PREMIUMIGR_NAME,
      INVENTORY_MENU_MODULE_NAME,
      INVENTORY_MENU_MODULE_TYPES_NAME,
      INVENTORY_MENU_MODULE_TYPES_VEHICLECHASSIS_NAME,
@@ -1244,12 +1332,14 @@ class MENU(object):
      INVENTORY_MENU_EQUIPMENT_FITS_MYVEHICLE_NAME,
      INVENTORY_MENU_EQUIPMENT_FITS_MYVEHICLES_NAME,
      INVENTORY_MENU_EQUIPMENT_FITS_OTHERVEHICLES_NAME)
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_REFERRALS_BLOCK)
     PROFILE_STATS_ITEMS_ENUM = (PROFILE_STATS_ITEMS_READYTOLEARN,
      PROFILE_STATS_ITEMS_NEXTSKILLXPLEFT,
      PROFILE_STATS_ITEMS_NEXTSKILLBATTLESLEFT,
      PROFILE_STATS_ITEMS_XP,
      PROFILE_STATS_ITEMS_FRAGS,
      PROFILE_STATS_ITEMS_UNKNOWN,
+     PROFILE_STATS_ITEMS_EMPTY,
      PROFILE_STATS_ITEMS_READY,
      PROFILE_STATS_ITEMS_FRAGSBEAST,
      PROFILE_STATS_ITEMS_AVGEXPERIENCE,
@@ -1372,6 +1462,7 @@ class MENU(object):
      SHOP_MENU_VEHICLE_EXTRA_NAME,
      SHOP_MENU_VEHICLE_EXTRA_LOCKED_NAME,
      SHOP_MENU_VEHICLE_EXTRA_INHANGAR_NAME,
+     SHOP_MENU_VEHICLE_EXTRA_RENTALS_NAME,
      SHOP_MENU_MODULE_NAME,
      SHOP_MENU_MODULE_TYPES_NAME,
      SHOP_MENU_MODULE_TYPES_VEHICLECHASSIS_NAME,
@@ -1410,7 +1501,9 @@ class MENU(object):
      SHOP_MENU_EQUIPMENT_FITS_NAME,
      SHOP_MENU_EQUIPMENT_FITS_MYVEHICLE_NAME,
      SHOP_MENU_EQUIPMENT_FITS_MYVEHICLES_NAME,
-     SHOP_MENU_EQUIPMENT_FITS_OTHERVEHICLES_NAME)
+     SHOP_MENU_EQUIPMENT_FITS_OTHERVEHICLES_NAME,
+     SHOP_MENU_VEHICLE_RENT_DAYS,
+     SHOP_MENU_VEHICLE_RENT_FOREVER)
     SKILLDROPWINDOW_STUDY_ENUM = (SKILLDROPWINDOW_STUDY_GOLDLABEL, SKILLDROPWINDOW_STUDY_CREDITSLABEL, SKILLDROPWINDOW_STUDY_FREELABEL)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_1,
@@ -1422,6 +1515,7 @@ class MENU(object):
      LOADING_BATTLETYPES_7,
      LOADING_BATTLETYPES_8,
      LOADING_BATTLETYPES_9)
+    REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM = (REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_INVITE_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_SQUAD_BLOCK, REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_REFERRALS_BLOCK)
     TANKCAROUSEL_VEHICLESTATES_ENUM = (TANKCAROUSEL_VEHICLESTATES_BATTLE,
      TANKCAROUSEL_VEHICLESTATES_LOCKED,
      TANKCAROUSEL_VEHICLESTATES_CLANLOCKED,
@@ -1435,6 +1529,9 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_NOT_SUITABLE,
      TANKCAROUSEL_VEHICLESTATES_SERVERRESTRICTION,
      TANKCAROUSEL_VEHICLESTATES_CREWNOTFULL,
+     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_IGRRENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_INPREMIUMIGRONLY,
      TANKCAROUSEL_VEHICLESTATES_BUYTANK,
      TANKCAROUSEL_VEHICLESTATES_BUYTANKEMPTYCOUNT,
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT)
@@ -1527,6 +1624,7 @@ class MENU(object):
      TRAINING_INFO_USECOMMONVOICECHAT,
      TRAINING_INFO_USESEPARATEVOIPCHAT,
      TRAINING_INFO_NOTUSECHAT)
+    REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM = (REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_REFERRALS, REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_PHENIX)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
      NATIONS_GERMANY,
@@ -1544,6 +1642,8 @@ class MENU(object):
      CONTEXTMENU_VEHICLERESEARCH,
      CONTEXTMENU_VEHICLECHECK,
      CONTEXTMENU_VEHICLEUNCHECK,
+     CONTEXTMENU_VEHICLEBUY,
+     CONTEXTMENU_VEHICLEREMOVE,
      CONTEXTMENU_USERINFO,
      CONTEXTMENU_MONEYTRANSFER,
      CONTEXTMENU_CREATEPRIVATECHANNEL,
@@ -1579,6 +1679,9 @@ class MENU(object):
      CONTEXTMENU_FORBIDDENNICK,
      CONTEXTMENU_BOT,
      CONTEXTMENU_PERSONALCASE,
+     CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE,
+     CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO,
+     CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO,
      CONTEXTMENU_TANKMANUNLOAD,
      CONTEXTMENU_TANKMANUNLOADALL,
      CONTEXTMENU_DISMISS,
@@ -1651,6 +1754,13 @@ class MENU(object):
     def inventory_menu(key):
         outcome = '#menu:inventory/menu/%s' % key
         if outcome not in MENU.INVENTORY_MENU_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def referralreferrerintrowindow_textblock_title(key):
+        outcome = '#menu:ReferralReferrerIntroWindow/textBlock_title/%s' % key
+        if outcome not in MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_TITLE_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
@@ -1732,6 +1842,13 @@ class MENU(object):
         return outcome
 
     @staticmethod
+    def referralreferrerintrowindow_textblock_body(key):
+        outcome = '#menu:ReferralReferrerIntroWindow/textBlock_body/%s' % key
+        if outcome not in MENU.REFERRALREFERRERINTROWINDOW_TEXTBLOCK_BODY_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
     def tankcarousel_vehiclestates(key):
         outcome = '#menu:tankCarousel/vehicleStates/%s' % key
         if outcome not in MENU.TANKCAROUSEL_VEHICLESTATES_ENUM:
@@ -1798,6 +1915,13 @@ class MENU(object):
     def training_info(key):
         outcome = '#menu:training/info/%s' % key
         if outcome not in MENU.TRAINING_INFO_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def referralreferralsintrowindow_text_block_body(key):
+        outcome = '#menu:ReferralReferralsIntroWindow/text_block/body/%s' % key
+        if outcome not in MENU.REFERRALREFERRALSINTROWINDOW_TEXT_BLOCK_BODY_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

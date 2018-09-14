@@ -21,13 +21,12 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         self.__clientID = None
         try:
             self.__clientID = ctx['clientID']
-        except:
+        except KeyError:
             LOG_ERROR('Strict condition, clientID have to be passed!!!')
 
         return
 
     def onTeamStatesReceived(self, functional, team1State, team2State):
-        super(CompanyMainWindow, self).onTeamStatesReceived(functional, team1State, team2State)
         self.as_enableWndCloseBtnS(not team1State.isInQueue())
 
     def getFlashAliases(self):
@@ -35,15 +34,6 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
     def getPythonAliases(self):
         return PREBATTLE_ALIASES.PYTHON_ALIASES
-
-    def _populate(self):
-        super(CompanyMainWindow, self)._populate()
-        self.addListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.startPrbListening()
-        self.updateView()
-
-    def __handleWindowHide(self, _):
-        self.destroy()
 
     def destroy(self):
         super(CompanyMainWindow, self).destroy()
@@ -82,12 +72,8 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
         self.prbDispatcher.doLeaveAction(LeavePrbCtx(waitingID='prebattle/leave'))
 
     def onWindowMinimize(self):
+        self.minimizing()
         self.destroy()
-
-    def _dispose(self):
-        self.removeListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.stopPrbListening()
-        super(CompanyMainWindow, self)._dispose()
 
     def getCompanyName(self):
         return formatters.getCompanyName()
@@ -107,6 +93,20 @@ class CompanyMainWindow(CompanyMainWindowMeta, PrbListener):
 
     def onJoinRally(self, rallyId, slotIndex = None, peripheryID = None):
         self.__requestToJoin(rallyId)
+
+    def _populate(self):
+        super(CompanyMainWindow, self)._populate()
+        self.addListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.startPrbListening()
+        self.updateView()
+
+    def _dispose(self):
+        self.removeListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.stopPrbListening()
+        super(CompanyMainWindow, self)._dispose()
+
+    def __handleWindowHide(self, _):
+        self.destroy()
 
     def __isCompanyPreBattleAlreadyExists(self):
         return self.prbFunctional.getID() != 0

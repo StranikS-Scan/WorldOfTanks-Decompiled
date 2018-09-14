@@ -8,7 +8,8 @@ from gui import SystemMessages
 import gui
 from gui.Scaleform.daapi.view.lobby.customization.BaseTimedCustomizationInterface import BaseTimedCustomizationInterface
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import InscriptionDataProvider, InscriptionRentalPackageDataProvider, InscriptionGroupsDataProvider, isItemInHangar, isIdInDefaultSetup
+from gui.Scaleform.daapi.view.lobby.customization.data_providers import InscriptionDataProvider, InscriptionRentalPackageDataProvider, InscriptionGroupsDataProvider
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -20,10 +21,8 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
 
     def __init__(self, name, nationId, type, position):
         super(InscriptionInterface, self).__init__(name, nationId, type, position)
-        self.isTurret = False
         self._isEnabled = False
         self._vehicleLevel = 1
-        self._positionShift = 0
 
     def __del__(self):
         LOG_DEBUG('InscriptionInterface deleted')
@@ -39,11 +38,6 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
 
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'inscription', self._position - self._positionShift, self.ZOOM_FACTOR)
-
-    def getRealPosition(self):
-        if not self.isTurret:
-            return self._position - self._positionShift
-        return 2 + self._position
 
     @abstractmethod
     def getRentalPackagesDP(self):
@@ -110,16 +104,19 @@ class InscriptionInterface(BaseTimedCustomizationInterface, AppRef):
                 message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_INSCRIPTION_COST_NOT_FOUND)
                 self.onCustomizationChangeFailed(message)
                 return
-            if isAlreadyPurchased or isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, self._newItemID, self._itemsDP.position):
+            if isAlreadyPurchased:
                 daysToWear = 0
                 cost = 0
+            elif CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, self._newItemID, self._nationID, self._itemsDP.position):
+                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, self._newItemID)
+                daysToWear = 0 if hangarItem.get('isPermanent') else 7
             else:
                 daysToWear = self._rentalPackageDP.selectedPackage.get('periodDays')
             newIdToSend = 0
             isNewInDefaultSetup = False
             isCurrIgr = self._itemsDP.isIGRItem(self._currentItemID)
             if isCurrIgr:
-                isNewInDefaultSetup = isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, self._newItemID)
+                isNewInDefaultSetup = CustomizationHelper.isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, self._newItemID)
             if self._currentItemID is None or not isCurrIgr or isCurrIgr and not isNewInDefaultSetup or isCurrIgr and isNewInDefaultSetup and daysToWear > 0:
                 newIdToSend = self._newItemID
             BigWorld.player().inventory.changeVehicleInscription(vehInvID, self.getRealPosition(), newIdToSend, daysToWear, 1, lambda resultID: self.__onChangeVehicleInscription(resultID, (cost, isGold)))

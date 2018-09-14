@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/restrictions.py
+import constants
 from UnitBase import SORTIE_DIVISION
 from constants import CLAN_MEMBER_FLAGS, FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, PREBATTLE_TYPE, FORT_SCOUTING_DATA_FILTER
 from external_strings_utils import isClanAbbrevValid
@@ -264,5 +265,8 @@ class FortValidators(IFortValidators):
     def __validateFortPublicInfo(self, filterType, abbrevPattern):
         if filterType == FORT_SCOUTING_DATA_FILTER.FILTER:
             if not isClanAbbrevValid(abbrevPattern):
-                return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID)
+                if not constants.IS_KOREA and not constants.IS_CHINA:
+                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID)
+                else:
+                    return (False, FORT_REQUEST_VALIDATION.REQUEST_PUBLIC_INFO.ABBREV_IS_INVALID_KR_CN)
         return (True, '')

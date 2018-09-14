@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 from adisp import process
 from gui import DialogsInterface
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.Scaleform.framework import AppRef
@@ -27,14 +28,14 @@ class LobbyMenu(View, LobbyMenuMeta, AbstractWindowView, AppRef):
 
     @process
     def logoffClick(self):
-        isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DialogsInterface.DIALOG_BUTTON_ID.CLOSE)
+        isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.destroy()
             self.app.logoff()
 
     @process
     def quitClick(self):
-        isOk = yield DialogsInterface.showI18nConfirmDialog('quit', focusedID=DialogsInterface.DIALOG_BUTTON_ID.CLOSE)
+        isOk = yield DialogsInterface.showI18nConfirmDialog('quit', focusedID=DIALOG_BUTTON_ID.CLOSE)
         if isOk:
             self.destroy()
             self.app.quit()

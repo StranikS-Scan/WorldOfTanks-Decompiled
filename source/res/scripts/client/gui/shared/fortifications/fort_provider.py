@@ -230,9 +230,9 @@ class ClientFortProvider(object):
         if resultCode != FORT_ERROR.OK:
             SystemMessages.pushMessage(getFortErrorMessage(resultCode, resultString), type=SystemMessages.SM_TYPE.Error)
 
-    def __onFortUpdateReceived(self):
+    def __onFortUpdateReceived(self, isFullUpdate = False):
         self.updateState()
-        self.__listeners.notify('onUpdated')
+        self.__listeners.notify('onUpdated', isFullUpdate)
 
     def __onFortStateChanged(self):
         if getClanFortState() is None:
@@ -246,4 +246,5 @@ class ClientFortProvider(object):
             self.__initial ^= FORT_PROVIDER_INITIAL_FLAGS.SUBSCRIBED
 
     def __onCenterIsLongDisconnected(self, _):
+        self.__controller.stopProcessing()
         self.resetState()

@@ -102,6 +102,10 @@ def updateTankmanDossier(dossierDescr, battleResults):
     __updateTankmanDossierImpl(dossierDescr, battleResults)
 
 
+def updatePotapovQuestAchievements(accDossierDescr, vehClass, progress, curQuest, bonusCount):
+    pass
+
+
 def __updateDossierCommonPart(dossierDescr, results, dossierXP):
     bonusCaps = BONUS_CAPS.get(results['bonusType'])
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_TOTAL):
@@ -122,7 +126,11 @@ def __updateDossierCommonPart(dossierDescr, results, dossierXP):
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_SORTIE):
         __updateAggregatedValues(dossierDescr.expand('fortSorties'), dossierDescr.expand('fortSorties'), results, dossierXP, frags8p)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_FORT_BATTLE):
-        __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p)
+        if results['winnerTeam'] == 0:
+            winnerTeam = results['fortBuilding']['buildTeam']
+        else:
+            winnerTeam = results['winnerTeam']
+        __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p, winnerTeam)
     if bool(bonusCaps & BONUS_CAPS.DOSSIER_ACHIEVEMENTS):
         for recordDBID in results['achievements'] + results['protoAchievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
@@ -175,22 +183,24 @@ def __processKillList(dossierDescr, killList):
     return frags8p
 
 
-def __updateAggregatedValues(block, block2, results, dossierXP, frags8p):
-    __updateBaseStatistics(block, block2, results, dossierXP)
+def __updateAggregatedValues(block, block2, results, dossierXP, frags8p, winnerTeam = None):
+    __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam)
     if results['killerID'] == 0 and results['winnerTeam'] == results['team']:
         block['winAndSurvived'] += 1
     if frags8p != 0:
         block['frags8p'] += frags8p
 
 
-def __updateBaseStatistics(block, block2, results, dossierXP):
+def __updateBaseStatistics(block, block2, results, dossierXP, winnerTeam = None):
     block['battlesCount'] += 1
     if dossierXP != 0:
         block['xp'] += dossierXP
         block2['originalXP'] += results['originalXP']
-    if results['winnerTeam'] == results['team']:
+    if not winnerTeam:
+        winnerTeam = results['winnerTeam']
+    if winnerTeam == results['team']:
         block['wins'] += 1
-    elif results['winnerTeam'] == 3 - results['team']:
+    elif winnerTeam == 3 - results['team']:
         block['losses'] += 1
     if results['killerID'] == 0:
         block['survivedBattles'] += 1

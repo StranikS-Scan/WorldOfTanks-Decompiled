@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/BattleLoading.py
 import BattleReplay
 import constants
-from gui.BattleContext import g_battleContext
-from gui.arena_info import IArenaController, getClientArena, getArenaTypeID, isEventBattle
-from gui.arena_info.arena_vos import VehicleActions
-from gui.arena_info.settings import INVALIDATE_OP
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.arena_info import IArenaController, getClientArena, getArenaTypeID
+from gui.battle_control.arena_info.arena_vos import VehicleActions
+from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.prb_control.formatters import getPrebattleFullDescription
 from helpers import tips
 from gui.shared.utils.functions import getBattleSubTypeWinText, getArenaSubTypeName, isBaseExists
@@ -19,6 +19,8 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
     def __init__(self):
         super(BattleLoading, self).__init__(backAlpha=1.0)
         self.__logArenaUniID = False
+        self.__battleCtx = None
+        return
 
     @storage_getter('users')
     def usersStorage(self):
@@ -27,7 +29,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
     def _populate(self):
         super(BattleLoading, self)._populate()
         self.__addArenaTypeData()
-        g_battleContext.addArenaCtrl(self)
+        g_sessionProvider.addArenaCtrl(self)
 
     def onLoadComplete(self):
         Waiting.close()
@@ -35,17 +37,20 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
 
     def _dispose(self):
         Waiting.close()
-        g_battleContext.removeArenaCtrl(self)
+        g_sessionProvider.removeArenaCtrl(self)
         super(BattleLoading, self)._dispose()
 
+    def setBattleCtx(self, battleCtx):
+        self.__battleCtx = battleCtx
+
     def invalidateArenaInfo(self):
-        arenaDP = g_battleContext.arenaDP
+        arenaDP = self.__battleCtx.getArenaDP()
         self.__addArenaExtraData(arenaDP)
         self.__addPlayerData(arenaDP)
         self.invalidateVehiclesInfo(arenaDP)
 
     def invalidateVehiclesInfo(self, arenaDP):
-        regionGetter = g_battleContext.getRegionCode
+        regionGetter = self.__battleCtx.getRegionCode
         isSpeaking = self.app.voiceChatManager.isPlayerSpeaking
         userGetter = self.usersStorage.getUser
         actionGetter = VehicleActions.getBitMask
@@ -59,7 +64,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
 
     def addVehicleInfo(self, vo, arenaDP):
         playerTeam = arenaDP.getNumberOfTeam()
-        item = self.__makeItem(vo, self.usersStorage.getUser, self.app.voiceChatManager.isPlayerSpeaking, VehicleActions.getBitMask, g_battleContext.getRegionCode, playerTeam)
+        item = self.__makeItem(vo, self.usersStorage.getUser, self.app.voiceChatManager.isPlayerSpeaking, VehicleActions.getBitMask, self.__battleCtx.getRegionCode, playerTeam)
         isEnemy = vo.team != playerTeam
         self.as_addVehicleInfoS(isEnemy, item, arenaDP.getVehiclesIDs(isEnemy))
 
@@ -70,7 +75,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
             vehiclesIDs = arenaDP.getVehiclesIDs(isEnemy)
         else:
             vehiclesIDs = None
-        item = self.__makeItem(vo, self.usersStorage.getUser, self.app.voiceChatManager.isPlayerSpeaking, VehicleActions.getBitMask, g_battleContext.getRegionCode, playerTeam)
+        item = self.__makeItem(vo, self.usersStorage.getUser, self.app.voiceChatManager.isPlayerSpeaking, VehicleActions.getBitMask, self.__battleCtx.getRegionCode, playerTeam)
         self.as_updateVehicleInfoS(isEnemy, item, vehiclesIDs)
         return
 
@@ -87,7 +92,7 @@ class BattleLoading(LobbySubView, BattleLoadingMeta, IArenaController):
         self.as_setPlayerStatusS(vo.team != arenaDP.getNumberOfTeam(), vo.vehicleID, vo.playerStatus)
 
     def invalidateChatRosters(self):
-        self.invalidateVehiclesInfo(g_battleContext.arenaDP)
+        self.invalidateVehiclesInfo(self.__battleCtx.getArenaDP())
 
     def updateSpaceLoadProgress(self, progress):
         self.as_setProgressS(progress)

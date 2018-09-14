@@ -4,7 +4,7 @@ from debug_utils import LOG_ERROR
 from gui import prb_control
 from gui.prb_control.context.unit_ctx import LeaveUnitCtx
 from gui.prb_control.factories.ControlFactory import ControlFactory
-from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro
+from gui.prb_control.functional.unit import NoUnitFunctional, UnitEntry, UnitIntro, FortBattleEntry
 from gui.prb_control.functional.unit import IntroFunctional, UnitFunctional
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.items.unit_items import SupportedRosterSettings, DynamicRosterSettings
@@ -12,6 +12,9 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE, UN
 _PAN = PREBATTLE_ACTION_NAME
 _SUPPORTED_ENTRY_BY_ACTION = {_PAN.UNIT: (UnitIntro, (PREBATTLE_TYPE.UNIT,)),
  _PAN.FORT: (UnitIntro, (PREBATTLE_TYPE.SORTIE,))}
+_SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.UNIT: UnitEntry,
+ PREBATTLE_TYPE.SORTIE: UnitEntry,
+ PREBATTLE_TYPE.FORT_BATTLE: FortBattleEntry}
 
 class UnitFactory(ControlFactory):
 
@@ -19,7 +22,12 @@ class UnitFactory(ControlFactory):
         if not ctx.getRequestType():
             entry = UnitIntro(ctx.getPrbType())
         else:
-            entry = UnitEntry()
+            clazz = _SUPPORTED_ENTRY_BY_TYPE.get(ctx.getPrbType())
+            if clazz is not None:
+                entry = clazz()
+            else:
+                entry = None
+                LOG_ERROR('Prebattle type is not supported', ctx)
         return entry
 
     def createEntryByAction(self, action):

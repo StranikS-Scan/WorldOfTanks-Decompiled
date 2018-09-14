@@ -120,7 +120,7 @@ class CompanyIntroFunctional(IntroPrbFunctional):
     def fini(self, clientPrb = None, woEvents = False):
         super(CompanyIntroFunctional, self).fini()
         if self._exit != FUNCTIONAL_EXIT.PREBATTLE:
-            if woEvents:
+            if not woEvents:
                 g_eventDispatcher.unloadCompany()
             else:
                 g_eventDispatcher.removeCompanyFromCarousel()
@@ -192,6 +192,8 @@ class CompanyFunctional(PrbFunctional):
             else:
                 g_eventDispatcher.removeCompanyFromCarousel()
             g_eventDispatcher.updateUI()
+        else:
+            g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.COMPANY)
         g_eventBus.removeListener(ChannelCarouselEvent.CAROUSEL_INITED, self.__handleCarouselInited, scope=EVENT_BUS_SCOPE.LOBBY)
 
     @vehicleAmmoCheck

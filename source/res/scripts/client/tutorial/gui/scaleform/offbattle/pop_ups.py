@@ -1,8 +1,8 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/offbattle/pop_ups.py
 import BigWorld, MusicController, SoundGroups
 from tutorial.gui.Scaleform.meta.TutorialBattleNoResultsMeta import TutorialBattleNoResultsMeta
-from tutorial.gui.Scaleform.pop_ups import TutorialDialog, TutorialWindow
 from tutorial.gui.Scaleform.meta.TutorialBattleStatisticMeta import TutorialBattleStatisticMeta
+from tutorial.gui.Scaleform.pop_ups import TutorialDialog, TutorialWindow
 
 class TutorialVideoDialog(TutorialDialog):
 
@@ -21,6 +21,17 @@ class TutorialVideoDialog(TutorialDialog):
             MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
         else:
             MusicController.g_musicController.stop()
+
+
+class TutorialConfirmRefuseDialog(TutorialDialog):
+
+    def __init__(self, content):
+        super(TutorialConfirmRefuseDialog, self).__init__(content)
+        self._tutorial._cache.setStartOnNextLogin(True)
+        self._content['doStartOnNextLogin'] = True
+
+    def setStartOnNextLogin(self, value):
+        self._tutorial._cache.setStartOnNextLogin(value)
 
 
 class TutorialBattleStatisticWindow(TutorialWindow, TutorialBattleStatisticMeta):

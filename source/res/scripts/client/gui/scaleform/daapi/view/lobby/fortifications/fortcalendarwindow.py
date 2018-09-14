@@ -55,6 +55,12 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
     def onWindowClose(self):
         self.destroy()
 
+    def onFortBattleChanged(self, cache, item, battleItem):
+        self._update()
+
+    def onFortBattleRemoved(self, cache, battleID):
+        self._update()
+
     def _populateMonthEvents(self):
         calendar = self.getCalendar()
         if calendar is not None:
@@ -80,9 +86,9 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         _ms = i18n.makeString
         fort = self.fortCtrl.getFort()
         localDateTime = time_utils.getDateTimeInLocal(self.__selectedDate)
-        targetDayStartTimestamp, _ = time_utils.getDayTimeBounds(self.__selectedDate)
+        targetDayStartTimestamp, _ = time_utils.getDayTimeBoundsForLocal(self.__selectedDate)
         eventItems, dateInfo, noEventsText = [], None, None
-        dateString = _ms(MENU.DATETIME_SHORTDATEFORMATWITHOUTYEAR, weekDay=_ms('#menu:dateTime/weekDays/full/%d' % (localDateTime.weekday() + 1)), monthDay=localDateTime.day, month=toLower(_ms('#menu:dateTime/months/full/%d' % localDateTime.month)))
+        dateString = _ms(MENU.DATETIME_SHORTDATEFORMATWITHOUTYEAR, weekDay=_ms('#menu:dateTime/weekDays/full/%d' % localDateTime.isoweekday()), monthDay=localDateTime.day, month=toLower(_ms('#menu:dateTime/months/full/%d' % localDateTime.month)))
         if fort.isOnVacationAt(self.__selectedDate):
             noEventsText = _ms(FORTIFICATIONS.FORTCALENDARWINDOW_EVENTSLIST_EMPTY_VACATION, date=fort.getVacationDateStr())
         elif not self._isValidTime(self.__selectedDate):
@@ -154,6 +160,14 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         super(FortCalendarWindow, self)._populate()
         self.startFortListening()
         self.startCalendarListening()
+        self._update()
+
+    def _dispose(self):
+        self.stopFortListening()
+        self.stopCalendarListening()
+        super(FortCalendarWindow, self)._dispose()
+
+    def _update(self):
         calendar = self.getCalendar()
         if calendar is not None:
             lowerTimeBound = time_utils.getCurrentTimestamp() - self.TIME_LIMITS.LOW
@@ -167,19 +181,14 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         self._populateCalendarMessage()
         return
 
-    def _dispose(self):
-        self.stopFortListening()
-        self.stopCalendarListening()
-        super(FortCalendarWindow, self)._dispose()
-
     @classmethod
     def _isValidTime(cls, timestampToCheck, rootTimestamp = None):
         rootTimestamp = rootTimestamp or time_utils.getCurrentTimestamp()
         minLimit = rootTimestamp - cls.TIME_LIMITS.LOW
-        dayStart, _ = time_utils.getDayTimeBounds(minLimit)
+        dayStart, _ = time_utils.getDayTimeBoundsForLocal(minLimit)
         minLimit = dayStart
         maxLimit = rootTimestamp + cls.TIME_LIMITS.HIGH
-        _, dayEnd = time_utils.getDayTimeBounds(maxLimit)
+        _, dayEnd = time_utils.getDayTimeBoundsForLocal(maxLimit)
         maxLimit = dayEnd
         return minLimit < timestampToCheck < maxLimit
 
@@ -188,7 +197,7 @@ class FortCalendarWindow(AbstractWindowView, View, FortViewHelper, FortCalendarW
         for battle in fort.getAttacks() + fort.getDefences():
             startTimestamp = battle.getStartTime()
             if self._isValidTime(startTimestamp):
-                dayStartTimestamp, _ = time_utils.getDayTimeBounds(startTimestamp)
+                dayStartTimestamp, _ = time_utils.getDayTimeBoundsForLocal(startTimestamp)
                 result[dayStartTimestamp].append(battle)
 
         return result

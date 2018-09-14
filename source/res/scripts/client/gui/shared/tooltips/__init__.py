@@ -4,6 +4,8 @@ import sys
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework import AppRef
+from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
 from gui.shared.utils import CONST_CONTAINER
 from helpers.i18n import makeString
@@ -25,6 +27,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     HISTORICAL_AMMO = 'historicalAmmo'
     HISTORICAL_MODULES = 'historicalModules'
     CONTROL = 'control'
+    REF_SYSTEM = 'refSystem'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -41,6 +44,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     CYBER_SPORT_UNIT = 'CyberSportUnit'
     FORTIFICATIONS = 'fortification'
     SETTINGS = 'settings'
+    CUSTOMIZATION = 'customization'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):
@@ -184,6 +188,9 @@ def getComplexStatus(statusKey):
         textKey = statusKey + '/text'
         header = makeString(headerKey)
         text = makeString(textKey)
+        if headerKey == TOOLTIPS.VEHICLESTATUS_INPREMIUMIGRONLY_HEADER:
+            icon = TextManager.getIcon(TextIcons.PREMIUM_IGR_SMALL)
+            header = makeString(headerKey, icon=icon)
         if header == headerKey.split(':', 1)[1]:
             header = None
         if text == textKey.split(':', 1)[1]:

@@ -3,8 +3,9 @@ import operator
 from collections import defaultdict
 from abc import ABCMeta, abstractmethod
 import constants
+from gui.shared.economics import getActionPrc
 import nations
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from items import vehicles, ITEM_TYPE_NAMES
 from helpers import i18n
 from gui import nationCompareByName
@@ -34,7 +35,7 @@ def _getDiscountByValue(value, default):
 
 
 def _getPercentDiscountByValue(value, default):
-    return g_itemsCache.items.shop.getActionPrc(value, default)
+    return getActionPrc(value, default)
 
 
 def _getDiscountByMultiplier(mult, default):
@@ -43,7 +44,7 @@ def _getDiscountByMultiplier(mult, default):
 
 def _getPercentDiscountByMultiplier(mult, default):
     price = int(round(float(mult) * default))
-    return g_itemsCache.items.shop.getActionPrc(price, default)
+    return getActionPrc(price, default)
 
 
 def _prepareVehData(vehsList, discounts = None):

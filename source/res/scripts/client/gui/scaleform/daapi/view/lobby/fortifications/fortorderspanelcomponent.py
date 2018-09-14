@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrdersPanelComponent.py
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework import AppRef
@@ -105,7 +104,7 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
 
     def _getProgressInfo(self, description, order):
         createdTime = order.getProductionLeftTime()
-        createdTimeStr = fort_text.getTimeDurationStr(createdTime)
+        createdTimeStr = self.app.utilsManager.textManager.getTimeDurationStr(createdTime)
         productionCountStr = ''
         if order.productionCount > 1:
             productionCountStr = ' (x%d)' % order.productionCount
@@ -120,10 +119,10 @@ class FortOrdersPanelComponent(OrdersPanelMeta, FortViewHelper, AppRef):
     def _getCooldownInfo(self, order):
         if not order.isPermanent:
             leftTime = order.getUsageLeftTime()
-            leftTimeStr = fort_text.getTimeDurationStr(leftTime)
+            leftTimeStr = self.app.utilsManager.textManager.getTimeDurationStr(leftTime)
             return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PROGRESSBAR_TIMELEFT, timeLeft=leftTimeStr)
         else:
             return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_INDEFENSIVE)
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self._buildList()

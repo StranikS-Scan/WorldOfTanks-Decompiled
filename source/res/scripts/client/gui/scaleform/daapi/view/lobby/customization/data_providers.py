@@ -1,13 +1,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/data_providers.py
 import cPickle
-from account_shared import getIGRCustomizedVehCompDescr
 import constants
 import gui
 import Math
 import time
 import Event
 from abc import abstractmethod, ABCMeta
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_WARNING, LOG_DEBUG
+from gui.Scaleform.daapi.view.lobby.customization.CustomizationHelper import getInventoryItemsFor
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.MENU import MENU
@@ -21,28 +21,105 @@ from gui.ClientHangarSpace import _CAMOUFLAGE_MIN_INTENSITY
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from gui.shared import g_itemsCache
 from gui.shared.utils.functions import makeTooltip
+from gui import g_tankActiveCamouflage
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 
-class CamouflageGroupsDataProvider(DAAPIDataProvider):
+class BaseCustomizationDataProvider(DAAPIModule):
 
     def __init__(self, nationID):
-        super(CamouflageGroupsDataProvider, self).__init__()
-        self.__list = []
+        super(BaseCustomizationDataProvider, self).__init__()
+        self.nationID = nationID
+        self._defCost = -1.0
+        self._cost = -1.0
+        self._period = -1.0
+        self._isIGR = False
+        self._isGold = 0
+        self._vehPriceFactor = 1.0
+        self._defVehPriceFactor = 1.0
+        self.currentItemID = None
+        self._currentType = None
+        return
+
+    @classmethod
+    def _makeCost(cls, defCost, vehPriceFactor, priceFactor):
+        return int(round(defCost * vehPriceFactor * priceFactor))
+
+    def _getPriceFactor(self, itemID):
+        LOG_WARNING('Method must be overridden!')
+
+    def getCost(self, itemID):
+        return (self._makeCost(self._cost, self._vehPriceFactor, self._getPriceFactor(itemID)), self._isGold)
+
+    def setDefaultCost(self, cost, defCost, isGold, isIGR, period):
+        self._cost = cost
+        self._defCost = defCost
+        self._isGold = isGold == 1
+        self._isIGR = isIGR
+        self._period = period
+
+    def refresh(self):
+        self.flashObject.invalidateRemote(True)
+
+    def isNewID(self, itemID):
+        return CustomizationHelper.checkIsNewItem(self._currentType, itemID, self.nationID)
+
+    def _hasNewItems(self, type, itemsInGroupIDs):
+        newItemsIds = CustomizationHelper.getNewIdsByType(type, self.nationID)
+        if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
+            groupIdsSet = set(itemsInGroupIDs)
+        else:
+            groupIdsSet = set(((self.nationID, id) for id in itemsInGroupIDs))
+        result = groupIdsSet.intersection(newItemsIds)
+        return len(result) > 0
+
+
+class BaseGroupsDataProvider(DAAPIDataProvider):
+
+    def __init__(self, nationID):
+        super(BaseGroupsDataProvider, self).__init__()
+        self._list = []
         self._nationID = nationID
+
+    @property
+    def collection(self):
+        return self._list
+
+    def _hasNewItems(self, type, itemsInGroupIDs):
+        newItemsIds = CustomizationHelper.getNewIdsByType(type, self._nationID)
+        if type == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
+            groupIdsSet = set(itemsInGroupIDs)
+        else:
+            groupIdsSet = set(((self._nationID, id) for id in itemsInGroupIDs))
+        result = groupIdsSet.intersection(newItemsIds)
+        return len(result) > 0
+
+
+class CamouflageGroupsDataProvider(BaseGroupsDataProvider):
+
+    def __init__(self, nationID):
+        super(CamouflageGroupsDataProvider, self).__init__(nationID)
 
     def buildList(self):
         customization = vehicles.g_cache.customization(self._nationID)
         result = []
+        compactDescr = g_currentVehicle.item.descriptor.type.compactDescr
+        activeGroup = g_tankActiveCamouflage['historical'].get(compactDescr)
+        if activeGroup is None:
+            activeGroup = g_tankActiveCamouflage.get(compactDescr, 0)
         if customization is not None:
             groups = customization.get('camouflageGroups', {})
             for name, info in groups.iteritems():
+                isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, info.get('ids', []))
                 if name in CAMOUFLAGE_KINDS:
+                    groupId = CAMOUFLAGE_KINDS.get(name)
                     result.append({'name': name,
                      'userString': info.get('userString', name),
-                     'hasNew': info.get('hasNew', False),
-                     'kind': CAMOUFLAGE_KINDS.get(name),
-                     'enabled': True})
+                     'hasNew': isHasNew,
+                     'kind': groupId,
+                     'enabled': True,
+                     'selected': activeGroup == groupId})
 
-        self.__list = sorted(result, cmp=self.__comparator)
+        self._list = sorted(result, cmp=self.__comparator)
         return
 
     def emptyItem(self):
@@ -51,10 +128,6 @@ class CamouflageGroupsDataProvider(DAAPIDataProvider):
          'hasNew': False,
          'kind': -1,
          'enabled': False}
-
-    @property
-    def collection(self):
-        return self.__list
 
     def __comparator(self, item, other):
         return cmp(item.get('kind'), other.get('kind'))
@@ -263,12 +336,10 @@ class InscriptionRentalPackageDataProvider(RentalPackageDataProviderBase):
         self._onGetPackagesCost(costs, defaultCosts, refresh)
 
 
-class InscriptionGroupsDataProvider(DAAPIDataProvider):
+class InscriptionGroupsDataProvider(BaseGroupsDataProvider):
 
     def __init__(self, nationID):
-        super(InscriptionGroupsDataProvider, self).__init__()
-        self.__list = []
-        self._nationID = nationID
+        super(InscriptionGroupsDataProvider, self).__init__(nationID)
 
     def buildList(self):
         hiddenInscriptions = g_itemsCache.items.shop.getInscriptionsGroupHiddens(self._nationID)
@@ -278,16 +349,21 @@ class InscriptionGroupsDataProvider(DAAPIDataProvider):
             igrRoomType = gui.game_control.g_instance.igr.getRoomType()
             groups = customization.get('inscriptionGroups', {})
             for name, group in groups.iteritems():
-                emblemIDs, groupUserString, igrType = group
-                if name not in hiddenInscriptions and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE):
+                inscriptionIDs, groupUserString, igrType = group
+                isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, inscriptionIDs)
+                isHiddenGroup = name in hiddenInscriptions
+                hasItemsInHangar = False
+                if isHiddenGroup:
+                    hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, inscriptionIDs, self._nationID)
+                if (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE):
                     result.append({'name': name,
                      'userString': groupUserString,
-                     'hasNew': False,
+                     'hasNew': isHasNew,
                      'isIGR': igrType != constants.IGR_TYPE.NONE,
                      'enabled': igrType == constants.IGR_TYPE.NONE or igrType <= igrRoomType,
                      'tooltip': TOOLTIPS.CUSTOMIZATION_INSCRIPTION_IGR})
 
-        self.__list = sorted(result, cmp=self.__comparator)
+        self._list = sorted(result, cmp=self.__comparator)
         return
 
     def emptyItem(self):
@@ -296,10 +372,6 @@ class InscriptionGroupsDataProvider(DAAPIDataProvider):
          'hasNew': False,
          'isIGR': False,
          'enabled': False}
-
-    @property
-    def collection(self):
-        return self.__list
 
     def __comparator(self, item, other):
         if item.get('isIGR') == other.get('isIGR'):
@@ -310,11 +382,10 @@ class InscriptionGroupsDataProvider(DAAPIDataProvider):
             return 1
 
 
-class EmblemGroupsDataProvider(DAAPIDataProvider):
+class EmblemGroupsDataProvider(BaseGroupsDataProvider):
 
-    def __init__(self):
-        super(EmblemGroupsDataProvider, self).__init__()
-        self.__list = []
+    def __init__(self, nationID):
+        super(EmblemGroupsDataProvider, self).__init__(nationID)
 
     def buildList(self):
         hiddenEmblems = g_itemsCache.items.shop.getEmblemsGroupHiddens()
@@ -324,15 +395,20 @@ class EmblemGroupsDataProvider(DAAPIDataProvider):
             igrRoomType = gui.game_control.g_instance.igr.getRoomType()
             for name, group in groups.iteritems():
                 emblemIDs, groupUserString, igrType, nations = group
-                if name not in hiddenEmblems and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE) and (nations is None or g_currentVehicle.item.nationID in nations):
+                isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, emblemIDs)
+                isHiddenGroup = name in hiddenEmblems
+                hasItemsInHangar = False
+                if isHiddenGroup:
+                    hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, emblemIDs, self._nationID)
+                if (isHasNew or hasItemsInHangar or not isHiddenGroup) and (gui.GUI_SETTINGS.igrEnabled or not gui.GUI_SETTINGS.igrEnabled and igrType == constants.IGR_TYPE.NONE) and (nations is None or g_currentVehicle.item.nationID in nations):
                     result.append({'name': name,
                      'userString': groupUserString,
-                     'hasNew': False,
+                     'hasNew': isHasNew,
                      'isIGR': igrType != constants.IGR_TYPE.NONE,
                      'enabled': igrType == constants.IGR_TYPE.NONE or igrType <= igrRoomType,
                      'tooltip': TOOLTIPS.CUSTOMIZATION_EMBLEM_IGR})
 
-        self.__list = sorted(result, cmp=self.__comparator)
+        self._list = sorted(result, cmp=self.__comparator)
         return
 
     def emptyItem(self):
@@ -341,10 +417,6 @@ class EmblemGroupsDataProvider(DAAPIDataProvider):
          'hasNew': False,
          'isIGR': False,
          'enabled': False}
-
-    @property
-    def collection(self):
-        return self.__list
 
     def __comparator(self, item, other):
         if item.get('isIGR') == other.get('isIGR'):
@@ -355,20 +427,12 @@ class EmblemGroupsDataProvider(DAAPIDataProvider):
             return 1
 
 
-class EmblemsDataProvider(DAAPIModule):
+class EmblemsDataProvider(BaseCustomizationDataProvider):
 
-    def __init__(self, position):
-        DAAPIModule.__init__(self)
-        self._defCost = -1.0
-        self._cost = -1.0
-        self._period = -1.0
-        self._isIGR = False
-        self._isGold = 0
-        self._vehPriceFactor = 1.0
-        self._defVehPriceFactor = 1.0
-        self.currentItemID = None
+    def __init__(self, nationID, position):
+        super(EmblemsDataProvider, self).__init__(nationID)
+        self._currentType = CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE
         self.position = position
-        return
 
     @classmethod
     def _makeTextureUrl(cls, width, height, texture, itemSize, coords):
@@ -384,10 +448,6 @@ class EmblemsDataProvider(DAAPIModule):
         return EmblemsDataProvider._makeTextureUrl(67, 67, texture, itemSize, coords)
 
     @classmethod
-    def _makeCost(cls, defCost, vehPriceFactor, itemPriceFactor):
-        return int(round(defCost * vehPriceFactor * itemPriceFactor))
-
-    @classmethod
     def _makeDescription(cls, groupName, userString):
         result = ''
         if len(groupName) > 0 and len(userString) > 0:
@@ -398,7 +458,7 @@ class EmblemsDataProvider(DAAPIModule):
         groups, emblems, names = vehicles.g_cache.playerEmblems()
         itemInfo = None
         if emblems is not None:
-            itemInfo = self._constructEmblem(itemID, groups, emblems, self.position, isCurrent, isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, itemID, self.position))
+            itemInfo = self._constructEmblem(itemID, groups, emblems, self.position, isCurrent, CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, itemID, self.nationID, self.position))
         if itemInfo is not None:
             itemInfo['timeLeft'] = timeLeftString
         else:
@@ -426,7 +486,8 @@ class EmblemsDataProvider(DAAPIModule):
         if emblem is not None:
             groupName, igrType, texture, bumpMap, emblemUserString, isMirrored = emblem
             emblemIDs, groupUserString, igrType, nations = groups.get(groupName)
-            if withoutCheck or groupName not in hiddens:
+            isNewItem = self.isNewID(itemID)
+            if withoutCheck or isNewItem or isInHangar or groupName not in hiddens:
                 price = self._makeCost(self._cost, self._vehPriceFactor, priceFactors.get(groupName)) if not isInHangar else 0
                 defaultPrice = self._makeCost(self._defCost, self._defVehPriceFactor, defPriceFactors.get(groupName, 1)) if not isInHangar else 0
                 action = None
@@ -446,6 +507,21 @@ class EmblemsDataProvider(DAAPIModule):
                      'state': state,
                      'newPrice': newPrice,
                      'oldPrice': oldPrice}
+                timeLeftStr = ''
+                days = 0
+                if isCurrent:
+                    updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+                    emblem = updatedDescr.playerEmblems[self.position]
+                    _, startTime, days = emblem
+                    if days:
+                        timeLeft = startTime + days * 86400 - time.time()
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
+                    else:
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
+                elif isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, itemID)
+                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
+                    timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 itemInfo = {'id': itemID,
                  'texturePath': self._makeSmallTextureUrl(texture, None, None),
                  'description': self._makeDescription(groupUserString, emblemUserString),
@@ -453,21 +529,25 @@ class EmblemsDataProvider(DAAPIModule):
                  'igrType': igrType,
                  'position': self.position,
                  'price': {'cost': price,
-                           'isGold': self._isGold == 1},
+                           'isGold': days == 0 if isCurrent else self._isGold == 1},
                  'action': action,
                  'current': isCurrent,
-                 'isInHangar': isInHangar}
+                 'isInHangar': isInHangar,
+                 'isNew': isNewItem,
+                 'timeLeftStr': timeLeftStr,
+                 'type': CUSTOMIZATION_ITEM_TYPE.EMBLEM,
+                 'isSpecialTooltip': True}
         return itemInfo
 
-    def getCost(self, itemID):
+    def _getPriceFactor(self, itemID):
         priceFactor = 0
         groups, emblems, names = vehicles.g_cache.playerEmblems()
         emblem = emblems.get(itemID)
         if emblem is not None:
             groupName, igrType, texture, bumpFile, emblemUserString, isMirrored = emblem
-            if not isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, itemID, self.position):
+            if not CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, itemID, self.nationID, self.position):
                 priceFactor = g_itemsCache.items.shop.getEmblemsGroupPriceFactors().get(groupName)
-        return (self._makeCost(self._cost, self._vehPriceFactor, priceFactor), self._isGold)
+        return priceFactor
 
     def getCostForPackagePrice(self, itemID, packagePrice, isGold):
         return (-1, False)
@@ -477,14 +557,14 @@ class EmblemsDataProvider(DAAPIModule):
         self._defVehPriceFactor = defaultVehPriceFactor
         self.currentItemID = itemID
 
-    def setDefaultCost(self, cost, defCost, isGold, isIGR, period):
-        self._cost = cost
-        self._defCost = defCost
-        self._isGold = isGold == 1
-        self._period = period
-
     def __comparator(self, item, other):
-        return cmp(item['userString'], other['userString'])
+        if item['current'] ^ other['current']:
+            result = -1 if item['current'] else 1
+        elif item['isInHangar'] ^ other['isInHangar']:
+            result = -1 if item['isInHangar'] else 1
+        else:
+            result = cmp(item['userString'], other['userString'])
+        return result
 
     def _populate(self):
         super(EmblemsDataProvider, self)._populate()
@@ -502,17 +582,19 @@ class EmblemsDataProvider(DAAPIModule):
         if group is not None:
             emblemIDs, groupUserString, igrType, nations = group
             self._isIGR = igrType != constants.IGR_TYPE.NONE
-            if groupName not in hiddenItems:
+            isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, emblemIDs)
+            isHiddenGroup = groupName in hiddenItems
+            hasItemsInHangar = False
+            if isHiddenGroup:
+                hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, emblemIDs, self.nationID)
+            if isHasNew or hasItemsInHangar or not isHiddenGroup:
                 for id in emblemIDs:
-                    itemInfo = self._constructEmblem(id, groups, emblems, self.position, self.currentItemID == id, False if self.isIGRItem(id) else isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, id, self.position), False)
+                    itemInfo = self._constructEmblem(id, groups, emblems, self.position, self.currentItemID == id, False if self.isIGRItem(id) else CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, id, self.nationID, self.position), False)
                     if itemInfo is not None:
                         if not self._isIGR or self._isIGR and itemInfo.get('igrType') != constants.IGR_TYPE.NONE:
                             result.append(itemInfo)
 
         return sorted(result, cmp=self.__comparator)
-
-    def refresh(self):
-        self.flashObject.invalidateRemote(True)
 
     def isIGRItem(self, itemID):
         groups, emblems, names = vehicles.g_cache.playerEmblems()
@@ -528,8 +610,8 @@ class EmblemsDataProvider(DAAPIModule):
 class InscriptionDataProvider(EmblemsDataProvider):
 
     def __init__(self, nationID, position):
-        super(InscriptionDataProvider, self).__init__(position)
-        self.nationID = nationID
+        super(InscriptionDataProvider, self).__init__(nationID, position)
+        self._currentType = CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE
 
     @classmethod
     def _makeSmallTextureUrl(cls, texture, itemSize, coords):
@@ -542,7 +624,7 @@ class InscriptionDataProvider(EmblemsDataProvider):
             groups = customization.get('inscriptionGroups', {})
             inscriptions = customization.get('inscriptions', {})
             if inscriptions is not None:
-                itemInfo = self._constructInscription(itemID, groups, inscriptions, isCurrent, isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, itemID, self.position))
+                itemInfo = self._constructInscription(itemID, groups, inscriptions, isCurrent, CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, itemID, self.nationID, self.position))
             if itemInfo is not None:
                 itemInfo['timeLeft'] = timeLeftString
             else:
@@ -567,7 +649,8 @@ class InscriptionDataProvider(EmblemsDataProvider):
         if inscription is not None:
             groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription
             inscriptionIDs, groupUserString, igrType = groups.get(groupName)
-            if withoutCheck or groupName not in hiddens:
+            isNewItem = self.isNewID(itemID)
+            if withoutCheck or isNewItem or isInHangar or groupName not in hiddens:
                 price = self._makeCost(self._cost, self._vehPriceFactor, priceFactors.get(groupName)) if not isInHangar else 0
                 defaultPrice = self._makeCost(self._defCost, self._defVehPriceFactor, defPriceFactors.get(groupName, 1)) if not isInHangar else 0
                 action = None
@@ -587,20 +670,40 @@ class InscriptionDataProvider(EmblemsDataProvider):
                      'state': state,
                      'newPrice': newPrice,
                      'oldPrice': oldPrice}
+                timeLeftStr = ''
+                days = 0
+                if isCurrent:
+                    updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+                    item = updatedDescr.playerInscriptions[self.position]
+                    _, startTime, days, _ = item
+                    if days:
+                        timeLeft = startTime + days * 86400 - time.time()
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
+                    else:
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
+                elif isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, itemID)
+                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
+                    timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 itemInfo = {'id': itemID,
                  'texturePath': self._makeSmallTextureUrl(texture, None, None),
                  'description': self._makeDescription(groupUserString, inscriptionUserString),
                  'igrType': igrType,
                  'price': {'cost': price,
-                           'isGold': self._isGold == 1},
+                           'isGold': days == 0 if isCurrent else self._isGold == 1},
                  'action': action,
                  'current': isCurrent,
                  'position': self.position,
                  'isInHangar': isInHangar,
-                 'isFeatured': isFeatured}
+                 'isFeatured': isFeatured,
+                 'isNew': isNewItem,
+                 'timeLeftStr': timeLeftStr,
+                 'type': CUSTOMIZATION_ITEM_TYPE.INSCRIPTION,
+                 'nationId': self.nationID,
+                 'isSpecialTooltip': True}
         return itemInfo
 
-    def getCost(self, itemID):
+    def _getPriceFactor(self, itemID):
         priceFactor = 0
         customization = vehicles.g_cache.customization(self.nationID)
         if customization is not None:
@@ -608,9 +711,9 @@ class InscriptionDataProvider(EmblemsDataProvider):
             inscription = inscriptions.get(itemID)
             if inscription is not None:
                 groupName, igrType, texture, bumpMap, inscriptionUserString, isFeatured = inscription
-                if not isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, itemID, self.position):
+                if not CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, itemID, self.nationID, self.position):
                     priceFactor = g_itemsCache.items.shop.getInscriptionsGroupPriceFactors(self.nationID).get(groupName)
-        return (self._makeCost(self._cost, self._vehPriceFactor, priceFactor), self._isGold)
+        return priceFactor
 
     def getCostForPackagePrice(self, itemID, packagePrice, isGold):
         return (-1, False)
@@ -627,11 +730,16 @@ class InscriptionDataProvider(EmblemsDataProvider):
                 group = groups.get(groupName, {})
                 inscriptions = customization.get('inscriptions', {})
                 if group is not None:
-                    emblemIDs, groupUserString, igrType = group
+                    inscriptionIDs, groupUserString, igrType = group
+                    isHasNew = self._hasNewItems(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, inscriptionIDs)
+                    isHiddenGroup = groupName in hiddenItems
+                    hasItemsInHangar = False
+                    if isHiddenGroup:
+                        hasItemsInHangar = CustomizationHelper.areItemsInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, inscriptionIDs, self.nationID)
                     self._isIGR = igrType != constants.IGR_TYPE.NONE
-                    if groupName not in hiddenItems:
-                        for id in emblemIDs:
-                            itemInfo = self._constructInscription(id, groups, inscriptions, self.currentItemID == id, False if self.isIGRItem(id) else isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, id, self.position), False)
+                    if isHasNew or hasItemsInHangar or not isHiddenGroup:
+                        for id in inscriptionIDs:
+                            itemInfo = self._constructInscription(id, groups, inscriptions, self.currentItemID == id, False if self.isIGRItem(id) else CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION, id, self.nationID, self.position), False)
                             if itemInfo is not None:
                                 if not self._isIGR or self._isIGR and itemInfo.get('igrType') != constants.IGR_TYPE.NONE:
                                     result.append(itemInfo)
@@ -650,27 +758,23 @@ class InscriptionDataProvider(EmblemsDataProvider):
         return False
 
     def __comparator(self, item, other):
-        if item['isFeatured'] ^ other['isFeatured']:
+        if item['current'] ^ other['current']:
+            result = -1 if item['current'] else 1
+        elif item['isInHangar'] ^ other['isInHangar']:
+            result = -1 if item['isInHangar'] else 1
+        elif item['isFeatured'] ^ other['isFeatured']:
             result = -1 if item['isFeatured'] else 1
         else:
             result = cmp(item['id'], other['id'])
         return result
 
 
-class CamouflagesDataProvider(DAAPIModule):
+class CamouflagesDataProvider(BaseCustomizationDataProvider):
 
     def __init__(self, nationID):
-        DAAPIModule.__init__(self)
+        super(CamouflagesDataProvider, self).__init__(nationID)
+        self._currentType = CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE
         self.currentGroup = None
-        self.__defCost = -1.0
-        self.__cost = -1.0
-        self.__period = -1.0
-        self.__isIGR = False
-        self.__isGold = 0
-        self.__vehPriceFactor = 1.0
-        self.__defVehPriceFactor = 1.0
-        self.currentItemID = None
-        self._nationID = nationID
         return
 
     @classmethod
@@ -694,10 +798,6 @@ class CamouflagesDataProvider(DAAPIModule):
         return CamouflagesDataProvider._makeTextureUrl(67, 67, texture, colors, armorColor, lifeCycle=lifeCycle)
 
     @classmethod
-    def _makeCost(cls, defCost, vehPriceFactor, camPriceFactor):
-        return int(round(defCost * vehPriceFactor * camPriceFactor))
-
-    @classmethod
     def _makeDescription(cls, groups, groupName, description):
         if not (description and groupName):
             return ''
@@ -706,19 +806,19 @@ class CamouflagesDataProvider(DAAPIModule):
 
     def getCamouflageDescr(self, camouflageID):
         camouflage = None
-        customization = vehicles.g_cache.customization(self._nationID)
+        customization = vehicles.g_cache.customization(self.nationID)
         if customization is not None:
             camouflages = customization.get('camouflages', {})
             camouflage = camouflages.get(camouflageID, None)
         return camouflage
 
     def makeItem(self, camouflageID, isCurrent, lifeCycle, timeLeftString, kind):
-        customization = vehicles.g_cache.customization(self._nationID)
+        customization = vehicles.g_cache.customization(self.nationID)
         camouflageInfo = None
         if customization is not None:
             groups = customization.get('camouflageGroups', {})
             armorColor = customization.get('armorColor', 0)
-            camouflageInfo = self._constructCamouflage(camouflageID, groups, customization.get('camouflages', {}), armorColor, lifeCycle, isCurrent, isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, camouflageID))
+            camouflageInfo = self._constructCamouflage(camouflageID, groups, customization.get('camouflages', {}), armorColor, lifeCycle, isCurrent, CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, camouflageID, self.nationID))
         if camouflageInfo is not None:
             camouflageInfo['timeLeft'] = timeLeftString
         else:
@@ -732,32 +832,31 @@ class CamouflagesDataProvider(DAAPIModule):
              'isNew': False,
              'invisibilityLbl': '',
              'current': False}
-        camouflageInfo['type'] = CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE
         return camouflageInfo
 
     def _constructCamouflage(self, cID, groups, camouflages, armorColor, lifeCycle = None, isCurrent = False, isInHangar = False, withoutCheck = True, currVehIntD = None):
         camouflageInfo = None
         camouflage = camouflages.get(cID, None)
-        hiddenCamos = g_itemsCache.items.shop.getCamouflagesHiddens(self._nationID)
-        if camouflage is not None and (withoutCheck or cID not in hiddenCamos or camouflage.get('igrType', 0) != constants.IGR_TYPE.NONE and cID not in hiddenCamos):
+        hiddenCamos = g_itemsCache.items.shop.getCamouflagesHiddens(self.nationID)
+        if camouflage is not None and (withoutCheck or cID not in hiddenCamos or isInHangar or camouflage.get('igrType', 0) != constants.IGR_TYPE.NONE and cID not in hiddenCamos):
             denyCD = camouflage.get('deny')
             allowCD = camouflage.get('allow')
             if currVehIntD not in denyCD and (len(allowCD) == 0 or currVehIntD in allowCD) or currVehIntD is None:
                 invisibilityFactor = camouflage.get('invisibilityFactor', 1)
                 invisibilityPercent = int(round((invisibilityFactor - 1) * 100))
                 invisibilityLbl = gui.makeHtmlString('html_templates:lobby/customization', 'camouflage-hint', {'percents': invisibilityPercent}, sourceKey=self.__getKindById(camouflage.get('kind', 0)))
-                price = self._makeCost(self.__cost, self.__vehPriceFactor, self._getCamoPriceFactor(cID)) if not isInHangar else 0
-                defaultPrice = self._makeCost(self.__defCost, self.__defVehPriceFactor, self._getDefaultCamoPriceFactor(cID)) if not isInHangar else 0
+                price = self._makeCost(self._cost, self._vehPriceFactor, self._getPriceFactor(cID)) if not isInHangar else 0
+                defaultPrice = self._makeCost(self._defCost, self._defVehPriceFactor, self._getDefaultCamoPriceFactor(cID)) if not isInHangar else 0
                 action = None
                 if price != defaultPrice:
-                    isPremium = self.__isGold == 1
+                    isPremium = self._isGold == 1
                     newPrice = (0, price) if isPremium else (price, 0)
                     oldPrice = (0, defaultPrice) if isPremium else (defaultPrice, 0)
                     state = (None, ACTION_TOOLTIPS_STATE.DISCOUNT) if isPremium else (ACTION_TOOLTIPS_STATE.DISCOUNT, None)
                     key = 'camouflagePacket7Cost'
-                    if self.__period == 0:
+                    if self._period == 0:
                         key = 'camouflagePacketInfCost'
-                    elif self.__period == 30:
+                    elif self._period == 30:
                         key = 'camouflagePacket30Cost'
                     action = {'type': ACTION_TOOLTIPS_TYPE.CAMOUFLAGE,
                      'key': cPickle.dumps((currVehIntD, key)),
@@ -765,43 +864,56 @@ class CamouflagesDataProvider(DAAPIModule):
                      'state': state,
                      'newPrice': newPrice,
                      'oldPrice': oldPrice}
+                timeLeftStr = ''
+                days = 0
+                if isCurrent:
+                    updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+                    item = updatedDescr.camouflages[camouflage.get('kind', 0)]
+                    _, startTime, days = item
+                    if days:
+                        timeLeft = startTime + days * 86400 - time.time()
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
+                    else:
+                        timeLeftStr = CustomizationHelper.getTimeLeftText(0)
+                elif isInHangar:
+                    item = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, cID)
+                    timeLeft = item.get('quantity') * 86400 if not item.get('isPermanent') else 0
+                    timeLeftStr = CustomizationHelper.getTimeLeftText(timeLeft)
                 camouflageInfo = {'id': cID,
                  'texturePath': self._makeSmallTextureUrl(camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor, lifeCycle),
                  'description': self._makeDescription(groups, camouflage.get('groupName', ''), camouflage.get('description', '')),
                  'price': {'cost': price,
-                           'isGold': self.__isGold == 1},
+                           'isGold': self._isGold == 1},
                  'action': action,
-                 'isNew': camouflage.get('isNew', False),
+                 'isNew': self.isNewID(cID),
                  'invisibilityLbl': invisibilityLbl,
                  'igrType': camouflage.get('igrType', 0),
                  'current': isCurrent,
-                 'isInHangar': isInHangar}
+                 'isInHangar': isInHangar,
+                 'timeLeftStr': timeLeftStr,
+                 'type': CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE,
+                 'nationId': self.nationID,
+                 'isSpecialTooltip': True}
         return camouflageInfo
 
-    def getCost(self, camouflageID):
-        return (self._makeCost(self.__cost, self.__vehPriceFactor, self._getCamoPriceFactor(camouflageID)), self.__isGold)
-
     def getCostForPackagePrice(self, camouflageID, packagePrice, isGold):
-        if isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, camouflageID):
+        if CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, camouflageID, self.nationID):
             priceFactor = 0
         else:
-            priceFactor = g_itemsCache.items.shop.getCamouflagesPriceFactors(self._nationID).get(camouflageID)
-        return (self._makeCost(packagePrice, self.__vehPriceFactor, priceFactor), isGold)
+            priceFactor = g_itemsCache.items.shop.getCamouflagesPriceFactors(self.nationID).get(camouflageID)
+        return (self._makeCost(packagePrice, self._vehPriceFactor, priceFactor), isGold)
 
     def setVehicleTypeParams(self, vehPriceFactor, defaultVehPriceFactor, camouflageID):
-        self.__vehPriceFactor = vehPriceFactor
-        self.__defVehPriceFactor = defaultVehPriceFactor
+        self._vehPriceFactor = vehPriceFactor
+        self._defVehPriceFactor = defaultVehPriceFactor
         self.currentItemID = camouflageID
 
-    def setDefaultCost(self, cost, defCost, isGold, isIGR, period):
-        self.__cost = cost
-        self.__defCost = defCost
-        self.__isGold = isGold == 1
-        self.__isIGR = isIGR
-        self.__period = period
-
     def __comparator(self, item, other):
-        if item['isNew'] ^ other['isNew']:
+        if item['current'] ^ other['current']:
+            result = -1 if item['current'] else 1
+        elif item['isInHangar'] ^ other['isInHangar']:
+            result = -1 if item['isInHangar'] else 1
+        elif item['isNew'] ^ other['isNew']:
             result = -1 if item['isNew'] else 1
         else:
             result = cmp(item['id'], other['id'])
@@ -837,7 +949,7 @@ class CamouflagesDataProvider(DAAPIModule):
 
     def onRequestList(self, groupName):
         self.currentGroup = groupName
-        customization = vehicles.g_cache.customization(self._nationID)
+        customization = vehicles.g_cache.customization(self.nationID)
         result = []
         if customization is not None:
             groups = customization.get('camouflageGroups', {})
@@ -847,9 +959,9 @@ class CamouflagesDataProvider(DAAPIModule):
             ids = group.get('ids', [])
             currIntDescr = g_currentVehicle.item.intCD
             for id in ids:
-                camouflageInfo = self._constructCamouflage(id, groups, camouflages, armorColor, isCurrent=self.currentItemID == id, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, id), withoutCheck=False, currVehIntD=currIntDescr)
+                camouflageInfo = self._constructCamouflage(id, groups, camouflages, armorColor, isCurrent=self.currentItemID == id, isInHangar=CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, id, self.nationID), withoutCheck=False, currVehIntD=currIntDescr)
                 if camouflageInfo is not None:
-                    if not self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
+                    if not self._isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self._isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
                         result.append(camouflageInfo)
 
             if gui.GUI_SETTINGS.igrEnabled:
@@ -859,18 +971,15 @@ class CamouflagesDataProvider(DAAPIModule):
                         for cID in ids:
                             camouflage = camouflages.get(cID, None)
                             if camouflage.get('kind', 0) == CAMOUFLAGE_KINDS.get(groupName, 0):
-                                camouflageInfo = self._constructCamouflage(cID, groups, camouflages, armorColor, isCurrent=self.currentItemID == cID, isInHangar=isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, cID), withoutCheck=False, currVehIntD=currIntDescr)
+                                camouflageInfo = self._constructCamouflage(cID, groups, camouflages, armorColor, isCurrent=self.currentItemID == cID, isInHangar=CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, cID, self.nationID), withoutCheck=False, currVehIntD=currIntDescr)
                                 if camouflageInfo is not None and camouflageInfo:
-                                    if not self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self.__isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
+                                    if not self._isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.NONE or self._isIGR and camouflageInfo.get('igrType') == constants.IGR_TYPE.PREMIUM:
                                         result.append(camouflageInfo)
 
         return sorted(result, cmp=self.__comparator)
 
-    def refresh(self):
-        self.flashObject.invalidateRemote(True)
-
     def isIGRItem(self, itemID):
-        customization = vehicles.g_cache.customization(self._nationID)
+        customization = vehicles.g_cache.customization(self.nationID)
         groups = customization.get('camouflageGroups', {})
         if itemID is not None:
             for groupName, group in groups.iteritems():
@@ -880,69 +989,14 @@ class CamouflagesDataProvider(DAAPIModule):
 
         return False
 
-    def _getCamoPriceFactor(self, camoID):
-        return g_itemsCache.items.shop.getCamouflagesPriceFactors(self._nationID).get(camoID)
+    def _getPriceFactor(self, camoID):
+        return g_itemsCache.items.shop.getCamouflagesPriceFactors(self.nationID).get(camoID)
 
     def _getDefaultCamoPriceFactor(self, camoID):
-        return g_itemsCache.items.shop.defaults.getCamouflagesPriceFactors(self._nationID).get(camoID)
+        return g_itemsCache.items.shop.defaults.getCamouflagesPriceFactors(self.nationID).get(camoID)
 
 
 class ITEM_REMOVE_TYPE():
     NONE = 0
     DESTROY = 1
     STORED = 2
-
-
-def getCustomizationElements(type, igrType):
-    igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
-    veh = g_currentVehicle.item
-    defaultVehCompDescr = veh.descriptor.makeCompactDescr()
-    igrVehCompDescr = getIGRCustomizedVehCompDescr(igrLayout, veh.invID, igrType, defaultVehCompDescr)
-    igrDescr = vehicles.VehicleDescr(igrVehCompDescr)
-    dossier = g_itemsCache.items.getVehicleDossier(veh.intCD)
-    if type == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
-        return (veh.descriptor.camouflages, igrDescr.camouflages, dossier.getBlock('camouflages'))
-    elif type == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-        return (veh.descriptor.playerEmblems, igrDescr.playerEmblems, dossier.getBlock('playerEmblems'))
-    elif type == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-        return (veh.descriptor.playerInscriptions, igrDescr.playerInscriptions, dossier.getBlock('playerInscriptions'))
-    else:
-        return (None, None, None)
-        return None
-
-
-def getUpdatedDescriptor(vehDescr):
-    igrRoomType = gui.game_control.g_instance.igr.getRoomType()
-    igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
-    igrVehCompDescr = getIGRCustomizedVehCompDescr(igrLayout, g_currentVehicle.item.invID, igrRoomType, vehDescr.makeCompactDescr())
-    return vehicles.VehicleDescr(igrVehCompDescr)
-
-
-def isItemInHangar(type, itemID, position = None):
-    if itemID is None:
-        return False
-    else:
-        igrRoomType = gui.game_control.g_instance.igr.getRoomType()
-        defaultElements, igrElements, dosierElements = getCustomizationElements(type, igrRoomType)
-        if itemID in dosierElements:
-            return True
-        for item in igrElements:
-            if item[0] == itemID and (item[2] == 0 or igrRoomType != 0 and (position is None or position is not None and igrElements[position] == item)):
-                return True
-
-        for item in defaultElements:
-            if item[0] == itemID and (item[2] == 0 or igrRoomType != 0 and (position is None or position is not None and defaultElements[position] == item)):
-                return True
-
-        return False
-
-
-def isIdInDefaultSetup(type, itemID, position = None):
-    res = False
-    defaultElements, _, _ = getCustomizationElements(type, 0)
-    for item in defaultElements:
-        if item[0] == itemID and (position is None or defaultElements.index(item) == position):
-            res = True
-            break
-
-    return res

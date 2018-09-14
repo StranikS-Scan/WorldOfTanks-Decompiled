@@ -81,11 +81,13 @@ class MessengerEntry(object):
     def __pe_onAccountBecomePlayer(self):
         scope = MESSENGER_SCOPE.LOBBY
         g_settings.update()
+        self.__protoPlugins.setFilters(self.__msgFiltersChain)
         self.__protoPlugins.connect(scope)
         self.__gui.switch(scope)
 
     def __pe_onAvatarBecomePlayer(self):
         g_settings.update()
+        self.__protoPlugins.setFilters(self.__msgFiltersChain)
         self.__playerHelper.onAvatarBecomePlayer()
 
     def __pe_onAccountBecomeNonPlayer(self):

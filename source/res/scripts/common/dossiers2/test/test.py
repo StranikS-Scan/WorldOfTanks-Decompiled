@@ -284,9 +284,9 @@ def test10():
         vehDossierDescr = dossiers2.getVehicleDossierDescr(compDescr)
         print str(vehDossierDescr['vehTypeFrags'])
         print str(vehDossierDescr['achievements7x7'])
-        print str(vehDossierDescr['playerInscriptions'])
+        print str(vehDossierDescr['inscriptions'])
         print str(vehDossierDescr['camouflages'])
-        print str(vehDossierDescr['playerEmblems'])
+        print str(vehDossierDescr['emblems'])
         print str(vehDossierDescr['compensation'])
         print 'ok'
     except Exception as e:

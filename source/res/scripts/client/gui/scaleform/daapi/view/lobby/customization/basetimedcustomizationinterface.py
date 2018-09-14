@@ -3,9 +3,11 @@ import time
 from abc import abstractmethod, ABCMeta
 from datetime import timedelta
 from math import ceil
+from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_DEBUG
 import gui
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import ITEM_REMOVE_TYPE
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
+from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n
 from gui.Scaleform.daapi.view.lobby.customization.CustomizationInterface import CustomizationInterface
@@ -23,6 +25,7 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
         self._groupsDP = None
         self._itemsDP = None
         self._flashObject = None
+        self.__newIds = CustomizationHelper.getNewIdsByType(CUSTOMIZATION_ITEM_TYPE.CI_TYPES[type], nationId)
         return
 
     @abstractmethod
@@ -65,8 +68,24 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
     def update(self, vehDescr):
         pass
 
+    def getRealPosition(self):
+        if not self.isTurret:
+            return self._position - self._positionShift
+        return 2 + self._position
+
+    def getDrorStr(self, sectionName, kind):
+        items = CustomizationHelper.getItemsOnVehicle(self._type)
+        itemIdx = kind if self._type == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE else self.getRealPosition()
+        item = items[itemIdx]
+        return 'customization/{0:>s}{1:>s}'.format(sectionName, 'Drop' if item[2] > 0 else 'Dismount')
+
     def updateSlotsPosition(self, vehDescr):
         pass
+
+    def hasNewItems(self):
+        type = CUSTOMIZATION_ITEM_TYPE.CI_TYPES[self._type]
+        newItemIDs = CustomizationHelper.getNewIdsByType(type, self._nationID)
+        return len(newItemIDs) > 0
 
     def getSlotsCount(self, descriptor, slotType):
         slots = descriptor.get('emblemSlots', [])
@@ -82,6 +101,8 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
         self._rentalPackageDP.onRentalPackageChange += self.__handleRentalPackageChange
 
     def _dispose(self):
+        CustomizationHelper.updateVisitedItems(CUSTOMIZATION_ITEM_TYPE.CI_TYPES[self._type], self.__newIds)
+        self.__newIds = None
         if self._newItemID is not None:
             self.updateVehicleCustomization(self._currentItemID)
         self._rentalPackageDP.onDataInited -= self._onRentalPackagesDataInited

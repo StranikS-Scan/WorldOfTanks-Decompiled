@@ -76,8 +76,8 @@ class ContactsWindow(View, AbstractWindowView, ContactsWindowMeta, ISearchHandle
 
     def searchContact(self, criteria):
         LOG_DEBUG('search contact')
-        self.as_frozenSearchActionS(True)
-        self._searchDP.find(criteria)
+        if self._searchDP.find(criteria):
+            self.as_frozenSearchActionS(True)
 
     def onSearchComplete(self, result):
         LOG_DEBUG('search complete')

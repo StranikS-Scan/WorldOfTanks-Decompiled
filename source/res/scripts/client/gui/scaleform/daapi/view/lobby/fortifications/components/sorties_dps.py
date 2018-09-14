@@ -1,20 +1,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/sorties_dps.py
-import random
 import BigWorld
-import time
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import MAIN_TEXT, ALERT_TEXT, MIDDLE_TITLE, STANDARD_TEXT, ERROR_TEXT
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getUnitMaxLevel, makeFortBattleShortVO
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeSortieShortVO
+from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider, SortableDAAPIDataProvider
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS, FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import ImageUrlProperties, UtilsManager
+from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.items.sortie_items import getDivisionsOrderData
 from gui.prb_control.prb_helpers import unitFunctionalProperty
-from gui.shared.fortifications.fort_seqs import getDivisionSettings
+from gui.shared.fortifications.fort_seqs import getDivisionSettings, BATTLE_ITEM_TYPE
+from gui.shared.utils import CONST_CONTAINER
 from helpers import i18n, time_utils
 
 def makeDivisionData(nameGenerator):
@@ -85,8 +84,8 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
         super(SortiesDataProvider, self).__init__()
         self._list = []
         self._listMapping = {}
-        self.__mapping = {}
-        self.__selectedID = None
+        self._mapping = {}
+        self._selectedID = None
         return
 
     @unitFunctionalProperty
@@ -103,8 +102,8 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
     def clear(self):
         self._list = []
         self._listMapping.clear()
-        self.__mapping.clear()
-        self.__selectedID = None
+        self._mapping.clear()
+        self._selectedID = None
         return
 
     def fini(self):
@@ -112,12 +111,12 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self.__selectedID in self.__mapping:
-            return self.__mapping[self.__selectedID]
+        if self._selectedID in self._mapping:
+            return self._mapping[self._selectedID]
         return -1
 
     def setSelectedID(self, id):
-        self.__selectedID = id
+        self._selectedID = id
 
     def getVO(self, index):
         vo = None
@@ -142,7 +141,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
                 self._list.append(self._makeVO(index, item))
                 self._listMapping[item.getID()] = index
 
-        self.__rebuildMapping()
+        self._rebuildMapping()
 
     def rebuildList(self, cache):
         self.buildList(cache)
@@ -150,7 +149,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
 
     def updateItem(self, cache, item):
         sortieID = item.getID()
-        if sortieID in self.__mapping and item.filter(cache.getRosterTypeID()):
+        if sortieID in self._mapping and item.filter(cache.getRosterTypeID()):
             index = self._listMapping[sortieID]
             try:
                 self._list[index] = self._makeVO(index, item)
@@ -158,15 +157,15 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
                 LOG_ERROR('Item is not found', sortieID, index)
 
             self.flashObject.update([index])
-            self.__rebuildMapping()
+            self._rebuildMapping()
             return self.getSelectedIdx()
         else:
             self.rebuildList(cache)
             return None
 
     def removeItem(self, cache, removedID):
-        if removedID in self.__mapping:
-            dropSelection = removedID == self.__selectedID
+        if removedID in self._mapping:
+            dropSelection = removedID == self._selectedID
             self.rebuildList(cache)
             return dropSelection
         return False
@@ -176,11 +175,11 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
 
     def pySortOn(self, fields, order):
         super(SortiesDataProvider, self).pySortOn(fields, order)
-        self.__rebuildMapping()
+        self._rebuildMapping()
         self.refresh()
 
-    def __rebuildMapping(self):
-        self.__mapping = dict(map(lambda item: (item[1]['sortieID'], item[0]), enumerate(self.sortedCollection)))
+    def _rebuildMapping(self):
+        self._mapping = dict(map(lambda item: (item[1]['sortieID'], item[0]), enumerate(self.sortedCollection)))
 
     def _makeVO(self, index, item):
         return {'sortieID': item.getID(),
@@ -213,9 +212,6 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
 
     def emptyItem(self):
         return None
-
-    def isEmpty(self):
-        return len(self._list) == 0
 
     def clear(self):
         self._list = []
@@ -259,6 +255,13 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
         self.buildList(cache)
         self.refresh()
 
+    def refreshItem(self, cache, clanDBID):
+        isSelected = self.__selectedID == clanDBID
+        self.buildList(cache)
+        if isSelected and clanDBID not in self.__mapping:
+            return True
+        return False
+
     def pyGetSelectedIdx(self):
         return self.getSelectedIdx()
 
@@ -272,13 +275,7 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
 
     def _makeVO(self, index, item, favorites):
         isWarDeclared = False
-        day, timestamp = item.getAvailabilityFromTomorrow()
-        if isWarDeclared or day > 14:
-            availability = i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_NOTAVAILABLE)
-        elif day == 0:
-            availability = i18n.makeString(FORTIFICATIONS.FORTINTELLIGENCE_DATE_TOMORROW)
-        else:
-            availability = BigWorld.wg_getShortDateFormat(timestamp)
+        timestamp = item.getAvailability()
         defenceStart, defenceFinish = item.getDefencePeriod()
         if defenceStart and defenceFinish:
             defenceTime = '%s - %s' % (BigWorld.wg_getShortTimeFormat(defenceStart), BigWorld.wg_getShortTimeFormat(defenceFinish))
@@ -288,82 +285,202 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
          'levelIcon': '../maps/icons/filters/levels/level_%s.png' % item.getLevel(),
          'clanTag': '[%s]' % item.getClanAbbrev(),
          'defenceTime': defenceTime,
-         'defenceStartTime': defenceStart,
+         'defenceStartTime': item.getLocalDefHour(),
          'avgBuildingLvl': round(item.getAvgBuildingLevel(), 1),
-         'availability': availability,
-         'availabilityDays': day,
+         'availabilityDays': timestamp,
          'isFavorite': item.getClanDBID() in favorites,
          'clanLvl': item.getLevel()}
 
 
-class ClanBattlesDataProvider(SortiesDataProvider):
+class ClanBattlesDataProvider(SortableDAAPIDataProvider, AppRef):
+
+    class DAY_OF_BATTLE(CONST_CONTAINER):
+        TODAY = 0
+        TOMORROW = 1
+        OTHER = 2
+
+    def __init__(self):
+        super(ClanBattlesDataProvider, self).__init__()
+        self._list = []
+        self._listMapping = {}
+        self._mapping = {}
+        self._selectedID = None
+        return
+
+    @unitFunctionalProperty
+    def unitFunctional(self):
+        return None
+
+    @property
+    def collection(self):
+        return self._list
+
+    def emptyItem(self):
+        return None
+
+    def clear(self):
+        self._list = []
+        self._listMapping.clear()
+        self._mapping.clear()
+        self._selectedID = None
+        return
+
+    def fini(self):
+        self.clear()
+        self._dispose()
+
+    def getSelectedIdx(self):
+        if self._selectedID in self._mapping:
+            return self._mapping[self._selectedID]
+        return -1
+
+    def setSelectedID(self, id):
+        self._selectedID = id
+
+    def getVO(self, index):
+        vo = None
+        if index > -1:
+            try:
+                vo = self.sortedCollection[index]
+            except IndexError:
+                LOG_ERROR('Item not found', index)
+
+        return vo
 
     def getUnitVO(self, clientIdx):
         return makeFortBattleShortVO(self.unitFunctional, unitIdx=clientIdx)
 
-    def _makeVO(self, index, item):
-        if item.isDefence():
+    def getUnitMaxLevel(self, clientIdx):
+        return getUnitMaxLevel(self.unitFunctional, unitIdx=clientIdx)
+
+    def buildList(self, cache):
+        self.clear()
+        if not BigWorld.player().isLongDisconnectedFromCenter:
+            for index, (item, battleItem) in enumerate(cache.getIterator()):
+                self._list.append(self._makeVO(index, item, battleItem))
+                self._listMapping[item.getBattleID()] = index
+
+        self._rebuildMapping()
+
+    def rebuildList(self, cache):
+        self.buildList(cache)
+        self.refresh()
+
+    def updateItem(self, cache, item, battleItem):
+        fortBattleID = item.getBattleID()
+        if fortBattleID in self._mapping and item.filter():
+            index = self._listMapping[fortBattleID]
+            try:
+                self._list[index] = self._makeVO(index, item, battleItem)
+            except IndexError:
+                LOG_ERROR('Item is not found', fortBattleID, index)
+
+            self.flashObject.update([index])
+            self._rebuildMapping()
+            return self.getSelectedIdx()
+        else:
+            self.rebuildList(cache)
+            return None
+
+    def removeItem(self, cache, removedID):
+        if removedID in self._mapping:
+            dropSelection = removedID == self._selectedID
+            self.rebuildList(cache)
+            return dropSelection
+        return False
+
+    def pyGetSelectedIdx(self):
+        return self.getSelectedIdx()
+
+    def pySortOn(self, fields, order):
+        super(ClanBattlesDataProvider, self).pySortOn(fields, order)
+        self._rebuildMapping()
+        self.refresh()
+
+    def _rebuildMapping(self):
+        self._mapping = dict(map(lambda item: (item[1]['sortieID'][0], item[0]), enumerate(self.sortedCollection)))
+
+    def _makeVO(self, index, item, battleItem):
+        if item.getType() == BATTLE_ITEM_TYPE.DEFENCE:
             battleType = FORTIFICATION_ALIASES.CLAN_BATTLE_DEFENCE
         else:
             battleType = FORTIFICATION_ALIASES.CLAN_BATTLE_OFFENCE
-        day, timestamp = item.getAvailability()
-        startTimeLeft = item.getAttackTimeLeft()
-        if day > 0:
+        if battleItem:
+            startTime = battleItem.getRoundStartTime()
+            startTimeLeft = battleItem.getRoundStartTimeLeft()
+            isBattleRound = battleItem.isBattleRound()
+        else:
+            startTime = item.getStartTime()
+            startTimeLeft = item.getStartTimeLeft()
+            isBattleRound = False
+        dayOfBattle = self.DAY_OF_BATTLE.TODAY
+        if startTimeLeft > time_utils.QUARTER_HOUR:
             stateOfBattle = FORTIFICATION_ALIASES.CLAN_BATTLE_BATTLE_TOMORROW
-        elif startTimeLeft > time_utils.QUARTER_HOUR:
-            stateOfBattle = FORTIFICATION_ALIASES.CLAN_BATTLE_BATTLE_TODAY
-        elif startTimeLeft > 0:
+            if time_utils.isTimeThisDay(startTime):
+                stateOfBattle = FORTIFICATION_ALIASES.CLAN_BATTLE_BATTLE_TODAY
+            elif time_utils.isTimeNextDay(startTime):
+                dayOfBattle = self.DAY_OF_BATTLE.TOMORROW
+            else:
+                dayOfBattle = self.DAY_OF_BATTLE.OTHER
+        elif startTimeLeft > 0 and not isBattleRound:
             stateOfBattle = FORTIFICATION_ALIASES.CLAN_BATTLE_BEGINS
         else:
             stateOfBattle = FORTIFICATION_ALIASES.CLAN_BATTLE_IS_IN_BATTLE
-        return {'sortieID': (item.getID(), item.getPeripheryID()),
+        return {'sortieID': (item.getBattleID(), item.getPeripheryID()),
          'battleType': battleType,
          'battleName': self.__makeBattleName(item, battleType),
          'battleDirection': self.__makeBattleDirection(item),
-         'dayOfBattle': self.__makeDayOfBattle(day, timestamp),
-         'beforeBegins': self.__makeTimeOfBattle(item, stateOfBattle),
-         'stateOfBattle': stateOfBattle}
+         'dayOfBattle': self.__makeDayOfBattle(dayOfBattle, startTime),
+         'beforeBegins': self.__makeTimeOfBattle(item, battleItem, stateOfBattle),
+         'stateOfBattle': stateOfBattle,
+         'startTimeLeft': startTimeLeft,
+         'direction': item.getDirection()}
 
     def __makeBattleName(self, item, battleType):
         _, clanAbbrev, _ = item.getOpponentClanInfo()
         clanName = '[%s]' % clanAbbrev
         result = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderbattlename(battleType), clanName=clanName)
-        result = fort_text.getText(MIDDLE_TITLE, result)
+        result = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, result)
         return result
 
     def __makeBattleDirection(self, item):
         direction = i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())
         directionName = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERDIRECTION, directionName=direction)
-        return fort_text.getText(STANDARD_TEXT, directionName)
+        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, directionName)
 
-    def __makeDayOfBattle(self, day, timestamp):
-        if day == 0:
+    def __makeDayOfBattle(self, dayOfBattle, timestamp):
+        if dayOfBattle == self.DAY_OF_BATTLE.TODAY:
             availability = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('today'))
-        elif day == 1:
+        elif dayOfBattle == self.DAY_OF_BATTLE.TOMORROW:
             availability = i18n.makeString(FORTIFICATIONS.fortclanbattlelist_renderdayofbattle('tomorrow'))
         else:
             availability = BigWorld.wg_getShortDateFormat(timestamp)
-        return fort_text.getText(MAIN_TEXT, availability)
+        return self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, availability)
 
-    def __makeTimeOfBattle(self, item, currentTestState):
+    def __makeTimeOfBattle(self, item, battleItem, currentState):
         result = {}
-        if currentTestState == FORTIFICATION_ALIASES.CLAN_BATTLE_IS_IN_BATTLE:
+        if currentState == FORTIFICATION_ALIASES.CLAN_BATTLE_IS_IN_BATTLE:
             icon = RES_ICONS.MAPS_ICONS_LIBRARY_BATTLERESULTICON_1
-            units = UtilsManager()
+            units = self.app.utilsManager
             icon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -3, 0))
-            formattedText = fort_text.getText(ERROR_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE))
+            formattedText = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE))
             result['text'] = icon + ' ' + formattedText
-        elif currentTestState == FORTIFICATION_ALIASES.CLAN_BATTLE_BEGINS:
+        elif currentState == FORTIFICATION_ALIASES.CLAN_BATTLE_BEGINS:
             timer = {}
-            htmlFormatter = fort_text.getText(ALERT_TEXT, '###')
+            htmlFormatter = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, '###')
             locale = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE)
-            locale = fort_text.getText(MAIN_TEXT, locale)
+            locale = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, locale)
             result['text'] = locale
-            timer['deltaTime'] = item.getAttackTimeLeft()
+            if battleItem:
+                startTimeLeft = battleItem.getRoundStartTimeLeft()
+            else:
+                startTimeLeft = item.getStartTimeLeft()
+            timer['deltaTime'] = startTimeLeft
             timer['htmlFormatter'] = htmlFormatter
+            timer['timerDefaultValue'] = '00'
             result['timer'] = timer
         else:
-            lastBattleTimeUserString = '%s - %s' % (BigWorld.wg_getShortTimeFormat(item.getAttackTime()), BigWorld.wg_getShortTimeFormat(item.getAttackFinishTime()))
-            result['text'] = fort_text.getText(MAIN_TEXT, lastBattleTimeUserString)
+            lastBattleTimeUserString = '%s - %s' % (BigWorld.wg_getShortTimeFormat(item.getStartTime()), BigWorld.wg_getShortTimeFormat(item.getFinishTime()))
+            result['text'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, lastBattleTimeUserString)
         i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE)
         return result

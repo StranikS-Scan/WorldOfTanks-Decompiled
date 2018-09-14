@@ -77,7 +77,8 @@ class VehicleSellDialog(View, VehicleSellDialogMeta, AbstractWindowView):
          'nationID': vehicle.nationID,
          'sellPrice': vehicle.sellPrice,
          'action': vehicleAction,
-         'hasCrew': vehicle.hasCrew}
+         'hasCrew': vehicle.hasCrew,
+         'isRented': vehicle.isRented}
         onVehicle = defaultdict(list)
         onVehicleOptionalDevices = onVehicle['optionalDevices']
         for o in vehicle.optDevices:

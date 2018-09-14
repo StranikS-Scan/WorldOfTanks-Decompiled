@@ -45,10 +45,10 @@ class ChannelsCarouselHandler(AppRef):
         add(ComponentEvent.COMPONENT_REGISTERED, self.__handleComponentRegistered)
         add(ComponentEvent.COMPONENT_UNREGISTERED, self.__handleComponentUnregistered)
 
-    def __handleComponentRegistered(self, event):
+    def __handleComponentRegistered(self, _):
         self.__checkOpenedWindows()
 
-    def __handleComponentUnregistered(self, event):
+    def __handleComponentUnregistered(self, _):
         self.__checkOpenedWindows()
 
     def __checkOpenedWindows(self):

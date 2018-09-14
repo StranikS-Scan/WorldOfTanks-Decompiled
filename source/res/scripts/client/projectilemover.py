@@ -269,6 +269,11 @@ class ProjectileMover(object):
                 break
 
             if endPoint is not None:
+                stopPlane = proj['stopPlane']
+                if stopPlane is not None and stopPlane.testPoint(endPoint):
+                    testRes = stopPlane.intersectSegment(model.position, endPoint)
+                    if testRes is not None:
+                        endPoint = testRes
                 dir = endPoint - model.position
                 dir.normalise()
                 proj['impactVelDir'] = dir

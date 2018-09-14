@@ -2,8 +2,8 @@
 import weakref
 from account_helpers.AccountSettings import AccountSettings
 from gui import DEPTH_OF_Aim
-from gui.BattleContext import g_battleContext
 from gui.Scaleform.Flash import Flash
+from gui.battle_control import g_sessionProvider
 from helpers import i18n
 from helpers.aop import Aspect
 from tutorial.control.battle.functional import IDirectionIndicator
@@ -141,7 +141,7 @@ class BattleLayout(ScaleformLayout):
     def init(self):
         result = super(BattleLayout, self).init()
         if result:
-            g_battleContext.setNormalizePlayerName(normalizePlayerName)
+            g_sessionProvider.getCtx().setNormalizePlayerName(normalizePlayerName)
             g_tutorialWeaver.weave('gui.WindowsManager', 'WindowsManager', '^showBattle$', aspects=[ShowBattleAspect])
             g_tutorialWeaver.weave('gui.Scaleform.Minimap', 'Minimap', '^getStoredMinimapSize|storeMinimapSize$', aspects=[MinimapDefaultSizeAspect(self.uiHolder)])
         return result
@@ -156,7 +156,7 @@ class BattleLayout(ScaleformLayout):
         return
 
     def fini(self, isItemsRevert = True):
-        g_battleContext.resetNormalizePlayerName()
+        g_sessionProvider.getCtx().resetNormalizePlayerName()
         dispatcher = self.getDispatcher()
         if dispatcher is not None:
             dispatcher.dispossessUI()

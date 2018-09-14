@@ -125,6 +125,20 @@ class _WalletStatusListener(_Listener):
         self._page.invalidateWalletStatus(status)
 
 
+class _RentChangeListener(_Listener):
+
+    def startListen(self, page):
+        super(_RentChangeListener, self).startListen(page)
+        game_control.g_instance.rentals.onRentChangeNotify += self.__onRentChange
+
+    def stopListen(self):
+        game_control.g_instance.rentals.onRentChangeNotify -= self.__onRentChange
+        super(_RentChangeListener, self).stopListen()
+
+    def __onRentChange(self, vehicles):
+        self._page.invalidateRent(vehicles)
+
+
 class _PrbGlobalListener(_Listener, GlobalListener):
 
     def startListen(self, page):
@@ -166,7 +180,7 @@ class _PrbGlobalListener(_Listener, GlobalListener):
 
 
 class TTListenerDecorator(_Listener):
-    __slots__ = ('_stats', '_items', '_wallet', '_prbListener')
+    __slots__ = ('_stats', '_items', '_wallet', '_prbListener', '_rent')
 
     def __init__(self):
         super(TTListenerDecorator, self).__init__()
@@ -174,6 +188,7 @@ class TTListenerDecorator(_Listener):
         self._items = _ItemsCacheListener()
         self._wallet = _WalletStatusListener()
         self._prbListener = _PrbGlobalListener()
+        self._rent = _RentChangeListener()
 
     def startListen(self, page):
         proxy = weakref.proxy(page)
@@ -181,9 +196,11 @@ class TTListenerDecorator(_Listener):
         self._items.startListen(proxy)
         self._wallet.startListen(proxy)
         self._prbListener.startListen(proxy)
+        self._rent.startListen(proxy)
 
     def stopListen(self):
         self._stats.stopListen()
         self._items.stopListen()
         self._wallet.stopListen()
         self._prbListener.stopListen()
+        self._rent.stopListen()

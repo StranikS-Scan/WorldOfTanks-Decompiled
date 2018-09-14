@@ -23,9 +23,14 @@ class _ChannelController(_LobbyLayout):
 
     def __init__(self, channel):
         super(_ChannelController, self).__init__(channel)
+        self.__isChat2Enabled = g_settings.server.BW_CHAT2.isEnabled()
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def proto_v2(self):
         return None
 
     @storage_getter('users')
@@ -47,6 +52,10 @@ class _ChannelController(_LobbyLayout):
         return (result, errorMsg)
 
     def _broadcast(self, message):
+        if self.__isChat2Enabled:
+            result, _ = self.proto_v2.adminChat.parseLine(message, self._channel.getClientID())
+            if result:
+                return
         self.proto.channels.sendMessage(self._channel.getID(), message)
 
     def _format(self, message, doFormatting = True):

@@ -2,12 +2,13 @@
 import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.meta.FortTransportConfirmationWindowMeta import FortTransportConfirmationWindowMeta
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
@@ -34,20 +35,23 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
 
     def _dispose(self):
         self.stopFortListening()
-        self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED,
-         'isInTutorial': self.__isInTutorial}), scope=EVENT_BUS_SCOPE.FORT)
+        ctrl = self.fortCtrl
+        if ctrl is not None and ctrl.getFort() is not None:
+            self.fireEvent(events.FortEvent(events.FortEvent.TRANSPORTATION_STEP, {'step': events.FortEvent.TRANSPORTATION_STEPS.CONFIRMED,
+             'isInTutorial': self.__isInTutorial}), scope=EVENT_BUS_SCOPE.FORT)
         super(FortTransportConfirmationWindow, self)._dispose()
+        return
 
     def _update(self):
         prefix = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_MAXTRANSPORTINGSIZELABEL)
-        stdText = fort_text.getText(fort_text.STANDARD_TEXT, prefix)
+        stdText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, prefix)
         defResText = fort_formatters.getDefRes(self.getTransportingSize(), True)
         self.as_setMaxTransportingSizeS(stdText + defResText)
-        clockIcon = fort_text.getIcon(fort_text.CLOCK_ICON)
-        time = fort_text.getTimeDurationStr(self.fortCtrl.getFort().getTransportationLevel().cooldownTime)
+        clockIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CLOCK_ICON)
+        time = self.app.utilsManager.textManager.getTimeDurationStr(self.fortCtrl.getFort().getTransportationLevel().cooldownTime)
         ctx = {'estimatedTime': time}
         estimatedTextString = i18n.makeString(FORTIFICATIONS.FORTTRANSPORTCONFIRMATIONWINDOW_TRANSPORTINGFOOTERTEXT, **ctx)
-        estimatedText = fort_text.getText(fort_text.STANDARD_TEXT, estimatedTextString)
+        estimatedText = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, estimatedTextString)
         self.as_setFooterTextS(clockIcon + estimatedText)
         data = self.__buildData()
         self.as_setDataS(data)
@@ -63,7 +67,7 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
          'sourceBaseVO': self._makeBuildingData(fromBuild, fromBuild.direction, fromBuild.position),
          'targetBaseVO': self._makeBuildingData(toBuild, toBuild.direction, toBuild.position)}
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self._update()
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
@@ -91,7 +95,7 @@ class FortTransportConfirmationWindow(View, AbstractWindowView, FortTransportCon
                 fromBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId())
                 toBuild = self.fortCtrl.getFort().getBuilding(self.getServerBuildId(False))
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_TRANSPORT, toBuilding=toBuild.userName, fromBuilding=fromBuild.userName, res=BigWorld.wg_getIntegralFormat(size), type=SystemMessages.SM_TYPE.Warning)
-                self.destroy()
+            self.destroy()
         else:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ERRORS_EVENT_COOLDOWN, type=SystemMessages.SM_TYPE.Error)
             self.destroy()

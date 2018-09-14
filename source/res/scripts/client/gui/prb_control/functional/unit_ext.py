@@ -6,7 +6,7 @@ from UnitBase import UNIT_ERROR, UNIT_SLOT, INV_ID_CLEAR_VEHICLE
 from account_helpers import getPlayerDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
-from gui import prb_control, SystemMessages
+from gui import prb_control, SystemMessages, game_control
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control import getClientUnitMgr, getClientUnitBrowser
@@ -18,6 +18,7 @@ from gui.prb_control.items.unit_seqs import UnitsUpdateIterator
 from gui.prb_control.prb_cooldown import PrbCooldownManager
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import REQ_CRITERIA, g_itemsCache
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import time_utils
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 
@@ -154,8 +155,10 @@ _UNIT_GETTER_BY_PRB_TYPE = {PREBATTLE_TYPE.UNIT: _getUnitFromBrowser,
  PREBATTLE_TYPE.FORT_BATTLE: _getUnitFromFortBattleCache}
 
 def getUnitFromStorage(prbType, unitIdx):
-    if prbType in _UNIT_GETTER_BY_PRB_TYPE:
-        unitIdx, unit = _UNIT_GETTER_BY_PRB_TYPE[prbType](unitIdx)
+    getter = prbType in _UNIT_GETTER_BY_PRB_TYPE and _UNIT_GETTER_BY_PRB_TYPE[prbType]
+    if not (getter and callable(getter)):
+        raise AssertionError
+        unitIdx, unit = getter(unitIdx)
     else:
         LOG_WARNING('Unit is not found by prebattle type', prbType)
         unit = None
@@ -333,9 +336,13 @@ class InventoryVehiclesWatcher(object):
 
     def init(self):
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesUpdated})
+        game_control.g_instance.rentals.onRentChangeNotify += self.__onRentUpdated
+        game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrRoomChanged
 
     def fini(self):
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
+        game_control.g_instance.rentals.onRentChangeNotify -= self.__onRentUpdated
+        game_control.g_instance.igr.onIgrTypeChanged -= self.__onIgrRoomChanged
 
     def autoSetVehicle(self):
         pInfo = self.__functional.getPlayerInfo()
@@ -364,6 +371,12 @@ class InventoryVehiclesWatcher(object):
             self.__functional.unit_onUnitPlayerVehDictChanged(getPlayerDatabaseID())
 
     def __onVehiclesUpdated(self, *args):
+        self.validate(update=True)
+
+    def __onRentUpdated(self, vehicles):
+        self.validate(update=True)
+
+    def __onIgrRoomChanged(self, roomType, xpFactor):
         self.validate(update=True)
 
 
@@ -482,7 +495,7 @@ class UnitsListRequester(interfaces.IPrbListRequester):
     def __recenter(self, browser, **kwargs):
         result = False
         if 'vehTypes' in kwargs:
-            browser.recenter(g_itemsCache.items.stats.getGlobalRating(), vehTypes=kwargs['vehTypes'])
+            browser.recenter(g_itemsCache.items.stats.globalRating, vehTypes=kwargs['vehTypes'])
             result = True
         else:
             LOG_ERROR('Types of vehicles are not defined', kwargs)

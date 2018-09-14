@@ -3,7 +3,6 @@ import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from gui import SystemMessages
 from adisp import process
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -11,6 +10,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.DemountBuildingWindowMeta import DemountBuildingWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as ALIAS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import BuildingCtx
@@ -59,8 +59,12 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
         self.__inputChecker = viewPy
         self.initInputChecker()
 
-    def onUpdated(self):
-        self.update()
+    def onUpdated(self, isFullUpdate):
+        if isFullUpdate and self.fortCtrl.getFort().getBuilding(self.__buildingIntID) is None:
+            self.destroy()
+        else:
+            self.update()
+        return
 
     def initInputChecker(self):
         self.__inputChecker.errorMsg = self.__makeInputCheckerError()
@@ -80,24 +84,24 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
 
     def __makeTitle(self):
         text = i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_TITLE, buildingName=self.__formattedBuildingName, buildingLevel=fort_formatters.getTextLevel(self.__buildingLevel))
-        return fort_text.getText(fort_text.STANDARD_TEXT, text)
+        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, text)
 
     def __makeBody(self):
-        text = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
-        concatTexts = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
+        text = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODYINNERTEXT))
+        concatTexts = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_GENERALTEXT_BODY, bodyInnerText=text))
         return concatTexts
 
     def __makeInputCheckerTitle(self):
-        return fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
+        return self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_TITLE))
 
     def __makeInputCheckerBody(self):
         controlNumber = BigWorld.wg_getIntegralFormat(self.__currHpVal)
-        controlNumber = fort_text.getText(fort_text.MIDDLE_TITLE, str(controlNumber))
-        questionBody = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
+        controlNumber = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, str(controlNumber))
+        questionBody = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_QUESTION_BODY, controlNumber=controlNumber))
         return questionBody
 
     def __makeInputCheckerError(self):
-        return fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
+        return self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(ALIAS.DEMOUNTBUILDING_ERRORMESSAGE))
 
     def applyDemount(self):
         self.__requestToDelete()
@@ -110,7 +114,7 @@ class DemountBuildingWindow(AbstractWindowView, View, DemountBuildingWindowMeta,
         if result:
             g_fortSoundController.playDeleteBuilding()
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEMOUNTBUILDING, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
-            self.onWindowClose()
+        self.destroy()
 
     def __updateInputChecker(self):
         self.__inputChecker.questionBody = self.__makeInputCheckerBody()

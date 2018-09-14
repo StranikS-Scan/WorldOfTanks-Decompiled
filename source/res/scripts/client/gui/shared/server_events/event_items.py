@@ -12,9 +12,8 @@ import constants
 import ResMgr
 import BigWorld
 import ArenaType
-from account_shared import AmmoIterator, getHistoricalCustomization
+from account_shared import AmmoIterator, getHistoricalCustomizedVehCompDescr
 from helpers import getLocalizedData, i18n, time_utils, getClientLanguage
-from helpers.time_utils import getTimeDeltaFromNow
 from gui import makeHtmlString
 from gui.shared import g_itemsCache
 from gui.shared.server_events.bonuses import getBonusObj
@@ -75,10 +74,10 @@ class ServerEventAbstract(object):
         return time.time()
 
     def getCreationTimeLeft(self):
-        return getTimeDeltaFromNow(self.getCreationTime())
+        return time_utils.getTimeDeltaFromNowInLocal(self.getCreationTime())
 
     def getDestroyingTimeLeft(self):
-        return getTimeDeltaFromNow(self.getDestroyingTime())
+        return time_utils.getTimeDeltaFromNowInLocal(self.getDestroyingTime())
 
     def getUserName(self):
         return getLocalizedData(self._data, 'name')
@@ -87,10 +86,10 @@ class ServerEventAbstract(object):
         return getLocalizedData(self._data, 'description')
 
     def getStartTimeLeft(self):
-        return getTimeDeltaFromNow(self.getStartTime())
+        return time_utils.getTimeDeltaFromNowInLocal(self.getStartTime())
 
     def getFinishTimeLeft(self):
-        return getTimeDeltaFromNow(self.getFinishTime())
+        return time_utils.getTimeDeltaFromNowInLocal(self.getFinishTime())
 
     def isOutOfDate(self):
         return self.getFinishTimeLeft() <= 0
@@ -111,8 +110,11 @@ class ServerEventAbstract(object):
         else:
             weekDays, timeIntervals = self.getWeekDays(), self.getActiveTimeIntervals()
             if len(weekDays) or len(timeIntervals):
-                timeLeft = next(time_utils.ActivityIntervalsIterator(time_utils.getServerRegionalTimeCurrentDay(), time_utils.getServerRegionalWeekDay(), weekDays, timeIntervals))
+                timeLeft = next(time_utils.ActivityIntervalsIterator(time_utils.getServerTimeCurrentDay(), time_utils.getServerRegionalWeekDay(), weekDays, timeIntervals))
         return timeLeft
+
+    def hasPremIGRVehBonus(self):
+        return False
 
     def isAvailable(self):
         if self.getStartTimeLeft() > 0:
@@ -122,7 +124,7 @@ class ServerEventAbstract(object):
         if len(self.getWeekDays()) and time_utils.getServerRegionalWeekDay() not in self.getWeekDays():
             return (False, 'invalid_weekday')
         intervals = self.getActiveTimeIntervals()
-        serverTime = time_utils.getServerRegionalTimeCurrentDay()
+        serverTime = time_utils.getServerTimeCurrentDay()
         if len(intervals):
             for low, high in intervals:
                 if low <= serverTime <= high:
@@ -229,6 +231,17 @@ class Quest(ServerEventAbstract):
                 result.append(b)
 
         return result
+
+    def hasPremIGRVehBonus(self):
+        vehBonuses = self.getBonuses('vehicles')
+        for vehBonus in vehBonuses:
+            vehicles = vehBonus.getValue()
+            for intCD, data in vehicles.iteritems():
+                item = g_itemsCache.items.getItemByCD(intCD)
+                if item.isPremiumIGR and data.get('rent', None) is not None:
+                    return True
+
+        return False
 
     def __checkGroupedCompletion(self, values, progress, bonusLimit = None, keyMaker = lambda v: v):
         bonusLimit = bonusLimit or self.bonusCond.getBonusLimit()
@@ -447,7 +460,7 @@ class HistoricalBattle(ServerEventAbstract):
             from gui import game_control
             igrRoomType = game_control.g_instance.igr.getRoomType()
             igrLayout = g_itemsCache.items.inventory.getIgrCustomizationsLayout()
-            updatedVehDescr = getHistoricalCustomization(igrLayout, vehicle.invID, igrRoomType, updatedVehDescr.makeCompactDescr(), self._data)
+            updatedVehDescr = getHistoricalCustomizedVehCompDescr(igrLayout, vehicle.invID, igrRoomType, updatedVehDescr.makeCompactDescr(), self._data)
         return updatedVehDescr
 
     def __cmp__(self, other):

@@ -6,7 +6,6 @@ from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
 from gui.shared.utils.functions import getClanRoleString
-from helpers import i18n
 from gui.shared.fortifications.fort_provider import ClientFortProvider
 from gui.shared.utils import code2str
 from messenger.proto.events import g_messengerEvents

@@ -1,14 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/sf_settings.py
+from adisp import process
 from gui.Scaleform.daapi.view.lobby.fortifications import FortifiedWindowScopes
 from gui.Scaleform.daapi.view.lobby.fortifications.FortBattleDirectionPopover import FortBattleDirectionPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortCalendarWindow import FortCalendarWindow
+from gui.Scaleform.daapi.view.lobby.fortifications.FortClanStatisticsData import getDataObject as getWindowData
 from gui.Scaleform.daapi.view.lobby.fortifications.FortDatePickerPopover import FortDatePickerPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortChoiceDivisionWindow import FortChoiceDivisionWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortClanBattleRoom import FortClanBattleRoom
 from gui.Scaleform.daapi.view.lobby.fortifications.FortDeclarationOfWarWindow import FortDeclarationOfWarWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortDisableDefencePeriodWindow import FortDisableDefencePeriodWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortIntelligenceWindow import FortIntelligenceWindow
-from gui.Scaleform.daapi.view.lobby.fortifications.FortIntelligenceWindowPatchCut import FortIntelligenceWindowPatchCut
+from gui.Scaleform.daapi.view.lobby.fortifications.FortIntelligenceNotAvailableWindow import FortIntelligenceNotAvailableWindow
 from gui.Scaleform.daapi.view.lobby.fortifications.FortOrdersPanelComponent import FortOrdersPanelComponent
 from gui.Scaleform.daapi.view.lobby.fortifications.FortSettingsDayoffPopover import FortSettingsDayoffPopover
 from gui.Scaleform.daapi.view.lobby.fortifications.FortSettingsWindow import FortSettingsWindow
@@ -78,7 +80,7 @@ def getViewSettings():
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_FIXED_PLAYERS_WINDOW_ALIAS, FortFixedPlayersWindow, FORTIFICATION_ALIASES.FORT_FIXED_PLAYERS_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_FIXED_PLAYERS_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_ALIAS, FortBuildingProcessWindow, FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_BUILDING_PROCESS_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW, FortIntelligenceWindow, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
-     GroupedViewSettings(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_PATCHCUT, FortIntelligenceWindowPatchCut, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_PATCHCUT_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_PATCHCUT_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
+     GroupedViewSettings(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW, FortIntelligenceNotAvailableWindow, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, DemountBuildingWindow, FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW_UI, ViewTypes.TOP_WINDOW, FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_ALIAS, FortDisableDefencePeriodWindow, FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_UI, ViewTypes.TOP_WINDOW, FORTIFICATION_ALIASES.FORT_DISABLE_DEFENCE_PERIOD_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
      GroupedViewSettings(FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_ALIAS, FortSettingsWindow, FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_UI, ViewTypes.WINDOW, FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_EVENT, None, FortifiedWindowScopes.FORT_MAIN_SCOPE),
@@ -110,7 +112,7 @@ class FortsBusinessHandler(PackageBusinessHandler):
          (FORTIFICATION_ALIASES.FORT_CREATION_CONGRATULATIONS_WINDOW_EVENT, self.__showFortCreationCongratulationsWindow),
          (FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_EVENT, self.__showFortCreateDirectionWindow),
          (FORTIFICATION_ALIASES.FORT_DECLARATION_OF_WAR_WINDOW_EVENT, self.__showFortDeclarationOfWarWindow),
-         (FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT, self.__showFortClanStatisticsWindow),
+         (FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_EVENT, self.__showAsyncDataView),
          (FORTIFICATION_ALIASES.FORT_CALENDAR_WINDOW_EVENT, self.__showFortCalendarWindow),
          (FORTIFICATION_ALIASES.FORT_CLAN_LIST_WINDOW_EVENT, self.__showFortClanListWindow),
          (FORTIFICATION_ALIASES.FORT_BUILDING_CARD_POPOVER_EVENT, self.__showFortBuildingCardPopover),
@@ -163,10 +165,12 @@ class FortsBusinessHandler(PackageBusinessHandler):
         self._loadView(FORTIFICATION_ALIASES.FORT_DEMOUNT_BUILDING_WINDOW, event.ctx)
 
     def __showFortIntelligenceWindow(self, event):
-        if self.app.varsManager.isFortificationBattleAvailable():
-            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW)
+        if not self.app.varsManager.isFortificationBattleAvailable():
+            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW, {'isDefenceHourEnabled': True})
+        elif not event.ctx['isDefenceHourEnabled']:
+            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_NOT_AVAILABLE_WINDOW, event.ctx)
         else:
-            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_PATCHCUT)
+            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW)
 
     def __showFortTransportConfirmationWindow(self, event):
         self._loadView(FORTIFICATION_ALIASES.FORT_TRANSPORT_CONFIRMATION_WINDOW_ALIAS, event.ctx['fromId'], event.ctx['toId'])
@@ -182,9 +186,6 @@ class FortsBusinessHandler(PackageBusinessHandler):
 
     def __showFortDeclarationOfWarWindow(self, event):
         self._loadView(FORTIFICATION_ALIASES.FORT_DECLARATION_OF_WAR_WINDOW_ALIAS, event.ctx)
-
-    def __showFortClanStatisticsWindow(self, event):
-        self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS)
 
     def __showFortCalendarWindow(self, event):
         self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_CALENDAR_WINDOW_ALIAS, event.ctx)
@@ -223,6 +224,13 @@ class FortsBusinessHandler(PackageBusinessHandler):
         pos = event.ctx.get('buildingPosition')
         name = '%s%d%d' % (alias, dir, pos)
         self.app.loadView(alias, name, event.ctx)
+
+    @process
+    def __showAsyncDataView(self, event):
+        data = yield getWindowData()
+        if data is not None:
+            self._loadUniqueWindow(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS, data)
+        return
 
 
 class FortsDialogsHandler(PackageBusinessHandler):

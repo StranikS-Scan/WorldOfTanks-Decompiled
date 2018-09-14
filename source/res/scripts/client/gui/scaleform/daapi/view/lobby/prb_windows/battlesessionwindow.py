@@ -20,6 +20,7 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
 
     def __init__(self):
         super(BattleSessionWindow, self).__init__(prbName='battleSession')
+        self.__setStaticData()
         self.__startTimeSyncCallbackID = None
         self.__team = None
         return
@@ -46,6 +47,7 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
 
     def onPlayerStateChanged(self, functional, roster, playerInfo):
         super(BattleSessionWindow, self).onPlayerStateChanged(functional, roster, playerInfo)
+        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbFunctional.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateCommonRequirements(functional.getTeamLimits(), functional.getRosters())
 
     def onSettingUpdated(self, functional, settingName, settingValue):
@@ -88,7 +90,7 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
         self.__syncStartTime()
         self._setRosterList(rosters)
         self.__updateCommonRequirements(teamLimits, rosters)
-        self.__updateInfo(self.prbFunctional.getSettings(), self.prbFunctional.getProps())
+        self.as_setInfoS(self.__battlesWinsString, self.__arenaName, self.__firstTeam, self.__secondTeam, self.prbFunctional.getProps().getBattlesScore(), self.__eventName, self.__sessionName)
         self.__updateLimits(teamLimits, rosters)
 
     def _dispose(self):
@@ -127,19 +129,19 @@ class BattleSessionWindow(PrebattleWindow, BattleSessionWindowMeta):
         if startTime > 0:
             self.__startTimeSyncCallbackID = BigWorld.callback(self.START_TIME_SYNC_PERIOD, self.__syncStartTime)
 
-    def __updateInfo(self, settings, props):
+    def __setStaticData(self):
+        settings = self.prbFunctional.getSettings()
         extraData = settings[PREBATTLE_SETTING_NAME.EXTRA_DATA]
-        arenaName = functions.getArenaShortName(settings[PREBATTLE_SETTING_NAME.ARENA_TYPE_ID])
-        firstTeam, secondTeam = formatters.getPrebattleOpponents(extraData)
+        self.__arenaName = functions.getArenaShortName(settings[PREBATTLE_SETTING_NAME.ARENA_TYPE_ID])
+        self.__firstTeam, self.__secondTeam = formatters.getPrebattleOpponents(extraData)
         battlesLimit = settings[PREBATTLE_SETTING_NAME.BATTLES_LIMIT]
         winsLimit = settings[PREBATTLE_SETTING_NAME.WINS_LIMIT]
-        battlesWinsString = '%d/%s' % (battlesLimit, str(winsLimit or '-'))
-        eventName = formatters.getPrebattleEventName(extraData)
-        sessionName = formatters.getPrebattleSessionName(extraData)
+        self.__battlesWinsString = '%d/%s' % (battlesLimit, str(winsLimit or '-'))
+        self.__eventName = formatters.getPrebattleEventName(extraData)
+        self.__sessionName = formatters.getPrebattleSessionName(extraData)
         description = formatters.getPrebattleDescription(extraData)
         if description:
-            sessionName = '%s\n%s' % (sessionName, description)
-        self.as_setInfoS(battlesWinsString, arenaName, firstTeam, secondTeam, props.getBattlesScore(), eventName, sessionName)
+            self.__sessionName = '%s\n%s' % (self.__sessionName, description)
 
     def __updateCommonRequirements(self, teamLimits, rosters):
         minTotalLvl, maxTotalLvl = prb_control.getTotalLevelLimits(teamLimits)

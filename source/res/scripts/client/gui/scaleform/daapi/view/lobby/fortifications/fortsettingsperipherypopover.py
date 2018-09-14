@@ -15,7 +15,6 @@ class FortSettingsPeripheryPopover(View, FortSettingsPeripheryPopoverMeta, Smart
 
     def __init__(self, ctx = None):
         super(FortSettingsPeripheryPopover, self).__init__()
-        self._orderID = str(ctx.get('data'))
 
     def setTexts(self):
         data = {'descriptionText': i18n.makeString(FORTIFICATIONS.SETTINGSPERIPHERYPOPOVER_DESCRIPTION),

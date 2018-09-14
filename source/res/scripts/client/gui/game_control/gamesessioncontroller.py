@@ -53,8 +53,8 @@ class GameSessionController(object):
         @param sessionStartTime: session start time (server time)
         """
         LOG_DEBUG('GameSessionController::start', sessionStartTime)
-        from gui.shared.utils.requesters import StatsRequesterr
-        self.__stats = yield StatsRequesterr().request()
+        from gui.shared.utils.requesters import StatsRequester
+        self.__stats = yield StatsRequester().request()
         self.__sessionStartedAt = sessionStartTime
         if constants.RESTRICTION_TYPE.BAN in self.__stats.restrictions:
             for ban in self.__stats.restrictions[constants.RESTRICTION_TYPE.BAN].itervalues():
@@ -135,7 +135,7 @@ class GameSessionController(object):
         """
         playTimeLeft = min([self.getDailyPlayTimeLeft(), self.getWeeklyPlayTimeLeft()])
         parentControl = self.isParentControlEnabled and playTimeLeft <= self.PLAY_TIME_LEFT_NOTIFY
-        curfewControl = not self.isAdult and time_utils.getServerRegionalTimeCurrentDay() >= self.MIDNIGHT_BLOCK_TIME
+        curfewControl = not self.isAdult and (time_utils.getServerRegionalTimeCurrentDay() >= self.MIDNIGHT_BLOCK_TIME or time_utils.getServerRegionalTimeCurrentDay() <= time_utils.QUARTER_HOUR)
         return parentControl or curfewControl
 
     @property

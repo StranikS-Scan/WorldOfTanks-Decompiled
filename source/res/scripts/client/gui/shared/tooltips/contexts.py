@@ -14,14 +14,18 @@ from gui.shared.gui_items.dossier import AccountDossier, VehicleDossier, Tankman
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils import findFirst
 from helpers.i18n import makeString
+from items import vehicles
+from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'rentals')
 
     def __init__(self):
         self.vehicle = None
         self.sellPrice = False
         self.buyPrice = True
+        self.minRentPrice = True
+        self.rentals = True
         self.unlockPrice = True
         self.inventoryCount = True
         self.vehiclesCount = True
@@ -128,6 +132,7 @@ class InventoryContext(ToolTipContext):
     def getStatsConfiguration(self, item):
         value = super(InventoryContext, self).getStatsConfiguration(item)
         value.buyPrice = False
+        value.minRentPrice = False
         value.unlockPrice = False
         value.sellPrice = True
         value.xp = getattr(item, 'xp', 0) > 0
@@ -149,6 +154,11 @@ class CarouselContext(InventoryContext):
     def getStatusConfiguration(self, item):
         value = super(CarouselContext, self).getStatusConfiguration(item)
         value.checkNotSuitable = True
+        return value
+
+    def getStatsConfiguration(self, item):
+        value = super(CarouselContext, self).getStatsConfiguration(item)
+        value.rentals = True
         return value
 
     def buildItem(self, invID):
@@ -364,3 +374,21 @@ class FortificationContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude = None):
         super(FortificationContext, self).__init__(TOOLTIP_COMPONENT.FORTIFICATIONS, fieldsToExclude)
+
+
+class CustomizationContext(ToolTipContext):
+
+    def __init__(self, fieldsToExclude = None):
+        super(CustomizationContext, self).__init__(TOOLTIP_COMPONENT.CUSTOMIZATION, fieldsToExclude)
+
+    def buildItem(self, nationId, itemId, customizationType):
+        if customizationType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
+            result = vehicles.g_cache.customization(nationId)['camouflages'][itemId]
+        elif customizationType == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
+            _, result, _ = vehicles.g_cache.playerEmblems()
+            result = result[itemId]
+        elif customizationType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
+            result = vehicles.g_cache.customization(nationId)['inscriptions'][itemId]
+        else:
+            result = None
+        return result

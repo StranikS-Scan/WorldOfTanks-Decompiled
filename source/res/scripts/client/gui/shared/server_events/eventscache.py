@@ -7,6 +7,7 @@ from collections import defaultdict
 import BigWorld
 from Event import Event
 from adisp import async
+from constants import EVENT_TYPE
 from gui.shared.utils import prettyPrint
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
@@ -15,14 +16,20 @@ from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from gui.shared import events
 from gui.shared.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
-from gui.shared.utils.requesters.QuestsProgress import QuestsProgress
+from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.server_events.event_items import Quest, Action, EventBattles, HistoricalBattle
 
 class _EventsCache(object):
+    USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
+     EVENT_TYPE.TOKEN_QUEST,
+     EVENT_TYPE.FORT_QUEST,
+     EVENT_TYPE.PERSONAL_QUEST,
+     EVENT_TYPE.POTAPOV_QUEST)
+    SYSTEM_QUESTS = (EVENT_TYPE.REF_SYSTEM_QUEST,)
 
     def __init__(self):
-        self.__progress = QuestsProgress()
+        self.__progress = QuestsProgressRequester()
         self.__waitForSync = False
         self.__invalidateCbID = None
         self.__cache = defaultdict(dict)
@@ -76,27 +83,20 @@ class _EventsCache(object):
             return
 
     def getQuests(self, filterFunc = None):
-        quests = self.__getQuestsData()
-        quests.update(self.__getFortQuestsData())
-        quests.update(self.__getPersonalQuestsData())
         filterFunc = filterFunc or (lambda a: True)
-        result = {}
-        for qID, qData in quests.iteritems():
-            q = self._makeQuest(qID, qData)
-            if q.getDestroyingTimeLeft() <= 0:
-                continue
-            if not filterFunc(q):
-                continue
-            result[qID] = q
 
-        children, parents = self._makeQuestsRelations(result)
-        for qID, q in result.iteritems():
-            if qID in children:
-                q.setChildren(children[qID])
-            if qID in parents:
-                q.setParents(parents[qID])
+        def userFilterFunc(q):
+            return q.getType() in self.USER_QUESTS and filterFunc(q)
 
-        return result
+        return self._getQuests(userFilterFunc)
+
+    def getSystemQuests(self, filterFunc = None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def systemFilterFunc(q):
+            return q.getType() in self.SYSTEM_QUESTS and filterFunc(q)
+
+        return self._getQuests(systemFilterFunc)
 
     def getActions(self, filterFunc = None):
         actions = self.__getActionsData()
@@ -172,6 +172,29 @@ class _EventsCache(object):
 
     def getQuestsDossierBonuses(self):
         return self.__questsDossierBonuses
+
+    def _getQuests(self, filterFunc = None):
+        quests = self.__getQuestsData()
+        quests.update(self.__getFortQuestsData())
+        quests.update(self.__getPersonalQuestsData())
+        filterFunc = filterFunc or (lambda a: True)
+        result = {}
+        for qID, qData in quests.iteritems():
+            q = self._makeQuest(qID, qData)
+            if q.getDestroyingTimeLeft() <= 0:
+                continue
+            if not filterFunc(q):
+                continue
+            result[qID] = q
+
+        children, parents = self._makeQuestsRelations(result)
+        for qID, q in result.iteritems():
+            if qID in children:
+                q.setChildren(children[qID])
+            if qID in parents:
+                q.setParents(parents[qID])
+
+        return result
 
     def _onResync(self, *args):
         self.__invalidateData()

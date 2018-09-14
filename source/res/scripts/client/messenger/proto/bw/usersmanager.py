@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/messenger/proto/bw/UsersManager.py
 import BigWorld
-import Event
 import chat_shared
 from debug_utils import LOG_DEBUG
 from messenger.ext.player_helpers import getPlayerDatabaseID
@@ -16,9 +15,6 @@ class UsersManager(ChatActionsListener):
         CHAT_RESPONSES = chat_shared.CHAT_RESPONSES
         ChatActionsListener.__init__(self, {CHAT_RESPONSES.commandInCooldown: '_UsersManager__onCommandInCooldown',
          CHAT_RESPONSES.incorrectCharacter: '_UsersManager__onIncorrectCharacter'})
-        self.__eventManager = Event.EventManager()
-        self.onFindUsersComplete = Event.Event(self.__eventManager)
-        self.onFindUsersFailed = Event.Event(self.__eventManager)
         self.__replayCtrl = None
         self.__isPrivateOpen = False
         self.__isRosterReceivedOnce = False
@@ -54,9 +50,6 @@ class UsersManager(ChatActionsListener):
     def view(self, scope):
         if scope is MESSENGER_SCOPE.BATTLE and not self.__isRosterReceivedOnce:
             self.requestUsersRoster()
-
-    def clear(self):
-        self.__eventManager.clear()
 
     def findUsers(self, token, onlineMode = None, requestID = None):
         BigWorld.player().findUsers(token, onlineMode=onlineMode, requestID=requestID)
@@ -108,7 +101,7 @@ class UsersManager(ChatActionsListener):
                     received.update(roster=user.getRoster())
             users.append(received)
 
-        self.onFindUsersComplete(requestID, users)
+        g_messengerEvents.users.onFindUsersComplete(requestID, users)
 
     def __onUserRosterChange(self, chatAction, actionIdx, include, exclude = None):
         userData = [-1, 'Unknown', 0]
@@ -197,7 +190,7 @@ class UsersManager(ChatActionsListener):
         result = False
         if data['command'] == 'findUser':
             result = True
-            self.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, data)
+            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, data)
         return result
 
     def __onIncorrectCharacter(self, actionResponse, chatAction):
@@ -205,7 +198,7 @@ class UsersManager(ChatActionsListener):
         result = False
         if action == chat_shared.CHAT_ACTIONS.findUsers.index():
             result = True
-            self.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, None)
+            g_messengerEvents.users.onFindUsersFailed(chatAction.get('requestID', -1L), actionResponse, None)
         return result
 
     def __ce_onConnectStateChanged(self, channel):

@@ -2,6 +2,9 @@
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import IGR_TYPE, QUEUE_TYPE, IS_SHOW_SERVER_STATS
+from debug_utils import LOG_DEBUG
+from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from helpers import i18n
 from gui.shared.utils.functions import makeTooltip
 from gui import game_control, makeHtmlString
@@ -243,27 +246,44 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.__updateResearchPanel()
         self.__updateCrew()
         self.__updateCarouselParams()
+        self.__updateVehIGRStatus()
         Waiting.hide('updateVehicle')
 
     def __onIgrTypeChanged(self, *args):
         type = game_control.g_instance.igr.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if type == IGR_TYPE.PREMIUM else 'basic', {})
         self.as_setIsIGRS(type != IGR_TYPE.NONE, i18n.makeString(MENU.IGR_INFO, igrIcon=icon))
+        self.__updateVehIGRStatus()
+
+    def __updateVehIGRStatus(self):
+        vehicleIgrTimeLeft = ''
+        igrType = game_control.g_instance.igr.getRoomType()
+        if g_currentVehicle.isPresent() and g_currentVehicle.isPremiumIGR() and igrType == IGR_TYPE.PREMIUM:
+            igrActionIcon = makeHtmlString('html_templates:igr/iconSmall', 'premium', {})
+            localization = '#menu:vehicleIgr/%s'
+            timeLeft = g_currentVehicle.item.rentLeftTime
+            vehicleIgrTimeLeft = getRentLeftTimeStr(localization, timeLeft, timeStyle=TextType.STATS_TEXT, ctx={'igrIcon': igrActionIcon})
+        self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):
+        enabledInRent = True
+        if g_currentVehicle.isPresent() and g_currentVehicle.isPremiumIGR():
+            vehDoss = g_itemsCache.items.getVehicleDossier(g_currentVehicle.item.intCD)
+            battlesCount = 0 if vehDoss is None else vehDoss.getTotalStats().getBattlesCount()
+            if battlesCount == 0:
+                enabledInRent = not g_currentVehicle.isDisabledInPremIGR() and not g_currentVehicle.isDisabledInRent()
         isVehicleDisabled = False
         if self.prbDispatcher is not None:
             permission = self.prbDispatcher.getGUIPermissions()
             if permission is not None:
                 isVehicleDisabled = not permission.canChangeVehicle()
-        msg, msgLvl = g_currentVehicle.getHangarMessage()
-        crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar()
+        crewEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and enabledInRent
         carouselEnabled = not isVehicleDisabled
-        maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar()
-        customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken()
+        maintenanceEnabled = not isVehicleDisabled and g_currentVehicle.isInHangar() and enabledInRent
+        customizationEnabled = g_currentVehicle.isInHangar() and not isVehicleDisabled and not g_currentVehicle.isBroken() and enabledInRent
         self.as_setCrewEnabledS(crewEnabled)
         self.as_setCarouselEnabledS(carouselEnabled)
-        self.as_setupAmmunitionPanelS(msg, msgLvl, maintenanceEnabled, customizationEnabled)
+        self.as_setupAmmunitionPanelS(maintenanceEnabled, customizationEnabled)
         self.as_setControlsVisibleS(g_currentVehicle.isPresent())
         return
 

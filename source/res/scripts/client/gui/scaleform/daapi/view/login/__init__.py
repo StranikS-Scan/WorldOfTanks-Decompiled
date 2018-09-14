@@ -6,12 +6,13 @@ from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH_REG
 from gui import GUI_SETTINGS, VERSION_FILE_PATH, DialogsInterface
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 from gui.Scaleform import SCALEFORM_WALLPAPER_PATH
 from gui.Scaleform.daapi.settings import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.daapi.view.login.LoginDispatcher import LoginDispatcher
 from gui.Scaleform.Waiting import Waiting
@@ -73,7 +74,7 @@ class LoginView(View, LoginPageMeta, AppRef):
                 pass
 
         self.__capsLockCallback = BigWorld.callback(0.1, self.__checkUserInputState)
-        g_battleContext.lastArenaUniqueID = None
+        g_sessionProvider.getCtx().lastArenaUniqueID = None
         if self.app.cursorMgr is not None:
             self.app.cursorMgr.attachCursor(True)
         return
@@ -297,7 +298,7 @@ class LoginView(View, LoginPageMeta, AppRef):
         self.__loginDispatcher.resetToken()
 
     def onEscape(self):
-        DialogsInterface.showI18nConfirmDialog('quit', self.__onConfirmClosed, focusedID=DialogsInterface.DIALOG_BUTTON_ID.CLOSE)
+        DialogsInterface.showI18nConfirmDialog('quit', self.__onConfirmClosed, focusedID=DIALOG_BUTTON_ID.CLOSE)
 
     def __onConfirmClosed(self, isOk):
         if isOk:

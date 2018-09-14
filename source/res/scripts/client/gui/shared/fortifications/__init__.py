@@ -2,7 +2,6 @@
 import types
 import BigWorld
 from debug_utils import LOG_DEBUG
-from helpers import isPlayerAccount
 from FortifiedRegionBase import FORT_STATE
 
 def getClientFortMgr():

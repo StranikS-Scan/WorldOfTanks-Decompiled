@@ -127,6 +127,10 @@ class Shop(object):
         proxy = lambda resultID, items, rev: self.__onGetPriceResponse(resultID, typeCompDescr, callback)
         self.__getValue('items', proxy)
 
+    def getRentPackets(self, typeCompDescr, callback):
+        proxy = lambda resultID, packets, rev: self.__onGetRentPacketsResponse(resultID, typeCompDescr, callback)
+        self.__getValue('items', proxy)
+
     def getVehiclePrice(self, vehCompDescr, callback):
         proxy = lambda resultID, items, rev: self.__onGetVehiclePriceResponse(resultID, vehCompDescr, False, callback)
         self.__getValue('items', proxy)
@@ -246,7 +250,7 @@ class Shop(object):
                 callback(AccountCommands.RES_NON_PLAYER, {})
             return
         elif itemTypeIdx == _VEHICLE:
-            self.buyVehicle(nationIdx, itemShopID, False, True, 0, callback)
+            self.buyVehicle(nationIdx, itemShopID, False, True, 0, -1, callback)
             return
         else:
             count = int(round(count))
@@ -289,7 +293,7 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_AND_EQUIP_TMAN, self.__getCacheRevision(), vehInvID, slot, tmanCostTypeIdx, proxy)
             return
 
-    def buyVehicle(self, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, callback):
+    def buyVehicle(self, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, rentPeriod, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -305,7 +309,12 @@ class Shop(object):
                 proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdInt4(AccountCommands.CMD_BUY_VEHICLE, self.__getCacheRevision(), typeCompDescr, flags, tmanCostTypeIdx, proxy)
+            arr = [self.__getCacheRevision(),
+             typeCompDescr,
+             flags,
+             tmanCostTypeIdx,
+             rentPeriod]
+            self.__account._doCmdIntArr(AccountCommands.CMD_BUY_VEHICLE, arr, proxy)
             return
 
     def buyTankman(self, nationIdx, innationIdx, role, tmanCostTypeIdx, callback):
@@ -392,6 +401,15 @@ class Shop(object):
             price = self.__getPriceFromCache(typeCompDescr)
         if callback is not None:
             callback(resultID, price, self.__getCacheRevision())
+        return
+
+    def __onGetRentPacketsResponse(self, resultID, typeCompDescr, callback):
+        if resultID < 0:
+            packets = None
+        else:
+            packets = self.__getRentPacketsFromCache(typeCompDescr)
+        if callback is not None:
+            callback(resultID, packets, self.__getCacheRevision())
         return
 
     def __onGetVehiclePriceResponse(self, resultID, vehCompDescr, isSellPrice, callback):
@@ -502,6 +520,10 @@ class Shop(object):
     def __getPriceFromCache(self, typeCompDescr, default = (0, 0)):
         vehPrices = self.__cache.get('items', {}).get('itemPrices', {})
         return vehPrices.get(typeCompDescr, default)
+
+    def __getRentPacketsFromCache(self, vehTypeCompDescr):
+        packets = self.__cache.get('items', {}).get('vehiclesRentPrices', {})
+        return packets.get(vehTypeCompDescr, {})
 
     def __getVehiclePriceFromCache(self, vehCompDescr, default = (0, 0)):
         typeCompDescr = vehicles.getVehicleTypeCompactDescr(vehCompDescr)

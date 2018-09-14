@@ -2,11 +2,11 @@
 from UnitBase import SORTIE_DIVISION
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.meta.FortChoiceDivisionWindowMeta import FortChoiceDivisionWindowMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as I18N_FORTIFICATIONS
 from gui.Scaleform.framework import AppRef
 from gui.prb_control.items.unit_items import SupportedRosterSettings
@@ -41,7 +41,7 @@ class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindo
     def __makeData(self):
         data = {}
         data['windowTitle'] = I18N_FORTIFICATIONS.CHOICEDIVISION_WINDOWTITLE
-        data['description'] = fort_text.getText(fort_text.MAIN_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DESCRIPTION))
+        data['description'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DESCRIPTION))
         data['applyBtnLbl'] = I18N_FORTIFICATIONS.CHOICEDIVISION_APPLYBTNLBL
         data['cancelBtnLbl'] = I18N_FORTIFICATIONS.CHOICEDIVISION_CANCELBTNLBL
         list = makeDivisionData(I18N_FORTIFICATIONS.sortie_division_name)
@@ -68,7 +68,7 @@ class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindo
 
     def __makePlayerCount(self, minPlayerCount, maxPlayerCount):
         separator = '-'
-        result = fort_text.getText(fort_text.MAIN_TEXT, str(minPlayerCount) + separator + str(maxPlayerCount))
+        result = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, str(minPlayerCount) + separator + str(maxPlayerCount))
         return result
 
     def __makeDivisionsData(self, list):
@@ -79,11 +79,11 @@ class FortChoiceDivisionWindow(AbstractWindowView, View, FortChoiceDivisionWindo
             profit = fort_formatters.getDefRes(item['profit'])
             minLevel = 1
             maxLevel = item['level']
-            divisionType['divisionName'] = fort_text.getText(fort_text.HIGH_TITLE, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONFULLNAME, divisionType=title))
-            divisionType['divisionProfit'] = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONPROFIT, defResCount=profit))
-            minLevelStr = fort_text.getText(fort_text.MAIN_TEXT, fort_formatters.getTextLevel(minLevel))
-            maxLevelStr = fort_text.getText(fort_text.MAIN_TEXT, fort_formatters.getTextLevel(maxLevel))
-            divisionType['vehicleLevel'] = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_VEHICLELEVEL, minLevel=minLevelStr, maxLevel=maxLevelStr))
+            divisionType['divisionName'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONFULLNAME, divisionType=title))
+            divisionType['divisionProfit'] = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_DIVISIONPROFIT, defResCount=profit))
+            minLevelStr = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, fort_formatters.getTextLevel(minLevel))
+            maxLevelStr = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, fort_formatters.getTextLevel(maxLevel))
+            divisionType['vehicleLevel'] = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(I18N_FORTIFICATIONS.CHOICEDIVISION_VEHICLELEVEL, minLevel=minLevelStr, maxLevel=maxLevelStr))
             divisionType['divisionID'] = maxLevel
             minCount, maxCount = self.__getPlayerLimits(maxLevel)
             divisionType['playerRange'] = self.__makePlayerCount(minCount, maxCount)

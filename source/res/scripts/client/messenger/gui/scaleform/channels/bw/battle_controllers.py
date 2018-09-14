@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw/battle_controllers.py
 import BattleReplay
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from helpers import i18n
@@ -21,6 +21,7 @@ class _ChannelController(IChannelController):
         self._channel = channel
         channel.onConnectStateChanged += self._onConnectStateChanged
         self._view = None
+        self.__isChat2Enabled = g_settings.server.BW_CHAT2.isEnabled()
         return
 
     def __del__(self):
@@ -28,6 +29,10 @@ class _ChannelController(IChannelController):
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
+        return None
+
+    @proto_getter(PROTO_TYPE.BW_CHAT2)
+    def proto_v2(self):
         return None
 
     def getChannel(self):
@@ -61,7 +66,7 @@ class _ChannelController(IChannelController):
         self._onConnectStateChanged(self._channel)
 
     def getFullPlayerName(self, chatAction):
-        return g_battleContext.getFullPlayerName(accID=chatAction.originator)
+        return g_sessionProvider.getCtx().getFullPlayerName(accID=chatAction.originator)
 
     def getMessageColors(self, message):
         return (g_settings.getColorScheme('battle/player').getHexStr('unknown'), g_settings.getColorScheme('battle/message').getHexStr('unknown'))
@@ -75,6 +80,10 @@ class _ChannelController(IChannelController):
     def sendMessage(self, message):
         result, errorMsg = self.canSendMessage()
         if result:
+            if self.__isChat2Enabled:
+                result, _ = self.proto_v2.adminChat.parseLine(message, self._channel.getClientID())
+                if result:
+                    return
             self.proto.channels.sendMessage(self._channel.getID(), message)
         else:
             self._view.addMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': errorMsg}))
@@ -137,11 +146,12 @@ class TeamChannelController(_ChannelController):
         mColor = g_settings.getColorScheme('battle/message').getHexStr('team')
         pColorScheme = g_settings.getColorScheme('battle/player')
         pColor = pColorScheme.getHexStr('teammate')
+        ctx = g_sessionProvider.getCtx()
         if isCurrentPlayer(dbID):
             pColor = pColorScheme.getHexStr('himself')
-        elif g_battleContext.isTeamKiller(accID=dbID):
+        elif ctx.isTeamKiller(accID=dbID):
             pColor = pColorScheme.getHexStr('teamkiller')
-        elif g_battleContext.isSquadMan(accID=dbID):
+        elif ctx.isSquadMan(accID=dbID):
             pColor = pColorScheme.getHexStr('squadman')
         return (pColor, mColor)
 
@@ -174,7 +184,7 @@ class CommonChannelController(_ChannelController):
         return None
 
     def getFullPlayerName(self, chatAction):
-        fullName = g_battleContext.getFullPlayerName(accID=chatAction.originator)
+        fullName = g_sessionProvider.getCtx().getFullPlayerName(accID=chatAction.originator)
         if not len(fullName):
             channel = self.channelsStorage.getChannel(self._teamChannel)
             if channel and channel.hasMember(chatAction.originator):
@@ -192,10 +202,11 @@ class CommonChannelController(_ChannelController):
             pColor = pColorScheme.getHexStr('himself')
         else:
             channel = self.channelsStorage.getChannel(self._teamChannel)
+            ctx = g_sessionProvider.getCtx()
             if channel and channel.hasMember(dbID):
-                if g_battleContext.isTeamKiller(accID=dbID):
+                if ctx.isTeamKiller(accID=dbID):
                     pColor = pColorScheme.getHexStr('teamkiller')
-                elif g_battleContext.isSquadMan(accID=dbID):
+                elif ctx.isSquadMan(accID=dbID):
                     pColor = pColorScheme.getHexStr('squadman')
                 else:
                     pColor = pColorScheme.getHexStr('teammate')
@@ -235,7 +246,7 @@ class SquadChannelController(_ChannelController):
         except UnicodeError:
             LOG_ERROR('Can not encode nick name', chatAction)
 
-        return g_battleContext.getFullPlayerName(accID=chatAction.originator, pName=pName)
+        return g_sessionProvider.getCtx().getFullPlayerName(accID=chatAction.originator, pName=pName)
 
     def getMessageColors(self, message):
         dbID = message.originator
@@ -244,7 +255,7 @@ class SquadChannelController(_ChannelController):
         pColor = pColorScheme.getHexStr('squadman')
         if isCurrentPlayer(dbID):
             pColor = pColorScheme.getHexStr('himself')
-        elif g_battleContext.isTeamKiller(accID=dbID):
+        elif g_sessionProvider.getCtx().isTeamKiller(accID=dbID):
             pColor = pColorScheme.getHexStr('teamkiller')
         return (pColor, mColor)
 
@@ -260,6 +271,6 @@ def addDefMessage(message):
     mColor = g_settings.getColorScheme('battle/message').getHexStr('unknown')
     pColor = g_settings.getColorScheme('battle/player').getHexStr('unknown')
     return g_settings.battle.messageFormat % {'playerColor': pColor,
-     'playerName': unicode(g_battleContext.getFullPlayerName(accID=message.originator), 'utf-8', errors='ignore'),
+     'playerName': unicode(g_sessionProvider.getCtx().getFullPlayerName(accID=message.originator), 'utf-8', errors='ignore'),
      'messageColor': mColor,
      'messageText': message.data}

@@ -6,10 +6,9 @@ import SoundGroups
 from debug_utils import *
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.SETTINGS import SETTINGS
-from helpers import i18n
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 from gui.shared.utils import flashObject2Dict, decorators
 from gui.Scaleform.daapi import AppRef
 from gui.Scaleform.framework.entities.View import View
@@ -79,7 +78,7 @@ class SettingsWindow(View, AbstractWindowView, SettingsWindowMeta, AppRef):
         self.as_openTabS(self.__initialTabIdx)
 
     def _dispose(self):
-        if not g_battleContext.isInBattle:
+        if not g_sessionProvider.getCtx().isInBattle:
             SoundGroups.g_instance.enableVoiceSounds(False)
         g_guiResetters.discard(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(None)

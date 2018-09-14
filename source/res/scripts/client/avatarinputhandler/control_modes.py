@@ -1,9 +1,12 @@
 # Embedded file name: scripts/client/AvatarInputHandler/control_modes.py
-import BigWorld, Math, Keys, GUI, ResMgr
 import math
-import stat
 import weakref
-import string
+from collections import namedtuple
+import BigWorld
+import Math
+import Keys
+import GUI
+import ResMgr
 from AvatarInputHandler import mathUtils, AimingSystems
 import cameras
 import aims
@@ -12,6 +15,7 @@ import constants
 import BattleReplay
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
+from gui.battle_control import g_sessionProvider
 from post_processing import g_postProcessing
 from constants import AIMING_MODE
 from gui import DEPTH_OF_GunMarker, GUI_SETTINGS
@@ -20,11 +24,9 @@ from debug_utils import *
 from ProjectileMover import collideDynamicAndStatic, getCollidableEntities
 from PostmortemDelay import PostmortemDelay
 import VideoCamera
-from gui.BattleContext import g_battleContext
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
-from collections import namedtuple
 import SoundGroups
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
 
@@ -91,6 +93,9 @@ class IControlMode():
         return None
 
     def setReloading(self, duration, startTime):
+        pass
+
+    def setReloadingInPercent(self, percent):
         pass
 
     def setGUIVisible(self, isVisible):
@@ -500,6 +505,9 @@ class ArcadeControlMode(IControlMode):
     def setReloading(self, duration, startTime):
         self.__gunMarker.setReloading(duration, startTime)
 
+    def setReloadingInPercent(self, percent):
+        self.__gunMarker.setReloadingInPercent(percent)
+
     def onMinimapClicked(self, worldPos):
         if self.__aih.isSPG:
             self.__activateAlternateMode(worldPos)
@@ -702,6 +710,9 @@ class StrategicControlMode(IControlMode):
 
     def setReloading(self, duration, startTime):
         self.__gunMarker.setReloading(duration, startTime)
+
+    def setReloadingInPercent(self, percent):
+        self.__gunMarker.setReloadingInPercent(percent)
 
     def onMinimapClicked(self, worldPos):
         self.__cam.teleport(worldPos)
@@ -933,6 +944,9 @@ class SniperControlMode(IControlMode):
     def setReloading(self, duration, startTime):
         self.__gunMarker.setReloading(duration, startTime)
 
+    def setReloadingInPercent(self, percent):
+        self.__gunMarker.setReloadingInPercent(percent)
+
     def showGunMarker(self, flag):
         raise self.__isEnabled or AssertionError
         self.__gunMarker.show(flag)
@@ -1111,7 +1125,7 @@ class PostMortemControlMode(IControlMode):
             if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.IS_DEVELOPMENT and isDown and key == Keys.KEY_F1:
                 self.__aih.onControlModeChanged('debug', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix)
                 return True
-            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or g_battleContext.isPlayerObserver()):
+            if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or g_sessionProvider.getCtx().isPlayerObserver()):
                 self.__aih.onControlModeChanged('video', prevModeName='postmortem', camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
                 return True
             if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown:
@@ -1316,7 +1330,7 @@ class PostMortemControlMode(IControlMode):
             if canPlayerSeeVehicle or vID == player.playerVehicleID and not isAlive:
                 vehicleType = desc['vehicleType'].type
                 if 'observer' not in vehicleType.tags:
-                    data.append(self.OBSERVE_VEH_DATA(isAlive, vehicleType.level, set(VEHICLE_CLASS_TAGS.intersection(vehicleType.tags)).pop(), vehicleType.shortUserString, desc['name'], g_battleContext.isSquadMan(vID=vID), vID, desc['team']))
+                    data.append(self.OBSERVE_VEH_DATA(isAlive, vehicleType.level, set(VEHICLE_CLASS_TAGS.intersection(vehicleType.tags)).pop(), vehicleType.shortUserString, desc['name'], g_sessionProvider.getCtx().isSquadMan(vID=vID), vID, desc['team']))
 
         self.__vIDs = []
         for item in sorted(data, cmp=self._playerComparator):
@@ -1554,20 +1568,24 @@ class _ShellingControl():
 
 
 class _SuperGunMarker():
+    GUN_MARKER_CLIENT = 1
+    GUN_MARKER_SERVER = 2
 
     def __init__(self, mode = 'arcade', isStrategic = False):
         self.__show2 = useServerAim()
         self.__show1 = constants.IS_DEVELOPMENT or not self.__show2
         self.__isGuiVisible = True
         self.__isStrategic = isStrategic
+        replayCtrl = BattleReplay.g_replayCtrl
+        replayCtrl.setUseServerAim(self.__show2)
         if isStrategic:
-            self.__gm1 = _SPGFlashGunMarker()
+            self.__gm1 = _SPGFlashGunMarker(self.GUN_MARKER_CLIENT)
         else:
-            self.__gm1 = _FlashGunMarker(mode)
+            self.__gm1 = _FlashGunMarker(self.GUN_MARKER_CLIENT, mode)
         if isStrategic:
-            self.__gm2 = _SPGFlashGunMarker(True)
+            self.__gm2 = _SPGFlashGunMarker(self.GUN_MARKER_SERVER, True)
         else:
-            self.__gm2 = _FlashGunMarker(mode, True)
+            self.__gm2 = _FlashGunMarker(self.GUN_MARKER_SERVER, mode, True)
 
     def prerequisites(self):
         return self.__gm1.prerequisites() + self.__gm2.prerequisites()
@@ -1609,6 +1627,10 @@ class _SuperGunMarker():
         self.__gm1.setReloading(duration, startTime)
         self.__gm2.setReloading(duration, startTime)
 
+    def setReloadingInPercent(self, percent):
+        self.__gm1.setReloadingInPercent(percent)
+        self.__gm2.setReloadingInPercent(percent)
+
     def show(self, flag):
         self.__show1 = flag
         self.__gm1.show(flag and self.__isGuiVisible)
@@ -1621,6 +1643,8 @@ class _SuperGunMarker():
         if self.__show2 and show2Prev != self.__show2:
             self.__gm2.setPosition(self.__gm1.getPosition())
         self.__gm2.show(self.__show2)
+        replayCtrl = BattleReplay.g_replayCtrl
+        replayCtrl.setUseServerAim(self.__show2)
         if not constants.IS_DEVELOPMENT:
             self.show(not flag)
 
@@ -1671,8 +1695,9 @@ class _SPGFlashGunMarker(Flash):
     _SWF_FILE_NAME = 'crosshair_strategic.swf'
     _SWF_SIZE = (620, 620)
 
-    def __init__(self, isDebug = False):
+    def __init__(self, key, isDebug = False):
         Flash.__init__(self, self._SWF_FILE_NAME, self._FLASH_CLASS)
+        self.key = key
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_GunMarker
         self.component.focus = False
@@ -1707,27 +1732,21 @@ class _SPGFlashGunMarker(Flash):
         self.__reload = {'start_time': 0,
          'duration': 0,
          'isReloading': False}
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
-            self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
-        else:
-            self.__cbIdSetReloading = None
         self.onRecreateDevice()
         if self.__applyFilter and constants.IS_DEVELOPMENT and useServerAim():
             self.call('Crosshair.setFilter')
-        return
 
     def destroy(self):
-        if self.__cbIdSetReloading is not None:
-            BigWorld.cancelCallback(self.__cbIdSetReloading)
-            self.__cbIdSetReloading = None
         self.active(False)
-        return
 
     def enable(self, state):
         if state is not None:
-            rs = state['reload']
-            self.setReloading(rs['duration'], rs['startTime'], rs['isReloading'], correction=rs.get('correction'))
+            ammoCtrl = g_sessionProvider.getAmmoCtrl()
+            if ammoCtrl.isGunReloadTimeInPercent():
+                self.setReloadingInPercent(ammoCtrl.getGunReloadTime())
+            else:
+                rs = state['reload']
+                self.setReloading(rs['duration'], rs['startTime'], rs['isReloading'], correction=rs.get('correction'))
             self.setPosition(state['pos1'])
         return
 
@@ -1746,22 +1765,16 @@ class _SPGFlashGunMarker(Flash):
         rs['startTime'] = BigWorld.time() if startTime is None else startTime
         rs['duration'] = duration
         rs['correction'] = correction
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
-            return
-        else:
-            startTime = 0.0 if startTime is None else BigWorld.time() - startTime
-            self.call('Crosshair.setReloading', [duration, startTime, isReloading])
-            return
+        startTime = 0.0 if startTime is None else BigWorld.time() - startTime
+        self.call('Crosshair.setReloading', [duration, startTime, isReloading])
+        return
 
-    def setReloadingAsPercent(self, percent):
+    def setReloadingInPercent(self, percent):
         self.call('Crosshair.setReloadingAsPercent', [percent])
 
-    def setReloadingFromReplay(self):
-        self.setReloadingAsPercent(100.0 * BattleReplay.g_replayCtrl.getGunReloadAmountLeft())
-        self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
-
     def update(self, pos, dir, size, relaxTime, collData):
+        if not self.component.visible:
+            return
         m = Math.Matrix()
         m.setTranslate(pos)
         self.__setupMatrixAnimation()
@@ -1811,7 +1824,10 @@ class _SPGFlashGunMarker(Flash):
                     dispersionAngle = d
                     size = s
             elif replayCtrl.isRecording:
-                replayCtrl.setSPGGunMarkerParams(dispersionAngle, size)
+                if replayCtrl.isServerAim and self.key == _SuperGunMarker.GUN_MARKER_SERVER:
+                    replayCtrl.setSPGGunMarkerParams(dispersionAngle, size)
+                elif self.key == _SuperGunMarker.GUN_MARKER_CLIENT:
+                    replayCtrl.setSPGGunMarkerParams(dispersionAngle, size)
             self.component.wg_update(pos3d, vel3d, gravity3d, dispersionAngle, size)
         except:
             LOG_CURRENT_EXCEPTION()
@@ -1828,7 +1844,7 @@ class _FlashGunMarker(Flash):
                      'little_pierced': 'yellow',
                      'great_pierced': 'green'}}
 
-    def __init__(self, mode, applyFilter = False):
+    def __init__(self, key, mode, applyFilter = False):
         Flash.__init__(self, self._SWF_FILE_NAME, self._FLASH_CLASS)
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_GunMarker
@@ -1839,6 +1855,7 @@ class _FlashGunMarker(Flash):
         self.movie.backgroundAlpha = 0
         self.flashSize = self._SWF_SIZE
         self.mode = mode
+        self.key = key
         self.__curSize = 0.0
         self.__animMat = None
         self.__applyFilter = applyFilter
@@ -1863,13 +1880,7 @@ class _FlashGunMarker(Flash):
         self.__reload = {'start_time': 0,
          'duration': 0,
          'isReloading': False}
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
-            self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
-        else:
-            self.__cbIdSetReloading = None
         self.onRecreateDevice()
-        return
 
     def applySettings(self, diff):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -1894,17 +1905,18 @@ class _FlashGunMarker(Flash):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.applySettings
         self.active(False)
-        if self.__cbIdSetReloading is not None:
-            BigWorld.cancelCallback(self.__cbIdSetReloading)
-            self.__cbIdSetReloading = None
         self.__animMat = None
         return
 
     def enable(self, state):
         self.applySettings(self.mode)
         if state is not None:
-            rs = state['reload']
-            self.setReloading(rs['duration'], rs['startTime'], rs['isReloading'], correction=rs.get('correction'), switched=True)
+            ammoCtrl = g_sessionProvider.getAmmoCtrl()
+            if ammoCtrl.isGunReloadTimeInPercent():
+                self.setReloadingInPercent(ammoCtrl.getGunReloadTime(), False)
+            else:
+                rs = state['reload']
+                self.setReloading(rs['duration'], rs['startTime'], rs['isReloading'], correction=rs.get('correction'), switched=True)
             self.setPosition(state['pos1'])
             self.component.wg_updateSize(state['size'], 0)
         return
@@ -1926,15 +1938,12 @@ class _FlashGunMarker(Flash):
         isReloading = duration > 0
         rs['isReloading'] = isReloading
         rs['correction'] = None
-        replayCtrl = BattleReplay.g_replayCtrl
-        allowFlashCall = not (replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads)
         if not switched and _isReloading and duration > 0 and _duration > 0:
             current = BigWorld.time()
             rs['correction'] = {'timeRemaining': duration,
              'startTime': current,
              'startPosition': (current - _startTime) / _duration}
-            if allowFlashCall:
-                self.call('Crosshair.correctReloadingTime', [duration])
+            self.call('Crosshair.correctReloadingTime', [duration])
         else:
             rs['startTime'] = BigWorld.time() if startTime is None else startTime
             rs['duration'] = duration
@@ -1942,41 +1951,41 @@ class _FlashGunMarker(Flash):
                 params = self._getCorrectionReloadingParams(correction)
                 if params is not None:
                     rs['correction'] = correction
-                    if allowFlashCall:
-                        self.call('Crosshair.setReloading', params)
+                    self.call('Crosshair.setReloading', params)
             else:
                 startTime = 0.0 if startTime is None else BigWorld.time() - startTime
-                if allowFlashCall:
-                    self.call('Crosshair.setReloading', [duration, startTime, isReloading])
+                self.call('Crosshair.setReloading', [duration, startTime, isReloading])
         return
 
-    def setReloadingFromReplay(self):
-        self._setReloadingAsPercent(100.0 * BattleReplay.g_replayCtrl.getGunReloadAmountLeft())
-        self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
-
-    def _setReloadingAsPercent(self, percent):
-        self.call('Crosshair.setReloadingAsPercent', [percent])
+    def setReloadingInPercent(self, percent, isReloading = True):
+        self.call('Crosshair.setReloadingAsPercent', [percent, isReloading])
 
     def update(self, pos, dir, size, relaxTime, collData):
-        m = Math.Matrix()
-        m.setTranslate(pos)
-        self.__setupMatrixAnimation()
-        self.__animMat.keyframes = ((0.0, Math.Matrix(self.__animMat)), (relaxTime, m))
-        self.__animMat.time = 0.0
-        self.__curSize = _calcScale(m, size) * (GUI.screenResolution()[0] * 0.5)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            s = replayCtrl.getArcadeGunMarkerSize()
-            if s != -1.0:
-                self.__curSize = s
-        elif replayCtrl.isRecording:
-            replayCtrl.setArcadeGunMarkerSize(self.__curSize)
-        if collData is None or collData[0].health <= 0 or collData[0].publicInfo['team'] == BigWorld.player().team:
-            self.call('Crosshair.setMarkerType', ['normal'])
+        if not self.component.visible:
+            return
         else:
-            self._changeColor(pos, collData[2])
-        self.component.wg_updateSize(self.__curSize, relaxTime)
-        return
+            m = Math.Matrix()
+            m.setTranslate(pos)
+            self.__setupMatrixAnimation()
+            self.__animMat.keyframes = ((0.0, Math.Matrix(self.__animMat)), (relaxTime, m))
+            self.__animMat.time = 0.0
+            self.__curSize = _calcScale(m, size) * (GUI.screenResolution()[0] * 0.5)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isClientReady:
+                s = replayCtrl.getArcadeGunMarkerSize()
+                if s != -1.0:
+                    self.__curSize = s
+            elif replayCtrl.isRecording:
+                if replayCtrl.isServerAim and self.key == _SuperGunMarker.GUN_MARKER_SERVER:
+                    replayCtrl.setArcadeGunMarkerSize(self.__curSize)
+                elif self.key == _SuperGunMarker.GUN_MARKER_CLIENT:
+                    replayCtrl.setArcadeGunMarkerSize(self.__curSize)
+            if collData is None or collData[0].health <= 0 or collData[0].publicInfo['team'] == BigWorld.player().team:
+                self.call('Crosshair.setMarkerType', ['normal'])
+            else:
+                self._changeColor(pos, collData[2])
+            self.component.wg_updateSize(self.__curSize, relaxTime)
+            return
 
     def onRecreateDevice(self):
         self.component.size = GUI.screenResolution()
@@ -2040,143 +2049,6 @@ class _FlashGunMarker(Flash):
              cStartTime,
              True,
              currentPosition * 100.0]
-
-
-class _GunMarker():
-
-    def __init__(self, dataSection):
-        self._readCfg(dataSection)
-        self.__mover = None
-        self.__gui = None
-        self.__model = None
-        self.__animMat = None
-        return
-
-    def prerequisites(self):
-        return [self.__cfg['texture']]
-
-    def create(self):
-        cfg = self.__cfg
-        sr = GUI.screenResolution()
-        self.__gui = GUI.Window('')
-        self.__gui.heightMode = 'PIXEL'
-        self.__gui.widthMode = 'PIXEL'
-        self.__gui.width = sr[0]
-        self.__gui.height = sr[1]
-        self.__gui.position[2] = DEPTH_OF_GunMarker
-        self.__gui.visible = False
-        mover = GUI.MatrixShader()
-        mover.target = None
-        mover.eta = 0
-        mover.blend = True
-        self.__gui.addShader(mover, 'mover')
-        elems = cfg['elems']
-        self._createGui(elems['top'], 'top')
-        self._createGui(elems['right'], 'right')
-        self._createGui(elems['bottom'], 'bottom')
-        self._createGui(elems['left'], 'left')
-        center = GUI.Simple(cfg['texture'])
-        center.mapping = _buildTexCoord(elems['center'][0], cfg['size'])
-        center.heightMode = 'PIXEL'
-        center.widthMode = 'PIXEL'
-        center.materialFX = 'BLEND'
-        center.size = elems['center'][1]
-        self.__gui.addChild(center, 'center')
-        GUI.addRoot(self.__gui)
-        return
-
-    def destroy(self):
-        GUI.delRoot(self.__gui)
-        self.__animMat = None
-        return
-
-    def matrixProvider(self):
-        return self.__animMat
-
-    def show(self, flag):
-        self.__gui.visible = flag
-
-    def update(self, pos, dir, size, relaxTime, collData):
-        m = Math.Matrix()
-        m.setTranslate(pos)
-        self.__setupMatrixAnimation(relaxTime)
-        self.__animMat.keyframes = ((0.0, Math.Matrix(self.__animMat)), (relaxTime, m))
-        self.__animMat.time = 0.0
-        sr = GUI.screenResolution()
-        aspect = sr[0] / float(sr[1])
-        scale = _calcScale(m, size)
-        self._transformGui(Math.Vector3(0, scale * aspect, 0), relaxTime, 'top')
-        self._transformGui(Math.Vector3(scale, 0, 0), relaxTime, 'right')
-        self._transformGui(Math.Vector3(0, -scale * aspect, 0), relaxTime, 'bottom')
-        self._transformGui(Math.Vector3(-scale, 0, 0), relaxTime, 'left')
-
-    def onRecreateDevice(self):
-        sr = GUI.screenResolution()
-        self.__gui.width = sr[0]
-        self.__gui.height = sr[1]
-
-    def setPosition(self, pos):
-        m = Math.Matrix()
-        m.setTranslate(pos)
-        self.__setupMatrixAnimation(0.0)
-        self.__animMat.keyframes = ((0.0, m), (0.0, m))
-        self.__animMat.time = 0.0
-
-    def getPosition(self):
-        if self.__animMat is None:
-            return Math.Vector3(0.0, 0.0, 0.0)
-        else:
-            return Math.Matrix(self.__animMat).translation
-
-    def _createGui(self, elemDesc, name):
-        mover = GUI.MatrixShader()
-        mover.blend = True
-        mover.eta = 0.0
-        gui = GUI.Simple(self.__cfg['texture'])
-        gui.mapping = _buildTexCoord(elemDesc[0], self.__cfg['size'])
-        gui.verticalPositionMode = 'CLIP'
-        gui.horizontalPositionMode = 'CLIP'
-        gui.heightMode = 'PIXEL'
-        gui.widthMode = 'PIXEL'
-        gui.materialFX = 'BLEND'
-        gui.size = elemDesc[1]
-        gui.addShader(mover, 'mover')
-        self.__gui.addChild(gui, name)
-
-    def _transformGui(self, translate, relaxTime, name):
-        mat = Math.Matrix()
-        mat.setTranslate(translate)
-        mov = getattr(self.__gui, name).mover
-        mov.target = mat
-        mov.eta = relaxTime
-
-    def _readCfg(self, dataSection):
-        self.__cfg = dict()
-        self.__cfg['texture'] = dataSection.readString('texture')
-        self.__cfg['size'] = dataSection.readVector2('size')
-        self.__cfg['elems'] = dict()
-        self.__readElem(dataSection['elems/top'], 'top')
-        self.__readElem(dataSection['elems/right'], 'right')
-        self.__readElem(dataSection['elems/bottom'], 'bottom')
-        self.__readElem(dataSection['elems/left'], 'left')
-        self.__readElem(dataSection['elems/center'], 'center')
-
-    def __readElem(self, dataSection, name):
-        mapping = dataSection.readVector4('mapping', Math.Vector4(0, 0, 0, 0))
-        size = dataSection.readVector2('size', Math.Vector2(0, 0))
-        self.__cfg['elems'][name] = (mapping, size)
-
-    def __setupMatrixAnimation(self, relaxTime):
-        if self.__animMat is not None:
-            return
-        else:
-            self.__animMat = Math.MatrixAnimation()
-            _wtcMat = GUI.WorldToClipMP()
-            _wtcMat.target = self.__animMat
-            _wtcMat.onlyFront = True
-            self.__gui.mover.target = _wtcMat
-            self.__gui.mover.eta = relaxTime
-            return
 
 
 class _MouseVehicleRotator():

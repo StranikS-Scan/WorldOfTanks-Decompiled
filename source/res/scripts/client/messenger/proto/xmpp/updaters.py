@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/updaters.py
 from ConnectionManager import connectionManager
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_DEBUG
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE, USER_ROSTER_ACTION
 from messenger.proto.bw.find_criteria import BWFriendFindCriteria
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IEntityFindCriteria
+from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.roster_items import RosterItem
 from messenger.proto.xmpp.gloox_wrapper import GLOOX_EVENT, ClientEventsHandler
 from messenger.proto.xmpp.gloox_wrapper import SUBSCRIPTION, PRESENCE
@@ -69,7 +70,7 @@ class RosterUpdater(ClientEventsHandler):
 
     def sync(self):
         if self.__isBWRosterReceived and self.client().isConnected():
-            LOG_DEBUG('XMPPClient:Sync, syncing XMPP rosters from BW')
+            g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Syncing XMPP rosters from BW')
             domain = g_settings.server.XMPP.domain
             contacts = set()
             for user in self.usersStorage.getList(_BWRosterFindCriteria()):
@@ -139,20 +140,20 @@ class RosterUpdater(ClientEventsHandler):
         if jid:
             result = self.xmppRoster[jid.getBareJID()].resources.remove(jid.getResource())
             if not result:
-                LOG_DEBUG('XMPPClient::RosterResource, resource is not in list of resources', jid)
+                g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Resource is not in list', jid)
 
     def __handleSubscriptionRequest(self, jid, _):
         self.client().setSubscribeFrom(jid)
 
     def __me_onRosterReceived(self):
-        LOG_DEBUG('XMPPClient:Sync, BW rooster received')
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'BW roster received')
         self.__isBWRosterReceived = True
         self.sync()
 
     def __me_onRosterUpdate(self, actionIdx, user):
         groups = self.__getBWRosterGroups(user)
         databaseID = user.getID()
-        LOG_DEBUG('XMPPClient:Sync, BW rooster update', groups, user)
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'BW roster update', groups, user)
         jid = ContactBareJID()
         jid.setNode(databaseID)
         jid.setDomain(g_settings.server.XMPP.domain)
@@ -171,46 +172,48 @@ class RosterUpdater(ClientEventsHandler):
 
     def __addToLocalXmppRoster(self, jid, name, groups, to, from_):
         if self.xmppRoster.hasItem(jid):
-            LOG_DEBUG('XMPPClient::RosterItem, updating item in local XMPP roster', jid, name, groups, to, from_)
+            g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Updating item in local XMPP roster', jid, name, groups, to, from_)
             self.xmppRoster[jid].update(name, groups, to, from_)
         else:
-            LOG_DEBUG('XMPPClient::RosterItem, adding item to local XMPP roster', jid, name, groups, to, from_)
+            g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Adding item to local XMPP roster', jid, name, groups, to, from_)
             self.xmppRoster[jid] = RosterItem(jid, name, groups, to, from_)
 
     def __removeFromLocalXmppRoster(self, jid):
         if self.xmppRoster.hasItem(jid):
-            LOG_DEBUG('XMPPClient::RosterItem, contact is removed from local XMPP roster', jid, self.xmppRoster[jid].name)
+            g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Contact is removed from local XMPP roster', jid, self.xmppRoster[jid].name)
             self.xmppRoster.pop(jid).clear()
         else:
-            LOG_ERROR('XMPPClient::RosterItem, roster item no is found', jid)
+            g_logOutput.warning(CLIENT_LOG_AREA.SYNC, 'Roster item is not found', jid)
 
     def __addContactToXmppRoster(self, jid, userName = 'Unknown', groups = None):
         if not GROUPS_SYNC_ENABLED:
             groups = None
-        LOG_DEBUG('XMPPClient::RosterItem, is going to add contact from BW roster to XMPP roster', jid, userName, groups)
-        self.client().setContactToRoster(jid, userName, groups)
-        self.client().setSubscribeTo(jid)
+        client = self.client()
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Adds contact from BW roster and sends request to add subscription', jid, userName, groups)
+        client.setContactToRoster(jid, userName, groups)
+        client.setSubscribeTo(jid)
         return
 
     def __setContactToXmppRoster(self, jid, userName = 'Unknown', groups = None):
         if not GROUPS_SYNC_ENABLED:
             groups = None
-        LOG_DEBUG('XMPPClient::RosterItem, is going to set contact from BW roster to XMPP roster', jid, userName, groups)
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Adds contact from BW roster', jid, userName, groups)
         self.client().setContactToRoster(jid, userName, groups)
         return
 
     def __setSubscribeTo(self, jid):
-        LOG_DEBUG('XMPPClient::RosterItem, contact already is in roster. Sets subscription = "to"', jid)
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Sends request to add subscription', jid)
         self.client().setSubscribeTo(jid)
 
     def __removeSubscribeTo(self, jid):
-        LOG_DEBUG('XMPPClient::RosterItem, user is removed from BW roster. Removing subscription = "to"', jid)
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Sends request to remove subscription', jid)
         self.client().removeSubscribeTo(jid)
 
     def __removeContactFromXmppRoster(self, jid):
-        LOG_DEBUG('XMPPClient::RosterItem, contact is removed from BW roster. Removing from XMPP roster', jid)
-        self.client().removeSubscribeTo(jid)
-        self.client().removeContactFromRoster(jid)
+        g_logOutput.debug(CLIENT_LOG_AREA.SYNC, 'Removes contact from XMPP roster', jid)
+        client = self.client()
+        client.removeSubscribeTo(jid)
+        client.removeContactFromRoster(jid)
 
 
 class OnlineStatusUpdater(ClientEventsHandler):

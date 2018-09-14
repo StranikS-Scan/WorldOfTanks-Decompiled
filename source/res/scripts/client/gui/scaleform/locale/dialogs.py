@@ -207,10 +207,12 @@ class DIALOGS(object):
     BUYVEHICLEDIALOG_PRICELABEL = '#dialogs:buyVehicleDialog/priceLabel'
     BUYVEHICLEDIALOG_AMMOCHECKBOX = '#dialogs:buyVehicleDialog/ammoCheckbox'
     BUYVEHICLEDIALOG_SLOTCHECKBOX = '#dialogs:buyVehicleDialog/slotCheckbox'
+    BUYVEHICLEDIALOG_FREERENTSLOT = '#dialogs:buyVehicleDialog/freeRentSlot'
     BUYVEHICLEDIALOG_TANKMENLABEL = '#dialogs:buyVehicleDialog/tankmenLabel'
     BUYVEHICLEDIALOG_TANKMEN = '#dialogs:buyVehicleDialog/tankmen'
     BUYVEHICLEDIALOG_WARNING = '#dialogs:buyVehicleDialog/warning'
     BUYVEHICLEDIALOG_TANKMENCHECKBOX = '#dialogs:buyVehicleDialog/tankmenCheckbox'
+    BUYVEHICLEDIALOG_CREWINVEHICLE = '#dialogs:buyVehicleDialog/crewInVehicle'
     BUYVEHICLEDIALOG_TOTALLABEL = '#dialogs:buyVehicleDialog/totalLabel'
     BUYVEHICLEDIALOG_EXPANDBTNLABEL = '#dialogs:buyVehicleDialog/expandBtnLabel'
     BUYVEHICLEDIALOG_ROLLUPBTNLABEL = '#dialogs:buyVehicleDialog/rollupBtnLabel'
@@ -406,6 +408,7 @@ class DIALOGS(object):
     MESSENGER_USERINFONOTAVAILABLE_MESSAGE = '#dialogs:messenger/userInfoNotAvailable/message'
     MESSENGER_USERINFONOTAVAILABLE_SUBMIT = '#dialogs:messenger/userInfoNotAvailable/submit'
     MESSENGER_USERINFONOTAVAILABLE_CANCEL = '#dialogs:messenger/userInfoNotAvailable/cancel'
+    VEHICLEREMOVEDIALOG_TITLE = '#dialogs:vehicleRemoveDialog/title'
     VEHICLESELLDIALOG_TITLE = '#dialogs:vehicleSellDialog/title'
     VEHICLESELLDIALOG_MESSAGE = '#dialogs:vehicleSellDialog/message'
     VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK = '#dialogs:vehicleSellDialog/vehicleType/lightTank'
@@ -426,6 +429,7 @@ class DIALOGS(object):
     VEHICLESELLDIALOG_INVENTORY = '#dialogs:vehicleSellDialog/inventory'
     VEHICLESELLDIALOG_NOTINSTALLED_MODULES = '#dialogs:vehicleSellDialog/notInstalled/modules'
     VEHICLESELLDIALOG_COUNT = '#dialogs:vehicleSellDialog/count'
+    VEHICLESELLDIALOG_REMOVE = '#dialogs:vehicleSellDialog/remove'
     VEHICLESELLDIALOG_SUBMIT = '#dialogs:vehicleSellDialog/submit'
     VEHICLESELLDIALOG_CANCEL = '#dialogs:vehicleSellDialog/cancel'
     VEHICLESELLDIALOG_CONTENT_TANKMENFIELD = '#dialogs:vehicleSellDialog/content/tankmenField'
@@ -445,22 +449,42 @@ class DIALOGS(object):
     CUSTOMIZATION_CAMOUFLAGEDROP_MESSAGE = '#dialogs:customization/camouflageDrop/message'
     CUSTOMIZATION_CAMOUFLAGEDROP_SUBMIT = '#dialogs:customization/camouflageDrop/submit'
     CUSTOMIZATION_CAMOUFLAGEDROP_CANCEL = '#dialogs:customization/camouflageDrop/cancel'
+    CUSTOMIZATION_CAMOUFLAGEDISMOUNT_TITLE = '#dialogs:customization/camouflageDismount/title'
+    CUSTOMIZATION_CAMOUFLAGEDISMOUNT_MESSAGE = '#dialogs:customization/camouflageDismount/message'
+    CUSTOMIZATION_CAMOUFLAGEDISMOUNT_SUBMIT = '#dialogs:customization/camouflageDismount/submit'
+    CUSTOMIZATION_CAMOUFLAGEDISMOUNT_CANCEL = '#dialogs:customization/camouflageDismount/cancel'
     CUSTOMIZATION_EMBLEMLEFTDROP_TITLE = '#dialogs:customization/emblemLeftDrop/title'
     CUSTOMIZATION_EMBLEMLEFTDROP_MESSAGE = '#dialogs:customization/emblemLeftDrop/message'
     CUSTOMIZATION_EMBLEMLEFTDROP_SUBMIT = '#dialogs:customization/emblemLeftDrop/submit'
     CUSTOMIZATION_EMBLEMLEFTDROP_CANCEL = '#dialogs:customization/emblemLeftDrop/cancel'
+    CUSTOMIZATION_EMBLEMLEFTDISMOUNT_TITLE = '#dialogs:customization/emblemLeftDismount/title'
+    CUSTOMIZATION_EMBLEMLEFTDISMOUNT_MESSAGE = '#dialogs:customization/emblemLeftDismount/message'
+    CUSTOMIZATION_EMBLEMLEFTDISMOUNT_SUBMIT = '#dialogs:customization/emblemLeftDismount/submit'
+    CUSTOMIZATION_EMBLEMLEFTDISMOUNT_CANCEL = '#dialogs:customization/emblemLeftDismount/cancel'
     CUSTOMIZATION_EMBLEMRIGHTDROP_TITLE = '#dialogs:customization/emblemRightDrop/title'
     CUSTOMIZATION_EMBLEMRIGHTDROP_MESSAGE = '#dialogs:customization/emblemRightDrop/message'
     CUSTOMIZATION_EMBLEMRIGHTDROP_SUBMIT = '#dialogs:customization/emblemRightDrop/submit'
     CUSTOMIZATION_EMBLEMRIGHTDROP_CANCEL = '#dialogs:customization/emblemRightDrop/cancel'
+    CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_TITLE = '#dialogs:customization/emblemRightDismount/title'
+    CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_MESSAGE = '#dialogs:customization/emblemRightDismount/message'
+    CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_SUBMIT = '#dialogs:customization/emblemRightDismount/submit'
+    CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_CANCEL = '#dialogs:customization/emblemRightDismount/cancel'
     CUSTOMIZATION_INSCRIPTIONLEFTDROP_TITLE = '#dialogs:customization/inscriptionLeftDrop/title'
     CUSTOMIZATION_INSCRIPTIONLEFTDROP_MESSAGE = '#dialogs:customization/inscriptionLeftDrop/message'
     CUSTOMIZATION_INSCRIPTIONLEFTDROP_SUBMIT = '#dialogs:customization/inscriptionLeftDrop/submit'
     CUSTOMIZATION_INSCRIPTIONLEFTDROP_CANCEL = '#dialogs:customization/inscriptionLeftDrop/cancel'
+    CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_TITLE = '#dialogs:customization/inscriptionLeftDismount/title'
+    CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_MESSAGE = '#dialogs:customization/inscriptionLeftDismount/message'
+    CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_SUBMIT = '#dialogs:customization/inscriptionLeftDismount/submit'
+    CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_CANCEL = '#dialogs:customization/inscriptionLeftDismount/cancel'
     CUSTOMIZATION_INSCRIPTIONRIGHTDROP_TITLE = '#dialogs:customization/inscriptionRightDrop/title'
     CUSTOMIZATION_INSCRIPTIONRIGHTDROP_MESSAGE = '#dialogs:customization/inscriptionRightDrop/message'
     CUSTOMIZATION_INSCRIPTIONRIGHTDROP_SUBMIT = '#dialogs:customization/inscriptionRightDrop/submit'
     CUSTOMIZATION_INSCRIPTIONRIGHTDROP_CANCEL = '#dialogs:customization/inscriptionRightDrop/cancel'
+    CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_TITLE = '#dialogs:customization/inscriptionRightDismount/title'
+    CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_MESSAGE = '#dialogs:customization/inscriptionRightDismount/message'
+    CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_SUBMIT = '#dialogs:customization/inscriptionRightDismount/submit'
+    CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_CANCEL = '#dialogs:customization/inscriptionRightDismount/cancel'
     CUSTOMIZATION_HORNDROP_TITLE = '#dialogs:customization/hornDrop/title'
     CUSTOMIZATION_HORNDROP_MESSAGE = '#dialogs:customization/hornDrop/message'
     CUSTOMIZATION_HORNDROP_SUBMIT = '#dialogs:customization/hornDrop/submit'
@@ -626,34 +650,6 @@ class DIALOGS(object):
     FORTIFICATIONCLOSEDIRECTION_MESSAGE = '#dialogs:fortificationCloseDirection/message'
     FORTIFICATIONCLOSEDIRECTION_SUBMIT = '#dialogs:fortificationCloseDirection/submit'
     FORTIFICATIONCLOSEDIRECTION_CANCEL = '#dialogs:fortificationCloseDirection/cancel'
-    HEADERTUTORIALWINDOW_WINDOWTITLE_WELCOME = '#dialogs:headerTutorialWindow/windowTitle/welcome'
-    HEADERTUTORIALWINDOW_TITLE_WELCOME = '#dialogs:headerTutorialWindow/title/welcome'
-    HEADERTUTORIALWINDOW_MAINTEXT_WELCOME = '#dialogs:headerTutorialWindow/mainText/welcome'
-    HEADERTUTORIALWINDOW_WINDOWTITLE_INTUTORIAL = '#dialogs:headerTutorialWindow/windowTitle/inTutorial'
-    HEADERTUTORIALWINDOW_TITLE_STEP1 = '#dialogs:headerTutorialWindow/title/step1'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP1 = '#dialogs:headerTutorialWindow/mainText/step1'
-    HEADERTUTORIALWINDOW_TITLE_STEP2 = '#dialogs:headerTutorialWindow/title/step2'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP2 = '#dialogs:headerTutorialWindow/mainText/step2'
-    HEADERTUTORIALWINDOW_TITLE_STEP3 = '#dialogs:headerTutorialWindow/title/step3'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP3 = '#dialogs:headerTutorialWindow/mainText/step3'
-    HEADERTUTORIALWINDOW_TITLE_STEP4 = '#dialogs:headerTutorialWindow/title/step4'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP4 = '#dialogs:headerTutorialWindow/mainText/step4'
-    HEADERTUTORIALWINDOW_TITLE_STEP5 = '#dialogs:headerTutorialWindow/title/step5'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP5 = '#dialogs:headerTutorialWindow/mainText/step5'
-    HEADERTUTORIALWINDOW_TITLE_STEP6 = '#dialogs:headerTutorialWindow/title/step6'
-    HEADERTUTORIALWINDOW_MAINTEXT_STEP6 = '#dialogs:headerTutorialWindow/mainText/step6'
-    HEADERTUTORIALWINDOW_SUBMIT = '#dialogs:headerTutorialWindow/submit'
-    HEADERTUTORIALWINDOW_CANCEL = '#dialogs:headerTutorialWindow/cancel'
-    HEADERTUTORIALWINDOW_PAUSETUTORIAL = '#dialogs:headerTutorialWindow/pauseTutorial'
-    HEADERTUTORIALWINDOW_NEXT = '#dialogs:headerTutorialWindow/next'
-    HEADERTUTORIALWINDOW_FINISH = '#dialogs:headerTutorialWindow/finish'
-    HEADERTUTORIALWINDOW_BACK = '#dialogs:headerTutorialWindow/back'
-    HEADERTUTORIALWINDOW_HELPTEXT = '#dialogs:headerTutorialWindow/helpText'
-    HEADERTUTORIALDIALOG_SUBMIT = '#dialogs:headerTutorialDialog/submit'
-    HEADERTUTORIALDIALOG_CANCEL = '#dialogs:headerTutorialDialog/cancel'
-    HEADERTUTORIALDIALOG_TITLE = '#dialogs:headerTutorialDialog/title'
-    HEADERTUTORIALDIALOG_MESSAGE = '#dialogs:headerTutorialDialog/message'
-    HEADERTUTORIALDIALOG_CHECKBOX = '#dialogs:headerTutorialDialog/checkBox'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -665,20 +661,6 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_SPG,
      VEHICLESELLDIALOG_VEHICLETYPE_AT_SPG)
-    HEADERTUTORIALWINDOW_MAINTEXT_ENUM = (HEADERTUTORIALWINDOW_MAINTEXT_WELCOME,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP1,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP2,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP3,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP4,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP5,
-     HEADERTUTORIALWINDOW_MAINTEXT_STEP6)
-    HEADERTUTORIALWINDOW_TITLE_ENUM = (HEADERTUTORIALWINDOW_TITLE_WELCOME,
-     HEADERTUTORIALWINDOW_TITLE_STEP1,
-     HEADERTUTORIALWINDOW_TITLE_STEP2,
-     HEADERTUTORIALWINDOW_TITLE_STEP3,
-     HEADERTUTORIALWINDOW_TITLE_STEP4,
-     HEADERTUTORIALWINDOW_TITLE_STEP5,
-     HEADERTUTORIALWINDOW_TITLE_STEP6)
     all_ENUM = (LEGALINFOWINDOW_TITLE,
      COMMON_CONFIRM_SUBMIT,
      COMMON_CONFIRM_CANCEL,
@@ -876,10 +858,12 @@ class DIALOGS(object):
      BUYVEHICLEDIALOG_PRICELABEL,
      BUYVEHICLEDIALOG_AMMOCHECKBOX,
      BUYVEHICLEDIALOG_SLOTCHECKBOX,
+     BUYVEHICLEDIALOG_FREERENTSLOT,
      BUYVEHICLEDIALOG_TANKMENLABEL,
      BUYVEHICLEDIALOG_TANKMEN,
      BUYVEHICLEDIALOG_WARNING,
      BUYVEHICLEDIALOG_TANKMENCHECKBOX,
+     BUYVEHICLEDIALOG_CREWINVEHICLE,
      BUYVEHICLEDIALOG_TOTALLABEL,
      BUYVEHICLEDIALOG_EXPANDBTNLABEL,
      BUYVEHICLEDIALOG_ROLLUPBTNLABEL,
@@ -1075,6 +1059,7 @@ class DIALOGS(object):
      MESSENGER_USERINFONOTAVAILABLE_MESSAGE,
      MESSENGER_USERINFONOTAVAILABLE_SUBMIT,
      MESSENGER_USERINFONOTAVAILABLE_CANCEL,
+     VEHICLEREMOVEDIALOG_TITLE,
      VEHICLESELLDIALOG_TITLE,
      VEHICLESELLDIALOG_MESSAGE,
      VEHICLESELLDIALOG_VEHICLE_LEVEL,
@@ -1090,6 +1075,7 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_INVENTORY,
      VEHICLESELLDIALOG_NOTINSTALLED_MODULES,
      VEHICLESELLDIALOG_COUNT,
+     VEHICLESELLDIALOG_REMOVE,
      VEHICLESELLDIALOG_SUBMIT,
      VEHICLESELLDIALOG_CANCEL,
      VEHICLESELLDIALOG_CONTENT_TANKMENFIELD,
@@ -1109,22 +1095,42 @@ class DIALOGS(object):
      CUSTOMIZATION_CAMOUFLAGEDROP_MESSAGE,
      CUSTOMIZATION_CAMOUFLAGEDROP_SUBMIT,
      CUSTOMIZATION_CAMOUFLAGEDROP_CANCEL,
+     CUSTOMIZATION_CAMOUFLAGEDISMOUNT_TITLE,
+     CUSTOMIZATION_CAMOUFLAGEDISMOUNT_MESSAGE,
+     CUSTOMIZATION_CAMOUFLAGEDISMOUNT_SUBMIT,
+     CUSTOMIZATION_CAMOUFLAGEDISMOUNT_CANCEL,
      CUSTOMIZATION_EMBLEMLEFTDROP_TITLE,
      CUSTOMIZATION_EMBLEMLEFTDROP_MESSAGE,
      CUSTOMIZATION_EMBLEMLEFTDROP_SUBMIT,
      CUSTOMIZATION_EMBLEMLEFTDROP_CANCEL,
+     CUSTOMIZATION_EMBLEMLEFTDISMOUNT_TITLE,
+     CUSTOMIZATION_EMBLEMLEFTDISMOUNT_MESSAGE,
+     CUSTOMIZATION_EMBLEMLEFTDISMOUNT_SUBMIT,
+     CUSTOMIZATION_EMBLEMLEFTDISMOUNT_CANCEL,
      CUSTOMIZATION_EMBLEMRIGHTDROP_TITLE,
      CUSTOMIZATION_EMBLEMRIGHTDROP_MESSAGE,
      CUSTOMIZATION_EMBLEMRIGHTDROP_SUBMIT,
      CUSTOMIZATION_EMBLEMRIGHTDROP_CANCEL,
+     CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_TITLE,
+     CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_MESSAGE,
+     CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_SUBMIT,
+     CUSTOMIZATION_EMBLEMRIGHTDISMOUNT_CANCEL,
      CUSTOMIZATION_INSCRIPTIONLEFTDROP_TITLE,
      CUSTOMIZATION_INSCRIPTIONLEFTDROP_MESSAGE,
      CUSTOMIZATION_INSCRIPTIONLEFTDROP_SUBMIT,
      CUSTOMIZATION_INSCRIPTIONLEFTDROP_CANCEL,
+     CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_TITLE,
+     CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_MESSAGE,
+     CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_SUBMIT,
+     CUSTOMIZATION_INSCRIPTIONLEFTDISMOUNT_CANCEL,
      CUSTOMIZATION_INSCRIPTIONRIGHTDROP_TITLE,
      CUSTOMIZATION_INSCRIPTIONRIGHTDROP_MESSAGE,
      CUSTOMIZATION_INSCRIPTIONRIGHTDROP_SUBMIT,
      CUSTOMIZATION_INSCRIPTIONRIGHTDROP_CANCEL,
+     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_TITLE,
+     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_MESSAGE,
+     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_SUBMIT,
+     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_CANCEL,
      CUSTOMIZATION_HORNDROP_TITLE,
      CUSTOMIZATION_HORNDROP_MESSAGE,
      CUSTOMIZATION_HORNDROP_SUBMIT,
@@ -1289,21 +1295,7 @@ class DIALOGS(object):
      FORTIFICATIONCLOSEDIRECTION_TITLE,
      FORTIFICATIONCLOSEDIRECTION_MESSAGE,
      FORTIFICATIONCLOSEDIRECTION_SUBMIT,
-     FORTIFICATIONCLOSEDIRECTION_CANCEL,
-     HEADERTUTORIALWINDOW_WINDOWTITLE_WELCOME,
-     HEADERTUTORIALWINDOW_WINDOWTITLE_INTUTORIAL,
-     HEADERTUTORIALWINDOW_SUBMIT,
-     HEADERTUTORIALWINDOW_CANCEL,
-     HEADERTUTORIALWINDOW_PAUSETUTORIAL,
-     HEADERTUTORIALWINDOW_NEXT,
-     HEADERTUTORIALWINDOW_FINISH,
-     HEADERTUTORIALWINDOW_BACK,
-     HEADERTUTORIALWINDOW_HELPTEXT,
-     HEADERTUTORIALDIALOG_SUBMIT,
-     HEADERTUTORIALDIALOG_CANCEL,
-     HEADERTUTORIALDIALOG_TITLE,
-     HEADERTUTORIALDIALOG_MESSAGE,
-     HEADERTUTORIALDIALOG_CHECKBOX)
+     FORTIFICATIONCLOSEDIRECTION_CANCEL)
 
     @staticmethod
     def recruitwindow_vehicleclassdropdown(key):
@@ -1316,20 +1308,6 @@ class DIALOGS(object):
     def vehicleselldialog_vehicletype(key):
         outcome = '#dialogs:vehicleSellDialog/vehicleType/%s' % key
         if outcome not in DIALOGS.VEHICLESELLDIALOG_VEHICLETYPE_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
-        return outcome
-
-    @staticmethod
-    def headertutorialwindow_maintext(key):
-        outcome = '#dialogs:headerTutorialWindow/mainText/%s' % key
-        if outcome not in DIALOGS.HEADERTUTORIALWINDOW_MAINTEXT_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
-        return outcome
-
-    @staticmethod
-    def headertutorialwindow_title(key):
-        outcome = '#dialogs:headerTutorialWindow/title/%s' % key
-        if outcome not in DIALOGS.HEADERTUTORIALWINDOW_TITLE_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

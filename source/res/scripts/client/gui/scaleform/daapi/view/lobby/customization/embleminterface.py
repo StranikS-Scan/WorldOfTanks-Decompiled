@@ -9,12 +9,13 @@ from gui import SystemMessages
 import gui
 from gui.Scaleform.daapi.view.lobby.customization.BaseTimedCustomizationInterface import BaseTimedCustomizationInterface
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import EmblemsDataProvider, EmblemRentalPackageDataProvider, EmblemGroupsDataProvider, isItemInHangar, isIdInDefaultSetup
+from gui.Scaleform.daapi.view.lobby.customization.data_providers import EmblemsDataProvider, EmblemRentalPackageDataProvider, EmblemGroupsDataProvider
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import time_utils, i18n
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 
 class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
     __metaclass__ = ABCMeta
@@ -22,7 +23,6 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
     def __init__(self, name, nationId, type, position):
         super(EmblemInterface, self).__init__(name, nationId, type, position)
         self.defaultPlayerEmblemID = None
-        self.isTurret = False
         self._isEnabled = False
         self._vehicleLevel = 1
         self._positionShift = 0
@@ -46,11 +46,6 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
     def locateCameraOnSlot(self):
         res = g_hangarSpace.space.locateCameraOnEmblem(not self.isTurret, 'player', self._position - self._positionShift, self.ZOOM_FACTOR)
         LOG_DEBUG('EmblemLeftInterface g_hangarSpace.space.locateCameraOnEmblem', self._position, res)
-
-    def getRealPosition(self):
-        if not self.isTurret:
-            return self._position - self._positionShift
-        return self._position + 2
 
     @abstractmethod
     def getRentalPackagesDP(self):
@@ -118,16 +113,19 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
                 message = i18n.makeString(SYSTEM_MESSAGES.CUSTOMIZATION_EMBLEM_COST_NOT_FOUND)
                 self.onCustomizationChangeFailed(message)
                 return
-            if isAlreadyPurchased or isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, self._newItemID, self._itemsDP.position):
+            if isAlreadyPurchased:
                 daysToWear = 0
                 cost = 0
+            elif CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM, self._newItemID, self._nationID, self._itemsDP.position):
+                hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE, self._newItemID)
+                daysToWear = 0 if hangarItem.get('isPermanent') else 7
             else:
                 daysToWear = self._rentalPackageDP.selectedPackage.get('periodDays')
             newIdToSend = 0
             isNewInDefaultSetup = False
             isCurrIgr = self._itemsDP.isIGRItem(self._currentItemID)
             if isCurrIgr:
-                isNewInDefaultSetup = isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.EMBLEM, self._newItemID)
+                isNewInDefaultSetup = CustomizationHelper.isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.EMBLEM, self._newItemID)
             if self._currentItemID is None or not isCurrIgr or isCurrIgr and not isNewInDefaultSetup or isCurrIgr and isNewInDefaultSetup and daysToWear > 0:
                 newIdToSend = self._newItemID
             BigWorld.player().inventory.changeVehicleEmblem(vehInvID, self.getRealPosition(), newIdToSend, daysToWear, lambda resultID: self.__onChangeVehicleEmblem(resultID, (cost, isGold)))
@@ -218,7 +216,7 @@ class EmblemInterface(BaseTimedCustomizationInterface, AppRef):
 class EmblemLeftInterface(EmblemInterface):
 
     def getItemsDP(self):
-        dp = EmblemsDataProvider(self.getRealPosition())
+        dp = EmblemsDataProvider(self._nationID, self.getRealPosition())
         dp.setFlashObject(self.flashObject.emblemLeftDP)
         return dp
 
@@ -228,7 +226,7 @@ class EmblemLeftInterface(EmblemInterface):
         return dp
 
     def getGroupsDP(self):
-        dp = EmblemGroupsDataProvider()
+        dp = EmblemGroupsDataProvider(self._nationID)
         dp.setFlashObject(self.flashObject.emblemLeftGroupsDataProvider)
         return dp
 
@@ -236,7 +234,7 @@ class EmblemLeftInterface(EmblemInterface):
 class EmblemRightInterface(EmblemInterface):
 
     def getItemsDP(self):
-        dp = EmblemsDataProvider(self.getRealPosition())
+        dp = EmblemsDataProvider(self._nationID, self.getRealPosition())
         dp.setFlashObject(self.flashObject.emblemRightDP)
         return dp
 
@@ -246,6 +244,6 @@ class EmblemRightInterface(EmblemInterface):
         return dp
 
     def getGroupsDP(self):
-        dp = EmblemGroupsDataProvider()
+        dp = EmblemGroupsDataProvider(self._nationID)
         dp.setFlashObject(self.flashObject.emblemRightGroupsDataProvider)
         return dp

@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_seqs.py
+import random
 import time
 import weakref
 import calendar
@@ -7,10 +8,12 @@ from collections import namedtuple
 import dossiers2
 from FortifiedRegionBase import NOT_ACTIVATED, FORT_ATTACK_RESULT
 from UnitBase import UNIT_STATE
-from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS
+from constants import FORT_SCOUTING_DATA_FILTER, FORT_MAX_ELECTED_CLANS, FORT_SCOUTING_DATA_ERROR
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import fortified_regions
-from gui.shared.utils import CONST_CONTAINER
+from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.shared.utils import CONST_CONTAINER, isEmpty
 from gui.prb_control.items.sortie_items import getDivisionNameByType
 from gui.shared.fortifications.context import RequestSortieUnitCtx, FortPublicInfoCtx, RequestClanCardCtx
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE
@@ -348,25 +351,27 @@ _FortBattleItemData = namedtuple('_FortBattleItemData', ('defenderClanDBID',
  'direction',
  'isDefence',
  'attackTime',
+ 'roundStart',
  'attackerBuildList',
  'defenderBuildList',
  'attackerFullBuildList',
  'defenderFullBuildList',
  'prevBuildNum',
- 'currentBuildNum'))
+ 'currentBuildNum',
+ 'isEnemyReadyForBattle',
+ 'isBattleRound'))
 
 def makeDefFortBattleItemData():
-    return _FortBattleItemData(0, 0, 0, False, 0, (), (), (), (), 0, 0, False)
+    return _FortBattleItemData(0, 0, 0, False, 0, 0, (), (), (), (), 0, 0, False, False)
 
 
 @ReprInjector.simple(('_battleID', 'battleID'), ('_peripheryID', 'peripheryID'), ('itemData', 'data'), ('additionalData', 'additional'))
 
 class BattleItem(object):
 
-    def __init__(self, battleID, peripheryID, itemData, additionalData):
+    def __init__(self, battleID, itemData, additionalData):
         super(BattleItem, self).__init__()
         self._battleID = battleID
-        self._peripheryID = peripheryID
         self._isDirty = True
         self.itemData = self._makeItemData(itemData)
         self.additionalData = additionalData
@@ -384,16 +389,13 @@ class BattleItem(object):
         return self._battleID
 
     def getPeripheryID(self):
-        return self._peripheryID
+        return self.additionalData.getPeripheryID()
 
     def isDefence(self):
         return self.itemData.isDefence
 
     def getDirection(self):
         return self.itemData.direction
-
-    def getAvailability(self):
-        return DaysAvailabilityIterator(self.getAttackTime()).next()
 
     def getAttackTime(self):
         return self.itemData.attackTime
@@ -402,7 +404,18 @@ class BattleItem(object):
         return self.getAttackTime() + time_utils.ONE_HOUR
 
     def getAttackTimeLeft(self):
-        return time_utils.getTimeDeltaFromNow(self.getAttackTime())
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.getAttackTime()))
+
+    def getRoundStartTime(self):
+        if self.itemData.roundStart:
+            return self.itemData.roundStart
+        return self.getAttackTime()
+
+    def getRoundFinishTime(self):
+        return self.getAttackFinishTime()
+
+    def getRoundStartTimeLeft(self):
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.getRoundStartTime()))
 
     def getAttackerBuildList(self):
         return self.itemData.attackerBuildList or ()
@@ -453,6 +466,12 @@ class BattleItem(object):
     def getOpponentClanInfo(self):
         return self.additionalData.getOpponentClanInfo()
 
+    def isEnemyReadyForBattle(self):
+        return self.itemData.isEnemyReadyForBattle
+
+    def isBattleRound(self):
+        return self.itemData.isBattleRound
+
     def _makeItemData(self, itemData):
         try:
             data = _FortBattleItemData(**itemData)
@@ -502,6 +521,8 @@ class FortBattlesCache(object):
         if fort:
             fort.onFortBattleChanged += self.__fort_onFortBattleChanged
             fort.onFortBattleRemoved += self.__fort_onFortBattleRemoved
+            fort.onFortBattleUnitReceived += self.__fort_onFortBattleUnitReceived
+            fort.onEnemyStateChanged += self.__fort_onEnemyStateChanged
             self.__cache = self.__buildCache()
         else:
             LOG_ERROR('Client fort is not found')
@@ -511,6 +532,8 @@ class FortBattlesCache(object):
         if fort:
             fort.onFortBattleChanged -= self.__fort_onFortBattleChanged
             fort.onFortBattleRemoved -= self.__fort_onFortBattleRemoved
+            fort.onFortBattleUnitReceived -= self.__fort_onFortBattleUnitReceived
+            fort.onEnemyStateChanged -= self.__fort_onEnemyStateChanged
         self.clear()
 
     @property
@@ -533,16 +556,19 @@ class FortBattlesCache(object):
         if selectedID not in self.__cache:
             LOG_WARNING('Item is not found in cache', selectedID)
             return False
-        return self._setSelectedID(selectedID)
+        else:
+            self.__selectedUnit = None
+            return self._setSelectedID(selectedID)
 
     def getItem(self, battleID):
         try:
-            item = self.__cache[battleID]
+            item, fortBattle = self.__cache[battleID]
         except KeyError:
             LOG_ERROR('Item not found in cache', battleID)
             item = None
+            fortBattle = None
 
-        return item
+        return (item, fortBattle)
 
     def getUnitByIndex(self, index):
         unit = None
@@ -555,9 +581,9 @@ class FortBattlesCache(object):
         return self.__getUnit(self.getSelectedID())
 
     def getIterator(self):
-        for item in self.__cache.itervalues():
+        for item, battleItem in self.__cache.itervalues():
             if item.filter():
-                yield item
+                yield (item, battleItem)
 
     @classmethod
     def _setSelectedID(cls, selectedID):
@@ -577,45 +603,43 @@ class FortBattlesCache(object):
         if not fort:
             LOG_WARNING('Client fort is not found')
             return cache
-        fortBattles = fort.getBattles()
+        fortBattles = fort.getAttacksAndDefencesIn(timePeriod=2 * time_utils.ONE_WEEK)
         selectedID = self.getSelectedID()
         found = False
         for item in fortBattles:
-            if not found and item.getID() == selectedID:
+            battleID = item.getBattleID()
+            if not found and battleID == selectedID:
                 found = True
-            cache[item.getID()] = item
+            battleItem = fort.getBattle(battleID)
+            cache[battleID] = (item, battleItem)
 
         if not found:
             self.clearSelectedID()
         return cache
 
     def __updateItem(self, battleID, fort):
-        fortBattle = fort.getFortBattleShortData(battleID)
-        if fortBattle is None:
-            LOG_ERROR('Fort battle is not found', battleID, fort.sorties)
-            return
+        item = fort.getBattleItemByBattleID(battleID)
+        if item is None:
+            LOG_ERROR('Fort battle is not found', battleID, fort.attacks, fort.defences)
+            return (None, None)
         else:
-            if battleID in self.__cache:
-                item = self.__cache[battleID]
-                item._updateItemData(fortBattle)
-            else:
-                item = fort.getBattle(battleID)
-                self.__cache[battleID] = item
+            fortBattle = fort.getBattle(battleID)
+            self.__cache[battleID] = (item, fortBattle)
             if self.getSelectedID() == battleID:
                 self.__selectedUnit = None
-            return item
+            return (item, fortBattle)
 
     def __requestCallback(self, _):
         self.__isRequestInProcess = False
 
-    def __removeItem(self, sortieID):
+    def __removeItem(self, battleID):
         result = False
-        if sortieID in self.__cache:
-            self.__cache.pop(sortieID)
+        if battleID in self.__cache:
+            self.__cache.pop(battleID)
             result = True
-        if self.getSelectedID() == sortieID:
+        if self.getSelectedID() == battleID:
             self.clearSelectedID()
-        clientIdx = self.__idToIndex.pop(sortieID, None)
+        clientIdx = self.__idToIndex.pop(battleID, None)
         if clientIdx is not None:
             self.__indexToID.pop(clientIdx, None)
         return result
@@ -645,16 +669,31 @@ class FortBattlesCache(object):
                 self.__selectedUnit = unit
             return unit
 
+    def __fort_onEnemyStateChanged(self, battleID, isReady):
+        fort = self.__controller.getFort()
+        if fort:
+            item, battleItem = self.__updateItem(battleID, fort)
+            if item:
+                self.__controller._listeners.notify('onFortBattleChanged', self, item, battleItem)
+
     def __fort_onFortBattleChanged(self, battleID):
         fort = self.__controller.getFort()
         if fort:
-            item = self.__updateItem(battleID, fort)
+            item, battleItem = self.__updateItem(battleID, fort)
             if item:
-                self.__controller._listeners.notify('onFortBattleChanged', self, item)
+                self.__controller._listeners.notify('onFortBattleChanged', self, item, battleItem)
 
     def __fort_onFortBattleRemoved(self, battleID):
         if self.__removeItem(battleID):
             self.__controller._listeners.notify('onFortBattleRemoved', self, battleID)
+
+    def __fort_onFortBattleUnitReceived(self, battleID):
+        fort = self.__controller.getFort()
+        if fort:
+            if self.__selectedID == battleID:
+                self.__selectedUnit = None
+            self.__controller._listeners.notify('onFortBattleUnitReceived', self.__getClientIdx(battleID))
+        return
 
 
 _PublicInfoItemData = namedtuple('_PublicInfoItemData', ('clanDBID',
@@ -692,11 +731,30 @@ class IClanFortInfo(object):
         else:
             return (None, None)
 
+    def getLocalDefHour(self):
+        from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
+        return adjustDefenceHourToLocal(self.getStartDefHour())
+
     def getOffDay(self):
         return NOT_ACTIVATED
 
     def getVacationPeriod(self):
         return (None, None)
+
+    def getLocalOffDay(self):
+        from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+        return adjustOffDayToLocal(self.getOffDay(), self.getLocalDefHour())
+
+    def getDefHourFor(self, timestamp):
+        from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
+        return adjustDefenceHourToLocal(self.getStartDefHour(), timestamp)
+
+    def getLocalOffDayFor(self, timestamp):
+        from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+        return adjustOffDayToLocal(self.getOffDay(), self.getDefHourFor(timestamp))
+
+    def isAvailableForAttack(self, timestamp):
+        return (False, True)
 
 
 @ReprInjector.simple(('__isFavorite', 'isFavorite'), ('itemData', 'data'))
@@ -728,7 +786,7 @@ class PublicInfoItem(IClanFortInfo):
     def getVacationPeriod(self):
         start = calendar.timegm(self.itemData.vacationStart.timetuple())
         finish = calendar.timegm(self.itemData.vacationFinish.timetuple())
-        return (time_utils.makeLocalServerTime(start), time_utils.makeLocalServerTime(finish))
+        return (start, finish)
 
     def getStartDefHour(self):
         return self.itemData.startDefHour
@@ -739,7 +797,7 @@ class PublicInfoItem(IClanFortInfo):
     def getOffDay(self):
         if self.itemData.offDay != NOT_ACTIVATED:
             mysqlDayOfWeekConvertor = (2, 3, 4, 5, 6, 7, 1)
-            return mysqlDayOfWeekConvertor.index(self.itemData.offDay) + 1
+            return mysqlDayOfWeekConvertor.index(self.itemData.offDay)
         return NOT_ACTIVATED
 
     def getHomePeripheryID(self):
@@ -758,10 +816,7 @@ class PublicInfoItem(IClanFortInfo):
         return self.itemData.battleCountForFort
 
     def getAvailability(self):
-        return DaysAvailabilityIterator(time_utils.getTimeTodayForUTC(self.itemData.startDefHour), (self.itemData.offDay,), (self.getVacationPeriod(),)).next()
-
-    def getAvailabilityFromTomorrow(self):
-        return DaysAvailabilityIterator(time_utils.getTimeTodayForUTC(self.itemData.startDefHour), (self.getOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
+        return DaysAvailabilityIterator(time_utils.getTimeTodayForLocal(self.getLocalDefHour()), (self.getLocalOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
 
     def _makeItemData(self, itemData):
         try:
@@ -784,13 +839,18 @@ class PublicInfoCache(object):
         self.__indexToID = {}
         self.__isRequestInProcess = False
         self.__cooldownRequest = None
-        self.__setFilters()
+        self.__firstDefaultQuery = False
+        self.__ifDefaultQueryResult = False
+        self.__selectedClanCard = None
+        self.resetClanAbbrev()
+        self.resetFilters()
         return
 
     def __del__(self):
         LOG_DEBUG('Public info cache deleted:', self)
 
     def clear(self):
+        self.clearSelectedID()
         self.__cache.clear()
         self.__idToIndex.clear()
         self.__indexToID.clear()
@@ -807,7 +867,8 @@ class PublicInfoCache(object):
         self.clear()
         return
 
-    def setDefaultFilterData(self, lvlFrom, lvlTo, extStartDefHour, attackDay):
+    def setDefaultFilterData(self, lvlFrom, lvlTo, extStartDefHour, attackDay = NOT_ACTIVATED):
+        self.__isFitlerApplied = True
         self.__lvlFrom = lvlFrom
         self.__lvlTo = lvlTo
         self.__extStartDefHour = extStartDefHour
@@ -828,10 +889,27 @@ class PublicInfoCache(object):
     def setAbbrevPattern(self, abbrevPattern):
         self.__abbrevPattern = abbrevPattern
 
+    def getAbbrevPattern(self):
+        return self.__abbrevPattern
+
+    def reset(self):
+        self.resetFilters()
+        self.resetClanAbbrev()
+
+    def resetClanAbbrev(self):
+        self.__filterType = FORT_SCOUTING_DATA_FILTER.DEFAULT
+        self.__abbrevPattern = ''
+
     def resetFilters(self):
-        self.__setFilters()
+        self.__isFitlerApplied = False
+        self.__limit = FORT_MAX_ELECTED_CLANS
+        self.__lvlFrom = 5
+        self.__lvlTo = 10
+        self.__extStartDefHour = NOT_ACTIVATED
+        self.__attackDay = NOT_ACTIVATED
 
     def setDefaultRequestFilters(self):
+        self.__isFitlerApplied = False
         self.__filterType = FORT_SCOUTING_DATA_FILTER.DEFAULT
         self.__abbrevPattern = ''
         self.__limit = FORT_MAX_ELECTED_CLANS
@@ -843,7 +921,7 @@ class PublicInfoCache(object):
     def request(self):
         self.__isRequestInProcess = True
         defenceHourFrom, defenceHourTo, attackDay = self.__adjustTimeToGM()
-        self.__controller.request(FortPublicInfoCtx(self.__filterType, self.__abbrevPattern, self.__limit, self.__lvlFrom, self.__lvlTo, defenceHourFrom, defenceHourTo, attackDay, waitingID='fort/publicInfo/get'), self.__requestCacheCallback)
+        self.__controller.request(FortPublicInfoCtx(self.__filterType, self.__abbrevPattern, self.__limit, self.__lvlFrom, self.__lvlTo, defenceHourFrom, defenceHourTo, attackDay, self.__firstDefaultQuery, waitingID='fort/publicInfo/get'), self.__requestCacheCallback)
 
     @property
     def isRequestInProcess(self):
@@ -859,6 +937,10 @@ class PublicInfoCache(object):
 
     def clearSelectedID(self):
         self._setSelectedID(0)
+        self.__selectedClanCard = None
+        if self.__controller:
+            self.__controller._listeners.notify('onEnemyClanCardRemoved')
+        return
 
     def setSelectedID(self, selectedID):
         if selectedID not in self.__cache:
@@ -882,18 +964,36 @@ class PublicInfoCache(object):
             if item.filter(self.__filterType, self.getFavorites()):
                 yield item
 
+    def hasResults(self):
+        return not isEmpty(self.getIterator())
+
+    def isFilterApplied(self):
+        return self.__isFitlerApplied
+
     def getItemsCount(self):
-        return len(self.__cache)
+        return len(tuple(self.getIterator()))
 
     def getFavorites(self):
         return self.__controller.getFort().favorites
+
+    def setFirstDefaultQuery(self, isFirst = False):
+        self.__firstDefaultQuery = isFirst
+
+    def ifDefaultQueryResult(self):
+        return self.__ifDefaultQueryResult
+
+    def storeSelectedClanCard(self, card):
+        self.__selectedClanCard = card
+
+    def getSelectedClanCard(self):
+        return self.__selectedClanCard
 
     def _requestClanCard(self, selectedID):
 
         def requester():
             self.__cooldownRequest = None
             self.__isRequestInProcess = True
-            self.__controller.request(RequestClanCardCtx(selectedID, waitingID=''), self.__requestCallback)
+            self.__controller.request(RequestClanCardCtx(selectedID, waitingID=''), self.__requestClanCardCallback)
             return
 
         if self.__controller._cooldown.isInProcess(FORT_REQUEST_TYPE.REQUEST_CLAN_CARD):
@@ -913,10 +1013,20 @@ class PublicInfoCache(object):
     def _removeStoredData(cls):
         cls.__selectedID = 0
 
+    def __requestClanCardCallback(self, result):
+        self.__requestCallback(result)
+        if not result:
+            Waiting.hide('fort/card/get')
+
     def __requestCacheCallback(self, result, data = None):
         self.__requestCallback(result)
+        if self.__firstDefaultQuery:
+            self.__firstDefaultQuery = False
+            self.__ifDefaultQueryResult = True
+        else:
+            self.__ifDefaultQueryResult = False
         data = data or tuple()
-        if result:
+        if result != FORT_SCOUTING_DATA_ERROR.COOLDOWN:
             self.__cache = {}
             for item in map(PublicInfoItem, data):
                 self.__cache[item.getClanDBID()] = item
@@ -924,19 +1034,11 @@ class PublicInfoCache(object):
     def __requestCallback(self, _):
         self.__isRequestInProcess = False
 
-    def __setFilters(self):
-        self.__filterType = FORT_SCOUTING_DATA_FILTER.DEFAULT
-        self.__abbrevPattern = ''
-        self.__limit = FORT_MAX_ELECTED_CLANS
-        self.__lvlFrom = 5
-        self.__lvlTo = 10
-        self.__extStartDefHour = NOT_ACTIVATED
-        self.__attackDay = NOT_ACTIVATED
-
     def __adjustTimeToGM(self):
         if self.__extStartDefHour != NOT_ACTIVATED:
             attackDay = time_utils.getTimeTodayForLocal(self.__extStartDefHour)
-            defenceHourGMTFrom = time.gmtime(attackDay).tm_hour
+            from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC
+            defenceHourGMTFrom = adjustDefenceHourToUTC(self.__extStartDefHour)
             defenceHourGMTTo = defenceHourGMTFrom + 1
         else:
             attackDay = calendar.timegm(time.gmtime())
@@ -944,6 +1046,11 @@ class PublicInfoCache(object):
             defenceHourGMTTo = 24
         if self.__attackDay != NOT_ACTIVATED:
             attackDay += self.__attackDay * time_utils.ONE_DAY
+        else:
+            startsFrom = 3
+            endsAt = 13
+            randomDay = random.randint(startsFrom, endsAt)
+            attackDay += randomDay * time_utils.ONE_DAY
         return (defenceHourGMTFrom, defenceHourGMTTo, attackDay)
 
 
@@ -1004,11 +1111,11 @@ class ClanCardItem(IClanFortInfo):
 
     def getOffDay(self):
         if self.itemData.offDay != NOT_ACTIVATED:
-            return self.itemData.offDay + 1
+            return self.itemData.offDay
         return NOT_ACTIVATED
 
     def getVacationPeriod(self):
-        return (time_utils.makeLocalServerTime(self.itemData.vacationStart), time_utils.makeLocalServerTime(self.itemData.vacationFinish))
+        return (self.itemData.vacationStart, self.itemData.vacationFinish)
 
     def getTimeNewDefHour(self):
         return self.itemData.timeNewDefHour
@@ -1021,18 +1128,6 @@ class ClanCardItem(IClanFortInfo):
 
     def getNewOffDay(self):
         return self.itemData.newOffDay
-
-    def getArenasCount(self):
-        return self.getStatistics().getBattlesStats().getCombatCount()
-
-    def getArenasWins(self):
-        return self.getStatistics().getBattlesStats().getCombatWins()
-
-    def getWinPercent(self):
-        return self.getStatistics().getBattlesStats().getWinsEfficiency()
-
-    def getResEarnCoeff(self):
-        return self.getStatistics().getBattlesStats().getProfitFactor()
 
     def getClanName(self):
         return self.itemData.clanName
@@ -1071,8 +1166,46 @@ class ClanCardItem(IClanFortInfo):
     def getDictDirOpenAttacks(self):
         return self.itemData.dictDirOpenAttacks
 
-    def getAvailabilityFromTomorrow(self):
-        return DaysAvailabilityIterator(time_utils.getTimeTodayForUTC(self.itemData.defHour), (self.getOffDay(),), (self.getVacationPeriod(),), fortified_regions.g_cache.attackPreorderTime).next()
+    def getAvailability(self, fort):
+        from ClientFortifiedRegion import ATTACK_PLAN_RESULT
+        maxPreorderLimit = FORTIFICATION_ALIASES.ACTIVE_EVENTS_FUTURE_LIMIT * time_utils.ONE_DAY
+        initialTime = time_utils.getTimeTodayForLocal(self.getLocalDefHour())
+        availableTimestamp = initialTime
+        while not fort.canPlanAttackOn(availableTimestamp, self) == ATTACK_PLAN_RESULT.OK:
+            if time_utils.getTimeDeltaFromNow(availableTimestamp) <= maxPreorderLimit:
+                availableTimestamp += time_utils.ONE_DAY
+            else:
+                availableTimestamp = initialTime
+                break
+
+        currentDayStart, _ = time_utils.getDayTimeBoundsForLocal()
+        availableDayStart, _ = time_utils.getDayTimeBoundsForLocal(availableTimestamp)
+        return availableTimestamp
+
+    def getDefHourFor(self, timestamp):
+        if self.getTimeNewDefHour() and timestamp >= self.getTimeNewDefHour():
+            from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
+            return adjustDefenceHourToLocal(self.getNewDefHour(), timestamp)
+        return super(ClanCardItem, self).getDefHourFor(timestamp)
+
+    def getLocalOffDayFor(self, timestamp):
+        if self.getTimeNewOffDay() and timestamp >= self.getTimeNewOffDay():
+            from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+            return adjustOffDayToLocal(self.getNewOffDay(), self.getDefHourFor(timestamp))
+        return super(ClanCardItem, self).getLocalOffDayFor(timestamp)
+
+    def isAvailableForAttack(self, timestamp):
+        hasFreeDirections = False
+        for direction in xrange(1, fortified_regions.g_cache.maxDirections + 1):
+            if bool(self.getDirMask() & 1 << direction):
+                availableTime = self.getDictDirOpenAttacks().get(direction, 0)
+                if availableTime <= timestamp:
+                    hasFreeDirections = True
+                    for _, dir, _, _ in self.getListScheduledAttacksAt(timestamp, timestamp + time_utils.ONE_HOUR):
+                        if direction == dir:
+                            return (True, hasFreeDirections)
+
+        return (False, hasFreeDirections)
 
     def _makeItemData(self, itemData):
         try:
@@ -1086,7 +1219,8 @@ class ClanCardItem(IClanFortInfo):
 
 class _BattleItemAbstract(object):
 
-    def __init__(self, startTime, opponentClanDBID, opponentClanAbbrev, opponentDirection, ourDirection, battleID, attackResult, attackResource):
+    def __init__(self, peripheryID, startTime, opponentClanDBID, opponentClanAbbrev, opponentDirection, ourDirection, battleID, attackResult, attackResource):
+        self._peripheryID = peripheryID
         self._startTime = startTime
         self._ourDirection = ourDirection
         self._opponentClanDBID = opponentClanDBID
@@ -1096,11 +1230,20 @@ class _BattleItemAbstract(object):
         self._attackResult = attackResult
         self._attackResource = attackResource
 
+    def filter(self):
+        return not self.isEnded()
+
     def getType(self):
         return BATTLE_ITEM_TYPE.UNKNOWN
 
+    def getPeripheryID(self):
+        return self._peripheryID
+
     def getStartTime(self):
         return self._startTime
+
+    def getFinishTime(self):
+        return self._startTime + time_utils.ONE_HOUR
 
     def getStartTimeLeft(self):
         return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.getStartTime()))
@@ -1154,11 +1297,7 @@ class _BattleItemAbstract(object):
 class AttackItem(_BattleItemAbstract):
 
     def __init__(self, startTime, ourDirection, defClanDBID, defClanAbbrev, dirTo, battleID, peripheryID, attackResult, attackResource):
-        super(AttackItem, self).__init__(startTime, defClanDBID, defClanAbbrev, dirTo, ourDirection, battleID, attackResult, attackResource)
-        self._peripheryID = peripheryID
-
-    def getPeripheryID(self):
-        return self._peripheryID
+        super(AttackItem, self).__init__(peripheryID, startTime, defClanDBID, defClanAbbrev, dirTo, ourDirection, battleID, attackResult, attackResource)
 
     def getType(self):
         return BATTLE_ITEM_TYPE.ATTACK
@@ -1166,8 +1305,8 @@ class AttackItem(_BattleItemAbstract):
 
 class DefenceItem(_BattleItemAbstract):
 
-    def __init__(self, startTime, ourDirection, attackerClanDBID, attackerClanAbbrev, dirFrom, battleID, attackResult, attackResource):
-        super(DefenceItem, self).__init__(startTime, attackerClanDBID, attackerClanAbbrev, dirFrom, ourDirection, battleID, attackResult, attackResource)
+    def __init__(self, startTime, ourDirection, peripheryID, attackerClanDBID, attackerClanAbbrev, dirFrom, battleID, attackResult, attackResource):
+        super(DefenceItem, self).__init__(peripheryID, startTime, attackerClanDBID, attackerClanAbbrev, dirFrom, ourDirection, battleID, attackResult, attackResource)
 
     def getType(self):
         return BATTLE_ITEM_TYPE.DEFENCE

@@ -8,6 +8,7 @@ from gui.Scaleform.daapi.view.meta.FortSettingsDefenceHourPopoverMeta import For
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.framework import AppRef
 from gui.shared.fortifications.context import DefenceHourCtx
+from gui.shared.fortifications.fort_helpers import adjustDefenceHourToUTC
 from helpers import i18n, time_utils
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui import SystemMessages
@@ -17,11 +18,6 @@ class FortSettingsDefenceHourPopover(View, FortSettingsDefenceHourPopoverMeta, S
 
     def __init__(self, ctx = None):
         super(FortSettingsDefenceHourPopover, self).__init__()
-        self._orderID = str(ctx.get('data'))
-
-    def isAmericanStyle(self):
-        isAmericanStyle = False
-        return isAmericanStyle
 
     def setTexts(self):
         data = {'descriptionText': i18n.makeString(FORTIFICATIONS.SETTINGSDEFENCEHOURPOPOVER_DESCRIPTION),
@@ -35,7 +31,6 @@ class FortSettingsDefenceHourPopover(View, FortSettingsDefenceHourPopoverMeta, S
         if constants.IS_KOREA:
             skipValues = [0, 7]
         data = {'hour': self.fortCtrl.getFort().getLocalDefenceHour(),
-         'isAmericanStyle': self.isAmericanStyle(),
          'skipValues': skipValues}
         self.as_setDataS(data)
 
@@ -55,11 +50,10 @@ class FortSettingsDefenceHourPopover(View, FortSettingsDefenceHourPopoverMeta, S
 
     @process
     def __setup(self, defHour):
-        context = DefenceHourCtx(defHour, waitingID='fort/settings')
-        result = yield self.fortProvider.sendRequest(context)
+        defHourUTC = adjustDefenceHourToUTC(defHour)
+        result = yield self.fortProvider.sendRequest(DefenceHourCtx(defHourUTC, waitingID='fort/settings'))
         if result:
-            defenceHour = context.getDefenceHour()
-            start = time_utils.getTimeTodayForUTC(defenceHour)
-            finish = time_utils.getTimeTodayForUTC(defenceHour + 1)
+            start = time_utils.getTimeTodayForUTC(defHourUTC)
+            finish = time_utils.getTimeTodayForUTC(defHourUTC + 1)
             defenceHourStr = '%s - %s' % (BigWorld.wg_getShortTimeFormat(start), BigWorld.wg_getShortTimeFormat(finish))
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET, defenceHour=defenceHourStr, type=SystemMessages.SM_TYPE.Warning)

@@ -26,7 +26,7 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
 
     @process
     def _doEffect(self, dispatcher):
-        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL)
+        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL, True)
         if not result:
             self._tutorial.refuse()
             return

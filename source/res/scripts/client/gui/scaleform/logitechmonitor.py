@@ -5,11 +5,11 @@ import CommandMapping
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.Flash import Flash
 from adisp import process
+from gui.battle_control import g_sessionProvider
 from items.vehicles import getVehicleType
-from gui.BattleContext import g_battleContext
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared.utils.requesters import StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
 from CurrentVehicle import g_currentVehicle
 from helpers import i18n, isPlayerAccount
 from gui.shared.utils.functions import getArenaSubTypeName
@@ -161,11 +161,11 @@ class _StatsScreen(_LogitechScreen):
         g_currentVehicle.onChanged -= self.onVehicleChange
 
     def onVehicleChange(self):
-        self.uiHolder.call('logitech.setMonoText', [g_currentVehicle.item.userName + '\r\n' + i18n.makeString(g_currentVehicle.getHangarMessage()[0])])
+        self.uiHolder.call('logitech.setMonoText', [g_currentVehicle.item.userName + '\r\n' + i18n.makeString(g_currentVehicle.getHangarMessage()[1])])
 
     @process
     def onLoaded(self):
-        dossier = yield StatsRequester().getAccountDossier()
+        dossier = yield DeprecatedStatsRequester().getAccountDossier()
         self.call('logitech.setStatsData', getDossierTotalBlocksSummary(dossier, isCompact=True))
 
 
@@ -210,7 +210,7 @@ class _BattleScreen(_LogitechScreen):
         self.__timerCallBackId = None
         player = BigWorld.player()
         arena = player.arena if hasattr(player, 'arena') else None
-        if not g_battleContext.isInBattle or arena is None:
+        if not g_sessionProvider.getCtx().isInBattle or arena is None:
             return
         else:
             arenaLength = int(arena.periodEndTime - BigWorld.serverTime())
@@ -232,7 +232,7 @@ class _BattleScreen(_LogitechScreen):
         _enemyTeamName = '#ingame_gui:player_messages/enemy_team_name'
         self.call('battle.fragCorrelationBar.setTeamNames', [_alliedTeamName, _enemyTeamName])
         arena = getattr(BigWorld.player(), 'arena', None)
-        if not g_battleContext.isInBattle or arena is None:
+        if not g_sessionProvider.getCtx().isInBattle or arena is None:
             return
         else:
             CommandMapping.g_instance.onMappingChanged += self.setCommands
@@ -253,7 +253,7 @@ class _BattleScreen(_LogitechScreen):
 
     def onUnload(self):
         arena = getattr(BigWorld.player(), 'arena', None)
-        if not g_battleContext.isInBattle or arena is None:
+        if not g_sessionProvider.getCtx().isInBattle or arena is None:
             return
         else:
             CommandMapping.g_instance.onMappingChanged -= self.setCommands
@@ -280,7 +280,7 @@ class _BattleScreen(_LogitechScreen):
 
     def getFrags(self):
         arena = BigWorld.player().arena
-        if not g_battleContext.isInBattle or arena is None:
+        if not g_sessionProvider.getCtx().isInBattle or arena is None:
             return
         else:
             vehicles = arena.vehicles
@@ -303,7 +303,7 @@ class _BattleScreen(_LogitechScreen):
     def __onSetArenaTime(self, *args):
         self.__timerCallBackId = None
         arena = getattr(BigWorld.player(), 'arena', None)
-        if not g_battleContext.isInBattle or arena is None:
+        if not g_sessionProvider.getCtx().isInBattle or arena is None:
             return
         else:
             arenaLength = int(arena.periodEndTime - BigWorld.serverTime())

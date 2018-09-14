@@ -27,6 +27,7 @@ from Vibroeffects.ControllersManager import ControllersManager as VibrationContr
 from LightFx.LightControllersManager import LightControllersManager as LightFxControllersManager
 import LightFx.LightManager
 import SoundGroups
+from AvatarInputHandler.mathUtils import clamp
 _ENABLE_VEHICLE_VALIDATION = False
 _VEHICLE_DISAPPEAR_TIME = 0.2
 _VEHICLE_APPEAR_TIME = 0.2
@@ -62,87 +63,7 @@ _EFFECT_MATERIALS_HARDNESS = {'ground': 0.1,
 _ALLOW_LAMP_LIGHTS = False
 frameTimeStamp = 0
 
-class SoundMaxPlaybacksChecker():
-
-    def __init__(self, maxPaybacks, period = 0.25):
-        self.__maxPlaybacks = maxPaybacks
-        self.__period = period
-        self.__queue = []
-        self.__distRecalcId = None
-        return
-
-    @staticmethod
-    def __isSoundPlaying(sound):
-        return sound.isPlaying
-
-    def __distRecalc(self):
-        if not isPlayerAvatar():
-            self.__distRecalcId = None
-            self.cleanup()
-            return
-        else:
-            self.__distRecalcId = BigWorld.callback(self.__period, self.__distRecalc)
-            cameraPos = BigWorld.camera().position
-            for soundDistSq in self.__queue:
-                if not self.__isSoundPlaying(soundDistSq[0]):
-                    soundDistSq[0] = None
-                    soundDistSq[1] = 0
-                else:
-                    soundDistSq[1] = (cameraPos - soundDistSq[0].position).lengthSquared
-
-            self.__queue = filter(lambda x: x[0] is not None, self.__queue)
-            self.__queue.sort(key=lambda soundDistSq: soundDistSq[1])
-            return
-
-    def cleanup(self):
-        self.__queue = []
-        if self.__distRecalcId is not None:
-            BigWorld.cancelCallback(self.__distRecalcId)
-            self.__distRecalcId = None
-        return
-
-    def checkAndPlay(self, newSound):
-        if self.__distRecalcId is None:
-            self.__distRecalc()
-        cameraPos = BigWorld.camera().position
-        newSoundDistSq = (cameraPos - newSound.position).lengthSquared
-        for sound, distSq in self.__queue:
-            if sound is newSound:
-                return
-
-        fullQueue = len(self.__queue) == self.__maxPlaybacks
-        insertBeforeIdx = len(self.__queue)
-        while insertBeforeIdx >= 1:
-            sound, distSq = self.__queue[insertBeforeIdx - 1]
-            if distSq < newSoundDistSq:
-                break
-            insertBeforeIdx -= 1
-
-        if insertBeforeIdx < len(self.__queue) or not fullQueue:
-            toInsert = [newSound, newSoundDistSq]
-            self.__queue.insert(insertBeforeIdx, toInsert)
-            if fullQueue:
-                excessSound = self.__queue.pop()[0]
-                if excessSound is not None:
-                    excessSound.stop(True)
-            if not self.__isSoundPlaying(newSound):
-                newSound.play()
-        return
-
-    def removeSound(self, sound):
-        if sound is None:
-            return
-        else:
-            for idx, (snd, _) in enumerate(self.__queue):
-                if snd == sound:
-                    del self.__queue[idx]
-                    return
-
-            return
-
-
 class VehicleAppearance(object):
-    VehicleSoundsChecker = SoundMaxPlaybacksChecker(6)
     gunRecoil = property(lambda self: self.__gunRecoil)
     fashion = property(lambda self: self.__fashion)
     terrainMatKind = property(lambda self: self.__currTerrainMatKind)
@@ -269,11 +190,9 @@ class VehicleAppearance(object):
                 BigWorld.cancelCallback(self.__validateCallbackId)
                 self.__validateCallbackId = None
             if self.__engineSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__engineSound)
                 self.__engineSound.stop()
                 self.__engineSound = None
             if self.__movementSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__movementSound)
                 self.__movementSound.stop()
                 self.__movementSound = None
             if self.__vibrationsCtrl is not None:
@@ -421,7 +340,11 @@ class VehicleAppearance(object):
             self.__engineSound = SoundGroups.g_instance.getSound(fakeModel, event)
             if self.__engineSound is None:
                 self.__engineSound = SoundGroups.g_instance.getSound(modelsDesc['hull']['model'], event)
+            if self.__engineSound:
+                self.__engineSound.play()
             self.__movementSound = SoundGroups.g_instance.getSound(modelsDesc['turret']['model'], eventC)
+            if self.__movementSound:
+                self.__movementSound.play()
             self.__isEngineSoundMutedByLOD = False
         if vehicle.isAlive() and self.__vehicle.isPlayer:
             self.__vibrationsCtrl = VibrationControllersManager()
@@ -465,11 +388,9 @@ class VehicleAppearance(object):
             if vehicle.health > 0:
                 self.changeEngineMode((0, 0))
             elif self.__engineSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__engineSound)
                 self.__engineSound.stop()
                 self.__engineSound = None
             if self.__movementSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.removeSound(self.__movementSound)
                 self.__movementSound.stop()
                 self.__movementSound = None
         currentState = self.__currentDamageState
@@ -678,7 +599,7 @@ class VehicleAppearance(object):
             for i, j in self.modelsDesc.iteritems():
                 modelMap[i] = j['model']
 
-            self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayer, showFlashBang=vehicle.isPlayer, isPlayer=vehicle.isPlayer, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), modelMap=modelMap)
+            self.__effectsPlayer = EffectsListPlayer(effects[1], effects[0], showShockWave=vehicle.isPlayer, showFlashBang=vehicle.isPlayer, isPlayer=vehicle.isPlayer, showDecal=enableDecal, start=vehicle.position + Math.Vector3(0.0, -1.0, 0.0), end=vehicle.position + Math.Vector3(0.0, 1.0, 0.0), modelMap=modelMap, entity_id=vehicle.id)
             self.__effectsPlayer.play(self.modelsDesc['hull']['model'], *modifs)
             return
 
@@ -942,24 +863,24 @@ class VehicleAppearance(object):
                 self.__vt.addValue2('speed_rel', v)
             param = sound.param('speed_rel')
             if param is not None:
-                param.value = v
+                param.value = clamp(-1.0, 1.0, v)
             rots = self.__vehicle.filter.speedInfo.value[1]
             if self.__vt is not None:
                 self.__vt.addValue2('rot_speed_abs', rots)
             param = sound.param('rot_speed_abs')
             if param is not None:
-                param.value = rots
+                param.value = clamp(-1.0, 1.0, rots)
             rotrel = rots / self.__vehicle.typeDescriptor.physics['rotationSpeedLimit']
             if self.__vt is not None:
                 self.__vt.addValue2('rot_speed_rel', rotrel)
             param = sound.param('rot_speed_rel')
             if param is not None:
-                param.value = rotrel
+                param.value = clamp(-1.0, 1.0, rotrel)
             if self.__vt is not None:
                 self.__vt.addValue2('speed_abs', s)
             param = sound.param('speed_abs')
             if param is not None:
-                param.value = s
+                param.value = clamp(-10, 30, s)
             sr = self.__vehicle.typeDescriptor.physics['speedLimits'][0] + self.__vehicle.typeDescriptor.physics['speedLimits'][1]
             if self.__vt is not None:
                 self.__vt.addValue2('speed range', sr)
@@ -971,13 +892,13 @@ class VehicleAppearance(object):
                 self.__vt.addValue2('gear', gear_num)
             param = sound.param('gear_num')
             if param is not None:
-                param.value = gear_num
+                param.value = clamp(0.0, 4.0, gear_num)
             rpm = math.fabs(1 + (s - gear_num * srg) / srg)
             if gear_num == 0:
                 rpm = 0
             param = sound.param('RPM')
             if param is not None:
-                param.value = rpm
+                param.value = clamp(0.0, 1.0, rpm)
             if self.__vt is not None:
                 self.__vt.addValue2('RPM', rpm)
             a = 0
@@ -1023,12 +944,11 @@ class VehicleAppearance(object):
                 if self.__movementSound is not None:
                     self.__movementSound.stop()
             else:
+                if self.__engineSound is not None:
+                    self.__engineSound.play()
+                if self.__movementSound is not None:
+                    self.__movementSound.play()
                 self.changeEngineMode(self.__engineMode)
-        if not isTooFar:
-            if self.__engineSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.checkAndPlay(self.__engineSound)
-            if self.__movementSound is not None:
-                VehicleAppearance.VehicleSoundsChecker.checkAndPlay(self.__movementSound)
         time = BigWorld.time()
         self.__updateTrackSounds()
         return
@@ -1591,7 +1511,7 @@ class _CrashedTrackController():
                 self.__loadInfo = [True, isLeft]
                 BigWorld.fetchModel(self.__va().modelsDesc['chassis']['_stateFunc'](self.__vehicle, 'destroyed'), self.__onModelLoaded)
             if self.__fashion is None:
-                self.__fashion = BigWorld.WGVehicleFashion(True)
+                self.__fashion = BigWorld.WGVehicleFashion(True, 1.0)
                 _setupVehicleFashion(self, self.__fashion, self.__vehicle, True)
             self.__fashion.setCrashEffectCoeff(0.0)
             self.__setupTracksHiding()
@@ -1816,7 +1736,7 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack = False):
                 rightSibling = ''
             fashion.addTrackNode(trackNode[0], trackNode[1], trackNode[2], leftSibling, rightSibling, trackNode[5], trackNode[6])
 
-        fashion.initialUpdateTracks(1.0)
+        fashion.initialUpdateTracks(1.0, 10.0)
         return retValue
 
 

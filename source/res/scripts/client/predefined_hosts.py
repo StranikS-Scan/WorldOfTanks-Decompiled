@@ -419,13 +419,21 @@ class _PreDefinedHostList(object):
         return result
 
     def getSimpleHostsList(self, hosts):
+        result = []
         defAvail = HOST_AVAILABILITY.getDefault()
+        predefined = tuple((host.url for host in self.peripheries()))
         isInProgress = self._isCSISQueryInProgress
         csisResGetter = self.__csisResponse.get
-        result = map(lambda item: (item.url,
-         item.name,
-         defAvail if isInProgress else csisResGetter(item.peripheryID, defAvail),
-         item.peripheryID), hosts)
+        for item in hosts:
+            if item.url not in predefined:
+                status = HOST_AVAILABILITY.IGNORED
+            else:
+                status = defAvail if isInProgress else csisResGetter(item.peripheryID, defAvail)
+            result.append((item.url,
+             item.name,
+             status,
+             item.peripheryID))
+
         return result
 
     def urlIterator(self, primary):

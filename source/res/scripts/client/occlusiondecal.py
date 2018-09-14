@@ -37,17 +37,17 @@ class OcclusionDecal:
         self.__attached = True
         self.__chassisParent = desc['chassis']['model']
         for transform in vehicle.typeDescriptor.chassis['AODecals']:
-            decal = OcclusionDecal.__createDecal(transform, self.__chassisParent)
+            decal = OcclusionDecal.__createDecal(transform, self.__chassisParent, False)
             self.__chassisDecals.append(decal)
 
         self.__hullParent = desc['hull']['model']
         for transform in vehicle.typeDescriptor.hull['AODecals']:
-            decal = OcclusionDecal.__createDecal(transform, self.__hullParent)
+            decal = OcclusionDecal.__createDecal(transform, self.__hullParent, True)
             self.__hullDecals.append(decal)
 
         self.__turretParent = desc['turret']['model']
         for transform in vehicle.typeDescriptor.turret['AODecals']:
-            decal = OcclusionDecal.__createDecal(transform, self.__turretParent)
+            decal = OcclusionDecal.__createDecal(transform, self.__turretParent, True)
             self.__turretDecals.append(decal)
 
     def detach(self):
@@ -88,16 +88,19 @@ class OcclusionDecal:
             self.detach()
 
     @staticmethod
-    def __createDecal(transform, parent):
+    def __createDecal(transform, parent, applyToAll):
         diffuseTexture = 'maps/spots/TankOcclusion/TankOcclusionMap.dds'
         bumpTexture = ''
         hmTexture = ''
         priority = 0
         materialType = 4
-        influence = 62
         visibilityMask = 4294967295L
+        accuracy = 2
+        influence = 30
+        if applyToAll:
+            influence = 62
         decal = BigWorld.WGOcclusionDecal()
-        decal.setup(diffuseTexture, bumpTexture, hmTexture, priority, materialType, influence, visibilityMask)
+        decal.setup(diffuseTexture, bumpTexture, hmTexture, priority, materialType, influence, visibilityMask, accuracy)
         decal.setLocalTransform(transform)
         decal.setParent(parent)
         parent.root.attach(decal)

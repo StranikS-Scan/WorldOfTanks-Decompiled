@@ -1,7 +1,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleBuyWindow.py
 import BigWorld
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
-from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer
+from gui.Scaleform.locale.MENU import MENU
+from gui.shared.gui_items.processors.vehicle import VehicleBuyer, VehicleSlotBuyer, VehicleRenter
 from account_helpers.AccountSettings import AccountSettings, VEHICLE_BUY_WINDOW_SETTINGS
 from debug_utils import LOG_ERROR
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -13,6 +14,8 @@ from gui.shared import g_itemsCache
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE, getItemActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import i18n, time_utils
+from gui.game_control import g_instance as g_gameCtrl
 
 class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
 
@@ -25,6 +28,7 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
         super(VehicleBuyWindow, self)._populate()
         self._initData()
         g_itemsCache.onSyncCompleted += self._initData
+        g_gameCtrl.rentals.onRentChangeNotify += self._onRentChange
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCreditsCallBack,
          'stats.gold': self.__setGoldCallBack})
 
@@ -109,15 +113,51 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
              'ammoPrice': ammoPrice[0],
              'ammoActionPriceData': ammoActionPriceData,
              'slotPrice': slotPrice,
-             'slotActionPriceData': slotActionPriceData}
+             'slotActionPriceData': slotActionPriceData,
+             'isRentable': vehicle.isRentable,
+             'isStudyDisabled': vehicle.hasCrew,
+             'isNoAmmo': not vehicle.hasShells,
+             'rentDataDD': self._getRentData(vehicle, vehiclePricesActionData)}
             self.as_setInitDataS(initData)
             return
 
     def storeSettings(self, expanded):
         AccountSettings.setSettings(VEHICLE_BUY_WINDOW_SETTINGS, expanded)
 
-    @decorators.process('buyItem')
+    def _onRentChange(self, vehicles):
+        vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
+        if vehicle and vehicle.intCD in vehicles:
+            self._initData()
+
+    def _getRentData(self, vehicle, vehiclePricesActionData):
+        result = []
+        rentPackages = vehicle.rentPackages
+        for rentPackage in rentPackages:
+            days = rentPackage['days']
+            result.append({'itemId': days,
+             'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_DAYS, days=days),
+             'price': rentPackage['rentPrice'],
+             'enabled': vehicle.maxRentDuration - vehicle.rentLeftTime >= days * time_utils.ONE_DAY})
+
+        result.append({'itemId': -1,
+         'label': i18n.makeString(MENU.SHOP_MENU_VEHICLE_RENT_FOREVER),
+         'price': vehicle.buyPrice,
+         'enabled': not vehicle.isDisabledForBuy and not vehicle.isHidden,
+         'actionPrice': vehiclePricesActionData})
+        selectedId = -1
+        for ddItem in result:
+            if ddItem['enabled']:
+                selectedId = ddItem['itemId']
+                break
+
+        return {'data': result,
+         'selectedId': selectedId}
+
     def submit(self, data):
+        self.__requestForBuy(data)
+
+    @decorators.process('buyItem')
+    def __requestForBuy(self, data):
         vehicle = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, self.nationID, self.inNationID)
         if data.buySlot:
             result = yield VehicleSlotBuyer(showConfirm=False, showWarning=False).request()
@@ -125,9 +165,13 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
                 SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 return
-        result = yield VehicleBuyer(vehicle, data.buySlot, data.buyAmmo, data.crewType).request()
+        if data.rentId == -1:
+            result = yield VehicleBuyer(vehicle, data.buySlot, data.buyAmmo, data.crewType).request()
+        else:
+            result = yield VehicleRenter(vehicle, data.rentId, data.buyAmmo, data.crewType).request()
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        self.as_setEnabledSubmitBtnS(True)
         if result.success:
             self.storeSettings(data.isHasBeenExpanded)
             self.onWindowClose()
@@ -144,4 +188,5 @@ class VehicleBuyWindow(View, VehicleBuyWindowMeta, AppRef, AbstractWindowView):
     def _dispose(self):
         g_itemsCache.onSyncCompleted -= self._initData
         g_clientUpdateManager.removeObjectCallbacks(self)
+        g_gameCtrl.rentals.onRentChangeNotify -= self._onRentChange
         super(VehicleBuyWindow, self)._dispose()

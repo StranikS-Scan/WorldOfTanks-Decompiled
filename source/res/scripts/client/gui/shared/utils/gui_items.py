@@ -465,9 +465,9 @@ class ShopItem(FittingItem):
                     callback((False, self._getMessage(message)))
             return
 
-        from gui.shared.utils.requesters import StatsRequester, ShopRequester, StatsRequesterr
+        from gui.shared.utils.requesters import DeprecatedStatsRequester, ShopRequester, StatsRequester
         shopRqs = yield ShopRequester().request()
-        statsRqs = yield StatsRequesterr().request()
+        statsRqs = yield StatsRequester().request()
         buyPrice = yield self.getPrice()
         buyGoldAmmoForCredits = buyForCredits and buyPrice[1] > 0 and (self.itemTypeName == 'shell' and shopRqs.isEnabledBuyingGoldShellsForCredits or self.itemTypeName == 'equipment' and shopRqs.isEnabledBuyingGoldEqsForCredits)
         buyPrice = [buyPrice[0] * count, buyPrice[1] * count]
@@ -484,20 +484,20 @@ class ShopItem(FittingItem):
                 shells = vehicles.getDefaultAmmoForGun(self.descriptor.gun)
                 for i in range(0, len(shells), 2):
                     _, nationIdx, shellInnationIdx = vehicles.parseIntCompactDescr(shells[i])
-                    shellPrice = yield StatsRequester().getShellPrice(nationIdx, shells[i])
+                    shellPrice = yield DeprecatedStatsRequester().getShellPrice(nationIdx, shells[i])
                     buyPrice[0] += shellPrice[0] * shells[i + 1]
                     buyPrice[1] += shellPrice[1] * shells[i + 1]
 
             if isSlot:
-                success = yield StatsRequester().buySlot()
+                success = yield DeprecatedStatsRequester().buySlot()
                 if not success:
                     SystemMessages.g_instance.pushI18nMessage('#system_messages:buy_slot/server_error', SystemMessages.SM_TYPE.Error)
                     return
-                price = yield StatsRequester().getSlotsPrices()
+                price = yield DeprecatedStatsRequester().getSlotsPrices()
                 buyPrice[1] += price[1][0]
         if (statsRqs.credits, statsRqs.gold) >= tuple(buyPrice):
             if self.itemTypeName == 'vehicle':
-                BigWorld.player().shop.buyVehicle(self.descriptor.type.id[0], self.descriptor.type.id[1], isShell, isCrew, crew_type, callback=getBuyResponse)
+                BigWorld.player().shop.buyVehicle(self.descriptor.type.id[0], self.descriptor.type.id[1], isShell, isCrew, crew_type, -1, callback=getBuyResponse)
             else:
                 BigWorld.player().shop.buy(ITEM_TYPE_INDICES[self.itemTypeName], self.nation, self.compactDescr, int(count), int(buyGoldAmmoForCredits), getBuyResponse)
         elif callback is not None:
@@ -723,8 +723,8 @@ class InventoryItem(FittingItem):
 
     @process
     def __responseRemove(self, code, callback, invVehicle, slotIdx, equipments = [], isUseGold = False):
-        from gui.shared.utils.requesters import StatsRequester
-        cost = yield StatsRequester().getPaidRemovalCost()
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
+        cost = yield DeprecatedStatsRequester().getPaidRemovalCost()
         if code >= 0:
             if equipments:
                 pass
@@ -780,6 +780,7 @@ class InventoryVehicle(InventoryItem):
         CRITICAL = 'critical'
         INFO = 'info'
         WARNING = 'warning'
+        RENTED = 'rented'
 
     def __init__(self, compactDescr, id, crew = [], shells = {}, ammoLayout = {}, repairCost = 0, health = 0, lock = 0, equipments = [], equipmentsLayout = [], settings = 0):
         InventoryItem.__init__(self, ITEM_TYPE_NAMES[1], compactDescr=compactDescr, id=id, count=1)
@@ -851,7 +852,7 @@ class InventoryVehicle(InventoryItem):
     @async
     @process
     def getSellPrice(self, sellEqs = True, performDismantling = False, callback = None):
-        from gui.shared.utils.requesters import VehicleItemsRequester, StatsRequester
+        from gui.shared.utils.requesters import VehicleItemsRequester, DeprecatedStatsRequester
         getMoney = yield self.getPrice()
         getMoney = list(getMoney)
         putMoney = [0, 0]
@@ -860,7 +861,7 @@ class InventoryVehicle(InventoryItem):
         devicesNotRemovablePrice = 0
         devicesNotRemovableCount = 0
         equipmentsPrice = 0
-        shellsPrice = yield StatsRequester().getAmmoSellPrice(self.getShellsList())
+        shellsPrice = yield DeprecatedStatsRequester().getAmmoSellPrice(self.getShellsList())
         for art in artefacts:
             artPrice = yield art.getPrice()
             if not hasattr(art.descriptor, 'removable') or art.descriptor['removable']:
@@ -879,19 +880,19 @@ class InventoryVehicle(InventoryItem):
             getMoney[0] -= equipmentsPrice
         if performDismantling:
             getMoney[0] -= devicesNotRemovablePrice
-            removeDeviceCost = yield StatsRequester().getPaidRemovalCost()
+            removeDeviceCost = yield DeprecatedStatsRequester().getPaidRemovalCost()
             putMoney[1] += removeDeviceCost * devicesNotRemovableCount
         callback((getMoney, putMoney))
 
     @async
     @process
     def sellParams(self, callback):
-        from gui.shared.utils.requesters import VehicleItemsRequester, StatsRequester, Requester
+        from gui.shared.utils.requesters import VehicleItemsRequester, DeprecatedStatsRequester, Requester
         artefacts = VehicleItemsRequester((self,)).getItems(('equipment', 'optionalDevice'))
-        removeDeviceCost = yield StatsRequester().getPaidRemovalCost()
+        removeDeviceCost = yield DeprecatedStatsRequester().getPaidRemovalCost()
         shopVehicles = yield Requester('vehicle').getFromShop()
         vehiclePrice = yield self.getPrice()
-        shellsPrice = yield StatsRequester().getAmmoSellPrice(self.getShellsList())
+        shellsPrice = yield DeprecatedStatsRequester().getAmmoSellPrice(self.getShellsList())
         shellsCount = 0
         for shell in self.shells:
             shellsCount += shell.count
@@ -1175,8 +1176,8 @@ class InventoryVehicle(InventoryItem):
     @async
     @process
     def isElite(self, callback):
-        from gui.shared.utils.requesters import StatsRequester
-        eliteVehicles = yield StatsRequester().getEliteVehicles()
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
+        eliteVehicles = yield DeprecatedStatsRequester().getEliteVehicles()
         callback(self.isGroupElite(eliteVehicles))
 
     def isGroupElite(self, eliteVehicles):
@@ -1452,8 +1453,8 @@ class InventoryTankman(InventoryItem):
     @async
     @process
     def dropSkills(self, dropSkillsCostIdx, callback):
-        from gui.shared.utils.requesters import StatsRequester
-        dropSkillsCost = yield StatsRequester().getDropSkillsCost()
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
+        dropSkillsCost = yield DeprecatedStatsRequester().getDropSkillsCost()
         price = (dropSkillsCost[dropSkillsCostIdx]['credits'], dropSkillsCost[dropSkillsCostIdx]['gold'])
         message_type = getTankmanOpertnSysMessageType(dropSkillsCostIdx)
 
@@ -1476,8 +1477,8 @@ class InventoryTankman(InventoryItem):
     @async
     @process
     def respec(self, vehTypeCompDescr, tmanCostTypeIdx, callback):
-        from gui.shared.utils.requesters import StatsRequester
-        upgradeParams = yield StatsRequester().getTankmanCost()
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
+        upgradeParams = yield DeprecatedStatsRequester().getTankmanCost()
 
         def respecResponse(code):
             if code >= 0:
@@ -1518,7 +1519,7 @@ class InventoryTankman(InventoryItem):
     @async
     @process
     def unload(self, callback, unloadAll):
-        from gui.shared.utils.requesters import StatsRequester, Requester
+        from gui.shared.utils.requesters import DeprecatedStatsRequester, Requester
         messageCode = 'unloadCrew' if unloadAll else 'unloadTankman'
 
         def unloadResponse(code):
@@ -1531,7 +1532,7 @@ class InventoryTankman(InventoryItem):
         ready = True
         if ready:
             tankmanInBarracks = 0
-            berthsCount = yield StatsRequester().getTankmenBerthsCount()
+            berthsCount = yield DeprecatedStatsRequester().getTankmenBerthsCount()
             tankmen = yield Requester('tankman').getFromInventory()
             for tankman in tankmen:
                 if not tankman.isInTank:
@@ -1603,9 +1604,9 @@ class InventoryTankman(InventoryItem):
     @async
     @process
     def replacePassport(self, firstNameID, lastNameID, iconID, isFemale, callback):
-        from gui.shared.utils.requesters import StatsRequester
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
         from gui.shared import g_itemsCache
-        passportCost = yield StatsRequester().getPassportChangeCost()
+        passportCost = yield DeprecatedStatsRequester().getPassportChangeCost()
         gold = g_itemsCache.items.stats.gold
 
         def replacePassportResponse(code):

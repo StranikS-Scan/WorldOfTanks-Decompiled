@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/__init__.py
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from messenger import g_settings
-from messenger.gui.Scaleform.channels import bw
+from messenger.gui.Scaleform.channels import bw, bw_chat2
 from messenger.gui.interfaces import IControllersCollection
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.events import g_messengerEvents
@@ -123,13 +123,24 @@ class ControllersCollection(IControllersCollection):
 class LobbyControllers(ControllersCollection):
 
     def __init__(self):
-        super(LobbyControllers, self).__init__({PROTO_TYPE.BW: bw.LobbyControllersFactory()})
+        super(LobbyControllers, self).__init__({PROTO_TYPE.BW: bw.LobbyControllersFactory(),
+         PROTO_TYPE.BW_CHAT2: bw_chat2.LobbyControllersFactory()})
+
+    def factory(self, channel):
+        if channel.getProtoType() == PROTO_TYPE.BW_CHAT2 and not g_settings.server.BW_CHAT2.isEnabled():
+            return None
+        else:
+            return super(LobbyControllers, self).factory(channel)
 
 
 class BattleControllers(ControllersCollection):
 
     def __init__(self):
-        super(BattleControllers, self).__init__({PROTO_TYPE.BW: bw.BattleControllersFactory()})
+        if g_settings.server.BW_CHAT2.isEnabled():
+            factories = {PROTO_TYPE.BW_CHAT2: bw_chat2.BattleControllersFactory()}
+        else:
+            factories = {PROTO_TYPE.BW: bw.BattleControllersFactory()}
+        super(BattleControllers, self).__init__(factories)
 
     def _initController(self, controller):
         controller.activate()

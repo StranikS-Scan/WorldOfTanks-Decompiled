@@ -240,8 +240,8 @@ class WalletValidator(SyncValidator):
 
 class VehicleSellsLeftValidator(SyncValidator):
 
-    def __init__(self, vehicle):
-        super(VehicleSellsLeftValidator, self).__init__()
+    def __init__(self, vehicle, isEnabled = True):
+        super(VehicleSellsLeftValidator, self).__init__(isEnabled)
         self.vehicle = vehicle
 
     def _validate(self):

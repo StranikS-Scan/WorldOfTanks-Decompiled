@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/messenger/formatters/service_channel.py
 import types
-import re
-from FortifiedRegionBase import FORT_ATTACK_RESULT
+from FortifiedRegionBase import FORT_ATTACK_RESULT, NOT_ACTIVATED
 from account_shared import getFairPlayViolationName
 from adisp import async, process
 from chat_shared import decompressSysMessage
@@ -10,19 +9,23 @@ import account_helpers
 import ArenaType
 import BigWorld
 from gui import GUI_SETTINGS
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared.utils import BoundMethodWeakref
 from gui.shared.utils.functions import getTankmanRoleLevel
+from gui.shared import formatters as shared_fmts
+from gui.shared.fortifications import formatters as fort_fmts
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
 from gui.shared.utils.transport import z_loads
-from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from messenger.m_constants import MESSENGER_I18N_FILE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 import offers
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.shared.utils.gui_items import formatPrice
 from helpers import i18n, html, getClientLanguage, getLocalizedData
@@ -33,6 +36,19 @@ from account_helpers import rare_achievements
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from messenger import g_settings
+from predefined_hosts import g_preDefinedHosts
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, PREBATTLE_INVITE_STATE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, FORT_BUILDING_TYPE, FORT_ORDER_TYPE, FORT_BUILDING_TYPE_NAMES
+from messenger.formatters import TimeFormatter, NCContextItemFormatter, NCWindowHandler, SYS_MSG_EXTRA_HANDLER_TYPE, SysMsgExtraData
+
+def _getTimeStamp(message):
+    import time
+    if message.createdAt is not None:
+        result = time.mktime(message.createdAt.timetuple())
+    else:
+        LOG_WARNING('Invalid value of created_at = None')
+        result = time.time()
+    return result
+
 
 class ServiceChannelFormatter(object):
 
@@ -118,8 +134,18 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             ctx['achieves'] = self.__makeAchievementsString(battleResult)
             ctx['lock'] = self.__makeVehicleLockString(ctx['vehicleName'], battleResult)
             ctx['quests'] = self.__makeQuestsAchieve(message)
-            ctx['fortBuilding'] = self.__makeFortBuildingString(battleResult)
-            templateName = self.__battleResultKeys[battleResult['isWinner']]
+            ctx['fortBuilding'] = ''
+            battleResKey = battleResult['isWinner']
+            team = battleResult.get('team', 0)
+            if battleResult.get('fortBuilding', None) is not None:
+                fortBuilding = battleResult['fortBuilding']
+                buildTypeID, buildTeam = fortBuilding.get('buildTypeID'), fortBuilding.get('buildTeam')
+                if buildTypeID:
+                    ctx['fortBuilding'] = g_settings.htmlTemplates.format('battleResultFortBuilding', ctx={'fortBuilding': FortBuilding(typeID=buildTypeID).userName,
+                     'clanAbbrev': ''})
+                if battleResKey == 0:
+                    battleResKey = 1 if buildTeam == team else -1
+            templateName = self.__battleResultKeys[battleResKey]
             formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
              'savedData': battleResult.get('arenaUniqueID', 0)})
             settings = self._getGuiSettings(message, templateName)
@@ -133,10 +159,10 @@ class BattleResultsFormatter(ServiceChannelFormatter):
                 elif fairplayViolations[0] != 0:
                     penaltyType = 'warning'
                     violation = fairplayViolations[0]
-                settings.extraHandlerData = {'penaltyType': penaltyType,
+                settings.extraHandlerData = SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.PUNISHMENT, {'penaltyType': penaltyType,
                  'arenaName': i18n.makeString(arenaType.name),
                  'time': TimeFormatter.getActualMsgTimeStr(arenaCreateTime),
-                 'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))}
+                 'reason': i18n.makeString(DIALOGS.all('punishmentWindow/reason/%s' % getFairPlayViolationName(violation)))})
             return (formatted, settings)
         else:
             return (None, None)
@@ -155,16 +181,6 @@ class BattleResultsFormatter(ServiceChannelFormatter):
             return g_settings.htmlTemplates.format('battleQuests', {'achieves': fmtMsg})
         else:
             return ''
-
-    @classmethod
-    def __makeFortBuildingString(cls, battleResult):
-        if 'fortBuilding' in battleResult:
-            fortBuilding = battleResult['fortBuilding'] or {}
-            buildTypeID, buildTeam = fortBuilding.get('buildTypeID'), fortBuilding.get('buildTeam')
-            if buildTypeID:
-                return g_settings.htmlTemplates.format('battleResultFortBuilding', ctx={'fortBuilding': FortBuilding(typeID=buildTypeID).userName,
-                 'clanAbbrev': ''})
-        return ''
 
     def __makeVehicleLockString(self, vehicle, battleResult):
         expireTime = battleResult.get('vehTypeUnlockTime', 0)
@@ -472,6 +488,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
     def _getVehicleNames(cls, vehicles, exclude = None, validateNegative = True, showCrewLvl = True):
         addVehNames = []
         removeVehNames = []
+        rentedVehNames = []
         if exclude is None:
             exclude = []
         vehGetter = getattr(vehicles, 'get', None)
@@ -484,9 +501,12 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
                 if vehCompDescr in exclude:
                     continue
                 crewLvl = 50
-                if vehGetter is not None and callable(vehGetter) and showCrewLvl:
+                isRented = False
+                if vehGetter is not None and callable(vehGetter):
                     vehData = vehGetter(vehCompDescr, {})
-                    crewLvl = getTankmanRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
+                    isRented = len(vehData.get('rent', {})) > 0 and not len(vehData.get('customCompensation', {}))
+                    if showCrewLvl:
+                        crewLvl = getTankmanRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
                 try:
                     vehUserString = vehicles_core.getVehicleType(vehCompDescr).userString
                     if crewLvl > 50:
@@ -494,17 +514,19 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
                         vehUserString = '{0:>s} ({1:>s})'.format(vehUserString, crewLvl)
                     if isNegative and validateNegative:
                         removeVehNames.append(vehUserString)
+                    elif isRented:
+                        rentedVehNames.append(vehUserString)
                     else:
                         addVehNames.append(vehUserString)
                 except:
                     LOG_ERROR('Wrong vehicle compact descriptor', vehCompDescr)
                     LOG_CURRENT_EXCEPTION()
 
-        return (addVehNames, removeVehNames)
+        return (addVehNames, removeVehNames, rentedVehNames)
 
     @classmethod
     def _getVehiclesString(cls, vehicles, exclude = None, htmlTplPostfix = 'InvoiceReceived'):
-        addVehNames, removeVehNames = cls._getVehicleNames(vehicles, exclude=exclude)
+        addVehNames, removeVehNames, rentedVehNames = cls._getVehicleNames(vehicles, exclude=exclude)
         result = ''
         if len(addVehNames):
             result = g_settings.htmlTemplates.format('vehiclesAccrued' + htmlTplPostfix, ctx={'vehicles': ', '.join(addVehNames)})
@@ -512,6 +534,8 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             if len(result):
                 result += '<br/>'
             result += g_settings.htmlTemplates.format('vehiclesDebited' + htmlTplPostfix, ctx={'vehicles': ', '.join(removeVehNames)})
+        if len(rentedVehNames):
+            result += g_settings.htmlTemplates.format('vehiclesRented' + htmlTplPostfix, ctx={'vehicles': ', '.join(rentedVehNames)})
         return result
 
     @classmethod
@@ -523,7 +547,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             values = []
             items = itemDict.get('vehicles')
             if len(items):
-                itemNames, _ = cls._getVehicleNames(items, validateNegative=False, showCrewLvl=False)
+                itemNames, _, _ = cls._getVehicleNames(items, validateNegative=False, showCrewLvl=False)
             gold = comptn.get('gold', 0)
             if gold > 0:
                 values.append(html.format('goldCompensation' + htmlTplPostfix, ctx={'amount': BigWorld.wg_getGoldFormat(gold)}))
@@ -537,7 +561,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
         return '<br/>'.join(result)
 
     @classmethod
-    def __getTankmenString(cls, tmen):
+    def _getTankmenString(cls, tmen):
         tmanUserStrings = []
         for tmanData in tmen:
             try:
@@ -614,7 +638,7 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
             operations.append(self.__getItemsString(items))
         tmen = dataEx.get('tankmen', {})
         if tmen is not None and len(tmen) > 0:
-            operations.append(self.__getTankmenString(tmen))
+            operations.append(self._getTankmenString(tmen))
         vehicles = dataEx.get('vehicles', {})
         if vehicles is not None and len(vehicles) > 0:
             exclude = comptnDict.get('ex_vehicles', [])
@@ -623,12 +647,18 @@ class InvoiceReceivedFormatter(ServiceChannelFormatter):
                 operations.append(result)
         compensation = data.get('compensation', [])
         if len(compensation):
+            LOG_DEBUG('compensation!!!!!', compensation)
             comptnStr = self._getComptnString(compensation)
             if len(comptnStr):
                 operations.append(comptnStr)
         slots = dataEx.get('slots')
         if slots:
             operations.append(self.__getSlotsString(slots))
+        customizations = dataEx.get('customizations', [])
+        for customizationItem in customizations:
+            custType = customizationItem['custType']
+            operations.append(i18n.makeString('#system_messages:customization/added/%s' % custType))
+
         if not operations:
             return
         else:
@@ -829,15 +859,6 @@ class PrebattleFormatter(ServiceChannelFormatter):
             key = '#{0:>s}:serviceChannelMessages/prebattle/finish/{1:>s}'.format(MESSENGER_I18N_FILE, finishString)
         return i18n.makeString(key)
 
-    def _getTimeStamp(self, message):
-        import time
-        if message.createdAt is not None:
-            result = time.mktime(message.createdAt.timetuple())
-        else:
-            LOG_WARNING('Invalid value of created_at = None')
-            result = time.time()
-        return result
-
 
 class PrebattleArenaFinishFormatter(PrebattleFormatter):
     _battleFinishReasonKeys = {FINISH_REASON.TECHNICAL: ('technical', True),
@@ -884,7 +905,7 @@ class PrebattleArenaFinishFormatter(PrebattleFormatter):
             formatted = g_settings.msgTemplates.format('prebattleArenaFinish', ctx={'desc': self._makeDescriptionString(data),
              'opponents': self._getOpponentsString(data.get('opponents', {})),
              'result': battleResult,
-             'subtotal': subtotal}, data={'timestamp': self._getTimeStamp(message),
+             'subtotal': subtotal}, data={'timestamp': _getTimeStamp(message),
              'icon': self._getIconId(prbType)})
             return (formatted, self._getGuiSettings(message, 'prebattleArenaFinish'))
 
@@ -953,7 +974,7 @@ class PrebattleDestructionFormatter(PrebattleFormatter):
             formatted = g_settings.msgTemplates.format('prebattleDestruction', ctx={'desc': self._makeDescriptionString(data, showBattlesCount=False),
              'opponents': self._getOpponentsString(data.get('opponents', {})),
              'result': battleResult,
-             'total': total}, data={'timestamp': self._getTimeStamp(message),
+             'total': total}, data={'timestamp': _getTimeStamp(message),
              'icon': self._getIconId(prbType)})
             return (formatted, self._getGuiSettings(message, 'prebattleDestruction'))
 
@@ -1019,9 +1040,9 @@ class ConverterFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         data = message.data
         text = []
-        if data.get('playerInscriptions'):
+        if data.get('inscriptions'):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/inscriptions'))
-        if data.get('playerEmblems'):
+        if data.get('emblems'):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/emblems'))
         if data.get('camouflages'):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/camouflages'))
@@ -1199,15 +1220,16 @@ class TokenQuestsFormatter(ServiceChannelFormatter):
     def __init__(self, asBattleFormatter = False):
         self._asBattleFormatter = asBattleFormatter
 
-    __questsTemplateKey = 'battleQuests'
-
     def format(self, message, *args):
         formatted, settings = (None, None)
         fmt = self._formatQuestAchieves(message)
         if fmt is not None:
-            settings = self._getGuiSettings(message, 'tokenQuests')
-            formatted = g_settings.msgTemplates.format('tokenQuests', {'achieves': self._formatQuestAchieves(message)})
+            settings = self._getGuiSettings(message, self._getTemplateName())
+            formatted = g_settings.msgTemplates.format(self._getTemplateName(), {'achieves': self._formatQuestAchieves(message)})
         return (formatted, settings)
+
+    def _getTemplateName(self):
+        return 'tokenQuests'
 
     def _formatQuestAchieves(self, message):
         data = message.data
@@ -1249,9 +1271,17 @@ class TokenQuestsFormatter(ServiceChannelFormatter):
 
         if len(itemsNames):
             result.append(self.__makeQuestsAchieve('battleQuestsItems', names=', '.join(itemsNames)))
+        customizations = data.get('customizations', [])
+        for customizationItem in customizations:
+            custType = customizationItem['custType']
+            result.append(i18n.makeString('#system_messages:customization/added/%s' % custType))
+
         berths = data.get('berths', 0)
         if berths:
             result.append(self.__makeQuestsAchieve('battleQuestsBerths', berths=BigWorld.wg_getIntegralFormat(berths)))
+        tmen = data.get('tankmen', {})
+        if tmen is not None and len(tmen) > 0:
+            result.append(InvoiceReceivedFormatter._getTankmenString(tmen))
         if not self._asBattleFormatter:
             achieves = data.get('popUpRecords', [])
             achievesNames = set()
@@ -1265,7 +1295,7 @@ class TokenQuestsFormatter(ServiceChannelFormatter):
             if len(achievesNames):
                 result.append(self.__makeQuestsAchieve('battleQuestsPopUps', achievements=', '.join(achievesNames)))
         if len(result):
-            return ''.join(result)
+            return '<br/>'.join(result)
         else:
             return
 
@@ -1345,6 +1375,7 @@ class NCMessageFormatter(ServiceChannelFormatter):
                     return (None, None)
             formatted = g_settings.msgTemplates.format(templateKey, ctx={'topic': topic,
              'body': body})
+            self.__processWindow(data)
             return (formatted, settings)
 
     def __getTemplateKey(self, data):
@@ -1379,6 +1410,14 @@ class NCMessageFormatter(ServiceChannelFormatter):
         if 'context' in data:
             body = body % self.__formatContext(data['context'])
         return body
+
+    def __processWindow(self, data):
+        if 'window' in data:
+            if 'context' in data:
+                ctx = self.__formatContext(data['context'])
+            else:
+                ctx = {}
+            NCWindowHandler.handle(data['window'], **ctx)
 
     def __fetchPollData(self, data, settings):
         result = False
@@ -1426,15 +1465,10 @@ class ClanMessageFormatter(ServiceChannelFormatter):
             return None
 
 
-class FortMessageFormatter(ServiceChannelFormatter):
-    __templates = {SYS_MESSAGE_FORT_EVENT.FORT_READY: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.RESERVE_EXPIRED: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.RESERVE_PRODUCED: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.STORAGE_OVERFLOW: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.ORDER_CANCELED: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.REATTACHED_TO_BASE: 'fortMessageWarning',
-     SYS_MESSAGE_FORT_EVENT.DEF_HOUR_SHUTDOWN: 'fortHightPriorityMessageWarning'}
+class FortMessageFormatter(ServiceChannelFormatter, AppRef):
+    __templates = {SYS_MESSAGE_FORT_EVENT.DEF_HOUR_SHUTDOWN: 'fortHightPriorityMessageWarning',
+     SYS_MESSAGE_FORT_EVENT.BASE_DESTROYED: 'fortHightPriorityMessageWarning'}
+    DEFAULT_WARNING = 'fortMessageWarning'
 
     def __init__(self):
         super(FortMessageFormatter, self).__init__()
@@ -1445,14 +1479,25 @@ class FortMessageFormatter(ServiceChannelFormatter):
          SYS_MESSAGE_FORT_EVENT.RESERVE_PRODUCED: BoundMethodWeakref(self._reserveProducedMessage),
          SYS_MESSAGE_FORT_EVENT.STORAGE_OVERFLOW: BoundMethodWeakref(self._storageOverflowMessage),
          SYS_MESSAGE_FORT_EVENT.ORDER_CANCELED: BoundMethodWeakref(self._orderCanceledMessage),
-         SYS_MESSAGE_FORT_EVENT.REATTACHED_TO_BASE: BoundMethodWeakref(self._reattachedToBaseMessage)}
+         SYS_MESSAGE_FORT_EVENT.REATTACHED_TO_BASE: BoundMethodWeakref(self._reattachedToBaseMessage),
+         SYS_MESSAGE_FORT_EVENT.DEF_HOUR_ACTIVATED: BoundMethodWeakref(self._defHourManipulationMessage),
+         SYS_MESSAGE_FORT_EVENT.DEF_HOUR_CHANGED: BoundMethodWeakref(self._defHourManipulationMessage),
+         SYS_MESSAGE_FORT_EVENT.OFF_DAY_ACTIVATED: BoundMethodWeakref(self._offDayActivatedMessage),
+         SYS_MESSAGE_FORT_EVENT.VACATION_STARTED: BoundMethodWeakref(self._vacationActivatedMessage),
+         SYS_MESSAGE_FORT_EVENT.PERIPHERY_CHANGED: BoundMethodWeakref(self._peripheryChangedMessage),
+         SYS_MESSAGE_FORT_EVENT.BUILDING_DAMAGED: BoundMethodWeakref(self._buildingDamagedMessage),
+         SYS_MESSAGE_FORT_EVENT.BASE_DESTROYED: BoundMethodWeakref(self._simpleMessage),
+         SYS_MESSAGE_FORT_EVENT.ORDER_COMPENSATED: BoundMethodWeakref(self._orderCompensationMessage),
+         SYS_MESSAGE_FORT_EVENT.ATTACK_PLANNED: BoundMethodWeakref(self._attackPlannedMessage),
+         SYS_MESSAGE_FORT_EVENT.DEFENCE_PLANNED: BoundMethodWeakref(self._defencePlannedMessage),
+         SYS_MESSAGE_FORT_EVENT.BATTLE_DELETED: BoundMethodWeakref(self._battleDeletedMessage)}
 
     def format(self, message, *args):
         LOG_DEBUG('Message has received from fort', message)
         data = message.data
         if data and 'event' in data:
             event = data['event']
-            templateKey = self.__templates.get(event)
+            templateKey = self.__templates.get(event, self.DEFAULT_WARNING)
             formatter = self.__messagesFormatters.get(event)
             if formatter is not None:
                 messageSting = formatter(data)
@@ -1462,55 +1507,86 @@ class FortMessageFormatter(ServiceChannelFormatter):
             LOG_WARNING('FortMessageFormatter has no available formatters for given message type: ', event)
         return (None, None)
 
+    def _buildMessage(self, event, ctx = None):
+        if ctx is None:
+            ctx = {}
+        return i18n.makeString(('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event]), **ctx)
+
     def _simpleMessage(self, data):
-        event = data['event']
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event])
+        return self._buildMessage(data['event'])
+
+    def _peripheryChangedMessage(self, data):
+        return self._buildMessage(data['event'], {'peripheryName': g_preDefinedHosts.periphery(data['peripheryID']).name})
 
     def _reserveActivatedMessage(self, data):
         event = data['event']
         orderTypeID = data['orderTypeID']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        order = i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.UI_ORDERS_BIND[orderTypeID])
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
-        timeExpiration = fort_text.getTimeDurationStr(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(data['timeExpiration'])))
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], order=order, time=timeExpiration)
+        order = fort_fmts.getOrderUserString(data['orderTypeID'])
+        if event == SYS_MESSAGE_FORT_EVENT.RESERVE_ACTIVATED and FORT_ORDER_TYPE.isOrderPermanent(orderTypeID):
+            return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED, order=order)
+        timeExpiration = self.app.utilsManager.textManager.getTimeDurationStr(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(data['timeExpiration'])))
+        return self._buildMessage(event, {'order': order,
+         'time': timeExpiration})
 
     def _reserveExpiredMessage(self, data):
-        event = data['event']
-        orderTypeID = data['orderTypeID']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        order = i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.UI_ORDERS_BIND[orderTypeID])
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], order=order)
+        return self._buildMessage(data['event'], {'order': fort_fmts.getOrderUserString(data['orderTypeID'])})
 
     def _reserveProducedMessage(self, data):
-        event = data['event']
-        orderTypeID = data['orderTypeID']
-        count = data['count']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        order = i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.UI_ORDERS_BIND[orderTypeID])
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], order=order, count=count)
+        return self._buildMessage(data['event'], {'order': fort_fmts.getOrderUserString(data['orderTypeID']),
+         'count': data['count']})
 
     def _storageOverflowMessage(self, data):
-        event = data['event']
-        buildTypeID = data['buildTypeID']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        building = i18n.makeString('#fortifications:Buildings/buildingName/%s' % FortViewHelper.UI_BUILDINGS_BIND[buildTypeID])
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], building=building)
+        return self._buildMessage(data['event'], {'building': fort_fmts.getBuildingUserString(data['buildTypeID'])})
 
     def _orderCanceledMessage(self, data):
-        event = data['event']
-        buildTypeID = data['buildTypeID']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        building = i18n.makeString('#fortifications:Buildings/buildingName/%s' % FortViewHelper.UI_BUILDINGS_BIND[buildTypeID])
         import fortified_regions
-        order = i18n.makeString('#fortifications:General/orderType/%s' % FortViewHelper.UI_ORDERS_BIND[fortified_regions.g_cache.buildings[buildTypeID].orderType])
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], building=building, order=order)
+        buildTypeID = data['buildTypeID']
+        orderTypeID = fortified_regions.g_cache.buildings[buildTypeID].orderType
+        return self._buildMessage(data['event'], {'building': fort_fmts.getBuildingUserString(buildTypeID),
+         'order': fort_fmts.getOrderUserString(orderTypeID)})
 
     def _reattachedToBaseMessage(self, data):
-        event = data['event']
-        from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-        building = i18n.makeString('#fortifications:Buildings/buildingName/%s' % FortViewHelper.UI_BUILDINGS_BIND[FORT_BUILDING_TYPE.MILITARY_BASE])
-        return i18n.makeString('#messenger:serviceChannelMessages/fort/%s' % SYS_MESSAGE_FORT_EVENT_NAMES[event], building=building)
+        return self._buildMessage(data['event'], {'building': fort_fmts.getBuildingUserString(FORT_BUILDING_TYPE.MILITARY_BASE)})
+
+    def _defHourManipulationMessage(self, data):
+        return self._buildMessage(data['event'], {'defenceHour': fort_fmts.getDefencePeriodString(time_utils.getTimeTodayForUTC(data['defenceHour']))})
+
+    def _offDayActivatedMessage(self, data):
+        offDay = data['offDay']
+        if offDay == NOT_ACTIVATED:
+            return i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_FORT_NO_OFF_DAY_ACTIVATED)
+        if 'defenceHour' in data:
+            from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal, adjustDefenceHourToLocal
+            offDayLocal = adjustOffDayToLocal(offDay, adjustDefenceHourToLocal(data['defenceHour']))
+        else:
+            LOG_WARNING('_offDayActivatedMessage: received incorrect data, using offDay without adjustment... ', data)
+            offDayLocal = offDay
+        return self._buildMessage(data['event'], {'offDay': fort_fmts.getDayOffString(offDayLocal)})
+
+    def _vacationActivatedMessage(self, data):
+        return self._buildMessage(data['event'], {'vacationPeriod': fort_fmts.getVacationPeriodString(data['timeStart'], data['timeEnd'])})
+
+    def _buildingDamagedMessage(self, data):
+        buildTypeID = data['buildTypeID']
+        if buildTypeID == FORT_BUILDING_TYPE.MILITARY_BASE:
+            return i18n.makeString('#messenger:serviceChannelMessages/fort/{0}_{1}'.format(SYS_MESSAGE_FORT_EVENT_NAMES[data['event']], FORT_BUILDING_TYPE_NAMES[FORT_BUILDING_TYPE.MILITARY_BASE]))
+        return self._buildMessage(data['event'], {'building': fort_fmts.getBuildingUserString(buildTypeID)})
+
+    def _orderCompensationMessage(self, data):
+        return self._buildMessage(data['event'], {'orderTypeName': fort_fmts.getOrderUserString(data['orderTypeID'])})
+
+    def _attackPlannedMessage(self, data):
+        return self._buildMessage(data['event'], {'clan': fort_fmts.getClanAbbrevString(data['defenderClanAbbrev']),
+         'date': BigWorld.wg_getShortDateFormat(data['timeAttack']),
+         'time': BigWorld.wg_getShortTimeFormat(data['timeAttack'])})
+
+    def _defencePlannedMessage(self, data):
+        return self._buildMessage(data['event'], {'clan': fort_fmts.getClanAbbrevString(data['attackerClanAbbrev']),
+         'date': BigWorld.wg_getShortDateFormat(data['timeAttack']),
+         'time': BigWorld.wg_getShortTimeFormat(data['timeAttack'])})
+
+    def _battleDeletedMessage(self, data):
+        return self._buildMessage(data['event'], {'clan': shared_fmts.getClanAbbrevString(data['enemyClanAbbrev'])})
 
 
 class FortBattleResultsFormatter(ServiceChannelFormatter):
@@ -1524,32 +1600,26 @@ class FortBattleResultsFormatter(ServiceChannelFormatter):
     def format(self, message, *args):
         battleResult = message.data
         if battleResult:
-            enemyClanAbbrev, _ = self.__getClanInfo(battleResult.get('enemyClanName'))
+            enemyClanAbbrev = battleResult.get('enemyClanName', '')
             winnerCode = battleResult['isWinner']
             if winnerCode == 0 and battleResult['attackResult'] == FORT_ATTACK_RESULT.TECHNICAL_DRAW:
                 winnerCode = -1
                 battleResult['isWinner'] = winnerCode
-            ctx = {'enemyClanAbbrev': enemyClanAbbrev,
-             'resourceClan': BigWorld.wg_getIntegralFormat(battleResult.get('fortResourceByClan', 0)),
+            resourceKey = 'fortResourceCaptureByClan' if winnerCode > 0 else 'fortResourceLostByClan'
+            ctx = {'enemyClanAbbrev': shared_fmts.getClanAbbrevString(enemyClanAbbrev),
+             'resourceClan': BigWorld.wg_getIntegralFormat(battleResult.get(resourceKey, 0)),
              'resourcePlayer': BigWorld.wg_getIntegralFormat(battleResult.get('fortResource', 0))}
-            ctx['achieves'] = self.__makeAchievementsString(battleResult)
-            templateName = self.__battleResultKeys[battleResult['isWinner']]
+            ctx['achieves'] = self._makeAchievementsString(battleResult)
+            templateName = self.__battleResultKeys[winnerCode]
             settings = self._getGuiSettings(message, templateName)
+            settings.extraHandlerData = SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS, battleResult)
             formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'savedData': battleResult})
             return (formatted, settings)
         else:
             return (None, None)
 
     @classmethod
-    def __getClanInfo(cls, enemyClanName):
-        try:
-            result = re.search('\\[(.+)\\] (.+)', enemyClanName)
-            return (result.group(1), result.group(2))
-        except:
-            return ('', '')
-
-    @classmethod
-    def __makeAchievementsString(cls, battleResult):
+    def _makeAchievementsString(cls, battleResult):
         result = []
         for recordIdx, value in battleResult.get('popUpRecords', []):
             recordName = DB_ID_TO_RECORD[recordIdx]
@@ -1567,3 +1637,175 @@ class FortBattleResultsFormatter(ServiceChannelFormatter):
         if len(result):
             res = g_settings.htmlTemplates.format('battleResultAchieves', {'achieves': ', '.join(map(lambda a: a.getUserName(), sorted(result)))})
         return res
+
+
+class FortBattleRoundEndFormatter(ServiceChannelFormatter):
+    __battleResultKeys = {-1: 'combatFortTechDefeatResult',
+     1: 'combatFortTechVictoryResult'}
+
+    def isNotify(self):
+        return True
+
+    def format(self, message, *args):
+        battleResult = message.data
+        if battleResult is not None:
+            ctx = {}
+            winnerCode = battleResult['isWinner']
+            if winnerCode == 0:
+                winnerCode = -1
+            templateName = self.__battleResultKeys[winnerCode]
+            settings = self._getGuiSettings(message, templateName)
+            if 'combats' in battleResult:
+                _, _, _, isDefendersBuilding, buildTypeID = battleResult['combats']
+                if battleResult['isDefence'] is isDefendersBuilding:
+                    buildOwnerClanAbbrev = battleResult['ownClanName']
+                else:
+                    buildOwnerClanAbbrev = battleResult['enemyClanName']
+                ctx['fortBuilding'] = g_settings.htmlTemplates.format('battleResultFortBuilding', ctx={'fortBuilding': FortBuilding(typeID=buildTypeID).userName,
+                 'clanAbbrev': '[%s]' % buildOwnerClanAbbrev})
+            else:
+                ctx['fortBuilding'] = ''
+            formatted = g_settings.msgTemplates.format(templateName, ctx=ctx)
+            return (formatted, settings)
+        else:
+            return (None, None)
+
+
+class FortBattleInviteFormatter(ServiceChannelFormatter):
+
+    def isNotify(self):
+        return True
+
+    def format(self, message, *args):
+        from gui.prb_control.formatters.invites import PrbFortBattleInviteHtmlTextFormatter
+        battleData = message.data
+        if battleData:
+            inviteWrapper = self.__toFakeInvite(battleData)
+            formatter = PrbFortBattleInviteHtmlTextFormatter()
+            formatted = g_settings.msgTemplates.format('fortBattleInvite', ctx={'text': formatter.getText(inviteWrapper)}, data={'timestamp': _getTimeStamp(message),
+             'savedData': (battleData.get('battleID'), battleData.get('peripheryID')),
+             'icon': formatter.getIconName(inviteWrapper)})
+            return (formatted, self._getGuiSettings(message, 'fortBattleInvite'))
+        else:
+            return (None, None)
+
+    @classmethod
+    def __toFakeInvite(cls, battleData):
+        from gui.shared.ClanCache import g_clanCache
+        from gui.prb_control.invites import PrbInviteWrapper
+        return PrbInviteWrapper(id=-1, receiver=BigWorld.player().name, state=PREBATTLE_INVITE_STATE.ACTIVE, receiverDBID=BigWorld.player().databaseID, prebattleID=-1, receiverClanAbbrev=g_lobbyContext.getClanAbbrev(g_clanCache.clanInfo), peripheryID=battleData.get('peripheryID'), extraData=battleData, type=PREBATTLE_TYPE.FORT_BATTLE, alwaysAvailable=True)
+
+
+class VehicleRentedFormatter(ServiceChannelFormatter):
+    _templateKey = 'vehicleRented'
+
+    def format(self, message, *args):
+        data = message.data
+        vehTypeCD = data.get('vehTypeCD', None)
+        expiryTime = data.get('expiryTime', None)
+        if vehTypeCD is not None:
+            return (self._getMessage(vehTypeCD, expiryTime), self._getGuiSettings(message, self._templateKey))
+        else:
+            return (None, None)
+
+    def _getMessage(self, vehTypeCD, expiryTime):
+        vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
+        ctx = {'vehicleName': vehicleName,
+         'expiryTime': TimeFormatter.getLongDatetimeFormat(expiryTime)}
+        return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
+
+
+class RentalsExpiredFormatter(ServiceChannelFormatter):
+    _templateKey = 'rentalsExpired'
+
+    def format(self, message, *args):
+        vehTypeCD = message.data.get('vehTypeCD', None)
+        if vehTypeCD is not None:
+            return (self._getMessage(vehTypeCD), self._getGuiSettings(message, self._templateKey))
+        else:
+            return (None, None)
+
+    def _getMessage(self, vehTypeCD):
+        vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
+        ctx = {'vehicleName': vehicleName}
+        return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
+
+
+class RentCompensationFormatter(ServiceChannelFormatter):
+    _templateKey = 'rentCompensation'
+
+    def format(self, message, *args):
+        dataList = message.data
+        compensations = []
+        for data in dataList:
+            gold = data.get('gold', 0)
+            credits = data.get('credits', 0)
+            vehTypeCD = data.get('vehTypeCD', None)
+            vehicleName = vehicles_core.getVehicleType(vehTypeCD).userString
+            if gold > 0:
+                key = 'goldRentCompensationReceived'
+                formattedGold = BigWorld.wg_getGoldFormat(account_helpers.convertGold(gold))
+                ctx = {'gold': formattedGold,
+                 'vehicleName': vehicleName}
+            else:
+                key = 'creditsRentCompensationReceived'
+                formattedCredits = BigWorld.wg_getIntegralFormat(credits)
+                ctx = {'credits': formattedCredits,
+                 'vehicleName': vehicleName}
+            compensations.append(g_settings.htmlTemplates.format(key, ctx=ctx))
+
+        if len(compensations) > 0:
+            return (self._getMessage(compensations), self._getGuiSettings(message, self._templateKey))
+        else:
+            return (None, None)
+            return
+
+    def _getMessage(self, compensationList):
+        ctx = {'compensations': ',\n'.join(compensationList)}
+        return g_settings.msgTemplates.format(self._templateKey, ctx=ctx)
+
+
+class RefSystemReferralBoughtVehicleFormatter(ServiceChannelFormatter):
+
+    def isNotify(self):
+        return True
+
+    def format(self, message, *args):
+        settings = self._getGuiSettings(message, 'refSystemBoughtVehicle')
+        formatted = g_settings.msgTemplates.format('refSystemBoughtVehicle', {'userName': message.data.get('nickName', '')})
+        return (formatted, settings)
+
+
+class RefSystemReferralContributedXPFormatter(ServiceChannelFormatter):
+
+    def isNotify(self):
+        return True
+
+    def format(self, message, *args):
+        data = message.data
+        settings = self._getGuiSettings(message, 'refSystemContributeXp')
+        formatted = g_settings.msgTemplates.format('refSystemContributeXp', {'userName': data.get('nickName', ''),
+         'xp': BigWorld.wg_getIntegralFormat(data.get('xp', 0))})
+        return (formatted, settings)
+
+
+class RefSystemQuestsFormatter(TokenQuestsFormatter):
+
+    def format(self, message, *args):
+        formatted, settings = super(RefSystemQuestsFormatter, self).format(message, *args)
+        data = message.data
+        if data is not None and settings:
+            extraData = {'completedQuestIDs': data.get('completedQuestIDs', set()),
+             'tankmen': [],
+             'vehicles': []}
+            settings.extraHandlerData = SysMsgExtraData(SYS_MSG_EXTRA_HANDLER_TYPE.REF_QUEST_AWARD, extraData)
+            for tmanCompDescr in data.get('tankmen') or []:
+                extraData['tankmen'].append(Tankman(tmanCompDescr))
+
+            for vehTypeCompDescr in data.get('vehicles') or {}:
+                extraData['vehicles'].append(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
+
+        return (formatted, settings)
+
+    def _getTemplateName(self):
+        return 'refSystemQuests'

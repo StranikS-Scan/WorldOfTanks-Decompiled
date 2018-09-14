@@ -151,10 +151,12 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_AUTOLOAD = '#battle_results:details/calculations/autoLoad'
     DETAILS_CALCULATIONS_AUTOEQUIP = '#battle_results:details/calculations/autoEquip'
     DETAILS_CALCULATIONS_AOGASFACTOR = '#battle_results:details/calculations/aogasFactor'
+    DETAILS_CALCULATIONS_PREMIUMVEHICLEXP = '#battle_results:details/calculations/premiumVehicleXP'
     DETAILS_CALCULATIONS_TOTAL = '#battle_results:details/calculations/total'
     DETAILS_CALCULATIONS_FIRSTWIN = '#battle_results:details/calculations/firstWin'
     DETAILS_CALCULATIONS_IGRBONUS = '#battle_results:details/calculations/igrBonus'
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
+    DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
     TANKSELECTOR_NEXT = '#battle_results:tankSelector/next'
     COMMON_TOOLTIP_ENUM = (COMMON_TOOLTIP_ASSIST_HEADER,
      COMMON_TOOLTIP_ASSIST_DESCRIPTION,

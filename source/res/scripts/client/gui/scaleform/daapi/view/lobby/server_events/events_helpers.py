@@ -6,7 +6,6 @@ import BigWorld
 import constants
 from account_helpers.AccountSettings import AccountSettings
 from helpers import i18n, int2roman, time_utils
-from debug_utils import LOG_DEBUG
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import makeHtmlString
@@ -15,6 +14,7 @@ from gui.shared.utils import CONST_CONTAINER
 from gui.shared.server_events import formatters, conditions
 from gui.shared.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
+from quest_xml_source import MAX_BONUS_LIMIT
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 
@@ -249,9 +249,10 @@ class _EventInfo(object):
 
 class _QuestInfo(_EventInfo):
     PROGRESS_TOOLTIP_MAX_ITEMS = 4
+    SIMPLE_BONUSES_MAX_ITEMS = 5
 
     def _getBonuses(self, svrEvents):
-        result, simpleBonuses = [], []
+        result, simpleBonusesList, customizationsList = [], [], []
         for b in self.event.getBonuses():
             if b.isShowInGUI():
                 if b.getName() == 'dossier':
@@ -259,17 +260,27 @@ class _QuestInfo(_EventInfo):
                         if record[0] != ACHIEVEMENT_BLOCK.RARE:
                             result.append(formatters.packAchieveElement(RECORD_DB_IDS[record]))
 
+                elif b.getName() == 'customizations':
+                    customizationsList.extend(b.getList())
                 else:
-                    simpleBonuses.append(b.format())
+                    simpleBonusesList.extend(b.formattedList())
 
-        result.append(formatters.packTextBlock(', '.join(simpleBonuses)))
+        label = ', '.join(simpleBonusesList)
+        fullLabel = None
+        if len(simpleBonusesList) > self.SIMPLE_BONUSES_MAX_ITEMS:
+            label = ', '.join(simpleBonusesList[0:self.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
+            fullLabel = ', '.join(simpleBonusesList)
+        result.append(formatters.packTextBlock(label, fullLabel=fullLabel))
+        if len(customizationsList):
+            result.append(formatters.packCustomizations(customizationsList))
         parents = [ qID for _, qIDs in self.event.getParents().iteritems() for qID in qIDs ]
         for qID, q in self._getEventsByIDs(parents, svrEvents or {}).iteritems():
             result.append(formatters.packTextBlock(i18n.makeString('#quests:bonuses/item/task', q.getUserName()), questID=qID))
 
         if len(result):
             return formatters.todict(result)
-        return []
+        else:
+            return []
 
     def _getBonusCount(self, pCur = None):
         if not self.event.isCompleted(progress=pCur):
@@ -301,7 +312,7 @@ class _QuestInfo(_EventInfo):
                 return (self.EVENT_STATUS.NOT_AVAILABLE, msg)
             bonus = self.event.bonusCond
             bonusLimit = bonus.getBonusLimit()
-            if bonusLimit is None:
+            if bonusLimit is None or bonusLimit >= MAX_BONUS_LIMIT:
                 msg = i18n.makeString(QUESTS.DETAILS_HEADER_COMPLETION_UNLIMITED)
             else:
                 groupBy = bonus.getGroupByValue()
@@ -420,9 +431,9 @@ class _QuestInfo(_EventInfo):
                 subBlocks.append(formatters.packSeparator(label=i18n.makeString('#quests:details/conditions/postBattle/separator')))
             subBlocks.extend(formatters.indexing(postBattleFmtConds))
         if bonus.isDaily():
-            resetOffset = time_utils.ONE_DAY - self._getDailyProgressResetTimeOffset()
-            if resetOffset >= 0:
-                subBlocks.append(formatters.packTextBlock(label=formatters.formatYellow('#quests:details/conditions/postBattle/dailyReset') % {'time': time.strftime(i18n.makeString('#quests:details/conditions/postBattle/dailyReset/timeFmt'), time.localtime(resetOffset))}))
+            resetHourOffset = (time_utils.ONE_DAY - self._getDailyProgressResetTimeOffset()) / 3600
+            if resetHourOffset >= 0:
+                subBlocks.append(formatters.packTextBlock(label=formatters.formatYellow('#quests:details/conditions/postBattle/dailyReset') % {'time': time.strftime(i18n.makeString('#quests:details/conditions/postBattle/dailyReset/timeFmt'), time_utils.getTimeStructInLocal(time_utils.getTimeTodayForUTC(hour=resetHourOffset)))}))
         result = []
         if len(subBlocks) or battlesCount:
             if not self.event.isGuiDisabled():

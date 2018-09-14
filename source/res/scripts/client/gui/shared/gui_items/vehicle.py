@@ -1,12 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
+from itertools import izip
 import BigWorld
 import constants
-from itertools import izip
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from constants import WIN_XP_FACTOR_MODE
-from debug_utils import LOG_DEBUG
 from gui import prb_control
-from helpers import i18n
+from gui.shared.economics import calcRentPackages
+from helpers import i18n, time_utils
 from items import vehicles, tankmen, getTypeInfoByName
 from account_shared import LayoutIterator
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
@@ -46,6 +46,7 @@ VEHICLE_BATTLE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(VEHICLE_
 
 class VEHICLE_TAGS(CONST_CONTAINER):
     PREMIUM = 'premium'
+    PREMIUM_IGR = 'premiumIGR'
     CANNOT_BE_SOLD = 'cannot_be_sold'
     SECRET = 'secret'
     SPECIAL = 'special'
@@ -55,6 +56,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
 
 class Vehicle(FittingItem, HasStrCD):
     NOT_FULL_AMMO_MULTIPLIER = 0.2
+    MAX_RENT_MULTIPLIER = 2
 
     class VEHICLE_STATE:
         DAMAGED = 'damaged'
@@ -67,6 +69,9 @@ class Vehicle(FittingItem, HasStrCD):
         CREW_NOT_FULL = 'crewNotFull'
         AMMO_NOT_FULL = 'ammoNotFull'
         SERVER_RESTRICTION = 'serverRestriction'
+        RENTAL_IS_ORVER = 'rentalIsOver'
+        IGR_RENTAL_IS_ORVER = 'igrRentalIsOver'
+        IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         NOT_SUITABLE = 'not_suitable'
 
     CAN_SELL_STATES = [VEHICLE_STATE.UNDAMAGED, VEHICLE_STATE.CREW_NOT_FULL, VEHICLE_STATE.AMMO_NOT_FULL]
@@ -84,6 +89,7 @@ class Vehicle(FittingItem, HasStrCD):
             _, nID, innID = vehicles.parseIntCompactDescr(typeCompDescr)
             vehDescr = vehicles.VehicleDescr(typeID=(nID, innID))
         self.__descriptor = vehDescr
+        self.rentInfo = None
         HasStrCD.__init__(self, strCompactDescr)
         FittingItem.__init__(self, vehDescr.type.compactDescr, proxy)
         self.inventoryID = inventoryID
@@ -93,6 +99,9 @@ class Vehicle(FittingItem, HasStrCD):
         self.isFullyElite = False
         self.clanLock = 0
         self.isUnique = self.isHidden
+        self.rentPackages = []
+        self.hasRentPackages = False
+        self.isDisabledForBuy = False
         invData = dict()
         if proxy is not None:
             invDataTmp = proxy.inventory.getItems(GUI_ITEM_TYPE.VEHICLE, inventoryID)
@@ -102,11 +111,14 @@ class Vehicle(FittingItem, HasStrCD):
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles:
                 self.dailyXPFactor = proxy.shop.dailyXPFactor
             self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
-            self.isFullyElite = self.isElite and len([ data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs ]) == 0
+            self.isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
             self.clanLock = clanDamageLock or clanNewbieLock
+            self.isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
+            self.hasRentPackages = len(proxy.shop.getVehicleRentPrices().get(self.intCD, {})) > 0
         self.inventoryCount = 1 if len(invData.keys()) else 0
+        self.rentInfo = invData.get('rent', None)
         self.settings = invData.get('settings', 0)
         self.lock = invData.get('lock', 0)
         self.repairCost, self.health = invData.get('repair', (0, 0))
@@ -132,9 +144,18 @@ class Vehicle(FittingItem, HasStrCD):
         self.crewIndices = dict([ (invID, idx) for idx, invID in enumerate(crewList) ])
         self.crew = self._buildCrew(crewList, proxy)
         self.lastCrew = invData.get('lastCrew')
+        self.rentPackages = calcRentPackages(self, proxy)
         return
 
+    @property
+    def buyPrice(self):
+        if self.isRented and not self.rentalIsOver:
+            return (self._buyPrice[0] - self.rentCompensation[0], self._buyPrice[1] - self.rentCompensation[1])
+        return self._buyPrice
+
     def _calcSellPrice(self, proxy):
+        if self.isRented:
+            return (0, 0)
         price = list(self.sellPrice)
         defaultDevices, installedDevices, _ = self.descriptor.getDevices()
         for defCompDescr, instCompDescr in izip(defaultDevices, installedDevices):
@@ -148,6 +169,8 @@ class Vehicle(FittingItem, HasStrCD):
         return price
 
     def _calcDefaultSellPrice(self, proxy):
+        if self.isRented:
+            return (0, 0)
         price = list(self.defaultSellPrice)
         defaultDevices, installedDevices, _ = self.descriptor.getDevices()
         for defCompDescr, instCompDescr in izip(defaultDevices, installedDevices):
@@ -255,6 +278,60 @@ class Vehicle(FittingItem, HasStrCD):
         return self.inventoryID
 
     @property
+    def isRentable(self):
+        return self.hasRentPackages and not self.isPurchased
+
+    @property
+    def isPurchased(self):
+        return self.isInInventory and self.rentInfo is None
+
+    @property
+    def rentExpiryTime(self):
+        if self.rentInfo is not None:
+            return self.rentInfo[0]
+        else:
+            return 0
+
+    @property
+    def rentCompensation(self):
+        if self.rentInfo is not None:
+            return self.rentInfo[1]
+        else:
+            return (0, 0)
+
+    @property
+    def isRentAvailable(self):
+        return self.maxRentDuration - self.rentLeftTime >= self.minRentDuration
+
+    @property
+    def minRentPrice(self):
+        return findFirst(None, self.rentPackages, {}).get('rentPrice', None)
+
+    @property
+    def isRented(self):
+        return self.rentInfo is not None
+
+    @property
+    def rentLeftTime(self):
+        return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(self.rentExpiryTime)))
+
+    @property
+    def maxRentDuration(self):
+        if len(self.rentPackages) > 0:
+            return max((item['days'] for item in self.rentPackages)) * self.MAX_RENT_MULTIPLIER * time_utils.ONE_DAY
+        return 0
+
+    @property
+    def minRentDuration(self):
+        if len(self.rentPackages) > 0:
+            return min((item['days'] for item in self.rentPackages)) * time_utils.ONE_DAY
+        return 0
+
+    @property
+    def rentalIsOver(self):
+        return self.isRented and self.rentLeftTime <= 0
+
+    @property
     def descriptor(self):
         return self.__descriptor
 
@@ -281,6 +358,10 @@ class Vehicle(FittingItem, HasStrCD):
         return sum((s.count for s in self.shells)) >= self.ammoMaxSize * self.NOT_FULL_AMMO_MULTIPLIER
 
     @property
+    def hasShells(self):
+        return sum((s.count for s in self.shells)) > 0
+
+    @property
     def hasCrew(self):
         return findFirst(lambda x: x[1] is not None, self.crew) is not None
 
@@ -293,16 +374,27 @@ class Vehicle(FittingItem, HasStrCD):
         return Vehicle.VEHICLE_STATE.UNDAMAGED
 
     def getState(self):
+        from gui.game_control import g_instance
         ms = self.modelState
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
+        elif self.isRented and self.rentalIsOver:
+            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER
+            if self.isPremiumIGR:
+                ms = Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER
+        elif self.isRented and self.isPremiumIGR and g_instance.igr.getRoomType() != constants.IGR_TYPE.PREMIUM:
+            ms = Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
         elif self.isInPrebattle:
             ms = Vehicle.VEHICLE_STATE.IN_PREBATTLE
         elif self.isLocked:
             ms = Vehicle.VEHICLE_STATE.LOCKED
         elif self.isDisabledInRoaming:
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
-        if ms == Vehicle.VEHICLE_STATE.UNDAMAGED:
+        ms = self.__checkUndamagedState(ms)
+        return (ms, self.__getStateLevel(ms))
+
+    def __checkUndamagedState(self, state):
+        if state == Vehicle.VEHICLE_STATE.UNDAMAGED:
             from gui.prb_control.dispatcher import g_prbLoader
             prbDisp = g_prbLoader.getDispatcher()
             isHistoricalBattle = False
@@ -310,12 +402,12 @@ class Vehicle(FittingItem, HasStrCD):
                 preQueue = prbDisp.getPreQueueFunctional()
                 isHistoricalBattle = preQueue is not None and preQueue.getQueueType() == constants.QUEUE_TYPE.HISTORICAL
             if self.repairCost > 0:
-                ms = Vehicle.VEHICLE_STATE.DAMAGED
+                state = Vehicle.VEHICLE_STATE.DAMAGED
             elif not self.isCrewFull:
-                ms = Vehicle.VEHICLE_STATE.CREW_NOT_FULL
+                state = Vehicle.VEHICLE_STATE.CREW_NOT_FULL
             elif not self.isAmmoFull and not isHistoricalBattle:
-                ms = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
-        return (ms, self.__getStateLevel(ms))
+                state = Vehicle.VEHICLE_STATE.AMMO_NOT_FULL
+        return state
 
     @classmethod
     def __getStateLevel(cls, state):
@@ -323,7 +415,9 @@ class Vehicle(FittingItem, HasStrCD):
          Vehicle.VEHICLE_STATE.DAMAGED,
          Vehicle.VEHICLE_STATE.EXPLODED,
          Vehicle.VEHICLE_STATE.DESTROYED,
-         Vehicle.VEHICLE_STATE.SERVER_RESTRICTION]:
+         Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
+         Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER,
+         Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER]:
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in [Vehicle.VEHICLE_STATE.UNDAMAGED]:
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -332,6 +426,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isPremium(self):
         return self._checkForTags(VEHICLE_TAGS.PREMIUM)
+
+    @property
+    def isPremiumIGR(self):
+        return self._checkForTags(VEHICLE_TAGS.PREMIUM_IGR)
 
     @property
     def isSecret(self):
@@ -349,6 +447,11 @@ class Vehicle(FittingItem, HasStrCD):
     def isDisabledInRoaming(self):
         from gui import game_control
         return self._checkForTags(VEHICLE_TAGS.DISABLED_IN_ROAMING) and game_control.g_instance.roaming.isInRoaming()
+
+    @property
+    def isDisabledInPremIGR(self):
+        st, _ = self.getState()
+        return st == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY
 
     @property
     def name(self):
@@ -385,6 +488,11 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def canSell(self):
         st, _ = self.getState()
+        if self.isRented:
+            if not self.rentalIsOver:
+                return False
+            if st in (self.VEHICLE_STATE.RENTAL_IS_ORVER, self.VEHICLE_STATE.IGR_RENTAL_IS_ORVER):
+                st = self.__checkUndamagedState(self.modelState)
         return st in self.CAN_SELL_STATES and not self._checkForTags(VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
@@ -439,16 +547,20 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isReadyToPrebattle(self):
+        if self.isRented and self.rentalIsOver:
+            return False
         result = not self.hasLockMode()
         if result:
-            result = not self.isBroken and self.isCrewFull
+            result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR
         return result
 
     @property
     def isReadyToFight(self):
+        if self.isRented and self.rentalIsOver:
+            return False
         result = not self.hasLockMode()
         if result:
-            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming
+            result = self.isAlive and self.isCrewFull and not self.isDisabledInRoaming and not self.isDisabledInPremIGR
         return result
 
     @property
@@ -474,7 +586,41 @@ class Vehicle(FittingItem, HasStrCD):
     def mayPurchase(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
             return (False, 'center_unavailable')
+        if self.isDisabledForBuy:
+            return (False, 'isDisabledForBuy')
+        if self.isPremiumIGR:
+            return (False, 'premiumIGR')
         return super(Vehicle, self).mayPurchase(money)
+
+    def mayRent(self, money):
+        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
+            return (False, 'center_unavailable')
+        if not self.isRentable:
+            return (False, 'rental_disabled')
+        if self.isPremiumIGR:
+            return (False, 'premiumIGR')
+        if not self.isRentAvailable:
+            return (False, 'rental_time_exceeded')
+        if self.minRentPrice:
+            currency = ''
+            if self.minRentPrice[1]:
+                currency = 'gold'
+                if self.minRentPrice[1] <= money[1]:
+                    return (True, '')
+            if self.minRentPrice[0]:
+                currency = 'credit'
+                if self.minRentPrice[0] <= money[0]:
+                    return (True, '')
+            return (False, '%s_error' % currency)
+        return (True, '')
+
+    def mayRentOrBuy(self, money):
+        canRent, rentReason = self.mayRent(money)
+        canBuy, buyReason = self.mayPurchase(money)
+        reason = ''
+        if not canRent and not canBuy:
+            reason = rentReason if len(rentReason) > 0 else buyReason
+        return (canRent or canBuy, reason)
 
     def getAutoUnlockedItems(self):
         return self.descriptor.type.autounlockedItems[:]

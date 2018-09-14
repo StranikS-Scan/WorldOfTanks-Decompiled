@@ -10,17 +10,11 @@ class AmmoQuantityAspect(aop.Aspect):
         self.__triggerRef = weakref.ref(trigger)
 
     def atCall(self, cd):
-        function = cd.function.__name__
         trigger = self.__triggerRef()
         if trigger is None:
             return
         else:
-            if function == 'updateVehicleAmmo':
-                cd, quantity, quantityInClip, _ = cd.args
-                if ITEM_TYPE_INDICES['shell'] == getTypeOfCompactDescr(cd):
-                    trigger.setAmmoLayout(cd, quantity)
-            elif function == 'shoot':
-                trigger.toggle(isOn=trigger.isOn(shoot=True))
+            trigger.toggle(isOn=trigger.isOn(shoot=True))
             return
 
     def clear(self):
@@ -58,7 +52,7 @@ class MouseScrollIgnoreAspect(aop.Aspect):
 class AmmoQuantityPointcut(aop.Pointcut):
 
     def __init__(self):
-        super(AmmoQuantityPointcut, self).__init__('Avatar', 'Avatar', '^shoot|updateVehicleAmmo$')
+        super(AmmoQuantityPointcut, self).__init__('Avatar', 'Avatar', '^shoot$')
 
 
 class AltModeTogglePointcut(aop.Pointcut):

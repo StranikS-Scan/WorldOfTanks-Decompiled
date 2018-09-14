@@ -57,6 +57,10 @@ class FortMainViewMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setMainData(data)
 
+    def as_setClanIconIdS(self, clanIconId):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setClanIconId(clanIconId)
+
     def as_setHeaderMessageS(self, message):
         if self._isDAAPIInited():
             return self.flashObject.as_setHeaderMessage(message)

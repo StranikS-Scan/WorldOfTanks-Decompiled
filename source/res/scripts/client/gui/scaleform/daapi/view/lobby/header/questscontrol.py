@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/QuestsControl.py
-from debug_utils import LOG_DEBUG
+from account_helpers.AccountSettings import AccountSettings, IGR_PROMO
 from gui import game_control
 from gui.shared import g_eventsCache, events
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -45,6 +45,11 @@ class QuestsControl(QuestsControlMeta, DAAPIModule):
         svrEvents = g_eventsCache.getEvents()
         events_helpers.updateEventsSettings(svrEvents)
         newQuestsCount = len(events_helpers.getNewEvents(svrEvents))
+        premiumIgrVehiclesQuests = g_eventsCache.getQuests(lambda q: q.getStartTimeLeft() <= 0 < q.getFinishTimeLeft() and q.hasPremIGRVehBonus())
+        if len(premiumIgrVehiclesQuests) > 0:
+            storedValue = AccountSettings.getFilter(IGR_PROMO)
+            if not storedValue['wasShown']:
+                self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_PROMO_PREMIUM_IGR_WINDOW))
         if newQuestsCount:
             if not self.__isHighlighted:
                 self.as_highlightControlS()

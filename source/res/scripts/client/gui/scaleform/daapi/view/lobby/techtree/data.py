@@ -34,6 +34,19 @@ class _ItemsData(object):
                 vehicleCanBeChanged = permission.canChangeVehicle()
         return vehicleCanBeChanged
 
+    def _checkMoneyForRentOrBuy(self, state, nodeCD):
+        state = NODE_STATE.removeIfHas(state, NODE_STATE.ENOUGH_MONEY)
+        if self._canRentOrBuy(nodeCD):
+            state |= NODE_STATE.ENOUGH_MONEY
+        return state
+
+    def _checkExpiredRent(self, state, item):
+        state = NODE_STATE.addIfNot(state, NODE_STATE.VEHICLE_IN_RENT)
+        if item.rentalIsOver:
+            state = NODE_STATE.removeIfHas(state, NODE_STATE.IN_INVENTORY)
+            state = NODE_STATE.removeIfHas(state, NODE_STATE.VEHICLE_IN_RENT)
+        return state
+
     @prbDispatcherProperty
     def prbDispatcher(self):
         return None
@@ -101,20 +114,22 @@ class _ItemsData(object):
             state = node['state']
             item = self.getItem(nodeCD)
             if item.isInInventory:
-                state = NODE_STATE.addIfNot(state, NODE_STATE.IN_INVENTORY)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE.ENOUGH_MONEY)
+                state = NODE_STATE.addIfNot(state, NODE_STATE.IN_INVENTORY)
+                state = NODE_STATE.removeIfHas(state, NODE_STATE.VEHICLE_IN_RENT)
+                if item.isRented and not item.isPremiumIGR:
+                    state = self._checkExpiredRent(state, item)
+                    state = self._checkMoneyForRentOrBuy(state, nodeCD)
                 if self._canSell(nodeCD):
                     state = NODE_STATE.addIfNot(state, NODE_STATE.CAN_SELL)
                 else:
                     state = NODE_STATE.removeIfHas(state, NODE_STATE.CAN_SELL)
             else:
                 state = NODE_STATE.removeIfHas(state, NODE_STATE.IN_INVENTORY)
+                state = NODE_STATE.removeIfHas(state, NODE_STATE.VEHICLE_IN_RENT)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE.CAN_SELL)
                 state = NODE_STATE.removeIfHas(state, NODE_STATE.SELECTED)
-                if self._canBuy(nodeCD):
-                    state = NODE_STATE.addIfNot(state, NODE_STATE.ENOUGH_MONEY)
-                else:
-                    state = NODE_STATE.removeIfHas(state, NODE_STATE.ENOUGH_MONEY)
+                state = self._checkMoneyForRentOrBuy(state, nodeCD)
             node['state'] = state
             result.append((nodeCD, state))
 
@@ -203,6 +218,14 @@ class _ItemsData(object):
         canBuy, _ = item.mayPurchase((self._stats.credits, self._stats.gold))
         return canBuy
 
+    def _canRent(self, nodeCD):
+        item = self.getItem(nodeCD)
+        canRent, _ = item.mayRent((self._stats.credits, self._stats.gold))
+        return canRent
+
+    def _canRentOrBuy(self, nodeCD):
+        return self._canRent(nodeCD) or self._canBuy(nodeCD)
+
     def _canSell(self, nodeCD):
         raise NotImplementedError
 
@@ -210,13 +233,14 @@ class _ItemsData(object):
         result = []
         for node in nodes:
             state = node['state']
-            if self._canBuy(node['id']):
+            nodeID = node['id']
+            if self._canRentOrBuy(nodeID):
                 state = NODE_STATE.add(state, NODE_STATE.ENOUGH_MONEY)
             else:
                 state = NODE_STATE.remove(state, NODE_STATE.ENOUGH_MONEY)
             if state > -1:
                 node['state'] = state
-                result.append((node['id'], state))
+                result.append((nodeID, state))
 
         return result
 
@@ -389,6 +413,12 @@ class ResearchItemsData(_ItemsData):
             result = super(ResearchItemsData, self)._canBuy(nodeCD)
         return result
 
+    def _canRent(self, nodeCD):
+        result = False
+        if getTypeOfCompactDescr(nodeCD) == GUI_ITEM_TYPE.VEHICLE:
+            result = super(ResearchItemsData, self)._canRent(nodeCD)
+        return result
+
     def _canSell(self, nodeCD):
         item = self.getItem(nodeCD)
         if item.isInInventory:
@@ -436,6 +466,11 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE.ELITE
             if guiItem.isPremium:
                 state |= NODE_STATE.PREMIUM
+            if guiItem.isRented and not guiItem.isPremiumIGR:
+                state = self._checkExpiredRent(state, guiItem)
+                state = self._checkMoneyForRentOrBuy(state, nodeCD)
+            if guiItem.isRentable and not guiItem.isInInventory:
+                state = self._checkMoneyForRentOrBuy(state, nodeCD)
             if self._isVehicleCanBeChanged():
                 state |= NODE_STATE.VEHICLE_CAN_BE_CHANGED
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
@@ -637,6 +672,11 @@ class NationTreeData(_ItemsData):
             state |= NODE_STATE.ELITE
         if guiItem.isPremium:
             state |= NODE_STATE.PREMIUM
+        if guiItem.isRented and not guiItem.isPremiumIGR:
+            state = self._checkExpiredRent(state, guiItem)
+            state = self._checkMoneyForRentOrBuy(state, nodeCD)
+        if guiItem.isRentable and not guiItem.isInInventory:
+            state = self._checkMoneyForRentOrBuy(state, nodeCD)
         if self._isVehicleCanBeChanged():
             state |= NODE_STATE.VEHICLE_CAN_BE_CHANGED
         return {'id': nodeCD,

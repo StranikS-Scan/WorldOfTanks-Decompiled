@@ -63,6 +63,9 @@ class ReceivedBattleChatCommand(_ChatCommand):
     def getSecondTargetID(self):
         return 0
 
+    def getCellIndex(self):
+        return 0
+
     def getCommandText(self):
         return ''
 

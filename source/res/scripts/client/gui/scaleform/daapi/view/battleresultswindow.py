@@ -6,10 +6,8 @@ import ArenaType
 from account_helpers.AccountSettings import AccountSettings
 from account_shared import getFairPlayViolationName
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
@@ -24,9 +22,9 @@ from helpers import time_utils
 from gui import makeHtmlString
 from gui.LobbyContext import g_lobbyContext
 from gui.shared import g_eventsCache, events
-from gui.shared.utils.requesters import Requester, StatsRequesterr
+from gui.shared.utils.requesters.deprecated import Requester
 from items import vehicles as vehicles_core, vehicles
-from gui.shared.utils.requesters import StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester, StatsRequester
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.BattleResultsMeta import BattleResultsMeta
 from messenger.storage import storage_getter
@@ -93,7 +91,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     @process
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        self.stats = yield StatsRequesterr().request()
+        self.stats = yield StatsRequester().request()
         commonData = yield self.__getCommonData()
         self.as_setDataS(commonData)
 
@@ -280,6 +278,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
         igrXpFactor = pData.get('igrXPFactor10', 10) / 10.0
         premXpFactor = pData.get('premiumXPFactor10', 10) / 10.0
         aogasFactor = pData.get('aogasFactor10', 10) / 10.0
+        refSystemFactor = pData.get('refSystemXPFactor10', 10) / 10.0
         aogasValStr = ''
         if dailyXpFactor > 1:
             pData['xpTitleStr'] += i18n.makeString(XP_TITLE_DAILY, dailyXpFactor)
@@ -447,6 +446,11 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             xpData.append(self.__getStatsLine(self.__resultLabel('event'), eventXPStr, eventFreeXPStr, eventXPPremStr, eventFreeXPPremStr))
         if aogasFactor < 1:
             xpData.append(self.__getStatsLine(self.__resultLabel('aogasFactor'), aogasValStr, aogasValStr, aogasValStr, aogasValStr))
+        if refSystemFactor > 1:
+            refSysFactorStr = makeHtmlString('html_templates:lobby/battle_results', 'ref_system_bonus', {'value': BigWorld.wg_getNiceNumberFormat(refSystemFactor)})
+            xpData.append(self.__getStatsLine(self.__resultLabel('referralBonus'), refSysFactorStr, refSysFactorStr, refSysFactorStr, refSysFactorStr))
+        if pData.get('premiumVehicleXP', 0) > 0:
+            xpData.append(self.__getPremiumVehicleXP(pData['premiumVehicleXP'], 0, isPremium))
         if len(xpData) < 3:
             xpData.append(self.__getStatsLine())
         if len(xpData) < 7:
@@ -474,6 +478,13 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             resData.append(self.__getStatsLine(self.__resultLabel('total'), None, self.__makeResourceLabel(resValue, not isPremium), None, self.__makeResourceLabel(resValue, isPremium)))
             pData['resourceData'] = resData
         return
+
+    def __getPremiumVehicleXP(self, premiumVehicleXP, premiumVehicleFreeXP, isPremiumAccount):
+        xp = self.__makeXpLabel(premiumVehicleXP, not isPremiumAccount)
+        freeXp = self.__makeFreeXpLabel(premiumVehicleFreeXP, not isPremiumAccount)
+        xpWithPremiumAccount = self.__makeXpLabel(premiumVehicleXP, isPremiumAccount)
+        freeXpWithPremiumAccount = self.__makeFreeXpLabel(premiumVehicleFreeXP, isPremiumAccount)
+        return self.__getStatsLine(self.__resultLabel('premiumVehicleXP'), xp, freeXp, xpWithPremiumAccount, freeXpWithPremiumAccount)
 
     @classmethod
     def _packAchievement(cls, achieve, isUnique = False):
@@ -636,14 +647,19 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             return i18n.makeString(formatter.format(finishReason))
 
         if bonusType == ARENA_BONUS_TYPE.FORT_BATTLE:
-            commonData['resultShortStr'] = 'clanBattle_%s' % status
             fortBuilding = pData.get('fortBuilding', {})
             buildTypeID, buildTeam = fortBuilding.get('buildTypeID'), fortBuilding.get('buildTeam')
+            if status == 'tie':
+                status = 'win' if buildTeam == pData.get('team') else 'lose'
+            commonData['resultShortStr'] = 'clanBattle_%s' % status
             if buildTypeID is not None:
                 buildingName = FortBuilding(typeID=buildTypeID).userName
             else:
                 buildingName = ''
-            _frFormatter = lambda : _finishReasonFormatter(CLAN_BATTLE_FINISH_REASON_DEF if buildTeam == pData.get('team') else CLAN_BATTLE_FINISH_REASON_ATTACK, buildingName=buildingName)
+            if buildTeam == pData.get('team'):
+                _frFormatter = lambda : i18n.makeString(CLAN_BATTLE_FINISH_REASON_DEF.format(''.join([str(1), str(status)])), buildingName=buildingName)
+            else:
+                _frFormatter = lambda : i18n.makeString(CLAN_BATTLE_FINISH_REASON_ATTACK.format(''.join([str(1), str(status)])), buildingName=buildingName)
         else:
             commonData['resultShortStr'] = status
             _frFormatter = lambda : _finishReasonFormatter(FINISH_REASON)
@@ -980,7 +996,7 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
     def __getCommonData(self, callback):
         results = None
         if self.arenaUniqueID:
-            results = yield StatsRequester().getBattleResults(int(self.arenaUniqueID))
+            results = yield DeprecatedStatsRequester().getBattleResults(int(self.arenaUniqueID))
         elif IS_DEVELOPMENT:
             results = self.testData
             yield lambda callback: callback(None)
@@ -1014,10 +1030,10 @@ class BattleResultsWindow(View, AbstractWindowView, BattleResultsMeta):
             dailyXPFactor = 2
             if False:
                 try:
-                    multipliedXPVehs = yield StatsRequester().getMultipliedXPVehicles()
-                    vehicleTypeLocks = yield StatsRequester().getVehicleTypeLocks()
-                    globalVehicleLocks = yield StatsRequester().getGlobalVehicleLocks()
-                    dailyXPFactor = yield StatsRequester().getDailyXPFactor() or 2
+                    multipliedXPVehs = yield DeprecatedStatsRequester().getMultipliedXPVehicles()
+                    vehicleTypeLocks = yield DeprecatedStatsRequester().getVehicleTypeLocks()
+                    globalVehicleLocks = yield DeprecatedStatsRequester().getGlobalVehicleLocks()
+                    dailyXPFactor = yield DeprecatedStatsRequester().getDailyXPFactor() or 2
                     vehicles = yield Requester('vehicle').getFromInventory()
 
                     def sorting(first, second):

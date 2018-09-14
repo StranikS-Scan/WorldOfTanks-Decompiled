@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/LobbyEntry.py
+import weakref
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view import dialogs
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID, DATA_TYPE
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import MessengerEvent
+from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger.formatters.users_messages import getUserRosterChangedMessage
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform import channels
@@ -20,6 +21,7 @@ class LobbyEntry(IGUIEntry):
         super(LobbyEntry, self).__init__()
         self.__channelsCtrl = None
         self.__carouselHandler = None
+        self.__components = {}
         return
 
     @storage_getter('channels')
@@ -41,8 +43,13 @@ class LobbyEntry(IGUIEntry):
         add(MessengerEvent.LAZY_CHANNEL_CTRL_DESTROYED, self.__handleLazyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         add(MessengerEvent.LOBBY_CHANNEL_CTRL_INITED, self.__handleLobbyChannelCtlInited, scope=EVENT_BUS_SCOPE.LOBBY)
         add(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, self.__handleLobbyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__handlePrbChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(ChannelManagementEvent.REQUEST_TO_ACTIVATE, self.__handleRqActivateChannel, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(ChannelManagementEvent.REQUEST_TO_DEACTIVATE, self.__handleRqDeactivateChannel, scope=EVENT_BUS_SCOPE.LOBBY)
+        add(ChannelManagementEvent.REQUEST_TO_EXIT, self.__handleRqExitFromChannel, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def clear(self):
+        self.__components.clear()
         if self.__channelsCtrl is not None:
             self.__channelsCtrl.clear()
             self.__channelsCtrl = None
@@ -55,6 +62,10 @@ class LobbyEntry(IGUIEntry):
         remove(MessengerEvent.LAZY_CHANNEL_CTRL_DESTROYED, self.__handleLazyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(MessengerEvent.LOBBY_CHANNEL_CTRL_INITED, self.__handleLobbyChannelCtlInited, scope=EVENT_BUS_SCOPE.LOBBY)
         remove(MessengerEvent.LOBBY_CHANNEL_CTRL_DESTROYED, self.__handleLobbyChannelCtlDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__handlePrbChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(ChannelManagementEvent.REQUEST_TO_ACTIVATE, self.__handleRqActivateChannel, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(ChannelManagementEvent.REQUEST_TO_DEACTIVATE, self.__handleRqDeactivateChannel, scope=EVENT_BUS_SCOPE.LOBBY)
+        remove(ChannelManagementEvent.REQUEST_TO_EXIT, self.__handleRqExitFromChannel, scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def show(self):
@@ -68,6 +79,7 @@ class LobbyEntry(IGUIEntry):
         g_messengerEvents.onServerErrorReceived += self.__me_onServerErrorReceived
 
     def close(self, nextScope):
+        self.__components.clear()
         storedData = g_windowsStoredData.getMap(TARGET_ID.CHANNEL_CAROUSEL, DATA_TYPE.CHANNEL_WINDOW)
         for controller in self.__channelsCtrl.getControllersIterator():
             channel = controller.getChannel()
@@ -90,6 +102,13 @@ class LobbyEntry(IGUIEntry):
 
     def addClientMessage(self, message, isCurrentPlayer = False):
         pass
+
+    def __setView4Ctrl(self, controller):
+        clientID = controller.getChannel().getClientID()
+        if clientID in self.__components:
+            component = self.__components.pop(clientID)()
+            if component:
+                controller.setView(component)
 
     def __me_onMessageReceived(self, message, channel):
         if channel:
@@ -137,9 +156,11 @@ class LobbyEntry(IGUIEntry):
             LOG_ERROR('Controller is not defined', ctx)
             return
         else:
+            ctx.clear()
             channel = controller.getChannel()
             if channel.getName() == LAZY_CHANNEL.COMMON:
                 self.__carouselHandler.addChannel(channel, lazy=True)
+            self.__setView4Ctrl(controller)
             return
 
     def __handleLazyChannelCtlDestroyed(self, event):
@@ -170,4 +191,60 @@ class LobbyEntry(IGUIEntry):
             return
         else:
             self.__carouselHandler.removeChannel(controller.getChannel())
+            return
+
+    def __handlePrbChannelControllerInited(self, event):
+        ctx = event.ctx
+        prbType = ctx.get('prbType', 0)
+        if not prbType:
+            LOG_ERROR('Prebattle type is not defined', ctx)
+            return
+        else:
+            controller = ctx.get('controller')
+            if controller is None:
+                LOG_ERROR('Channel controller is not defined', ctx)
+                return
+            ctx.clear()
+            self.__setView4Ctrl(controller)
+            return
+
+    def __handleRqActivateChannel(self, event):
+        clientID = event.clientID
+        if clientID is None:
+            LOG_ERROR('clientID is not defined')
+            return
+        else:
+            ctx = event.ctx
+            component = ctx.get('component')
+            if component is None:
+                LOG_ERROR('UI component is not defined', ctx)
+                return
+            ctx.clear()
+            controller = self.__channelsCtrl.getController(clientID)
+            if controller:
+                controller.setView(component)
+            else:
+                self.__components[clientID] = weakref.ref(component)
+            return
+
+    def __handleRqDeactivateChannel(self, event):
+        clientID = event.clientID
+        if clientID is None:
+            LOG_ERROR('clientID is not defined')
+            return
+        else:
+            controller = self.__channelsCtrl.getController(clientID)
+            if controller:
+                controller.deactivate()
+            return
+
+    def __handleRqExitFromChannel(self, event):
+        clientID = event.clientID
+        if clientID is None:
+            LOG_ERROR('clientID is not defined')
+            return
+        else:
+            controller = self.__channelsCtrl.getController(clientID)
+            if controller:
+                controller.exit()
             return

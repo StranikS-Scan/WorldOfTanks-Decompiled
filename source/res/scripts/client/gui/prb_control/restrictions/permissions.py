@@ -236,7 +236,7 @@ class UnitPermissions(IUnitPermissions):
         return self._roles & UNIT_ROLE.START_STOP_BATTLE > 0
 
     def canChangeVehicle(self):
-        return self._isCurrentPlayer and not self._isPlayerReady
+        return self._isCurrentPlayer and not self._isPlayerReady and not self._state.isInQueue()
 
     def canGiveLeadership(self):
         return self.isCreator(self._roles)

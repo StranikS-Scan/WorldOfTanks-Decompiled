@@ -232,7 +232,14 @@ ACCOUNT_ACHIEVEMENTS_BLOCK_LAYOUT = ['fragsBeast',
  'charmed',
  'even',
  'maxDeathTrackWinSeries',
- 'deathTrackWinSeries']
+ 'deathTrackWinSeries',
+ 'readyForBattleLT',
+ 'readyForBattleMT',
+ 'readyForBattleHT',
+ 'readyForBattleSPG',
+ 'readyForBattleATSPG',
+ 'readyForBattleALL',
+ 'tankwomenProgress']
 _accountAchievementsPopUps = ['warrior',
  'invader',
  'sniper',
@@ -331,7 +338,13 @@ _accountAchievementsPopUps = ['warrior',
  'arsonist',
  'bonecrusher',
  'charmed',
- 'even']
+ 'even',
+ 'readyForBattleLT',
+ 'readyForBattleMT',
+ 'readyForBattleHT',
+ 'readyForBattleSPG',
+ 'readyForBattleATSPG',
+ 'readyForBattleALL']
 _accountAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', ACCOUNT_ACHIEVEMENTS_BLOCK_LAYOUT, ACHIEVEMENT_DEPENDENCIES, _accountAchievementsPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
@@ -465,7 +478,9 @@ ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'WFC2014',
  'tacticalBreakthrough',
  'aimer',
- 'deathTrack']
+ 'deathTrack',
+ 'firstMerit',
+ 'tankwomen']
 _accountSingleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -475,7 +490,9 @@ _accountSingleAchievementsPopUps = ['titleSniper',
  'WFC2014',
  'tacticalBreakthrough',
  'aimer',
- 'deathTrack']
+ 'deathTrack',
+ 'firstMerit',
+ 'tankwomen']
 _accountSingleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', ACCOUNT_SINGLE_ACHIEVEMENTS_VALUES, {}, _accountSingleAchievementsPopUps)
 FORT_BLOCK_LAYOUT = ['xp',
  'battlesCount',
@@ -694,8 +711,8 @@ _vehicleAchievementsPopUps = ['tankExpert',
  'charmed',
  'even']
 _vehicleAchievementsBlockBuilder = StaticSizeBlockBuilder('achievements', VEHICLE_ACHIEVEMENTS_BLOCK_LAYOUT, ACHIEVEMENT_DEPENDENCIES, _vehicleAchievementsPopUps)
-_playerInscriptionsBlockBuilder = ListBlockBuilder('playerInscriptions', 'H', {})
-_playerEmblemsBlockBuilder = ListBlockBuilder('playerEmblems', 'H', {})
+_playerInscriptionsBlockBuilder = ListBlockBuilder('inscriptions', 'H', {})
+_playerEmblemsBlockBuilder = ListBlockBuilder('emblems', 'H', {})
 _camouflagesBlockBuilder = ListBlockBuilder('camouflages', 'H', {})
 COMPENSATION_BLOCK_LAYOUT = ['gold']
 _compensationBlockBuilder = StaticSizeBlockBuilder('compensation', COMPENSATION_BLOCK_LAYOUT, {}, [])

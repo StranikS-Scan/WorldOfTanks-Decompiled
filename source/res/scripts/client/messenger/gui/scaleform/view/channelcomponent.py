@@ -27,12 +27,14 @@ class ChannelComponent(ChannelComponentMeta):
             self.as_setJoinedS(False)
 
     def close(self):
-        if self._controller():
-            self._controller().exit()
+        ctrl = self._controller()
+        if ctrl:
+            ctrl.exit()
 
     def minimize(self):
-        if self._controller():
-            self._controller().deactivate()
+        ctrl = self._controller()
+        if ctrl:
+            ctrl.deactivate()
 
     def getMessageMaxLength(self):
         return round(constants.CHAT_MESSAGE_MAX_LENGTH / 2, 0)

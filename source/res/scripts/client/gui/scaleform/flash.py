@@ -1,4 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/Flash.py
+from collections import defaultdict
 import json, constants
 import GUI, _Scaleform, weakref
 from gui.Scaleform import SCALEFORM_SWF_PATH
@@ -9,8 +10,8 @@ class Flash(object):
     def __init__(self, swf, className = 'Flash', args = None, path = SCALEFORM_SWF_PATH):
         if args is None:
             args = []
-        self.__fsCbs = {}
-        self.__exCbs = {}
+        self.__fsCbs = defaultdict(set)
+        self.__exCbs = defaultdict(set)
         movieDefinition = _Scaleform.MovieDef(''.join([path, '/', swf]))
         movie = movieDefinition.createInstance()
         self.component = getattr(GUI, className)(movie, *args)
@@ -20,8 +21,8 @@ class Flash(object):
         self.flashSize = (2, 2)
         self.isActive = False
         movie = self.component.movie
-        movie.setFSCommandCallback(_FuncObj(self, 'handleFsCommandCallback'))
-        movie.setExternalInterfaceCallback(_FuncObj(self, 'handleExternalInterfaceCallback'))
+        movie.setFSCommandCallback(_FsCommandObj(self))
+        movie.setExternalInterfaceCallback(_ExternalInterfaceObj(self))
         return
 
     def __del__(self):
@@ -102,7 +103,6 @@ class Flash(object):
         return
 
     def addFsCallback(self, command, function):
-        self.__fsCbs.setdefault(command, set())
         self.__fsCbs[command].add(function)
 
     def removeFsCallback(self, command):
@@ -112,15 +112,16 @@ class Flash(object):
             pass
 
     def addFsCallbacks(self, commands):
+        add = self.addFsCallback
         for command, function in commands.items():
-            self.addFsCallback(command, function)
+            add(command, function)
 
     def removeFsCallbacks(self, *args):
+        remove = self.removeFsCallback
         for command in args:
-            self.removeFsCallback(command)
+            remove(command)
 
     def addExternalCallback(self, command, function):
-        self.__exCbs.setdefault(command, set())
         self.__exCbs[command].add(function)
 
     def removeExternalCallback(self, command, function = None):
@@ -135,12 +136,14 @@ class Flash(object):
         return
 
     def addExternalCallbacks(self, commands):
+        add = self.addExternalCallback
         for command, function in commands.items():
-            self.addExternalCallback(command, function)
+            add(command, function)
 
     def removeExternalCallbacks(self, *args):
+        remove = self.removeExternalCallback
         for command in args:
-            self.removeExternalCallback(command)
+            remove(command)
 
     def removeAllCallbacks(self):
         self.__fsCbs.clear()
@@ -175,15 +178,27 @@ class Flash(object):
         return result
 
 
-class _FuncObj():
+class _FsCommandObj():
 
-    def __init__(self, obj, funcName):
+    def __init__(self, obj):
         self.__weakObj = weakref.ref(obj)
-        self.__funcName = funcName
 
     def __call__(self, command, args):
-        if self.__weakObj() is not None:
-            getattr(self.__weakObj(), self.__funcName)(command, args)
+        obj = self.__weakObj()
+        if obj:
+            obj.handleFsCommandCallback(command, args)
         else:
             LOG_CODEPOINT_WARNING('weak object has been already destroyed.')
-        return
+
+
+class _ExternalInterfaceObj():
+
+    def __init__(self, obj):
+        self.__weakObj = weakref.ref(obj)
+
+    def __call__(self, command, args):
+        obj = self.__weakObj()
+        if obj:
+            obj.handleExternalInterfaceCallback(command, args)
+        else:
+            LOG_CODEPOINT_WARNING('weak object has been already destroyed.')

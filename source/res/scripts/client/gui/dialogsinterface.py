@@ -1,10 +1,10 @@
 # Embedded file name: scripts/client/gui/DialogsInterface.py
-from gui.BattleContext import g_battleContext
 from gui.Scaleform.Waiting import Waiting
+from gui.battle_control import g_sessionProvider
 from gui.shared import events, g_eventBus
 from gui.shared.utils.decorators import dialog
 from gui.shared.utils.functions import showInformationDialog, showConfirmDialog
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta
 
 @dialog
 def showDialog(meta, callback):
@@ -13,7 +13,7 @@ def showDialog(meta, callback):
 
 @dialog
 def showI18nInfoDialog(i18nKey, callback, meta = None):
-    if g_battleContext.isInBattle:
+    if g_sessionProvider.isBattleUILoaded():
         customMsg = None
         if meta is not None:
             customMsg.getMessage()
@@ -25,7 +25,7 @@ def showI18nInfoDialog(i18nKey, callback, meta = None):
 
 @dialog
 def showI18nConfirmDialog(i18nKey, callback, meta = None, focusedID = None):
-    if g_battleContext.isInBattle:
+    if g_sessionProvider.isBattleUILoaded():
         customMsg = None
         if meta is not None:
             customMsg.getMessage()
@@ -41,7 +41,7 @@ def showDisconnect(reason = None, isBan = False, expiryTime = None):
     global __ifDisconnectDialogShown
     if __ifDisconnectDialogShown:
         return
-    if g_battleContext.isInBattle:
+    if g_sessionProvider.isBattleUILoaded():
         from gui.Scaleform.Disconnect import Disconnect
         Disconnect.showKick(reason, isBan, expiryTime)
     else:

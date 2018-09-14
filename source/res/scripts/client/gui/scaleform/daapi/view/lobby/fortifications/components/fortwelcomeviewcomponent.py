@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/FortWelcomeViewComponent.py
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.FortWelcomeViewMeta import FortWelcomeViewMeta
+from gui.Scaleform.framework import AppRef
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.Waiting import Waiting
@@ -13,7 +14,7 @@ from gui.shared.fortifications.settings import CLIENT_FORT_STATE, FORT_RESTRICTI
 from helpers import i18n
 from debug_utils import LOG_DEBUG, LOG_ERROR
 
-class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper):
+class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper, AppRef):
 
     def __init__(self):
         super(FortWelcomeViewComponent, self).__init__()
@@ -77,15 +78,15 @@ class FortWelcomeViewComponent(FortWelcomeViewMeta, FortViewHelper):
             self.as_setRequirementTextS(self.__getClanMemberWelcomeText(data))
 
     def __getNoClanText(self):
-        return fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCLAN))
+        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCLAN))
 
     def __getNotEnoughMembersText(self, data):
         minClanSize = data.get('minClanSize', 0)
-        text = fort_text.getText(fort_text.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_WARNING, minClanSize=minClanSize))
+        text = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_WARNING, minClanSize=minClanSize))
         header = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_HEADER)
         body = i18n.makeString(TOOLTIPS.FORTIFICATION_WELCOME_CANTCREATEFORT_BODY, minClanSize=minClanSize)
         return (text, header, body)
 
     def __getClanMemberWelcomeText(self, data):
-        textOne = ((fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCOMMANDER)), (fort_text.NEUTRAL_TEXT, data.get('clanCommanderName', '')))
-        return fort_text.concatStyles(textOne)
+        textOne = ((TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTWELCOMEVIEW_REQUIREMENTCOMMANDER)), (TextType.NEUTRAL_TEXT, data.get('clanCommanderName', '')))
+        return self.app.utilsManager.textManager.concatStyles(textOne)

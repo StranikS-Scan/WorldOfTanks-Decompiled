@@ -91,7 +91,8 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.MIGRATION: '_handleMigrationURL',
  OpenLinkEvent.FORT_DESC: '_handleFortDescription',
  OpenLinkEvent.CLAN_SEARCH: '_handleClanSearch',
- OpenLinkEvent.CLAN_CREATE: '_handleClanCreate'}
+ OpenLinkEvent.CLAN_CREATE: '_handleClanCreate',
+ OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL'}
 
 class ExternalLinksHandler(object):
 
@@ -174,3 +175,6 @@ class ExternalLinksHandler(object):
 
     def _handleClanCreate(self, _):
         self.open(self.getURL('clanCreate'))
+
+    def _handleInvitesManagementURL(self, _):
+        self.open(self.getURL('invitesManagementURL'))

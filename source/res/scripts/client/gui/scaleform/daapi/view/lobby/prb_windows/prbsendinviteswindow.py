@@ -12,7 +12,7 @@ from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import i18n
 from messenger.gui.Scaleform.data import users_data_providers, search_data_providers
-from messenger.proto.bw.search_porcessors import ISearchHandler
+from messenger.proto.interfaces import ISearchHandler
 
 class PrbSendInvitesWindow(View, PrbSendInvitesWindowMeta, AbstractWindowView, ISearchHandler):
 

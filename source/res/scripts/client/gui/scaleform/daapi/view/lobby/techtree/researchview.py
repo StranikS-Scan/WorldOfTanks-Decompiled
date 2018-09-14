@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/ResearchView.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 import enumerations
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
@@ -63,22 +63,30 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             LOG_ERROR('Value of int-type descriptor is not refer to vehicle', vehCD)
             return
         else:
-            if not item.isInInventory:
-                price = item.buyPrice
+            if item.isInInventory and not item.isRented:
+                self._showMessage(self.MSG_SCOPE.Inventory, 'already_exists', item, msgType=SystemMessages.SM_TYPE.Warning)
+            else:
+                price = item.minRentPrice or item.buyPrice
+                money = g_itemsCache.items.stats.money
                 if price is None:
                     self._showMessage(self.MSG_SCOPE.Shop, 'not_found', item)
                     return
-                result, errorStr = item.mayPurchase(price)
-                if result:
-                    self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
-                     'itemID': item.innationID}))
+                canRentOrBuy, reason = item.mayRentOrBuy(money)
+                if canRentOrBuy:
+                    self._showVehicleBuyWindow(item)
                 else:
-                    stats = g_itemsCache.items.stats
-                    money = [price[0] - stats.credits if price[0] > 0 else 0, price[1] - stats.gold if price[1] > 0 else 0]
-                    self._showMessage(self.MSG_SCOPE.Shop, 'not_enough_money', item, price=gui_items.formatPrice(money))
-            else:
-                self._showMessage(self.MSG_SCOPE.Inventory, 'already_exists', item, msgType=SystemMessages.SM_TYPE.Warning)
+                    self._showMessage(self.MSG_SCOPE.Shop, 'common_rent_or_buy_error', item)
+                    LOG_WARNING('Vehicle ' + item.userName + ' cannot be buy or rent, reason: ' + reason)
             return
+
+    def _showVehicleBuyWindow(self, item):
+        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
+         'itemID': item.innationID}))
+
+    def _sendMoneyValidationMsg(self, price, item, errorID):
+        stats = g_itemsCache.items.stats
+        money = [price[0] - stats.credits if price[0] > 0 else 0, price[1] - stats.gold if price[1] > 0 else 0]
+        self._showMessage(self.MSG_SCOPE.Shop, errorID, item, price=gui_items.formatPrice(money))
 
     def sellVehicle(self, vehCD):
         item = self._data.getItem(vehCD)
@@ -146,6 +154,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         raise NotImplementedError, 'Must be overridden in subclass'
 
     def invalidateWalletStatus(self, status):
+        raise NotImplementedError, 'Must be overridden in subclass'
+
+    def invalidateRent(self, vehicles):
         raise NotImplementedError, 'Must be overridden in subclass'
 
     def _populate(self):

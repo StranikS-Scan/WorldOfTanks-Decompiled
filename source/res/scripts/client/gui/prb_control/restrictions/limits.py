@@ -2,11 +2,11 @@
 from collections import defaultdict
 import weakref
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE, ARENA_BONUS_TYPE
+from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
 from gui.prb_control import getClassLevelLimits, getTotalLevelLimits
 from gui.prb_control import getPrebattleRosters, getMaxSizeLimits
 from gui.prb_control.restrictions.interfaces import IVehicleLimit, ITeamLimit
-from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION
+from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_RESTRICTION, UNIT_RESTRICTION
 from gui.shared.ItemsCache import g_itemsCache
 from items import vehicles
 from items.vehicles import VehicleDescr, VEHICLE_CLASS_TAGS
@@ -14,17 +14,14 @@ from prebattle_shared import isTeamValid, isVehicleValid
 
 class VehicleIsValid(IVehicleLimit):
 
-    def __init__(self, allowEventBattles = False, onlyForEventBattles = False):
-        self.__allowEventBattles = allowEventBattles
-        self.__onlyForEventBattles = onlyForEventBattles
+    def __init__(self, checkForEventBattles = True):
+        self.__checkForEventBattles = checkForEventBattles
 
     def check(self, teamLimits):
         if not g_currentVehicle.isReadyToFight():
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_READY)
         vehicle = g_currentVehicle.item
-        if self.__onlyForEventBattles and not vehicle.isOnlyForEventBattles:
-            return (False, PREBATTLE_RESTRICTION.VEHICLE_ONLY_EVENT_BATTLES)
-        if vehicle.isOnlyForEventBattles and not self.__allowEventBattles:
+        if self.__checkForEventBattles and vehicle.isOnlyForEventBattles:
             return (False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)
         shellsList = []
         for shell in vehicle.shells:
@@ -254,7 +251,7 @@ class DefaultLimits(LimitsCollection):
 class SquadLimits(LimitsCollection):
 
     def __init__(self, functional):
-        super(SquadLimits, self).__init__(functional, (VehicleIsValid(allowEventBattles=True),), (TeamIsValid(),))
+        super(SquadLimits, self).__init__(functional, (VehicleIsValid(checkForEventBattles=False),), (TeamIsValid(),))
 
 
 class TrainingLimits(LimitsCollection):
@@ -271,11 +268,136 @@ class CompanyLimits(LimitsCollection):
 
 class BattleSessionLimits(LimitsCollection):
 
-    def __init__(self, functional, settings = None):
-        if settings is not None:
-            allowEventBattles = settings['allowEventBattles']
-            onlyForEventBattles = allowEventBattles and settings['bonusType'] == ARENA_BONUS_TYPE.EVENT_BATTLES
-        else:
-            allowEventBattles = onlyForEventBattles = False
-        super(BattleSessionLimits, self).__init__(functional, (VehicleIsValid(allowEventBattles=allowEventBattles, onlyForEventBattles=onlyForEventBattles),), (VehiclesLevelLimit(), TeamIsValid()))
+    def __init__(self, functional):
+        super(BattleSessionLimits, self).__init__(functional, (VehicleIsValid(),), (VehiclesLevelLimit(), TeamIsValid()))
+
+
+class _UnitActionValidator(object):
+
+    def __init__(self, rosterSettings, hasPlayersSearch = False):
+        super(_UnitActionValidator, self).__init__()
+        self._hasPlayersSearch = hasPlayersSearch
+        self._rosterSettings = weakref.proxy(rosterSettings)
+
+    def clear(self):
+        self._rosterSettings = None
         return
+
+    def canDoAction(self, functional):
+        state = functional.getState()
+        stats = functional.getStats()
+        vInfo = functional.getVehicleInfo()
+        if functional.isCreator():
+            valid, restriction = self.canCreatorDoAction(stats, state, vInfo)
+        else:
+            valid, restriction = self.canPlayerDoAction(state, vInfo)
+        return (valid, restriction)
+
+    def canCreatorDoAction(self, stats, state, vInfo):
+        valid, restriction = self.canPlayerDoAction(state, vInfo)
+        if not valid:
+            return (valid, restriction)
+        valid, restriction = self._validateLevels(stats, state)
+        if not valid:
+            return (valid, restriction)
+        return self._validateSlots(stats, state)
+
+    def canPlayerDoAction(self, state, vInfo):
+        if state.isInIdle():
+            return (False, UNIT_RESTRICTION.IS_IN_IDLE)
+        if state.isInArena():
+            return (False, UNIT_RESTRICTION.IS_IN_ARENA)
+        if vInfo.isEmpty():
+            return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
+        if not vInfo.isReadyToBattle():
+            return (False, UNIT_RESTRICTION.VEHICLE_NOT_VALID)
+        if g_currentVehicle.invID != vInfo.vehInvID:
+            return (False, UNIT_RESTRICTION.VEHICLE_NOT_SELECTED)
+        return (True, UNIT_RESTRICTION.UNDEFINED)
+
+    def getRestrictionByLevel(self, stats, state):
+        return self._validateLevels(stats, state)[1]
+
+    def getUnitInvalidLevels(self, stats):
+        return []
+
+    def _areVehiclesSelected(self, stats):
+        return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount
+
+    def _validateSlots(self, stats, state):
+        if stats.occupiedSlotsCount > 1 and stats.readyCount != stats.occupiedSlotsCount:
+            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
+        return (True, UNIT_RESTRICTION.UNDEFINED)
+
+    def _validateLevels(self, stats, state):
+        if not stats.curTotalLevel:
+            return (False, UNIT_RESTRICTION.ZERO_TOTAL_LEVEL)
+        if not self._hasPlayersSearch or self._areVehiclesSelected(stats):
+            if not state.isDevMode() and stats.curTotalLevel < stats.minTotalLevel:
+                return (False, UNIT_RESTRICTION.MIN_TOTAL_LEVEL)
+            if stats.curTotalLevel > stats.maxTotalLevel:
+                return (False, UNIT_RESTRICTION.MAX_TOTAL_LEVEL)
+        return (True, UNIT_RESTRICTION.UNDEFINED)
+
+
+class UnitActionValidator(_UnitActionValidator):
+
+    def __init__(self, rosterSettings):
+        super(UnitActionValidator, self).__init__(rosterSettings, True)
+        self._maxLevel = rosterSettings.getMaxLevel()
+        maxSlots = rosterSettings.getMaxSlots()
+        maxTotalLevel = rosterSettings.getMaxTotalLevel()
+        self._compensation = self._maxLevel * maxSlots - maxTotalLevel
+
+    def getRestrictionByLevel(self, stats, state):
+        valid, restriction = self._validateLevels(stats, state)
+        if valid and not self._areVehiclesSelected(stats):
+            restriction = UNIT_RESTRICTION.NEED_PLAYERS_SEARCH
+        return restriction
+
+    def getUnitInvalidLevels(self, stats):
+        if self._compensation <= 0:
+            return []
+        compensation = self._compensation
+        levels = []
+        for level in stats.levelsSeq:
+            if not level:
+                continue
+            diff = self._maxLevel - level
+            if diff:
+                if level not in levels:
+                    levels.append(level)
+                if compensation > 0:
+                    compensation -= diff
+                else:
+                    levels.sort()
+                    return levels
+
+        return []
+
+    def _validateLevels(self, stats, state):
+        if not state.isDevMode():
+            if stats.occupiedSlotsCount > 1 and stats.freeSlotsCount > 0 and len(self.getUnitInvalidLevels(stats)):
+                return (False, UNIT_RESTRICTION.INVALID_TOTAL_LEVEL)
+        return super(UnitActionValidator, self)._validateLevels(stats, state)
+
+
+class SortieActionValidator(_UnitActionValidator):
+
+    def __init__(self, rosterSettings):
+        super(SortieActionValidator, self).__init__(rosterSettings, False)
+
+    def _validateSlots(self, stats, state):
+        if state.isDevMode():
+            return (True, UNIT_RESTRICTION.UNDEFINED)
+        if self._rosterSettings.getMinSlots() > stats.occupiedSlotsCount:
+            return (False, UNIT_RESTRICTION.MIN_SLOTS)
+        if stats.readyCount != stats.occupiedSlotsCount:
+            return (False, UNIT_RESTRICTION.NOT_READY_IN_SLOTS)
+        return (True, UNIT_RESTRICTION.UNDEFINED)
+
+
+class FortBattleActionValidator(_UnitActionValidator):
+
+    def __init__(self, rosterSettings):
+        super(FortBattleActionValidator, self).__init__(rosterSettings, False)

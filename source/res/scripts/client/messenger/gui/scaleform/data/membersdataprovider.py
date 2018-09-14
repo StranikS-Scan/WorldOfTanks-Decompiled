@@ -1,5 +1,4 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/MembersDataProvider.py
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE

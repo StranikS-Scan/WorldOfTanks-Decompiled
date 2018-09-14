@@ -31,6 +31,7 @@ class _LobbyLayout(IChannelController):
         self._activated = True
 
     def deactivate(self, entryClosing = False):
+        self.removeView()
         self._activated = False
 
     def setView(self, view):

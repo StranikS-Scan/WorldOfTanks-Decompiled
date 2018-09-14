@@ -4,13 +4,14 @@ from UnitBase import UNIT_OP
 import account_helpers
 from debug_utils import LOG_DEBUG
 from fortified_regions import g_cache as g_fortCache
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text, fort_formatters
+from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters, rally_dps
 from gui.Scaleform.daapi.view.meta.FortRoomMeta import FortRoomMeta
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.managers.UtilsManager import UtilsManager, ImageUrlProperties
+from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control import settings
 from gui.prb_control.items.sortie_items import getDivisionNameByType, getDivisionLevel
 from gui.shared.ItemsCache import g_itemsCache
@@ -57,7 +58,7 @@ class FortRoomView(FortRoomMeta):
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if not vInfo.isEmpty():
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD))
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = functional.getSlotState(slotIdx)
@@ -182,13 +183,13 @@ class FortRoomView(FortRoomMeta):
 
     def __playersLabel(self, playerCount, limit):
         concat = ' / ' + str(limit)
-        currentPlayerColor = fort_text.MAIN_TEXT
+        currentPlayerColor = TextType.MAIN_TEXT
         if playerCount == 0:
-            currentPlayerColor = fort_text.STANDARD_TEXT
-        resultCount = fort_text.concatStyles(((currentPlayerColor, str(playerCount)), (fort_text.STANDARD_TEXT, concat)))
-        units = UtilsManager()
+            currentPlayerColor = TextType.STANDARD_TEXT
+        resultCount = self.app.utilsManager.textManager.concatStyles(((currentPlayerColor, str(playerCount)), (TextType.STANDARD_TEXT, concat)))
+        units = self.app.utilsManager
         legionariesIcon = units.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE, 16, 16, -4, 0))
-        legionariesMSG = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LEGIONARIESCOUNT))
+        legionariesMSG = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LEGIONARIESCOUNT))
         result = legionariesIcon + ' ' + legionariesMSG + ' ' + resultCount
         return result
 

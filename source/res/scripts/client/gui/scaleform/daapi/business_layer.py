@@ -37,6 +37,8 @@ class BusinessHandler(SequenceIDLoader):
          LoadEvent.LOAD_BATTLE_QUEUE: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
          LoadEvent.LOAD_BATTLE_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
          LoadEvent.LOAD_TUTORIAL_LOADING: (self.__lobbyHdlr.showLobbyView, EVENT_BUS_SCOPE.LOBBY),
+         ShowWindowEvent.SHOW_REFERRAL_REFERRALS_INTRO_WINDOW: (self.__showReferralReferralsIntroWindow,),
+         ShowWindowEvent.SHOW_REFERRAL_REFERRER_INTRO_WINDOW: (self.__showReferralReferrerIntroWindow,),
          ShowWindowEvent.SHOW_FREE_X_P_INFO_WINDOW: (self.__showFreeXPInfoWindow,),
          ShowWindowEvent.SHOW_TEST_WINDOW: (self.__showTestWindow,),
          ShowWindowEvent.SHOW_EULA: (self.__showEULA,),
@@ -73,8 +75,10 @@ class BusinessHandler(SequenceIDLoader):
          ShowWindowEvent.SHOW_TANKMAN_INFO: (self.__lobbyHdlr.showCrewTankmanInfo,),
          ShowWindowEvent.SHOW_BATTLE_RESULTS: (self.__lobbyHdlr.showBattleResults,),
          ShowWindowEvent.SHOW_EVENTS_WINDOW: (self.__lobbyHdlr.showEventsWindow,),
-         ShowWindowEvent.SHOW_HEADER_TUTORIAL_WINDOW: (self.__lobbyHdlr.showHeaderTutorialWindow,),
          ShowWindowEvent.SHOW_TANKMAN_DROP_SKILLS_WINDOW: (self.__lobbyHdlr.showTankmanDropSkillsWindow,),
+         ShowWindowEvent.SHOW_AWARD_WINDOW: (self.__showAwardWindow,),
+         ShowWindowEvent.SHOW_REFERRAL_MANAGEMENT_WINDOW: (self.__showReferralManagementWindow,),
+         ShowWindowEvent.SHOW_PROMO_PREMIUM_IGR_WINDOW: (self.__showPromoPremiumIgrWindow,),
          ShowWindowEvent.SHOW_BROWSER_WINDOW: (self.__lobbyHdlr.showBrowserWindow, EVENT_BUS_SCOPE.LOBBY),
          ShowDialogEvent.SHOW_SIMPLE_DLG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_ICON_DIALOG: (self.__dlgsHdlr,),
@@ -84,7 +88,6 @@ class BusinessHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_CONFIRM_MODULE: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: (self.__dlgsHdlr,),
-         ShowDialogEvent.SHOW_HEADER_TUTORIAL_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: (self.__dlgsHdlr,),
          ShowDialogEvent.SHOW_PUNISHMENT_DIALOG: (self.__dlgsHdlr,)}
 
@@ -133,6 +136,12 @@ class BusinessHandler(SequenceIDLoader):
                     raise Exception, 'Package {0} does not have method getBusinessHandler'.format(name)
 
         return
+
+    def __showReferralReferralsIntroWindow(self, event):
+        self._loadView(VIEW_ALIAS.REFERRAL_REFERRALS_INTRO_WINDOW, event.ctx)
+
+    def __showReferralReferrerIntroWindow(self, event):
+        self._loadView(VIEW_ALIAS.REFERRAL_REFERRER_INTRO_WINDOW)
 
     def __showFreeXPInfoWindow(self, event):
         self._loadView(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, event.meta, event.handler)
@@ -258,6 +267,15 @@ class BusinessHandler(SequenceIDLoader):
     def __showDemonstratorWindow(self, event):
         self._loadView(VIEW_ALIAS.DEMONSTRATOR_WINDOW)
 
+    def __showAwardWindow(self, event):
+        self._loadView(VIEW_ALIAS.AWARD_WINDOW, event.ctx)
+
+    def __showReferralManagementWindow(self, event):
+        self.app.loadView(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW, VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW)
+
+    def __showPromoPremiumIgrWindow(self, event):
+        self.app.loadView(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW)
+
 
 class BusinessLobbyHandler(SequenceIDLoader):
 
@@ -272,8 +290,7 @@ class BusinessLobbyHandler(SequenceIDLoader):
         self.app.loadView(VIEW_ALIAS.PERSONAL_CASE, name, event.ctx)
 
     def showBattleResults(self, event):
-        arenaUniqueID = event.ctx.get('data')
-        self.app.loadView(VIEW_ALIAS.BATTLE_RESULTS, 'battleResults' + str(arenaUniqueID), {'data': arenaUniqueID})
+        self.app.loadView(VIEW_ALIAS.BATTLE_RESULTS, 'battleResults' + str(event.ctx.get('data')), event.ctx)
 
     def showEventsWindow(self, event):
         windowContainer = self.app.containerManager.getContainer(ViewTypes.WINDOW)
@@ -282,10 +299,6 @@ class BusinessLobbyHandler(SequenceIDLoader):
             window.selectCurrentEvent(event.ctx.get('eventID'))
         self.app.loadView(VIEW_ALIAS.EVENTS_WINDOW, VIEW_ALIAS.EVENTS_WINDOW, event.ctx)
         return
-
-    def showHeaderTutorialWindow(self, event):
-        viewAlias = VIEW_ALIAS.HEADER_TUTORIAL_WINDOW
-        self.app.loadView(viewAlias, viewAlias, event.ctx)
 
     def showTankmanDropSkillsWindow(self, event):
         name = 'skillDrop_' + str(event.ctx['tankmanID'])
@@ -320,7 +333,6 @@ class BusinessDlgsHandler(SequenceIDLoader):
          ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG: self.__demountDeviceDialogHandler,
          ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG: self.__destroyDeviceDialogHandler,
          ShowDialogEvent.SHOW_CONFIRM_MODULE: self.__confirmModuleHandler,
-         ShowDialogEvent.SHOW_HEADER_TUTORIAL_DIALOG: self.__headerTutorialDialogHandler,
          ShowDialogEvent.SHOW_SYSTEM_MESSAGE_DIALOG: self.__systemMsgDialogHandler,
          ShowDialogEvent.SHOW_CAPTCHA_DIALOG: self.__handleShowCaptcha,
          ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG: self.__dismissTankmanHandler,
@@ -340,9 +352,6 @@ class BusinessDlgsHandler(SequenceIDLoader):
 
     def __confirmModuleHandler(self, event):
         self._loadView(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, event.meta, event.handler)
-
-    def __headerTutorialDialogHandler(self, event):
-        self._loadView(VIEW_ALIAS.HEADER_TUTORIAL_DIALOG, event.meta, event.handler)
 
     def __iconDialogHandler(self, event):
         self._loadView(VIEW_ALIAS.ICON_DIALOG, event.meta, event.handler)

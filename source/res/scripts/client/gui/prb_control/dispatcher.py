@@ -5,7 +5,9 @@ import weakref
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from adisp import async, process
+from constants import IGR_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from FortifiedRegionBase import FORT_ERROR
 from gui import SystemMessages, DialogsInterface, GUI_SETTINGS, game_control
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
@@ -31,7 +33,9 @@ from gui.prb_control.settings import IGNORED_UNIT_BROWSER_ERRORS
 from gui.prb_control.settings import RETURN_INTRO_UNIT_MGR_ERRORS
 from PlayerEvents import g_playerEvents
 from gui.shared import actions
+from gui.shared.ItemsCache import g_itemsCache
 from gui.shared.fortifications import getClientFortMgr
+from gui.shared.gui_items import GUI_ITEM_TYPE
 
 class _PrebattleDispatcher(object):
 
@@ -97,7 +101,7 @@ class _PrebattleDispatcher(object):
     def create(self, ctx, callback = None):
         if ctx.getRequestType() == REQUEST_TYPE.CREATE:
             if not self.__requestCtx.isProcessing():
-                result = yield self.unlock(ctx.getFuncExit())
+                result = yield self.unlock(ctx.getFuncExit(), True)
                 if result:
                     entry = self.__factories.createEntry(ctx)
                     if entry:
@@ -126,7 +130,7 @@ class _PrebattleDispatcher(object):
     @process
     def join(self, ctx, callback = None):
         if self._validateJoinOp(ctx):
-            result = yield self.unlock(ctx.getFuncExit())
+            result = yield self.unlock(ctx.getFuncExit(), ctx.isForced())
             ctx.setForced(result)
             if result:
                 entry = self.__factories.createEntry(ctx)
@@ -180,10 +184,10 @@ class _PrebattleDispatcher(object):
 
     @async
     @process
-    def unlock(self, funcExit, callback = None):
+    def unlock(self, funcExit, forced, callback = None):
         state = self.getFunctionalState()
         result = True
-        if state.hasModalEntity:
+        if state.hasModalEntity and (not state.isIntroMode or forced):
             factory = self.__factories.get(state.ctrlTypeID)
             result = False
             if factory:
@@ -210,7 +214,7 @@ class _PrebattleDispatcher(object):
     def select(self, entry, callback = None):
         ctx = entry.makeDefCtx()
         if ctx and self._validateJoinOp(ctx):
-            result = yield self.unlock(funcExit=ctx.getFuncExit())
+            result = yield self.unlock(ctx.getFuncExit(), True)
             ctx.setForced(result)
             if result:
                 LOG_DEBUG('Request to select', ctx)
@@ -266,6 +270,15 @@ class _PrebattleDispatcher(object):
                 elif g_currentVehicle.isDisabledInRoaming():
                     canDo = False
                     restriction = PREBATTLE_RESTRICTION.VEHICLE_ROAMING
+                elif g_currentVehicle.isDisabledInPremIGR():
+                    canDo = False
+                    restriction = PREBATTLE_RESTRICTION.VEHICLE_IN_PREMIUM_IGR_ONLY
+                elif g_currentVehicle.isDisabledInRent():
+                    canDo = False
+                    if g_currentVehicle.isPremiumIGR():
+                        restriction = PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER
+                    else:
+                        restriction = PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER
             if canDo:
                 canDo, restriction = self.__collection.canPlayerDoAction(True)
         return (canDo, restriction)
@@ -336,10 +349,14 @@ class _PrebattleDispatcher(object):
         g_playerEvents.onPrebattleAutoInvitesChanged += self.pe_onPrebattleAutoInvitesChanged
         gameSession = game_control.g_instance.gameSession
         captchaCtrl = game_control.g_instance.captcha
+        rentCtr = game_control.g_instance.rentals
+        igrCtr = game_control.g_instance.igr
         if gameSession.lastBanMsg is not None:
             self.gs_onTillBanNotification(*gameSession.lastBanMsg)
         gameSession.onTimeTillBan += self.gs_onTillBanNotification
+        rentCtr.onRentChangeNotify += self.rc_onRentChange
         captchaCtrl.onCaptchaInputCanceled += self.captcha_onCaptchaInputCanceled
+        igrCtr.onIgrTypeChanged += self.igr_onRoomChange
         unitMgr = getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined += self.unitMgr_onUnitJoined
@@ -355,6 +372,7 @@ class _PrebattleDispatcher(object):
         fortMgr = getClientFortMgr()
         if fortMgr:
             fortMgr.onFortStateChanged += self.forMgr_onFortStateChanged
+            fortMgr.onFortResponseReceived += self.fortMgr_onFortResponseReceived
         else:
             LOG_ERROR('Fort manager is not defined')
         g_prbCtrlEvents.onPrebattleIntroModeJoined += self.ctrl_onPrebattleIntroModeJoined
@@ -379,6 +397,8 @@ class _PrebattleDispatcher(object):
         g_playerEvents.onPrebattleAutoInvitesChanged -= self.pe_onPrebattleAutoInvitesChanged
         game_control.g_instance.captcha.onCaptchaInputCanceled -= self.captcha_onCaptchaInputCanceled
         game_control.g_instance.gameSession.onTimeTillBan -= self.gs_onTillBanNotification
+        game_control.g_instance.rentals.onRentChangeNotify -= self.rc_onRentChange
+        game_control.g_instance.igr.onIgrTypeChanged -= self.igr_onRoomChange
         unitMgr = getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitJoined -= self.unitMgr_onUnitJoined
@@ -389,6 +409,7 @@ class _PrebattleDispatcher(object):
             unitBrowser.onErrorReceived -= self.unitBrowser_onErrorReceived
         fortMgr = getClientFortMgr()
         if fortMgr:
+            fortMgr.onFortResponseReceived -= self.fortMgr_onFortResponseReceived
             fortMgr.onFortStateChanged -= self.forMgr_onFortStateChanged
         g_prbCtrlEvents.clear()
 
@@ -463,7 +484,8 @@ class _PrebattleDispatcher(object):
             if prbFunctional and prbFunctional.getExit() not in [FUNCTIONAL_EXIT.NO_FUNC,
              FUNCTIONAL_EXIT.BATTLE_TUTORIAL,
              FUNCTIONAL_EXIT.RANDOM,
-             FUNCTIONAL_EXIT.SWITCH]:
+             FUNCTIONAL_EXIT.SWITCH,
+             FUNCTIONAL_EXIT.SQUAD]:
                 prbType = prbFunctional.getPrbType()
             self._changePrbFunctional(prbType=prbType, stop=False)
             return
@@ -479,6 +501,15 @@ class _PrebattleDispatcher(object):
                 SystemMessages.g_instance.pushI18nMessage(key.format('playTimeNotification'), timeTillBlock, type=SystemMessages.SM_TYPE.Warning)
             else:
                 SystemMessages.g_instance.pushI18nMessage(key.format('midnightNotification'), type=SystemMessages.SM_TYPE.Warning)
+
+    def rc_onRentChange(self, vehicles):
+        if g_currentVehicle.isPresent() and g_currentVehicle.item.intCD in vehicles and g_currentVehicle.isDisabledInRent() and g_currentVehicle.isInPrebattle():
+            self.__collection.reset()
+
+    def igr_onRoomChange(self, roomType, xpFactor):
+        if roomType != IGR_TYPE.PREMIUM:
+            if g_currentVehicle.isPremiumIGR() and g_currentVehicle.isInPrebattle():
+                self.__collection.reset()
 
     def captcha_onCaptchaInputCanceled(self):
         self.__requestCtx.stopProcessing(False)
@@ -558,6 +589,10 @@ class _PrebattleDispatcher(object):
     def forMgr_onFortStateChanged(self):
         g_eventDispatcher.updateUI()
 
+    def fortMgr_onFortResponseReceived(self, requestID, resultCode, _):
+        self.__requestCtx.stopProcessing(result=resultCode in (FORT_ERROR.OK,))
+        g_eventDispatcher.updateUI()
+
     def _changePrbFunctional(self, funcExit = None, prbType = 0, stop = True):
         if funcExit is not None:
             prbFunctional = self.getFunctional(CTRL_ENTITY_TYPE.PREBATTLE)
@@ -598,7 +633,7 @@ class _PrebattleDispatcher(object):
 
     @process
     def _doUnlock(self):
-        yield self.unlock(FUNCTIONAL_EXIT.RANDOM)
+        yield self.unlock(FUNCTIONAL_EXIT.RANDOM, True)
 
     @process
     def _doSelect(self, entry):

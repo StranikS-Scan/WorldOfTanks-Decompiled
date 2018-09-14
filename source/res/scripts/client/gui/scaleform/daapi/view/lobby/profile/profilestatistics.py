@@ -103,7 +103,11 @@ class ProfileStatistics(ProfileSection, ProfileStatisticsMeta):
             formattedBattlesCount = BigWorld.wg_getIntegralFormat(battlesCount)
             specificDataColumn1 = []
             if isFortificationBattlesEnabled():
-                specificDataColumn1.append(ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTBATTLES, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTTOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, ProfileUtils.createToolTipData(battlesToolTipData)), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS, ProfileUtils.getFormattedWinsEfficiency(fortBattlesTargetData), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS), DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_LOOTING, fortMiscTargetData.getEnemyBasePlunderNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_LOOTING)]))
+                specificDataColumn1.append(ProfileUtils.getLabelDataObject(PROFILE.SECTION_STATISTICS_BODYPARAMS_LABEL_FORTBATTLES, [DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTTOTALBATTLES, formattedBattlesCount, PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_BATTLES, ProfileUtils.createToolTipData(battlesToolTipData)),
+                 DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS, ProfileUtils.getFormattedWinsEfficiency(fortBattlesTargetData), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS),
+                 DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_LOOTING, fortMiscTargetData.getEnemyBasePlunderNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORT_LOOTING),
+                 DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_ATTACKS, fortMiscTargetData.getAttackNumber(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_ATTACKS),
+                 DetailedStatisticsUtils.getDetailedDataObject(PROFILE.SECTION_STATISTICS_SCORES_FORTBATTLES_DEFENCES, fortMiscTargetData.getDefenceHours(), PROFILE.PROFILE_PARAMS_TOOLTIP_FORTBATTLES_DEFENCES)]))
             battlesCount = targetData.getBattlesCount()
             lossesCount = targetData.getLossesCount()
             winsCount = targetData.getWinsCount()

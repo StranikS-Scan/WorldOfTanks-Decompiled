@@ -15,9 +15,6 @@ class ContextMenuManagerMeta(DAAPIModule):
     def _isMoneyTransfer(self):
         self._printOverrideError('_isMoneyTransfer')
 
-    def isVehicleWasInBattle(self, intCD):
-        self._printOverrideError('isVehicleWasInBattle')
-
     def showUserInfo(self, uid, userName):
         self._printOverrideError('showUserInfo')
 
@@ -86,3 +83,24 @@ class ContextMenuManagerMeta(DAAPIModule):
 
     def fortPrepareOrder(self, uid):
         self._printOverrideError('fortPrepareOrder')
+
+    def getContextMenuVehicleData(self, inventoryId):
+        self._printOverrideError('getContextMenuVehicleData')
+
+    def showVehicleInfo(self, inventoryId):
+        self._printOverrideError('showVehicleInfo')
+
+    def toResearch(self, compactDescr):
+        self._printOverrideError('toResearch')
+
+    def vehicleSell(self, inventoryId):
+        self._printOverrideError('vehicleSell')
+
+    def favoriteVehicle(self, inventoryId, isFavorite):
+        self._printOverrideError('favoriteVehicle')
+
+    def showVehicleStats(self, compactDescr):
+        self._printOverrideError('showVehicleStats')
+
+    def vehicleBuy(self, inventoryId):
+        self._printOverrideError('vehicleBuy')

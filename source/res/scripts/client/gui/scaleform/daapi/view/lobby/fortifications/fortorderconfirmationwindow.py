@@ -3,6 +3,7 @@ import BigWorld
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.framework import AppRef
+from gui.Scaleform.locale.MENU import MENU
 from helpers import time_utils
 from adisp import process
 from gui import SystemMessages
@@ -73,12 +74,12 @@ class FortOrderConfirmationWindow(View, FortOrderConfirmationWindowMeta, Abstrac
             g_fortSoundController.playCreateOrder()
             order = self.fortCtrl.getFort().getOrder(orderTypeID)
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_ADDORDER, count=BigWorld.wg_getIntegralFormat(count), time=order.getProductionLeftTimeStr(), type=SystemMessages.SM_TYPE.Warning)
-            self.destroy()
+        self.destroy()
 
     def getTimeStr(self, time):
-        return time_utils.getTillTimeString(time, FORTIFICATIONS.TIME_TIMEVALUE)
+        return time_utils.getTillTimeString(time, MENU.TIME_TIMEVALUE)
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self._prepareAndSendData()
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):

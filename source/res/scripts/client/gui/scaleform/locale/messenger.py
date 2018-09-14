@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/locale/MESSENGER.py
-
+from debug_utils import LOG_WARNING
 
 class MESSENGER(object):
     LISTVIEW_TITLE = '#messenger:listView/title'
@@ -244,8 +244,10 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SERVERREBOOTCANCELLED = '#messenger:serviceChannelMessages/serverRebootCancelled'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BUTTON = '#messenger:serviceChannelMessages/battleResults/button'
     SERVICECHANNELMESSAGES_BATTLERESULTS_VICTORY = '#messenger:serviceChannelMessages/battleResults/victory'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_TECHVICTORY = '#messenger:serviceChannelMessages/battleResults/techVictory'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DRAWGAME = '#messenger:serviceChannelMessages/battleResults/drawGame'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DEFEAT = '#messenger:serviceChannelMessages/battleResults/defeat'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_TECHDEFEAT = '#messenger:serviceChannelMessages/battleResults/techDefeat'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BATTLE = '#messenger:serviceChannelMessages/battleResults/battle'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TRAINING_BATTLE = '#messenger:serviceChannelMessages/battleResults/training_battle'
     SERVICECHANNELMESSAGES_BATTLERESULTS_TANK = '#messenger:serviceChannelMessages/battleResults/tank'
@@ -272,6 +274,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_PREMIUM = '#messenger:serviceChannelMessages/battleResults/quests/premium'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS = '#messenger:serviceChannelMessages/battleResults/quests/items'
     SERVICECHANNELMESSAGES_BATTLERESULTS_QUESTS_ITEMS_NAME = '#messenger:serviceChannelMessages/battleResults/quests/items/name'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMQUESTS = '#messenger:serviceChannelMessages/battleResults/refSystemQuests'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMBOUGHTVEHICLE = '#messenger:serviceChannelMessages/battleResults/refSystemBoughtVehicle'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMCONTRIBUTEXP = '#messenger:serviceChannelMessages/battleResults/refSystemContributeXp'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE = '#messenger:serviceChannelMessages/battleResults/fortResource'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTBUILDING = '#messenger:serviceChannelMessages/battleResults/fortBuilding'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
@@ -302,6 +307,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_ITEMSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/itemsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesDebited'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESRENTED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesRented'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_SLOTSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/slotsAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_SLOTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/slotsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_COMPENSATION = '#messenger:serviceChannelMessages/invoiceReceived/compensation'
@@ -351,6 +357,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PURCHASE = '#messenger:serviceChannelMessages/sysMsg/titles/purchase'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_DISMANTLING = '#messenger:serviceChannelMessages/sysMsg/titles/dismantling'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_SELLING = '#messenger:serviceChannelMessages/sysMsg/titles/selling'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_REMOVE = '#messenger:serviceChannelMessages/sysMsg/titles/remove'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REPAIR = '#messenger:serviceChannelMessages/sysMsg/titles/repair'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'
@@ -377,6 +384,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_CAMOUFLAGES = '#messenger:serviceChannelMessages/serverDowntimeCompensation/camouflages'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYEREMBLEMS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerEmblems'
     SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_PLAYERINSCRIPTIONS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/playerInscriptions'
+    SERVICECHANNELMESSAGES_SERVERDOWNTIMECOMPENSATION_RENTALS = '#messenger:serviceChannelMessages/serverDowntimeCompensation/rentals'
     SERVICECHANNELMESSAGES_ACTIONBEGIN = '#messenger:serviceChannelMessages/actionBegin'
     SERVICECHANNELMESSAGES_ACTIONEND = '#messenger:serviceChannelMessages/actionEnd'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_TITLE = '#messenger:serviceChannelMessages/sysMsg/converter/title'
@@ -403,16 +411,94 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_FORT_FORT_READY = '#messenger:serviceChannelMessages/fort/FORT_READY'
     SERVICECHANNELMESSAGES_FORT_DEF_HOUR_SHUTDOWN = '#messenger:serviceChannelMessages/fort/DEF_HOUR_SHUTDOWN'
     SERVICECHANNELMESSAGES_FORT_RESERVE_ACTIVATED = '#messenger:serviceChannelMessages/fort/RESERVE_ACTIVATED'
+    SERVICECHANNELMESSAGES_FORT_PERMANENT_RESERVE_ACTIVATED = '#messenger:serviceChannelMessages/fort/PERMANENT_RESERVE_ACTIVATED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_EXPIRED = '#messenger:serviceChannelMessages/fort/RESERVE_EXPIRED'
     SERVICECHANNELMESSAGES_FORT_RESERVE_PRODUCED = '#messenger:serviceChannelMessages/fort/RESERVE_PRODUCED'
     SERVICECHANNELMESSAGES_FORT_STORAGE_OVERFLOW = '#messenger:serviceChannelMessages/fort/STORAGE_OVERFLOW'
     SERVICECHANNELMESSAGES_FORT_ORDER_CANCELED = '#messenger:serviceChannelMessages/fort/ORDER_CANCELED'
     SERVICECHANNELMESSAGES_FORT_REATTACHED_TO_BASE = '#messenger:serviceChannelMessages/fort/REATTACHED_TO_BASE'
+    SERVICECHANNELMESSAGES_FORT_DEF_HOUR_CHANGED = '#messenger:serviceChannelMessages/fort/DEF_HOUR_CHANGED'
+    SERVICECHANNELMESSAGES_FORT_DEF_HOUR_ACTIVATED = '#messenger:serviceChannelMessages/fort/DEF_HOUR_ACTIVATED'
+    SERVICECHANNELMESSAGES_FORT_OFF_DAY_ACTIVATED = '#messenger:serviceChannelMessages/fort/OFF_DAY_ACTIVATED'
+    SERVICECHANNELMESSAGES_FORT_NO_OFF_DAY_ACTIVATED = '#messenger:serviceChannelMessages/fort/NO_OFF_DAY_ACTIVATED'
+    SERVICECHANNELMESSAGES_FORT_VACATION_STARTED = '#messenger:serviceChannelMessages/fort/VACATION_STARTED'
+    SERVICECHANNELMESSAGES_FORT_PERIPHERY_CHANGED = '#messenger:serviceChannelMessages/fort/PERIPHERY_CHANGED'
+    SERVICECHANNELMESSAGES_FORT_BUILDING_DAMAGED = '#messenger:serviceChannelMessages/fort/BUILDING_DAMAGED'
+    SERVICECHANNELMESSAGES_FORT_BUILDING_DAMAGED_MILITARY_BASE = '#messenger:serviceChannelMessages/fort/BUILDING_DAMAGED_MILITARY_BASE'
+    SERVICECHANNELMESSAGES_FORT_BASE_DESTROYED = '#messenger:serviceChannelMessages/fort/BASE_DESTROYED'
+    SERVICECHANNELMESSAGES_FORT_ORDER_COMPENSATED = '#messenger:serviceChannelMessages/fort/ORDER_COMPENSATED'
+    SERVICECHANNELMESSAGES_FORT_ATTACK_PLANNED = '#messenger:serviceChannelMessages/fort/ATTACK_PLANNED'
+    SERVICECHANNELMESSAGES_FORT_DEFENCE_PLANNED = '#messenger:serviceChannelMessages/fort/DEFENCE_PLANNED'
+    COMMAND_SUCCESS_USERBAN = '#messenger:command/success/USERBAN'
+    COMMAND_SUCCESS_USERUNBAN = '#messenger:command/success/USERUNBAN'
+    CHAT_ERROR_NOT_ALLOWED = '#messenger:chat_error/NOT_ALLOWED'
+    CHAT_ERROR_USER_NOT_FOUND = '#messenger:chat_error/USER_NOT_FOUND'
+    CHAT_ERROR_CANNOT_BAN_ONESELF = '#messenger:chat_error/CANNOT_BAN_ONESELF'
+    CHAT_ERROR_WRONG_ARGS = '#messenger:chat_error/WRONG_ARGS'
+    CHAT_ERROR_NOT_READY = '#messenger:chat_error/NOT_READY'
+    CHAT_ERROR_IS_BUSY = '#messenger:chat_error/IS_BUSY'
+    CHAT_ERROR_GENERIC_ERROR = '#messenger:chat_error/GENERIC_ERROR'
+    CLIENT_ERROR_COMMAND_NOT_SUPPORTED = '#messenger:client_error/command/not_supported'
+    CLIENT_ERROR_COMMAND_WRONG_BAN_TYPE = '#messenger:client_error/command/wrong_ban_type'
+    CLIENT_ERROR_COMMAND_WRONG_PLAYER_NAME = '#messenger:client_error/command/wrong_player_name'
+    CLIENT_ERROR_COMMAND_WRONG_BAN_PERIOD = '#messenger:client_error/command/wrong_ban_period'
+    CLIENT_ERROR_COMMAND_IN_COOLDOWN_WO_NAME = '#messenger:client_error/command/in_cooldown_wo_name'
+    CLIENT_ERROR_COMMAND_GENERIC_ERROR = '#messenger:client_error/command/generic_error'
+    CLIENT_ERROR_ACTION_IN_COOLDOWN = '#messenger:client_error/action/in_cooldown'
+    CLIENT_ERROR_ACTION_IN_COOLDOWN_WO_PERIOD = '#messenger:client_error/action/in_cooldown_wo_period'
+    CHAT_ACTION_BROADCAST_UNIT_MESSAGE = '#messenger:chat_action/BROADCAST_UNIT_MESSAGE'
+    CHAT_ACTION_BROADCAST_BATTLE_MESSAGE = '#messenger:chat_action/BROADCAST_BATTLE_MESSAGE'
+    CHAT_ACTION_FIND_USERS_BY_NAME = '#messenger:chat_action/FIND_USERS_BY_NAME'
+    CHAT_ACTION_GET_VOIP_CREDENTIALS = '#messenger:chat_action/GET_VOIP_CREDENTIALS'
+    SERVICECHANNELMESSAGES_VEHICLERENTED = '#messenger:serviceChannelMessages/vehicleRented'
+    SERVICECHANNELMESSAGES_RENTALSEXPIRED = '#messenger:serviceChannelMessages/rentalsExpired'
+    SERVICECHANNELMESSAGES_RENTCOMPENSATION_COMPENSATION = '#messenger:serviceChannelMessages/rentCompensation/compensation'
+    SERVICECHANNELMESSAGES_RENTCOMPENSATION_GOLDRECEIVED = '#messenger:serviceChannelMessages/rentCompensation/goldReceived'
+    SERVICECHANNELMESSAGES_RENTCOMPENSATION_CREDITSRECEIVED = '#messenger:serviceChannelMessages/rentCompensation/creditsReceived'
+    COMMAND_SUCCESS_ENUM = (COMMAND_SUCCESS_USERBAN, COMMAND_SUCCESS_USERUNBAN)
+    CHAT_ERROR_ENUM = (CHAT_ERROR_NOT_ALLOWED,
+     CHAT_ERROR_USER_NOT_FOUND,
+     CHAT_ERROR_CANNOT_BAN_ONESELF,
+     CHAT_ERROR_WRONG_ARGS,
+     CHAT_ERROR_NOT_READY,
+     CHAT_ERROR_IS_BUSY,
+     CHAT_ERROR_GENERIC_ERROR)
+    CHAT_ACTION_ENUM = (CHAT_ACTION_BROADCAST_UNIT_MESSAGE,
+     CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
+     CHAT_ACTION_FIND_USERS_BY_NAME,
+     CHAT_ACTION_GET_VOIP_CREDENTIALS)
     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM = (DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_NOTREADY,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,
      DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK)
+
+    @staticmethod
+    def command_success(key):
+        outcome = '#messenger:command/success/%s' % key
+        if outcome not in MESSENGER.COMMAND_SUCCESS_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def chat_error(key):
+        outcome = '#messenger:chat_error/%s' % key
+        if outcome not in MESSENGER.CHAT_ERROR_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
+
+    @staticmethod
+    def chat_action(key):
+        outcome = '#messenger:chat_action/%s' % key
+        if outcome not in MESSENGER.CHAT_ACTION_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome
 
     @staticmethod
     def dialogs_squadchannel_tooltips_status(key):

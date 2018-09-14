@@ -11,6 +11,7 @@ from gui.prb_control import settings
 from gui.prb_control.prb_helpers import UnitListener
 from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
+from helpers import int2roman
 
 class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
 
@@ -41,7 +42,6 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
             self.as_setCommentS(self.unitFunctional.getCensoredComment())
         elif opCode in [UNIT_OP.CLOSE_SLOT, UNIT_OP.OPEN_SLOT]:
             functional = self.unitFunctional
-            unitStats = functional.getStats()
             unitState = functional.getState()
             slotState = functional.getSlotState(value)
             pInfo = functional.getPlayerInfo()
@@ -52,8 +52,9 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
                 self.as_closeSlotS(value, settings.UNIT_CLOSED_SLOT_COST, slotLabel)
             else:
                 self.as_openSlotS(value, canAssign, slotLabel, vehCount)
-            hasError, label = vo_converters.makeTotalLevelLabel(unitStats)
-            self.as_setTotalLabelS(hasError, label, unitStats.curTotalLevel)
+            unitStats = functional.getStats()
+            canDoAction, restriction = functional.validateLevels(stats=unitStats)
+            self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
             self._setActionButtonState()
 
     def onUnitVehicleChanged(self, dbID, vInfo):
@@ -62,7 +63,7 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
             if not vInfo.isEmpty():
-                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD))
+                vehicleVO = makeVehicleVO(g_itemsCache.items.getItemByCD(vInfo.vehTypeCD), functional.getRosterSettings().getLevelsRange())
                 slotCost = vInfo.vehLevel
             else:
                 slotState = functional.getSlotState(slotIdx)
@@ -73,9 +74,9 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
                     slotCost = 0
             self.as_setMemberVehicleS(slotIdx, slotCost, vehicleVO)
             unitStats = functional.getStats()
-            hasError, label = vo_converters.makeTotalLevelLabel(unitStats)
-            self.as_setTotalLabelS(hasError, label, unitStats.curTotalLevel)
-        if pInfo.isCreator() or pInfo.isCurrentPlayer():
+            canDoAction, restriction = functional.validateLevels(stats=unitStats)
+            self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
+        if pInfo.isCurrentPlayer() or functional.getPlayerInfo().isCreator():
             self._setActionButtonState()
         return
 
@@ -86,8 +87,8 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
         self._updateMembersData()
         self._setActionButtonState()
         unitStats = functional.getStats()
-        hasError, label = vo_converters.makeTotalLevelLabel(unitStats)
-        self.as_setTotalLabelS(hasError, label, unitStats.curTotalLevel)
+        canDoAction, restriction = functional.validateLevels(stats=unitStats)
+        self.as_setTotalLabelS(canDoAction, vo_converters.makeTotalLevelLabel(unitStats, restriction), unitStats.curTotalLevel)
 
     def toggleFreezeRequest(self):
         self.requestToLock(not self.unitFunctional.getState().isLocked())
@@ -101,10 +102,10 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
         if window is not None:
             window.updateSlots(slots)
         else:
-            maxLevel = self.unitFunctional.getRosterSettings().getMaxLevel()
+            levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
             self.fireEvent(events.ShowViewEvent(events.ShowWindowEvent.SHOW_ROSTER_SLOT_SETTINGS_WINDOW, ctx={'settings': slots,
              'section': 'cs_unit_view_settings',
-             'maxLevel': maxLevel}), scope=EVENT_BUS_SCOPE.LOBBY)
+             'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def cancelRosterSlotsSettings(self):
@@ -131,7 +132,8 @@ class CyberSportUnitView(CyberSportUnitMeta, UnitListener):
     def _populate(self):
         super(CyberSportUnitView, self)._populate()
         self.addListener(events.CSRosterSlotSettingsWindow.APPLY_SLOT_SETTINGS, self.__applyRosterSettings)
-        self._updateVehiclesLabel('I', 'VIII')
+        settings = self.unitFunctional.getRosterSettings()
+        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _dispose(self):
         self._destroyRelatedView(ViewTypes.TOP_WINDOW, CYBER_SPORT_ALIASES.ROSTER_SLOT_SETTINGS_WINDOW_PY)

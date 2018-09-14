@@ -3,7 +3,7 @@ import BigWorld
 from UnitBase import UNIT_BROWSER_ERROR
 from adisp import process
 from constants import PREBATTLE_TYPE
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui import DialogsInterface, SystemMessages
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
@@ -89,7 +89,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
         self.__clearCache()
-        ctx = JoinUnitCtx(rallyId, slotIndex, waitingID='prebattle/join')
+        ctx = JoinUnitCtx(rallyId, PREBATTLE_TYPE.SORTIE, slotIndex, waitingID='prebattle/join')
         if g_lobbyContext.isAnotherPeriphery(peripheryID):
             if g_lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndJoinSortie(peripheryID, ctx)
@@ -140,6 +140,10 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
             self.__initState()
         else:
             self.as_autoSearchEnableBtnS(True)
+
+    def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
+        if pInfo.isCurrentPlayer():
+            self.as_changeAutoSearchBtnsStateS(pPermissions.canInvokeAutoSearch(), pPermissions.canStopBattleQueue())
 
     def loadListView(self):
         self._requestViewLoad(FORTIFICATION_ALIASES.FORT_BATTLE_ROOM_LIST_VIEW_UI, None)
@@ -221,7 +225,7 @@ class FortBattleRoomWindow(FortBattleRoomWindowMeta, AppRef, FortListener):
 
     @process
     def __requestToCreateOrJoinFortBattle(self, battleID, slotIndex = -1):
-        yield self.fortProvider.sendRequest(CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
+        yield self.prbDispatcher.join(CreateOrJoinFortBattleCtx(battleID, slotIndex, 'fort/fortBattle/createOrJoin'))
 
     @process
     def __requestToReloginAndCreateOrJoinFortBattle(self, peripheryID, battleID, slotIndex = -1):

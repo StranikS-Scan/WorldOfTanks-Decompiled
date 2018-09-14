@@ -5,6 +5,7 @@ class AbstractRallyView(AbstractRallyViewMeta):
 
     def __init__(self):
         super(AbstractRallyView, self).__init__()
+        self.isMinimising = False
 
     def setData(self, itemID):
         pass

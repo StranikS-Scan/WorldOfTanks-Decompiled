@@ -25,7 +25,7 @@ class QuestProgress(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        for item in ('quests', 'tokens'):
+        for item in ('quests', 'tokens', 'potapovQuests'):
             itemDiff = diff.get(item, None)
             if itemDiff is not None:
                 synchronizeDicts(itemDiff, self.__cache.setdefault(item, {}))

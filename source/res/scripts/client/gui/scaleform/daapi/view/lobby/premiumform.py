@@ -6,9 +6,8 @@ from gui.Scaleform.daapi.view.meta.PremiumFormMeta import PremiumFormMeta
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.framework.entities.View import View
-from gui.shared import EVENT_BUS_SCOPE, g_itemsCache
-from gui.shared.events import LobbySimpleEvent
-from gui.shared.utils.requesters import StatsRequester, StatsRequesterr
+from gui.shared import g_itemsCache
+from gui.shared.utils.requesters import DeprecatedStatsRequester, StatsRequester
 import account_helpers
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -43,7 +42,7 @@ class PremiumForm(View, AbstractWindowView, PremiumFormMeta, AppRef):
 
     @process
     def __premiumBuyRequest(self, days, price):
-        stats = yield StatsRequesterr().request()
+        stats = yield StatsRequester().request()
         if account_helpers.isPremiumAccount(stats.attributes):
             dialogId = 'premiumContinueConfirmation'
         else:
@@ -79,11 +78,11 @@ class PremiumForm(View, AbstractWindowView, PremiumFormMeta, AppRef):
     @process
     def __upgradeToPremium(self, days):
         Waiting.show('loadStats')
-        attrs = yield StatsRequester().getAccountAttrs()
+        attrs = yield DeprecatedStatsRequester().getAccountAttrs()
         isPremium = account_helpers.isPremiumAccount(attrs)
-        success = yield StatsRequester().upgradeToPremium(days)
+        success = yield DeprecatedStatsRequester().upgradeToPremium(days)
         if success:
-            premiumCost = yield StatsRequester().getPremiumCost()
+            premiumCost = yield DeprecatedStatsRequester().getPremiumCost()
             if premiumCost:
                 if isPremium:
                     successMessage = SYSTEM_MESSAGES.PREMIUM_CONTINUESUCCESS

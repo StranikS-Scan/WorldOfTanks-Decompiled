@@ -1,8 +1,9 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
-from constants import FORT_ORDER_TYPE
+from FortifiedRegionBase import FORT_EVENT_TYPE
+from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
 from gui.Scaleform.framework import AppRef
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import time_utils, i18n
@@ -35,9 +36,13 @@ class FortOrder(AppRef):
         self.isSupported = True
         if proxy is not None:
             self.buildingID, self.count, self.level, orderData = proxy.getOrderData(orderID)
-            orderEvent = proxy.events.get(orderID)
+            self.isPermanent = FORT_ORDER_TYPE.isOrderPermanent(orderID)
+            orderEvent = proxy.events.get(FORT_EVENT_TYPE.ACTIVE_ORDERS_BASE + orderID)
+            if self.isPermanent and orderEvent is None:
+                expireTypeName = FORT_ORDER_TYPE_NAMES[orderID] + '_EXPIRE'
+                expireOrderID = getattr(FORT_ORDER_TYPE, expireTypeName)
+                orderEvent = proxy.events.get(FORT_EVENT_TYPE.ACTIVE_ORDERS_BASE + expireOrderID)
             self.finishTime = orderEvent[0] if orderEvent is not None else None
-            self.isPermanent = self._isPermanent(orderID)
             self.isSupported = self._isSupported(orderID)
             if orderData is not None:
                 self.effectTime = orderData.effectTime
@@ -90,16 +95,11 @@ class FortOrder(AppRef):
         if self.isSpecialMission:
             awardText = i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
             bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(self.level))
-            return fort_text.concatStyles(((fort_text.NEUTRAL_TEXT, awardText), (fort_text.MAIN_TEXT, bonusDescr)))
+            return self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, awardText), (TextType.MAIN_TEXT, bonusDescr)))
         else:
             from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
             effectValueStr = '+' + str(abs(self.effectValue))
             return fort_formatters.getBonusText('%s%%' % effectValueStr, FortViewHelper.UI_BUILDINGS_BIND[self.buildingID])
-
-    def _isPermanent(self, orderID):
-        if orderID in (FORT_ORDER_TYPE.EVACUATION, FORT_ORDER_TYPE.REQUISITION):
-            return True
-        return False
 
     def _isSupported(self, orderID):
         if not self.app.varsManager.isFortificationBattleAvailable():
@@ -121,7 +121,7 @@ class FortOrder(AppRef):
             return 0
 
     def getUsageLeftTimeStr(self):
-        return fort_text.getTimeDurationStr(self.getProductionLeftTime())
+        return self.app.utilsManager.textManager.getTimeDurationStr(self.getProductionLeftTime())
 
     def getProductionLeftTime(self):
         if self.productionTime is not None:
@@ -130,4 +130,4 @@ class FortOrder(AppRef):
             return 0
 
     def getProductionLeftTimeStr(self):
-        return fort_text.getTimeDurationStr(self.getProductionLeftTime())
+        return self.app.utilsManager.textManager.getTimeDurationStr(self.getProductionLeftTime())

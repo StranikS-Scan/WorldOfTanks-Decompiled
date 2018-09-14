@@ -1,9 +1,7 @@
 # Embedded file name: scripts/client/ClientFortifiedRegion.py
-import calendar
 import struct
 import itertools
 import operator
-import time
 import BigWorld
 from ClientUnit import ClientUnit
 from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE
@@ -31,13 +29,19 @@ class BUILDING_UPDATE_REASON(CONST_CONTAINER):
 
 class ATTACK_PLAN_RESULT(CONST_CONTAINER):
     OK = 'ok'
+    MY_FROZEN = 'my_frozen'
     MY_VACATION = 'my_vacation'
     MY_OFF_DAY = 'my_off_day'
+    MY_BUSY = 'my_busy'
+    MY_NO_DIR = 'my_no_dir'
     OPP_VACATION = 'opponent_vacation'
     OPP_OFF_DAY = 'opponent_off_day'
+    OPP_BUSY = 'opponent_busy'
+    OPP_NO_DIR = 'opponent_no_dir'
     DEFENCE_HOUR_SAME = 'defence_hour_same'
     PREORDER_TIME = 'preorder_time'
     IN_COOLDOWN = 'in_cooldown'
+    WAR_DECLARED = 'war_declared'
 
 
 class ClientFortifiedRegion(FortifiedRegionBase):
@@ -50,19 +54,27 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         self.onSortieUnitReceived = Event.Event(self.__eManager)
         self.onFortBattleChanged = Event.Event(self.__eManager)
         self.onFortBattleRemoved = Event.Event(self.__eManager)
+        self.onFortBattleUnitReceived = Event.Event(self.__eManager)
         self.onResponseReceived = Event.Event(self.__eManager)
         self.onBuildingChanged = Event.Event(self.__eManager)
         self.onTransport = Event.Event(self.__eManager)
         self.onDirectionOpened = Event.Event(self.__eManager)
         self.onDirectionClosed = Event.Event(self.__eManager)
+        self.onDirectionLockChanged = Event.Event(self.__eManager)
         self.onStateChanged = Event.Event(self.__eManager)
         self.onOrderReady = Event.Event(self.__eManager)
         self.onDossierChanged = Event.Event(self.__eManager)
         self.onPlayerAttached = Event.Event(self.__eManager)
+        self.onPeripheryChanged = Event.Event(self.__eManager)
         self.onDefenceHourChanged = Event.Event(self.__eManager)
+        self.onOffDayChanged = Event.Event(self.__eManager)
+        self.onVacationChanged = Event.Event(self.__eManager)
         self.onEnemyClanCardReceived = Event.Event(self.__eManager)
         self.onFavoritesChanged = Event.Event(self.__eManager)
+        self.onDefenceHourShutdown = Event.Event(self.__eManager)
         self.onShutdownDowngrade = Event.Event(self.__eManager)
+        self.onEmergencyRestore = Event.Event(self.__eManager)
+        self.onEnemyStateChanged = Event.Event(self.__eManager)
         self.__battlesMapping = {}
         FortifiedRegionBase.__init__(self)
 
@@ -95,6 +107,16 @@ class ClientFortifiedRegion(FortifiedRegionBase):
 
         return result
 
+    def getDirectionsInBattle(self):
+        result = []
+        for direction in range(1, fortified_regions.g_cache.maxDirections + 1):
+            if self.isDirectionOpened(direction) and self.isDirectionLocked(direction):
+                result.append(direction)
+
+        if result:
+            result.append(0)
+        return result
+
     def getBuildingsByDirections(self):
         result = {}
         for direction in self.getOpenedDirections():
@@ -123,12 +145,18 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def isDirectionOpened(self, direction):
         return bool(self.dirMask & 1 << direction)
 
+    def isDirectionLocked(self, direction):
+        return bool(self.lockedDirMask & 1 << direction)
+
     def getDefResStep(self):
         return self.DEF_RES_STEP
 
     def getBuildingState(self, buildingTypeID):
         building = self.getBuilding(buildingTypeID)
         return (building.isExportAvailable(), building.isImportAvailable())
+
+    def isFrozen(self):
+        return self.state & FORT_STATE.BASE_DESTROYED > 0
 
     def getOrderData(self, orderID, level = None):
         orderBuildingID = None
@@ -267,11 +295,16 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def isVacationEnabled(self):
         return self.vacationStart > 0 and self.vacationFinish > 0
 
+    def getVacationProcessing(self):
+        inProcess = FORT_EVENT_TYPE.VACATION_START in self.events and FORT_EVENT_TYPE.VACATION_FINISH in self.events
+        inCooldown = FORT_EVENT_TYPE.VACATION_COOLDOWN in self.events
+        return (inProcess, inCooldown)
+
     def getVacationDate(self):
         if not self.isVacationEnabled():
             return (None, None)
         else:
-            return (time_utils.makeLocalServerTime(self.vacationStart), time_utils.makeLocalServerTime(self.vacationFinish))
+            return (self.vacationStart, self.vacationFinish)
 
     def getVacationDateStr(self):
         if not self.isVacationEnabled():
@@ -296,7 +329,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         if not self.isVacationEnabled():
             return False
         start, finish = self.getVacationDate()
-        return start <= time.gmtime() < finish
+        return start <= time_utils.getCurrentTimestamp() < finish
 
     def isDefenceHourEnabled(self):
         return self.defenceHour != NOT_ACTIVATED
@@ -305,9 +338,10 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         return FORT_EVENT_TYPE.DEFENCE_HOUR_SHUTDOWN in self.events
 
     def getLocalDefenceHour(self):
+        from gui.shared.fortifications.fort_helpers import adjustDefenceHourToLocal
         if not self.isDefenceHourEnabled():
             return NOT_ACTIVATED
-        return time.localtime(time_utils.getTimeTodayForUTC(self.defenceHour)).tm_hour
+        return adjustDefenceHourToLocal(self.defenceHour)
 
     def getDefencePeriod(self):
         if self.isDefenceHourEnabled():
@@ -336,32 +370,57 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         if not self.isDefenceHourEnabled():
             return False
         start, finish = self.getDefencePeriod()
-        return start <= calendar.timegm(time.gmtime()) < finish
+        return start <= time_utils.getCurrentTimestamp() < finish and not self.isOnVacation() and not self.isOnOffDay()
 
     def getDefenceHourProcessing(self):
         return (FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE in self.events, FORT_EVENT_TYPE.DEFENCE_HOUR_COOLDOWN in self.events)
 
-    def getVacationProcessing(self):
-        inProcess = FORT_EVENT_TYPE.VACATION_START in self.events and FORT_EVENT_TYPE.VACATION_FINISH in self.events
-        inCooldown = FORT_EVENT_TYPE.VACATION_COOLDOWN in self.events
-        return (inProcess, inCooldown)
+    def getNextDefenceHourData(self):
+        dayOfChange, defHour, _ = self.events.get(FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE, (NOT_ACTIVATED, self.defenceHour, None))
+        return (defHour, dayOfChange)
 
     def isOffDayEnabled(self):
         return self.offDay != NOT_ACTIVATED
 
-    def getOffDay(self):
-        if self.isOffDayEnabled():
-            return self.offDay + 1
-        return NOT_ACTIVATED
+    def isOnOffDay(self):
+        return self.getLocalOffDay() == time_utils.getDateTimeInLocal(time_utils.getCurrentTimestamp()).weekday()
+
+    def getLocalOffDay(self):
+        from gui.shared.fortifications.fort_helpers import adjustOffDayToLocal
+        if not self.isOffDayEnabled():
+            return NOT_ACTIVATED
+        return adjustOffDayToLocal(self.offDay, self.getLocalDefenceHour())
 
     def getOffDayStr(self):
-        offDay = self.getOffDay()
-        if offDay > NOT_ACTIVATED:
-            return i18n.makeString('#menu:dateTime/weekDays/full/%d' % offDay)
+        if self.isOffDayEnabled():
+            return i18n.makeString('#menu:dateTime/weekDays/full/%d' % (self.getLocalOffDay() + 1))
         return i18n.makeString(FORTIFICATIONS.SETTINGSWINDOW_BLOCKCONDITION_NOWEEKEND)
 
     def getOffDayProcessing(self):
         return (FORT_EVENT_TYPE.OFF_DAY_CHANGE in self.events, FORT_EVENT_TYPE.OFF_DAY_COOLDOWN in self.events)
+
+    def getAttacksIn(self, clanDBID = None, timePeriod = time_utils.QUARTER_HOUR):
+
+        def filterFunc(item):
+            if item.getStartTimeLeft() <= timePeriod and not item.isEnded():
+                return True
+            return False
+
+        return self.getAttacks(clanDBID, filterFunc)
+
+    def getDefencesIn(self, clanDBID = None, timePeriod = time_utils.QUARTER_HOUR):
+
+        def filterFunc(item):
+            if item.getStartTimeLeft() <= timePeriod and not item.isEnded():
+                return True
+            return False
+
+        return self.getDefences(clanDBID, filterFunc)
+
+    def getAttacksAndDefencesIn(self, clanDBID = None, timePeriod = time_utils.QUARTER_HOUR):
+        attacks = self.getAttacksIn(clanDBID, timePeriod)
+        defences = self.getDefencesIn(clanDBID, timePeriod)
+        return sorted(attacks + defences)
 
     def getAttacks(self, clanDBID = None, filterFunc = None):
         result = []
@@ -374,20 +433,20 @@ class ClientFortifiedRegion(FortifiedRegionBase):
                 LOG_ERROR('Error while building attack item', startTime, direction, data)
                 LOG_CURRENT_EXCEPTION()
 
-        return result
+        return sorted(result)
 
     def getDefences(self, clanDBID = None, filterFunc = None):
         result = []
         for (startTime, direction), data in self.defences.iteritems():
             try:
-                item = DefenceItem(startTime, direction, *data)
+                item = DefenceItem(startTime, direction, self.peripheryID, *data)
                 if (clanDBID is None or item.getOpponentClanDBID() == clanDBID) and (filterFunc is None or filterFunc(item)):
                     result.append(item)
             except Exception:
                 LOG_ERROR('Error while building defence item', startTime, direction, data)
                 LOG_CURRENT_EXCEPTION()
 
-        return result
+        return sorted(result)
 
     def getBattleItemByBattleID(self, battleID):
         return self.__battlesMapping.get(battleID)
@@ -400,28 +459,70 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         return result
 
     def canPlanAttackOn(self, dayTimestamp, clanFortInfo):
-        if self.isOnVacationAt(dayTimestamp):
+        if self.isFrozen():
+            return ATTACK_PLAN_RESULT.MY_FROZEN
+        currentDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, clanFortInfo.getStartDefHour())
+        enemyDefHour = clanFortInfo.getDefHourFor(currentDefHourTimestamp)
+        enemyDefHourTimestamp = time_utils.getTimeForLocal(dayTimestamp, enemyDefHour)
+        if enemyDefHourTimestamp - time_utils.getCurrentTimestamp() <= fortified_regions.g_cache.attackPreorderTime:
+            return ATTACK_PLAN_RESULT.PREORDER_TIME
+        elif self.isOnVacationAt(enemyDefHourTimestamp):
             return ATTACK_PLAN_RESULT.MY_VACATION
         vacationStart, vacationEnd = clanFortInfo.getVacationPeriod()
-        if vacationStart <= dayTimestamp <= vacationEnd:
+        if vacationStart <= enemyDefHourTimestamp <= vacationEnd:
             return ATTACK_PLAN_RESULT.OPP_VACATION
         dayDate = time_utils.getDateTimeInLocal(dayTimestamp)
-        if dayDate.isoweekday() == clanFortInfo.getOffDay():
+        localOffDay = clanFortInfo.getLocalOffDayFor(currentDefHourTimestamp)
+        if dayDate.weekday() == localOffDay:
             return ATTACK_PLAN_RESULT.OPP_OFF_DAY
         elif self.defenceHour == clanFortInfo.getStartDefHour():
             return ATTACK_PLAN_RESULT.DEFENCE_HOUR_SAME
 
-        def filterLastWeek(item):
-            if 0 < item.getStartTimePast() < time_utils.ONE_WEEK:
+        def filterInFight(item):
+            if enemyDefHourTimestamp <= item.getStartTime() < enemyDefHourTimestamp + time_utils.ONE_HOUR:
                 return True
             return False
 
-        attacksLastWeek = self.getAttacks(clanFortInfo.getClanDBID(), filterLastWeek)
-        defencesLastWeek = self.getAttacks(clanFortInfo.getClanDBID(), filterLastWeek)
+        attacksInFight = self.getAttacks(clanFortInfo.getClanDBID(), filterInFight)
+        if attacksInFight:
+            return ATTACK_PLAN_RESULT.WAR_DECLARED
+
+        def filterInCooldown(item):
+            if 0 < enemyDefHourTimestamp - item.getStartTime() < fortified_regions.g_cache.attackCooldownTime:
+                return True
+            return False
+
+        attacksLastWeek = self.getAttacks(clanFortInfo.getClanDBID(), filterInCooldown)
+        defencesLastWeek = self.getDefences(clanFortInfo.getClanDBID(), filterInCooldown)
         attackLastWeek = attacksLastWeek[-1] if attacksLastWeek else None
         defenceLastWeek = defencesLastWeek[-1] if defencesLastWeek else None
         if attackLastWeek is not None and (defenceLastWeek is None or defenceLastWeek.getStartTime() > attackLastWeek.getStartTime()):
             return ATTACK_PLAN_RESULT.IN_COOLDOWN
+        hasAvailableDirections, hasFreeDirections = False, False
+        for direction in self.getOpenedDirections():
+            eventTypeID = FORT_EVENT_TYPE.DIR_OPEN_ATTACKS_BASE + direction
+            availableTime, _, _ = self.events.get(eventTypeID, (None, None, None))
+            if availableTime <= enemyDefHourTimestamp:
+                hasAvailableDirections = True
+
+                def filterAttacks(item):
+                    if enemyDefHourTimestamp <= item.getStartTime() <= enemyDefHourTimestamp + time_utils.ONE_HOUR and direction == item.getDirection() and not item.isEnded():
+                        return True
+                    return False
+
+                if not self.getAttacks(filterFunc=filterAttacks):
+                    hasFreeDirections = True
+                    break
+
+        if not hasAvailableDirections:
+            return ATTACK_PLAN_RESULT.MY_NO_DIR
+        elif not hasFreeDirections:
+            return ATTACK_PLAN_RESULT.MY_BUSY
+        isBusy, isAvailable = clanFortInfo.isAvailableForAttack(enemyDefHourTimestamp)
+        if not isAvailable:
+            return ATTACK_PLAN_RESULT.OPP_NO_DIR
+        elif isBusy:
+            return ATTACK_PLAN_RESULT.OPP_BUSY
         else:
             return ATTACK_PLAN_RESULT.OK
 
@@ -435,8 +536,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def __buildBattle(self, battleID, itemData):
         try:
             additionalData = self.__battlesMapping[battleID]
-            peripheryID = self.peripheryID if itemData['isDefence'] else additionalData.getPeripheryID()
-            return BattleItem(battleID, peripheryID, itemData, additionalData)
+            return BattleItem(battleID, itemData, additionalData)
         except Exception:
             LOG_ERROR('Error while building battle item', battleID, itemData)
             LOG_CURRENT_EXCEPTION()
@@ -472,11 +572,23 @@ class ClientFortifiedRegion(FortifiedRegionBase):
 
     def _addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID):
         FortifiedRegionBase._addFortBattle(self, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID)
+        self.__updateBattlesMapping()
         self.onFortBattleChanged(battleID)
 
     def _removeFortBattle(self, battleID):
         FortifiedRegionBase._removeFortBattle(self, battleID)
+        self.__updateBattlesMapping()
         self.onFortBattleRemoved(battleID)
+
+    def _unpackFortBattleUnit(self, unpacking):
+        result = FortifiedRegionBase._unpackFortBattleUnit(self, unpacking)
+        try:
+            battleID, = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
+            self.onFortBattleUnitReceived(battleID)
+        except struct.error as e:
+            LOG_ERROR(e)
+
+        return result
 
     def _processRequest(self, reqID, callerDBID):
         FortifiedRegionBase._processRequest(self, reqID, callerDBID)
@@ -556,6 +668,8 @@ class ClientFortifiedRegion(FortifiedRegionBase):
             self.onOrderReady(orderTypeID, orderCount)
         elif eventTypeID == FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE:
             self.onDefenceHourChanged(value)
+        elif eventTypeID == FORT_EVENT_TYPE.OFF_DAY_CHANGE:
+            self.onOffDayChanged(value)
 
     def _syncFortDossier(self, compDossierDescr):
         FortifiedRegionBase._syncFortDossier(self, compDossierDescr)
@@ -577,5 +691,62 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         FortifiedRegionBase._shutdownDowngrade(self)
         self.onShutdownDowngrade()
 
+    def _shutdownDefHour(self, timeActivation, initiatorDBID):
+        FortifiedRegionBase._shutdownDefHour(self, timeActivation, initiatorDBID)
+        self.onDefenceHourShutdown()
+
+    def _cancelEvent(self, eventTypeID):
+        FortifiedRegionBase._cancelEvent(self, eventTypeID)
+        if eventTypeID == FORT_EVENT_TYPE.DEFENCE_HOUR_SHUTDOWN:
+            self.onDefenceHourShutdown()
+
+    def _changePeriphery(self, peripheryID, timeCooldown):
+        FortifiedRegionBase._changePeriphery(self, peripheryID, timeCooldown)
+        self.onPeripheryChanged(peripheryID)
+
+    def _changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID):
+        FortifiedRegionBase._changeDefHour(self, newValue, timeActivation, timeCooldown, initiatorDBID)
+        self.onDefenceHourChanged(newValue)
+
+    def _changeOffDay(self, offDay, timeActivation, timeCooldown, initiatorDBID):
+        FortifiedRegionBase._changeOffDay(self, offDay, timeActivation, timeCooldown, initiatorDBID)
+        self.onOffDayChanged(offDay)
+
+    def _changeVacation(self, timeVacationStart, timeVacationEnd, timeCooldown, initiatorDBID):
+        FortifiedRegionBase._changeVacation(self, timeVacationStart, timeVacationEnd, timeCooldown, initiatorDBID)
+        self.onVacationChanged(timeVacationStart, timeVacationEnd)
+
+    def _setLockedDirMask(self, lockedDirMask):
+        FortifiedRegionBase._setLockedDirMask(self, lockedDirMask)
+        self.onDirectionLockChanged()
+
+    def _setFortBattleBuildnum(self, battleID, packBuildsNum, roundStart = 0):
+        FortifiedRegionBase._setFortBattleBuildnum(self, battleID, packBuildsNum, roundStart)
+        self.__updateBattlesMapping()
+        self.onFortBattleChanged(battleID)
+
+    def _setEnemyReadyForBattle(self, battleID, isReady):
+        FortifiedRegionBase._setEnemyReadyForBattle(self, battleID, isReady)
+        self.onEnemyStateChanged(battleID, isReady)
+
+    def _setFortBattleRound(self, battleID, isBattleRound):
+        FortifiedRegionBase._setFortBattleRound(self, battleID, isBattleRound)
+        self.__updateBattlesMapping()
+        self.onFortBattleChanged(battleID)
+
+    def _addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev):
+        FortifiedRegionBase._addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev)
+        self.__updateBattlesMapping()
+        self.onFortBattleChanged(battleID)
+
+    def _addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackResult, attackResource, attackerClanAbbrev):
+        FortifiedRegionBase._addDefence(self, timeAttack, dirFrom, dirTo, attackerClanDBID, battleID, attackResult, attackResource, attackerClanAbbrev)
+        self.__updateBattlesMapping()
+        self.onFortBattleChanged(battleID)
+
     def _onEnemyClanCard(self, *args):
         self.onEnemyClanCardReceived(ClanCardItem(args))
+
+    def _onEmergencyRestore(self, unpacking):
+        self.onEmergencyRestore()
+        return FortifiedRegionBase._onEmergencyRestore(self, unpacking)

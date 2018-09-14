@@ -35,12 +35,12 @@ class CyberSportIntroView(CyberSportIntroMeta):
         self.__updateVehicles(event.ctx)
 
     def __updateVehicles(self, compDescr = None):
-        maxLevel = self.unitFunctional.getRosterSettings().getMaxLevel()
         if compDescr is not None and len(compDescr) > 0:
             vehicles = compDescr
         else:
+            levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
             item = g_currentVehicle.item
-            isAllowed = g_itemsCache.items.getItemByCD(int(item.intCD)).level <= maxLevel
+            isAllowed = g_itemsCache.items.getItemByCD(int(item.intCD)).level in levelsRange
             vehicles = [item.intCD] if isAllowed else []
         self._selectedVehicles = vehicles
         hasReadyVehicles = False
@@ -71,7 +71,7 @@ class CyberSportIntroView(CyberSportIntroMeta):
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_INTRO,
          'selectedVehicles': self._selectedVehicles,
          'section': 'cs_intro_view_vehicle',
-         'maxLevel': rosterSettings.getMaxLevel()}), scope=EVENT_BUS_SCOPE.LOBBY)
+         'levelsRange': rosterSettings.getLevelsRange()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onVehiclesChanged(self, *args):
         self.__updateVehicles(self.unitFunctional.getSelectedVehicles(self._section))

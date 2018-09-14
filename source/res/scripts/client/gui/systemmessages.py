@@ -13,6 +13,7 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'DismantlingForGold',
  'PurchaseForCredits',
  'Selling',
+ 'Remove',
  'Repair',
  'CustomizationForGold',
  'CustomizationForCredits'])

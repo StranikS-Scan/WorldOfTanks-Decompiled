@@ -901,9 +901,6 @@ class FortMiscInClanStats(FortMiscStats):
 
 class FortRegionBattlesStats(_CommonStatsBlock):
 
-    def getBattlesHours(self):
-        return self._getStat('battlesHours')
-
     def getAttackCount(self):
         return self._getStat('attackCount')
 
@@ -916,14 +913,23 @@ class FortRegionBattlesStats(_CommonStatsBlock):
     def getSuccessAttackCount(self):
         return self._getStat('successAttackCount')
 
+    def getWinsCount(self):
+        return self.getSuccessDefenceCount() + self.getSuccessAttackCount()
+
+    def getLossesCount(self):
+        return self.getBattlesCount() - self.getWinsCount()
+
+    def getWinsEfficiency(self):
+        return self._getAvgValue(self.getBattlesCount, self.getWinsCount)
+
     def getCombatCount(self):
         return self._getStat('combatCount')
 
     def getCombatWins(self):
         return self._getStat('combatWins')
 
-    def getWinsEfficiency(self):
-        return self._getAvgValue(self.getCombatCount, self.getCombatWins)
+    def getCombatLosses(self):
+        return self.getCombatCount() - self.getCombatWins()
 
     def getEnemyBaseCaptureCount(self):
         return self._getStat('enemyBaseCaptureCount')
@@ -943,16 +949,19 @@ class FortRegionBattlesStats(_CommonStatsBlock):
     def getResourceLossCount(self):
         return self._getStat('resourceLossCount')
 
-    def getProfitFactor(self):
-        if self.getResourceLossCount():
-            return float(self.getResourceCaptureCount()) / self.getResourceLossCount()
-        return 0
-
     def getCaptureEnemyBuildingTotalCount(self):
         return self._getStat('captureEnemyBuildingTotalCount')
 
     def getLossOwnBuildingTotalCount(self):
         return self._getStat('lossOwnBuildingTotalCount')
+
+    def getCombatWinsEfficiency(self):
+        return self._getAvgValue(self.getCombatCount, self.getCombatWins)
+
+    def getProfitFactor(self):
+        if self.getResourceLossCount():
+            return float(self.getResourceCaptureCount()) / self.getResourceLossCount()
+        return 0
 
     def _getStatsBlock(self, dossier):
         return dossier.getDossierDescr()['fortBattles']

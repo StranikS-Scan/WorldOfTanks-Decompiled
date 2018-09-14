@@ -84,6 +84,7 @@ class ServiceChannelManager(ChatActionsListener):
     def __addServerMessage(self, message):
         yield lambda callback: callback(True)
         formatter = formatters.SCH_SERVER_FORMATTERS_DICT.get(message.type)
+        LOG_DEBUG('Server message received', message, formatter)
         if formatter:
             try:
                 if formatter.isAsync():

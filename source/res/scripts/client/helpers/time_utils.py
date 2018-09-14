@@ -2,8 +2,9 @@
 import time
 import datetime
 import calendar
+import math
 import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
 ONE_MINUTE = 60
 QUARTER_HOUR = 15 * ONE_MINUTE
@@ -51,7 +52,7 @@ def setTimeCorrection(serverUTCTime):
 
 def makeLocalServerTime(serverTime):
     if serverTime:
-        return serverTime - _g_instance.timeCorrection
+        return max(0, serverTime - _g_instance.timeCorrection)
     else:
         return None
 
@@ -72,6 +73,11 @@ def getServerRegionalTimeCurrentDay():
     return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
 
 
+def getServerTimeCurrentDay():
+    ts = time.gmtime(_g_instance.serverUTCTime)
+    return ts.tm_hour * ONE_HOUR + ts.tm_min * ONE_MINUTE + ts.tm_sec
+
+
 def getServerRegionalWeekDay():
     return datetime.datetime.utcfromtimestamp(_g_instance.serverRegionalTime).isoweekday()
 
@@ -80,6 +86,15 @@ def getTimeDeltaFromNow(t):
     if t and datetime.datetime.utcfromtimestamp(t) > datetime.datetime.utcnow():
         delta = datetime.datetime.utcfromtimestamp(t) - datetime.datetime.utcnow()
         return delta.days * ONE_DAY + delta.seconds
+    return 0
+
+
+def getTimeDeltaFromNowInLocal(t):
+    if t:
+        givenDateTime = getDateTimeInLocal(t)
+        nowDateTime = getDateTimeInLocal(getCurrentTimestamp())
+        if givenDateTime > nowDateTime:
+            return (givenDateTime - nowDateTime).total_seconds()
     return 0
 
 
@@ -151,20 +166,28 @@ def isPast(timestamp):
 
 
 def isToday(timestamp):
-    todayStart, todayEnd = getDayTimeBounds(getCurrentTimestamp())
+    todayStart, todayEnd = getDayTimeBoundsForLocal(getCurrentTimestamp())
     return todayStart <= timestamp <= todayEnd
 
 
-def getDayTimeBounds(timestamp = None):
+def getDayTimeBoundsForLocal(timestamp = None):
     if timestamp is not None:
         dateTime = getDateTimeInLocal(timestamp)
     else:
         dateTime = datetime.datetime.now()
+    return (_getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day), _getTimestampForLocal(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59))
+
+
+def getDayTimeBoundsForUTC(timestamp = None):
+    if timestamp is not None:
+        dateTime = getDateTimeInUTC(timestamp)
+    else:
+        dateTime = datetime.datetime.utcnow()
     return (_getTimestampForUTC(dateTime.year, dateTime.month, dateTime.day), _getTimestampForUTC(dateTime.year, dateTime.month, dateTime.day, 23, 59, 59))
 
 
 def isTimeThisDay(timestamp):
-    start, end = getDayTimeBounds()
+    start, end = getDayTimeBoundsForLocal()
     return start <= timestamp <= end
 
 
@@ -173,13 +196,25 @@ def isTimeNextDay(timestamp):
 
 
 def getTimeTodayForUTC(hour = 0, minute = 0, second = 0, microsecond = 0):
-    date = datetime.datetime.now()
-    return _getTimestampForUTC(date.year, date.month, date.day, hour, minute, second, microsecond)
+    return getTimeForUTC(getCurrentTimestamp(), hour, minute, second, microsecond)
 
 
 def getTimeTodayForLocal(hour = 0, minute = 0, second = 0, microsecond = 0):
-    date = datetime.datetime.now()
+    return getTimeForLocal(getCurrentTimestamp(), hour, minute, second, microsecond)
+
+
+def getTimeForUTC(timestamp, hour = 0, minute = 0, second = 0, microsecond = 0):
+    date = getDateTimeInUTC(timestamp)
+    return _getTimestampForUTC(date.year, date.month, date.day, hour, minute, second, microsecond)
+
+
+def getTimeForLocal(timestamp, hour = 0, minute = 0, second = 0, microsecond = 0):
+    date = getDateTimeInLocal(timestamp)
     return _getTimestampForLocal(date.year, date.month, date.day, hour, minute, second, microsecond)
+
+
+def getDateTimeFormat(timeValue):
+    return '{0:>s} {1:>s}'.format(BigWorld.wg_getLongDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
 
 
 class ActivityIntervalsIterator(object):
@@ -233,11 +268,10 @@ class ActivityIntervalsIterator(object):
 
 class DaysAvailabilityIterator(object):
 
-    def __init__(self, currentTimestamp, weekDaysToExclude = None, intervalsToExclude = None, minDelta = 0):
+    def __init__(self, availableTimestamp, weekDaysToExclude = None, intervalsToExclude = None, minDelta = 0):
         self._weekDaysToExclude = weekDaysToExclude or ()
         self._intervalsToExclude = intervalsToExclude or ()
-        self._currentDay = 0
-        self._currentTimestamp = currentTimestamp
+        self._availableTimestamp = availableTimestamp
         self._minDelta = minDelta
 
     def __iter__(self):
@@ -245,17 +279,15 @@ class DaysAvailabilityIterator(object):
 
     def next(self):
         while True:
-            currentGMTime = getDateTimeInUTC(self._currentTimestamp)
+            currentGMTime = getDateTimeInUTC(self._availableTimestamp)
             currentLocalTimestamp = time.time()
-            if self._currentTimestamp - currentLocalTimestamp >= self._minDelta and currentGMTime.isoweekday() not in self._weekDaysToExclude and self._checkIntervals(self._currentTimestamp):
-                start, finish = getDayTimeBounds(currentLocalTimestamp)
-                if finish < self._currentTimestamp:
-                    self._currentDay = max(1, int((self._currentTimestamp - finish) / ONE_DAY))
+            if self._availableTimestamp - currentLocalTimestamp >= self._minDelta and currentGMTime.weekday() not in self._weekDaysToExclude and self._checkIntervals(self._availableTimestamp):
                 break
-            self._currentDay += 1
-            self._currentTimestamp += ONE_DAY
+            self._availableTimestamp += ONE_DAY
 
-        return (self._currentDay, self._currentTimestamp)
+        currentDayStart, _ = getDayTimeBoundsForLocal()
+        availableDayStart, _ = getDayTimeBoundsForLocal(self._availableTimestamp)
+        return self._availableTimestamp
 
     def _checkIntervals(self, timeStamp):
         for start, finish in self._intervalsToExclude:

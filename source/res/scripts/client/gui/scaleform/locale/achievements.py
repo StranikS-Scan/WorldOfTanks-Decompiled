@@ -267,9 +267,9 @@ class ACHIEVEMENTS(object):
     RELIABLECOMRADE = '#achievements:reliableComrade'
     RELIABLECOMRADE_DESCR = '#achievements:reliableComrade_descr'
     RELIABLECOMRADE_CONDITION = '#achievements:reliableComrade_condition'
-    MAXAIMERSERIES = '#achievements:maxAimerSeries'
-    MAXAIMERSERIES_DESCR = '#achievements:maxAimerSeries_descr'
-    MAXAIMERSERIES_CONDITION = '#achievements:maxAimerSeries_condition'
+    AIMER = '#achievements:aimer'
+    AIMER_DESCR = '#achievements:aimer_descr'
+    AIMER_CONDITION = '#achievements:aimer_condition'
     DIEHARD = '#achievements:diehard'
     DIEHARD_DESCR = '#achievements:diehard_descr'
     DIEHARD_CONDITION = '#achievements:diehard_condition'
@@ -727,9 +727,9 @@ class ACHIEVEMENTS(object):
      RELIABLECOMRADE,
      RELIABLECOMRADE_DESCR,
      RELIABLECOMRADE_CONDITION,
-     MAXAIMERSERIES,
-     MAXAIMERSERIES_DESCR,
-     MAXAIMERSERIES_CONDITION,
+     AIMER,
+     AIMER_DESCR,
+     AIMER_CONDITION,
      DIEHARD,
      DIEHARD_DESCR,
      DIEHARD_CONDITION,

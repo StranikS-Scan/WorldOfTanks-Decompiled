@@ -9,7 +9,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_
 from gui.shared.fortifications import getClientFortMgr, getClientFort
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE_NAMES, CLIENT_FORT_STATE
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
-from gui.shared.utils.requesters.rqs_by_id import RequestsByIDProcessor, RequestCtx
+from gui.shared.utils.requesters import RequestCtx, RequestsByIDProcessor
 from helpers import i18n
 
 class SimpleFortRequester(RequestsByIDProcessor):
@@ -26,6 +26,7 @@ class SimpleFortRequester(RequestsByIDProcessor):
         fortMgr = getClientFortMgr()
         if fortMgr:
             fortMgr.onFortResponseReceived += self._fortMgr_onFortResponseReceived
+            fortMgr.onFortUpdateReceived += self._fortMgr_onFortUpdateReceived
         else:
             LOG_DEBUG('Fort manager is not defined')
 
@@ -33,6 +34,7 @@ class SimpleFortRequester(RequestsByIDProcessor):
         fortMgr = getClientFortMgr()
         if fortMgr:
             fortMgr.onFortResponseReceived -= self._fortMgr_onFortResponseReceived
+            fortMgr.onFortUpdateReceived -= self._fortMgr_onFortUpdateReceived
         super(SimpleFortRequester, self).fini()
 
     def getSender(self):
@@ -40,6 +42,10 @@ class SimpleFortRequester(RequestsByIDProcessor):
 
     def _fortMgr_onFortResponseReceived(self, requestID, resultCode, _):
         self._onResponseReceived(requestID, resultCode in self._success)
+
+    def _fortMgr_onFortUpdateReceived(self, isFullUpdate):
+        if isFullUpdate:
+            self.stopProcessing()
 
 
 class PlayerFortRequester(SimpleFortRequester):
@@ -61,8 +67,11 @@ class PlayerFortRequester(SimpleFortRequester):
         fort = getClientFort()
         if fort:
             fort.onResponseReceived -= self._fort_onResponseReceived
-        self._individualRqIDs.clear()
         super(PlayerFortRequester, self).fini()
+
+    def stopProcessing(self):
+        self._individualRqIDs.clear()
+        super(PlayerFortRequester, self).stopProcessing()
 
     def _sendRequest(self, ctx, methodName, chain, *args, **kwargs):
         result, requestID = super(PlayerFortRequester, self)._sendRequest(ctx, methodName, chain, *args, **kwargs)

@@ -46,10 +46,6 @@ def getVehicleNotSupportedMessage():
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/vehicleNotSupported')
 
 
-def getVehicleOnlyEventBattlesMessage():
-    return i18n.makeString('#system_messages:prebattle/vehicleInvalid/onlyEventBattles')
-
-
 def getClassLimitMessage4Vehicle(teamLimits):
     classesList = map(lambda clazz: i18n.makeString('#menu:classes/%s' % clazz), teamLimits['classes'])
     return i18n.makeString('#system_messages:prebattle/vehicleInvalid/limits/classes') % ', '.join(classesList)
@@ -86,8 +82,7 @@ def getLevelLimitMessage4Team(teamLimits):
 
 _INVALID_VEHICLE_STATE = {PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT: getVehicleNotPresentMessage,
  PREBATTLE_RESTRICTION.VEHICLE_NOT_READY: getVehicleNotReadyMessage,
- PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage,
- PREBATTLE_RESTRICTION.VEHICLE_ONLY_EVENT_BATTLES: getVehicleOnlyEventBattlesMessage}
+ PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED: getVehicleNotSupportedMessage}
 _INVALID_VEHICLE_IN_TEAM = {PREBATTLE_RESTRICTION.LIMIT_CLASSES: getClassLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_NATIONS: getNationLimitMessage4Vehicle,
  PREBATTLE_RESTRICTION.LIMIT_LEVEL: getLevelLimitMessage4Vehicle,

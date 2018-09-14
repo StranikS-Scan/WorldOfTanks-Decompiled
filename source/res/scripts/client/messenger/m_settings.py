@@ -104,7 +104,6 @@ class _BattleSettings(object):
 _UserPrefs = namedtuple('_UserPrefs', ('version', 'datetimeIdx', 'enableOlFilter', 'enableSpamFilter', 'invitesFromFriendsOnly', 'storeReceiverInBattle', 'disableBattleChat'))
 
 class MessengerSettings(object):
-    __messageFormat = '<font color="#%(user)s">{0:>s}</font><font color="#%(user)s">{1:>s}</font> <font color="#%(message)s">{2:>s}</font>'
     __slots__ = ('__colorsSchemes', '__messageFormatters', '__eManager', 'lobby', 'battle', 'userPrefs', 'htmlTemplates', 'msgTemplates', 'server', 'onUserPreferencesUpdated', 'onColorsSchemesUpdated')
 
     def __init__(self):

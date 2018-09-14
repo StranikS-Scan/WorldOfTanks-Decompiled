@@ -79,14 +79,6 @@ class LobbyHeaderMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setFreeXP(freeXP, useFreeXP)
 
-    def as_highlightTutorialControlsS(self, step):
-        if self._isDAAPIInited():
-            return self.flashObject.as_highlightTutorialControls(step)
-
-    def as_resetHighlightTutorialControlsS(self):
-        if self._isDAAPIInited():
-            return self.flashObject.as_resetHighlightTutorialControls()
-
     def as_disableFightButtonS(self, isDisabled, toolTip):
         if self._isDAAPIInited():
             return self.flashObject.as_disableFightButton(isDisabled, toolTip)

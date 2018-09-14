@@ -5,10 +5,10 @@ import random
 import cPickle
 import dossiers2
 import fortified_regions
-from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES, SYS_MESSAGE_FORT_EVENT, FORT_BUILDING_STATUS
+from constants import FORT_BUILDING_TYPE, FORT_BUILDING_TYPE_NAMES, FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES, SYS_MESSAGE_FORT_EVENT, FORT_BUILDING_STATUS, IS_KOREA
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from UnitBase import UnitBase
-from debug_utils import LOG_DEBUG_DEV, LOG_DAN, IS_DEVELOPMENT
+from debug_utils import LOG_DEBUG_DEV, LOG_DAN, IS_DEVELOPMENT, LOG_CURRENT_EXCEPTION, LOG_VLK, LOG_WARNING
 from UnitRoster import buildNamesDict
 NOT_ACTIVATED = -1
 TOTAL_CONTRIBUTION = 0
@@ -16,12 +16,17 @@ FORT_AUTO_UNSUBSCRIBE_TIMEOUT = 60
 SECONDS_PER_HOUR = 60 * 60
 SECONDS_PER_DAY = 24 * SECONDS_PER_HOUR
 SECONDS_PER_WEEK = 7 * SECONDS_PER_DAY
+INT_MAX = (1 << 31) - 1
+INT_MIN = -(1 << 31)
+OFF_DAY_SETTING_PERIOD = 10
 MAX_BUILDING_POSITIONS = 2
 MAX_DIRECTION_NUM = 6
 NO_FORT_PACK = ''
 EMPTY_FORT_PACK = ' '
 FORT_BATTLE_BUILDING_HP_PERCENT = 20
 DEF_SHUTDOWN_LEVEL = 4
+MAX_PERIPHERY_ID = 999
+ALL_DIRS = 100
 
 class FORT_EVENT_TYPE():
     ACTIVE_ORDERS_BASE = 0
@@ -37,6 +42,7 @@ class FORT_EVENT_TYPE():
     VACATION_FINISH = 107
     DEFENCE_HOUR_SHUTDOWN = 108
     PERIPHERY_COOLDOWN = 109
+    OFF_DAY_SETTING = 110
     BUILDING_MAPS_BASE = 150
     PRODUCT_ORDERS_BASE = 200
     _COOLDOWNS = (DEFENCE_HOUR_COOLDOWN,
@@ -154,6 +160,8 @@ class FORT_ERROR():
     WRONG_PERIPHERY = 94
     FORT_BATTLES_DISABLED = 95
     TOO_MANY_DEFENCES = 96
+    CURFEW_HOUR = 97
+    LAST_DIR_FOR_DEFENCE = 98
 
 
 OK = FORT_ERROR.OK
@@ -208,9 +216,13 @@ class FORT_OP():
     SET_FORT_BATTLE_DIRECTIONS = 45
     FORT_BATTLE_UNIT = 46
     REMOVE_FORT_BATTLE_UNIT = 47
-    ADD_FAVORITE = 48
-    REMOVE_FAVORITE = 49
-    SET_BUILD_MAPS = 50
+    SET_FORT_BATTLE_ROUND = 48
+    ADD_FAVORITE = 49
+    REMOVE_FAVORITE = 50
+    SET_BUILD_MAPS = 51
+    SET_ENEMY_READY_FOR_BATTLE = 52
+    EMERGENCY_ON_RESTORE = 53
+    ADD_EVENT = 54
     SET_RESOURCE = 101
     SET_DEF_HOUR = 102
     SET_OFF_DAY = 103
@@ -228,6 +240,8 @@ class FORT_URGENT_OP():
     GENERIC_SYS_MESSAGE = 7
     CREATE_FORT_BATTLE = 8
     JOIN_FORT_BATTLE = 9
+    CHANGE_PERIPHERY_SYS_MESSAGE = 10
+    ORDER_COMPENSATED = 11
 
 
 class FORT_NOTIFICATION():
@@ -269,6 +283,15 @@ class FORT_ATTACK_RESULT():
      SKIPPED,
      FAILED_TO_START,
      TECHNICAL_DRAW)
+
+
+class DELETE_BATTLE_REASON():
+    UNKNOWN = 0
+    ADMIN_REQUEST = 1
+    BASE_DAMAGED = 2
+    DEFENCE_SHUTDOWN = 3
+    DIR_CLOSED = 4
+    FORT_DELETED = 5
 
 
 class FORT_CLIENT_METHOD():
@@ -495,6 +518,7 @@ class FortifiedRegionBase(OpsUnpacker):
                             'S',
                             ['']),
      FORT_OP.SHUTDOWN_DEF_HOUR: ('iq', '_shutdownDefHour'),
+     FORT_OP.ADD_EVENT: ('Biiq', '_addEvent'),
      FORT_OP.CANCEL_EVENT: ('B', '_cancelEvent'),
      FORT_OP.DMG_BUILDING: ('Biq', '_dmgBuilding'),
      FORT_OP.SUSPEND_PRODUCTION: ('Bi', '_suspendProduction'),
@@ -510,8 +534,8 @@ class FortifiedRegionBase(OpsUnpacker):
                                 ('B', 'BBBi', ('level', 'dirPosByte', 'hp')),
                                 ('i', 'iBq11p'),
                                 ('B', 'B', 'i')]),
-     FORT_OP.DELETE_BATTLES_BY_TIME: ('ii', '_deleteBattlesByTime'),
-     FORT_OP.DELETE_BATTLES_BY_CLAN: ('qii', '_deleteBattlesByClan'),
+     FORT_OP.DELETE_BATTLES_BY_TIME: ('iibb', '_deleteBattlesByTime'),
+     FORT_OP.DELETE_BATTLES_BY_CLAN: ('qiibb', '_deleteBattlesByClan'),
      FORT_OP.ADD_ATTACK: ('iBBqqHbi',
                           '_addAttack',
                           'S',
@@ -524,16 +548,19 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.SET_ATTACK_RESULT: ('biqBi', '_setAttackResult'),
      FORT_OP.ADD_FORT_BATTLE: ('qBiqq', '_addFortBattle'),
      FORT_OP.REMOVE_FORT_BATTLE: ('q', '_removeFortBattle'),
-     FORT_OP.SET_FORT_BATTLE_BUILDNUM: ('qb', '_setFortBattleBuildnum'),
+     FORT_OP.SET_FORT_BATTLE_BUILDNUM: ('qbi', '_setFortBattleBuildnum'),
      FORT_OP.SET_FORT_BATTLE_DIRECTIONS: ('q',
                                           '_setFortBattleDirections',
                                           'S',
                                           ['']),
      FORT_OP.FORT_BATTLE_UNIT: ('', '_unpackFortBattleUnit'),
+     FORT_OP.SET_ENEMY_READY_FOR_BATTLE: ('qB', '_setEnemyReadyForBattle'),
      FORT_OP.REMOVE_FORT_BATTLE_UNIT: ('q', '_removeFortBattleUnit'),
+     FORT_OP.SET_FORT_BATTLE_ROUND: ('qB', '_setFortBattleRound'),
      FORT_OP.ADD_FAVORITE: ('q', '_addFavorite'),
      FORT_OP.REMOVE_FAVORITE: ('q', '_removeFavorite'),
      FORT_OP.SET_BUILD_MAPS: ('BiHH', '_setBuildingMaps'),
+     FORT_OP.EMERGENCY_ON_RESTORE: ('', '_onEmergencyRestore'),
      FORT_OP.SET_RESOURCE: ('Bi', '_setBuildingResource'),
      FORT_OP.SET_DEF_HOUR: ('i', '_setDefHour'),
      FORT_OP.SET_OFF_DAY: ('i', '_setOffDay'),
@@ -541,7 +568,7 @@ class FortifiedRegionBase(OpsUnpacker):
      FORT_OP.SET_PERIPHERY: ('H', '_setPeriphery')})
     FORMAT_HEADER = '<qiiiiHBbbBBBBBBBBBHHHHHq'
     SIZE_HEADER = struct.calcsize(FORMAT_HEADER)
-    FORMAT_EVENT = '<Biqq'
+    FORMAT_EVENT = '<BIqq'
     SIZE_EVENT = struct.calcsize(FORMAT_EVENT)
     FORMAT_BUILDING_HEADER = '<BH'
     SIZE_BUILDING_HEADER = struct.calcsize(FORMAT_BUILDING_HEADER)
@@ -555,7 +582,7 @@ class FortifiedRegionBase(OpsUnpacker):
     SIZE_ADD_SORTIE_HEADER = struct.calcsize(FORMAT_ADD_SORTIE_HEADER)
     FORMAT_SORTIE_UNIT_HEADER = '<qH'
     SIZE_SORTIE_UNIT_HEADER = struct.calcsize(FORMAT_SORTIE_UNIT_HEADER)
-    FORMAT_ADD_BATTLE_HEADER = '<qBBibqqq'
+    FORMAT_ADD_BATTLE_HEADER = '<qBBibbqqBiB'
     SIZE_ADD_BATTLE_HEADER = struct.calcsize(FORMAT_ADD_BATTLE_HEADER)
     FORMAT_ADD_BATTLEUNIT_HEADER = '<qh'
     SIZE_ADD_BATTLEUNIT_HEADER = struct.calcsize(FORMAT_ADD_BATTLEUNIT_HEADER)
@@ -581,7 +608,7 @@ class FortifiedRegionBase(OpsUnpacker):
         return self.dbID and self.state & FORT_STATE.IS_SUSPENDED
 
     def isLoaded(self):
-        return self.state & FORT_STATE.PLANNED_INFO_LOADED != 0
+        return not self.dbID or self.state & FORT_STATE.PLANNED_INFO_LOADED != 0
 
     def _empty(self):
         self.dbID = 0
@@ -655,8 +682,7 @@ class FortifiedRegionBase(OpsUnpacker):
         if self.dbID:
             statistics = self.statistics.makeCompDescr()
             packed = struct.pack(self.FORMAT_HEADER, self.dbID, self.peripheryID, self.vacationStart, self.vacationFinish, self._debugTimeShift, self.state, self.level, self.defenceHour, self.offDay, self._devMode, self.dirMask, self.lockedDirMask, len(self.events), len(self.buildings), len(self.orders), len(self.battles), len(self.battleUnits), len(self.sorties), len(self.playerContributions), len(statistics), len(self.attacks), len(self.defences), len(self.favorites), self.creatorDBID)
-            for eventType in sorted(self.events.keys()):
-                unixtime, eventValue, initiatorDBID = self.events[eventType]
+            for eventType, (unixtime, eventValue, initiatorDBID) in self.events.iteritems():
                 packed += struct.pack(self.FORMAT_EVENT, eventType, unixtime, eventValue, initiatorDBID)
 
             for buildTypeID, buildingCompactDescr in self.buildings.iteritems():
@@ -692,11 +718,14 @@ class FortifiedRegionBase(OpsUnpacker):
                 currentBuildNum = data['currentBuildNum']
                 attackerClanDBID = data['attackerClanDBID']
                 defenderClanDBID = data['defenderClanDBID']
-                attackerBuildList = packPascalString(cPickle.dumps(data['attackerBuildList'], -1))
-                defenderBuildList = packPascalString(cPickle.dumps(data['defenderBuildList'], -1))
-                attackerFullBuildList = packPascalString(cPickle.dumps(data['attackerFullBuildList'], -1))
-                defenderFullBuildList = packPascalString(cPickle.dumps(data['defenderFullBuildList'], -1))
-                packed += struct.pack(fmt, battleID, direction, isDefence, attackTime, prevBuildNum, currentBuildNum, attackerClanDBID, defenderClanDBID)
+                isEnemyReadyForBattle = data['isEnemyReadyForBattle']
+                roundStart = data.get('roundStart', 0)
+                isBattleRound = data.get('isBattleRound', False)
+                attackerBuildList = packPascalString(cPickle.dumps(data['attackerBuildList']))
+                defenderBuildList = packPascalString(cPickle.dumps(data['defenderBuildList']))
+                attackerFullBuildList = packPascalString(cPickle.dumps(data['attackerFullBuildList']))
+                defenderFullBuildList = packPascalString(cPickle.dumps(data['defenderFullBuildList']))
+                packed += struct.pack(fmt, battleID, direction, isDefence, attackTime, prevBuildNum, currentBuildNum, attackerClanDBID, defenderClanDBID, isEnemyReadyForBattle, roundStart, isBattleRound)
                 packed += attackerBuildList
                 packed += defenderBuildList
                 packed += attackerFullBuildList
@@ -815,7 +844,7 @@ class FortifiedRegionBase(OpsUnpacker):
         fmt = self.FORMAT_ADD_BATTLE_HEADER
         self.battles = {}
         for i in xrange(lenBattles):
-            battleID, direction, isDefence, attackTime, prevBuildNum, currentBuildNum, attackerClanDBID, defenderClanDBID = struct.unpack_from(fmt, packed, offset)
+            battleID, direction, isDefence, attackTime, prevBuildNum, currentBuildNum, attackerClanDBID, defenderClanDBID, isEnemyReadyForBattle, roundStart, isBattleRound = struct.unpack_from(fmt, packed, offset)
             attackerBuildListStr, attackerListLen = unpackPascalString(packed, offset + sz)
             attackerBuildList = cPickle.loads(attackerBuildListStr)
             defenderBuildListStr, defenderListLen = unpackPascalString(packed, offset + sz + attackerListLen)
@@ -835,7 +864,10 @@ class FortifiedRegionBase(OpsUnpacker):
              'attackerFullBuildList': attackerFullBuildList,
              'defenderFullBuildList': defenderFullBuildList,
              'prevBuildNum': prevBuildNum,
-             'currentBuildNum': currentBuildNum}
+             'currentBuildNum': currentBuildNum,
+             'isEnemyReadyForBattle': isEnemyReadyForBattle,
+             'roundStart': roundStart,
+             'isBattleRound': isBattleRound}
 
         sz = self.SIZE_ADD_BATTLEUNIT_HEADER
         fmt = self.FORMAT_ADD_BATTLEUNIT_HEADER
@@ -923,7 +955,19 @@ class FortifiedRegionBase(OpsUnpacker):
                 self._unpackBuilding(buildingCompactDescr, buildTypeID)
 
             self.state |= FORT_STATE.FORT_CREATED
-        self.pack()
+            for eventID in self.events.keys():
+                args = self.events.get(eventID)
+                timestamp = args[0]
+                if timestamp < INT_MIN or timestamp > INT_MAX:
+                    LOG_WARNING('Removing bad event timestamp', self.dbID, eventID, args)
+                    self.events.pop(eventID)
+
+        try:
+            self.pack()
+        except Exception as e:
+            LOG_CURRENT_EXCEPTION()
+            LOG_VLK('FortifiedRegionBase.self: %s' % repr(self))
+            raise e
 
     def getBuilding(self, buildingTypeID):
         buildCompDescr = self.buildings.get(buildingTypeID)
@@ -979,6 +1023,8 @@ class FortifiedRegionBase(OpsUnpacker):
     def validateDefHour(self, value, isAdmin = False):
         if value < -1 or value == -1 and isAdmin == False or value > 23:
             return FORT_ERROR.BAD_HOUR_VALUE
+        if IS_KOREA and value >= 15 and value <= 21:
+            return FORT_ERROR.CURFEW_HOUR
         return OK
 
     def validateOffDay(self, value):
@@ -1020,13 +1066,13 @@ class FortifiedRegionBase(OpsUnpacker):
 
         return (total, lastWeek)
 
-    def _validateDefenceHour(self, timestamp):
+    def _validateDefenceHour(self, timestamp, startingTimeOfNewDay = 0):
         timeNewDefHour, newDefHour, _ = self.events.get(FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE, (0, 0, 0))
         timeNewOffDay, newOffDay, _ = self.events.get(FORT_EVENT_TYPE.OFF_DAY_CHANGE, (0, 0, 0))
-        return FortifiedRegionBase.validateDefenceHour(timestamp, self.defenceHour, self.offDay, self.vacationStart, self.vacationFinish, timeNewDefHour, newDefHour, timeNewOffDay, newOffDay)
+        return FortifiedRegionBase.validateDefenceHour(timestamp, self.defenceHour, self.offDay, self.vacationStart, self.vacationFinish, timeNewDefHour, newDefHour, timeNewOffDay, newOffDay, startingTimeOfNewDay)
 
     @staticmethod
-    def validateDefenceHour(timestamp, defHour, offDay, timeVacationStart, timeVacationFinish, timeNewDefHour, newDefHour, timeNewOffDay, newOffDay):
+    def validateDefenceHour(timestamp, defHour, offDay, timeVacationStart, timeVacationFinish, timeNewDefHour, newDefHour, timeNewOffDay, newOffDay, startingTimeOfNewDay = 0):
         if timeVacationStart <= timestamp and timestamp <= timeVacationFinish:
             return FORT_ERROR.CLAN_ON_VACATION
         if timestamp % SECONDS_PER_HOUR != 0:
@@ -1042,7 +1088,8 @@ class FortifiedRegionBase(OpsUnpacker):
             return FORT_ERROR.BAD_HOUR_VALUE
         od = offDay if timeNewOffDay == 0 or timestamp < timeNewOffDay else newOffDay
         if od >= 0:
-            dayOfWeek = timestamp % SECONDS_PER_WEEK / SECONDS_PER_DAY
+            dayOfWeek = (timestamp - startingTimeOfNewDay) % SECONDS_PER_WEEK / SECONDS_PER_DAY
+            dayOfWeek = (dayOfWeek + 3) % 7
             if od == dayOfWeek:
                 return FORT_ERROR.CLAN_HAS_OFF_DAY
         return OK
@@ -1233,7 +1280,7 @@ class FortifiedRegionBase(OpsUnpacker):
     SIZE_DBID = struct.calcsize('<q')
 
     def _delete(self, deleterDBID):
-        LOG_DAN('Fort._delete', deleterDBID)
+        LOG_DAN('Fort._delete', deleterDBID, self.dbID)
         self.storeOp(FORT_OP.DELETE, deleterDBID)
         self._empty()
 
@@ -1289,14 +1336,12 @@ class FortifiedRegionBase(OpsUnpacker):
             building.orderInProduction.clear()
             self.setBuilding(buildingTypeID, building)
         elif eventTypeID == FORT_EVENT_TYPE.DEFENCE_HOUR_CHANGE:
-            self.defenceHour = value
-            self.validateBuildingMaps()
-            self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.DEF_HOUR_ACTIVATED, defenceHour=self.defenceHour)
+            self._activateDefHour(value)
         elif eventTypeID == FORT_EVENT_TYPE.OFF_DAY_CHANGE:
             self.offDay = value
-            self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.OFF_DAY_ACTIVATED, offDay=self.offDay)
+            self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.OFF_DAY_ACTIVATED, defenceHour=self.defenceHour, offDay=self.offDay)
         elif eventTypeID == FORT_EVENT_TYPE.VACATION_START:
-            self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.VACATION_STARTED)
+            self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.VACATION_STARTED, timeStart=self.vacationStart, timeEnd=self.vacationFinish)
         elif eventTypeID == FORT_EVENT_TYPE.VACATION_FINISH:
             self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.VACATION_FINISHED)
         elif eventTypeID == FORT_EVENT_TYPE.DEFENCE_HOUR_SHUTDOWN:
@@ -1306,6 +1351,12 @@ class FortifiedRegionBase(OpsUnpacker):
             self._broadcastFortSystemMessage(SYS_MESSAGE_FORT_EVENT.DEF_HOUR_SHUTDOWN)
         self.storeOp(FORT_OP.EXPIRE_EVENT, eventTypeID, value)
         return
+
+    def _activateDefHour(self, value):
+        msgID = SYS_MESSAGE_FORT_EVENT.DEF_HOUR_ACTIVATED if self.defenceHour == NOT_ACTIVATED else SYS_MESSAGE_FORT_EVENT.DEF_HOUR_CHANGED
+        self._broadcastFortSystemMessage(msgID, defenceHour=value)
+        self.defenceHour = value
+        self.validateBuildingMaps()
 
     def _shutdownDowngrade(self):
         if self.level > DEF_SHUTDOWN_LEVEL:
@@ -1345,6 +1396,11 @@ class FortifiedRegionBase(OpsUnpacker):
                     self.events.pop(eventTypeID)
 
             self._dirty = True
+
+    def _addEvent(self, eventTypeID, timestamp, value, callerDBID):
+        LOG_DEBUG_DEV('_addEvent', eventTypeID, timestamp, value, callerDBID)
+        self.events[eventTypeID] = (timestamp, value, callerDBID)
+        self.storeOp(FORT_OP.ADD_EVENT, eventTypeID, timestamp, value, callerDBID)
 
     def _cancelEvent(self, eventTypeID):
         LOG_DEBUG_DEV('_cancelEvent', eventTypeID)
@@ -1441,7 +1497,10 @@ class FortifiedRegionBase(OpsUnpacker):
          'attackerFullBuildList': None,
          'defenderFullBuildList': None,
          'prevBuildNum': 0,
-         'currentBuildNum': 0}
+         'currentBuildNum': 0,
+         'isEnemyReadyForBattle': False,
+         'roundStart': 0,
+         'isBattleRound': 0}
         self.storeOp(FORT_OP.ADD_FORT_BATTLE, battleID, direction, attackTime, attackerClanDBID, defenderClanDBID)
         return
 
@@ -1451,12 +1510,13 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.REMOVE_FORT_BATTLE, battleID)
         return
 
-    def _setFortBattleBuildnum(self, battleID, packBuildsNum):
+    def _setFortBattleBuildnum(self, battleID, packBuildsNum, roundStart = 0):
         battle = self.battles[battleID]
         prevBuildNum, currentBuildNum = parseDirPosByte(packBuildsNum)
         battle['prevBuildNum'] = prevBuildNum
         battle['currentBuildNum'] = currentBuildNum - 1
-        self.storeOp(FORT_OP.SET_FORT_BATTLE_BUILDNUM, battleID, packBuildsNum)
+        battle['roundStart'] = roundStart
+        self.storeOp(FORT_OP.SET_FORT_BATTLE_BUILDNUM, battleID, packBuildsNum, roundStart)
 
     def _setFortBattleDirections(self, battleID, buildListStr):
         battle = self.battles[battleID]
@@ -1466,6 +1526,11 @@ class FortifiedRegionBase(OpsUnpacker):
         battle['attackerFullBuildList'] = buildList['attackerFull']
         battle['defenderFullBuildList'] = buildList['defenderFull']
         self.storeOp(FORT_OP.SET_FORT_BATTLE_DIRECTIONS, battleID, buildListStr)
+
+    def _setFortBattleRound(self, battleID, isBattleRound):
+        battle = self.battles[battleID]
+        battle['isBattleRound'] = int(isBattleRound)
+        self.storeOp(FORT_OP.SET_FORT_BATTLE_ROUND, battleID, isBattleRound)
 
     def _setSortie(self, unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, count, maxCount, timestamp, igrType, cmdrName):
         LOG_DEBUG_DEV('_setSortie', unitMgrID, cmdrDBID, rosterTypeID, state, peripheryID, count, maxCount, timestamp, igrType, cmdrName)
@@ -1497,6 +1562,12 @@ class FortifiedRegionBase(OpsUnpacker):
         self._sortieUnits[sortieKey] = unit.pack()
         LOG_DEBUG_DEV('_unpackSortieUnit', unitMgrID, peripheryID, unit)
         return unpacking
+
+    def _setEnemyReadyForBattle(self, battleID, isReady):
+        LOG_DEBUG_DEV('_setEnemyReadyForBattle', battleID, isReady)
+        battle = self.battles[battleID]
+        battle['isEnemyReadyForBattle'] = isReady
+        self.storeOp(FORT_OP.SET_ENEMY_READY_FOR_BATTLE, battleID, isReady)
 
     def _unpackFortBattleUnit(self, unpacking):
         battleID, = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
@@ -1577,37 +1648,56 @@ class FortifiedRegionBase(OpsUnpacker):
     def _onEnemyClanCard(self, clanDBID, fortLevel, dirMask, defHour, offDay, vacationStart, vacationFinish, timeNewDefHour, timeNewOffDay, newDefHour, newOffDay, clanName, clanAbbrev, clanDescr, clanMotto, statistics, dictBuildingsBrief, listScheduledAttacks, dictDirOpenAttacks):
         pass
 
-    def _deleteBattlesByTime(self, timeStart, timeFinish):
-        LOG_DEBUG_DEV('_deleteBattlesByTime', timeStart, timeFinish, self.dbID)
+    def _onDeleteBattle(self, key, args, reason, isDefence):
+        battleID = args[3]
+        self.battles.pop(battleID, None)
+        return
+
+    def _deleteBattlesByTime(self, timeStart, timeFinish, dir, reason):
+        LOG_DEBUG_DEV('_deleteBattlesByTime', timeStart, timeFinish, dir, reason, self.dbID)
         for key in self.attacks.keys():
             timeAttack, dirFrom = key
+            if dir != ALL_DIRS and dir != dirFrom:
+                continue
             if timeStart <= timeAttack and timeAttack <= timeFinish:
-                self.attacks.pop(key)
+                args = self.attacks.pop(key)
+                self._onDeleteBattle(key, args, reason, isDefence=False)
 
         for key in self.defences.keys():
             timeAttack, dirTo = key
+            if dir != ALL_DIRS and dir != dirTo:
+                continue
             if timeStart <= timeAttack and timeAttack <= timeFinish:
-                self.defences.pop(key)
+                args = self.defences.pop(key)
+                self._onDeleteBattle(key, args, reason, isDefence=True)
 
         self._rebuildLastAttackIndexes()
-        self.storeOp(FORT_OP.DELETE_BATTLES_BY_TIME, timeStart, timeFinish)
+        self.storeOp(FORT_OP.DELETE_BATTLES_BY_TIME, timeStart, timeFinish, dir, reason)
 
-    def _deleteBattlesByClan(self, enemyClanDBID, timeStart, timeFinish):
-        LOG_DEBUG_DEV('_deleteBattlesByClan', enemyClanDBID, timeStart, timeFinish, self.dbID)
+    def _deleteBattlesByClan(self, enemyClanDBID, timeStart, timeFinish, enemyDir, reason):
+        LOG_DEBUG_DEV('_deleteBattlesByClan', enemyClanDBID, timeStart, timeFinish, enemyDir, reason, self.dbID)
         for key in self.attacks.keys():
             timeAttack, dirFrom = key
             defenderClanDBID = self.attacks[key][0]
+            dirTo = self.attacks[key][2]
+            if enemyDir != ALL_DIRS and enemyDir != dirTo:
+                continue
             if defenderClanDBID == enemyClanDBID and timeStart <= timeAttack and timeAttack <= timeFinish:
-                self.attacks.pop(key)
+                args = self.attacks.pop(key)
+                self._onDeleteBattle(key, args, reason, isDefence=True)
 
         for key in self.defences.keys():
             timeAttack, dirTo = key
             attackerClanDBID = self.defences[key][0]
+            dirFrom = self.defences[key][2]
+            if enemyDir != ALL_DIRS and enemyDir != dirFrom:
+                continue
             if attackerClanDBID == enemyClanDBID and timeStart <= timeAttack and timeAttack <= timeFinish:
-                self.defences.pop(key)
+                args = self.defences.pop(key)
+                self._onDeleteBattle(key, args, reason, isDefence=True)
 
         self._rebuildLastAttackIndexes()
-        self.storeOp(FORT_OP.DELETE_BATTLES_BY_CLAN, enemyClanDBID, timeStart, timeFinish)
+        self.storeOp(FORT_OP.DELETE_BATTLES_BY_CLAN, enemyClanDBID, timeStart, timeFinish, enemyDir, reason)
 
     def _addAttack(self, timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev):
         LOG_DEBUG_DEV('_addAttack', timeAttack, dirFrom, dirTo, defClanDBID, battleID, peripheryID, attackResult, attackResource, defClanAbbrev, self.dbID)
@@ -1639,7 +1729,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.SET_LOCKED_DIRS, lockedDirMask)
 
     def _setAttackResult(self, attackResult, attackResource, attackerClanDBID, attackerDirection, attackTime):
-        LOG_DEBUG_DEV('_setAttackResult', attackResult, attackResource, attackerClanDBID, attackerDirection, attackTime)
+        LOG_DEBUG_DEV('_setAttackResult', attackResult, attackResource, attackerClanDBID, attackerDirection, attackTime, self.dbID)
         if attackerClanDBID == self.dbID:
             key = (attackTime, attackerDirection)
             if key in self.attacks:
@@ -1677,6 +1767,10 @@ class FortifiedRegionBase(OpsUnpacker):
         LOG_DEBUG_DEV('_removeFavorite', clanDBID)
         self.favorites.discard(clanDBID)
         self.storeOp(FORT_OP.REMOVE_FAVORITE, clanDBID)
+
+    def _onEmergencyRestore(self, unpacking):
+        LOG_DEBUG_DEV('_onEmergencyRestore')
+        return unpacking
 
     def _setBuildingResource(self, buildingTypeID, resCount):
         LOG_DEBUG_DEV('_setBuildingResource', buildingTypeID, resCount)

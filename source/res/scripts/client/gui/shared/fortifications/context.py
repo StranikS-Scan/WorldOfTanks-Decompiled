@@ -1,11 +1,12 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/context.py
-import calendar
-import datetime
-import time
-from constants import REQUEST_COOLDOWN
+from constants import REQUEST_COOLDOWN, PREBATTLE_TYPE
+from gui.prb_control.context import PrbCtrlRequestCtx
+from gui.prb_control import getUnitIdx, settings as prb_settings
 from gui.shared.fortifications.settings import FORT_REQUEST_TYPE
 from gui.shared.utils.decorators import ReprInjector
-from gui.shared.utils.requesters.rqs_by_id import RequestCtx
+from gui.shared.utils.requesters import RequestCtx
+
+@ReprInjector.withParent(('__isUpdateExpected', 'isUpdateExpected'))
 
 class FortRequestCtx(RequestCtx):
 
@@ -21,9 +22,6 @@ class FortRequestCtx(RequestCtx):
 
     def _setUpdateExpected(self, value):
         self.__isUpdateExpected = value
-
-    def __repr__(self):
-        return 'FortRequestCtx(waitingID={0:>s}, update={1!r:s})'.format(self.getWaitingID(), self.__isUpdateExpected)
 
 
 class CreateFortCtx(FortRequestCtx):
@@ -44,6 +42,8 @@ class DeleteFortCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.DELETE_FORT
 
 
+@ReprInjector.withParent(('__direction', 'direction'), ('__isOpen', 'isOpen'))
+
 class DirectionCtx(FortRequestCtx):
 
     def __init__(self, direction, isOpen = True, waitingID = ''):
@@ -59,9 +59,8 @@ class DirectionCtx(FortRequestCtx):
     def getDirection(self):
         return self.__direction
 
-    def __repr__(self):
-        return 'DirectionCtx(op={0:>s}, direction={1:n}, waitingID={2:>s})'.format('open' if self.__isOpen else 'close', self.__direction, self.getWaitingID())
 
+@ReprInjector.withParent(('__buildingTypeID', 'buildingTypeID'), ('__direction', 'direction'), ('__position', 'position'), ('__isAdd', 'isAdd'))
 
 class BuildingCtx(FortRequestCtx):
 
@@ -86,11 +85,8 @@ class BuildingCtx(FortRequestCtx):
     def getBuildingTypeID(self):
         return self.__buildingTypeID
 
-    def __repr__(self):
-        if self.__isAdd:
-            return 'BuildingCtx(op={0:>s}, buildingTypeID={1:n}, ' + ' direction={2:n}, position={3:n},'
-        return ' waitingID={4:>s})'.format('add' if self.__isAdd else 'delete', self.__buildingTypeID, self.__direction, self.__position, self.getWaitingID())
 
+@ReprInjector.withParent(('__fromBuildingTypeID', 'fromBuildingTypeID'), ('__toBuildingTypeID', 'toBuildingTypeID'), ('__resCount', 'resCount'))
 
 class TransportationCtx(FortRequestCtx):
 
@@ -112,9 +108,8 @@ class TransportationCtx(FortRequestCtx):
     def getResCount(self):
         return self.__resCount
 
-    def __repr__(self):
-        return 'TransportationCtx(op={0:>s}, fromBuildingTypeID={1:n}, toBuildingTypeID={2:n}, resCount={3:n}, waitingID={4:>s})'.format('transport', self.__fromBuildingTypeID, self.__toBuildingTypeID, self.__resCount, self.getWaitingID())
 
+@ReprInjector.withParent(('__orderTypeID', 'orderTypeID'), ('__count', 'count'), ('__isAdd', 'isAdd'))
 
 class OrderCtx(FortRequestCtx):
 
@@ -135,13 +130,8 @@ class OrderCtx(FortRequestCtx):
     def getCount(self):
         return self.__count
 
-    def __repr__(self):
-        if self.__isAdd:
-            formatter = 'OrderCtx(op=add, orderTypeID={0:n}, count={1:n}, waitingID={2:>s})'
-        else:
-            formatter = 'OrderCtx(op=activate, orderTypeID={0:n} waitingID={2:>s})'
-        return formatter.format(self.__orderTypeID, self.__count, self.getWaitingID())
 
+@ReprInjector.withParent(('__buildingTypeID', 'buildingTypeID'))
 
 class AttachCtx(FortRequestCtx):
 
@@ -155,9 +145,8 @@ class AttachCtx(FortRequestCtx):
     def getBuildingTypeID(self):
         return self.__buildingTypeID
 
-    def __repr__(self):
-        return 'AttachCtx(op={0:>s}, buildingTypeID={1:n} waitingID={2:>s})'.format('attach', self.__buildingTypeID, self.getWaitingID())
 
+@ReprInjector.withParent(('__buildingTypeID', 'buildingTypeID'))
 
 class UpgradeCtx(FortRequestCtx):
 
@@ -171,9 +160,8 @@ class UpgradeCtx(FortRequestCtx):
     def getBuildingTypeID(self):
         return self.__buildingTypeID
 
-    def __repr__(self):
-        return 'UpgradeCtx(op={0:>s}, buildingTypeID={1:n} waitingID={2:>s})'.format('upgrade', self.__buildingTypeID, self.getWaitingID())
 
+@ReprInjector.withParent(('__divisionLevel', 'divisionLevel'))
 
 class CreateSortieCtx(FortRequestCtx):
 
@@ -190,6 +178,8 @@ class CreateSortieCtx(FortRequestCtx):
     def __repr__(self):
         return 'CreateSortieCtx(buildingTypeID={0:n}, waitingID={1:>s})'.format(self.__divisionLevel, self.getWaitingID())
 
+
+@ReprInjector.withParent(('__unitMgrID', 'unitMgrID'), ('__peripheryID', 'peripheryID'))
 
 class RequestSortieUnitCtx(FortRequestCtx):
 
@@ -214,6 +204,8 @@ class RequestSortieUnitCtx(FortRequestCtx):
         return 'RequestSortieUnitCtx(unitMgrID={0:n}, peripheryID={1:n}, waitingID={2:>s})'.format(self.__unitMgrID, self.__peripheryID, self.getWaitingID())
 
 
+@ReprInjector.withParent(('_defenceHour', 'defenceHour'))
+
 class DefenceHourCtx(FortRequestCtx):
 
     def __init__(self, defenceHour, waitingID = ''):
@@ -224,14 +216,10 @@ class DefenceHourCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.CHANGE_DEF_HOUR
 
     def getDefenceHour(self):
-        date = datetime.datetime.now()
-        currentDefenceHourStart = datetime.datetime(date.year, date.month, date.day, self._defenceHour)
-        localTime = time.mktime(currentDefenceHourStart.timetuple())
-        return time.gmtime(localTime).tm_hour
+        return self._defenceHour
 
-    def __repr__(self):
-        return 'DefenceHourCtx(defenceHour={0:n}, waitingID={1:>s})'.format(self._defenceHour, self.getWaitingID())
 
+@ReprInjector.withParent(('_offDay', 'offDay'))
 
 class OffDayCtx(FortRequestCtx):
 
@@ -245,9 +233,8 @@ class OffDayCtx(FortRequestCtx):
     def getOffDay(self):
         return self._offDay
 
-    def __repr__(self):
-        return 'OffDayCtx(offDay={0:n}, waitingID={1:>s})'.format(self._offDay, self.getWaitingID())
 
+@ReprInjector.withParent(('_peripheryID', 'peripheryID'))
 
 class PeripheryCtx(FortRequestCtx):
 
@@ -261,31 +248,27 @@ class PeripheryCtx(FortRequestCtx):
     def getPeripheryID(self):
         return self._peripheryID
 
-    def __repr__(self):
-        return 'PeripheryCtx(peripheryID={0:n}, waitingID={1:>s})'.format(self._peripheryID, self.getWaitingID())
 
+@ReprInjector.withParent(('_timeVacationStart', 'timeVacationStart'), ('_vacationDuration', 'vacationDuration'))
 
 class VacationCtx(FortRequestCtx):
 
-    def __init__(self, timeVacationStart, timeVacationEnd, waitingID = ''):
+    def __init__(self, timeVacationStart, vacationDuration, waitingID = ''):
         super(VacationCtx, self).__init__(waitingID)
         self._timeVacationStart = timeVacationStart
-        self._timeVacationEnd = timeVacationEnd
+        self._vacationDuration = vacationDuration
 
     def getRequestType(self):
         return FORT_REQUEST_TYPE.CHANGE_VACATION
 
     def getTimeVacationStart(self):
-        return calendar.timegm(time.gmtime(self._timeVacationStart))
+        return self._timeVacationStart
 
     def getTimeVacationEnd(self):
-        return self._timeVacationEnd
+        return self.getTimeVacationStart() + self.getTimeVacationDuration()
 
     def getTimeVacationDuration(self):
-        return self._timeVacationEnd - self._timeVacationStart
-
-    def __repr__(self):
-        return 'VacationCtx(timeVacationStart={0:n}, timeVacationEnd={1:n}, waitingID={2:>s})'.format(self._timeVacationStart, self._timeVacationEnd, self.getWaitingID())
+        return self._vacationDuration
 
 
 class SettingsCtx(DefenceHourCtx, OffDayCtx, PeripheryCtx):
@@ -298,9 +281,8 @@ class SettingsCtx(DefenceHourCtx, OffDayCtx, PeripheryCtx):
     def getRequestType(self):
         return FORT_REQUEST_TYPE.CHANGE_SETTINGS
 
-    def __repr__(self):
-        return 'SettingsCtx(defenceHour={0:n}, offDay={1:n}, peripheryID={2:n}, waitingID={3:>s})'.format(self._defenceHour, self._offDay, self._peripheryID, self.getWaitingID())
 
+@ReprInjector.withParent(('_shutDown', 'shutDown'))
 
 class DefencePeriodCtx(FortRequestCtx):
 
@@ -314,15 +296,12 @@ class DefencePeriodCtx(FortRequestCtx):
         else:
             return FORT_REQUEST_TYPE.CANCEL_SHUTDOWN_DEF_HOUR
 
-    def __repr__(self):
-        return 'DefencePeriodCtx(shutDown={0:n}, waitingID={1:>s})'.format(self._shutDown, self.getWaitingID())
 
-
-@ReprInjector.simple(('_filterType', 'filterType'), ('_abbrevPattern', 'abbrevPattern'), ('_limit', 'limit'), ('_lvlFrom', 'lvlFrom'), ('_lvlTo', 'lvlTo'), ('_extStartDefHourFrom', 'extStartDefHourFrom'), ('_extStartDefHourTo', 'extStartDefHourTo'), ('_attackDay', 'attackDay'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent(('_filterType', 'filterType'), ('_abbrevPattern', 'abbrevPattern'), ('_limit', 'limit'), ('_lvlFrom', 'lvlFrom'), ('_lvlTo', 'lvlTo'), ('_extStartDefHourFrom', 'extStartDefHourFrom'), ('_extStartDefHourTo', 'extStartDefHourTo'), ('_attackDay', 'attackDay'), ('_firstDefaultQuery', 'firstDefaultQuery'), ('getWaitingID', 'waitingID'))
 
 class FortPublicInfoCtx(FortRequestCtx):
 
-    def __init__(self, filterType, abbrevPattern, limit, lvlFrom, lvlTo, extStartDefHourFrom, extStartDefHourTo, attackDay, waitingID = ''):
+    def __init__(self, filterType, abbrevPattern, limit, lvlFrom, lvlTo, extStartDefHourFrom, extStartDefHourTo, attackDay, firstDefaultQuery = False, waitingID = ''):
         super(FortPublicInfoCtx, self).__init__(waitingID)
         self._filterType = filterType
         self._abbrevPattern = abbrevPattern
@@ -332,6 +311,7 @@ class FortPublicInfoCtx(FortRequestCtx):
         self._extStartDefHourFrom = extStartDefHourFrom
         self._extStartDefHourTo = extStartDefHourTo
         self._attackDay = attackDay
+        self._firstDefaultQuery = firstDefaultQuery
 
     def getRequestType(self):
         return FORT_REQUEST_TYPE.REQUEST_PUBLIC_INFO
@@ -363,6 +343,11 @@ class FortPublicInfoCtx(FortRequestCtx):
     def getAttackDay(self):
         return self._attackDay
 
+    def isFirstDefaultQuery(self):
+        return self._firstDefaultQuery
+
+
+@ReprInjector.withParent(('__clanDBID', 'clanDBID'))
 
 class RequestClanCardCtx(FortRequestCtx):
 
@@ -380,7 +365,7 @@ class RequestClanCardCtx(FortRequestCtx):
         return 'RequestClanCardCtx(clanDBID={0:n},  waitingID={1:>s})'.format(self.__clanDBID, self.getWaitingID())
 
 
-@ReprInjector.simple(('__clanDBID', 'clanDBID'), ('__isAdd', 'isAdd'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent(('__clanDBID', 'clanDBID'), ('__isAdd', 'isAdd'))
 
 class FavoriteCtx(FortRequestCtx):
 
@@ -399,7 +384,7 @@ class FavoriteCtx(FortRequestCtx):
             return FORT_REQUEST_TYPE.REMOVE_FAVORITE
 
 
-@ReprInjector.simple(('__clanDBID', 'clanDBID'), ('__timeAttack', 'timeAttack'), ('__dirFrom', 'dirFrom'), ('__dirTo', 'dirTo'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent(('__clanDBID', 'clanDBID'), ('__timeAttack', 'timeAttack'), ('__dirFrom', 'dirFrom'), ('__dirTo', 'dirTo'))
 
 class AttackCtx(FortRequestCtx):
 
@@ -426,23 +411,53 @@ class AttackCtx(FortRequestCtx):
         return FORT_REQUEST_TYPE.PLAN_ATTACK
 
 
-@ReprInjector.simple(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'), ('getWaitingID', 'waitingID'))
+@ReprInjector.withParent('getClanDBID', 'getTimeAttack', 'getDirFrom', 'getDirTo', 'getRequestType')
 
-class CreateOrJoinFortBattleCtx(FortRequestCtx):
+class AttackClanAndRequestItsCardCtx(AttackCtx):
 
-    def __init__(self, battleID, slotIdx = -1, waitingID = ''):
-        super(CreateOrJoinFortBattleCtx, self).__init__(waitingID)
+    def __init__(self, clanDBID, timeAttack, dirFrom, dirTo, waitingID = ''):
+        super(AttackClanAndRequestItsCardCtx, self).__init__(clanDBID, timeAttack, dirFrom, dirTo, waitingID)
+
+    def getRequestType(self):
+        return FORT_REQUEST_TYPE.ATTACK_AND_REQUEST_CARD
+
+
+@ReprInjector.withParent(('__battleID', 'battleID'), ('__slotIdx', 'slotIdx'))
+
+class CreateOrJoinFortBattleCtx(PrbCtrlRequestCtx):
+
+    def __init__(self, battleID, slotIdx = -1, waitingID = '', isUpdateExpected = False):
+        super(CreateOrJoinFortBattleCtx, self).__init__(waitingID=waitingID, funcExit=prb_settings.FUNCTIONAL_EXIT.UNIT, isForced=True)
         self.__battleID = battleID
         self.__slotIdx = slotIdx
+        self.__isUpdateExpected = isUpdateExpected
+
+    def isUpdateExpected(self):
+        return self.__isUpdateExpected
+
+    def getCooldown(self):
+        return REQUEST_COOLDOWN.CALL_FORT_METHOD
+
+    def getPrbType(self):
+        return PREBATTLE_TYPE.FORT_BATTLE
+
+    def getCtrlType(self):
+        return prb_settings.CTRL_ENTITY_TYPE.UNIT
+
+    def getUnitIdx(self):
+        return getUnitIdx()
 
     def getRequestType(self):
         return FORT_REQUEST_TYPE.CREATE_OR_JOIN_FORT_BATTLE
 
-    def getBattleID(self):
+    def getID(self):
         return self.__battleID
 
     def getSlotIdx(self):
         return self.__slotIdx
+
+    def _setUpdateExpected(self, value):
+        self.__isUpdateExpected = value
 
 
 __all__ = ('FortRequestCtx', 'CreateFortCtx', 'DeleteFortCtx', 'DirectionCtx', 'BuildingCtx', 'TransportationCtx', 'OrderCtx', 'AttachCtx', 'OrderCtx', 'UpgradeCtx', 'CreateSortieCtx', 'RequestSortieUnitCtx', 'DefenceHourCtx', 'OffDayCtx', 'PeripheryCtx', 'VacationCtx', 'SettingsCtx', 'FortPublicInfoCtx', 'RequestClanCardCtx', 'FavoriteCtx', 'CreateOrJoinFortBattleCtx')

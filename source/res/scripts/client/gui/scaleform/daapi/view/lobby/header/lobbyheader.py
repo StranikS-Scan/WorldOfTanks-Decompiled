@@ -53,8 +53,6 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         g_eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbySimpleEvent.HIGHLIGHT_TUTORIAL_CONTROL, self.__highlightControls, EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.LobbySimpleEvent.RESET_HIGHLIGHT_TUTORIAL_CONTROL, self.__resetHighlightControls, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__setCredits,
          'stats.gold': self.__setGold,
          'stats.freeXP': self.__setFreeXP,
@@ -78,8 +76,6 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbySimpleEvent.HIGHLIGHT_TUTORIAL_CONTROL, self.__highlightControls, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.LobbySimpleEvent.RESET_HIGHLIGHT_TUTORIAL_CONTROL, self.__resetHighlightControls, EVENT_BUS_SCOPE.LOBBY)
         game_control.g_instance.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         game_control.g_instance.wallet.onWalletStatusChanged -= self.__onWalletChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
@@ -215,13 +211,6 @@ class LobbyHeader(LobbyHeaderMeta, AppRef, GlobalListener):
         else:
             LOG_ERROR('Invalid subview alias', alias)
         return
-
-    def __highlightControls(self, event):
-        self.as_highlightTutorialControlsS(event.ctx.get('currentStep', None))
-        return
-
-    def __resetHighlightControls(self, _):
-        self.as_resetHighlightTutorialControlsS()
 
     def __onWalletChanged(self, status):
         self.as_goldResponseS(BigWorld.wg_getGoldFormat(g_itemsCache.items.stats.actualGold))

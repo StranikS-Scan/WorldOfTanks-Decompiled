@@ -154,7 +154,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
         self.__requestToCreate()
 
     def onJoinRally(self, rallyId, slotIndex, peripheryID):
-        ctx = unit_ctx.JoinUnitCtx(rallyId, slotIndex, waitingID='prebattle/join')
+        ctx = unit_ctx.JoinUnitCtx(rallyId, self.getPrbType(), slotIndex, waitingID='prebattle/join')
         if g_lobbyContext.isAnotherPeriphery(peripheryID):
             if g_lobbyContext.isPeripheryAvailable(peripheryID):
                 self.__requestToReloginAndJoin(peripheryID, ctx)
@@ -198,7 +198,7 @@ class CyberSportMainWindow(CyberSportMainWindowMeta):
 
     @process
     def __requestToCreate(self):
-        yield self.prbDispatcher.create(unit_ctx.CreateUnitCtx(waitingID='prebattle/create'))
+        yield self.prbDispatcher.create(unit_ctx.CreateUnitCtx(self.getPrbType(), waitingID='prebattle/create'))
 
     @process
     def __requestToJoin(self, ctx):

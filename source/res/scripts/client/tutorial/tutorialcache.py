@@ -14,13 +14,15 @@ class TutorialCache(object):
         self.__cacheFileName = p.join(self.__cacheDir, '{0:>s}.dat'.format(base64.b32encode('{0:>s};{1:>s}'.format(str(BigWorld.server()), accountName))))
         self.__space = space
         self.__version = TUTORIAL_VERSION
+        self.__wasReset = False
         self.__cache = {space: {'finished': False,
                  'refused': False,
                  'afterBattle': False,
                  'flags': {},
                  'currentChapter': None,
                  'localCtx': None,
-                 'playerXPLevel': PLAYER_XP_LEVEL.NEWBIE}}
+                 'playerXPLevel': PLAYER_XP_LEVEL.NEWBIE,
+                 'startOnNextLogin': True}}
         self.__read()
         cache = self.__current()
         if initRecords is None:
@@ -51,6 +53,7 @@ class TutorialCache(object):
                 self.__version, cache = cPickle.load(cacheFile)
                 if self.__version != TUTORIAL_VERSION:
                     self.__version = TUTORIAL_VERSION
+                    self.__wasReset = True
                 else:
                     self.__cache.setdefault(self.__space, {})
                     self.__cache.update(cache)
@@ -88,6 +91,9 @@ class TutorialCache(object):
             cache['flags'] = flags
         self.write()
         return
+
+    def wasReset(self):
+        return self.__wasReset
 
     def setFinished(self, flag):
         self.__current()['finished'] = flag
@@ -130,6 +136,13 @@ class TutorialCache(object):
 
     def getPlayerXPLevel(self):
         return self.__current()['playerXPLevel']
+
+    def setStartOnNextLogin(self, value):
+        self.__current()['startOnNextLogin'] = value
+        return self
+
+    def doStartOnNextLogin(self):
+        return self.__current()['startOnNextLogin']
 
     def clearChapterData(self):
         cache = self.__current()

@@ -47,9 +47,9 @@ class XmppPlugin(IProtoPlugin):
         self.__connection.connect()
 
     def disconnect(self):
+        self.__connection.disconnect()
         if self.__isClientInited:
             self.clear()
-        self.__connection.disconnect()
 
     def __initClientEnv(self):
         addDynStorage('xmppRoster', RosterItemStorage())

@@ -127,11 +127,11 @@ class ReprInjector(object):
 
     @classmethod
     def withParent(cls, *argNames):
-        return InternalRepresenter(True, list(argNames))
+        return InternalRepresenter(True, argNames)
 
     @classmethod
     def simple(cls, *argNames):
-        return InternalRepresenter(False, list(argNames))
+        return InternalRepresenter(False, argNames)
 
 
 class InternalRepresenter(object):
@@ -143,14 +143,11 @@ class InternalRepresenter(object):
     def __call__(self, clazz):
         if '__repr__' in dir(clazz):
             if hasattr(clazz, '__repr_params__') and self.reprParentFlag != False:
-                for argName in self.argNames:
-                    if argName not in clazz.__repr_params__:
-                        clazz.__repr_params__.append(argName)
-
+                clazz.__repr_params__ = tuple((arg for arg in self.argNames if arg not in clazz.__repr_params__)) + tuple((arg for arg in clazz.__repr_params__ if arg[0:2] != '__'))
             else:
-                clazz.__repr_params__ = list(self.argNames)
+                clazz.__repr_params__ = self.argNames
         else:
-            clazz.__repr_params__ = list(self.argNames)
+            clazz.__repr_params__ = self.argNames
         representation = []
         attrMethNames = []
         for i in xrange(len(clazz.__repr_params__)):

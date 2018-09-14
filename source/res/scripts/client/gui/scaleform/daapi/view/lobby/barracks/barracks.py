@@ -20,7 +20,8 @@ from gui.Scaleform.daapi.view.meta.BarracksMeta import BarracksMeta
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload
 from gui.shared.utils import decorators
-from gui.shared.utils.requesters import StatsRequester, StatsRequesterr, ShopRequester, Requester
+from gui.shared.utils.requesters.deprecated import Requester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
 from gui.shared.gui_items.Tankman import Tankman, TankmenComparator
 
 class Barracks(BarracksMeta, LobbySubView, GlobalListener):
@@ -99,7 +100,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
     @process
     def onShowRecruitWindow(self, callbackID):
         credits, gold = g_itemsCache.items.stats.money
-        upgradeParams = yield StatsRequester().getTankmanCost()
+        upgradeParams = yield DeprecatedStatsRequester().getTankmanCost()
         data = [credits,
          gold,
          round(upgradeParams[1]['credits']),
@@ -109,7 +110,7 @@ class Barracks(BarracksMeta, LobbySubView, GlobalListener):
             data.append(role)
             data.append(convert(getSkillsConfig()[role]['userString']))
 
-        unlocks = yield StatsRequester().getUnlocks()
+        unlocks = yield DeprecatedStatsRequester().getUnlocks()
         modulesAll = yield Requester('vehicle').getFromShop()
         modulesAll.sort()
         for module in modulesAll:

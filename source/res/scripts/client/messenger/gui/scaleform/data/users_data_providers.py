@@ -1,10 +1,12 @@
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/users_data_providers.py
 from debug_utils import LOG_DEBUG
+from gui import game_control
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from messenger import g_settings
 from messenger.proto.bw import find_criteria
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from gui.Scaleform.genConsts.REFERRAL_SYSTEM import REFERRAL_SYSTEM
 
 def makeEmptyUserItem():
     return {'uid': 0L,
@@ -13,7 +15,8 @@ def makeEmptyUserItem():
      'online': False,
      'himself': False,
      'displayName': '',
-     'colors': [0, 0]}
+     'colors': [0, 0],
+     'referralType': REFERRAL_SYSTEM.TYPE_NO_REFERRAL}
 
 
 def makeUserItem(user):
@@ -24,7 +27,8 @@ def makeUserItem(user):
      'himself': user.isCurrentPlayer(),
      'displayName': user.getFullName(),
      'colors': g_settings.getColorScheme('rosters').getColors(user.getGuiType()),
-     'group': user.getGroup()}
+     'group': user.getGroup(),
+     'referralType': game_control.g_instance.refSystem.getUserType(user.getID())}
 
 
 def getUsersCmp():

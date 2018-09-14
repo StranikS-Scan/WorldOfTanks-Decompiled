@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/account_helpers/settings_core/options.py
 import base64
 import cPickle
-import functools
 from operator import itemgetter
 import sys
 import fractions
@@ -34,13 +33,13 @@ from Vibroeffects import VibroManager
 from messenger import g_settings as messenger_settings
 from account_helpers.AccountSettings import AccountSettings
 from gui import GUI_SETTINGS
-from gui.BattleContext import g_battleContext
 from gui.shared.utils import graphics, CONST_CONTAINER, sound, functions
 from gui.shared.utils.graphics import g_monitorSettings
 from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBigworldNameFromKey
 from gui.Scaleform import VoiceChatInterface
 from gui.Scaleform.daapi import AppRef
 from gui.Scaleform.LogitechMonitor import LogitechMonitor
+from gui.battle_control import g_sessionProvider
 
 class APPLY_METHOD:
     NORMAL = 'normal'
@@ -177,8 +176,8 @@ class SettingsContainer(ISetting):
     def getSetting(self, name):
         if name in self.indices:
             return self.settings[self.indices[name]][1]
-        else:
-            return None
+        LOG_WARNING("Failed to get a value of setting as it's not in indices: ", name)
+        return SettingAbstract()
 
     def get(self, names = None):
         settings = self.__filter(self.indices.keys(), names)
@@ -607,9 +606,13 @@ class VOIPSupportSetting(ReadOnlySetting, AppRef):
         super(VOIPSupportSetting, self).__init__(self.__isSupported)
 
     def __isVoiceChatReady(self):
-        if g_battleContext.isInBattle:
+        if g_sessionProvider.getCtx().isInBattle:
             return VoiceChatInterface.g_instance.ready
-        return self.app and self.app.voiceChatManager.ready
+        elif self.app is not None and self.app.voiceChatManager is not None:
+            return self.app.voiceChatManager.ready
+        else:
+            return False
+            return
 
     def __isSupported(self):
         return VOIP.getVOIPManager().vivoxDomain != '' and self.__isVoiceChatReady()
@@ -989,6 +992,7 @@ class GraphicsPresetSetting(SettingAbstract):
         return self._get() == len(self.__presets) - 1
 
     def __parsePresets(self):
+        idx = 0
         for key, idx in graphics.getGraphicsPresetsIndices().iteritems():
             self.__presets.append(self.Preset(idx, key, dict(graphics.getGraphicsPresets(idx)))._asdict())
 

@@ -3,15 +3,6 @@ from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 
 class TankCarouselMeta(DAAPIModule):
 
-    def showVehicleInfo(self, vehicleId):
-        self._printOverrideError('showVehicleInfo')
-
-    def toResearch(self, compactDescr):
-        self._printOverrideError('toResearch')
-
-    def vehicleSell(self, inventoryId):
-        self._printOverrideError('vehicleSell')
-
     def vehicleChange(self, vehicleInventoryId):
         self._printOverrideError('vehicleChange')
 
@@ -23,12 +14,6 @@ class TankCarouselMeta(DAAPIModule):
 
     def setVehiclesFilter(self, nation, tankType, ready):
         self._printOverrideError('setVehiclesFilter')
-
-    def favoriteVehicle(self, compact, isFavorite):
-        self._printOverrideError('favoriteVehicle')
-
-    def showVehicleStats(self, compact):
-        self._printOverrideError('showVehicleStats')
 
     def getVehicleTypeProvider(self):
         self._printOverrideError('getVehicleTypeProvider')

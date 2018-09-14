@@ -3,14 +3,13 @@ from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from FortifiedRegionBase import BuildingDescr
 from adisp import process
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import STANDARD_TEXT
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortBuildingProcessWindowMeta import FortBuildingProcessWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -44,7 +43,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
     def onWindowClose(self):
         self.destroy()
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self.__makeData()
 
     def onDirectionClosed(self, dir):
@@ -59,12 +58,12 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         infoData = {}
         id = self.UI_BUILDINGS_BIND.index(uid)
         buildingStatus = self.__getBuildingStatus(id)
-        infoData['buildingName'] = fort_text.getText(fort_text.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(uid)))
+        infoData['buildingName'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(uid)))
         infoData['buildingID'] = uid
-        infoData['longDescr'] = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.buildingsprocess_longdescr(uid)))
+        infoData['longDescr'] = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.buildingsprocess_longdescr(uid)))
         buttonLbl = FORTIFICATIONS.BUILDINGSPROCESS_BUTTONLBL
         if buildingStatus == self.BUILDING_STATUS.BUILT:
-            buttonLbl = fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_BUTTONLBLBUILT))
+            buttonLbl = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_BUTTONLBLBUILT))
         infoData['buttonLabel'] = i18n.makeString(buttonLbl)
         infoData['orderInfo'] = self.__makeOrderInfoData(uid)
         statusIcon = ''
@@ -74,7 +73,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         statusIconTooltip = None
         buttonTooltip = None
         if buildingStatus == self.BUILDING_STATUS.BUILT:
-            statusMsg = fort_text.concatStyles(((fort_text.CHECKMARK_ICON,), (fort_text.SUCCESS_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_STATUSMSG_BUILT))))
+            statusMsg = self.app.utilsManager.textManager.concatStyles(((TextIcons.CHECKMARK_ICON,), (TextType.SUCCESS_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_STATUSMSG_BUILT))))
             statusIcon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_CHECKMARK
             isEnableBtn = False
             isVisibleBtn = False
@@ -83,7 +82,7 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
         elif buildingStatus == self.BUILDING_STATUS.NOT_AVAILABLE:
             isEnableBtn = False
             isVisibleBtn = True
-            statusMsg = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_BUILDINGINFO_STATUSMESSAGE))
+            statusMsg = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_BUILDINGINFO_STATUSMESSAGE))
             imageSource = self.app._utilsMgr.getHtmlIconText(ImageUrlProperties(RES_ICONS.MAPS_ICONS_LIBRARY_REDNOTAVAILABLE, 12, 12, 0, 0))
             statusMsg = imageSource + ' ' + statusMsg
             statusIconTooltip = self.__makeStatusTooltip(False)
@@ -121,9 +120,9 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
     def __makeOrderInfoData(self, uid):
         self._buildingID = self.UI_BUILDINGS_BIND.index(uid)
         self._orderID = self.fortCtrl.getFort().getBuildingOrder(self._buildingID)
-        orderTitle = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self._orderID])))
+        orderTitle = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.orders_orderpopover_ordertype(self.UI_ORDERS_BIND[self._orderID])))
         descrMSG = i18n.makeString(FORTIFICATIONS.buildings_processorderinfo(uid))
-        descrMSG = fort_text.getText(fort_text.MAIN_TEXT, descrMSG)
+        descrMSG = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, descrMSG)
         result = {}
         result['title'] = orderTitle
         result['description'] = descrMSG
@@ -146,14 +145,14 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
             g_fortSoundController.playCreateBuilding()
             building = self.fortCtrl.getFort().getBuilding(buildingTypeID)
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_BUILDINGPROCESS, buildingName=building.userName, type=SystemMessages.SM_TYPE.Warning)
-            self.onWindowClose()
+        self.destroy()
 
     def __makeData(self):
         result = {}
         result['listItems'] = self.__makeListData()
         result['availableCount'] = self.__makeMainLabel()
         result['windowTitle'] = FORTIFICATIONS.BUILDINGSPROCESS_WINDOWTITLE
-        result['textInfo'] = fort_text.getText(fort_text.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_TEXTINFO))
+        result['textInfo'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_TEXTINFO))
         self.as_setDataS(result)
 
     def __makeListData(self):
@@ -167,8 +166,8 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
 
     def __getStrings(self, value, status):
         id = value
-        name = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(id)))
-        shortDescr = fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.buildingsprocess_shortdescr(id)))
+        name = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.buildings_buildingname(id)))
+        shortDescr = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.buildingsprocess_shortdescr(id)))
         statusMsg = ''
         if status == self.BUILDING_STATUS.AVAILABLE:
             return (id,
@@ -176,14 +175,14 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
              shortDescr,
              statusMsg,
              status)
-        iconType = fort_text.CHECKMARK_ICON
-        textColor = fort_text.SUCCESS_TEXT
+        iconType = TextIcons.CHECKMARK_ICON
+        textColor = TextType.SUCCESS_TEXT
         statusType = FORTIFICATIONS.BUILDINGSPROCESS_STATUSMSG_BUILT
         if status == self.BUILDING_STATUS.NOT_AVAILABLE:
-            iconType = fort_text.NOT_AVAILABLE
-            textColor = fort_text.STANDARD_TEXT
+            iconType = TextIcons.NOT_AVAILABLE
+            textColor = TextType.STANDARD_TEXT
             statusType = FORTIFICATIONS.BUILDINGSPROCESS_STATUSMSG_NOTAVAILABLE
-        statusMsg = fort_text.concatStyles(((iconType,), (textColor, i18n.makeString(statusType))))
+        statusMsg = self.app.utilsManager.textManager.concatStyles(((iconType,), (textColor, i18n.makeString(statusType))))
         return (id,
          name,
          shortDescr,
@@ -199,12 +198,12 @@ class FortBuildingProcessWindow(AbstractWindowView, View, FortBuildingProcessWin
 
     def __makeMainLabel(self):
         buildingCount = len(self.fortCtrl.getFort().buildings) - 1
-        countColor = fort_text.NEUTRAL_TEXT
+        countColor = TextType.NEUTRAL_TEXT
         if buildingCount == 0:
-            countColor = fort_text.STANDARD_TEXT
-        currentCount = fort_text.getText(countColor, buildingCount)
+            countColor = TextType.STANDARD_TEXT
+        currentCount = self.app.utilsManager.textManager.getText(countColor, buildingCount)
         msg = i18n.makeString(FORTIFICATIONS.BUILDINGSPROCESS_MAINLABEL_ACCESSCOUNT, current=currentCount, total=len(self.BUILDINGS))
-        msg = fort_text.getText(fort_text.STANDARD_TEXT, msg)
+        msg = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, msg)
         return msg
 
     def __getBuildingStatus(self, buildingTypeID):

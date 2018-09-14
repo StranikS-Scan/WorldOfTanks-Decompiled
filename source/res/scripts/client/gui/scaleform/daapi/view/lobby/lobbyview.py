@@ -6,7 +6,7 @@ import CommandMapping
 from PlayerEvents import g_playerEvents
 from gui import GUI_SETTINGS, game_control, SystemMessages
 import gui
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -57,6 +57,7 @@ class LobbyView(View, LobbyPageMeta, AppRef):
         self.app.loaderManager.onViewLoadError += self.__onViewLoadError
         game_control.g_instance.igr.onIgrTypeChanged += self.__onIgrTypeChanged
         self.__showBattleResults()
+        self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         if constants.IS_CHINA and self.app.browser is not None:
             self.app.browser.checkBattlesCounter()
         keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
@@ -119,7 +120,8 @@ class LobbyView(View, LobbyPageMeta, AppRef):
             Waiting.hide('loadPage')
 
     def __showBattleResults(self):
-        if GUI_SETTINGS.battleStatsInHangar and g_battleContext.lastArenaUniqueID:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BATTLE_RESULTS, {'data': g_battleContext.lastArenaUniqueID}))
-            g_battleContext.lastArenaUniqueID = None
+        battleCtx = g_sessionProvider.getCtx()
+        if GUI_SETTINGS.battleStatsInHangar and battleCtx.lastArenaUniqueID:
+            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_BATTLE_RESULTS, {'data': battleCtx.lastArenaUniqueID}))
+            battleCtx.lastArenaUniqueID = None
         return

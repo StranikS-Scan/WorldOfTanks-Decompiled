@@ -6,10 +6,12 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.settings import PREQUEUE_SETTING_NAME
 from gui.shared import g_eventsCache
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.shared.utils import CLIP_ICON_PATH
-from helpers import i18n, html
+from gui.shared.utils.gui_items import InventoryVehicle
+from helpers import i18n, html, time_utils
 from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp, VehicleClassInfo, SelectedNation
 import nations
 __all__ = ['_BaseDumper',
@@ -31,6 +33,22 @@ class _BaseDumper(object):
 
     def dump(self, data):
         return {}
+
+    def _getRentStatus(self, item):
+        status = ''
+        statusLevel = ''
+        if item.isRented:
+            if item.rentalIsOver:
+                if item.isPremiumIGR:
+                    status = i18n.makeString('#menu:currentVehicleStatus/igrRentalIsOver')
+                else:
+                    status = i18n.makeString('#menu:currentVehicleStatus/rentalIsOver')
+                statusLevel = InventoryVehicle.STATE_LEVEL.CRITICAL
+            elif not item.isPremiumIGR:
+                localization = '#menu:vehicle/rentLeft/%s'
+                status = getRentLeftTimeStr(localization, item.rentLeftTime)
+                statusLevel = InventoryVehicle.STATE_LEVEL.RENTED
+        return (status, statusLevel)
 
 
 class ResearchItemsObjDumper(_BaseDumper):
@@ -109,7 +127,8 @@ class ResearchItemsObjDumper(_BaseDumper):
                        'type': typeString,
                        'level': i18n.makeString('#tooltips:level/{0:d}'.format(item.level))}),
              'benefitsHead': i18n.makeString('#menu:research/{0:>s}/benefits/head'.format(tag)),
-             'benefitsList': gui.makeHtmlString('html_templates:lobby/research', '{0:>s}_benefits'.format(tag), ctx={'description': item.fullDescription})}
+             'benefitsList': gui.makeHtmlString('html_templates:lobby/research', '{0:>s}_benefits'.format(tag), ctx={'description': item.fullDescription}),
+             'isPremiumIgr': item.isPremiumIGR}
         return result
 
     def _getItemData(self, node, item, rootItem):
@@ -117,14 +136,16 @@ class ResearchItemsObjDumper(_BaseDumper):
         vClass = {'userString': '',
          'name': ''}
         extraInfo = None
+        status = statusLevel = ''
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             vClass = self._vClassInfo.getInfoByTags(item.tags)
+            status, statusLevel = self._getRentStatus(item)
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
             vClass.update({'name': item.itemTypeName,
              'userString': item.userType})
-        (credits, gold), (defCredits, defGold) = item.buyPrice, item.defaultPrice
+        credits, gold = item.minRentPrice or item.buyPrice
         action = None
         if item.buyPrice != item.defaultPrice:
             action = getItemActionTooltipData(item)
@@ -140,7 +161,10 @@ class ResearchItemsObjDumper(_BaseDumper):
          'shopPrice': (credits, gold, action),
          'displayInfo': node['displayInfo'],
          'unlockProps': node['unlockProps']._makeTuple(),
-         'extraInfo': extraInfo}
+         'extraInfo': extraInfo,
+         'status': status,
+         'statusLevel': statusLevel,
+         'isRemovable': item.isRented}
 
 
 class ResearchItemsXMLDumper(ResearchItemsObjDumper):
@@ -217,7 +241,8 @@ class NationObjDumper(_BaseDumper):
     def _getVehicleData(self, node, item):
         nodeCD = node['id']
         tags = item.tags
-        (credits, gold), (defCredits, defGold) = item.buyPrice, item.defaultPrice
+        credits, gold = item.minRentPrice or item.buyPrice
+        status, statusLevel = self._getRentStatus(item)
         action = None
         if item.buyPrice != item.defaultPrice:
             action = getItemActionTooltipData(item)
@@ -233,7 +258,10 @@ class NationObjDumper(_BaseDumper):
          'earnedXP': node['earnedXP'],
          'shopPrice': (credits, gold, action),
          'displayInfo': node['displayInfo'],
-         'unlockProps': node['unlockProps']._makeTuple()}
+         'unlockProps': node['unlockProps']._makeTuple(),
+         'status': status,
+         'statusLevel': statusLevel,
+         'isRemovable': item.isRented}
 
 
 class NationXMLDumper(NationObjDumper):

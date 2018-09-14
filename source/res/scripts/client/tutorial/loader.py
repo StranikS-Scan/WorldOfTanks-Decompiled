@@ -6,13 +6,15 @@ from constants import IS_TUTORIAL_ENABLED
 from PlayerEvents import g_playerEvents
 from tutorial import Tutorial
 from tutorial import TutorialCache
-from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
+from tutorial.control.context import GlobalStorage, GLOBAL_FLAG, isInPrebattle
 from tutorial.gui import GUIProxy
 from tutorial.logger import LOG_ERROR
 from tutorial.settings import TUTORIAL_SETTINGS, TUTORIAL_STOP_REASON
 
 class RunCtx(object):
     __slots__ = ['cache',
+     'isFirstStart',
+     'databaseID',
      'afterBattle',
      'restart',
      'isInRandomQueue',
@@ -26,9 +28,11 @@ class RunCtx(object):
     def __init__(self, **kwargs):
         super(RunCtx, self).__init__()
         self.cache = None
+        self.isFirstStart = False
+        self.databaseID = kwargs.get('databaseID', 0L)
         self.restart = kwargs.get('restart', False)
         self.isInRandomQueue = kwargs.get('isInRandomQueue', False)
-        self.isInPrebattle = kwargs.get('prebattleID', 0L) > 0L
+        self.isInPrebattle = isInPrebattle()
         self.isInTutorialQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, kwargs.get('isInTutorialQueue', False))
         self.isInHistoricalQueue = kwargs.get('isInHistoricalQueue', False)
         self.isInEventBattlesQueue = kwargs.get('isInEventBattles', False)
@@ -44,6 +48,7 @@ class _TutorialLoader(object):
 
     def __init__(self):
         super(_TutorialLoader, self).__init__()
+        self.__loggedDBIDs = set()
         self.__afterBattle = False
         self.__tutorial = None
         self.__dispatcher = None
@@ -67,6 +72,7 @@ class _TutorialLoader(object):
         if self.__tutorial is not None:
             self.__dispatcher.stop()
             self.__tutorial.stop()
+        self.__loggedDBIDs.clear()
         return
 
     def _clear(self):
@@ -133,7 +139,10 @@ class _TutorialLoader(object):
         return
 
     def __pe_onAccountShowGUI(self, ctx):
-        self.tryingToRun(RunCtx(**ctx))
+        ctx = RunCtx(**ctx)
+        ctx.isFirstStart = ctx.databaseID not in self.__loggedDBIDs
+        self.__loggedDBIDs.add(ctx.databaseID)
+        self.tryingToRun(ctx)
 
     def __pe_onAvatarBecomePlayer(self):
         self.__afterBattle = True

@@ -1,20 +1,24 @@
 # Embedded file name: scripts/client/gui/Scaleform/Minimap.py
-import math
-import string
 from functools import partial
 from weakref import proxy
+import string
 import BigWorld
 import Math
 import Keys
-import CommandMapping
-from gui import GUI_SETTINGS, g_repeatKeyHandlers
-from gui.BattleContext import g_battleContext, PLAYER_ENTITY_NAME
-from gui.arena_info import isLowLevelBattle
+from AvatarInputHandler import mathUtils
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.battle_constants import PLAYER_ENTITY_NAME
+from gui.battle_control.arena_info import isLowLevelBattle
+import math
+from Math import Matrix, Vector3
 from gui.shared.utils.sound import Sound
+from gui import GUI_SETTINGS, g_repeatKeyHandlers
 from helpers.gui_utils import *
 from debug_utils import *
+import CommandMapping
 from items.vehicles import VEHICLE_CLASS_TAGS
 from account_helpers.AccountSettings import AccountSettings
+from gui.battle_control import vehicle_getter
 CURSOR_NORMAL = 'cursorNormal'
 CURSOR_STRATEGIC = 'cursorStrategic'
 CAMERA_NORMAL = 'cameraNormal'
@@ -71,6 +75,10 @@ class Minimap(object):
         self.__resetSPGMarkerTimoutCbckId = None
         self.zIndexManager = MinimapZIndexManager()
         self.__observedVehicleId = -1
+        self.__currentMode = None
+        self.__normalMarkerScale = None
+        self._actualSize = {'width': 0,
+         'height': 0}
         return
 
     def __del__(self):
@@ -83,20 +91,22 @@ class Minimap(object):
         self.__ownUI.mapSize = Math.Vector2(self.__MINIMAP_SIZE)
         bl, tr = BigWorld.player().arena.arenaType.boundingBox
         self.__ownUI.setArenaBB(bl, tr)
+        player = BigWorld.player()
+        self.__playerTeam = player.team
+        self.__playerVehicleID = player.playerVehicleID
         tex = BigWorld.PyTextureProvider(self.__cfg['texture'])
         if not self.__ownUI.setBackground(tex):
             LOG_ERROR("Failed to set minimap texture: '%s'" % self.__cfg['texture'])
         self.__cameraHandle = None
+        self.__cameraMatrix = None
         self.__resetCamera(MODE_ARCADE)
         BigWorld.player().inputHandler.onCameraChanged += self.__resetCamera
         BigWorld.player().inputHandler.onPostmortemVehicleChanged += self.__clearCamera
         self.__parentUI.addExternalCallbacks({'minimap.onClick': self._onMapClicked,
          'minimap.playAttantion': self._playAttention,
          'minimap.setSize': self.onSetSize,
-         'minimap.lightPlayer': self.onLightPlayer})
-        player = BigWorld.player()
-        self.__playerTeam = player.team
-        self.__playerVehicleID = player.playerVehicleID
+         'minimap.lightPlayer': self.onLightPlayer,
+         'minimap.scaleMarkers': self.onScaleMarkers})
         arena = player.arena
         arena.onPositionsUpdated += self.__onFarPosUpdated
         arena.onNewVehicleListReceived += self.__validateEntries
@@ -104,7 +114,7 @@ class Minimap(object):
         arena.onVehicleAdded += self.__onVehicleAdded
         arena.onTeamKiller += self.__onTeamKiller
         self.__marks = {}
-        if not g_battleContext.isPlayerObserver():
+        if not g_sessionProvider.getCtx().isPlayerObserver():
             mp = BigWorld.player().getOwnVehicleMatrix()
             self.__ownEntry['handle'] = self.__ownUI.addEntry(mp, self.zIndexManager.getIndexByName('self'))
             self.__ownEntry['matrix'] = player.getOwnVehicleMatrix()
@@ -120,6 +130,43 @@ class Minimap(object):
         self.setupMinimapSettings()
         self.setTeamPoints()
         g_repeatKeyHandlers.add(self.handleRepeatKeyEvent)
+        return
+
+    def onScaleMarkers(self, callbackID, scale, normalScale):
+        scale = scale / 100
+        self.__normalMarkerScale = scale
+        bases = self.__points['base']
+        for team in bases:
+            for base in bases[team]:
+                self.scaleMarker(bases[team][base].handle, bases[team][base].matrix, scale)
+
+        spawns = self.__points['spawn']
+        for team in spawns:
+            for spawn in spawns[team]:
+                self.scaleMarker(spawns[team][spawn].handle, spawns[team][spawn].matrix, scale)
+
+        if 'control' in self.__points:
+            controls = self.__points['control']
+            for point in controls:
+                self.scaleMarker(point.handle, point.matrix, scale)
+
+        if self.__currentMode != MODE_STRATEGIC and self.__cameraHandle is not None and self.__cameraMatrix is not None:
+            self.scaleMarker(self.__cameraHandle, self.__cameraMatrix, self.__normalMarkerScale)
+        if self.__ownEntry.has_key('handle'):
+            self.scaleMarker(self.__ownEntry['handle'], self.__ownEntry['matrix'], scale)
+        for id in self.__entries:
+            originalMatrix = self.__entries[id]['matrix']
+            handle = self.__entries[id]['handle']
+            self.scaleMarker(handle, originalMatrix, scale)
+
+        return
+
+    def scaleMarker(self, handle, originalMatrix, scale):
+        if handle is not None and originalMatrix is not None:
+            scaleMatrix = Matrix()
+            scaleMatrix.setScale(Vector3(scale, scale, scale))
+            mp = mathUtils.MatrixProviders.product(scaleMatrix, originalMatrix)
+            self.__ownUI.entrySetMatrix(handle, mp)
         return
 
     def getStoredMinimapSize(self):
@@ -149,8 +196,8 @@ class Minimap(object):
                     pos = (spawnPoint[0], 0, spawnPoint[1])
                     m = Math.Matrix()
                     m.setTranslate(pos)
-                    self.__points['spawn'][team][spawn] = self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex())
-                    self.__ownUI.entryInvoke(self.__points['spawn'][team][spawn], ('init', ['points',
+                    self.__points['spawn'][team][spawn] = EntryInfo(self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex()), m)
+                    self.__ownUI.entryInvoke(self.__points['spawn'][team][spawn].handle, ('init', ['points',
                       'spawn',
                       'blue' if team == currentTeam else 'red',
                       spawn + 1 if len(teamSpawnPoints) > 1 else 1]))
@@ -161,8 +208,8 @@ class Minimap(object):
                     pos = (basePoint[0], 0, basePoint[1])
                     m = Math.Matrix()
                     m.setTranslate(pos)
-                    self.__points['base'][team][base] = self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex())
-                    self.__ownUI.entryInvoke(self.__points['base'][team][base], ('init', ['points',
+                    self.__points['base'][team][base] = EntryInfo(self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex()), m)
+                    self.__ownUI.entryInvoke(self.__points['base'][team][base].handle, ('init', ['points',
                       'base',
                       'blue' if team == currentTeam else 'red',
                       len(self.__points['base'][team]) + 1 if len(teamBasePoints) > 1 else 1]))
@@ -173,9 +220,9 @@ class Minimap(object):
                     pos = (controlPoint[0], 0, controlPoint[1])
                     m = Math.Matrix()
                     m.setTranslate(pos)
-                    newPoint = self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex())
+                    newPoint = EntryInfo(self.__ownUI.addEntry(m, self.zIndexManager.getTeamPointIndex()), m)
                     self.__points['control'].append(newPoint)
-                    self.__ownUI.entryInvoke(newPoint, ('init', ['points',
+                    self.__ownUI.entryInvoke(newPoint.handle, ('init', ['points',
                       'control',
                       'empty',
                       index if len(self.__cfg['controlPoints']) > 1 else 1]))
@@ -202,6 +249,7 @@ class Minimap(object):
             self.__isStarted = False
             self.__entries = {}
             self.__cameraHandle = None
+            self.__cameraMatrix = None
             self.__marks = None
             self.__backMarkers.clear()
             setattr(self.__parentUI.component, 'minimap', None)
@@ -324,7 +372,7 @@ class Minimap(object):
             cellCount = Minimap.__MINIMAP_CELLS
             row = int(cellCount[0] * localPos[0] / mapSize[0])
             column = int(cellCount[1] * localPos[1] / mapSize[1])
-            self.__parentUI.chatCommands.sendAttentionToCell(row * int(cellCount[1]) + column)
+            g_sessionProvider.getChatCommands().sendAttentionToCell(row * int(cellCount[1]) + column)
         elif 'SPG' in player.vehicleTypeDescriptor.type.tags:
             arenaDesc = BigWorld.player().arena.arenaType
             bottomLeft, upperRight = arenaDesc.boundingBox
@@ -349,7 +397,7 @@ class Minimap(object):
     def __onTeamKiller(self, id):
         arena = BigWorld.player().arena
         entryVehicle = arena.vehicles[id]
-        if BigWorld.player().team == entryVehicle.get('team') and g_battleContext.isSquadMan(vID=id):
+        if BigWorld.player().team == entryVehicle.get('team') and g_sessionProvider.getCtx().isSquadMan(vID=id):
             return
         self.__callEntryFlash(id, 'setEntryName', [PLAYER_ENTITY_NAME.teamKiller.name()])
 
@@ -372,7 +420,7 @@ class Minimap(object):
             if entry is not None:
                 location = entry['location']
                 if location == VehicleLocation.FAR:
-                    entry['matrix'].setTranslate(pos)
+                    entry['matrix'] = mathUtils.createTranslationMatrix(pos)
                 elif location == VehicleLocation.AOI_TO_FAR:
                     self.__delEntry(id)
                     self.__addEntry(id, VehicleLocation.FAR, False)
@@ -497,7 +545,8 @@ class Minimap(object):
         return
 
     def __addEntry(self, id, location, doMark):
-        if g_battleContext.isObserver(id):
+        battleCtx = g_sessionProvider.getCtx()
+        if battleCtx.isObserver(id):
             return
         else:
             arena = BigWorld.player().arena
@@ -506,11 +555,11 @@ class Minimap(object):
             if location == VehicleLocation.AOI_TO_FAR:
                 self.__aoiToFarCallbacks[id] = BigWorld.callback(self.__AOI_TO_FAR_TIME, partial(self.__delEntry, id))
             entry['location'] = location
-            entry['matrix'] = m.source
+            entry['matrix'] = m
             entry['handle'] = self.__ownUI.addEntry(m, self.zIndexManager.getVehicleIndex(id))
             self.__entries[id] = entry
             entryVehicle = arena.vehicles[id]
-            entityName = g_battleContext.getPlayerEntityName(id, entryVehicle.get('team'))
+            entityName = battleCtx.getPlayerEntityName(id, entryVehicle.get('team'))
             markerType = entityName.base
             entryName = entityName.name()
             markMarker = ''
@@ -583,9 +632,11 @@ class Minimap(object):
                 if entry.has_key('handle'):
                     mp1 = self.__getEntryMatrixByLocation(self.__observedVehicleId, entry['location'])
                     self.__ownUI.entrySetMatrix(entry['handle'], mp1)
+                    entry['matrix'] = mp1
             self.__observedVehicleId = -1
 
     def __resetCamera(self, mode, vehicleId = None):
+        self.__currentMode = mode
         if self.__cameraHandle is not None:
             self.__ownUI.delEntry(self.__cameraHandle)
         if mode == MODE_STRATEGIC:
@@ -611,9 +662,11 @@ class Minimap(object):
             m = BigWorld.camera().invViewMatrix
         if mode == MODE_VIDEO:
             self.__cameraHandle = self.__ownUI.addEntry(m, self.zIndexManager.getIndexByName(CAMERA_VIDEO))
+            self.__cameraMatrix = m
             self.__ownUI.entryInvoke(self.__cameraHandle, ('init', ['player', mode]))
         else:
             self.__cameraHandle = self.__ownUI.addEntry(m, self.zIndexManager.getIndexByName(CAMERA_STRATEGIC if mode == MODE_STRATEGIC else CAMERA_NORMAL))
+            self.__cameraMatrix = m
             self.__ownUI.entryInvoke(self.__cameraHandle, ('gotoAndStop', [CURSOR_STRATEGIC if mode == MODE_STRATEGIC else CURSOR_NORMAL]))
         playerMarker = 'normal'
         if mode == MODE_STRATEGIC:
@@ -630,6 +683,7 @@ class Minimap(object):
                     if entry.has_key('handle'):
                         mp1 = BigWorld.entities[vehicleId].matrix
                         self.__ownUI.entrySetMatrix(entry['handle'], mp1)
+                        entry['matrix'] = mp1
             else:
                 playerMarker += 'Camera'
                 mp = Math.WGCombinedMP()
@@ -638,6 +692,8 @@ class Minimap(object):
             if self.__ownEntry.has_key('handle'):
                 self.__ownUI.entrySetMatrix(self.__ownEntry['handle'], mp)
             self.__callEntryFlash(BigWorld.player().playerVehicleID, 'init', ['player', playerMarker])
+        if mode != MODE_STRATEGIC and self.__normalMarkerScale is not None:
+            self.scaleMarker(self.__cameraHandle, self.__cameraMatrix, self.__normalMarkerScale)
         self.__parentUI.call('minimap.entryInited', [])
         return
 
@@ -645,6 +701,7 @@ class Minimap(object):
         if self.__cameraHandle is not None:
             self.__ownUI.delEntry(self.__cameraHandle)
             self.__cameraHandle = None
+            self.__cameraMatrix = None
         return
 
     def handleRepeatKeyEvent(self, event):
@@ -667,6 +724,21 @@ class Minimap(object):
 
     def showActionMarker(self, vehicleID, newState):
         self.__callEntryFlash(vehicleID, 'showAction', [newState])
+
+
+class EntryInfo(object):
+
+    def __init__(self, handle, matrix):
+        self.__handle = handle
+        self.__matrix = matrix
+
+    @property
+    def handle(self):
+        return self.__handle
+
+    @property
+    def matrix(self):
+        return self.__matrix
 
 
 class MinimapZIndexManager(object):

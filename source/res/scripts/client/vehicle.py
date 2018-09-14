@@ -127,7 +127,7 @@ class Vehicle(BigWorld.Entity):
             for shotPoint in decodedPoints:
                 showFullscreenEffs = self.isPlayer and self.isAlive()
                 keyPoints, effects, _ = effectsDescr[shotPoint.hitEffectGroup]
-                self.appearance.modelsDesc[shotPoint.componentName]['boundEffects'].addNew(shotPoint.matrix, effects, keyPoints, isPlayer=self.isPlayer, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs)
+                self.appearance.modelsDesc[shotPoint.componentName]['boundEffects'].addNew(shotPoint.matrix, effects, keyPoints, isPlayer=self.isPlayer, showShockWave=showFullscreenEffs, showFlashBang=showFullscreenEffs, entity_id=self.id)
 
             if decodedPoints:
                 firstHitPoint = decodedPoints[0]

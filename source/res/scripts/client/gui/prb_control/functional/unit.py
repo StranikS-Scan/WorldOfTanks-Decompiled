@@ -3,6 +3,8 @@ import time
 from CurrentVehicle import g_currentVehicle
 from UnitBase import UNIT_SLOT, INV_ID_CLEAR_VEHICLE, UNIT_ROLE, UNIT_ERROR
 import account_helpers
+from gui.prb_control.restrictions import createUnitActionValidator
+from gui.shared.fortifications import getClientFortMgr
 from messenger.ext import passCensor
 from account_helpers.AccountSettings import AccountSettings
 from adisp import process
@@ -86,6 +88,41 @@ class UnitEntry(interfaces.IPrbEntry):
 
     def select(self, ctx, callback = None):
         LOG_ERROR('Routine "select" can not be invoked for UnitEntry')
+
+
+class FortBattleEntry(interfaces.IPrbEntry):
+
+    def __init__(self):
+        super(FortBattleEntry, self).__init__()
+
+    def create(self, ctx, callback = None):
+        if not prb_control.hasModalEntity() or ctx.isForced():
+            fortMgr = getClientFortMgr()
+            if fortMgr:
+                ctx.startProcessing(callback=callback)
+                fortMgr.createOrJoinFortBattle(ctx.getID(), slotIdx=ctx.getSlotIdx())
+            else:
+                LOG_ERROR('Fort provider is not defined')
+        else:
+            LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
+            if callback:
+                callback(False)
+
+    def join(self, ctx, callback = None):
+        if not prb_control.hasModalEntity() or ctx.isForced():
+            fortMgr = getClientFortMgr()
+            if fortMgr:
+                ctx.startProcessing(callback=callback)
+                fortMgr.createOrJoinFortBattle(ctx.getID(), slotIdx=ctx.getSlotIdx())
+            else:
+                LOG_ERROR('Fort provider is not defined')
+        else:
+            LOG_ERROR('First, player has to confirm exit from the current prebattle/unit')
+            if callback:
+                callback(False)
+
+    def select(self, ctx, callback = None):
+        LOG_ERROR('Routine "select" can not be invoked for FortBattleEntry')
 
 
 class NoUnitFunctional(interfaces.IUnitFunctional):
@@ -262,7 +299,7 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
     def getStats(self, unitIdx = None):
         _, unit = self.getUnit(unitIdx=unitIdx)
         if not unit:
-            return unit_items.UnitStats(0, 0, 0, 0, 0, 0)
+            return unit_items.UnitStats(0, 0, 0, 0, 0, [], 0, 0)
         return self._buildStats(unitIdx, unit)
 
     def getComment(self, unitIdx = None):
@@ -367,7 +404,9 @@ class _UnitFunctional(ListenersCollection, interfaces.IUnitFunctional):
             else:
                 curTotalLevel += 1
 
-        return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, self._rosterSettings.getMaxTotalLevel())
+        levelsSeq = map(lambda vehicle: vehicle.get('vehLevel', 0), unit.getVehicles().itervalues())
+        levelsSeq.sort()
+        return unit_items.UnitStats(readyCount, occupiedSlotsCount, openedSlotsCount, freeSlotsCount, curTotalLevel, levelsSeq, self._rosterSettings.getMinTotalLevel(), self._rosterSettings.getMaxTotalLevel())
 
     def _getSlotsIterator(self, unitIdx, unit):
         players = unit.getPlayers()
@@ -454,9 +493,8 @@ class IntroFunctional(_UnitFunctional):
 
     def isPlayerJoined(self, ctx):
         result = False
-        if hasattr(ctx, 'getPrbType'):
+        if isinstance(ctx, unit_ctx.JoinModeCtx):
             result = ctx.getPrbType() == self._prbType
-        if hasattr(ctx, 'getModeFlags'):
             self._modeFlags = ctx.getModeFlags()
         return result
 
@@ -530,21 +568,11 @@ class UnitFunctional(_UnitFunctional):
         self._vehiclesWatcher = None
         self._lastErrorCode = UNIT_ERROR.OK
         self._cooldown = PrbCooldownManager()
+        self._actionValidator = createUnitActionValidator(prbType, rosterSettings)
         return
 
     def canPlayerDoAction(self):
-        state = self.getState()
-        vInfo = self.getVehicleInfo()
-        if self.isCreator():
-            stats = self.getStats()
-            if state.isSortie():
-                validSlots = state.isDevMode() or self._rosterSettings.getMinSlots() <= stats.occupiedSlotsCount and stats.readyCount == stats.occupiedSlotsCount
-            else:
-                validSlots = stats.readyCount == stats.occupiedSlotsCount and stats.maxTotalLevel >= stats.curTotalLevel and stats.maxTotalLevel - stats.curTotalLevel >= stats.openedSlotsCount - stats.occupiedSlotsCount
-            vResult = validSlots and not vInfo.isEmpty() and not state.isInIdle()
-        else:
-            vResult = not vInfo.isEmpty() and not state.isInIdle() and g_currentVehicle.invID == vInfo.vehInvID
-        return (vResult, '')
+        return self._actionValidator.canDoAction(self)
 
     def init(self):
         self._hasEntity = True
@@ -668,6 +696,15 @@ class UnitFunctional(_UnitFunctional):
     def isVehicleReadyToBattle(self):
         vInfo = self.getVehicleInfo()
         return not vInfo.isEmpty() and vInfo.isReadyToBattle()
+
+    def validateLevels(self, stats = None, state = None, vInfo = None):
+        stats = stats or self.getStats()
+        state = state or self.getState()
+        vInfo = vInfo or self.getVehicleInfo()
+        return (self._actionValidator.canCreatorDoAction(stats, state, vInfo)[0], self._actionValidator.getRestrictionByLevel(stats, state))
+
+    def getUnitInvalidLevels(self, stats = None):
+        return self._actionValidator.getUnitInvalidLevels(stats or self.getStats())
 
     def leave(self, ctx, callback = None):
         ctx.startProcessing(callback)

@@ -1,8 +1,7 @@
 # Embedded file name: scripts/client/notification/decorators.py
 import BigWorld
 from debug_utils import LOG_ERROR
-from gui.prb_control.formatters.invites import PrbInviteHtmlTextFormatter
-from gui.prb_control.formatters.invites import getPrbName
+from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
 from messenger import g_settings
@@ -199,8 +198,7 @@ class PrbInviteDecorator(_NotificationDecorator):
             self._settings = NotificationGuiSettings(True, NotificationPriorityLevel.HIGH, showAt=invite.showAt)
         else:
             self._settings = NotificationGuiSettings(False, NotificationPriorityLevel.LOW, showAt=invite.showAt)
-        text = PrbInviteHtmlTextFormatter().getText(invite)
-        prbName = getPrbName(invite.type, True)
+        formatter = getPrbInviteHtmlFormatter(invite)
         canAccept = self.prbInvites.canAcceptInvite(invite)
         canDecline = self.prbInvites.canDeclineInvite(invite)
         if canAccept or canDecline:
@@ -211,8 +209,8 @@ class PrbInviteDecorator(_NotificationDecorator):
                 cancelState |= NOTIFICATION_BUTTON_STATE.ENABLED
         else:
             submitState = cancelState = 0
-        message = g_settings.msgTemplates.format('invite', ctx={'text': text}, data={'timestamp': self._createdAt,
-         'icon': makePathToIcon('{0:>s}InviteIcon'.format(prbName)),
+        message = g_settings.msgTemplates.format('invite', ctx={'text': formatter.getText(invite)}, data={'timestamp': self._createdAt,
+         'icon': makePathToIcon(formatter.getIconName(invite)),
          'defaultIcon': makePathToIcon('prebattleInviteIcon'),
          'buttonsStates': {'submit': submitState,
                            'cancel': cancelState}})

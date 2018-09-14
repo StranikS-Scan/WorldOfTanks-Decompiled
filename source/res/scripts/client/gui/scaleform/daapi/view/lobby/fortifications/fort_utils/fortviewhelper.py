@@ -5,7 +5,7 @@ from FortifiedRegionBase import NOT_ACTIVATED
 import fortified_regions
 from ClientFortifiedRegion import BUILDING_UPDATE_REASON
 from constants import FORT_BUILDING_TYPE, CLAN_MEMBER_FLAGS
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
+from gui.Scaleform.framework.managers.TextManager import TextIcons, TextManager
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.ORDER_TYPES import ORDER_TYPES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
@@ -47,6 +47,17 @@ class FortViewHelper(FortListener):
     BUILDING_ANIMATIONS = {BUILDING_UPDATE_REASON.ADDED: FORTIFICATION_ALIASES.BUILD_FOUNDATION_ANIMATION,
      BUILDING_UPDATE_REASON.UPGRADED: FORTIFICATION_ALIASES.UPGRADE_BUILDING_ANIMATION,
      BUILDING_UPDATE_REASON.DELETED: FORTIFICATION_ALIASES.DEMOUNT_BUILDING_ANIMATION}
+    CLAN_MEMBER_ROLES = [CLAN_MEMBER_FLAGS.RESERVIST,
+     CLAN_MEMBER_FLAGS.RECRUIT,
+     CLAN_MEMBER_FLAGS.PRIVATE,
+     CLAN_MEMBER_FLAGS.JUNIOR,
+     CLAN_MEMBER_FLAGS.COMMANDER,
+     CLAN_MEMBER_FLAGS.RECRUITER,
+     CLAN_MEMBER_FLAGS.TREASURER,
+     CLAN_MEMBER_FLAGS.DIPLOMAT,
+     CLAN_MEMBER_FLAGS.STAFF,
+     CLAN_MEMBER_FLAGS.VICE_LEADER,
+     CLAN_MEMBER_FLAGS.LEADER]
 
     def getData(self):
         data = self._getBaseFortificationData()
@@ -83,7 +94,7 @@ class FortViewHelper(FortListener):
                     orderTooltipData = '\n' + i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPROCESS_INPAUSE)
                 else:
                     order = self.fortCtrl.getFort().getOrder(self.fortCtrl.getFort().getBuildingOrder(buildingDescr.typeID))
-                    orderTime = fort_text.getTimeDurationStr(order.getProductionLeftTime())
+                    orderTime = TextManager.reference().getTimeDurationStr(order.getProductionLeftTime())
                     orderTooltipData = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_ORDER, order.productionCount, orderTime)
         toolTipData = self.getBuildingTooltipBody(hpVal, maxHpValue, defResVal, maxDefResValue)
         if orderTooltipData is not None:
@@ -104,15 +115,7 @@ class FortViewHelper(FortListener):
             return
 
     def _isFortFrozen(self):
-        baseBuildingDescr = self.fortCtrl.getFort().getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
-        baseHpVal = baseBuildingDescr.hp
-        baseMaxHpValue = baseBuildingDescr.levelRef.hp
-        return self._isBuildingFrozen(baseHpVal, baseMaxHpValue)
-
-    def _isBuildingFrozen(self, baseHpVal, baseMaxHpValue):
-        baseHpValF = float(baseHpVal)
-        baseMaxHpValueF = float(baseMaxHpValue)
-        return baseHpValF / baseMaxHpValueF < 0.2
+        return self.fortCtrl.getFort().isFrozen()
 
     def _isProductionInPause(self, buildingDescr):
         return self._isBaseBuildingDamaged() or self._isBuildingDamaged(buildingDescr) or self._isFortFrozen()
@@ -171,7 +174,9 @@ class FortViewHelper(FortListener):
          'buildingLevel': level,
          'animationType': animation}
         if not onlyBaseData:
-            data.update({'isAvailable': True,
+            isDefenceHour = progress == FORTIFICATION_ALIASES.STATE_TROWEL and direction in self.fortCtrl.getFort().getDirectionsInBattle()
+            data.update({'isDefenceHour': isDefenceHour,
+             'isAvailable': True,
              'isExportAvailable': isExportAvailable,
              'isImportAvailable': isImportAvailable,
              'cooldown': cooldownStr,
@@ -217,7 +222,7 @@ class FortViewHelper(FortListener):
                 if canModernization:
                     result.append(self.__createItem(cxtMaps[2], enableModernizationBtn))
                 if self._isVisibleDemountBtn(buildingDescr):
-                    result.append(self.__createItem(cxtMaps[3], self._isEnableDemountBtn()))
+                    result.append(self.__createItem(cxtMaps[3], self._isEnableDemountBtn(buildingDescr)))
             return result
 
     def _isEnableActionBtn(self, descr):
@@ -254,16 +259,18 @@ class FortViewHelper(FortListener):
     def _canModernization(self, descr):
         return descr.level < 10 and self._isAvailableBlinking()
 
-    def _isEnableModernizationBtnByProgress(self, descr):
-        progressFoundation = descr.level == 0 and descr.hp < descr.levelRef.hp
-        result = not progressFoundation and not self._isTutorial()
+    def _isEnableModernizationBtnByProgress(self, buildingDescr):
+        progressFoundation = buildingDescr.level == 0 and buildingDescr.hp < buildingDescr.levelRef.hp
+        isOnDefenceHour = buildingDescr.direction in self.fortCtrl.getFort().getDirectionsInBattle()
+        result = not progressFoundation and not self._isTutorial() and not isOnDefenceHour
         return self.fortCtrl.getPermissions().canUpgradeBuilding() and result
 
     def _isEnableModernizationBtnByDamaged(self, buildingDescr):
         isBuildingDamaged = self._isBuildingDamaged(buildingDescr)
         isBaseBuildingDamaged = self._isBaseBuildingDamaged()
         isFortFrozen = self._isFortFrozen()
-        isDamaged = isBuildingDamaged or isBaseBuildingDamaged or isFortFrozen
+        isOnDefenceHour = buildingDescr.direction in self.fortCtrl.getFort().getDirectionsInBattle()
+        isDamaged = (isBuildingDamaged or isBaseBuildingDamaged or isFortFrozen) and not isOnDefenceHour
         return not isDamaged
 
     def _isMilitaryBase(self, typeID):
@@ -273,11 +280,12 @@ class FortViewHelper(FortListener):
         isBaseBuilding = self._isMilitaryBase(descr.typeID)
         return self.fortCtrl.getPermissions().canDeleteBuilding() and not isBaseBuilding
 
-    def _isEnableDemountBtn(self):
-        return not self._isTutorial()
+    def _isEnableDemountBtn(self, buildingDescr):
+        isOnDefenceHour = buildingDescr.direction in self.fortCtrl.getFort().getDirectionsInBattle()
+        return not self._isTutorial() and not isOnDefenceHour
 
     def getBuildingTooltipBody(self, hpVal, maxHpValue, defResVal, maxDefResValue):
-        nutIcon = ' ' + fort_text.getIcon(fort_text.NUT_ICON)
+        nutIcon = ' ' + TextManager.reference().getIcon(TextIcons.NUT_ICON)
         labelOne = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STRENGTH)
         labelTwo = i18n.makeString(FORTIFICATIONS.BUILDINGS_BUILDINGTOOLTIP_STORE)
         fstLine = labelOne + self.__toFormattedStr(hpVal) + '/' + self.__toFormattedStr(maxHpValue) + nutIcon

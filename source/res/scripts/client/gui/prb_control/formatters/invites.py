@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/prb_control/formatters/invites.py
-from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_INVITE_STATE
+from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_INVITE_STATE, PREBATTLE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -10,6 +10,7 @@ from gui.prb_control.formatters import getBattleSessionStartTimeString
 from gui.prb_control.prb_helpers import prbInvitesProperty
 from gui.prb_control.prb_helpers import prbDispatcherProperty
 from gui.prb_control.prb_helpers import prbAutoInvitesProperty
+from gui.shared.fortifications import formatters as fort_fmt
 from helpers import i18n
 from messenger.ext import passCensor
 
@@ -118,8 +119,15 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
     def prbInvites(self):
         return None
 
+    def getIconName(self, invite):
+        return '{0:>s}InviteIcon'.format(getPrbName(invite.type, True))
+
     def getTitle(self, invite):
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': invite.creatorFullName}, sourceKey=getPrbName(invite.type))
+        if invite.creatorFullName:
+            creatorName = makeHtmlString('html_templates:lobby/prebattle', 'inviteTitleCreatorName', ctx={'name': invite.creatorFullName})
+        else:
+            creatorName = ''
+        return makeHtmlString('html_templates:lobby/prebattle', 'inviteTitle', ctx={'sender': creatorName}, sourceKey=getPrbName(invite.type))
 
     def getComment(self, invite):
         comment = passCensor(invite.comment)
@@ -160,6 +168,32 @@ class PrbInviteHtmlTextFormatter(InviteFormatter):
         if len(text):
             result.append(text)
         return ''.join(result)
+
+
+class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
+
+    def getTitle(self, invite):
+        extraData = invite.getExtraData()
+        regularInviteTitle = super(PrbFortBattleInviteHtmlTextFormatter, self).getTitle(invite)
+        if 'enemyClanAbbrev' in extraData:
+            enemyClanAbbrev = '[%s]' % extraData['enemyClanAbbrev']
+        else:
+            enemyClanAbbrev = ''
+        return makeHtmlString('html_templates:lobby/prebattle', 'inviteFortTitle', ctx={'inviteRegularTitle': regularInviteTitle,
+         'dir': fort_fmt.getDirectionString(extraData['direction']),
+         'clanAbbrev': enemyClanAbbrev,
+         'time': fort_fmt.getDefencePeriodString(extraData['attackTime'])}, sourceKey='defence' if extraData.get('isDefence') else 'offence')
+
+    def getIconName(self, invite):
+        if invite.getExtraData('isDefence'):
+            return 'fortBattleDefenceInviteIcon'
+        return 'fortBattleOffenceInviteIcon'
+
+
+def getPrbInviteHtmlFormatter(invite):
+    if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
+        return PrbFortBattleInviteHtmlTextFormatter()
+    return PrbInviteHtmlTextFormatter()
 
 
 class PrbInviteTitleFormatter(InviteFormatter):

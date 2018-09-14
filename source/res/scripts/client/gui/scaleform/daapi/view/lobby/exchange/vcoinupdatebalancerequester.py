@@ -3,7 +3,7 @@ import time
 import BigWorld
 import Event
 from adisp import process
-from gui.shared.utils.requesters import StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
 import constants
 
 class _VcoinUpdateBalanceRequester(object):
@@ -22,7 +22,7 @@ class _VcoinUpdateBalanceRequester(object):
     @process
     def __buyGold(self, vcoin):
         self.__buyCallback = None
-        success, errStr = yield StatsRequester().ebankBuyGold(vcoin)
+        success, errStr = yield DeprecatedStatsRequester().ebankBuyGold(vcoin)
         self.__updateBuyingCooldown()
         self.onEbankUpdateBalanceComplete(errStr, vcoin)
         return

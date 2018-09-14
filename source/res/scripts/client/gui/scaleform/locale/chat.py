@@ -2,6 +2,8 @@
 
 
 class CHAT(object):
+    CHANNELS_SQUADREADY_TOOLTIP = '#chat:channels/squadReady/tooltip'
+    CHANNELS_SQUADNOTREADY_TOOLTIP = '#chat:channels/squadNotReady/tooltip'
     CHANNELS_PREBATTLE = '#chat:channels/prebattle'
     CHANNELS_SYSTEM = '#chat:channels/system'
     CHANNELS_TRADING = '#chat:channels/trading'
@@ -16,6 +18,10 @@ class CHAT(object):
     CHANNELS_BATTLE_TEAM = '#chat:channels/battle/team'
     CHANNELS_TRAINING = '#chat:channels/training'
     CHANNELS_SQUAD = '#chat:channels/squad'
+    CHANNELS_SQUADREADY_TOOLTIP_HEADER = CHANNELS_SQUADREADY_TOOLTIP + '/header'
+    CHANNELS_SQUADREADY_TOOLTIP_BODY = CHANNELS_SQUADREADY_TOOLTIP + '/body'
+    CHANNELS_SQUADNOTREADY_TOOLTIP_HEADER = CHANNELS_SQUADNOTREADY_TOOLTIP + '/header'
+    CHANNELS_SQUADNOTREADY_TOOLTIP_BODY = CHANNELS_SQUADNOTREADY_TOOLTIP + '/body'
     ERRORS_USERBANHIMSELF = '#chat:errors/userbanhimself'
     ERRORS_BANCHANNELOWNER = '#chat:errors/banchannelowner'
     ERRORS_BANCHATADMIN = '#chat:errors/banchatadmin'

@@ -2,7 +2,8 @@
 import ArenaType
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
-ENABLED_ARENA_GAMEPLAY_NAMES = constants.ARENA_GAMEPLAY_NAMES[0:4]
+_ASSAULT2_GP_NAME = constants.ARENA_GAMEPLAY_NAMES[6]
+ENABLED_ARENA_GAMEPLAY_NAMES = constants.ARENA_GAMEPLAY_NAMES[:3] + (_ASSAULT2_GP_NAME,)
 
 def getDefaultMask():
 
@@ -44,4 +45,4 @@ def setMaskByNames(names):
 
 
 def isCreationEnabled(gameplayName):
-    return gameplayName in ENABLED_ARENA_GAMEPLAY_NAMES and gameplayName != 'nations'
+    return gameplayName in ENABLED_ARENA_GAMEPLAY_NAMES

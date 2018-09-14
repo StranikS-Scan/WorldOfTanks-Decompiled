@@ -1,5 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/__init__.py
 from gui import GUI_SETTINGS
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.daapi.view.lobby.customization.CamouflageInterface import CamouflageInterface
 from gui.Scaleform.daapi.view.lobby.customization.EmblemInterface import EmblemLeftInterface, EmblemRightInterface
 from gui.Scaleform.daapi.view.lobby.customization.InscriptionInterface import InscriptionLeftInterface, InscriptionRightInterface
@@ -45,3 +46,11 @@ if GUI_SETTINGS.customizationInscriptions:
      'interface': InscriptionRightInterface,
      'position': 1,
      'type': CUSTOMIZATION_ITEM_TYPE.INSCRIPTION})
+CAMOUFLAGES_KIND_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_WINTER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_SUMMER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_DESERT]
+CAMOUFLAGES_NATIONS_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_USSR,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_GERMANY,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_USA,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_CHINA,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_FRANCE,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_UK,
+ VEHICLE_CUSTOMIZATION.CAMOUFLAGE_NATION_JAPAN]

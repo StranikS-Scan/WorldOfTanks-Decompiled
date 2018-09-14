@@ -2,6 +2,7 @@
 import BigWorld
 import TriggersManager
 from constants import ARENA_PERIOD
+from gui.battle_control import g_sessionProvider
 from tutorial import g_tutorialWeaver
 from tutorial.control.battle import aspects
 from tutorial.control.triggers import _Trigger, _TriggerWithValidateVar
@@ -60,15 +61,9 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
     def __del__(self):
         LOG_MEMORY('PlayerVehicleNoAmmoTrigger deleted')
 
-    def setAmmoLayout(self, cd, quantity):
-        self.__ammoLayout[cd] = quantity
-
     def run(self):
         if not self.isSubscribed:
-            player = BigWorld.player()
-            if hasattr(player, '_PlayerAvatar__ammo'):
-                ammo = player._PlayerAvatar__ammo.copy()
-                self.__ammoLayout = dict(map(lambda item: (item[0], item[1]), ammo.itervalues()))
+            self.__addListeners()
             self.__pIdx = g_tutorialWeaver.weave(pointcut=aspects.AmmoQuantityPointcut, aspects=[aspects.AmmoQuantityAspect(self)])
             self.isSubscribed = True
         if self._stateFlag is None:
@@ -90,8 +85,29 @@ class PlayerVehicleNoAmmoTrigger(_Trigger):
         g_tutorialWeaver.clear(self.__pIdx)
         self.__pIdx = -1
         self.__ammoLayout.clear()
+        self.__removeListeners()
         self.isSubscribed = False
         super(PlayerVehicleNoAmmoTrigger, self).clear()
+
+    def __addListeners(self):
+        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        if ammoCtrl:
+            ammoCtrl.onShellsAdded += self.__onShellsAdded
+            ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+            for intCD, (quantity, _) in ammoCtrl.getShellsLayout():
+                self.__ammoLayout[intCD] = quantity
+
+    def __removeListeners(self):
+        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        if ammoCtrl:
+            ammoCtrl.onShellsAdded -= self.__onShellsAdded
+            ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
+
+    def __onShellsAdded(self, intCD, descriptor, quantity, quantityInClip, gunSettings):
+        self.__ammoLayout[intCD] = quantity
+
+    def __onShellsUpdated(self, intCD, quantity, quantityInClip, result):
+        self.__ammoLayout[intCD] = quantity
 
 
 class _DispatchableTrigger(_TriggerWithValidateVar):

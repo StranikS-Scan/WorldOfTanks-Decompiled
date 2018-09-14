@@ -1,6 +1,18 @@
 # Embedded file name: scripts/client/gui/shared/fortifications/fort_helpers.py
+import calendar
+import datetime
+import time
+from constants import PREBATTLE_TYPE
+from FortifiedRegionBase import NOT_ACTIVATED
+from adisp import process
+from helpers import time_utils
+from gui import DialogsInterface, SystemMessages
+from gui.prb_control.dispatcher import g_prbLoader
+from gui.LobbyContext import g_lobbyContext
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import interfaces
+from gui.shared.fortifications.context import CreateOrJoinFortBattleCtx
+from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import UnitConfirmDialogMeta
 
 class fortProviderProperty(property):
 
@@ -51,3 +63,69 @@ class FortListener(interfaces.IFortListener):
         provider = self.fortProvider
         if provider:
             provider.removeListener(self)
+
+
+def adjustDefenceHourToUTC(defenceHour):
+    date = datetime.datetime.now()
+    currentDefenceHourStart = datetime.datetime(date.year, date.month, date.day, defenceHour)
+    localTime = time.mktime(currentDefenceHourStart.timetuple())
+    return time.gmtime(localTime).tm_hour
+
+
+def adjustDefenceHourToLocal(defenceHour, timestamp = None):
+    timestamp = timestamp or time_utils.getCurrentTimestamp()
+    return time.localtime(time_utils.getTimeForUTC(timestamp, defenceHour)).tm_hour
+
+
+def adjustVacationToUTC(vacationStart, vacationDuration):
+    vacationStart, _ = time_utils.getDayTimeBoundsForUTC(vacationStart)
+    return (vacationStart, vacationDuration)
+
+
+def adjustOffDayToUTC(offDay, defenceHour):
+    return __adjustOffDay(offDay, defenceHour)
+
+
+def adjustOffDayToLocal(offDay, defenceHour):
+    return __adjustOffDay(offDay, defenceHour, False)
+
+
+def __adjustOffDay(offDay, defenceHour, toUTC = True):
+    if offDay != NOT_ACTIVATED and time.timezone:
+        weekDays = tuple(calendar.Calendar().iterweekdays())
+        timezoneHourOffset = abs(getTimeZoneOffset())
+        isPositiveOffset = getTimeZoneOffset() < 0
+        if isPositiveOffset:
+            if defenceHour < timezoneHourOffset:
+                if toUTC:
+                    offDay -= 1
+                else:
+                    offDay += 1
+        elif defenceHour + timezoneHourOffset >= 24:
+            if toUTC:
+                offDay += 1
+            else:
+                offDay -= 1
+        if offDay == len(weekDays):
+            offDay = weekDays[0]
+        elif offDay == -1:
+            offDay = weekDays[-1]
+    return offDay
+
+
+def getTimeZoneOffset():
+    return float(time.timezone) / time_utils.ONE_HOUR
+
+
+@process
+def tryToConnectFortBattle(battleID, peripheryID):
+    yield lambda callback: callback(None)
+    if g_lobbyContext.isAnotherPeriphery(peripheryID):
+        if g_lobbyContext.isPeripheryAvailable(peripheryID):
+            result = yield DialogsInterface.showDialog(UnitConfirmDialogMeta(PREBATTLE_TYPE.FORT_BATTLE, 'changePeriphery', messageCtx={'host': g_lobbyContext.getPeripheryName(peripheryID)}))
+            if result:
+                g_prbLoader.getPeripheriesHandler().join(peripheryID, CreateOrJoinFortBattleCtx(battleID, waitingID='fort/fortBattle/createOrJoin'))
+        else:
+            SystemMessages.pushI18nMessage('#system_messages:periphery/errors/isNotAvailable', type=SystemMessages.SM_TYPE.Error)
+    else:
+        yield g_prbLoader.getDispatcher().join(CreateOrJoinFortBattleCtx(battleID, waitingID='fort/fortBattle/createOrJoin'))

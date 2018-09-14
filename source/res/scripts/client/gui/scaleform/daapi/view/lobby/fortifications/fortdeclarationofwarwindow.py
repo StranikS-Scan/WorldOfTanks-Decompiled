@@ -12,7 +12,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.fortifications import getDirectionFromDirPos, getPositionFromDirPos
 from fortified_regions import g_cache as g_fortCache
-from gui.shared.fortifications.context import AttackCtx
+from gui.shared.fortifications.context import AttackClanAndRequestItsCardCtx
 from helpers import i18n
 from helpers.i18n import makeString
 
@@ -97,7 +97,7 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
                     attackerClanName = None
 
                     def filterAttacks(item):
-                        if self.__selectedDayStart < item.getStartTime() < self.__selectedDayFinish and not item.isEnded():
+                        if self.__selectedDayStart <= item.getStartTime() <= self.__selectedDayFinish and not item.isEnded():
                             return True
                         return False
 
@@ -147,8 +147,8 @@ class FortDeclarationOfWarWindow(AbstractWindowView, View, FortDeclarationOfWarW
     @process
     def __planAttack(self, direction):
         if self.__item is not None:
-            result = yield self.fortProvider.sendRequest(AttackCtx(self.__item.getClanDBID(), self.__selectedDayStart, direction, self.__direction, waitingID='fort/attack'))
+            result = yield self.fortProvider.sendRequest(AttackClanAndRequestItsCardCtx(self.__item.getClanDBID(), self.__selectedDayStart, direction, self.__direction, waitingID='fort/attack'))
             if result:
                 g_fortSoundController.playFortClanWarDeclared()
-                self.onWindowClose()
+            self.destroy()
         return

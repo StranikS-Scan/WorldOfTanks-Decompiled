@@ -1,5 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/locale/CYBERSPORT.py
-
+from debug_utils import LOG_WARNING
 
 class CYBERSPORT(object):
     WINDOW_TITLE = '#cyberSport:window/title'
@@ -79,9 +79,14 @@ class CYBERSPORT(object):
     WINDOW_UNIT_MESSAGE_WAITING = '#cyberSport:window/unit/message/waiting'
     WINDOW_UNIT_MESSAGE_NOTFULLUNIT = '#cyberSport:window/unit/message/notFullUnit'
     WINDOW_UNIT_MESSAGE_READY = '#cyberSport:window/unit/message/ready'
-    WINDOW_UNIT_MESSAGE_LEVELERROR = '#cyberSport:window/unit/message/levelError'
+    WINDOW_UNIT_MESSAGE_MINLEVELERROR = '#cyberSport:window/unit/message/minLevelError'
+    WINDOW_UNIT_MESSAGE_MAXLEVELERROR = '#cyberSport:window/unit/message/maxLevelError'
     WINDOW_UNIT_MESSAGE_WAITCOMMANDER = '#cyberSport:window/unit/message/waitCommander'
     WINDOW_UNIT_MESSAGE_ALLREADY = '#cyberSport:window/unit/message/allReady'
+    WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED = '#cyberSport:window/unit/message/invalidLevelError/unresolved'
+    WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6 = '#cyberSport:window/unit/message/invalidLevelError/6'
+    WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7 = '#cyberSport:window/unit/message/invalidLevelError/7'
+    WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6_7 = '#cyberSport:window/unit/message/invalidLevelError/6_7'
     WINDOW_UNIT_READY = '#cyberSport:window/unit/ready'
     WINDOW_UNIT_NOTREADY = '#cyberSport:window/unit/notReady'
     WINDOW_UNIT_FIGHT = '#cyberSport:window/unit/fight'
@@ -135,3 +140,16 @@ class CYBERSPORT(object):
     WINDOW_AUTOSEARCH_ERRORSTATE_SUBMITLLBL = '#cyberSport:window/autoSearch/errorState/submitlLbl'
     WINDOW_AUTOSEARCH_ERRORSTATE_CANCELLBL = '#cyberSport:window/autoSearch/errorState/cancelLbl'
     WINDOW_BACKBTNLBL = '#cyberSport:window/backBtnLbl'
+    WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM = (WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_UNRESOLVED,
+     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6,
+     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_7,
+     WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_6_7)
+
+    @staticmethod
+    def window_unit_message_invalidlevelerror(key):
+        outcome = '#cyberSport:window/unit/message/invalidLevelError/%s' % key
+        if outcome not in CYBERSPORT.WINDOW_UNIT_MESSAGE_INVALIDLEVELERROR_ENUM:
+            LOG_WARNING('locale key "' + outcome + '" was not found')
+            return None
+        else:
+            return outcome

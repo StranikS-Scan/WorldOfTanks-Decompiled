@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/MovingText.py
-import BigWorld, time, constants
+import time
+import BigWorld
+import constants
 from debug_utils import *
+from gui.battle_control import g_sessionProvider
 from windows import UIInterface
 from gui import GUI_SETTINGS
-from gui.BattleContext import g_battleContext
 
 class MovingText(UIInterface):
     """
@@ -47,11 +49,11 @@ class MovingText(UIInterface):
         try:
             self.flashDO = self.uiHolder.getMember(moviePath)
             self.flashDO.script = self
-            self.uiHolder.respond([cid, True, g_battleContext.isInBattle])
+            self.uiHolder.respond([cid, True, g_sessionProvider.getCtx().isInBattle])
         except Exception:
             LOG_ERROR('There is error while getting moving text display object')
             LOG_CURRENT_EXCEPTION()
-            self.uiHolder.respond([cid, False, g_battleContext.isInBattle])
+            self.uiHolder.respond([cid, False, g_sessionProvider.getCtx().isInBattle])
 
     def __clearCallback(self):
         """ Clear news updating callback """

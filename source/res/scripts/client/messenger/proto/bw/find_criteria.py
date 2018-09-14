@@ -37,9 +37,11 @@ class BWLazyChannelFindCriteria(IEntityFindCriteria):
 class BWActiveChannelFindCriteria(IEntityFindCriteria):
 
     def filter(self, channel):
+        if channel.getProtoType() != PROTO_TYPE.BW:
+            return False
         data = channel.getProtoData()
         flags = data.flags
-        return channel.getProtoType() is PROTO_TYPE.BW and channel.isJoined() and flags & chat_shared.CHAT_CHANNEL_BATTLE == 0 and (flags & chat_shared.CHAT_CHANNEL_PREBATTLE == 0 or flags & chat_shared.CHAT_CHANNEL_TRAINING != 0) and channel.getName() not in LAZY_CHANNEL.ALL
+        return channel.isJoined() and flags & chat_shared.CHAT_CHANNEL_BATTLE == 0 and (flags & chat_shared.CHAT_CHANNEL_PREBATTLE == 0 or flags & chat_shared.CHAT_CHANNEL_TRAINING != 0) and channel.getName() not in LAZY_CHANNEL.ALL
 
 
 class BWClanChannelFindCriteria(IEntityFindCriteria):

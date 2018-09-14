@@ -42,6 +42,7 @@ class ShowShooting(EntityExtra):
         for i, j in vehicle.appearance.modelsDesc.iteritems():
             data['modelMap'][i] = vehicle.appearance.modelsDesc[i]['model']
 
+        data['entity_id'] = vehicle.id
         data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
         data['_burst'] = (burstCount, gunDescr['burst'][1])
         data['_gunModel'] = vehicle.appearance.modelsDesc['gun']['model']
@@ -120,7 +121,7 @@ class ShowShooting(EntityExtra):
             return
         else:
             position = testRes[0]
-            BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=testRes[2], start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0))
+            BigWorld.player().terrainEffects.addNew(position, groundWaveEff.effectsList, groundWaveEff.keyPoints, None, dir=gunDir, surfaceMatKind=testRes[2], start=position + Math.Vector3(0, 0.5, 0), end=position - Math.Vector3(0, 0.5, 0), entity_id=vehicle.id)
             return
 
 
@@ -181,6 +182,7 @@ class Fire(EntityExtra):
             for i, j in vehicle.appearance.modelsDesc.iteritems():
                 data['modelMap'][i] = vehicle.appearance.modelsDesc[i]['model']
 
+            data['entity_id'] = vehicle.id
             effectListPlayer = EffectsListPlayer(effects, stages, **data)
             data['_effectsPlayer'] = effectListPlayer
             effectListPlayer.play(vehicle.appearance.modelsDesc['hull']['model'], None, None, True)
@@ -217,6 +219,7 @@ class Fire(EntityExtra):
             for i, j in vehicle.appearance.modelsDesc.iteritems():
                 data['modelMap'][i] = vehicle.appearance.modelsDesc[i]['model']
 
+            data['entity_id'] = vehicle.id
             effectListPlayer = EffectsListPlayer(effects, stages, **data)
             data['_effectsPlayer'] = effectListPlayer
             effectListPlayer.play(vehicle.appearance.modelsDesc['hull']['model'], None, None, True)

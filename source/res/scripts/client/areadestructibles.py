@@ -16,10 +16,12 @@ import FMOD
 g_cache = None
 g_destructiblesManager = None
 g_destructiblesAnimator = None
+MODULE_DEPENDENCY_HIDING_DELAY = 0.25
 DESTRUCTIBLE_HIDING_DELAY_CONSTANT = 0.2
 DESTRUCTIBLE_HIDING_DELAY = DESTRUCTIBLE_HIDING_DELAY_CONSTANT
 _TREE_EFFECTS_SCALE_RATIO = 0.7
 _MAX_PITCH_TO_CHECK_TERRAIN = math.radians(87)
+_SHOT_EXPLOSION_SYNC_TIMEOUT = 0.11
 
 def init():
     global g_destructiblesManager
@@ -58,6 +60,8 @@ class DestructiblesManager():
         self.__destrInitialMatrices = {}
         self.__ctrls = {}
         self.__destroyCallbacks = {}
+        self.__projectileExplosions = []
+        self.__explodedDestructibles = []
         return
 
     def clear(self):
@@ -71,6 +75,8 @@ class DestructiblesManager():
         self.__destrInitialMatrices = {}
         self.__ctrls = {}
         self.__destroyCallbacks = {}
+        self.__projectileExplosions = []
+        self.__explodedDestructibles = []
         return
 
     def startSpace(self, spaceID):
@@ -129,11 +135,68 @@ class DestructiblesManager():
     def isChunkLoaded(self, chunkID):
         return self.__loadedChunkIDs.has_key(chunkID)
 
+    def onProjectileExploded(self, hitParams, damagedDestructibles):
+        global DESTRUCTIBLE_HIDING_DELAY
+        self.__reduceExplosionCacheByTimeout()
+        explosionInfo = [hitParams, True]
+        explDestrs = self.__explodedDestructibles
+        gotDestrs = False
+        restDamagedDestructibles = []
+        for chunkID, itemIndex, matKind in damagedDestructibles:
+            found = False
+            for destr in explDestrs:
+                time, itemInfo = destr
+                chunkID_, itemIndex_, matKind_, dmgType, destrData = itemInfo
+                if chunkID_ == chunkID and itemIndex_ == itemIndex and (dmgType == DESTR_TYPE_FRAGILE or matKind_ == matKind):
+                    self.__destroyDestructible(chunkID, dmgType, destrData, True, explosionInfo)
+                    explDestrs.remove(destr)
+                    found = True
+                    gotDestrs = True
+                    break
+
+            if not found:
+                restDamagedDestructibles.append((chunkID, itemIndex, matKind))
+
+        if restDamagedDestructibles:
+            newExpl = (BigWorld.time(), explosionInfo, restDamagedDestructibles)
+            self.__projectileExplosions.append(newExpl)
+        if not gotDestrs:
+            BigWorld.callback(_SHOT_EXPLOSION_SYNC_TIMEOUT + DESTRUCTIBLE_HIDING_DELAY, partial(self.__delayedHavokExplosion, self.__spaceID, explosionInfo))
+
     def orderDestructibleDestroy(self, chunkID, dmgType, destrData, isNeedAnimation, syncWithProjectile = False):
         if self.forceNoAnimation:
             isNeedAnimation = False
         if self.__loadedChunkIDs.has_key(chunkID):
-            self.__destroyDestructible(chunkID, dmgType, destrData, isNeedAnimation)
+            if isNeedAnimation and syncWithProjectile:
+                if dmgType == DESTR_TYPE_FRAGILE:
+                    itemIndex, _ = decodeFragile(destrData)
+                    matKind = 0
+                elif dmgType == DESTR_TYPE_STRUCTURE:
+                    itemIndex, matKind, _ = decodeDestructibleModule(destrData)
+                else:
+                    LOG_CODEPOINT_WARNING()
+                    return
+                self.__reduceExplosionCacheByTimeout()
+                for expl in reversed(self.__projectileExplosions):
+                    time, explInfo, damagedDestrs = expl
+                    for destr in damagedDestrs:
+                        chunkID_, itemIndex_, matKind_ = destr
+                        if chunkID == chunkID_ and itemIndex == itemIndex_ and (dmgType == DESTR_TYPE_FRAGILE or matKind == matKind_):
+                            self.__destroyDestructible(chunkID, dmgType, destrData, isNeedAnimation, explInfo)
+                            damagedDestrs.remove(destr)
+                            if not damagedDestrs:
+                                self.__projectileExplosions.remove(expl)
+                            return
+
+                itemInfo = (chunkID,
+                 itemIndex,
+                 matKind,
+                 dmgType,
+                 destrData)
+                self.__explodedDestructibles.append((BigWorld.time(), itemInfo))
+                BigWorld.callback(_SHOT_EXPLOSION_SYNC_TIMEOUT + 0.01, self.__reduceExplosionCacheByTimeout)
+            else:
+                self.__destroyDestructible(chunkID, dmgType, destrData, isNeedAnimation)
         else:
             entry = (dmgType, destrData, isNeedAnimation)
             self.__destructiblesWaitDestroy.setdefault(chunkID, []).append(entry)
@@ -171,6 +234,26 @@ class DestructiblesManager():
         if self.__ctrls.has_key(chunkID):
             del self.__ctrls[chunkID]
 
+    def __reduceExplosionCacheByTimeout(self):
+        currTime = BigWorld.time()
+        newExplCache = []
+        for expl in self.__projectileExplosions:
+            time, explInfo, _ = expl
+            if currTime - time < _SHOT_EXPLOSION_SYNC_TIMEOUT:
+                newExplCache.append(expl)
+
+        self.__projectileExplosions = newExplCache
+        newItemCache = []
+        for destr in self.__explodedDestructibles:
+            time, itemInfo = destr
+            if currTime - time < _SHOT_EXPLOSION_SYNC_TIMEOUT:
+                newItemCache.append(destr)
+            else:
+                chunkID, _, _, dmgType, destrData = itemInfo
+                self.__destroyDestructible(chunkID, dmgType, destrData, True)
+
+        self.__explodedDestructibles = newItemCache
+
     def __logErrorTooMuchDestructibles(self, chunkID):
         x, y = chunkIndexesFromChunkID(chunkID)
         player = BigWorld.player()
@@ -195,7 +278,7 @@ class DestructiblesManager():
         if spaceID == self.__spaceID:
             self.__effectsResourceRefs[chunkID] = resourceRefs
 
-    def __destroyDestructible(self, chunkID, dmgType, destData, isNeedAnimation):
+    def __destroyDestructible(self, chunkID, dmgType, destData, isNeedAnimation, explosionInfo = None):
         if self.forceNoAnimation:
             isNeedAnimation = False
         if dmgType == DESTR_TYPE_FALLING_ATOM:
@@ -211,11 +294,11 @@ class DestructiblesManager():
             FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DESTR_TYPE_FRAGILE:
             destrIndex, isShotDamage = decodeFragile(destData)
-            self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage)
+            self.__destroyFragile(chunkID, destrIndex, isNeedAnimation, isShotDamage, explosionInfo)
             FMOD.lightSoundRemove(self.__spaceID, chunkID, destrIndex)
         elif dmgType == DESTR_TYPE_STRUCTURE:
             destrIndex, matKind, isShotDamage = decodeDestructibleModule(destData)
-            self.__destroyModule(chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage)
+            self.__destroyModule(chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage, explosionInfo)
         return
 
     def __setDestructibleInitialState(self, chunkID, destrIndex):
@@ -243,15 +326,14 @@ class DestructiblesManager():
                 self.__startLifetimeEffect(chunkID, destrIndex, 0, desc, desc['filename'])
             return
 
-    def __destroyFragile(self, chunkID, destrIndex, isNeedAnimation, isShotDamage):
-        global DESTRUCTIBLE_HIDING_DELAY
+    def __destroyFragile(self, chunkID, destrIndex, isNeedAnimation, isShotDamage, explosionInfo = None):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
         if isNeedAnimation:
-            functor = partial(self.__setDestructibleState, self.__spaceID, chunkID, destrIndex, True)
+            functor = partial(self.__setDestructibleState, self.__spaceID, chunkID, destrIndex, True, explosionInfo)
             callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY, functor)
             self.__destroyCallbacks[functor] = callbackID
         else:
-            self.__setDestructibleState(self.__spaceID, chunkID, destrIndex, True, False)
+            self.__setDestructibleState(self.__spaceID, chunkID, destrIndex, True, explosionInfo, False)
         desc = g_cache.getDestructibleDesc(self.__spaceID, chunkID, destrIndex)
         if desc is None:
             _printErrDescNotAvailable(self.__spaceID, chunkID, destrIndex)
@@ -266,7 +348,7 @@ class DestructiblesManager():
                 self.__launchEffect(chunkID, destrIndex, desc, coreEffectType, desc['filename'])
             return
 
-    def __destroyModule(self, chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage):
+    def __destroyModule(self, chunkID, destrIndex, matKind, isNeedAnimation, isShotDamage, explosionInfo = None):
         if self.__isModuleDamaged(chunkID, destrIndex, matKind):
             return
         else:
@@ -275,21 +357,24 @@ class DestructiblesManager():
             if desc is None:
                 _printErrDescNotAvailable(self.__spaceID, chunkID, destrIndex)
                 return
-            destroyDepends = desc['destroyDepends'].get(matKind, [])
-            kindsToHide = [matKind]
-            kindsToHide += destroyDepends
-            for kind in destroyDepends:
-                dependModuleDesc = desc['modules'][kind]
-                kindsToHide.append(dependModuleDesc['destroyedMat'])
-
             moduleDesc = desc['modules'][matKind]
             destroyedMat = moduleDesc['destroyedMat']
+            destroyDepends = desc['destroyDepends'].get(matKind, [])
+            dependKinds = list(destroyDepends)
+            for kind in destroyDepends:
+                dependModuleDesc = desc['modules'][kind]
+                dependKinds.append(dependModuleDesc['destroyedMat'])
+
             if isNeedAnimation:
-                functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [destroyedMat], kindsToHide)
+                functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [destroyedMat], [matKind], explosionInfo)
                 callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY, functor)
                 self.__destroyCallbacks[functor] = callbackID
+                functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [], dependKinds, explosionInfo)
+                callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + MODULE_DEPENDENCY_HIDING_DELAY, functor)
+                self.__destroyCallbacks[functor] = callbackID
             else:
-                self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [destroyedMat], kindsToHide, False)
+                kindsToHide = [matKind] + dependKinds
+                self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [destroyedMat], kindsToHide, explosionInfo, False)
             if isShotDamage:
                 unregisterCallback = partial(self.__unregisterModuleEffect, self.__spaceID, chunkID, destrIndex, matKind)
                 decayEffectID = self.__launchEffect(chunkID, destrIndex, moduleDesc, 'decayEffect', desc['filename'], unregisterCallback)
@@ -330,7 +415,7 @@ class DestructiblesManager():
                     depends = desc['destroyDepends'].get(kind, [])
                     for dependKind in depends:
                         if dependKind in allUndamagedKinds:
-                            self.__destroyModule(chunkID, destrIndex, dependKind, isNeedAnimation, False)
+                            BigWorld.callback(MODULE_DEPENDENCY_HIDING_DELAY, partial(self.__destroyModule, chunkID, destrIndex, dependKind, isNeedAnimation, False, explosionInfo))
                             return
 
             if len(allUndamagedKinds) == 1 and len(allDamagedKinds) >= 7:
@@ -350,7 +435,7 @@ class DestructiblesManager():
 
                 if isNeedAnimation:
                     functor = partial(self.__setDestructibleMaterialsVisible, self.__spaceID, chunkID, destrIndex, [], kindsToHide)
-                    callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY, functor)
+                    callbackID = BigWorld.callback(DESTRUCTIBLE_HIDING_DELAY + MODULE_DEPENDENCY_HIDING_DELAY, functor)
                     self.__destroyCallbacks[functor] = callbackID
                 else:
                     self.__setDestructibleMaterialsVisible(self.__spaceID, chunkID, destrIndex, [], kindsToHide, False)
@@ -460,40 +545,67 @@ class DestructiblesManager():
         if self.__structuresEffects.has_key(code):
             del self.__structuresEffects[code]
 
-    def __setDestructibleMaterialsVisible(self, spaceID, chunkID, destrIndex, kindsToShow, kindsToHide, delCallback = True):
+    def __setDestructibleMaterialsVisible(self, spaceID, chunkID, destrIndex, kindsToShow, kindsToHide, explosionInfo = None, delCallback = True):
         if spaceID != self.__spaceID:
             return
-        fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
-        for kind in kindsToShow:
-            fashion.setMaterialKindVisible(kind, True)
-            if kind >= DESTRUCTIBLE_MATKIND.DAMAGED_MIN and kind <= DESTRUCTIBLE_MATKIND.DAMAGED_MAX:
-                fashion.setEnableDrawMergedModel(False)
+        else:
+            fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
+            for kind in kindsToShow:
+                fashion.setMaterialKindVisible(kind, True)
+                if kind >= DESTRUCTIBLE_MATKIND.DAMAGED_MIN and kind <= DESTRUCTIBLE_MATKIND.DAMAGED_MAX:
+                    fashion.setEnableDrawMergedModel(False)
 
-        for kind in kindsToHide:
-            fashion.setMaterialKindVisible(kind, False)
-            fashion.havokDestroyMaterial(kind)
-            if kind >= DESTRUCTIBLE_MATKIND.NORMAL_MIN and kind <= DESTRUCTIBLE_MATKIND.NORMAL_MAX:
-                fashion.setEnableDrawMergedModel(False)
+            if explosionInfo is not None:
+                hitParams, createExplosion = explosionInfo
+                endPoint, hitDir, shellVelocity, shellMass, splashRadius, splashStrength = hitParams
+                for kind in kindsToHide:
+                    fashion.setMaterialKindVisible(kind, False)
+                    fashion.havokDestroyMaterialExp(kind, endPoint, hitDir, shellVelocity, shellMass)
 
-        if delCallback:
-            for functor in self.__destroyCallbacks:
-                args = functor.args
-                if args[1] == chunkID and args[2] == destrIndex and args[3] == kindsToShow and args[4] == kindsToHide:
-                    del self.__destroyCallbacks[functor]
-                    break
+                if createExplosion:
+                    BigWorld.wg_havokExplosion(endPoint, splashStrength, splashRadius)
+                    explosionInfo[1] = False
+            else:
+                for kind in kindsToHide:
+                    fashion.setMaterialKindVisible(kind, False)
+                    fashion.havokDestroyMaterial(kind)
 
-    def __setDestructibleState(self, spaceID, chunkID, destrIndex, isDestroyed, delCallback = True):
+            for kind in kindsToHide:
+                if kind >= DESTRUCTIBLE_MATKIND.NORMAL_MIN and kind <= DESTRUCTIBLE_MATKIND.NORMAL_MAX:
+                    fashion.setEnableDrawMergedModel(False)
+
+            if delCallback:
+                for functor in self.__destroyCallbacks:
+                    args = functor.args
+                    if args[1] == chunkID and args[2] == destrIndex and args[3] == kindsToShow and args[4] == kindsToHide:
+                        del self.__destroyCallbacks[functor]
+                        break
+
+            return
+
+    def __setDestructibleState(self, spaceID, chunkID, destrIndex, isDestroyed, explosionInfo = None, delCallback = True):
         if spaceID != self.__spaceID:
             return
-        fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
-        fashion.isDestroyed = isDestroyed
-        fashion.setEnableDrawMergedModel(not isDestroyed)
-        if delCallback:
-            for functor in self.__destroyCallbacks:
-                functorArgs = functor.args
-                if functorArgs[1] == chunkID and functorArgs[2] == destrIndex:
-                    del self.__destroyCallbacks[functor]
-                    break
+        else:
+            fashion = _getOrCreateFashion(spaceID, chunkID, destrIndex, True)
+            if isDestroyed and explosionInfo is not None:
+                hitParams, createExplosion = explosionInfo
+                endPoint, hitDir, shellVelocity, shellMass, splashRadius, splashStrength = hitParams
+                fashion.havokDestroyAllExp(endPoint, hitDir, shellVelocity, shellMass)
+                if createExplosion:
+                    BigWorld.wg_havokExplosion(endPoint, splashStrength, splashRadius)
+                    explosionInfo[1] = False
+            else:
+                fashion.isDestroyed = isDestroyed
+            fashion.setEnableDrawMergedModel(not isDestroyed)
+            if delCallback:
+                for functor in self.__destroyCallbacks:
+                    functorArgs = functor.args
+                    if functorArgs[1] == chunkID and functorArgs[2] == destrIndex:
+                        del self.__destroyCallbacks[functor]
+                        break
+
+            return
 
     def __dropDestructible(self, chunkID, destrIndex, fallDirYaw, pitchConstr, fallSpeed, isAnimate, obstacleCollisionFlags):
         self.__stopLifetimeEffect(chunkID, destrIndex, 0)
@@ -547,6 +659,14 @@ class DestructiblesManager():
     def __touchDown(self, fashion):
         if fashion.hasDamagedMaterial():
             fashion.isDestroyed = True
+
+    def __delayedHavokExplosion(self, spaceID, explosionInfo):
+        if spaceID != self.__spaceID:
+            return
+        if explosionInfo[1]:
+            endPoint, _, _, _, radius, impact = explosionInfo[0]
+            BigWorld.wg_havokExplosion(endPoint, impact, radius)
+            explosionInfo[1] = False
 
     def __launchFallEffect(self, chunkID, destrIndex, effectName, fallDirYaw):
         player = BigWorld.player()

@@ -1,18 +1,15 @@
 # Embedded file name: scripts/client/AvatarInputHandler/aims.py
-from functools import partial
 import math
 import weakref
-import BigWorld
 import GUI
 import Math
-import ResMgr
 from debug_utils import *
+from gui.battle_control import g_sessionProvider
 from helpers import i18n
 from helpers.func_utils import *
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.ColorSchemeManager import _ColorSchemeManager
-from gui.BattleContext import g_battleContext
 import BattleReplay
 
 def createAim(type):
@@ -66,18 +63,11 @@ class Aim(Flash):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
             self._flashCall('setupReloadingCounter', [False])
-            self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
-        else:
-            self.__cbIdSetReloading = None
-        return
 
     def destroy(self):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.onSettingsChanged
         self.close()
-        if self.__cbIdSetReloading is not None:
-            BigWorld.cancelCallback(self.__cbIdSetReloading)
-            self.__cbIdSetReloading = None
         self.__timeInterval.stop()
         self.__timeInterval = None
         self.__aimSettings = None
@@ -288,37 +278,26 @@ class Aim(Flash):
     def _clearTarget(self, startTime):
         self._flashCall('clearTarget', [startTime])
 
-    def setReloadingFromReplay(self):
-        self._setReloadingAsPercent(100.0 * BattleReplay.g_replayCtrl.getGunReloadAmountLeft())
-        self.__cbIdSetReloading = BigWorld.callback(0.0, self.setReloadingFromReplay)
+    def setReloadingInPercent(self, percent, isReloading = True):
+        self._setReloadingAsPercent(percent, isReloading)
 
     def _setReloading(self, duration, startTime = None, isReloading = True, correction = None, baseTime = None):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
-            return
+        if correction is not None:
+            params = self._getCorrectionReloadingParams(correction)
+            if params is not None:
+                self._flashCall('setReloading', params)
         else:
-            if replayCtrl.isRecording:
-                replayCtrl.setGunReloadTime(startTime, duration)
-            if correction is not None:
-                params = self._getCorrectionReloadingParams(correction)
-                if params is not None:
-                    self._flashCall('setReloading', params)
-            else:
-                self._flashCall('setReloading', [duration,
-                 startTime,
-                 isReloading,
-                 None,
-                 baseTime])
-            return
+            self._flashCall('setReloading', [duration,
+             startTime,
+             isReloading,
+             None,
+             baseTime])
+        return
 
-    def _setReloadingAsPercent(self, percent):
-        self._flashCall('setReloadingAsPercent', [percent])
+    def _setReloadingAsPercent(self, percent, isReloading = True):
+        self._flashCall('setReloadingAsPercent', [percent, isReloading])
 
     def _correctReloadingTime(self, duration):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.replayContainsGunReloads:
-            self.setReloadingFromReplay()
-            return
         self._flashCall('correctReloadingTime', [duration])
 
     def _getCorrectionReloadingParams(self, correction):
@@ -408,11 +387,15 @@ class StrategicAim(Aim):
             Aim._flashCall(self, 'updateDistance', [self._getAimDistance()])
             hs = state['health']
             self._setHealth(hs['cur'], hs['max'])
-            rs = state['reload']
-            if rs['startTime'] is not None:
-                self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
+            ammoCtrl = g_sessionProvider.getAmmoCtrl()
+            if ammoCtrl.isGunReloadTimeInPercent():
+                self.setReloadingInPercent(ammoCtrl.getGunReloadTime(), False)
             else:
-                self._setReloading(rs['duration'], 0, False)
+                rs = state['reload']
+                if rs['startTime'] is not None:
+                    self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
+                else:
+                    self._setReloading(rs['duration'], 0, False)
             capacity, burst = state['clip']
             if capacity > 1:
                 self._setClipParams(capacity, burst)
@@ -475,7 +458,7 @@ class PostMortemAim(Aim):
         if self.__vID is not None:
             vehicle = BigWorld.entity(self.__vID)
             if vehicle is not None:
-                playerName = g_battleContext.getFullPlayerName(vID=self.__vID, showVehShortName=False)
+                playerName = g_sessionProvider.getCtx().getFullPlayerName(vID=self.__vID, showVehShortName=False)
                 type = vehicle.typeDescriptor.type.userString
                 healthPercent = math.ceil(100.0 * max(0, vehicle.health) / vehicle.typeDescriptor.maxHealth)
                 self.__setText(playerName, type, healthPercent)
@@ -517,11 +500,15 @@ class ArcadeAim(Aim):
                 self._clearTarget(BigWorld.time() - ts['startTime'])
             hs = state['health']
             self._setHealth(hs['cur'], hs['max'])
-            rs = state['reload']
-            if rs['startTime'] is not None:
-                self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
+            ammoCtrl = g_sessionProvider.getAmmoCtrl()
+            if ammoCtrl.isGunReloadTimeInPercent():
+                self.setReloadingInPercent(ammoCtrl.getGunReloadTime(), False)
             else:
-                self._setReloading(rs['duration'], 0, False)
+                rs = state['reload']
+                if rs['startTime'] is not None:
+                    self._setReloading(rs['duration'], startTime=BigWorld.time() - rs['startTime'], correction=rs['correction'])
+                else:
+                    self._setReloading(rs['duration'], 0, False)
             capacity, burst = state['clip']
             if capacity > 1:
                 self._setClipParams(capacity, burst)

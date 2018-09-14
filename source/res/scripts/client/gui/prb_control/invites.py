@@ -4,7 +4,7 @@ import BigWorld
 from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from account_helpers import getPlayerDatabaseID, isRoamingEnabled
-import constants
+from constants import PREBATTLE_INVITE_STATE, PREBATTLE_INVITE_STATUS, PREBATTLE_INVITE_STATUS_NAMES, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages
 from gui.LobbyContext import g_lobbyContext
@@ -30,15 +30,17 @@ _PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['id',
  'state',
  'count',
  'peripheryID',
- 'prebattleID']))
+ 'prebattleID',
+ 'extraData',
+ 'alwaysAvailable']))
 
 class PrbInviteWrapper(_PrbInviteData):
 
     @staticmethod
-    def __new__(cls, id = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, **kwargs):
+    def __new__(cls, id = -1L, createTime = None, type = 0, comment = str(), creator = str(), creatorDBID = -1L, creatorClanAbbrev = None, receiver = str(), receiverDBID = -1L, receiverClanAbbrev = None, state = None, count = 0, peripheryID = 0, prebattleID = 0, extraData = None, alwaysAvailable = None, **kwargs):
         if createTime is not None:
             createTime = time_utils.makeLocalServerTime(createTime)
-        result = _PrbInviteData.__new__(cls, id, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID)
+        result = _PrbInviteData.__new__(cls, id, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable)
         result.showAt = 0
         return result
 
@@ -61,11 +63,17 @@ class PrbInviteWrapper(_PrbInviteData):
         if dispatcher:
             prbFunctional = dispatcher.getPrbFunctional()
             unitFunctional = dispatcher.getUnitFunctional()
-            if self.type in (constants.PREBATTLE_TYPE.UNIT, constants.PREBATTLE_TYPE.SORTIE, constants.PREBATTLE_TYPE.FORT_BATTLE) and self._isCurrentPrebattle(unitFunctional):
+            if self.type in (PREBATTLE_TYPE.UNIT, PREBATTLE_TYPE.SORTIE, PREBATTLE_TYPE.FORT_BATTLE) and self._isCurrentPrebattle(unitFunctional):
                 return True
             if self._isCurrentPrebattle(prbFunctional):
                 return True
         return False
+
+    def getExtraData(self, key = None):
+        if key is not None:
+            return self.extraData.get(key)
+        else:
+            return self.extraData
 
     def _isCurrentPrebattle(self, functional):
         return functional is not None and self.prebattleID == functional.getID()
@@ -91,7 +99,7 @@ class PrbInviteWrapper(_PrbInviteData):
         return False
 
     def isActive(self):
-        return self.state == constants.PREBATTLE_INVITE_STATE.ACTIVE
+        return self.state == PREBATTLE_INVITE_STATE.ACTIVE
 
 
 class _AcceptInvitesPostActions(ActionsChain):
@@ -201,7 +209,9 @@ class InvitesManager(object):
 
     def canAcceptInvite(self, invite):
         result = False
-        if invite.id in self.__receivedInvites:
+        if invite.alwaysAvailable is True:
+            result = True
+        elif invite.id in self.__receivedInvites:
             dispatcher = self.__loader.getDispatcher()
             if dispatcher:
                 prbFunctional = dispatcher.getPrbFunctional()
@@ -352,9 +362,9 @@ class InvitesManager(object):
             return
 
     def __pe_onPrebattleInvitesStatus(self, dbID, name, status):
-        if status != constants.PREBATTLE_INVITE_STATUS.OK:
-            statusName = constants.PREBATTLE_INVITE_STATUS_NAMES[status]
-            SystemMessages.g_instance.pushI18nMessage('#system_messages:invite/status/%s' % statusName, type=SystemMessages.SM_TYPE.Warning)
+        if status != PREBATTLE_INVITE_STATUS.OK:
+            statusName = PREBATTLE_INVITE_STATUS_NAMES[status]
+            SystemMessages.pushI18nMessage('#system_messages:invite/status/%s' % statusName, name=name, type=SystemMessages.SM_TYPE.Warning)
 
     def __updatePrebattleInvites(self, prbInvites):
         receiver = BigWorld.player().name

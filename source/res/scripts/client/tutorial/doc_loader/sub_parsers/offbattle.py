@@ -58,6 +58,11 @@ def _readVideoDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
     return chapter.VarRefPopUp(dialogID, dialogType, content, None)
 
 
+def _readConfirmRefuseDialogSection(xmlCtx, section, _, dialogID, dialogType, content):
+    content['checkBoxLabel'] = translation(_xml.readString(xmlCtx, section, 'checkbox-label'))
+    return chapter.PopUp(dialogID, dialogType, content)
+
+
 def _readFinalWindowSection(xmlCtx, section, _, windowID, windowType, content):
     bSec = _xml.getSubsection(xmlCtx, section, 'buttons')
     content['restartID'] = _xml.readString(xmlCtx, bSec, 'restart')
@@ -95,6 +100,7 @@ def init():
      'queue': _readQueueTriggerSection})
     sub_parsers.setDialogsParsers({'greeting': _readGreetingDialogSection,
      'queue': _readQueueDialogSection,
-     'video': _readVideoDialogSection})
+     'video': _readVideoDialogSection,
+     'confirmRefuse': _readConfirmRefuseDialogSection})
     sub_parsers.setWindowsParsers({'final': _readFinalWindowSection,
      'noResults': _readNoResultsWindowSection})

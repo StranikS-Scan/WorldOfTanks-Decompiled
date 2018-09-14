@@ -5,7 +5,7 @@ from gui.prb_control import isInRandomQueue, isInTutorialQueue, getPrebattleID
 from gui.prb_control import isInHistoricalQueue, isInEventBattlesQueue
 from gui.prb_control import settings as prb_settings
 from gui.shared.utils.decorators import ReprInjector
-from gui.shared.utils.requesters.rqs_by_id import RequestCtx
+from gui.shared.utils.requesters import RequestCtx
 
 class StartDispatcherCtx(object):
     __slots__ = ['isInRandomQueue',

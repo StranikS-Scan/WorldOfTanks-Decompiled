@@ -46,7 +46,21 @@ class MemberEvents(object):
         self.__eventManager.clear()
 
 
+class _VOIPSharedEvents(object):
+
+    def __init__(self):
+        super(_VOIPSharedEvents, self).__init__()
+        self.__eventManager = Event.EventManager()
+        self.onCredentialReceived = Event.Event()
+        self.onChannelEntered = Event.Event(self.__eventManager)
+        self.onChannelLeft = Event.Event(self.__eventManager)
+
+    def clear(self):
+        self.__eventManager.clear()
+
+
 class _UsersSharedEvents(object):
+    __slots__ = ('__eventManager', 'onUsersRosterReceived', 'onUserRosterChanged', 'onUserRosterStatusUpdated', 'onClanMembersListChanged', 'onFindUsersComplete', 'onFindUsersFailed')
 
     def __init__(self):
         super(_UsersSharedEvents, self).__init__()
@@ -55,6 +69,8 @@ class _UsersSharedEvents(object):
         self.onUserRosterChanged = Event.Event(self.__eventManager)
         self.onUserRosterStatusUpdated = Event.Event(self.__eventManager)
         self.onClanMembersListChanged = Event.Event(self.__eventManager)
+        self.onFindUsersComplete = Event.Event(self.__eventManager)
+        self.onFindUsersFailed = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()
@@ -73,13 +89,14 @@ class _ServiceChannelEvents(object):
 
 
 class _MessengerEvents(object):
-    __slots__ = ('__channels', '__users', '__serviceChannel', 'onServerErrorReceived')
+    __slots__ = ('__channels', '__users', '__serviceChannel', '__voip', 'onServerErrorReceived')
 
     def __init__(self):
         super(_MessengerEvents, self).__init__()
         self.__channels = _ChannelsSharedEvents()
         self.__users = _UsersSharedEvents()
         self.__serviceChannel = _ServiceChannelEvents()
+        self.__voip = _VOIPSharedEvents()
         self.onServerErrorReceived = Event.Event()
 
     @property
@@ -94,10 +111,15 @@ class _MessengerEvents(object):
     def serviceChannel(self):
         return self.__serviceChannel
 
+    @property
+    def voip(self):
+        return self.__voip
+
     def clear(self):
         self.__channels.clear()
         self.__users.clear()
         self.__serviceChannel.clear()
+        self.__voip.clear()
         self.onServerErrorReceived.clear()
 
 

@@ -8,6 +8,7 @@ import fortified_regions
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.fortifications import FortificationEffects
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -22,7 +23,6 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import FortEvent
@@ -62,12 +62,13 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def updateData(self):
         self.__updateCurrentMode()
         data = self.getData()
-        data['clanIconId'] = yield g_clanCache.getClanEmblemID()
+        self.__updateHeaderMessage()
+        self.as_setMainDataS(data)
+        self.as_setBattlesDirectionDataS({'directionsBattles': self._getDirectionsBattles()})
+        self.__checkDefHourConditions()
+        clanIconId = yield g_clanCache.getClanEmblemID()
         if not self.isDisposed():
-            self.__updateHeaderMessage()
-            self.as_setMainDataS(data)
-            self.as_setBattlesDirectionDataS({'directionsBattles': self._getDirectionsBattles()})
-            self.__checkDefHourConditions()
+            self.as_setClanIconIdS(clanIconId)
 
     def _getDirectionsBattles(self):
         battlesByDir = {}
@@ -170,7 +171,8 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         self.__refreshCurrentMode()
 
     def onIntelligenceClick(self):
-        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
+        isDefenceHourEnabled = self.fortCtrl.getFort().isDefenceHourEnabled()
+        self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_INTELLIGENCE_WINDOW_EVENT, {'isDefenceHourEnabled': isDefenceHourEnabled}), EVENT_BUS_SCOPE.LOBBY)
 
     def onSortieClick(self):
         self.__joinToSortie()
@@ -187,7 +189,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
     def onSettingClick(self):
         self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_SETTINGS_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self.updateData()
 
     def onClanMembersListChanged(self):
@@ -208,7 +210,7 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         level = fort.level
         levelTxt = fort_formatters.getTextLevel(level)
         defResQuantity = fort.getTotalDefRes()
-        defResPrefix = fort_text.getText(fort_text.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT))
+        defResPrefix = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_COMMON_TOTALDEPOTQUANTITYTEXT))
         disabledTransporting = False
         if self.__currentMode in (FORTIFICATION_ALIASES.MODE_TRANSPORTING_FIRST_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NEXT_STEP, FORTIFICATION_ALIASES.MODE_TRANSPORTING_NOT_AVAILABLE):
             if not self.fortCtrl.getFort().isTransportationAvailable():
@@ -222,12 +224,12 @@ class FortMainViewComponent(FortMainViewMeta, FortViewHelper, AppRef):
         message = ''
         if self._isFortFrozen():
             message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_FORTFROZEN)
-            message = fort_text.getText(fort_text.ERROR_TEXT, message)
+            message = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, message)
         else:
             periodStr = self.fortCtrl.getFort().getDefencePeriodStr()
             if periodStr is not None and len(periodStr) > 0:
                 message = i18n.makeString(FORTIFICATIONS.FORTMAINVIEW_HEADER_DEFENCEPERIOD, period=periodStr)
-                message = fort_text.getText(fort_text.STATS_TEXT, message)
+                message = self.app.utilsManager.textManager.getText(TextType.STATS_TEXT, message)
         self.as_setHeaderMessageS(message)
         return
 

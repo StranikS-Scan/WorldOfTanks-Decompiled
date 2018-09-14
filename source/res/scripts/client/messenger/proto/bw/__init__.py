@@ -7,6 +7,7 @@ from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.bw.ClanListener import ClanListener
 from messenger.proto.bw.ServiceChannelManager import ServiceChannelManager
 from messenger.proto.bw.UsersManager import UsersManager
+from messenger.proto.bw.VOIPChatProvider import VOIPChatProvider
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import IProtoPlugin
 
@@ -19,12 +20,12 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.users = UsersManager()
         self.clanListener = ClanListener()
         self.serviceChannel = ServiceChannelManager()
+        self.voipProvider = VOIPChatProvider()
 
     def clear(self):
         self.__isConnected = False
         self._removeChatActionsListeners()
         self.channels.clear()
-        self.users.clear()
         self.serviceChannel.clear()
         self.clanListener.stop()
 
@@ -67,12 +68,14 @@ class BWProtoPlugin(ChatActionsListener, IProtoPlugin):
         self.channels.addListeners()
         self.users.addListeners()
         self.serviceChannel.addListeners()
+        self.voipProvider.addListeners()
 
     def _removeChatActionsListeners(self):
         self.removeAllListeners()
         self.channels.removeAllListeners()
         self.users.removeAllListeners()
         self.serviceChannel.removeAllListeners()
+        self.voipProvider.removeAllListeners()
 
     __errorsHandlers = {CHAT_RESPONSES.channelNotExists: '_BWProtoPlugin__onChannelNotExists',
      CHAT_RESPONSES.memberBanned: '_BWProtoPlugin__onMemberBanned',

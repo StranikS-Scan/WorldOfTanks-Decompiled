@@ -5,6 +5,7 @@ from gui import DialogsInterface
 from gui.Scaleform.daapi.view.meta.EULAMeta import EULAMeta
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.shared.events import CloseWindowEvent, OpenLinkEvent
 
 class EULADlg(View, EULAMeta, AbstractWindowView):
@@ -26,7 +27,7 @@ class EULADlg(View, EULAMeta, AbstractWindowView):
 
     def onWindowClose(self):
         if not self.__applied:
-            DialogsInterface.showI18nConfirmDialog('quit', self.__onConfirmClosed, focusedID=DialogsInterface.DIALOG_BUTTON_ID.CLOSE)
+            DialogsInterface.showI18nConfirmDialog('quit', self.__onConfirmClosed, focusedID=DIALOG_BUTTON_ID.CLOSE)
         else:
             self.destroy()
 

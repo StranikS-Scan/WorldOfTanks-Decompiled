@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/notification/listeners.py
 import weakref
 import BigWorld
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.prb_control.prb_helpers import GlobalListener, prbInvitesProperty
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from messenger.formatters import SYS_MSG_EXTRA_HANDLER_TYPE
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -28,6 +30,14 @@ class _NotificationListener(object):
 
 
 class ServiceChannelListener(_NotificationListener):
+    _handlers = {SYS_MSG_EXTRA_HANDLER_TYPE.PUNISHMENT: ('handlePunishWindow', True),
+     SYS_MSG_EXTRA_HANDLER_TYPE.REF_QUEST_AWARD: ('handleRefQuestsWindow', True),
+     SYS_MSG_EXTRA_HANDLER_TYPE.FORT_RESULTS: ('handleFortResultsWindow', True)}
+
+    def __init__(self):
+        super(ServiceChannelListener, self).__init__()
+        self.__isLobbyLoaded = False
+        self.__delayedHandlers = []
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
@@ -39,6 +49,7 @@ class ServiceChannelListener(_NotificationListener):
             channel = g_messengerEvents.serviceChannel
             channel.onServerMessageReceived += self.__onMessageReceived
             channel.onClientMessageReceived += self.__onMessageReceived
+            g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
             serviceChannel = self.proto.serviceChannel
             messages = serviceChannel.getReadMessages()
             addNotification = model.collection.addItem
@@ -50,21 +61,53 @@ class ServiceChannelListener(_NotificationListener):
 
     def stop(self):
         super(ServiceChannelListener, self).stop()
+        g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyLoaded)
         channel = g_messengerEvents.serviceChannel
         channel.onServerMessageReceived -= self.__onMessageReceived
         channel.onClientMessageReceived -= self.__onMessageReceived
+        self.__delayedHandlers = []
+
+    def handlePunishWindow(self, data):
+        from gui.DialogsInterface import showDialog
+        showDialog(I18PunishmentDialogMeta('punishmentWindow', None, data), lambda *args: None)
+        return
+
+    def handleRefQuestsWindow(self, data):
+        from gui.game_control import g_instance as g_gameCtrl
+        completedQuestIDs = data['completedQuestIDs']
+        for tankman in data['tankmen']:
+            g_gameCtrl.refSystem.showTankmanAwardWindow(tankman, completedQuestIDs)
+
+        for vehicle in data['vehicles']:
+            g_gameCtrl.refSystem.showVehicleAwardWindow(vehicle, completedQuestIDs)
+
+    def handleFortResultsWindow(self, data):
+        from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+        if data:
+            g_eventBus.handleEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_EVENT, {'data': data}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __handleLobbyLoaded(self, _):
+        self.__isLobbyLoaded = True
+        for handlerName, data in self.__delayedHandlers:
+            getattr(self, handlerName)(data)
+
+    def __handleExtraData(self, handlerType, data):
+        if handlerType in self._handlers:
+            handlerName, isLobbyRequired = self._handlers[handlerType]
+            if isLobbyRequired and not self.__isLobbyLoaded:
+                self.__delayedHandlers.append((handlerName, data))
+            else:
+                getattr(self, handlerName)(data)
+        else:
+            LOG_WARNING('Unknown handler for system message', handlerType, data)
 
     def __onMessageReceived(self, clientID, formatted, settings):
         model = self._model()
         if model:
             model.addNotification(MessageDecorator(clientID, formatted, settings))
-            if formatted.get('type') == 'battleResult' and settings.extraHandlerData is not None:
-                from gui.DialogsInterface import showDialog
-                showDialog(I18PunishmentDialogMeta('punishmentWindow', None, settings.extraHandlerData), self.__doneHandler())
+            if settings.extraHandlerData is not None:
+                self.__handleExtraData(settings.extraHandlerData.type, settings.extraHandlerData.data)
         return
-
-    def __doneHandler(self):
-        pass
 
 
 class PrbInvitesListener(_NotificationListener, GlobalListener):

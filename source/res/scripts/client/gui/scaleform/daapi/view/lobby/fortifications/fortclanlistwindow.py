@@ -2,13 +2,13 @@
 import BigWorld
 from debug_utils import LOG_DEBUG
 from gui import game_control
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortClanListWindowMeta import FortClanListWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.utils.functions import getClanRoleString
@@ -34,32 +34,33 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
 
     def _update(self):
         initData = {'windowTitle': i18n.makeString(FORTIFICATIONS.FORTCLANLISTWINDOW_TITLE, clanName=g_clanCache.clanTag),
-         'members': self._getClanMemebers()}
+         'members': self._getClanMembers()}
         self.as_setDataS(initData)
 
-    def _getClanMemebers(self):
-        clanMemebrs = []
+    def _getClanMembers(self):
+        clanMembers = []
         for member in g_clanCache.clanMembers:
             intTotalMining, intWeekMining = self.fortCtrl.getFort().getPlayerContributions(member.getID())
             role = self._getClanRole(member)
-            vo = vo_converters.makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role)
-            clanMemebrs.append(vo)
+            roleID = self.CLAN_MEMBER_ROLES.index(member.getClanRole())
+            vo = vo_converters.makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, roleID)
+            clanMembers.append(vo)
 
-        return clanMemebrs
+        return clanMembers
 
     def __gameSession_onNewDayNotify(self, nextUpdateTime):
         self._update()
 
     def _getClanRole(self, member):
-        return fort_text.getText(fort_text.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
+        return self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(getClanRoleString(member.getClanRole())))
 
     def _getWeekMiningStr(self, weekMining):
         randWeek = BigWorld.wg_getIntegralFormat(weekMining)
-        return fort_text.getText(fort_text.PURPLE_TEXT, randWeek)
+        return self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, randWeek)
 
     def _getTotalMiningStr(self, totalMining):
         allTime = BigWorld.wg_getIntegralFormat(totalMining)
-        return fort_text.getText(fort_text.PURPLE_TEXT, allTime)
+        return self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, allTime)
 
     def onWindowClose(self):
         self.destroy()
@@ -67,5 +68,5 @@ class FortClanListWindow(AbstractWindowView, View, FortClanListWindowMeta, AppRe
     def onClanMembersListChanged(self):
         self._update()
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self._update()

@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/tutorial/settings.py
 from collections import namedtuple
-TUTORIAL_VERSION = '0.3.4'
+TUTORIAL_VERSION = '0.3.6'
 DOC_DIRECTORY = 'scripts/tutorial_docs'
 GLOBAL_REFS_FILE_PATH = '{0:>s}/global-refs.xml'.format(DOC_DIRECTORY)
 TUTORIAL_AVG_SESSION_TIME = 5

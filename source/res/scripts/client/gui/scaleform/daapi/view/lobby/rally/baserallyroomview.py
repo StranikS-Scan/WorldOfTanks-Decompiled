@@ -88,6 +88,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
     def onUnitPlayerRolesChanged(self, pInfo, pPermissions):
         if pInfo.isCurrentPlayer():
             self._setActionButtonState()
+        self._updateMembersData()
 
     def onUnitPlayerOnlineStatusChanged(self, pInfo):
         if pInfo.isInSlot:
@@ -179,7 +180,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
 
     def chooseVehicleRequest(self):
         playerInfo = self.unitFunctional.getPlayerInfo()
-        maxLevel = self.unitFunctional.getRosterSettings().getMaxLevel()
+        levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
         slotIdx = playerInfo.slotIdx
         vehicles = playerInfo.getSlotsToVehicles(True).get(slotIdx)
         if vehicles is not None:
@@ -188,7 +189,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
          'vehicles': vehicles,
          'infoText': self._getVehicleSelectorDescription(),
          'section': 'cs_unit_view_vehicle',
-         'maxLevel': maxLevel}), scope=EVENT_BUS_SCOPE.LOBBY)
+         'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def _getVehicleSelectorDescription(self):
@@ -276,7 +277,8 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, AppRef, UnitListener):
         elif type(item) == long:
             return unit_ctx.RosterSlotCtx(item)
         else:
-            levels = self.unitFunctional.getRosterSettings().getLevelsRange()
+            settings = self.unitFunctional.getRosterSettings()
+            levels = (settings.getMinLevel(), settings.getMaxLevel())
             if len(item.vLevelRange) == 2:
                 i0 = int(item.vLevelRange[0])
                 i1 = int(item.vLevelRange[1])

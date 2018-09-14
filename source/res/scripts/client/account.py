@@ -351,9 +351,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isLongDisconnectedFromCenter = isLongDisconnected
         events.onCenterIsLongDisconnected(isLongDisconnected)
 
-    def onSendPrebattleInvites(self, dbID, name, status):
-        LOG_DEBUG('onSendPrebattleInvites', dbID, name, status)
-        events.onPrebattleInvitesStatus(dbID, name, status)
+    def onSendPrebattleInvites(self, dbID, name, clanDBID, clanAbbrev, prebattleID, status):
+        LOG_DEBUG('onSendPrebattleInvites', dbID, name, clanDBID, clanAbbrev, prebattleID, status)
+        if status != PREBATTLE_INVITE_STATUS.OK:
+            events.onPrebattleInvitesStatus(dbID, name, status)
 
     def handleKeyEvent(self, event):
         return False
@@ -438,8 +439,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.prebattle.update(updateType, argStr)
         return
 
-    def requestFortPublicInfo(self, requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs):
-        self.base.requestFortPublicInfo(requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, electedClanDBIDs)
+    def requestFortPublicInfo(self, requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, nextOwnStartDefHourFrom, nextOwnStartDefHourTo, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs):
+        self.base.requestFortPublicInfo(requestID, filterType, abbrevPattern, homePeripheryID, limit, lvlFrom, lvlTo, ownStartDefHourFrom, ownStartDefHourTo, nextOwnStartDefHourFrom, nextOwnStartDefHourTo, defHourChangeDay, extStartDefHourFrom, extStartDefHourTo, attackDay, ownFortLvl, ownProfitFactor10, avgBuildingLevel10, ownBattleCountForFort, firstDefaultQuery, electedClanDBIDs)
 
     def responseFortPublicInfo(self, requestID, errorID, resultSet):
         if errorID > 0:
@@ -691,6 +692,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdStr(AccountCommands.CMD_SET_LANGUAGE, language, None)
         return
 
+    def selectPotapovQuest(self, potapovQuestID, callback):
+        self._doCmdInt3(AccountCommands.CMD_SELECT_POTAPOV_QUEST, potapovQuestID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def makeDenunciation(self, violatorID, topicID, violatorKind):
         self._doCmdInt3(AccountCommands.CMD_MAKE_DENUNCIATION, violatorID, topicID, violatorKind, None)
         return
@@ -715,6 +719,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         else:
             self._doCmdIntArr(AccountCommands.CMD_LOG_CLIENT_UX_EVENTS, intArr, None)
             return
+
+    def logXMPPEvents(self, intArr, strArr):
+        self._doCmdIntArrStrArr(AccountCommands.CMD_LOG_CLIENT_XMPP_EVENTS, intArr, strArr, None)
+        return
 
     def completeTutorial(self, tutorialID, callback):
         from CurrentVehicle import g_currentVehicle
@@ -758,6 +766,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
+        MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
 
     def _doCmdStr(self, cmd, str, callback):
         self.__doCmd('doCmdStr', cmd, callback, str)

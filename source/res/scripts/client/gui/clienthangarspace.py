@@ -418,10 +418,6 @@ class _VehicleAppearance():
         self.__isLoaded = False
         self.__startBuild(vDesc, vState)
 
-    def __onItemsCacheSyncCompleted(self, updateReason, invalidItems):
-        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC:
-            self.refresh()
-
     def refresh(self):
         if self.__isLoaded:
             self.__onLoadedCallback = None
@@ -533,11 +529,11 @@ class _VehicleAppearance():
         turret.node('HP_gunJoint').attach(gun)
         self.__setupEmblems(self.__vDesc)
         self.__vehicleStickers.show = False
-        if not self.__isVehicleDestroyed and _CFG['v_scale'] == 1.0:
-            fashion = BigWorld.WGVehicleFashion(self.__isVehicleDestroyed)
+        if not self.__isVehicleDestroyed:
+            fashion = BigWorld.WGVehicleFashion(False, _CFG['v_scale'])
             VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
             chassis.wg_fashion = fashion
-            fashion.initialUpdateTracks(1.0)
+            fashion.initialUpdateTracks(1.0, 10.0)
             VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
         for model in self.__models:
             model.visible = False
@@ -581,14 +577,20 @@ class _VehicleAppearance():
             _modifyHangarChunkModel(lambda spaceID, ix, iz: BigWorld.wg_setChunkModelTexture(spaceID, ix, iz, _CFG['fakeShadowMapModelName'], 'diffuseMap', shadowMapTexFileName))
             return
 
+    def __onItemsCacheSyncCompleted(self, updateReason, invalidItems):
+        if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
+            self.refresh()
+
+    def __getThisVehicleDossierInsigniaRank(self):
+        vehicleDossier = g_itemsCache.items.getVehicleDossier(self.__vDesc.type.compactDescr)
+        return vehicleDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
+
     def __setupEmblems(self, vDesc):
         if self.__vehicleStickers is not None:
             self.__vehicleStickers.detach()
         insigniaRank = 0
-        from gui.shared import g_itemsCache
         if self.__showMarksOnGun:
-            vehDossier = g_itemsCache.items.getVehicleDossier(vDesc.type.compactDescr)
-            insigniaRank = vehDossier.getRandomStats().getAchievement(MARK_ON_GUN_RECORD).getValue()
+            insigniaRank = self.__getThisVehicleDossierInsigniaRank()
         self.__vehicleStickers = VehicleStickers.VehicleStickers(vDesc, insigniaRank)
         self.__vehicleStickers.alpha = self.__emblemsAlpha
         chassis = self.__models[0]

@@ -92,6 +92,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI = None):
         dossiers2.init()
         import fortified_regions
         fortified_regions.init()
+        import potapov_quests
+        potapov_quests.init()
         BigWorld.worldDrawEnabled(False)
         import LcdKeyboard
         LcdKeyboard.enableLcdKeyboardSpecificKeys(True)

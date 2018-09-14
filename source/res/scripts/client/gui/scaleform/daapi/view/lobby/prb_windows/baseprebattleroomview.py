@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/BasePrebattleRoomView.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
-from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.meta.BasePrebattleRoomViewMeta import BasePrebattleRoomViewMeta
 from gui.Scaleform.framework import AppRef, ViewTypes
@@ -14,11 +13,11 @@ from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_EXIT
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import int2roman
-from messenger import g_settings, MessengerEntry
+from messenger import g_settings
 from messenger.ext import channel_num_gen
+from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE
-from messenger.proto.bw import find_criteria
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
@@ -29,18 +28,6 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
         super(BasePrebattleRoomView, self).__init__()
         self.__prbName = prbName
         self.__clientID = channel_num_gen.getClientID4Prebattle(self.prbFunctional.getPrbType())
-
-    def onWindowClose(self):
-        chat = self.chat
-        if chat:
-            chat.minimize()
-        self.destroy()
-
-    def onWindowMinimize(self):
-        chat = self.chat
-        if chat:
-            chat.minimize()
-        self.destroy()
 
     def onSourceLoaded(self):
         if self.prbFunctional and not self.prbFunctional.hasEntity():
@@ -100,7 +87,6 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
 
     def stopListening(self):
         self.stopPrbListening()
-        self.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__handlePrbChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
         g_currentVehicle.onChanged -= self._handleCurrentVehicleChanged
         g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
 
@@ -224,31 +210,8 @@ class BasePrebattleRoomView(BasePrebattleRoomViewMeta, PrbListener, AppRef):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
-            channels = MessengerEntry.g_instance.gui.channelsCtrl
-            controller = None
-            if channels:
-                prbType = self.prbFunctional.getPrbType()
-                if prbType:
-                    controller = channels.getControllerByCriteria(find_criteria.BWPrbChannelFindCriteria(prbType))
-            if controller is not None:
-                controller.setView(viewPy)
-            else:
-                self.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__handlePrbChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
-        return
+            events_dispatcher.rqActivateChannel(self.__clientID, viewPy)
 
-    def __handlePrbChannelControllerInited(self, event):
-        ctx = event.ctx
-        prbType = ctx.get('prbType', 0)
-        if prbType is 0:
-            LOG_ERROR('Prebattle type is not defined', ctx)
-            return
-        else:
-            controller = ctx.get('controller')
-            if controller is None:
-                LOG_ERROR('Channel controller is not defined', ctx)
-                return
-            if prbType is self.prbFunctional.getPrbType():
-                chat = self.chat
-                if chat is not None:
-                    controller.setView(chat)
-            return
+    def _onUnregisterFlashComponent(self, viewPy, alias):
+        if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
+            events_dispatcher.rqDeactivateChannel(self.__clientID)

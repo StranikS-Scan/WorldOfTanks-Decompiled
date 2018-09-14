@@ -4,13 +4,27 @@ import BigWorld
 import time
 import math
 import Math
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG
+import resource_helper
+import ResMgr
+TWEEN_CONSTRAINTS_FILE_PATH = 'gui/tween_constraints.xml'
+ERROR_NOT_SUCH_FILE = 'Not such file '
+REQUIRED_PARAMETERS = ['moveDuration',
+ 'fadeDuration',
+ 'shadowDuration',
+ 'blinkingDuration',
+ 'translationLength',
+ 'fadeAlphaMax',
+ 'fadeAlphaMin',
+ 'halfTurnDuration',
+ 'halfTurnDelay']
 
 class TweenManager(TweenManagerMeta):
     THRESHOLD_VALUE_IN_CURRENT_FRAME = 15
 
     def __init__(self):
         super(TweenManager, self).__init__()
+        self.__settings = {}
         self.__id = 0
         self.__animCallback = None
         self.__lastUpdateTime = None
@@ -18,7 +32,30 @@ class TweenManager(TweenManagerMeta):
         self.__playStack = []
         self.__callBackTime = 0.02
         self.__lastStartTime = 0
+        self.__loadTweenConstraintsXML()
         return
+
+    def _populate(self):
+        super(TweenManager, self)._populate()
+        self.as_setDataFromXmlS(self.__settings)
+
+    def __loadTweenConstraintsXML(self):
+        if ResMgr.isFile(TWEEN_CONSTRAINTS_FILE_PATH):
+            ctx, section = resource_helper.getRoot(TWEEN_CONSTRAINTS_FILE_PATH)
+            settings = {}
+            for ctx, subSection in resource_helper.getIterator(ctx, section):
+                item = resource_helper.readItem(ctx, subSection, name='setting')
+                settings[item.name] = item.value
+
+            self.__settings.update(settings)
+            self.__checkRequiredValues(self.__settings)
+        else:
+            LOG_ERROR(ERROR_NOT_SUCH_FILE, TWEEN_CONSTRAINTS_FILE_PATH)
+
+    def __checkRequiredValues(self, settings):
+        for key in REQUIRED_PARAMETERS:
+            if key not in settings:
+                LOG_ERROR('In the ' + TWEEN_CONSTRAINTS_FILE_PATH + ' there is no required parameter ' + key)
 
     def __onTweenStarted(self, tween):
         if not self.isTweenInStack(tween):

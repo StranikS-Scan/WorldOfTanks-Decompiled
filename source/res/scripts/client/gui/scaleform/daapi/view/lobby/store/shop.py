@@ -1,5 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Shop.py
 from PlayerEvents import g_playerEvents
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
@@ -18,7 +20,7 @@ from gui.Scaleform.daapi.view.meta.ShopMeta import ShopMeta
 from gui.Scaleform.daapi.view.lobby.store import Store
 from gui.shared.events import ShowWindowEvent
 from gui.shared.utils.gui_items import InventoryVehicle
-from gui.shared.utils.requesters import StatsRequesterr
+from gui.shared.utils.requesters import StatsRequester
 import BigWorld
 from items import ITEM_TYPE_INDICES
 
@@ -46,7 +48,7 @@ class Shop(Store, ShopMeta):
 
     @process
     def __buyItem(self, typeCompactDescr):
-        stats = yield StatsRequesterr().request()
+        stats = yield StatsRequester().request()
         isOk, args = yield DialogsInterface.showDialog(BuyModuleMeta(typeCompactDescr, (stats.credits, stats.gold)))
         LOG_DEBUG('Buy module confirm dialog results: success = ', isOk, args)
 
@@ -93,25 +95,38 @@ class Shop(Store, ShopMeta):
                     if not module.isUnlocked:
                         continue
                 if 'inHangar' not in extra and type not in (self._OPTIONAL_DEVICE, self._EQUIPMENT):
-                    if inventoryCount > 0:
+                    if inventoryCount > 0 and not module.isRented:
+                        continue
+                if type == self._VEHICLE and 'rentals' not in extra:
+                    if module.isRented and not module.rentalIsOver:
                         continue
                 if 'onVehicle' not in extra:
                     if vehicleCount > 0:
                         continue
-            disabled = ''
+            disabled = False
+            statusMessage = ''
             if type == self._VEHICLE:
                 if BigWorld.player().isLongDisconnectedFromCenter:
-                    disabled = MENU.SHOP_ERRORS_CENTERISDOWN
+                    statusMessage = MENU.SHOP_ERRORS_CENTERISDOWN
+                    disabled = True
                 if inventoryCount > 0:
-                    disabled = MENU.SHOP_ERRORS_INHANGAR
+                    statusMessage = MENU.SHOP_ERRORS_INHANGAR
+                    disabled = True
+                    if module.isRentable:
+                        money = g_itemsCache.items.stats.money
+                        canBuyOrRent, _ = module.mayRentOrBuy(money)
+                        disabled = not canBuyOrRent
                 elif not module.isUnlocked:
-                    disabled = MENU.SHOP_ERRORS_UNLOCKNEEDED
+                    statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
+                    disabled = True
             elif type not in (self._SHELL, self._OPTIONAL_DEVICE, self._EQUIPMENT) and not module.isUnlocked:
-                disabled = MENU.SHOP_ERRORS_UNLOCKNEEDED
+                statusMessage = MENU.SHOP_ERRORS_UNLOCKNEEDED
+                disabled = True
             dataProviderValues.append((module,
              inventoryCount,
              vehicleCount,
              disabled,
+             statusMessage,
              isEnabledBuyingGoldShellsForCredits,
              isEnabledBuyingGoldEqsForCredits,
              extraModuleInfo))
@@ -184,6 +199,8 @@ class Shop(Store, ShopMeta):
 
                 requestCriteria |= REQ_CRITERIA.IN_CD_LIST(shellsList)
         elif type == self._VEHICLE:
+            requestCriteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT
+            requestCriteria |= ~REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
             typeSize = int(filter.pop(0))
             requestType = filter[0:typeSize]
             extra = filter[typeSize:]
@@ -214,14 +231,17 @@ class Shop(Store, ShopMeta):
          extra)
 
     def itemWrapper(self, packedItem):
-        module, inventoryCount, vehicleCount, disabled, isEnabledBuyingGoldShellsForCredits, isEnabledBuyingGoldEqsForCredits, extraModuleInfo = packedItem
+        module, inventoryCount, vehicleCount, disabled, statusMessage, isEnabledBuyingGoldShellsForCredits, isEnabledBuyingGoldEqsForCredits, extraModuleInfo = packedItem
         credits, gold = g_itemsCache.items.stats.money
         name = module.userName if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS else module.longUserName
         price = module.altPrice or module.buyPrice
         defaultPrice = module.defaultAltPrice or module.defaultPrice
+        localization = '#menu:vehicle/rentLeft/%s'
+        rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
         action = None
-        if price != defaultPrice:
+        if price != defaultPrice and not module.isRentable:
             action = getItemActionTooltipData(module)
+        price = module.minRentPrice or price
         return {'id': str(module.intCD),
          'name': name,
          'desc': module.getShortInfo(),
@@ -239,6 +259,7 @@ class Shop(Store, ShopMeta):
                   GUI_ITEM_TYPE.SHELL,
                   GUI_ITEM_TYPE.EQUIPMENT) else module.icon,
          'disabled': disabled,
+         'statusMessage': statusMessage,
          'statusLevel': InventoryVehicle.STATE_LEVEL.WARNING,
          'removable': module.isRemovable if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else True,
          'tankType': module.type if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE else type,
@@ -248,4 +269,5 @@ class Shop(Store, ShopMeta):
          'goldShellsForCredits': isEnabledBuyingGoldShellsForCredits,
          'goldEqsForCredits': isEnabledBuyingGoldEqsForCredits,
          'actionPriceData': action,
+         'rentLeft': rentLeftTimeStr,
          EXTRA_MODULE_INFO: extraModuleInfo}

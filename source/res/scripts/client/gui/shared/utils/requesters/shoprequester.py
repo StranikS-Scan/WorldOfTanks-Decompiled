@@ -3,9 +3,9 @@ import BigWorld
 from abc import ABCMeta, abstractmethod
 from constants import WIN_XP_FACTOR_MODE
 import weakref
-from adisp import async, process
+from adisp import async
 from debug_utils import LOG_DEBUG
-from gui.shared.utils.requesters.abstract import RequesterAbstract
+from abstract import AbstractRequester
 
 class ShopCommonStats(object):
     __metaclass__ = ABCMeta
@@ -19,6 +19,12 @@ class ShopCommonStats(object):
 
     def getHiddens(self):
         return self.getItemsData().get('notInShopItems', set([]))
+
+    def getNotToBuyVehicles(self):
+        return self.getItemsData().get('vehiclesNotToBuy', set([]))
+
+    def getVehicleRentPrices(self):
+        return self.getItemsData().get('vehiclesRentPrices', {})
 
     def getVehiclesForGold(self):
         return self.getItemsData().get('vehiclesToSellForGold', set([]))
@@ -245,8 +251,12 @@ class ShopCommonStats(object):
     def getEmblemCost(self, days = 0):
         return self.playerEmblemCost.get(days)
 
+    @property
+    def refSystem(self):
+        return self.getValue('refSystem', {})
 
-class ShopRequester(ShopCommonStats, RequesterAbstract):
+
+class ShopRequester(ShopCommonStats, AbstractRequester):
 
     def __init__(self):
         super(ShopRequester, self).__init__()
@@ -271,19 +281,6 @@ class ShopRequester(ShopCommonStats, RequesterAbstract):
         Overloaded method to request shop cache
         """
         BigWorld.player().shop.getCache(lambda resID, value, rev: self._response(resID, value, callback))
-
-    def getActionPrc(self, price, defaultPrice):
-
-        def calculate(price, defaultPrice):
-            if defaultPrice == 0 or price == defaultPrice:
-                return 0
-            return int(round((1 - float(price) / defaultPrice) * 100))
-
-        if isinstance(price, tuple):
-            goldPrc = calculate(price[1], defaultPrice[1])
-            creditPrc = calculate(price[0], defaultPrice[0])
-            return goldPrc or creditPrc
-        return calculate(price, defaultPrice)
 
     def getTankmanCostWithDefaults(self):
         """
@@ -361,6 +358,12 @@ class DefaultShopRequester(ShopCommonStats):
 
     def getHiddens(self):
         return self.getItemsData().get('notInShopItems', self.__proxy.getHiddens())
+
+    def getNotToBuyVehicles(self):
+        return self.getItemsData().get('vehiclesNotToBuy', self.__proxy.getNotToBuyVehicles())
+
+    def getVehicleRentPrices(self):
+        return self.getItemsData().get('vehiclesRentPrices', self.__proxy.getVehicleRentPrices())
 
     def getVehiclesForGold(self):
         return self.getItemsData().get('vehiclesToSellForGold', {})

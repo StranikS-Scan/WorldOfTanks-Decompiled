@@ -186,7 +186,7 @@ class BattleSessionFunctional(PrbFunctional):
          REQUEST_TYPE.SET_TEAM_STATE: self.setTeamState,
          REQUEST_TYPE.SET_PLAYER_STATE: self.setPlayerState,
          REQUEST_TYPE.KICK: self.kickPlayer}
-        super(BattleSessionFunctional, self).__init__(settings, permClass=BattleSessionPrbPermissions, limits=BattleSessionLimits(self, settings), requestHandlers=requests)
+        super(BattleSessionFunctional, self).__init__(settings, permClass=BattleSessionPrbPermissions, limits=BattleSessionLimits(self), requestHandlers=requests)
 
     def init(self, clientPrb = None, ctx = None):
         result = super(BattleSessionFunctional, self).init(clientPrb=clientPrb)

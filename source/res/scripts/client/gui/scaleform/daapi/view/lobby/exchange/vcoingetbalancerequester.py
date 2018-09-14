@@ -3,7 +3,7 @@ import time
 import BigWorld
 import Event
 from adisp import process
-from gui.shared.utils.requesters import ItemsRequester, StatsRequester
+from gui.shared.utils.requesters import ItemsRequester, DeprecatedStatsRequester
 import constants
 
 class _VcoinGetBalanceRequester(object):
@@ -43,7 +43,7 @@ class _VcoinGetBalanceRequester(object):
 
     @process
     def __processSyncEBankData(self):
-        self.balance, self.error = yield StatsRequester().ebankGetBalance()
+        self.balance, self.error = yield DeprecatedStatsRequester().ebankGetBalance()
         self.__isCached = _VcoinGetBalanceRequester.CACHE_ENABLED and not len(self.error)
         self.__isWaitForSync = False
         self.__updateBalanceCooldown()

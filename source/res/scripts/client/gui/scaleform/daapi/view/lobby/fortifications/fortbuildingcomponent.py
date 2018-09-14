@@ -58,8 +58,8 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         buildingDescr = self.fortCtrl.getFort().getBuilding(self.UI_BUILDINGS_BIND.index(uid))
         return [uid, self.getCommonBuildTooltipData(buildingDescr)]
 
-    def onUpdated(self):
-        if self._animation is not None:
+    def onUpdated(self, isFullUpdate):
+        if self._animation is not None or isFullUpdate:
             self.updateData(self._animation)
             self._animation = None
         return
@@ -100,6 +100,12 @@ class FortBuildingComponent(FortBuildingComponentMeta, FortTransportationViewHel
         self.updateData()
 
     def onShutdownDowngrade(self):
+        self.updateData()
+
+    def onDefenceHourStateChanged(self):
+        self.updateData()
+
+    def onDirectionLockChanged(self):
         self.updateData()
 
     def isOnNextTransportingStep(self):

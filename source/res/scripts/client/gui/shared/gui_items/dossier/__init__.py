@@ -4,6 +4,7 @@ import cPickle
 import BigWorld
 import dossiers2
 from constants import DOSSIER_TYPE
+from gui.Scaleform.locale.MENU import MENU
 from items import tankmen
 from helpers import i18n
 from gui.shared.gui_items import GUIItem
@@ -85,7 +86,7 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
     def getGlobalRating(self):
         from gui.shared import g_itemsCache
-        return g_itemsCache.items.stats.getGlobalRating()
+        return g_itemsCache.items.stats.globalRating
 
     def pack(self):
         return (AccountDossier, self._dossier.makeCompDescr(), self._playerDBID)
@@ -102,14 +103,18 @@ class AccountDossier(_Dossier, stats.AccountDossierStats):
 
 
 class TankmanDossier(_Dossier, stats.TankmanDossierStats):
+    PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR = 1.5
 
-    def __init__(self, tmanDescr, dossier, extDossier, playerDBID = None):
+    def __init__(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID = None, currentVehicleItem = None):
         raise extDossier is not None or AssertionError
-        super(TankmanDossier, self).__init__(dossier, DOSSIER_TYPE.TANKMAN, playerDBID)
+        super(TankmanDossier, self).__init__(tankmanDossierDescr, DOSSIER_TYPE.TANKMAN, playerDBID)
+        currentVehicleType = currentVehicleItem.descriptor.type if currentVehicleItem else None
         self.tmanDescr = tmanDescr
         self.extStats = extDossier.getRandomStats()
         self.addStats = extDossier.getTeam7x7Stats()
         self.__extDossierDump = dumpDossier(extDossier)
+        self.__currentVehicleIsPremium = currentVehicleItem and currentVehicleItem.isPremium
+        self.__currentVehicleCrewXpFactor = currentVehicleType.crewXpFactor if currentVehicleType else 1.0
         return
 
     def pack(self):
@@ -122,11 +127,6 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def unpack(tmanCompDescr, dossierCD, extDossierDump):
         return TankmanDossier(tankmen.TankmanDescr(tmanCompDescr), dossiers2.getTankmanDossierDescr(dossierCD), loadDossier(extDossierDump))
 
-    def getNextSkillXPLeft(self):
-        if self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.__isNewSkillReady():
-            return self.__getSkillNextLevelCost()
-        return 0
-
     def getAvgXP(self):
         totalXP = self.extStats.getXP() + self.addStats.getXP()
         totalBattles = self.extStats.getBattlesCount() + self.addStats.getBattlesCount()
@@ -137,27 +137,13 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
     def getBattlesCount(self):
         return self.getTotalStats().getBattlesCount()
 
-    def getNextSkillBattlesLeft(self):
-        if not self.getBattlesCount() or not self.extStats.getBattlesCount() or not self.extStats.getXP():
-            return None
-        avgExp = self.getAvgXP()
-        newSkillReady = self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL and (len(self.tmanDescr.skills) == 0 or self.tmanDescr.lastSkillLevel == tankmen.MAX_SKILL_LEVEL)
-        if avgExp and not newSkillReady:
-            return max(1, math.ceil(self.__getSkillNextLevelCost() / avgExp))
-        else:
-            return 0
-
     def getStats(self):
-        nextSkillsBattlesLeft = self.getNextSkillBattlesLeft()
-        nextSkillBattlesLeftExtra = ''
-        if nextSkillsBattlesLeft is not None:
-            nextSkillsBattlesLeft = BigWorld.wg_getIntegralFormat(nextSkillsBattlesLeft)
-        else:
-            nextSkillBattlesLeftExtra = '(%s)' % i18n.makeString('#menu:profile/stats/items/unknown')
-        skillImgType, skillImg = self.__getCurrentSkillIcon()
+        imageType, image = self.__getCurrentSkillIcon()
         return ({'label': 'common',
-          'stats': (self.__packStat('battlesCount', BigWorld.wg_getNiceNumberFormat(self.getBattlesCount())),)}, {'label': 'studying',
-          'stats': (self.__packStat('nextSkillXPLeft', BigWorld.wg_getIntegralFormat(self.getNextSkillXPLeft()), imageType=skillImgType, image=skillImg), self.__packStat('avgExperience', BigWorld.wg_getIntegralFormat(self.getAvgXP())), self.__packStat('nextSkillBattlesLeft', nextSkillsBattlesLeft, nextSkillBattlesLeftExtra))})
+          'stats': (self.__packStat('battlesCount', self.getBattlesCount()), self.__packStat('avgExperience', self.getAvgXP()))}, {'label': 'studying',
+          'secondLabel': i18n.makeString(MENU.CONTEXTMENU_PERSONALCASE_STATSBLOCKTITLE),
+          'isPremium': self.__currentVehicleIsPremium,
+          'stats': (self.__packStat('nextSkillXPLeft', self.__getNextSkillXPLeft(), imageType=imageType, image=image), self.__packStat('nextSkillBattlesLeft', self.__getNextSkillBattlesLeft(), usePremiumXpFactor=True))})
 
     def _getDossierItem(self):
         return self
@@ -179,11 +165,51 @@ class TankmanDossier(_Dossier, stats.TankmanDossierStats):
             return ('role', '%s.png' % self.tmanDescr.role)
         return ('skill', tankmen.getSkillsConfig()[self.tmanDescr.skills[-1]]['icon'])
 
-    @classmethod
-    def __packStat(cls, name, value, extra = '', imageType = None, image = None):
+    def __getNextSkillXPLeft(self):
+        if self.tmanDescr.roleLevel != tankmen.MAX_SKILL_LEVEL or not self.__isNewSkillReady():
+            return self.__getSkillNextLevelCost()
+        return 0
+
+    def __getNextSkillBattlesLeft(self):
+        if not self.getBattlesCount() or not self.extStats.getBattlesCount() or not self.extStats.getXP():
+            result = None
+        else:
+            avgExp = self.getAvgXP()
+            newSkillReady = self.tmanDescr.roleLevel == tankmen.MAX_SKILL_LEVEL and (len(self.tmanDescr.skills) == 0 or self.tmanDescr.lastSkillLevel == tankmen.MAX_SKILL_LEVEL)
+            if avgExp and not newSkillReady:
+                result = max(1, math.ceil(self.__getSkillNextLevelCost() / avgExp))
+            else:
+                result = 0
+        return result
+
+    def __formatValueForUI(self, value):
+        if value is None:
+            return '%s' % i18n.makeString('#menu:profile/stats/items/empty')
+        else:
+            return BigWorld.wg_getIntegralFormat(value)
+            return
+
+    def __getBattlesLeftOnPremiumVehicle(self, value):
+        xpFactorToUse = self.PREMIUM_TANK_DEFAULT_CREW_XP_FACTOR
+        if self.__currentVehicleIsPremium:
+            xpFactorToUse = self.__currentVehicleCrewXpFactor
+        if value is not None:
+            if value != 0:
+                return max(1, value / xpFactorToUse)
+            return 0
+        else:
+            return
+
+    def __packStat(self, name, value, imageType = None, image = None, usePremiumXpFactor = False):
+        if usePremiumXpFactor:
+            premiumValue = self.__getBattlesLeftOnPremiumVehicle(value)
+        else:
+            premiumValue = value
+        value = self.__formatValueForUI(value)
+        premiumValue = self.__formatValueForUI(premiumValue)
         return {'name': name,
          'value': value,
-         'extra': extra,
+         'premiumValue': premiumValue,
          'imageType': imageType,
          'image': image}
 

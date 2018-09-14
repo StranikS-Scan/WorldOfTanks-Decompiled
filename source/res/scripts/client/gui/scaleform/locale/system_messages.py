@@ -61,7 +61,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS = '#system_messages:prebattle/vehicleInvalid/limits/shells'
     PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE = '#system_messages:prebattle/vehicleInvalid/no_readyVehicle'
     PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED = '#system_messages:prebattle/vehicleInvalid/vehicleNotSupported'
-    PREBATTLE_VEHICLEINVALID_ONLYEVENTBATTLES = '#system_messages:prebattle/vehicleInvalid/onlyEventBattles'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
     PREBATTLE_VEHICLEINVALID_LIMITS_CLASSES = '#system_messages:prebattle/vehicleInvalid/limits/classes'
@@ -128,6 +127,8 @@ class SYSTEM_MESSAGES(object):
     UNLOCKS_ITEM_IN_PROCESSING = '#system_messages:unlocks/item/in_processing'
     UNLOCKS_DRAWFAILED = '#system_messages:unlocks/drawFailed'
     SHOP_VEHICLE_NOT_ENOUGH_MONEY = '#system_messages:shop/vehicle/not_enough_money'
+    SHOP_VEHICLE_NOT_ENOUGH_MONEY_FOR_RENT = '#system_messages:shop/vehicle/not_enough_money_for_rent'
+    SHOP_VEHICLE_COMMON_RENT_OR_BUY_ERROR = '#system_messages:shop/vehicle/common_rent_or_buy_error'
     SHOP_ITEM_NOT_ENOUGH_MONEY = '#system_messages:shop/item/not_enough_money'
     SHOP_VEHICLE_NOT_FOUND = '#system_messages:shop/vehicle/not_found'
     SHOP_ITEM_NOT_FOUND = '#system_messages:shop/item/not_found'
@@ -216,6 +217,9 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_FREE = '#system_messages:customization/inscription_change_success/free'
     CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS = '#system_messages:customization/inscription_drop_success'
     CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR = '#system_messages:customization/igr_type_changed_error'
+    CUSTOMIZATION_ADDED_CAMOUFLAGES = '#system_messages:customization/added/camouflages'
+    CUSTOMIZATION_ADDED_EMBLEMS = '#system_messages:customization/added/emblems'
+    CUSTOMIZATION_ADDED_INSCRIPTIONS = '#system_messages:customization/added/inscriptions'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
     SHOP_RESYNC = '#system_messages:shop_resync'
@@ -350,6 +354,13 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_BUY_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_buy/not_enough_credits'
     VEHICLE_BUY_NOT_ENOUGH_GOLD = '#system_messages:vehicle_buy/not_enough_gold'
     VEHICLE_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_buy/wallet_not_available'
+    VEHICLE_RENT_SUCCESS = '#system_messages:vehicle_rent/success'
+    VEHICLE_RENT_SERVER_ERROR = '#system_messages:vehicle_rent/server_error'
+    VEHICLE_RENT_INVALID_VEHICLE = '#system_messages:vehicle_rent/invalid_vehicle'
+    VEHICLE_RENT_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_rent/server_error_centerDown'
+    VEHICLE_RENT_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_rent/not_enough_credits'
+    VEHICLE_RENT_NOT_ENOUGH_GOLD = '#system_messages:vehicle_rent/not_enough_gold'
+    VEHICLE_RENT_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_rent/wallet_not_available'
     VEHICLE_SLOT_BUY_SUCCESS = '#system_messages:vehicle_slot_buy/success'
     VEHICLE_SLOT_BUY_NOT_ENOUGH_GOLD = '#system_messages:vehicle_slot_buy/not_enough_gold'
     VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_slot_buy/wallet_not_available'
@@ -366,6 +377,18 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_sell/wallet_not_available'
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
+    VEHICLE_REMOVE_SUCCESS = '#system_messages:vehicle_remove/success'
+    VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success_dismantling'
+    VEHICLE_REMOVE_SERVER_ERROR = '#system_messages:vehicle_remove/server_error'
+    VEHICLE_REMOVE_INVALID_VEHICLE = '#system_messages:vehicle_remove/invalid_vehicle'
+    VEHICLE_REMOVE_VEHICLE_CANNOT_BE_SOLD = '#system_messages:vehicle_remove/vehicle_cannot_be_sold'
+    VEHICLE_REMOVE_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_remove/vehicle_need_repair'
+    VEHICLE_REMOVE_VEHICLE_LOCKED = '#system_messages:vehicle_remove/vehicle_locked'
+    VEHICLE_REMOVE_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_remove/not_enough_credits'
+    VEHICLE_REMOVE_NOT_ENOUGH_GOLD = '#system_messages:vehicle_remove/not_enough_gold'
+    VEHICLE_REMOVE_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_remove/wallet_not_available'
+    VEHICLE_REMOVE_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_remove/vehicle_sell_limit'
+    VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -424,6 +447,7 @@ class SYSTEM_MESSAGES(object):
     MODULE_APPLY_ERROR_TOO_HEAVY = '#system_messages:module_apply/error_too_heavy'
     MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS = '#system_messages:module_apply/error_too_heavy_chassis'
     MODULE_APPLY_ERROR_NEED_TURRET = '#system_messages:module_apply/error_need_turret'
+    MODULE_APPLY_ERROR_NEED_GUN = '#system_messages:module_apply/error_need_gun'
     MODULE_APPLY_ERROR_IS_CURRENT = '#system_messages:module_apply/error_is_current'
     MODULE_APPLY_ERROR_NOT_WITH_INSTALLED_EQUIPMENT = '#system_messages:module_apply/error_not_with_installed_equipment'
     MODULE_APPLY_INCOMPATIBLEEQS = '#system_messages:module_apply/incompatibleEqs'
@@ -552,13 +576,13 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_COOLDOWN = '#system_messages:unit/errors/COOLDOWN'
     UNIT_ERRORS_BAD_POINTS_SUM = '#system_messages:unit/errors/BAD_POINTS_SUM'
     UNIT_ERRORS_BAD_VEHICLE_LEVEL = '#system_messages:unit/errors/BAD_VEHICLE_LEVEL'
-    UNIT_ERRORS_NO_CLAN_MEMBERS = '#system_messages:unit/errors/NO_CLAN_MEMBERS'
+    UNIT_WARNINGS_NO_CLAN_MEMBERS = '#system_messages:unit/warnings/NO_CLAN_MEMBERS'
     UNIT_ERRORS_NO_PLAYER = '#system_messages:unit/errors/NO_PLAYER'
     UNIT_ERRORS_SLOT_RESERVED = '#system_messages:unit/errors/SLOT_RESERVED'
     UNIT_ERRORS_SLOT_OCCUPIED = '#system_messages:unit/errors/SLOT_OCCUPIED'
     UNIT_ERRORS_TOO_MANY_CLOSED_SLOTS = '#system_messages:unit/errors/TOO_MANY_CLOSED_SLOTS'
     UNIT_ERRORS_SLOT_NOT_CLOSED = '#system_messages:unit/errors/SLOT_NOT_CLOSED'
-    UNIT_ERRORS_CANT_PICK_LEADER = '#system_messages:unit/errors/CANT_PICK_LEADER'
+    UNIT_WARNINGS_CANT_PICK_LEADER = '#system_messages:unit/warnings/CANT_PICK_LEADER'
     UNIT_ERRORS_RESTRICT_LEGIONARIES = '#system_messages:unit/errors/RESTRICT_LEGIONARIES'
     UNIT_ERRORS_RESTRICT_INVITED = '#system_messages:unit/errors/RESTRICT_INVITED'
     UNIT_ERRORS_VEHICLE_MISMATCH = '#system_messages:unit/errors/VEHICLE_MISMATCH'
@@ -582,6 +606,14 @@ class SYSTEM_MESSAGES(object):
     UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT = '#system_messages:unitBrowser/errors/BAD_ACCEPT_CONTEXT'
     PERIPHERY_ERRORS_ISNOTAVAILABLE = '#system_messages:periphery/errors/isNotAvailable'
     UNIT_ERRORS_FORT_BATTLE_END = '#system_messages:unit/errors/FORT_BATTLE_END'
+    UNIT_ERRORS_BAD_CLAN = '#system_messages:unit/errors/BAD_CLAN'
+    UNIT_ERRORS_BAD_ACCOUNT_TYPE = '#system_messages:unit/errors/BAD_ACCOUNT_TYPE'
+    UNIT_ERRORS_HAS_IN_ARENA_MEMBERS = '#system_messages:unit/errors/HAS_IN_ARENA_MEMBERS'
+    UNIT_ERRORS_ACCOUNT_RESTORED = '#system_messages:unit/errors/ACCOUNT_RESTORED'
+    UNIT_ERRORS_UNIT_RESTORED = '#system_messages:unit/errors/UNIT_RESTORED'
+    UNIT_ERRORS_OFFLINE_PLAYER = '#system_messages:unit/errors/OFFLINE_PLAYER'
+    UNIT_ERRORS_TIMEOUT = '#system_messages:unit/errors/TIMEOUT'
+    UNIT_ERRORS_BAD_ROSTER_PACK = '#system_messages:unit/errors/BAD_ROSTER_PACK'
     IGR_CUSTOMIZATION_BEGIN = '#system_messages:igr/customization/begin'
     IGR_CUSTOMIZATION_END = '#system_messages:igr/customization/end'
     INFO_NOAVAILABLE = '#system_messages:info/noAvailable'
@@ -701,6 +733,7 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_ERRORS_WRONG_PERIPHERY = '#system_messages:fortification/errors/WRONG_PERIPHERY'
     FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED = '#system_messages:fortification/errors/FORT_BATTLES_DISABLED'
     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES = '#system_messages:fortification/errors/TOO_MANY_DEFENCES'
+    FORTIFICATION_ERRORS_CURFEW_HOUR = '#system_messages:fortification/errors/CURFEW_HOUR'
     BUTTONS_GOTOPOLL = '#system_messages:buttons/goToPoll'
     INVITE_STATUS_WRONG_CLAN = '#system_messages:invite/status/WRONG_CLAN'
     INVITE_STATUS_LEGIONARIES_NOT_ALLOWED = '#system_messages:invite/status/LEGIONARIES_NOT_ALLOWED'
@@ -769,13 +802,11 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_COOLDOWN,
      UNIT_ERRORS_BAD_POINTS_SUM,
      UNIT_ERRORS_BAD_VEHICLE_LEVEL,
-     UNIT_ERRORS_NO_CLAN_MEMBERS,
      UNIT_ERRORS_NO_PLAYER,
      UNIT_ERRORS_SLOT_RESERVED,
      UNIT_ERRORS_SLOT_OCCUPIED,
      UNIT_ERRORS_TOO_MANY_CLOSED_SLOTS,
      UNIT_ERRORS_SLOT_NOT_CLOSED,
-     UNIT_ERRORS_CANT_PICK_LEADER,
      UNIT_ERRORS_RESTRICT_LEGIONARIES,
      UNIT_ERRORS_RESTRICT_INVITED,
      UNIT_ERRORS_VEHICLE_MISMATCH,
@@ -783,7 +814,15 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_TOO_MANY_LEGIONARIES,
      UNIT_ERRORS_VEHICLE_NOT_CHOSEN,
      UNIT_ERRORS_ALREADY_IN_SLOT,
-     UNIT_ERRORS_FORT_BATTLE_END)
+     UNIT_ERRORS_FORT_BATTLE_END,
+     UNIT_ERRORS_BAD_CLAN,
+     UNIT_ERRORS_BAD_ACCOUNT_TYPE,
+     UNIT_ERRORS_HAS_IN_ARENA_MEMBERS,
+     UNIT_ERRORS_ACCOUNT_RESTORED,
+     UNIT_ERRORS_UNIT_RESTORED,
+     UNIT_ERRORS_OFFLINE_PLAYER,
+     UNIT_ERRORS_TIMEOUT,
+     UNIT_ERRORS_BAD_ROSTER_PACK)
     FORTIFICATION_ERRORS_ENUM = (FORTIFICATION_ERRORS_UNKNOWN,
      FORTIFICATION_ERRORS_NOT_SUPPORTED,
      FORTIFICATION_ERRORS_BAD_METHOD,
@@ -882,14 +921,17 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_CANT_LOOKUP_CLAN,
      FORTIFICATION_ERRORS_WRONG_PERIPHERY,
      FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED,
-     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES)
+     FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
+     FORTIFICATION_ERRORS_CURFEW_HOUR)
     UNITBROWSER_ERRORS_ENUM = UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
      UNIT_NOTIFICATION_PLAYERREMOVED,
      UNIT_NOTIFICATION_GIVELEADERSHIP)
-    UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_KICKED_CANDIDATE,
+    UNIT_WARNINGS_ENUM = (UNIT_WARNINGS_NO_CLAN_MEMBERS,
+     UNIT_WARNINGS_CANT_PICK_LEADER,
+     UNIT_WARNINGS_KICKED_CANDIDATE,
      UNIT_WARNINGS_KICKED_PLAYER,
      UNIT_WARNINGS_UNIT_ASSEMBLER_TIMEOUT,
      UNIT_WARNINGS_KICKED_FROM_UNIT_ASSEMBLER,
@@ -960,7 +1002,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_LIMITS_SHELLS,
      PREBATTLE_VEHICLEINVALID_NO_READYVEHICLE,
      PREBATTLE_VEHICLEINVALID_VEHICLENOTSUPPORTED,
-     PREBATTLE_VEHICLEINVALID_ONLYEVENTBATTLES,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
      PREBATTLE_VEHICLEINVALID_LIMITS_CLASSES,
@@ -1027,6 +1068,8 @@ class SYSTEM_MESSAGES(object):
      UNLOCKS_ITEM_IN_PROCESSING,
      UNLOCKS_DRAWFAILED,
      SHOP_VEHICLE_NOT_ENOUGH_MONEY,
+     SHOP_VEHICLE_NOT_ENOUGH_MONEY_FOR_RENT,
+     SHOP_VEHICLE_COMMON_RENT_OR_BUY_ERROR,
      SHOP_ITEM_NOT_ENOUGH_MONEY,
      SHOP_VEHICLE_NOT_FOUND,
      SHOP_ITEM_NOT_FOUND,
@@ -1111,6 +1154,9 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_FREE,
      CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS,
      CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR,
+     CUSTOMIZATION_ADDED_CAMOUFLAGES,
+     CUSTOMIZATION_ADDED_EMBLEMS,
+     CUSTOMIZATION_ADDED_INSCRIPTIONS,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,
      SHOP_RESYNC,
@@ -1245,6 +1291,13 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_BUY_NOT_ENOUGH_CREDITS,
      VEHICLE_BUY_NOT_ENOUGH_GOLD,
      VEHICLE_BUY_WALLET_NOT_AVAILABLE,
+     VEHICLE_RENT_SUCCESS,
+     VEHICLE_RENT_SERVER_ERROR,
+     VEHICLE_RENT_INVALID_VEHICLE,
+     VEHICLE_RENT_SERVER_ERROR_CENTERDOWN,
+     VEHICLE_RENT_NOT_ENOUGH_CREDITS,
+     VEHICLE_RENT_NOT_ENOUGH_GOLD,
+     VEHICLE_RENT_WALLET_NOT_AVAILABLE,
      VEHICLE_SLOT_BUY_SUCCESS,
      VEHICLE_SLOT_BUY_NOT_ENOUGH_GOLD,
      VEHICLE_SLOT_BUY_WALLET_NOT_AVAILABLE,
@@ -1261,6 +1314,18 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_WALLET_NOT_AVAILABLE,
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
+     VEHICLE_REMOVE_SUCCESS,
+     VEHICLE_REMOVE_SUCCESS_DISMANTLING,
+     VEHICLE_REMOVE_SERVER_ERROR,
+     VEHICLE_REMOVE_INVALID_VEHICLE,
+     VEHICLE_REMOVE_VEHICLE_CANNOT_BE_SOLD,
+     VEHICLE_REMOVE_VEHICLE_NEED_REPAIR,
+     VEHICLE_REMOVE_VEHICLE_LOCKED,
+     VEHICLE_REMOVE_NOT_ENOUGH_CREDITS,
+     VEHICLE_REMOVE_NOT_ENOUGH_GOLD,
+     VEHICLE_REMOVE_WALLET_NOT_AVAILABLE,
+     VEHICLE_REMOVE_VEHICLE_SELL_LIMIT,
+     VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -1319,6 +1384,7 @@ class SYSTEM_MESSAGES(object):
      MODULE_APPLY_ERROR_TOO_HEAVY,
      MODULE_APPLY_ERROR_TOO_HEAVY_CHASSIS,
      MODULE_APPLY_ERROR_NEED_TURRET,
+     MODULE_APPLY_ERROR_NEED_GUN,
      MODULE_APPLY_ERROR_IS_CURRENT,
      MODULE_APPLY_ERROR_NOT_WITH_INSTALLED_EQUIPMENT,
      MODULE_APPLY_INCOMPATIBLEEQS,
@@ -1447,13 +1513,13 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_COOLDOWN,
      UNIT_ERRORS_BAD_POINTS_SUM,
      UNIT_ERRORS_BAD_VEHICLE_LEVEL,
-     UNIT_ERRORS_NO_CLAN_MEMBERS,
+     UNIT_WARNINGS_NO_CLAN_MEMBERS,
      UNIT_ERRORS_NO_PLAYER,
      UNIT_ERRORS_SLOT_RESERVED,
      UNIT_ERRORS_SLOT_OCCUPIED,
      UNIT_ERRORS_TOO_MANY_CLOSED_SLOTS,
      UNIT_ERRORS_SLOT_NOT_CLOSED,
-     UNIT_ERRORS_CANT_PICK_LEADER,
+     UNIT_WARNINGS_CANT_PICK_LEADER,
      UNIT_ERRORS_RESTRICT_LEGIONARIES,
      UNIT_ERRORS_RESTRICT_INVITED,
      UNIT_ERRORS_VEHICLE_MISMATCH,
@@ -1477,6 +1543,14 @@ class SYSTEM_MESSAGES(object):
      UNITBROWSER_ERRORS_BAD_ACCEPT_CONTEXT,
      PERIPHERY_ERRORS_ISNOTAVAILABLE,
      UNIT_ERRORS_FORT_BATTLE_END,
+     UNIT_ERRORS_BAD_CLAN,
+     UNIT_ERRORS_BAD_ACCOUNT_TYPE,
+     UNIT_ERRORS_HAS_IN_ARENA_MEMBERS,
+     UNIT_ERRORS_ACCOUNT_RESTORED,
+     UNIT_ERRORS_UNIT_RESTORED,
+     UNIT_ERRORS_OFFLINE_PLAYER,
+     UNIT_ERRORS_TIMEOUT,
+     UNIT_ERRORS_BAD_ROSTER_PACK,
      IGR_CUSTOMIZATION_BEGIN,
      IGR_CUSTOMIZATION_END,
      INFO_NOAVAILABLE,
@@ -1596,6 +1670,7 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_ERRORS_WRONG_PERIPHERY,
      FORTIFICATION_ERRORS_FORT_BATTLES_DISABLED,
      FORTIFICATION_ERRORS_TOO_MANY_DEFENCES,
+     FORTIFICATION_ERRORS_CURFEW_HOUR,
      BUTTONS_GOTOPOLL,
      INVITE_STATUS_WRONG_CLAN,
      INVITE_STATUS_LEGIONARIES_NOT_ALLOWED,

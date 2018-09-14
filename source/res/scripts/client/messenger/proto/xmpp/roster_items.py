@@ -99,10 +99,3 @@ class RosterItemStorage(defaultdict):
 
     def hasItem(self, jid):
         return jid in self
-
-    def log(self):
-        result = ['XMPPClient:RosterItemsLog, Client is connected to XMPP.XMPP roster is:']
-        for jid, item in self.iteritems():
-            result.append(repr(item))
-
-        LOG_DEBUG('\n'.join(result))

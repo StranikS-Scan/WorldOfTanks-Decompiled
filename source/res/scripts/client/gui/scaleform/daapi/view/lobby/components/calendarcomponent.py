@@ -20,3 +20,4 @@ class CalendarComponent(CalendarMeta, DAAPIModule):
 
     def _dispose(self):
         self.__em.clear()
+        super(CalendarComponent, self)._dispose()

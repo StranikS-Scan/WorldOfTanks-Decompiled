@@ -8,7 +8,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 
 class FortNotCommanderFirstEnterWindow(AbstractWindowView, View, FortNotCommanderFirstEnterWindowMeta, AppRef):
 
-    def __init__(self):
+    def __init__(self, ctx = None):
         super(FortNotCommanderFirstEnterWindow, self).__init__()
 
     def _populate(self):

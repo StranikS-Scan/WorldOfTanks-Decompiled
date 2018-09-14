@@ -15,4 +15,4 @@ class ProfileSummaryPage(ProfileSummary):
         return outcome
 
     def getGlobalRating(self, userName):
-        return g_itemsCache.items.stats.getGlobalRating()
+        return g_itemsCache.items.stats.globalRating

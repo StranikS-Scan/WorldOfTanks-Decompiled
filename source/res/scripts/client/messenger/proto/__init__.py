@@ -4,14 +4,18 @@ from constants import JD_CUTOUT
 from messenger.ext.ROPropertyMeta import ROPropertyMeta
 from messenger.m_constants import PROTO_TYPE, PROTO_TYPE_NAMES
 from messenger.proto.bw import BWProtoPlugin
+from messenger.proto.bw_chat2 import BWProtoPlugin as BWProtoPlugin_chat2
 from messenger.proto.bw.BWServerSettings import BWServerSettings
+from messenger.proto.bw_chat2.BWServerSettings import BWServerSettings as BWServerSettings_chat2
 from messenger.proto.interfaces import IProtoPlugin
 from messenger.proto.xmpp import XmppPlugin
 from messenger.proto.xmpp.XmppServerSettings import XmppServerSettings
 __all__ = ('BWProtoPlugin', 'BWProtoPlugin_chat2', 'XmppPlugin')
 SUPPORTED_PROTO_PLUGINS = {PROTO_TYPE_NAMES[PROTO_TYPE.BW]: BWProtoPlugin(),
+ PROTO_TYPE_NAMES[PROTO_TYPE.BW_CHAT2]: BWProtoPlugin_chat2(),
  PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]: XmppPlugin()}
 SUPPORTED_PROTO_SETTINGS = {PROTO_TYPE_NAMES[PROTO_TYPE.BW]: BWServerSettings(),
+ PROTO_TYPE_NAMES[PROTO_TYPE.BW_CHAT2]: BWServerSettings_chat2(),
  PROTO_TYPE_NAMES[PROTO_TYPE.XMPP]: XmppServerSettings()}
 
 class proto_type_getter(object):
@@ -31,6 +35,26 @@ class proto_getter(proto_type_getter):
 
     def get(self):
         return SUPPORTED_PROTO_PLUGINS[self._attr]
+
+
+class _BWProtoProxy(object):
+
+    def __getattribute__(self, attrName):
+        if settings_getter(PROTO_TYPE.BW_CHAT2).get().isEnabled():
+            protoName = PROTO_TYPE_NAMES[PROTO_TYPE.BW_CHAT2]
+        else:
+            protoName = PROTO_TYPE_NAMES[PROTO_TYPE.BW]
+        return getattr(SUPPORTED_PROTO_PLUGINS[protoName], attrName)
+
+
+class bw_proto_getter(object):
+
+    def __init__(self):
+        super(bw_proto_getter, self).__init__()
+        self.__proxy = _BWProtoProxy()
+
+    def __call__(self, _):
+        return self.__proxy
 
 
 class settings_getter(proto_type_getter):
@@ -106,5 +130,18 @@ class ServerSettings(object):
 
 
 def getBattleCommandFactory():
-    from messenger.proto.bw.battle_chat_cmd import BattleCommandFactory
-    return BattleCommandFactory()
+    if settings_getter(PROTO_TYPE.BW_CHAT2).get().isEnabled():
+        factory = proto_getter(PROTO_TYPE.BW_CHAT2).get().battleCmd.factory
+    else:
+        from messenger.proto.bw.battle_chat_cmd import BattleCommandFactory
+        factory = BattleCommandFactory()
+    return factory
+
+
+def getSearchUserProcessor():
+    if settings_getter(PROTO_TYPE.BW_CHAT2).get().isEnabled():
+        from messenger.proto.bw_chat2.search_processor import SearchUsersProcessor
+        return SearchUsersProcessor()
+    else:
+        from messenger.proto.bw.search_processors import SearchUsersProcessor
+        return SearchUsersProcessor()

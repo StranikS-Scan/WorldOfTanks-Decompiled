@@ -2,58 +2,28 @@
 import BigWorld
 from constants import PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.fortifications.components import sorties_dps
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import PROMO_TITLE, MAIN_TEXT, STANDARD_TEXT, HIGH_TITLE
 from gui.Scaleform.daapi.view.meta.FortClanBattleListMeta import FortClanBattleListMeta
 from gui.Scaleform.framework import AppRef
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.prb_control.prb_helpers import UnitListener
 from gui.shared.fortifications.fort_helpers import FortListener
+from gui.shared.fortifications.fort_seqs import BATTLE_ITEM_TYPE
 from gui.shared.fortifications.settings import CLIENT_FORT_STATE
 from helpers import i18n, time_utils
 
 class FortClanBattleList(FortClanBattleListMeta, FortListener, UnitListener, AppRef):
 
-    def _populate(self):
-        super(FortClanBattleList, self)._populate()
-        self.unitFunctional.setPrbType(PREBATTLE_TYPE.FORT_BATTLE)
-        cache = self.fortCtrl.getFortBattlesCache()
-        if cache is not None:
-            self._searchDP.rebuildList(cache)
-        self.startFortListening()
-        self.__makeData()
+    def __init__(self):
+        super(FortClanBattleList, self).__init__()
+        self.__callback = None
         return
 
     def onWindowClose(self):
         self.destroy()
 
-    def _dispose(self):
-        self.fortCtrl.removeFortBattlesCache()
-        self.stopFortListening()
-        super(FortClanBattleList, self)._dispose()
-
     def getPyDataProvider(self):
         return sorties_dps.ClanBattlesDataProvider()
-
-    def __makeData(self):
-        result = {}
-        self.__updateNextBattleCount()
-        result['actionDescr'] = fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
-        result['titleLbl'] = fort_text.getText(PROMO_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
-        result['descrLbl'] = fort_text.getText(MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
-        localeBattleCount = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_CURRENTBTLCOUNT)
-        result['battlesCountTitle'] = fort_text.getText(HIGH_TITLE, localeBattleCount)
-        self.as_setClanBattleDataS(result)
-
-    def __updateNextBattleCount(self):
-        cache = self.fortCtrl.getFortBattlesCache()
-        if cache is None:
-            return
-        else:
-            currentBattlesCount = BigWorld.wg_getNiceNumberFormat(len(self._searchDP.collection))
-            result = fort_text.getText(HIGH_TITLE, currentBattlesCount)
-            self.as_upateClanBattlesCountS(result)
-            return
 
     def onClientStateChanged(self, state):
         self.__updateSearchDP(state)
@@ -64,12 +34,16 @@ class FortClanBattleList(FortClanBattleListMeta, FortListener, UnitListener, App
             cache = self.fortCtrl.getFortBattlesCache()
             if cache is not None:
                 cache.clearSelectedID()
+        self.__refreshCallback()
         self.__updateNextBattleCount()
         return
 
-    def onFortBattleChanged(self, cache, item):
+    def onUnitFunctionalInited(self):
+        self.unitFunctional.setPrbType(PREBATTLE_TYPE.FORT_BATTLE)
+
+    def onFortBattleChanged(self, cache, item, battleItem):
         prevIdx = self._searchDP.getSelectedIdx()
-        nextIdx = self._searchDP.updateItem(cache, item)
+        nextIdx = self._searchDP.updateItem(cache, item, battleItem)
         if nextIdx is not None and nextIdx != -1 and nextIdx != prevIdx:
             self.as_selectByIndexS(nextIdx)
         elif nextIdx is None or nextIdx == -1:
@@ -78,6 +52,7 @@ class FortClanBattleList(FortClanBattleListMeta, FortListener, UnitListener, App
             cache.clearSelectedID()
             self.as_setDetailsS(None)
         self._searchDP.refresh()
+        self.__refreshCallback()
         self.__updateNextBattleCount()
         return
 
@@ -88,7 +63,15 @@ class FortClanBattleList(FortClanBattleListMeta, FortListener, UnitListener, App
             self._searchDP.setSelectedID(None)
             cache.clearSelectedID()
             self.as_setDetailsS(None)
+        self.__refreshCallback()
         self.__updateNextBattleCount()
+        return
+
+    def onFortBattleUnitReceived(self, clientIdx):
+        self._searchDP.refresh()
+        cache = self.fortCtrl.getFortBattlesCache()
+        if cache is not None and cache.getSelectedIdx() == clientIdx:
+            self.__makeDetailsData(clientIdx)
         return
 
     def getRallyDetails(self, index):
@@ -107,52 +90,126 @@ class FortClanBattleList(FortClanBattleListMeta, FortListener, UnitListener, App
                 else:
                     self._searchDP.setSelectedID(battleID)
                     self.__makeDetailsData(cache.getSelectedIdx())
+                    self._searchDP.refresh()
+            return
+
+    def _populate(self):
+        super(FortClanBattleList, self)._populate()
+        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setPrbType(PREBATTLE_TYPE.FORT_BATTLE)
+        self.startFortListening()
+        cache = self.fortCtrl.getFortBattlesCache()
+        if cache:
+            self._searchDP.rebuildList(cache)
+        self.__refreshCallback()
+        self.__makeData()
+
+    def _dispose(self):
+        self.__clearCallback()
+        self.fortCtrl.removeFortBattlesCache()
+        self.stopFortListening()
+        super(FortClanBattleList, self)._dispose()
+
+    def __clearCallback(self):
+        if self.__callback is not None:
+            BigWorld.cancelCallback(self.__callback)
+            self.__callback = None
+        return
+
+    def __processCallback(self):
+        cache = self.fortCtrl.getFortBattlesCache()
+        if cache:
+            self._searchDP.rebuildList(cache)
+            self.__refreshCallback()
+
+    def __refreshCallback(self):
+        self.__clearCallback()
+        cache = self.fortCtrl.getFortBattlesCache()
+        if cache:
+            delta = 2 * time_utils.ONE_WEEK
+            for item, battleItem in cache.getIterator():
+                if battleItem is not None:
+                    startTimeLeft = battleItem.getRoundStartTimeLeft()
+                else:
+                    startTimeLeft = item.getStartTimeLeft()
+                if startTimeLeft > time_utils.QUARTER_HOUR:
+                    nextNotification = startTimeLeft - time_utils.QUARTER_HOUR
+                else:
+                    nextNotification = startTimeLeft
+                if nextNotification:
+                    delta = min(nextNotification, delta)
+
+            self.__callback = BigWorld.callback(delta, self.__processCallback)
+        return
+
+    def __makeData(self):
+        result = {}
+        self.__updateNextBattleCount()
+        result['actionDescr'] = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_ACTIONDESCR))
+        result['titleLbl'] = self.app.utilsManager.textManager.getText(TextType.PROMO_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_TITLELBL))
+        result['descrLbl'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DESCRLBL))
+        localeBattleCount = i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_CURRENTBTLCOUNT)
+        result['battlesCountTitle'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, localeBattleCount)
+        self.as_setClanBattleDataS(result)
+
+    def __updateNextBattleCount(self):
+        cache = self.fortCtrl.getFortBattlesCache()
+        if cache is None:
+            return
+        else:
+            currentBattlesCount = BigWorld.wg_getNiceNumberFormat(len(self._searchDP.collection))
+            result = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, currentBattlesCount)
+            self.as_upateClanBattlesCountS(result)
             return
 
     def __makeDetailsData(self, clientIdx):
         result = self._searchDP.getUnitVO(clientIdx)
         cache = self.fortCtrl.getFortBattlesCache()
         if cache is not None:
-            item = cache.getItem(cache.getSelectedID())
+            item, battleItem = cache.getItem(cache.getSelectedID())
             isCreated = bool(result)
             isInBattle = False
             isBegin = False
-            startTimeLeft = item.getAttackTimeLeft()
-            if time_utils.QUARTER_HOUR > startTimeLeft > 0:
+            if battleItem:
+                startTimeLeft = battleItem.getRoundStartTimeLeft()
+            else:
+                startTimeLeft = item.getStartTimeLeft()
+            if time_utils.QUARTER_HOUR > startTimeLeft > 0 or item.isHot():
                 isBegin = True
-            elif startTimeLeft == 0:
+            elif startTimeLeft == 0 or item.isInProgress():
                 isInBattle = True
             isCreationAvailable = not isCreated and isBegin
-            result['titleText'] = fort_text.getText(fort_text.PROMO_SUB_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
+            result['titleText'] = self.app.utilsManager.textManager.getText(TextType.PROMO_SUB_TITLE, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONTITLE))
             result['buttonLbl'] = FORTIFICATIONS.SORTIE_LISTVIEW_CREATE
             result['isCreationAvailable'] = not isCreated
             _, clanAbbrev, _ = item.getOpponentClanInfo()
-            isDefence = item.isDefence()
+            isDefence = item.getType() == BATTLE_ITEM_TYPE.DEFENCE
             localeStr = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_TITLE if isDefence else FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_ATTACK_TITLE
-            result['detailsTitle'] = fort_text.getText(HIGH_TITLE, i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
-            result['description'] = fort_text.getText(MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
+            result['detailsTitle'] = self.app.utilsManager.textManager.getText(TextType.HIGH_TITLE, i18n.makeString(localeStr, clanName='[%s]' % clanAbbrev))
+            result['description'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_DESCRIPTION, directionName=i18n.makeString('#fortifications:General/directionName%d' % item.getDirection())))
             result['isEnableBtn'] = isCreationAvailable
             if isCreationAvailable:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR
             else:
                 descrText = FORTIFICATIONS.FORTCLANBATTLELIST_DETAILS_CREATIONDESCR_DISABLE
-            result['descrText'] = fort_text.getText(MAIN_TEXT, i18n.makeString(descrText))
+            result['descrText'] = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(descrText))
             if isCreated and isInBattle:
                 for slot in result['slots']:
                     slot['canBeTaken'] = False
 
-        self._searchDP.refresh()
         self.as_setDetailsS(result)
         return
 
     def __updateSearchDP(self, state):
         if state.getStateID() != CLIENT_FORT_STATE.HAS_FORT:
+            self.__clearCallback()
             self._searchDP.clear()
             self._searchDP.refresh()
             return
         else:
             cache = self.fortCtrl.getFortBattlesCache()
             if cache is not None:
+                self.__refreshCallback()
                 self._searchDP.rebuildList(cache)
                 self.as_selectByIndexS(self._searchDP.getSelectedIdx())
             return

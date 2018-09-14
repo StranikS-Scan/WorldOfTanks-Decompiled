@@ -63,9 +63,6 @@ class CompanyListView(CompanyListMeta, PrbListener):
         self.__requestCompaniesList()
 
     def _dispose(self):
-        chat = self.chat
-        if chat:
-            chat.minimize()
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.stopPrbListening()
         if self.__listDP is not None:

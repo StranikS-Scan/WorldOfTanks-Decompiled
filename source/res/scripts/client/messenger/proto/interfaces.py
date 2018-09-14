@@ -101,3 +101,15 @@ class IServerError(object):
 
     def isModal(self):
         return False
+
+
+class IVOIPChatProvider(object):
+
+    def getChannelParams(self):
+        return ('', '')
+
+    def requestCredentials(self, reset = 0):
+        pass
+
+    def logVivoxLogin(self):
+        pass

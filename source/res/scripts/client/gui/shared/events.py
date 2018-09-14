@@ -28,6 +28,7 @@ class HasCtxEvent(SharedEvent):
 class GUICommonEvent(SharedEvent):
     APP_STARTED = 'appStarted'
     APP_LOGOFF = 'appLogoff'
+    LOBBY_VIEW_LOADED = 'lobbyViewLoaded'
 
 
 class GUIEditorEvent(HasCtxEvent):
@@ -95,7 +96,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_DEMOUNT_DEVICE_DIALOG = 'showDemountDeviceDialog'
     SHOW_DESTROY_DEVICE_DIALOG = 'showDestroyDeviceDialog'
     SHOW_CONFIRM_MODULE = 'showConfirmModule'
-    SHOW_HEADER_TUTORIAL_DIALOG = 'showHeaderTutorialDialog'
     SHOW_SYSTEM_MESSAGE_DIALOG = 'showSystemMessageDialog'
     SHOW_CAPTCHA_DIALOG = 'showCaptchaDialog'
     SHOW_DISMISS_TANKMAN_DIALOG = 'showDismissTankmanDialog'
@@ -166,7 +166,6 @@ class ShowWindowEvent(HasCtxEvent):
     SHOW_TANKMAN_INFO = 'showTankmanInfo'
     SHOW_BATTLE_RESULTS = 'showBattleResults'
     SHOW_EVENTS_WINDOW = 'showEventsWindow'
-    SHOW_HEADER_TUTORIAL_WINDOW = 'showHeaderTutorialWindow'
     SHOW_TANKMAN_DROP_SKILLS_WINDOW = 'showTankmanDropSkillsWindow'
     SHOW_TRAINING_SETTINGS_WINDOW = 'showTrainingSettingsWindow'
     SHOW_SQUAD_WINDOW = 'showSquadWindow'
@@ -193,6 +192,11 @@ class ShowWindowEvent(HasCtxEvent):
     SHOW_FREE_X_P_INFO_WINDOW = 'showFreeXPInfoWindow'
     SHOW_HISTORICAL_BATTLES_WINDOW = 'showHistoricalBattlesListWindow'
     SHOW_FORT_ORDER_CONFIRM_WINDOW = 'showOrderConfirmWindow'
+    SHOW_AWARD_WINDOW = 'showAwardWindow'
+    SHOW_REFERRAL_MANAGEMENT_WINDOW = 'showReferralManagementWindow'
+    SHOW_REFERRAL_REFERRER_INTRO_WINDOW = 'showReferralReferrerIntroWindow'
+    SHOW_REFERRAL_REFERRALS_INTRO_WINDOW = 'showReferralReferralsIntroWindow'
+    SHOW_PROMO_PREMIUM_IGR_WINDOW = 'showPromoPremiumIgrWindow'
 
 
 class HideWindowEvent(HasCtxEvent):
@@ -245,8 +249,6 @@ class LobbySimpleEvent(HasCtxEvent):
     SHOW_HELPLAYOUT = 'showHelplayout'
     CLOSE_HELPLAYOUT = 'closeHelplayout'
     EVENTS_UPDATED = 'questUpdated'
-    HIGHLIGHT_TUTORIAL_CONTROL = 'highLightTutorialControl'
-    RESET_HIGHLIGHT_TUTORIAL_CONTROL = 'resetHighLightTutorialControl'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -282,6 +284,7 @@ class CoolDownEvent(SharedEvent):
     GLOBAL = 'globalCoolDown'
     PREBATTLE = 'prebattleCoolDown'
     FORTIFICATION = 'fortificationCoolDown'
+    BW_CHAT2 = 'bwChat2CoolDown'
 
     def __init__(self, eventType = None, requestID = 0, coolDown = 5.0):
         super(CoolDownEvent, self).__init__(eventType)
@@ -311,6 +314,9 @@ class ChannelManagementEvent(HasCtxEvent):
     REQUEST_TO_REMOVE = 'requestToRemove'
     REQUEST_TO_CHANGE = 'requestToChange'
     REQUEST_TO_SHOW = 'requestToShow'
+    REQUEST_TO_ACTIVATE = 'rqActivateChannel'
+    REQUEST_TO_DEACTIVATE = 'rqDeactivateChannel'
+    REQUEST_TO_EXIT = 'rqExitChannel'
 
     def __init__(self, clientID, eventType = None, ctx = None):
         super(ChannelManagementEvent, self).__init__(eventType, ctx)
@@ -373,7 +379,6 @@ class FortEvent(HasCtxEvent):
     ON_INTEL_FILTER_DO_REQUEST = 'onIntelFilterDoRequest'
     TRANSPORTATION_STEP = 'transportationStep'
     CHOICE_DIVISION = 'testChoiceDivision'
-    ON_TOGGLE_BOOKMARK = 'onToggleBookMark'
 
     class TRANSPORTATION_STEPS(CONST_CONTAINER):
         NONE = 0
@@ -404,6 +409,7 @@ class OpenLinkEvent(SharedEvent):
     FORT_DESC = 'fortDescription'
     CLAN_SEARCH = 'clanSearch'
     CLAN_CREATE = 'clanCreate'
+    INVIETES_MANAGEMENT = 'invitesManagementURL'
 
     def __init__(self, eventType, url = ''):
         super(OpenLinkEvent, self).__init__(eventType)

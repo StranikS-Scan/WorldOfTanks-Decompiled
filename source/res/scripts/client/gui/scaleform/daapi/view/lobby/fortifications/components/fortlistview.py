@@ -32,6 +32,9 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
                 cache.clearSelectedID()
         return
 
+    def onUnitFunctionalInited(self):
+        self.unitFunctional.setPrbType(PREBATTLE_TYPE.SORTIE)
+
     def onSortieChanged(self, cache, item):
         prevIdx = self._searchDP.getSelectedIdx()
         nextIdx = self._searchDP.updateItem(cache, item)
@@ -81,7 +84,8 @@ class FortListView(FortListMeta, FortListener, UnitListener, AppRef):
     def _populate(self):
         super(FortListView, self)._populate()
         self.startFortListening()
-        self.unitFunctional.setPrbType(PREBATTLE_TYPE.SORTIE)
+        if self.unitFunctional.getPrbType() != PREBATTLE_TYPE.NONE:
+            self.unitFunctional.setPrbType(PREBATTLE_TYPE.SORTIE)
         self._divisionsDP = sorties_dps.DivisionsDataProvider()
         self._divisionsDP.init(self.as_getDivisionsDPS())
         self.__updateSearchDP(self.fortProvider.getState())

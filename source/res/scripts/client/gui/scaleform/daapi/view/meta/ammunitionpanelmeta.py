@@ -18,6 +18,9 @@ class AmmunitionPanelMeta(DAAPIModule):
     def highlightParams(self, type):
         self._printOverrideError('highlightParams')
 
+    def toRentContinue(self):
+        self._printOverrideError('toRentContinue')
+
     def as_setDataS(self, data, type):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data, type)
@@ -37,3 +40,7 @@ class AmmunitionPanelMeta(DAAPIModule):
     def as_setModulesEnabledS(self, value):
         if self._isDAAPIInited():
             return self.flashObject.as_setModulesEnabled(value)
+
+    def as_updateVehicleStatusS(self, id, message, stateLevel, rentAvailable):
+        if self._isDAAPIInited():
+            return self.flashObject.as_updateVehicleStatus(id, message, stateLevel, rentAvailable)

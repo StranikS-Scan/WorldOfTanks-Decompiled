@@ -3,7 +3,6 @@ import time
 import SoundGroups
 import BigWorld
 import MusicController
-from gui.BattleContext import g_battleContext
 from gui.shared.ClanCache import g_clanCache
 from predefined_hosts import g_preDefinedHosts
 from account_helpers.settings_core.SettingsCache import g_settingsCache
@@ -83,7 +82,6 @@ def onAccountBecomeNonPlayer():
 def onAvatarBecomePlayer():
     yield g_settingsCache.update()
     g_settingsCore.serverSettings.applySettings()
-    g_battleContext.createEnv()
     g_prbLoader.onAvatarBecomePlayer()
     game_control.g_instance.onAvatarBecomePlayer()
     g_clanCache.onAvatarBecomePlayer()
@@ -210,6 +208,15 @@ def fini():
     g_playerEvents.onShopResyncStarted -= onShopResyncStarted
     g_playerEvents.onShopResync -= onShopResync
     g_playerEvents.onCenterIsLongDisconnected -= onCenterIsLongDisconnected
+    from constants import IS_DEVELOPMENT
+    if IS_DEVELOPMENT:
+        try:
+            from gui.development import fini
+        except ImportError:
+            LOG_ERROR('Development features not found.')
+            fini = lambda : None
+
+        fini()
 
 
 def onConnected():

@@ -49,7 +49,7 @@ class RecruitWindow(View, AbstractWindowView, RecruitWindowMeta):
     def onInventoryChanged(self, inventory):
         if GUI_ITEM_TYPE.VEHICLE in inventory and 'compDescr' in inventory[GUI_ITEM_TYPE.VEHICLE]:
             changedVehicles = inventory[GUI_ITEM_TYPE.VEHICLE]['compDescr']
-            if changedVehicles[self._currentVehicleInvId] is None:
+            if changedVehicles.get(self._currentVehicleInvId, None) is None:
                 self._currentVehicleInvId = None
                 self.onWindowClose()
         return

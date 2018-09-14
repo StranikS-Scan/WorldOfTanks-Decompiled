@@ -1,7 +1,5 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/DAAPIModule.py
-import traceback
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
-__author__ = 'd_trofimov'
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.shared.events import ComponentEvent, FocusEvent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -19,13 +17,7 @@ class DAAPIModule(EventSystemEntity):
         LOG_ERROR('Method must be override!', methodName, self.__class__)
 
     def _isDAAPIInited(self):
-        isInited = self.flashObject is not None
-        if not isInited:
-            traceback.print_stack()
-            LOG_ERROR('flash object can`t be None!', self.__class__)
-        else:
-            isInited = self.__flashObject.as_isDAAPIInited()
-        return isInited
+        return self.flashObject is not None and self.__flashObject.as_isDAAPIInited()
 
     @property
     def flashObject(self):
@@ -106,7 +98,7 @@ class DAAPIModule(EventSystemEntity):
 
     def _dispose(self):
         super(DAAPIModule, self)._dispose()
-        while len(self.__components):
+        while self.__components:
             alias, viewPy = self.__components.popitem()
             self._onUnregisterFlashComponent(viewPy.flashObject, alias)
             self.__fireRegisteringEvent(ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
@@ -139,6 +131,4 @@ class DAAPIModule(EventSystemEntity):
         viewPy.destroy()
 
     def __fireRegisteringEvent(self, event, componentPy, alias):
-        ctx = {'owner': self,
-         'componentPy': componentPy}
         g_eventBus.handleEvent(ComponentEvent(event, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)

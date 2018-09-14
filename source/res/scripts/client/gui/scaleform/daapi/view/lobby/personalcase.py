@@ -2,7 +2,9 @@
 import constants
 from adisp import async
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.Scaleform.framework.managers.TextManager import TextType
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from helpers import i18n, strcmp
 from gui.Scaleform.framework import AppRef
@@ -207,13 +209,14 @@ class PersonalCase(View, AbstractWindowView, PersonalCaseMeta, GlobalListener, A
         self.as_setSkillsDataS(data)
 
 
-class PersonalCaseDataProvider(object):
+class PersonalCaseDataProvider(AppRef):
 
     def __init__(self, tmanInvID):
         """
         @param tmanInvID: tankman inventory id
         """
         self.tmanInvID = tmanInvID
+        self.__textMgr = self.app.utilsManager.textManager
 
     @async
     def getCommonData(self, callback):
@@ -269,8 +272,14 @@ class PersonalCaseDataProvider(object):
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
             callback({'achievements': packedAchieves,
-             'stats': tmanDossier.getStats()})
+             'stats': tmanDossier.getStats(),
+             'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
+             'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO)})
             return
+
+    def __makeStandardText(self, locale):
+        text = i18n.makeString(locale)
+        return self.__textMgr.getText(TextType.STANDARD_TEXT, text)
 
     @async
     def getRetrainingData(self, callback):

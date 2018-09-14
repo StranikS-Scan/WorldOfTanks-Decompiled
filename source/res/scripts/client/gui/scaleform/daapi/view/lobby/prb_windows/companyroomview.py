@@ -22,14 +22,12 @@ class CompanyRoomView(CompanyRoomMeta):
 
     def startListening(self):
         super(CompanyRoomView, self).startListening()
-        self.addListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleCompanyWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         g_messengerEvents.users.onUserRosterChanged += self._onUserRosterChanged
         g_messengerEvents.users.onUsersRosterReceived += self.__onUsersRosterReceived
 
     def stopListening(self):
         super(CompanyRoomView, self).stopListening()
-        self.removeListener(events.HideWindowEvent.HIDE_COMPANY_WINDOW, self.__handleCompanyWindowHide, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         g_messengerEvents.users.onUserRosterChanged -= self._onUserRosterChanged
         g_messengerEvents.users.onUsersRosterReceived -= self.__onUsersRosterReceived
@@ -133,9 +131,6 @@ class CompanyRoomView(CompanyRoomMeta):
         self.__setLimits(rosters, self.prbFunctional.getSettings().getTeamLimits(1))
 
     def _dispose(self):
-        chat = self.chat
-        if chat:
-            chat.minimize()
         super(CompanyRoomView, self)._dispose()
 
     def _setRosterList(self, rosters):
@@ -217,9 +212,6 @@ class CompanyRoomView(CompanyRoomMeta):
     def __makeMaxCountLimitLabel(self, playersCount, maxCount):
         return makeHtmlString('html_templates:lobby/prebattle', 'companyPlayersCount', {'playersCount': playersCount,
          'maxCount': maxCount})
-
-    def __handleCompanyWindowHide(self, _):
-        self.destroy()
 
     def __handleSetPrebattleCoolDown(self, event):
         if event.requestID is REQUEST_TYPE.SET_PLAYER_STATE:

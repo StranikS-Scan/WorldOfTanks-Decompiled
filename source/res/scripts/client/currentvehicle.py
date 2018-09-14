@@ -1,9 +1,11 @@
 # Embedded file name: scripts/client/CurrentVehicle.py
-import BigWorld
 import random
+import BigWorld
 from Event import Event
+from gui.Scaleform.framework.managers.TextManager import TextManager, TextIcons
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from items import vehicles
-from helpers import isPlayerAccount
+from helpers import isPlayerAccount, i18n
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import prb_control, game_control, g_tankActiveCamouflage
@@ -28,6 +30,7 @@ class _CurrentVehicle():
         g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate,
          'cache.vehsLock': self.onLocksUpdate})
         game_control.g_instance.igr.onIgrTypeChanged += self.onIgrTypeChanged
+        game_control.g_instance.rentals.onRentChangeNotify += self.onRentChange
         prbVehicle = self.__checkPrebattleLockedVehicle()
         storedVehInvID = AccountSettings.getFavorites(CURRENT_VEHICLE)
         self.selectVehicle(prbVehicle or storedVehInvID)
@@ -39,11 +42,19 @@ class _CurrentVehicle():
         self.onChangeStarted.clear()
         g_clientUpdateManager.removeObjectCallbacks(self)
         game_control.g_instance.igr.onIgrTypeChanged -= self.onIgrTypeChanged
+        game_control.g_instance.rentals.onRentChangeNotify -= self.onRentChange
         g_hangarSpace.removeVehicle()
         self.selectNoVehicle()
 
     def onIgrTypeChanged(self, *args):
+        if self.isPremiumIGR():
+            self.onChanged()
         self.refreshModel()
+
+    def onRentChange(self, vehicles):
+        if self.isPresent():
+            if self.item.intCD in vehicles:
+                self.onChanged()
 
     def onInventoryUpdate(self, invDiff):
         vehsDiff = invDiff.get(GUI_ITEM_TYPE.VEHICLE, {})
@@ -56,7 +67,7 @@ class _CurrentVehicle():
             self.selectVehicle()
         else:
             isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
-            isCustomizationChanged = 'igrCustomizationsLayout' in vehsDiff and self.__vehInvID in vehsDiff['igrCustomizationsLayout']
+            isCustomizationChanged = 'igrCustomizationLayout' in vehsDiff and self.__vehInvID in vehsDiff['igrCustomizationLayout']
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
             isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive or (self.__vehInvID, '_r') in hive, vehsDiff.itervalues())) > 0
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
@@ -119,6 +130,18 @@ class _CurrentVehicle():
     def isCrewFull(self):
         return self.isPresent() and self.item.isCrewFull
 
+    def isDisabledInRent(self):
+        return self.isPresent() and self.item.rentalIsOver and self.item.isRented
+
+    def isDisabledInPremIGR(self):
+        return self.isPresent() and self.item.isDisabledInPremIGR
+
+    def isPremiumIGR(self):
+        return self.isPresent() and self.item.isPremiumIGR
+
+    def isInPrebattle(self):
+        return self.isPresent() and self.item.isInPrebattle
+
     def isInBattle(self):
         return self.isPresent() and self.item.isInBattle
 
@@ -170,8 +193,14 @@ class _CurrentVehicle():
     def getHangarMessage(self):
         if self.isPresent():
             state, stateLvl = self.item.getState()
-            return ('#menu:currentVehicleStatus/' + state, stateLvl)
-        return (MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
+            if state == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
+                localization = '#menu:vehicle/igrRentLeft/%s'
+                rentLeftStr = getRentLeftTimeStr(localization, self.item.rentLeftTime)
+                icon = TextManager.getIcon(TextIcons.PREMIUM_IGR_BIG)
+                message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)
+                return (state, message, stateLvl)
+            return (state, '#menu:currentVehicleStatus/' + state, stateLvl)
+        return ('notpresent', MENU.CURRENTVEHICLESTATUS_NOTPRESENT, Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
 
     def setHistoricalBattle(self, historicalBattle):
         g_tankActiveCamouflage['historical'] = {}

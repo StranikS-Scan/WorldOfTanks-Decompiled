@@ -3,7 +3,7 @@ from dossiers2.common.updater_utils import getNewStaticSizeBlockValues, getStati
 from dossiers2.common.updater_utils import getNewBinarySetBlockValues, setStaticSizeBlockRecordValues
 from dossiers2.common.updater_utils import addBlock, addRecords, removeRecords, setVersion, getHeader
 from dossiers2.common.updater_utils import struct
-ACCOUNT_DOSSIER_VERSION = 87
+ACCOUNT_DOSSIER_VERSION = 88
 VEHICLE_DOSSIER_VERSION = 87
 TANKMAN_DOSSIER_VERSION = 66
 FORT_DOSSIER_VERSION = 2
@@ -1256,6 +1256,60 @@ def __updateFromAccountDossier86(compDescr):
     return (87, updateCtx['dossierCompDescr'])
 
 
+def __updateFromAccountDossier87(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortMisc',
+     'fortMiscInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    formats = [('readyForBattleLT', 'B'),
+     ('readyForBattleMT', 'B'),
+     ('readyForBattleHT', 'B'),
+     ('readyForBattleSPG', 'B'),
+     ('readyForBattleATSPG', 'B'),
+     ('readyForBattleALL', 'B'),
+     ('tankwomenProgress', 'B')]
+    addRecords(updateCtx, 'achievements', formats, {})
+    setVersion(updateCtx, 88)
+    return (88, updateCtx['dossierCompDescr'])
+
+
 def __updateFromVehicleDossier1(compDescr):
     import dossiers1
     d1 = dossiers1.getVehicleDossierDescr(compDescr)
@@ -1511,8 +1565,8 @@ def __updateFromVehicleDossier65(compDescr):
      'versionFormat': 'H',
      'blocksLayout': blocksLayout}
     getHeader(updateCtx)
-    addBlock(updateCtx, 'playerInscriptions')
-    addBlock(updateCtx, 'playerEmblems')
+    addBlock(updateCtx, 'inscriptions')
+    addBlock(updateCtx, 'emblems')
     addBlock(updateCtx, 'camouflages')
     addBlock(updateCtx, 'compensation')
     setVersion(updateCtx, 66)
@@ -1532,8 +1586,8 @@ def __updateFromVehicleDossier66(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation']
     updateCtx = {'dossierCompDescr': compDescr,
@@ -1559,8 +1613,8 @@ def __updateFromVehicleDossier67(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation']
     updateCtx = {'dossierCompDescr': compDescr,
@@ -1588,8 +1642,8 @@ def __updateFromVehicleDossier68(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1616,8 +1670,8 @@ def __updateFromVehicleDossier69(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1665,8 +1719,8 @@ def __updateFromVehicleDossier70(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1697,8 +1751,8 @@ def __updateFromVehicleDossier71(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1737,8 +1791,8 @@ def __updateFromVehicleDossier72(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1777,8 +1831,8 @@ def __updateFromVehicleDossier73(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7']
@@ -1806,8 +1860,8 @@ def __updateFromVehicleDossier74(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -1850,8 +1904,8 @@ def __updateFromVehicleDossier75(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -1881,8 +1935,8 @@ def __updateFromVehicleDossier76(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -1916,8 +1970,8 @@ def __updateFromVehicleDossier77(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -1946,8 +2000,8 @@ def __updateFromVehicleDossier78(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -1981,8 +2035,8 @@ def __updateFromVehicleDossier79(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2039,8 +2093,8 @@ def __updateFromVehicleDossier80(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2076,8 +2130,8 @@ def __updateFromVehicleDossier81(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2137,8 +2191,8 @@ def __updateFromVehicleDossier82(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2191,8 +2245,8 @@ def __updateFromVehicleDossier83(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2230,8 +2284,8 @@ def __updateFromVehicleDossier84(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2285,8 +2339,8 @@ def __updateFromVehicleDossier85(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2333,8 +2387,8 @@ def __updateFromVehicleDossier86(compDescr):
      'total',
      'max15x15',
      'max7x7',
-     'playerInscriptions',
-     'playerEmblems',
+     'inscriptions',
+     'emblems',
      'camouflages',
      'compensation',
      'achievements7x7',
@@ -2489,7 +2543,8 @@ accountVersionUpdaters = {19: __updateFromAccountDossier1,
  83: __updateFromAccountDossier83,
  84: __updateFromAccountDossier84,
  85: __updateFromAccountDossier85,
- 86: __updateFromAccountDossier86}
+ 86: __updateFromAccountDossier86,
+ 87: __updateFromAccountDossier87}
 vehicleVersionUpdaters = {17: __updateFromVehicleDossier1,
  18: __updateFromVehicleDossier1,
  19: __updateFromVehicleDossier1,

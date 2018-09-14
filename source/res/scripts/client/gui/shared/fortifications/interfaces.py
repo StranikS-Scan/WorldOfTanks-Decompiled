@@ -68,16 +68,19 @@ class IFortListener(object):
     def onSortieUnitReceived(self, clientIdx):
         pass
 
-    def onFortBattleChanged(self, cache, item):
+    def onFortBattleChanged(self, cache, item, battleItem):
         pass
 
     def onFortBattleRemoved(self, cache, battleID):
         pass
 
+    def onFortBattleUnitReceived(self, clientIdx):
+        pass
+
     def onUpgradeVisitedBuildingChanged(self, buildingID):
         pass
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         pass
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
@@ -95,6 +98,9 @@ class IFortListener(object):
     def onDirectionClosed(self, dir):
         pass
 
+    def onDirectionLockChanged(self):
+        pass
+
     def onStateChanged(self, state):
         pass
 
@@ -107,10 +113,19 @@ class IFortListener(object):
     def onPlayerAttached(self, buildingTypeID):
         pass
 
+    def onPeripheryChanged(self, peripheryID):
+        pass
+
     def onDefenceHourChanged(self, hour):
         pass
 
     def onDefenceHourStateChanged(self):
+        pass
+
+    def onOffDayChanged(self, offDay):
+        pass
+
+    def onVacationChanged(self, vacationStart, vacationEnd):
         pass
 
     def onFavoritesChanged(self, clanDBID):
@@ -125,7 +140,16 @@ class IFortListener(object):
     def onEnemyClanCardReceived(self, card):
         pass
 
+    def onEnemyClanCardRemoved(self):
+        pass
+
     def onShutdownDowngrade(self):
+        pass
+
+    def onDefenceHourShutdown(self):
+        pass
+
+    def onEnemyStateChanged(self, battleID, isReady):
         pass
 
 

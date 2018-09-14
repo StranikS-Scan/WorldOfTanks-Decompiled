@@ -2,10 +2,7 @@
 import weakref
 import math
 import BigWorld
-import BattleReplay
 from debug_utils import LOG_ERROR
-from gui.BattleContext import g_battleContext
-from gui.arena_info import getPlayerVehicleID
 from gui.battle_control import avatar_getter
 from messenger import MessengerEntry
 from messenger.m_constants import MESSENGER_COMMAND_TYPE
@@ -17,19 +14,24 @@ class ChatCommandsController(object):
     def __init__(self):
         super(ChatCommandsController, self).__init__()
         self.__battleUI = None
+        self.__arenaDP = None
         self.__cmdFactories = None
         return
 
-    def start(self, battleUI):
+    def start(self, battleUI, arenaDP):
         self.__battleUI = weakref.proxy(battleUI)
+        self.__arenaDP = arenaDP
         self.__cmdFactories = getBattleCommandFactory()
         g_messengerEvents.channels.onCommandReceived += self.__me_onCommandReceived
+        import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived += self.__me_onCommandReceived
 
     def stop(self):
         self.__battleUI = None
+        self.__arenaDP = None
         self.__cmdFactories = None
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
+        import BattleReplay
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__me_onCommandReceived
         return
 
@@ -90,20 +92,26 @@ class ChatCommandsController(object):
 
     def __findVehicleInfoByDatabaseID(self, dbID):
         result = None
-        vehicleID = g_battleContext.getVehIDByAccDBID(dbID)
-        if vehicleID:
-            result = self.__findVehicleInfoByVehicleID(vehicleID)
-        return result
+        if self.__arenaDP is None:
+            return result
+        else:
+            vehicleID = self.__arenaDP.getVehIDByAccDBID(dbID)
+            if vehicleID:
+                result = self.__findVehicleInfoByVehicleID(vehicleID)
+            return result
 
     def __findVehicleInfoByVehicleID(self, vehicleID):
         result = None
-        vehicleInfo = g_battleContext.arenaDP.getVehicleInfo(vehicleID)
-        if vehicleInfo.isAlive() and not vehicleInfo.isObserver():
-            result = vehicleInfo
-        return result
+        if self.__arenaDP is None:
+            return result
+        else:
+            vehicleInfo = self.__arenaDP.getVehicleInfo(vehicleID)
+            if vehicleInfo.isAlive() and not vehicleInfo.isObserver():
+                result = vehicleInfo
+            return result
 
     def __showVehicleMarker(self, vehicleID, markerName):
-        if vehicleID == getPlayerVehicleID():
+        if vehicleID == avatar_getter.getPlayerVehicleID():
             return
         else:
             entity = BigWorld.entity(vehicleID)
@@ -130,7 +138,7 @@ class ChatCommandsController(object):
         if cmd.isReceiver() or cmd.isSender():
             self.__playSound(cmd)
             if vehicleInfo is None:
-                vehicleInfo = self.__findVehicleInfoByVehicleID(getPlayerVehicleID())
+                vehicleInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
             vehicleID = vehicleInfo.vehicleID if vehicleInfo else 0
             vehMarker = cmd.getVehMarker(vehicle=vehicleInfo)
             if vehMarker and vehicleID:
@@ -141,7 +149,7 @@ class ChatCommandsController(object):
     def __handlePublicCommand(self, cmd):
         senderInfo = self.__findVehicleInfoByDatabaseID(cmd.getSenderID())
         if senderInfo is None:
-            senderInfo = self.__findVehicleInfoByVehicleID(getPlayerVehicleID())
+            senderInfo = self.__findVehicleInfoByVehicleID(avatar_getter.getPlayerVehicleID())
         showReceiver = cmd.showMarkerForReceiver()
         recvMarker, senderMarker = cmd.getVehMarkers(vehicle=senderInfo)
         receiverID = cmd.getFirstTargetID()
@@ -163,7 +171,7 @@ class ChatCommandsController(object):
         if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
         if cmd.isOnMinimap():
-            self.__battleUI.minimap.markCell(cmd.getSecondTargetID(), 3.0)
+            self.__battleUI.minimap.markCell(cmd.getCellIndex(), 3.0)
         elif cmd.isPrivate():
             self.__handlePrivateCommand(cmd)
         else:

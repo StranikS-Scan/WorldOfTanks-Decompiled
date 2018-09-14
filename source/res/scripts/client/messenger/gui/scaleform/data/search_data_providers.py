@@ -6,8 +6,8 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.users_data_providers import makeUserItem
 from messenger.gui.Scaleform.data.users_data_providers import getUsersCmp
 from messenger.gui.Scaleform.data.users_data_providers import makeEmptyUserItem
-from messenger.proto.bw.search_porcessors import SearchChannelsProcessor
-from messenger.proto.bw.search_porcessors import SearchUsersProcessor
+from messenger.proto.bw.search_processors import SearchChannelsProcessor
+from messenger.proto import getSearchUserProcessor
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.interfaces import ISearchHandler
 
@@ -47,7 +47,7 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
         return
 
     def find(self, token, **kwargs):
-        self._processor.find(token, **kwargs)
+        return self._processor.find(token, **kwargs)
 
     def onSearchComplete(self, result):
         if not len(result):
@@ -56,7 +56,8 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
         self.refresh()
 
     def onSearchFailed(self, reason):
-        SystemMessages.pushMessage(reason, type=SystemMessages.SM_TYPE.Error)
+        if reason:
+            SystemMessages.pushMessage(reason, type=SystemMessages.SM_TYPE.Error)
         self._list = []
         self.refresh()
 
@@ -86,7 +87,7 @@ class SearchChannelsDataProvider(SearchDataProvider):
 class SearchUsersDataProvider(SearchDataProvider):
 
     def __init__(self, exclude = None):
-        super(SearchUsersDataProvider, self).__init__(SearchUsersProcessor())
+        super(SearchUsersDataProvider, self).__init__(getSearchUserProcessor())
         if exclude is not None:
             self.__exclude = exclude
         else:

@@ -1,6 +1,5 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 from collections import namedtuple
-import BigWorld
 from debug_utils import *
 from helpers import i18n
 from adisp import process, async

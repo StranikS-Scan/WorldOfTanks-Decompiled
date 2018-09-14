@@ -11,8 +11,8 @@ VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
-HEADER_TUTORIAL = 'HEADER_TUTORIAL'
 FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
+IGR_PROMO = 'IGR_PROMO'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                'shop_vehicle': (5, 'lightTank', 'mediumTank', 'heavyTank', 'at-spg', 'spg', 'locked'),
@@ -36,10 +36,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                                  'nationID': None},
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False},
                EULA_VERSION: {'version': 0},
-               HEADER_TUTORIAL: {'step': 0,
-                                 'isRefused': False,
-                                 'isFinished': False},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
+               IGR_PROMO: {'wasShown': False},
                'cs_intro_view_vehicle': {'nation': -1,
                                          'vehicleType': 'none',
                                          'isMain': False,
@@ -165,11 +163,26 @@ DEFAULT_VALUES = {KEY_FILTERS: {'shop_current': (-1, 'vehicle'),
                 'backDraftInvert': False,
                 'quests': {'lastVisitTime': -1,
                            'visited': [],
-                           'naVisited': []}}}
+                           'naVisited': []},
+                'customization': {}}}
+
+def _filterAccountSection(dataSec):
+    for key, section in dataSec.items()[:]:
+        if key == 'account':
+            yield (key, section)
+
+
+def _pack(value):
+    return base64.b64encode(pickle.dumps(value))
+
+
+def _unpack(value):
+    return pickle.loads(base64.b64decode(value))
+
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 11
+    version = 12
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -345,6 +358,18 @@ class AccountSettings(object):
                         accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
                         defaultSorting = DEFAULT_VALUES[KEY_SETTINGS]['statsSortingSortie'].copy()
                         accSettings.write('statsSortingSortie', base64.b64encode(pickle.dumps(defaultSorting)))
+
+            if currVersion < 12:
+                from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    if KNOWN_SELECTOR_BATTLES in accSettings.keys():
+                        known = _unpack(accSettings[KNOWN_SELECTOR_BATTLES].asString)
+                        if SELECTOR_BATTLE_TYPES.UNIT in known:
+                            known.remove(SELECTOR_BATTLE_TYPES.UNIT)
+                            accSettings.write(KNOWN_SELECTOR_BATTLES, _pack(known))
+                    if 'unitWindow' in accSettings.keys():
+                        accSettings.deleteSection('unitWindow')
 
             ads.writeInt('version', AccountSettings.version)
 

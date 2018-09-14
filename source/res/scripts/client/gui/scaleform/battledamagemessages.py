@@ -1,7 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/BattleDamageMessages.py
 import BigWorld
 import Event
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 
 class BattleDamageMessages(object):
 
@@ -45,7 +45,7 @@ class BattleDamageMessages(object):
             isObservedVehicle = not p.isVehicleAlive and targetID == p.inputHandler.ctrl.curVehicleID
             if isMyVehicle or isObservedVehicle:
                 return
-            if targetID == attackerID and g_battleContext.isObserver(targetID):
+            if targetID == attackerID and g_sessionProvider.getCtx().isObserver(targetID):
                 return
             code, postfix, sound = self.__getKillInfo(targetID, attackerID, reason)
             if sound is not None:

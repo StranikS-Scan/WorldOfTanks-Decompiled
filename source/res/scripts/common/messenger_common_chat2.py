@@ -153,6 +153,22 @@ ADMIN_CHAT_COMMANDS = (AdminChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._A
 ADMIN_CHAT_COMMANDS_BY_NAMES = dict(((v.name, v) for v in ADMIN_CHAT_COMMANDS))
 raise len(ADMIN_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_START_ID - MESSENGER_ACTION_IDS._ADMIN_COMMAND_START_ID or AssertionError
 BattleChatCommand = namedtuple('BattleChatCommand', ('id', 'name', 'cooldownPeriod', 'msgText', 'vehMarker', 'soundNotification'))
-BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'), BattleChatCommand(id=_makeID(), name='FOLLOWME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='follow_me', vehMarker='follow_me', soundNotification='follow_me'), BattleChatCommand(id=_makeID(), name='ATTACKENEMY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack_enemy', vehMarker='attack', soundNotification='attack_the_enemy'))
+BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID), name='HELPME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me', vehMarker='help_me', soundNotification='help_me'),
+ BattleChatCommand(id=_makeID(), name='FOLLOWME', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='follow_me', vehMarker='follow_me', soundNotification='follow_me'),
+ BattleChatCommand(id=_makeID(), name='ATTACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack', vehMarker=None, soundNotification='attack'),
+ BattleChatCommand(id=_makeID(), name='BACKTOBASE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='back_to_base', vehMarker=None, soundNotification='back_to_base'),
+ BattleChatCommand(id=_makeID(), name='POSITIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='positive', vehMarker='positive', soundNotification='positive'),
+ BattleChatCommand(id=_makeID(), name='NEGATIVE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='negative', vehMarker='negative', soundNotification='negative'),
+ BattleChatCommand(id=_makeID(), name='ATTENTIONTOCELL', cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='attention_to_cell', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='ATTACKENEMY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='attack_enemy', vehMarker='attack', soundNotification='attack_the_enemy'),
+ BattleChatCommand(id=_makeID(), name='TURNBACK', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='turn_back', vehMarker='turn_back', soundNotification='turn_back'),
+ BattleChatCommand(id=_makeID(), name='HELPMEEX', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='help_me_ex', vehMarker='help_me_ex', soundNotification='help_me_ex'),
+ BattleChatCommand(id=_makeID(), name='SUPPORTMEWITHFIRE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='support_me_with_fire', vehMarker='attack', soundNotification='support_me_with_fire'),
+ BattleChatCommand(id=_makeID(), name='RELOADINGGUN', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_gun', vehMarker='reloading_gun', soundNotification='reloading_gun'),
+ BattleChatCommand(id=_makeID(), name='STOP', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='stop', vehMarker='stop', soundNotification='stop'),
+ BattleChatCommand(id=_makeID(), name='RELOADING_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_cassette', vehMarker='reloading_gun', soundNotification='reloading_gun'),
+ BattleChatCommand(id=_makeID(), name='RELOADING_READY', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='RELOADING_READY_CASSETE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_ready_cassette', vehMarker=None, soundNotification=None),
+ BattleChatCommand(id=_makeID(), name='RELOADING_UNAVAILABLE', cooldownPeriod=5.0 + _COOLDOWN_OFFSET, msgText='reloading_unavailable', vehMarker=None, soundNotification=None))
 BATTLE_CHAT_COMMANDS_BY_NAMES = dict(((v.name, v) for v in BATTLE_CHAT_COMMANDS))
 raise len(BATTLE_CHAT_COMMANDS) <= MESSENGER_ACTION_IDS._BATTLE_ACTION_END_ID - MESSENGER_ACTION_IDS._BATTLE_CHAT_COMMAND_START_ID or AssertionError

@@ -103,7 +103,9 @@ class ChannelsManager(ChatActionsListener):
         BigWorld.player().enterChat(channelID, password)
 
     def exitFromChannel(self, channelID):
-        BigWorld.player().leaveChat(channelID)
+        player = BigWorld.player()
+        if player:
+            player.leaveChat(channelID)
 
     def createChannel(self, name, password = None):
         channels = self.channelsStorage.getChannelsByCriteria(find_criteria.BWActiveChannelFindCriteria())

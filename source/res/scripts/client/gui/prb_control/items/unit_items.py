@@ -7,7 +7,7 @@ from account_helpers import getPlayerDatabaseID
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
-from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_GUI_ERROR, UNIT_CLOSED_SLOT_COST
+from gui.prb_control.settings import CREATOR_SLOT_INDEX, UNIT_RESTRICTION
 from gui.shared import g_itemsCache, REQ_CRITERIA
 
 class PlayerUnitInfo(object):
@@ -86,14 +86,14 @@ class PlayerUnitInfo(object):
         return result
 
     def canAssignToSlots(self, allSlots = False):
-        result = (True, UNIT_GUI_ERROR.UNKNOWN)
+        result = (True, UNIT_RESTRICTION.UNDEFINED)
         if self.unit is not None:
             if not len(self.unit.getFreeSlots()):
-                result = (False, UNIT_GUI_ERROR.UNIT_IS_FULL)
+                result = (False, UNIT_RESTRICTION.UNIT_IS_FULL)
             elif not len(self.getAvailableSlots(allSlots=allSlots)):
-                result = (False, UNIT_GUI_ERROR.VEHICLES_NOT_FOUND)
+                result = (False, UNIT_RESTRICTION.VEHICLE_NOT_FOUND)
             elif UnitState(self.unit.getState()).isLocked():
-                result = (False, UNIT_GUI_ERROR.UNIT_IS_LOCKED)
+                result = (False, UNIT_RESTRICTION.UNIT_IS_LOCKED)
         return result
 
     def getVehiclesToSlots(self, allSlots = False):
@@ -233,22 +233,24 @@ class UnitState(object):
         return self.__state & UNIT_STATE.FORT_BATTLE > 0
 
 
-UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'maxTotalLevel'))
+UnitStats = namedtuple('UnitStats', ('readyCount', 'occupiedSlotsCount', 'openedSlotsCount', 'freeSlotsCount', 'curTotalLevel', 'levelsSeq', 'minTotalLevel', 'maxTotalLevel'))
 
 class UnitRosterSettings(object):
     TOTAL_SLOTS = 15
-    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots')
+    __slots__ = ('_minLevel', '_maxLevel', '_maxSlots', '_maxClosedSlots', '_maxEmptySlots', '_minTotalLevel', '_maxTotalLevel')
 
-    def __init__(self, minLevel = 1, maxLevel = 10, maxSlots = TOTAL_SLOTS, maxClosedSlots = 0, maxEmptySlots = 0):
+    def __init__(self, minLevel = 1, maxLevel = 10, maxSlots = TOTAL_SLOTS, maxClosedSlots = 0, maxEmptySlots = 0, minTotalLevel = 1, maxTotalLevel = 150):
         super(UnitRosterSettings, self).__init__()
         self._minLevel = minLevel
         self._maxLevel = maxLevel
         self._maxSlots = maxSlots
         self._maxClosedSlots = maxClosedSlots
         self._maxEmptySlots = maxEmptySlots
+        self._minTotalLevel = minTotalLevel
+        self._maxTotalLevel = maxTotalLevel
 
     def __repr__(self):
-        return '{0:>s}(minLevel = {1:n}, maxLevel = {2:n}, maxSlots = {3:n}, maxClosedSlots = {4:n}, maxEmptySlots = {4:n},)'.format(self.__class__.__name__, self._minLevel, self._maxLevel, self._maxSlots, self._maxClosedSlots, self._maxEmptySlots)
+        return '{0:>s}(minLevel = {1:n}, maxLevel = {2:n}, maxSlots = {3:n}, maxClosedSlots = {4:n}, maxEmptySlots = {5:n}, minTotalLevel = {6:n}, maxTotalLevel = {7:n})'.format(self.__class__.__name__, self._minLevel, self._maxLevel, self._maxSlots, self._maxClosedSlots, self._maxEmptySlots, self._minTotalLevel, self._maxTotalLevel)
 
     def getMinLevel(self):
         return self._minLevel
@@ -256,14 +258,14 @@ class UnitRosterSettings(object):
     def getMaxLevel(self):
         return self._maxLevel
 
+    def getMinTotalLevel(self):
+        return self._minTotalLevel
+
     def getMaxTotalLevel(self):
-        totalLevel = self._maxLevel * self._maxSlots
-        if self._maxClosedSlots > 0:
-            totalLevel -= (self._maxLevel - UNIT_CLOSED_SLOT_COST) * self._maxClosedSlots
-        return totalLevel
+        return self._maxTotalLevel
 
     def getLevelsRange(self):
-        return (self._minLevel, self._maxLevel)
+        return xrange(self._minLevel, self._maxLevel + 1)
 
     def getAllSlotsRange(self):
         return xrange(CREATOR_SLOT_INDEX, self._maxSlots)
@@ -299,6 +301,8 @@ class DynamicRosterSettings(UnitRosterSettings):
             kwargs['maxSlots'] = roster.MAX_SLOTS
             kwargs['maxClosedSlots'] = roster.MAX_CLOSED_SLOTS
             kwargs['maxEmptySlots'] = roster.MAX_EMPTY_SLOTS
+            kwargs['minTotalLevel'] = roster.MIN_UNIT_POINTS_SUM
+            kwargs['maxTotalLevel'] = roster.MAX_UNIT_POINTS_SUM
         else:
             LOG_ERROR('Unit roster is not defined')
         super(DynamicRosterSettings, self).__init__(**kwargs)
@@ -314,7 +318,9 @@ class PredefinedRosterSettings(UnitRosterSettings):
         maxSlots = clazz.MAX_SLOTS
         maxClosedSlots = clazz.MAX_CLOSED_SLOTS
         maxEmptySlots = clazz.MAX_EMPTY_SLOTS
-        super(PredefinedRosterSettings, self).__init__(minLevel, maxLevel, maxSlots, maxClosedSlots, maxEmptySlots)
+        minTotalLevel = clazz.MIN_UNIT_POINTS_SUM
+        maxTotalLevel = clazz.MAX_UNIT_POINTS_SUM
+        super(PredefinedRosterSettings, self).__init__(minLevel, maxLevel, maxSlots, maxClosedSlots, maxEmptySlots, minTotalLevel, maxTotalLevel)
 
     def getDisabledSlotsRange(self):
         if self._rosterTypeID in _SUPPORTED_ROSTER_SETTINGS[PREBATTLE_TYPE.SORTIE]:

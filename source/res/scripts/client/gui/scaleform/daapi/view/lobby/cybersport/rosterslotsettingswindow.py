@@ -14,9 +14,9 @@ class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindo
     def __init__(self, ctx):
         super(RosterSlotSettingsWindow, self).__init__()
         raise 'section' in ctx or AssertionError('Section is required to show selector popup')
-        self.currentSlot = self.__makeCurrentSlotData(ctx.get('settings'))
         self.__section = ctx.get('section')
-        self.__maxLevel = ctx.get('maxLevel', 10)
+        self.__levelsRange = ctx.get('levelsRange', (1, 10))
+        self.currentSlot = self.__makeCurrentSlotData(ctx.get('settings'))
 
     def _populate(self):
         super(RosterSlotSettingsWindow, self)._populate()
@@ -32,7 +32,7 @@ class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindo
         self.updateData()
 
     def updateData(self):
-        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET), self.__maxLevel)
+        result = self._updateData(g_itemsCache.items.getVehicles(~REQ_CRITERIA.SECRET), self.__levelsRange)
         self.as_setListDataS(result)
 
     def getFilterData(self):
@@ -50,7 +50,7 @@ class RosterSlotSettingsWindow(View, RosterSlotSettingsWindowMeta, AbstractWindo
         currentSlot = [value[0], value[1]]
         data = value[2]
         if isinstance(data, long):
-            currentSlot.append(makeVehicleVO(g_itemsCache.items.getItemByCD(int(data))))
+            currentSlot.append(makeVehicleVO(g_itemsCache.items.getItemByCD(int(data)), self.__levelsRange))
         elif data is not None:
             if len(data.nationIDRange) == 0 and len(data.vTypeRange) == 0 and len(data.vLevelRange) == 0:
                 currentSlot.append(None)

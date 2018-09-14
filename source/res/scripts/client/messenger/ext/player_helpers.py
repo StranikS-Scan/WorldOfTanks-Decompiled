@@ -65,7 +65,7 @@ class CurrentPlayerHelper(object):
 
     @process
     def onAccountShowGUI(self):
-        from gui.shared.utils.requesters import StatsRequester
+        from gui.shared.utils.requesters import DeprecatedStatsRequester
         dbID, name, clanAbbrev = _getInfo4AccountPlayer()
         if dbID:
             if self.usersStorage.getUser(dbID) is None:
@@ -73,9 +73,9 @@ class CurrentPlayerHelper(object):
                 self.usersStorage.addUser(CurrentUserEntity(dbID, name, clanAbbrev))
         else:
             LOG_ERROR('Current player is not found')
-        accountAttrs = yield StatsRequester().getAccountAttrs()
+        accountAttrs = yield DeprecatedStatsRequester().getAccountAttrs()
         self.__setAccountAttrs(accountAttrs)
-        clanInfo = yield StatsRequester().getClanInfo()
+        clanInfo = yield DeprecatedStatsRequester().getClanInfo()
         self.__setClanInfo(clanInfo)
         g_clientUpdateManager.addCallbacks({'account.attrs': self.__setAccountAttrs,
          'stats.clanInfo': self.__setClanInfo})

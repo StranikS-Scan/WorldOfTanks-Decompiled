@@ -184,6 +184,10 @@ class TrainingFunctional(PrbFunctional, IStatefulFunctional):
                 g_eventDispatcher.updateUI()
         g_eventDispatcher.requestToDestroyPrbChannel(PREBATTLE_TYPE.TRAINING)
 
+    def reset(self):
+        super(TrainingFunctional, self).reset()
+        g_eventDispatcher.loadHangar()
+
     def getRosters(self, keys = None):
         rosters = getPrebattleRosters()
         if keys is None:

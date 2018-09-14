@@ -23,8 +23,10 @@ class VehicleSelectorBase(object):
          'level': level,
          'compatibleOnly': compatibleOnly}
 
-    def _updateData(self, allVehicles, maxLevel = 10):
+    def _updateData(self, allVehicles, levelsRange):
         criteria = REQ_CRITERIA.EMPTY
+        criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
+        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
         if not self.showNotReadyVehicles:
             criteria |= REQ_CRITERIA.VEHICLE.READY
         if self.__filters:
@@ -38,9 +40,9 @@ class VehicleSelectorBase(object):
                 criteria |= REQ_CRITERIA.VEHICLE.LEVELS([self.__filters['level']])
         filteredVehicles = allVehicles.filter(criteria)
         if self.__filters.get('compatibleOnly', True):
-            return [ vo for vo in [ makeVehicleVO(v, maxLevel) for v in filteredVehicles.values() ] if vo.get('enabled', True) ]
+            return [ vo for vo in [ makeVehicleVO(v, levelsRange) for v in filteredVehicles.values() ] if vo.get('enabled', True) ]
         else:
-            return [ makeVehicleVO(v, maxLevel) for v in filteredVehicles.values() ]
+            return [ makeVehicleVO(v, levelsRange) for v in filteredVehicles.values() ]
 
     def _initFilter(self, nation, vehicleType, isMain, level, compatibleOnly):
         filtersData = {'vehicleTypesDP': self.getVehicleTypeDP(),

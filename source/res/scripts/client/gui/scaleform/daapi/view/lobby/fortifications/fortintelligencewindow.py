@@ -67,8 +67,13 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
     def onFavoritesChanged(self, clanDBID):
         cache = self.fortCtrl.getPublicInfoCache()
         if cache is not None:
-            self._searchDP.rebuildList(cache)
-            self.__setStatus(not self._searchDP.isEmpty())
+            dropSelection = self._searchDP.refreshItem(cache, clanDBID)
+            if dropSelection:
+                self.as_selectByIndexS(-1)
+                self._searchDP.setSelectedID(None)
+                cache.clearSelectedID()
+            self._searchDP.refresh()
+            self.__setStatus(cache.hasResults())
         return
 
     def getLevelColumnIcons(self):
@@ -88,16 +93,16 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
         if cache is not None:
             rqIsInCooldown, _ = cache.getRequestCacheCooldownInfo()
             if rqIsInCooldown:
+                self.as_selectByIndexS(-1)
                 self._searchDP.setSelectedID(None)
+                cache.clearSelectedID()
                 self._searchDP.rebuildList(cache)
-        self.__setStatus(not self._searchDP.isEmpty())
-        self.addListener(FortEvent.ON_TOGGLE_BOOKMARK, self.__onToggleBookMark, EVENT_BUS_SCOPE.FORT)
+            self.__setStatus(cache.hasResults())
         self.addListener(FortEvent.ON_INTEL_FILTER_DO_REQUEST, self.__onDoInfoCacheRequest, EVENT_BUS_SCOPE.FORT)
         return
 
     def _dispose(self):
         self.removeListener(FortEvent.ON_INTEL_FILTER_DO_REQUEST, self.__onDoInfoCacheRequest, EVENT_BUS_SCOPE.FORT)
-        self.removeListener(FortEvent.ON_TOGGLE_BOOKMARK, self.__onToggleBookMark, EVENT_BUS_SCOPE.FORT)
         self.__clearCooldownCB()
         if self._searchDP is not None:
             self._searchDP.fini()
@@ -110,11 +115,6 @@ class FortIntelligenceWindow(AbstractWindowView, View, FortIntelligenceWindowMet
         super(FortIntelligenceWindow, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == FORTIFICATION_ALIASES.FORT_INTEL_FILTER_ALIAS:
             self.__updateCooldowns()
-
-    def __onToggleBookMark(self, event):
-        selectedIdx = self._searchDP.getSelectedIdx()
-        self._searchDP.sortedCollection[selectedIdx]['isFavorite'] = event.ctx['isAdd']
-        self._searchDP.refresh()
 
     def __onDoInfoCacheRequest(self, event):
         self.__updateCooldowns()

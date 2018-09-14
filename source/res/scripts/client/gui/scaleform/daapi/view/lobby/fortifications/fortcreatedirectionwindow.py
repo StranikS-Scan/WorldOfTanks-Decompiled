@@ -41,10 +41,12 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
     def updateList(self):
         directions = []
         openedDirectionsCount = len(self.fortCtrl.getFort().getOpenedDirections())
+        fightsForDirections = self.fortCtrl.getFort().getDirectionsInBattle()
         for direction in range(1, g_fortCache.maxDirections + 1):
             buildings = self.fortCtrl.getFort().getBuildingsByDirections().get(direction)
             isOpened = buildings is not None
-            canBeClosed = isOpened and findFirst(lambda b: b is not None, buildings) is None
+            inBattle = direction in fightsForDirections
+            canBeClosed = isOpened and not inBattle and findFirst(lambda b: b is not None, buildings) is None
             buildingsData = []
             if isOpened:
                 for building in buildings:
@@ -99,7 +101,7 @@ class FortCreateDirectionWindow(AbstractWindowView, View, FortCreateDirectionWin
     def onWindowClose(self):
         self.destroy()
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self.updateData()
 
     def onClanMembersListChanged(self):

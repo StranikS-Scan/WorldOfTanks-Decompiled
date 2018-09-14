@@ -17,13 +17,17 @@ class _UnitRequestCtx(PrbCtrlRequestCtx):
         return getUnitIdx()
 
 
-@ReprInjector.simple(('getRosterID', 'rosterID'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('__prbType', 'prbType'), ('getRosterID', 'rosterID'), ('getWaitingID', 'waitingID'))
 
 class CreateUnitCtx(_UnitRequestCtx):
 
-    def __init__(self, waitingID = '', rosterID = 0):
+    def __init__(self, prbType, waitingID = '', rosterID = 0):
         super(CreateUnitCtx, self).__init__(waitingID=waitingID, funcExit=_FUNCTIONAL_EXIT.UNIT)
+        self.__prbType = prbType
         self.__rosterID = rosterID
+
+    def getPrbType(self):
+        return self.__prbType
 
     def getRequestType(self):
         return _REQUEST_TYPE.CREATE
@@ -51,17 +55,21 @@ class JoinModeCtx(_UnitRequestCtx):
         return self.__modeFlags
 
 
-@ReprInjector.simple(('__unitMgrID', 'unitMgrID'), ('__slotIdx', 'slotIdx'), ('getWaitingID', 'waitingID'))
+@ReprInjector.simple(('__prbType', 'prbType'), ('__unitMgrID', 'unitMgrID'), ('__slotIdx', 'slotIdx'), ('getWaitingID', 'waitingID'))
 
 class JoinUnitCtx(_UnitRequestCtx):
 
-    def __init__(self, unitMgrID, slotIdx = None, waitingID = ''):
+    def __init__(self, unitMgrID, prbType, slotIdx = None, waitingID = ''):
         super(JoinUnitCtx, self).__init__(waitingID=waitingID, funcExit=_FUNCTIONAL_EXIT.UNIT)
         self.__unitMgrID = unitMgrID
+        self.__prbType = prbType
         self.__slotIdx = slotIdx
 
     def getRequestType(self):
         return _REQUEST_TYPE.JOIN
+
+    def getPrbType(self):
+        return self.__prbType
 
     def getID(self):
         return self.__unitMgrID
@@ -271,18 +279,21 @@ class RosterSlotCtx(object):
 
     def __init__(self, vehTypeCD = None, nationNames = None, levels = None, vehClassNames = None):
         self.__vehTypeCD = vehTypeCD
-        self.__nationNames = nationNames or []
-        self.__vehLevels = levels or (1, 8)
-        self.__vehClassNames = vehClassNames or []
+        self.__nationNames = nationNames
+        self.__vehLevels = levels
+        self.__vehClassNames = vehClassNames
 
     def getCriteria(self):
         criteria = {}
         if self.__vehTypeCD:
             criteria['vehTypeID'] = self.__vehTypeCD
         else:
-            criteria['nationNames'] = self.__nationNames
-            criteria['levels'] = self.__vehLevels
-            criteria['vehClassNames'] = self.__vehClassNames
+            if self.__nationNames:
+                criteria['nationNames'] = self.__nationNames
+            if self.__vehLevels:
+                criteria['levels'] = self.__vehLevels
+            if self.__vehClassNames:
+                criteria['vehClassNames'] = self.__vehClassNames
         return criteria
 
 

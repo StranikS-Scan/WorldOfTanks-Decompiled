@@ -1,14 +1,15 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleResultsWindow.py
-import re
 import uuid
 import BigWorld
 import constants
 from adisp import process
 from constants import FORT_COMBAT_RESULT
-from debug_utils import LOG_DEBUG
+from dossiers2.ui.achievements import ACHIEVEMENT_TYPE
+from gui.Scaleform.framework.managers.TextManager import TextType
 from helpers import i18n
 from gui import SystemMessages
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.fortifications import formatters as fort_fmts
 from gui.shared.fortifications.FortBuilding import FortBuilding
 from gui.shared.utils import CONST_CONTAINER
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
@@ -17,9 +18,12 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 from gui.Scaleform.daapi.view.meta.FortBattleResultsWindowMeta import FortBattleResultsWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from debug_utils import LOG_DEBUG
+from dossiers2.custom.records import DB_ID_TO_RECORD
+from gui.shared.gui_items.dossier import getAchievementFactory
+from dossiers2.ui import achievements
+from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkOnGunAchievement
 
 class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowMeta, AppRef):
 
@@ -64,23 +68,69 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             msg = SYSTEM_MESSAGES.FORTIFICATION_ERRORS_BATTLE_INFO_NOT_AVAILABLE
             SystemMessages.g_instance.pushI18nMessage(msg, type=SystemMessages.SM_TYPE.Warning)
 
+    @classmethod
+    def _packAchievement(cls, achieve, isUnique = False):
+        icons = achieve.getIcons()
+        rank, i18nValue = (None, None)
+        if achieve.getType() != ACHIEVEMENT_TYPE.SERIES:
+            rank, i18nValue = achieve.getValue(), achieve.getI18nValue()
+        specialIcon = icons.get(MarkOnGunAchievement.IT_95X85, None)
+        return {'type': achieve.getName(),
+         'block': achieve.getBlock(),
+         'inactive': False,
+         'icon': achieve.getSmallIcon() if specialIcon is None else '',
+         'rank': rank,
+         'localizedValue': i18nValue,
+         'unic': isUnique,
+         'rare': False,
+         'title': achieve.getUserName(),
+         'description': achieve.getUserDescription(),
+         'rareIconId': None,
+         'isEpic': achieve.hasRibbon(),
+         'specialIcon': specialIcon,
+         'customData': []}
+
+    def __populatePersonalMedals(self):
+        self.__data['dossierType'] = None
+        self.__data['dossierCompDescr'] = None
+        achievementsData = self.__data.get('popUpRecords', [])
+        achievementsLeft = []
+        achievementsRight = []
+        for achievementId, achieveValue in achievementsData:
+            record = DB_ID_TO_RECORD[achievementId]
+            factory = getAchievementFactory(record)
+            if factory is not None:
+                achieve = factory.create(value=achieveValue)
+                achieveData = self._packAchievement(achieve, isUnique=True)
+                if achieve.getName() in achievements.FORT_BATTLE_ACHIEVES_RIGHT:
+                    achievementsRight.append(achieveData)
+                else:
+                    achievementsLeft.append(achieveData)
+
+        achievementsRight.sort(key=lambda k: k['isEpic'], reverse=True)
+        return (achievementsLeft, achievementsRight)
+
     def __updateData(self):
         _ms = i18n.makeString
         winStatus = self.__data['isWinner']
         isDefence = self.__data['isDefence']
         enemyBuildingCapture = self.__data['enemyBuildingCapture']
-        ourClanAbbrev, _ = self.__getClanInfo(self.__data['ownClanName'])
-        enemyClanAbbrev, _ = self.__getClanInfo(self.__data['enemyClanName'])
+        ourClanAbbrev = self.__data['ownClanName']
+        enemyClanAbbrev = self.__data['enemyClanName']
+        clanResourceDataKey = 'fortResourceLostByClan'
+        resourceHeaderLabel = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_HEADER)
         if self.BATTLE_RESULT.isWin(winStatus):
             g_fortSoundController.playFortClanWarResult('win')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_WIN_HEADER)
             descriptionStartText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_WIN_DESCRIPTION_START)
             descriptionEndText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_WIN_DESCRIPTION_END, clanTag='[%s]' % enemyClanAbbrev, numBuildings=enemyBuildingCapture)
+            clanResourceDataKey = 'fortResourceCaptureByClan'
         elif self.BATTLE_RESULT.isDefeat(winStatus):
             g_fortSoundController.playFortClanWarResult('lose')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_HEADER)
             descriptionStartText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_START)
             descriptionEndText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFEAT_DESCRIPTION_END, clanTag='[%s]' % enemyClanAbbrev, numBuildings=enemyBuildingCapture)
+            resourceHeaderLabel = _ms(FORTIFICATIONS.CLANSTATS_PARAMS_PERIODDEFENCE_BATTLES_LOSTPROMRES_LABEL)
         else:
             g_fortSoundController.playFortClanWarResult('draw')
             resultText = _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TIE_HEADER)
@@ -94,9 +144,9 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
             combatResult, startTime, _, isDefendersBuilding, buildingTypeID = data
             building = FortBuilding(typeID=buildingTypeID)
             if combatResult in (constants.FORT_COMBAT_RESULT.WIN, constants.FORT_COMBAT_RESULT.TECH_WIN):
-                battleResult = fort_text.getText(fort_text.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
+                battleResult = self.app.utilsManager.textManager.getText(TextType.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_WIN))
             else:
-                battleResult = fort_text.getText(fort_text.SUCCESS_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
+                battleResult = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_TABLE_RESULT_DEFEAT))
             battles.append({'battleID': 0,
              'startTime': BigWorld.wg_getShortTimeFormat(startTime),
              'building': building.userName,
@@ -105,18 +155,21 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
              'description': '',
              'participated': True})
 
+        achievementsLeft, achievementsRight = self.__populatePersonalMedals()
         self.as_setDataS({'windowTitle': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_WINDOWTITLE),
          'resultText': resultText,
          'descriptionStartText': descriptionStartText,
          'descriptionEndText': descriptionEndText,
          'journalText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_JOURNAL),
-         'defResReceivedText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_HEADER),
+         'defResReceivedText': resourceHeaderLabel,
          'byClanText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYCLAN),
          'byPlayerText': _ms(FORTIFICATIONS.FORTBATTLERESULTSWINDOW_DEFRESRECEIVED_BYPLAYER),
          'battleResult': self.BATTLE_RESULT.getResultByWinStatus(winStatus),
-         'clanResText': BigWorld.wg_getNiceNumberFormat(self.__data.get('fortResourceByClan', 0)),
+         'clanResText': BigWorld.wg_getNiceNumberFormat(self.__data.get(clanResourceDataKey, 0)),
          'playerResText': BigWorld.wg_getNiceNumberFormat(self.__data.get('fortResource', 0)),
-         'battles': battles})
+         'battles': battles,
+         'achievementsLeft': achievementsLeft,
+         'achievementsRight': achievementsRight})
 
     @process
     def getClanEmblem(self):
@@ -129,11 +182,3 @@ class FortBattleResultsWindow(View, AbstractWindowView, FortBattleResultsWindowM
     def _populate(self):
         super(FortBattleResultsWindow, self)._populate()
         self.__updateData()
-
-    @classmethod
-    def __getClanInfo(cls, enemyClanName):
-        try:
-            result = re.search('\\[(.+)\\]\\ *(.*)', enemyClanName)
-            return (result.group(1), result.group(2))
-        except:
-            return ('', '')

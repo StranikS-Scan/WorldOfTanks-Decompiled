@@ -8,7 +8,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.ResearchPanelMeta import ResearchPanelMeta
 from gui.Scaleform.framework.entities.DAAPIModule import DAAPIModule
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.utils.requesters import StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
 
 class ResearchPanel(ResearchPanelMeta, DAAPIModule):
 
@@ -35,7 +35,7 @@ class ResearchPanel(ResearchPanelMeta, DAAPIModule):
     @process
     def onCurrentVehicleChanged(self):
         if g_currentVehicle.isPresent():
-            xps = yield StatsRequester().getVehicleTypeExperiences()
+            xps = yield DeprecatedStatsRequester().getVehicleTypeExperiences()
             xp = xps.get(g_currentVehicle.item.intCD, 0)
             isElite = g_currentVehicle.item.isElite
             vTypeId = g_currentVehicle.item.type
@@ -44,9 +44,9 @@ class ResearchPanel(ResearchPanelMeta, DAAPIModule):
             vLevel = makeString('#menu:header/level/%s' % g_currentVehicle.item.level)
             vDescription = makeHtmlString('html_templates:lobby/header', 'vehicle-level', {'level': vLevel,
              'vDescription': vDescription})
-            self.as_updateCurrentVehicleS(g_currentVehicle.item.userName, vTypeId, vDescription, xp, isElite)
+            self.as_updateCurrentVehicleS(g_currentVehicle.item.userName, vTypeId, vDescription, xp, isElite, g_currentVehicle.item.isPremiumIGR)
         else:
-            self.as_updateCurrentVehicleS('', '', '', 0, False)
+            self.as_updateCurrentVehicleS('', '', '', 0, False, False)
             yield lambda callback = None: callback
         return
 

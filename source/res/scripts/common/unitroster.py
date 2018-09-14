@@ -13,6 +13,8 @@ class BaseUnitRoster:
     MAX_UNIT_ASSEMBLER_ARTY = 15
     SLOT_TYPE = None
     DEFAULT_SLOT_PACK = None
+    MIN_UNIT_POINTS_SUM = 1
+    MAX_UNIT_POINTS_SUM = 150
 
     def __init__(self, slotDefs = {}, slotCount = None, packedRoster = ''):
         if self.SLOT_TYPE is None:
@@ -130,6 +132,14 @@ class BaseUnitRoster:
 
         return (False, unitSlotIdx)
 
+    def checkVehicleLevel(self, vehTypeCompDescr):
+        itemTypeIdx, nationIdx, inNationIdx = vehicles.parseIntCompactDescr(vehTypeCompDescr)
+        vehType = vehicles.g_cache.vehicle(nationIdx, inNationIdx)
+        level = vehType.level
+        if level < self.SLOT_TYPE.DEFAULT_LEVELS[0] or level > self.SLOT_TYPE.DEFAULT_LEVELS[1]:
+            return False
+        return True
+
 
 _DFLT_MASK = 255
 
@@ -218,7 +228,7 @@ class BaseUnitRosterSlot(object):
             if isinstance(levels, tuple) and len(levels) == 2:
                 if levels[0] in level_range and levels[1] in level_range:
                     self.levels = levels
-                return
+                    return
             self.levels = self.DEFAULT_LEVELS
             return
 
@@ -289,15 +299,16 @@ class BaseUnitRosterSlot(object):
 _DEFAULT_ROSTER_SLOT_PACK = BaseUnitRosterSlot().pack()
 
 class UnitRosterSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (1, 8)
+    DEFAULT_LEVELS = (6, 8)
 
 
 class UnitRoster(BaseUnitRoster):
     MAX_SLOTS = 7
-    MAX_CLOSED_SLOTS = 2
+    MAX_CLOSED_SLOTS = 0
     SLOT_TYPE = UnitRosterSlot
     DEFAULT_SLOT_PACK = UnitRosterSlot().pack()
-    MAX_UNIT_POINTS_SUM = 42
+    MIN_UNIT_POINTS_SUM = 54
+    MAX_UNIT_POINTS_SUM = 54
     MAX_UNIT_ASSEMBLER_ARTY = 2
 
 

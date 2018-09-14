@@ -208,6 +208,7 @@ class DestructiblesCache():
          'kineticDamageCorrection': kineticDamageCorrection,
          'type': DESTR_TYPE_FRAGILE}
         self.__readAchievementTag(fragileSec, desc)
+        self.__readExplosive(fragileSec, desc)
         matName = fragileSec.readString('matName')
         if matName:
             surface = _parseFragileMaterialName(matName, filename)
@@ -285,7 +286,7 @@ class DestructiblesCache():
 def _parseFragileMaterialName(matName, filename):
     try:
         arr = matName.split('_')
-        res = arr[1]
+        res = filter(str.isalpha, arr[1])
     except:
         LOG_ERROR('Fail to parse material name %s in fragile %s' % (matName, filename))
         res = None
@@ -297,7 +298,7 @@ def _parseMaterialName(matName, filename):
     try:
         arr = matName.split('_')
         type = arr[0]
-        surface = arr[1]
+        surface = filter(str.isalpha, arr[1])
         id = int(arr[2])
         depends = map(int, arr[3:])
         res = (type,

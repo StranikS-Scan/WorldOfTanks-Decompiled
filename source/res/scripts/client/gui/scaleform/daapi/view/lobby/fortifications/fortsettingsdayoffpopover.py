@@ -1,26 +1,25 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsDayoffPopover.py
+from FortifiedRegionBase import NOT_ACTIVATED
 from adisp import process
-import BigWorld
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import getText
 from gui.Scaleform.daapi.view.lobby.popover.SmartPopOverView import SmartPopOverView
 from gui.Scaleform.daapi.view.meta.FortSettingsDayoffPopoverMeta import FortSettingsDayoffPopoverMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.fortifications.context import OffDayCtx
+from gui.shared.fortifications.fort_helpers import adjustOffDayToUTC
 from helpers import i18n
 
 class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, FortSettingsDayoffPopoverMeta):
 
     def __init__(self, ctx = None):
         super(FortSettingsDayoffPopover, self).__init__()
-        self._orderID = str(ctx.get('data'))
 
     def onApply(self, offDay):
         self.__setup(offDay)
@@ -30,14 +29,14 @@ class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, 
 
     def __getDataObject(self):
         fort = self.fortCtrl.getFort()
-        selectedDay = fort.offDay
+        selectedDay = fort.getLocalOffDay()
         return {'currentDayOff': selectedDay,
          'daysList': self._getDayoffsList()}
 
     def _populate(self):
         super(FortSettingsDayoffPopover, self)._populate()
-        description = getText(fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DESCRIPTION))
-        dayOffText = getText(fort_text.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DROPDOWNDESCRIPTION))
+        description = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DESCRIPTION))
+        dayOffText = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_DROPDOWNDESCRIPTION))
         self.as_setDescriptionsTextS(description, dayOffText)
         applyButtonText = i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_APPLYBUTTONLABEL)
         cancelButtonText = i18n.makeString(FORTIFICATIONS.SETTINGSDAYOFFPOPOVER_CANCELBUTTONLABEL)
@@ -49,10 +48,13 @@ class FortSettingsDayoffPopover(View, SmartPopOverView, FortViewHelper, AppRef, 
 
     @process
     def __setup(self, offDay):
-        result = yield self.fortProvider.sendRequest(OffDayCtx(offDay, waitingID='fort/settings'))
+        offDayUTC = offDay
+        if offDay != NOT_ACTIVATED:
+            offDayUTC = adjustOffDayToUTC(offDay, self.fortCtrl.getFort().getLocalDefenceHour())
+        result = yield self.fortProvider.sendRequest(OffDayCtx(offDayUTC, waitingID='fort/settings'))
         if result:
-            if offDay == -1:
+            if offDay == NOT_ACTIVATED:
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_NOOFFDAY, type=SystemMessages.SM_TYPE.Warning)
             else:
-                dayOffString = i18n.makeString(MENU.datetime_weekdays_full(str(offDayUTC + 1)))
+                dayOffString = i18n.makeString(MENU.datetime_weekdays_full(str(offDay + 1)))
                 SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_DEFENCEHOURSET_OFFDAY, offDay=dayOffString, type=SystemMessages.SM_TYPE.Warning)

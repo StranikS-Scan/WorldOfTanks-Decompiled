@@ -28,6 +28,10 @@ class FortSettingsWindowMeta(DAAPIModule):
         if self._isDAAPIInited():
             return self.flashObject.as_setDataForActivated(data)
 
+    def as_setCanDisableDefencePeriodS(self, value):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setCanDisableDefencePeriod(value)
+
     def as_setDataForNotActivatedS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setDataForNotActivated(data)

@@ -10,7 +10,8 @@ from debug_utils import LOG_DEBUG
 from gui import SystemMessages, g_tankActiveCamouflage
 import gui
 from gui.Scaleform.daapi.view.lobby.customization.BaseTimedCustomizationInterface import BaseTimedCustomizationInterface
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import CamouflageGroupsDataProvider, CamouflagesDataProvider, CamouflageRentalPackageDataProvider, isItemInHangar, getCustomizationElements, isIdInDefaultSetup
+from gui.Scaleform.daapi.view.lobby.customization.data_providers import CamouflageGroupsDataProvider, CamouflagesDataProvider, CamouflageRentalPackageDataProvider
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -231,15 +232,16 @@ class CamouflageInterface(BaseTimedCustomizationInterface):
                     self.onCustomizationChangeFailed(message)
                     return
                 localKind = kind
-                if isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, newItemID):
-                    daysToWear = 0
+                if CustomizationHelper.isItemInHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, newItemID, self._nationID):
+                    hangarItem = CustomizationHelper.getItemFromHangar(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE, newItemID)
+                    daysToWear = 0 if hangarItem.get('isPermanent') else 7
                 else:
                     daysToWear = self._rentalPackageDP.pyRequestItemAt(item.get('packageIdx')).get('periodDays')
                 newIdToSend = 0
                 isNewInDefaultSetup = False
                 isCurrIgr = self._itemsDP.isIGRItem(currItemId)
                 if isCurrIgr:
-                    isNewInDefaultSetup = isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, newItemID)
+                    isNewInDefaultSetup = CustomizationHelper.isIdInDefaultSetup(CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE, newItemID)
                 if currItemId is None or not isCurrIgr or isCurrIgr and not isNewInDefaultSetup or isCurrIgr and isNewInDefaultSetup and daysToWear > 0:
                     newIdToSend = newItemID
                 BigWorld.player().inventory.changeVehicleCamouflage(vehInvID, localKind, newIdToSend, daysToWear, functools.partial(self.__onChangeVehicleCamouflage, (cost, isGold), localKind))

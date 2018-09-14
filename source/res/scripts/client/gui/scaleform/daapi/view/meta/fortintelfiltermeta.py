@@ -32,3 +32,7 @@ class FortIntelFilterMeta(DAAPIModule):
     def as_setupCooldownS(self, isOnCooldown):
         if self._isDAAPIInited():
             return self.flashObject.as_setupCooldown(isOnCooldown)
+
+    def as_setClanAbbrevS(self, clanAbbrev):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setClanAbbrev(clanAbbrev)

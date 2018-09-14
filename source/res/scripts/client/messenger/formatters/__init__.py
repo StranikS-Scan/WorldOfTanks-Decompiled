@@ -1,10 +1,11 @@
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
+from collections import namedtuple
 import BigWorld
 import time
 from time import gmtime
 from constants import NC_CONTEXT_ITEM_TYPE
-from debug_utils import LOG_WARNING
-from helpers import time_utils
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from helpers import time_utils, i18n
 from messenger import g_settings
 
 class TimeFormatter(object):
@@ -73,7 +74,8 @@ class NCContextItemFormatter(object):
      NC_CONTEXT_ITEM_TYPE.LONG_TIME: 'getLongTimeFormat',
      NC_CONTEXT_ITEM_TYPE.SHORT_DATE: 'getShortDateFormat',
      NC_CONTEXT_ITEM_TYPE.LONG_DATE: 'getLongDateFormat',
-     NC_CONTEXT_ITEM_TYPE.DATETIME: 'getDateTimeFormat'}
+     NC_CONTEXT_ITEM_TYPE.DATETIME: 'getDateTimeFormat',
+     NC_CONTEXT_ITEM_TYPE.STRING: 'getStringFormat'}
 
     @classmethod
     def getItemFormat(cls, itemType, itemValue):
@@ -116,9 +118,55 @@ class NCContextItemFormatter(object):
         return BigWorld.wg_getLongDateFormat(time_utils.makeLocalServerTime(value))
 
     @classmethod
-    def getDateTimeFormat(self, value):
+    def getDateTimeFormat(cls, value):
         value = time_utils.makeLocalServerTime(value)
         return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(value), BigWorld.wg_getLongTimeFormat(value))
+
+    @classmethod
+    def getStringFormat(cls, value):
+        return i18n.encodeUtf8(value)
+
+
+class NCWindowHandler(object):
+    _handlers = {1: '_handleBecomeReferrer',
+     2: '_handleBecomeReferral',
+     3: '_handleBecomePhoenix'}
+
+    @classmethod
+    def handle(cls, windowID, **ctx):
+        if windowID not in cls._handlers:
+            LOG_WARNING('Type of window is not found', windowID)
+            return
+        return getattr(cls, cls._handlers[windowID])(**ctx)
+
+    @classmethod
+    def _handleBecomeReferrer(cls, **ctx):
+        cls.__showRefSystemNotification('showReferrerIntroWindow')
+
+    @classmethod
+    def _handleBecomeReferral(cls, **ctx):
+        cls.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=True)
+
+    @classmethod
+    def _handleBecomePhoenix(cls, **ctx):
+        cls.__showRefSystemNotification('showReferralIntroWindow', nickname=ctx['nickname'], isNewbie=False)
+
+    @classmethod
+    def __showRefSystemNotification(cls, methodName, **ctx):
+        try:
+            from gui import game_control
+            getattr(game_control.g_instance.refSystem, methodName)(**ctx)
+        except:
+            LOG_ERROR('There is exception while processing notification center window', methodName, ctx)
+            LOG_CURRENT_EXCEPTION()
+
+
+SysMsgExtraData = namedtuple('SysMsgExtraData', 'type data')
+
+class SYS_MSG_EXTRA_HANDLER_TYPE(object):
+    PUNISHMENT = 1
+    REF_QUEST_AWARD = 2
+    FORT_RESULTS = 3
 
 
 from chat_shared import SYS_MESSAGE_TYPE
@@ -152,7 +200,15 @@ SCH_SERVER_FORMATTERS_DICT = {SYS_MESSAGE_TYPE.serverReboot.index(): sch_formatt
  SYS_MESSAGE_TYPE.notificationsCenter.index(): sch_formatters.NCMessageFormatter(),
  SYS_MESSAGE_TYPE.clanEvent.index(): sch_formatters.ClanMessageFormatter(),
  SYS_MESSAGE_TYPE.fortEvent.index(): sch_formatters.FortMessageFormatter(),
- SYS_MESSAGE_TYPE.fortBattleEnd.index(): sch_formatters.FortBattleResultsFormatter()}
+ SYS_MESSAGE_TYPE.fortBattleEnd.index(): sch_formatters.FortBattleResultsFormatter(),
+ SYS_MESSAGE_TYPE.fortBattleRoundEnd.index(): sch_formatters.FortBattleRoundEndFormatter(),
+ SYS_MESSAGE_TYPE.fortBattleInvite.index(): sch_formatters.FortBattleInviteFormatter(),
+ SYS_MESSAGE_TYPE.vehicleRented.index(): sch_formatters.VehicleRentedFormatter(),
+ SYS_MESSAGE_TYPE.rentalsExpired.index(): sch_formatters.RentalsExpiredFormatter(),
+ SYS_MESSAGE_TYPE.rentCompensation.index(): sch_formatters.RentCompensationFormatter(),
+ SYS_MESSAGE_TYPE.refSystemQuests.index(): sch_formatters.RefSystemQuestsFormatter(),
+ SYS_MESSAGE_TYPE.refSystemReferralBoughtVehicle.index(): sch_formatters.RefSystemReferralBoughtVehicleFormatter(),
+ SYS_MESSAGE_TYPE.refSystemReferralContributedXP.index(): sch_formatters.RefSystemReferralContributedXPFormatter()}
 
 class SCH_CLIENT_MSG_TYPE(object):
     SYS_MSG_TYPE, PREMIUM_ACCOUNT_EXPIRY_MSG, AOGAS_NOTIFY_TYPE, ACTION_NOTIFY_TYPE, BATTLE_TUTORIAL_RESULTS_TYPE = range(5)

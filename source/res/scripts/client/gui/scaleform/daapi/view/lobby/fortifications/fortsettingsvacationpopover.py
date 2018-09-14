@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsVacationPopover.py
 from adisp import process
-from debug_utils import LOG_DEBUG
+import fortified_regions
+from gui.shared.fortifications.fort_helpers import adjustVacationToUTC
 from helpers import i18n, time_utils
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.View import View
@@ -11,16 +12,14 @@ from gui.Scaleform.framework import AppRef
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.shared.fortifications.context import VacationCtx
-from gui.shared.utils import flashObject2Dict
 
 class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPopOverView, FortViewHelper, AppRef):
 
     def __init__(self, ctx = None):
         super(FortSettingsVacationPopover, self).__init__()
-        self._orderID = str(ctx.get('data'))
 
     def onApply(self, data):
-        self.__setup(data.startVacation, data.endVacation)
+        self.__setup(data.startVacation, data.vacationDuration)
 
     def onWindowClose(self):
         self.destroy()
@@ -30,24 +29,26 @@ class FortSettingsVacationPopover(View, FortSettingsVacationPopoverMeta, SmartPo
         self.__setData()
         self.__setTexts()
 
-    def _dispose(self):
-        super(FortSettingsVacationPopover, self)._dispose()
-
     @process
-    def __setup(self, timeStart, timeEnd):
-        result = yield self.fortProvider.sendRequest(VacationCtx(timeStart, timeEnd, waitingID='fort/settings'))
+    def __setup(self, vacationStart, vacationDuration):
+        vacationStartUTC, vacationDurationUTC = adjustVacationToUTC(vacationStart, vacationDuration * time_utils.ONE_DAY)
+        result = yield self.fortProvider.sendRequest(VacationCtx(vacationStartUTC, vacationDurationUTC, waitingID='fort/settings'))
         if result:
-            vacationPeriod = '%s - %s' % (time_utils.getDateTimeInLocal(timeStart), time_utils.getDateTimeInLocal(timeEnd))
+            vacationPeriod = '%s - %s' % (time_utils.getDateTimeFormat(vacationStartUTC), time_utils.getDateTimeFormat(vacationStartUTC + vacationDurationUTC))
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_VACATIONSET, vacationPeriod=vacationPeriod, type=SystemMessages.SM_TYPE.Warning)
-            self.destroy()
+        self.destroy()
 
     def __setTexts(self):
         self.as_setTextsS({'descriptionText': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_DESCRIPTION),
-         'vacationStart': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_VACATIONSTART),
-         'vacationDuration': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_VACATIONDURATION),
-         'ofDays': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_OFDAYS),
+         'vacationStartText': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_VACATIONSTART),
+         'vacationDurationText': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_VACATIONDURATION),
+         'ofDaysText': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_OFDAYS),
          'applyBtnLabel': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_APPLYBUTTONLABEL),
          'cancelBtnLabel': i18n.makeString(FORTIFICATIONS.SETTINGSVACATIONPOPOVER_CANCELBUTTONLABEL)})
 
     def __setData(self):
-        self.as_setDataS({'isAmericanStyle': False})
+        dayStartUTC, _ = time_utils.getDayTimeBoundsForUTC(time_utils.getCurrentTimestamp())
+        vacationStart = dayStartUTC + time_utils.ONE_DAY + fortified_regions.g_cache.minVacationPreorderTime
+        self.as_setDataS({'startVacation': vacationStart,
+         'vacationDuration': fortified_regions.g_cache.maxVacationDuration / time_utils.ONE_DAY,
+         'isAmericanStyle': False})

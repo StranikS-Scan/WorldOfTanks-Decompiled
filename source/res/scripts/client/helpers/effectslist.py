@@ -167,23 +167,32 @@ class EffectsListPlayer:
 
     def __isNeedToPlay(self, waitForKeyOff):
         global g_disableEffects
-        newKey = None
         if g_disableEffects:
-            return (False, newKey)
-        else:
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-                if not waitForKeyOff:
-                    warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
-                    if self.__keyPoints[-1].time / 2 < warpDelta:
-                        return (False, newKey)
-                for key in self.__keyPoints:
-                    if key.name == SpecialKeyPointNames.STATIC:
-                        newKey = SpecialKeyPointNames.STATIC
-                        break
+            return (False, None)
+        import BattleReplay
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying:
+            entity_id = -1
+            if 'entity_id' in self.__args:
+                entity_id = self.__args['entity_id']
+            need_play = True
+            if entity_id > -1:
+                need_play = replayCtrl.isNeedToPlay(entity_id)
+            if need_play:
+                if replayCtrl.isTimeWarpInProgress:
+                    if not waitForKeyOff:
+                        warpDelta = replayCtrl.warpTime - replayCtrl.currentTime
+                        if self.__keyPoints[-1].time / 2 < warpDelta:
+                            return (False, None)
+                else:
+                    return (True, None)
+            for key in self.__keyPoints:
+                if key.name == SpecialKeyPointNames.STATIC:
+                    return (True, SpecialKeyPointNames.STATIC)
 
-            return (True, newKey)
+            return (False, None)
+        else:
+            return (True, None)
 
     def stop(self, keepPosteffects = False):
         if not self.__isStarted:

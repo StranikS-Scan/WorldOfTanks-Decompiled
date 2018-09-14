@@ -10,7 +10,7 @@ from helpers import i18n
 import PlayerEvents
 import traceback
 g_instance = None
-DSP_LOWPASS_LOW = 2000
+DSP_LOWPASS_LOW = 7000
 DSP_LOWPASS_HI = 20000
 DSP_SEEKSPEED = 200000
 
@@ -296,6 +296,7 @@ class SoundGroups(object):
         self.__activeStinger = None
         self.__activeTrack = None
         self.__activeStingerPriority = None
+        self.__muffled = False
         PlayerEvents.g_playerEvents.onAccountBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.reviveSoundSystem
         PlayerEvents.g_playerEvents.onAvatarReady += self.onAvatarReady
@@ -399,7 +400,8 @@ class SoundGroups(object):
 
     def setMasterVolume(self, volume):
         self.__masterVolume = volume
-        FMOD.setMasterVolume(volume)
+        self.__muffledVolume = self.__masterVolume * self.getVolume('masterFadeVivox')
+        FMOD.setMasterVolume(self.__muffledVolume if self.__muffled else self.__masterVolume)
         self.savePreferences()
 
     def getMasterVolume(self):
@@ -452,6 +454,15 @@ class SoundGroups(object):
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.keys():
             self.setVolume(categoryName, self.__volumeByCategory[categoryName], updatePrefs=False)
+
+    def muffleFMODVolume(self):
+        if not self.__muffled:
+            self.__muffled = True
+            self.applyPreferences()
+
+    def restoreFMODVolume(self):
+        self.__muffled = False
+        self.applyPreferences()
 
     def __muteByWindowVisibility(self):
         isWindowVisible = BigWorld.isWindowVisible()

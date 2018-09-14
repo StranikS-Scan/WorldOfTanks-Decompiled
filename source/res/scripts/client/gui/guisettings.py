@@ -76,7 +76,10 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'igrCredentialsReset': False,
  'igrEnabled': False,
  'isPollEnabled': False,
- 'csisRequestRate': 0}
+ 'csisRequestRate': 0,
+ 'showSectorLines': False,
+ 'showDirectionLine': False,
+ 'isBattleCmdCoolDownVisible': False}
 
 class GuiSettings(object):
 

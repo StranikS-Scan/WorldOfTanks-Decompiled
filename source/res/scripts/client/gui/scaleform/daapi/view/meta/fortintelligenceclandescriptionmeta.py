@@ -27,3 +27,7 @@ class FortIntelligenceClanDescriptionMeta(DAAPIModule):
     def as_setDataS(self, data):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(data)
+
+    def as_updateBookMarkS(self, isAdd):
+        if self._isDAAPIInited():
+            return self.flashObject.as_updateBookMark(isAdd)

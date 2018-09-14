@@ -4,6 +4,8 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import getNationIndex, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import SellModuleMeta
 from gui.Scaleform.daapi.view.meta.InventoryMeta import InventoryMeta
@@ -92,26 +94,37 @@ class Inventory(Store, InventoryMeta):
                 if type == self._VEHICLE and 'locked' not in extra:
                     if not module.isUnlocked:
                         continue
+                if type == self._VEHICLE and 'premiumIGR' not in extra:
+                    if module.isPremiumIGR:
+                        continue
+                if type == self._VEHICLE and 'rentals' not in extra:
+                    if module.isRented and not module.isPremiumIGR:
+                        continue
                 if 'onVehicle' in extra:
                     if vehicleCount == 0 and inventoryCount == 0:
                         continue
-            disable = ''
-            if type == self._VEHICLE and not module.canSell:
-                disable = makeString('#menu:store/vehicleStates/%s' % module.getState()[0])
-                if not len(disable):
-                    disable = ' '
+            disable = False
+            statusMessage = ''
+            if type == self._VEHICLE:
+                if module.getState()[0] in (Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER, Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_ORVER) or not module.canSell:
+                    statusMessage = makeString('#menu:store/vehicleStates/%s' % module.getState()[0])
+                    disable = not module.canSell
             elif type in (self._MODULE, self._OPTIONAL_DEVICE, self._EQUIPMENT) and not module.isInInventory:
                 if type == self._OPTIONAL_DEVICE:
                     if not module.descriptor['removable']:
-                        disable = makeString(MENU.INVENTORY_DEVICE_ERRORS_NOT_REMOVABLE)
+                        statusMessage = makeString(MENU.INVENTORY_DEVICE_ERRORS_NOT_REMOVABLE)
+                        disable = True
                     else:
-                        disable = makeString(MENU.INVENTORY_DEVICE_ERRORS_RESERVED)
+                        statusMessage = makeString(MENU.INVENTORY_DEVICE_ERRORS_RESERVED)
+                        disable = True
                 else:
-                    disable = makeString(MENU.INVENTORY_ERRORS_RESERVED)
+                    statusMessage = makeString(MENU.INVENTORY_ERRORS_RESERVED)
+                    disable = True
             dataProviderValues.append((module,
              inventoryCount,
              vehicleCount,
              disable,
+             statusMessage,
              isEnabledBuyingGoldShellsForCredits,
              isEnabledBuyingGoldEqsForCredits,
              extraModuleInfo))
@@ -222,19 +235,26 @@ class Inventory(Store, InventoryMeta):
          extra)
 
     def itemWrapper(self, packedItem):
-        module, inventoryCount, vehicleCount, disable, isEnabledBuyingGoldShellsForCredits, isEnabledBuyingGoldEqsForCredits, extraModuleInfo = packedItem
+        module, inventoryCount, vehicleCount, disable, statusMessage, isEnabledBuyingGoldShellsForCredits, isEnabledBuyingGoldEqsForCredits, extraModuleInfo = packedItem
         credits, gold = g_itemsCache.items.stats.money
         statusLevel = InventoryVehicle.STATE_LEVEL.INFO
         inventoryId = None
         name = module.longUserName
+        isRented = False
+        rentLeftTimeStr = ''
         if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             statusLevel = module.getState()[1]
+            if module.isRented:
+                isRented = True
+                if not module.isPremiumIGR:
+                    localization = '#menu:vehicle/rentLeft/%s'
+                    rentLeftTimeStr = getRentLeftTimeStr(localization, module.rentLeftTime)
             if module.isInInventory:
                 inventoryId = module.invID
         if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
             name = module.userName
         action = None
-        if module.sellPrice != module.defaultSellPrice:
+        if module.sellPrice != module.defaultSellPrice and not isRented:
             action = getItemActionTooltipData(module, False)
         return {'id': str(module.intCD),
          'name': name,
@@ -253,6 +273,7 @@ class Inventory(Store, InventoryMeta):
                   GUI_ITEM_TYPE.SHELL,
                   GUI_ITEM_TYPE.EQUIPMENT) else module.icon,
          'disabled': disable,
+         'statusMessage': statusMessage,
          'statusLevel': statusLevel,
          'removable': module.isRemovable if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE else True,
          'tankType': module.type if module.itemTypeID == GUI_ITEM_TYPE.VEHICLE else None,
@@ -262,4 +283,5 @@ class Inventory(Store, InventoryMeta):
          'goldShellsForCredits': isEnabledBuyingGoldShellsForCredits,
          'goldEqsForCredits': isEnabledBuyingGoldEqsForCredits,
          'actionPriceData': action,
+         'rentLeft': rentLeftTimeStr,
          EXTRA_MODULE_INFO: extraModuleInfo}

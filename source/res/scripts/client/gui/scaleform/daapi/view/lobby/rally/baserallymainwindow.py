@@ -6,11 +6,9 @@ from gui.prb_control.prb_helpers import GlobalListener
 from gui.Scaleform.locale.WAITING import WAITING
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
 from gui.Scaleform.daapi.view.meta.BaseRallyMainWindowMeta import BaseRallyMainWindowMeta
-from gui.shared import events
-from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import FocusEvent
-from messenger import MessengerEntry
 from messenger.ext import channel_num_gen
+from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform.sf_settings import MESSENGER_VIEW_ALIAS
 
 class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
@@ -75,9 +73,6 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
 
     def _dispose(self):
         self.stopGlobalListening()
-        chat = self.chat
-        if chat:
-            chat.minimize()
         self._currentView = None
         self._clearLeadershipNotification()
         super(BaseRallyMainWindow, self)._dispose()
@@ -85,25 +80,13 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
-            channels = MessengerEntry.g_instance.gui.channelsCtrl
-            controller = None
-            if channels:
-                controller = channels.getController(self.getClientID())
-            if controller is not None:
-                controller.setView(viewPy)
-            else:
-                self.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self._handleChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+            events_dispatcher.rqActivateChannel(self.getClientID(), viewPy)
             return
-        else:
-            super(BaseRallyMainWindow, self)._onRegisterFlashComponent(viewPy, alias)
-            return
+        super(BaseRallyMainWindow, self)._onRegisterFlashComponent(viewPy, alias)
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
-            chat = self.chat
-            if chat:
-                chat.removeController()
-        self.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self._handleChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
+            events_dispatcher.rqDeactivateChannel(self.getClientID())
         super(BaseRallyMainWindow, self)._onUnregisterFlashComponent(viewPy, alias)
 
     def _handleChannelControllerInited(self, event):

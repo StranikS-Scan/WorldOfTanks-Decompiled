@@ -12,7 +12,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.customization.VehicleCustonizationModel import VehicleCustomizationModel
 from gui.Scaleform.daapi.view.lobby.customization import _VEHICLE_CUSTOMIZATIONS
-from gui.Scaleform.daapi.view.lobby.customization.data_providers import getUpdatedDescriptor
+from gui.Scaleform.daapi.view.lobby.customization import CustomizationHelper
 from gui.Scaleform.daapi.view.meta.VehicleCustomizationMeta import VehicleCustomizationMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta
@@ -68,7 +68,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
         vehDescr = None
         vehType = None
         if g_currentVehicle.isPresent():
-            vehDescr = getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+            vehDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
             vehType = vehDescr.type
             VehicleCustomizationModel.setVehicleDescriptor(vehDescr)
         self.__steps = len(_VEHICLE_CUSTOMIZATIONS)
@@ -128,7 +128,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
 
     def __refreshData(self):
         vehType = vehicles.g_cache.vehicle(*g_currentVehicle.item.descriptor.type.id)
-        updatedDescr = getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+        updatedDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
         for interface in self.__interfaces.itervalues():
             interface.update(updatedDescr)
             interface.fetchCurrentItem(updatedDescr)
@@ -156,7 +156,8 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
              'priceLabel': customization['priceUserString'],
              'linkage': customization['linkage'],
              'enabled': self.getInterface(customization['sectionName']).isEnabled(),
-             'type': customization['type']})
+             'type': customization['type'],
+             'showNewMarker': self.getInterface(customization['sectionName']).hasNewItems()})
 
         return res
 
@@ -246,7 +247,7 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
             if vehCompDescr is not None:
                 vehDescr = VehicleDescr(compactDescr=vehCompDescr)
                 for interface in self.__interfaces.itervalues():
-                    interface.update(getUpdatedDescriptor(vehDescr))
+                    interface.update(CustomizationHelper.getUpdatedDescriptor(vehDescr))
 
                 self.as_refreshItemsDataS()
             return
@@ -269,10 +270,10 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
             return
         self.__steps = len(_VEHICLE_CUSTOMIZATIONS)
         vehType = vehicles.g_cache.vehicle(*g_currentVehicle.item.descriptor.type.id)
-        vehDescr = getUpdatedDescriptor(g_currentVehicle.item.descriptor)
+        vehDescr = CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor)
         VehicleCustomizationModel.resetVehicleDescriptor(vehDescr)
         for interface in self.__interfaces.itervalues():
-            interface.update(getUpdatedDescriptor(g_currentVehicle.item.descriptor))
+            interface.update(CustomizationHelper.getUpdatedDescriptor(g_currentVehicle.item.descriptor))
             interface.refreshViewData(vehType, refresh=True)
 
         self.as_refreshDataS()
@@ -446,18 +447,18 @@ class VehicleCustomization(VehicleCustomizationMeta, View, AppRef):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.customization_vehicle(g_currentVehicle.item.getState()), type=SystemMessages.SM_TYPE.Error)
             return
         else:
-            dialog = 'customization/{0:>s}Drop'.format(section)
-            isConfirmed = yield DialogsInterface.showI18nConfirmDialog(dialog)
-            if self.__isIgrChanged:
-                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR, type=SystemMessages.SM_TYPE.Error)
-                self.__isIgrChanged = False
-            elif isConfirmed:
-                interface = self.__interfaces.get(section)
-                if interface is not None:
+            interface = self.__interfaces.get(section)
+            if interface is not None:
+                dialog = interface.getDrorStr(section, kind)
+                isConfirmed = yield DialogsInterface.showI18nConfirmDialog(dialog)
+                if self.__isIgrChanged:
+                    SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR, type=SystemMessages.SM_TYPE.Error)
+                    self.__isIgrChanged = False
+                elif isConfirmed:
                     self.__returnHangar = False
                     self.__lockUpdate = True
                     Waiting.show('customizationDrop')
                     interface.drop(g_currentVehicle.invID, kind)
-                else:
-                    LOG_ERROR('Drop operation, section not found', section)
+            else:
+                LOG_ERROR('Drop operation, section not found', section)
             return

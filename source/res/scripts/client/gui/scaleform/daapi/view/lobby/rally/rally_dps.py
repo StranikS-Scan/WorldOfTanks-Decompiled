@@ -1,17 +1,16 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.fort_text import STANDARD_TEXT
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makePlayerVO, makeUnitShortVO, makeSortiePlayerVO
 from gui.Scaleform.daapi.view.lobby.rally.data_providers import BaseRallyListDataProvider
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from gui.Scaleform.framework.managers.TextManager import TextType
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.managers.UtilsManager import UtilsManager, ImageUrlProperties
+from gui.Scaleform.managers.UtilsManager import ImageUrlProperties
 from gui.prb_control.items.unit_items import getUnitCandidatesComparator
 from gui.prb_control.prb_helpers import unitFunctionalProperty
 from helpers import i18n
@@ -118,12 +117,12 @@ class SortieCandidatesLegionariesDP(SortieCandidatesDP):
             self._buildData(legionaryPlayers)
 
     def __addAdditionalBlocks(self, playersCount, legionariesCount):
-        headerClanPlayers = {'headerText': fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
+        headerClanPlayers = {'headerText': self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_CLANPLAYERS))}
         emptyRenders = {'emptyRender': True}
-        units = UtilsManager()
+        units = self.app.utilsManager
         icon = RES_ICONS.MAPS_ICONS_LIBRARY_FORTIFICATION_LEGIONNAIRE
         legionariesIcon = units.getHtmlIconText(ImageUrlProperties(icon, 16, 16, -4, 0))
-        textResult = legionariesIcon + fort_text.getText(STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
+        textResult = legionariesIcon + self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.FORTBATTLEROOM_LISTHEADER_LEGIONARIESPLAYERS))
         headerLegionasriesPlayers = {'headerText': textResult,
          'headerToolTip': TOOLTIPS.FORTIFICATION_BATTLEROOMLEGIONARIES}
         if playersCount > 0:

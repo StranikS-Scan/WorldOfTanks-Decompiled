@@ -247,7 +247,7 @@ class LoginDispatcher(DisposableEntity, AppRef):
                 if status != 'LOGIN_REJECTED_RATE_LIMITED':
                     self.__resetLgTimeout()
                 self.onCancelQueue(False, False)
-                if status in ('LOGIN_REJECTED_INVALID_PASSWORD',):
+                if status not in ('LOGIN_REJECTED_INVALID_PASSWORD',):
                     g_preDefinedHosts.clearPeripheryTL()
             try:
                 getattr(self, handlerFunc)(status, serverMsg)

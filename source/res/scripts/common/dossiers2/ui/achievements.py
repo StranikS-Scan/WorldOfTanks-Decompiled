@@ -97,6 +97,7 @@ ACHIEVEMENT_SECTIONS_ORDER = (_AS.BATTLE,
 ACHIEVEMENT_SECTIONS_INDICES = dict(((n, i) for i, n in enumerate(ACHIEVEMENT_SECTIONS_ORDER)))
 BATTLE_ACHIEVES_WITH_RIBBON = []
 BATTLE_ACHIEVES_RIGHT = []
+FORT_BATTLE_ACHIEVES_RIGHT = []
 BATTLE_APPROACHABLE_ACHIEVES = []
 
 def getType(record):
@@ -129,14 +130,17 @@ def getWeight(record):
 
 
 def init(achievesMappingXmlPath):
-    global BATTLE_ACHIEVES_RIGHT
     global BATTLE_APPROACHABLE_ACHIEVES
     global BATTLE_ACHIEVES_WITH_RIBBON
+    global BATTLE_ACHIEVES_RIGHT
+    global FORT_BATTLE_ACHIEVES_RIGHT
     raise achievesMappingXmlPath or AssertionError('Invalid achievements mapping file')
     ctx, section = resource_helper.getRoot(achievesMappingXmlPath)
     for ctx, subSection in resource_helper.getIterator(ctx, section['achievements']):
         try:
             item = resource_helper.readItem(ctx, subSection, name='achievement')
+            if not item.name:
+                continue
             block, name = tuple(item.name.split(':'))
             if block not in ACHIEVEMENT_BLOCK.ALL:
                 raise Exception('Unknown block name', (block, name))
@@ -156,4 +160,5 @@ def init(achievesMappingXmlPath):
 
     BATTLE_ACHIEVES_WITH_RIBBON = tuple(resource_helper.readList(ctx, section['battleAchievesWithRibbon']).value)
     BATTLE_ACHIEVES_RIGHT = tuple(resource_helper.readList(ctx, section['battleResultsRight']).value)
+    FORT_BATTLE_ACHIEVES_RIGHT = tuple(resource_helper.readList(ctx, section['fortBattleResultsRight']).value)
     BATTLE_APPROACHABLE_ACHIEVES = tuple(resource_helper.readList(ctx, section['approachableAchieves']).value)

@@ -12,7 +12,7 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.shared import events, g_itemsCache, REQ_CRITERIA
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import CSVehicleSelectEvent
-from helpers import i18n
+from helpers import i18n, int2roman
 
 class CyberSportUnitsListView(CyberSportUnitsListMeta):
 
@@ -43,7 +43,8 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         unit_ext.initListReq(self._selectedVehicles).start(self.__onUnitsListUpdated)
         g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehiclesChanged})
         self.as_setSearchResultTextS(i18n.makeString(CYBERSPORT.WINDOW_UNITLISTVIEW_FOUNDTEAMS))
-        self._updateVehiclesLabel('I', 'VIII')
+        settings = self.unitFunctional.getRosterSettings()
+        self._updateVehiclesLabel(int2roman(settings.getMinLevel()), int2roman(settings.getMaxLevel()))
 
     def _onUserRosterChanged(self, _, user):
         self.__updateView(user)
@@ -71,16 +72,16 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
         self.as_setSelectedVehiclesInfoS(infoText, vehiclesCount)
 
     def filterVehicles(self):
-        maxLevel = self.unitFunctional.getRosterSettings().getMaxLevel()
+        levelsRange = self.unitFunctional.getRosterSettings().getLevelsRange()
         if self._selectedVehicles is not None and len(self._selectedVehicles) > 0:
             selectedVehicles = self._selectedVehicles
         else:
-            selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).items() if v.level <= maxLevel ]
+            selectedVehicles = [ k for k, v in g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).items() if v.level in levelsRange ]
         self.fireEvent(events.ShowViewEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELECTOR_WINDOW, {'isMultiSelect': True,
          'infoText': CYBERSPORT.WINDOW_VEHICLESELECTOR_INFO_SEARCH,
          'selectedVehicles': selectedVehicles,
          'section': 'cs_list_view_vehicle',
-         'maxLevel': maxLevel}), scope=EVENT_BUS_SCOPE.LOBBY)
+         'levelsRange': levelsRange}), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __onUnitsListUpdated(self, selectedID, isFullUpdate, isReqInCoolDown, units):

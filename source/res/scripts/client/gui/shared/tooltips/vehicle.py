@@ -1,15 +1,18 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import BigWorld
+import math
 import constants
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.techtree import NODE_STATE
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipDataField, ToolTipParameterField, ToolTipAttrField, ToolTipData, getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils import ItemsParameters, ParametersCache
 from gui.shared.utils.gui_items import InventoryVehicle
 from gui.prb_control.dispatcher import g_prbLoader
+from helpers import time_utils, i18n
 
 class VehicleStatusField(ToolTipDataField):
 
@@ -39,6 +42,9 @@ class VehicleStatusField(ToolTipDataField):
                     tooltip = '#tooltips:moduleFits/gold_error'
                 else:
                     tooltip = '#tooltips:moduleFits/credit_error'
+                canRentOrBuy, reason = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+                if not canRentOrBuy and reason not in ('gold_error', 'credit_error'):
+                    tooltip = '#tooltips:moduleFits/operation_error'
         header, text = getComplexStatus(tooltip)
         if header is None and text is None:
             return
@@ -52,16 +58,17 @@ class VehicleStatusField(ToolTipDataField):
             isUnlocked = vehicle.isUnlocked
             isInInventory = vehicle.isInInventory
             credits, gold = g_itemsCache.items.stats.money
+            price = vehicle.minRentPrice or vehicle.buyPrice
             msg = None
             level = InventoryVehicle.STATE_LEVEL.WARNING
             if not isUnlocked:
                 msg = 'notUnlocked'
             elif isInInventory:
                 msg = 'inHangar'
-            elif credits < vehicle.buyPrice[0]:
+            elif credits < price[0]:
                 msg = 'notEnoughCredits'
                 level = InventoryVehicle.STATE_LEVEL.CRITICAL
-            elif gold < vehicle.buyPrice[1]:
+            elif gold < price[1]:
                 msg = 'notEnoughGold'
                 level = InventoryVehicle.STATE_LEVEL.CRITICAL
             if msg is not None:
@@ -105,12 +112,15 @@ class VehicleStatsField(ToolTipDataField):
         buyPrice = configuration.buyPrice
         sellPrice = configuration.sellPrice
         techTreeNode = configuration.node
+        minRentPrice = configuration.minRentPrice
+        rentals = configuration.rentals
         if buyPrice and sellPrice:
             LOG_ERROR('You are not allowed to use buyPrice and sellPrice at the same time')
             return
         else:
             isUnlocked = vehicle.isUnlocked
             isInInventory = vehicle.isInInventory
+            isRented = vehicle.isRented
             isNextToUnlock = False
             parentCD = None
             if techTreeNode is not None:
@@ -131,10 +141,10 @@ class VehicleStatsField(ToolTipDataField):
                     unlockPriceStat.append(need)
                 if cost > 0:
                     result.append(('unlock_price', unlockPriceStat))
-            if buyPrice:
+            if buyPrice and not vehicle.isPremiumIGR:
                 price = vehicle.buyPrice
                 needed = (0, 0)
-                if not isInInventory and (isNextToUnlock or isUnlocked):
+                if not isInInventory and (isNextToUnlock or isUnlocked) or isRented:
                     credits, gold = g_itemsCache.items.stats.money
                     creditsNeeded = price[0] - credits if price[0] else 0
                     goldNeeded = price[1] - gold if price[1] else 0
@@ -146,6 +156,24 @@ class VehicleStatsField(ToolTipDataField):
                 result.append(('sell_price', vehicle.sellPrice))
                 result.append(('def_sell_price', vehicle.defaultSellPrice))
                 result.append(('action_prc', vehicle.sellActionPrc))
+            if minRentPrice and not vehicle.isPremiumIGR:
+                minRentPriceValue = vehicle.minRentPrice
+                if minRentPriceValue:
+                    credits, gold = g_itemsCache.items.stats.money
+                    enoughGoldForRent = gold - minRentPriceValue[1] >= 0
+                    enoughCreditsForRent = credits - minRentPriceValue[0] >= 0
+                    result.append(('minRentalsPrice', (minRentPriceValue, (enoughCreditsForRent, enoughGoldForRent))))
+            if rentals and not vehicle.isPremiumIGR:
+                rentLeftTime = vehicle.rentLeftTime
+                if rentLeftTime > 0:
+                    if rentLeftTime > time_utils.ONE_DAY:
+                        timeLeft = math.ceil(vehicle.rentLeftTime / time_utils.ONE_DAY)
+                        description = i18n.makeString(TOOLTIPS.VEHICLE_RENTLEFT_DAYS)
+                    else:
+                        timeLeft = math.ceil(vehicle.rentLeftTime / time_utils.ONE_HOUR)
+                        description = i18n.makeString(TOOLTIPS.VEHICLE_RENTLEFT_HOURS)
+                    result.append(('rentals', {'left': timeLeft,
+                      'descr': description}))
             return result
 
 

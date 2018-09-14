@@ -42,6 +42,7 @@ class BattleReplay():
     isControllingCamera = property(lambda self: self.__replayCtrl.isControllingCamera)
     isOffline = property(lambda self: self.__replayCtrl.isOfflinePlaybackMode)
     isTimeWarpInProgress = property(lambda self: self.__replayCtrl.isTimeWarpInProgress or self.__timeWarpCleanupCb is not None)
+    isServerAim = property(lambda self: self.__replayCtrl.isServerAim)
     playerVehicleID = property(lambda self: self.__replayCtrl.playerVehicleID)
     fps = property(lambda self: self.__replayCtrl.fps)
     ping = property(lambda self: self.__replayCtrl.ping)
@@ -52,6 +53,11 @@ class BattleReplay():
     currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
     warpTime = property(lambda self: self.__warpTime)
 
+    def resetUpdateGunOnRewind(self):
+        self.__updateGunOnRewind = False
+
+    isUpdateGunOnRewind = property(lambda self: self.__updateGunOnRewind)
+
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
         if not userPrefs.has_key(Settings.KEY_REPLAY_PREFERENCES):
@@ -61,7 +67,7 @@ class BattleReplay():
         self.__replayCtrl = BigWorld.WGReplayController()
         self.__replayCtrl.replayFinishedCallback = self.onReplayFinished
         self.__replayCtrl.controlModeChangedCallback = self.onControlModeChanged
-        self.__replayCtrl.ammoButtonPressedCallback = self.onAmmoButtonPressed
+        self.__replayCtrl.ammoButtonPressedCallback = self.__onAmmoButtonPressed
         self.__replayCtrl.playerVehicleIDChangedCallback = self.onPlayerVehicleIDChanged
         self.__replayCtrl.clientVersionDiffersCallback = self.onClientVersionDiffers
         self.__replayCtrl.battleChatMessageCallback = self.onBattleChatMessage
@@ -72,6 +78,8 @@ class BattleReplay():
         self.__isPlayingPlayList = False
         self.__playList = []
         self.__isFinished = False
+        self.__isMenuShowed = False
+        self.__updateGunOnRewind = False
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -95,9 +103,11 @@ class BattleReplay():
         self.__isChatPlaybackEnabled = True
         self.__warpTime = -1.0
         self.__skipMessage = False
+        self.replayTimeout = 0
         self.enableAutoRecordingBattles(True)
         gui.Scaleform.CursorDelegator.g_cursorDelegator.detachCursor()
         self.onCommandReceived = Event.Event()
+        self.onAmmoSettingChanged = Event.Event()
         return
 
     @property
@@ -107,7 +117,10 @@ class BattleReplay():
 
     def destroy(self):
         self.stop()
+        self.onCommandReceived.clear()
         self.onCommandReceived = None
+        self.onAmmoSettingChanged.clear()
+        self.onAmmoSettingChanged = None
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -249,7 +262,13 @@ class BattleReplay():
         player = BigWorld.player()
         if not isPlayerAvatar():
             return False
-        if player.isForcedGuiControlMode():
+        if key == Keys.KEY_ESCAPE:
+            if isDown and not player.isForcedGuiControlMode():
+                self.__isMenuShowed = True
+                return False
+        if not player.isForcedGuiControlMode():
+            self.__isMenuShowed = False
+        if self.__isMenuShowed:
             return False
         currReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
@@ -305,21 +324,24 @@ class BattleReplay():
         suppressCommand = False
         if cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown:
             suppressCommand = True
+        elif (key == Keys.KEY_RETURN or key == Keys.KEY_NUMPADENTER) and isDown and mods != 4:
+            suppressCommand = True
         elif cmdMap.isFiredList((CommandMapping.CMD_CM_LOCK_TARGET,
          CommandMapping.CMD_CM_LOCK_TARGET_OFF,
-         CommandMapping.CMD_USE_HORN,
+         CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
+         CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE,
+         CommandMapping.CMD_RADIAL_MENU_SHOW,
+         CommandMapping.CMD_RELOAD_PARTIAL_CLIP), key) and isDown and not isCursorVisible:
+            suppressCommand = True
+        elif cmdMap.isFiredList((CommandMapping.CMD_USE_HORN,
          CommandMapping.CMD_STOP_UNTIL_FIRE,
          CommandMapping.CMD_INCREMENT_CRUISE_MODE,
          CommandMapping.CMD_DECREMENT_CRUISE_MODE,
          CommandMapping.CMD_MOVE_FORWARD,
          CommandMapping.CMD_MOVE_FORWARD_SPEC,
          CommandMapping.CMD_MOVE_BACKWARD,
-         CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
-         CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE,
-         CommandMapping.CMD_RADIAL_MENU_SHOW,
-         CommandMapping.CMD_RELOAD_PARTIAL_CLIP), key) and isDown and not isCursorVisible:
-            suppressCommand = True
-        elif (key == Keys.KEY_RETURN or key == Keys.KEY_NUMPADENTER) and isDown and mods != 4:
+         CommandMapping.CMD_ROTATE_LEFT,
+         CommandMapping.CMD_ROTATE_RIGHT), key):
             suppressCommand = True
         if suppressCommand:
             if isVideoCamera:
@@ -414,7 +436,10 @@ class BattleReplay():
         if not self.isPlaying:
             raise AssertionError
             ret = self.__replayCtrl.arenaPeriod
-            ret = ret not in (constants.ARENA_PERIOD.WAITING, constants.ARENA_PERIOD.PREBATTLE, constants.ARENA_PERIOD.BATTLE) and constants.ARENA_PERIOD.WAITING
+            ret = ret not in (constants.ARENA_PERIOD.IDLE,
+             constants.ARENA_PERIOD.WAITING,
+             constants.ARENA_PERIOD.PREBATTLE,
+             constants.ARENA_PERIOD.BATTLE) and constants.ARENA_PERIOD.WAITING
         return ret
 
     def getArenaLength(self):
@@ -512,6 +537,9 @@ class BattleReplay():
                 self.__showInfoMessage('replayControlsHelp2')
                 self.__showInfoMessage('replayControlsHelp3')
                 self.__disableSidePanelContextMenu()
+                if self.replayTimeout > 0:
+                    LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
+                    BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
             return
 
     def __getArenaVehiclesInfo(self):
@@ -555,6 +583,7 @@ class BattleReplay():
             self.stop()
             BigWorld.callback(1.0, self.play)
             return
+        self.__isMenuShowed = False
         DialogsInterface.showI18nInfoDialog('replayStopped', self.stop)
         self.__isFinished = True
         self.setPlaybackSpeedIdx(0)
@@ -576,14 +605,14 @@ class BattleReplay():
             player.positionControl.bindToVehicle(True, self.__replayCtrl.playerVehicleID)
             self.onControlModeChanged()
 
-    def onAmmoButtonPressed(self, idx):
-        player = BigWorld.player()
+    def setAmmoSetting(self, idx):
         if not isPlayerAvatar():
             return
-        if self.isPlaying:
-            player.onAmmoButtonPressed(idx)
-        elif self.isRecording:
+        if self.isRecording:
             self.__replayCtrl.onAmmoButtonPressed(idx)
+
+    def __onAmmoButtonPressed(self, idx):
+        self.onAmmoSettingChanged(idx)
 
     def onLockTarget(self, lock):
         player = BigWorld.player()
@@ -699,10 +728,23 @@ class BattleReplay():
                 BigWorld.callback(0, self.__updateAim)
         return
 
+    def setArenaStatisticsStr(self, arenaUniqueStr):
+        self.__replayCtrl.setArenaStatisticsStr(arenaUniqueStr)
+
     def __onBattleResultsReceived(self, isPlayerVehicle, results):
         if isPlayerVehicle:
-            results = (results, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
-            self.__replayCtrl.setArenaStatisticsStr(json.dumps(results))
+            modifiedResults = copy.copy(results)
+            vehicles = modifiedResults.get('vehicles', None)
+            if vehicles is not None:
+                for vehicle in vehicles.itervalues():
+                    vehicle['damage_event_list'] = None
+
+            personal = modifiedResults.get('personal', None)
+            if personal is not None:
+                personal['damage_event_list'] = None
+            modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
+            self.__replayCtrl.setArenaStatisticsStr(json.dumps(modifiedResults))
+        return
 
     def __onAccountBecomePlayer(self):
         if not isPlayerAccount():
@@ -732,6 +774,7 @@ class BattleReplay():
             self.__enableInGameEffects(False)
             rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
             AreaDestructibles.g_destructiblesManager.onBeforeReplayTimeWarp(rewind)
+            self.__updateGunOnRewind = not rewind
             EffectsList.EffectsListPlayer.clear()
             if rewind:
                 playerControlMode = BigWorld.player().inputHandler.ctrl
@@ -793,6 +836,18 @@ class BattleReplay():
             self.__replayCtrl.onSetCruiseMode(mode)
         elif self.isPlaying:
             self.guiWindowManager.battleWindow.damagePanel.setCruiseMode(mode)
+
+    def isNeedToPlay(self, entity_id):
+        return self.__replayCtrl.isEffectNeedToPlay(entity_id)
+
+    def setUseServerAim(self, server_aim):
+        return self.__replayCtrl.onServerAim(server_aim)
+
+    def printAIMType(self):
+        if self.isServerAim:
+            print 'SERVER_AIM_ACTIVE'
+        else:
+            print 'CLIENT_AIM_ACTIVE'
 
 
 def isPlaying():

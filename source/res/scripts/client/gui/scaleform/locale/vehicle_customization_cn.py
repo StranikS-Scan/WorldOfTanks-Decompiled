@@ -8,6 +8,7 @@ class VEHICLE_CUSTOMIZATION_CN(object):
     EMBLEM_BATTLE = '#vehicle_customization_cn:emblem/battle'
     EMBLEM_COOL = '#vehicle_customization_cn:emblem/cool'
     EMBLEM_SIGNS = '#vehicle_customization_cn:emblem/signs'
+    EMBLEM_HISTORICAL_EMBLEMS = '#vehicle_customization_cn:emblem/historical_emblems'
     EMBLEM_GROUP0_CHINESE_1 = '#vehicle_customization_cn:emblem/group0/chinese_1'
     EMBLEM_GROUP0_CHINESE_2 = '#vehicle_customization_cn:emblem/group0/chinese_2'
     EMBLEM_GROUP0_CHINESE_3 = '#vehicle_customization_cn:emblem/group0/chinese_3'

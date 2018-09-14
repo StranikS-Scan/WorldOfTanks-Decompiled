@@ -475,7 +475,7 @@ class GlobalRating(_Requirement):
         if self._relationValue is None:
             return False
         else:
-            return _handleRelation(self._relation, g_itemsCache.items.stats.getGlobalRating(), self._relationValue)
+            return _handleRelation(self._relation, g_itemsCache.items.stats.globalRating, self._relationValue)
 
     def _format(self, svrEvents, event = None):
         if event is None or not event.isGuiDisabled():
@@ -1416,3 +1416,36 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
          self._relation,
          self._relationValue,
          self._getTotalValue())
+
+
+class RefSystemRalXPPoolCondition(_Requirement):
+
+    def __init__(self, path, data):
+        super(RefSystemRalXPPoolCondition, self).__init__('refSystemRalXPPool', dict(data), path)
+        self._relation = _findRelation(self._data.keys())
+        self._relationValue = float(_getNodeValue(self._data, self._relation))
+
+    def negate(self):
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
+
+    def getValue(self):
+        return self._relationValue
+
+    def __repr__(self):
+        return 'RefSystemRalXPPoolCondition<%s=%s>' % (self._relation, str(self._relationValue))
+
+
+class RefSystemRalBought10Lvl(_Requirement):
+
+    def __init__(self, path, data):
+        super(RefSystemRalBought10Lvl, self).__init__('refSystemRalBought10Lvl', dict(data), path)
+        self._relation = bool(self._data['value'])
+
+    def negate(self):
+        self._relation = not self._relation
+
+    def getValue(self):
+        return self._relation
+
+    def __repr__(self):
+        return 'RefSystemRalBought10Lvl<value=%r>' % self._relation

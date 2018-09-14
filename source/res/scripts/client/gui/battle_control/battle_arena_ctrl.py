@@ -4,10 +4,9 @@ import BigWorld
 from account_helpers.settings_core.SettingsCore import g_settingsCore
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui import game_control
-from gui.BattleContext import g_battleContext
 from gui.Scaleform import VoiceChatInterface
-from gui.arena_info import IArenaController, getPlayerVehicleID, isPlayerTeamKillSuspected
-from gui.arena_info.arena_vos import VehicleActions
+from gui.battle_control import avatar_getter, arena_info
+from gui.battle_control.arena_info.arena_vos import VehicleActions
 from messenger.storage import storage_getter
 PLAYERS_PANEL_LENGTH = 15
 
@@ -76,17 +75,19 @@ def makeTeamCtx(team, isEnemy, arenaDP, labelMaxLength, cameraVehicleID = -1):
     if isEnemy:
         ctx = EnemyTeamCtx(team, labelMaxLength)
     elif cameraVehicleID > 0:
-        ctx = PostmortemTeamCtx(team, labelMaxLength, getPlayerVehicleID(), isPlayerTeamKillSuspected(), cameraVehicleID, arenaDP.getVehicleInfo().prebattleID)
+        ctx = PostmortemTeamCtx(team, labelMaxLength, avatar_getter.getPlayerVehicleID(), arena_info.isPlayerTeamKillSuspected(), cameraVehicleID, arenaDP.getVehicleInfo().prebattleID)
     else:
-        ctx = PlayerTeamCtx(team, labelMaxLength, getPlayerVehicleID(), isPlayerTeamKillSuspected(), cameraVehicleID, arenaDP.getVehicleInfo().prebattleID)
+        ctx = PlayerTeamCtx(team, labelMaxLength, avatar_getter.getPlayerVehicleID(), arena_info.isPlayerTeamKillSuspected(), cameraVehicleID, arenaDP.getVehicleInfo().prebattleID)
     return ctx
 
 
-class BattleArenaController(IArenaController):
+class BattleArenaController(arena_info.IArenaController):
 
     def __init__(self, battleUI):
         super(BattleArenaController, self).__init__()
         self.__battleUI = weakref.proxy(battleUI)
+        self.__battleCtx = None
+        return
 
     def __del__(self):
         LOG_DEBUG('Deleted:', self)
@@ -99,8 +100,11 @@ class BattleArenaController(IArenaController):
         self.__battleUI = None
         return
 
+    def setBattleCtx(self, battleCtx):
+        self.__battleCtx = battleCtx
+
     def invalidateArenaInfo(self):
-        self.invalidateVehiclesInfo(g_battleContext.arenaDP)
+        self.invalidateVehiclesInfo(self.__battleCtx.getArenaDP())
 
     def invalidateVehiclesInfo(self, arenaDP):
         for isEnemy in (False, True):
@@ -134,20 +138,21 @@ class BattleArenaController(IArenaController):
         self.__updateTeamItem(vo, arenaDP)
 
     def invalidateChatRosters(self):
-        self.invalidateVehiclesInfo(g_battleContext.arenaDP)
+        self.invalidateVehiclesInfo(self.__battleCtx.getArenaDP())
 
     def invalidateChatRoster(self, user):
-        arenaDP = g_battleContext.arenaDP
-        vehicleID = arenaDP.getVehIDByAccDBID(user.getID())
+        vehicleID = self.__battleCtx.getVehIDByAccDBID(user.getID())
         if vehicleID:
+            arenaDP = self.__battleCtx.getArenaDP()
             self.__updateTeamItem(arenaDP.getVehicleInfo(vehicleID), arenaDP)
 
     def invalidateGUI(self, playerTeamOnly = False):
         if playerTeamOnly:
-            self.__updateTeamData(False, g_battleContext.arenaDP, False)
+            self.__updateTeamData(False, self.__battleCtx.getArenaDP(), False)
         else:
+            arenaDP = self.__battleCtx.getArenaDP()
             for isEnemy in (False, True):
-                self.__updateTeamData(isEnemy, g_battleContext.arenaDP, False)
+                self.__updateTeamData(isEnemy, arenaDP, False)
 
     def __updateTeamItem(self, vo, arenaDP):
         updatedTeam = vo.team
@@ -170,7 +175,7 @@ class BattleArenaController(IArenaController):
             playersPanel = self.__battleUI.rightPlayersPanel
         else:
             playersPanel = self.__battleUI.leftPlayersPanel
-        regionGetter = g_battleContext.getRegionCode
+        regionGetter = self.__battleCtx.getRegionCode
         isSpeaking = VoiceChatInterface.g_instance.isPlayerSpeaking
         userGetter = self.usersStorage.getUser
         pNamesList, fragsList, vNamesList = [], [], []
@@ -185,14 +190,14 @@ class BattleArenaController(IArenaController):
             if index >= PLAYERS_PANEL_LENGTH:
                 LOG_WARNING('Max players in panel are', PLAYERS_PANEL_LENGTH)
                 break
-            if g_battleContext.isObserver(vInfoVO.vehicleID):
-                if g_battleContext.isPlayerObserver():
+            if self.__battleCtx.isObserver(vInfoVO.vehicleID):
+                if self.__battleCtx.isPlayerObserver():
                     continue
             elif isFragsUpdate:
                 fragCorrelation.addVehicle(team, vInfoVO.vehicleID, vInfoVO.vehicleType.getClassName(), vInfoVO.isAlive())
                 if not vInfoVO.isAlive():
                     fragCorrelation.addKilled(team)
-            playerFullName = g_battleContext.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
+            playerFullName = self.__battleCtx.getFullPlayerName(vID=vInfoVO.vehicleID, showVehShortName=False)
             if not playerFullName:
                 playerFullName = vInfoVO.player.getPlayerLabel()
             valuesHash = self.__makeHash(index, playerFullName, vInfoVO, vStatsVO, ctx, userGetter, isSpeaking, isMenuEnabled, regionGetter)

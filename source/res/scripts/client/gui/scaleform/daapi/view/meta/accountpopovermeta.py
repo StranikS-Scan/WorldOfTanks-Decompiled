@@ -12,6 +12,9 @@ class AccountPopoverMeta(DAAPIModule):
     def openCrewStatistic(self):
         self._printOverrideError('openCrewStatistic')
 
+    def openReferralManagement(self):
+        self._printOverrideError('openReferralManagement')
+
     def as_setDataS(self, userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData):
         if self._isDAAPIInited():
             return self.flashObject.as_setData(userData, isTeamKiller, mainAchievements, infoBtnEnabled, clanData, crewData)
@@ -23,3 +26,7 @@ class AccountPopoverMeta(DAAPIModule):
     def as_setCrewEmblemS(self, emblemId):
         if self._isDAAPIInited():
             return self.flashObject.as_setCrewEmblem(emblemId)
+
+    def as_setReferralDataS(self, data):
+        if self._isDAAPIInited():
+            return self.flashObject.as_setReferralData(data)

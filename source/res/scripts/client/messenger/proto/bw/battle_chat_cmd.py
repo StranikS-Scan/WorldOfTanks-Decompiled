@@ -1,7 +1,6 @@
 # Embedded file name: scripts/client/messenger/proto/bw/battle_chat_cmd.py
 from chat_shared import CHAT_COMMANDS
 from debug_utils import LOG_ERROR
-from gui.arena_info import getPlayerVehicleID
 from helpers import i18n
 from messenger import g_settings
 from messenger.ext import getMinimapCellName
@@ -33,7 +32,8 @@ _VEHICLE_TARGET_CMD_INDEXES = (CHAT_COMMANDS.ATTACKENEMY.index(),
 _SHOW_MARKER_FOR_RECEIVER_CMD_INDEXES = (CHAT_COMMANDS.ATTACKENEMY.index(), CHAT_COMMANDS.SUPPORTMEWITHFIRE.index())
 
 def makeDecorator(commandData):
-    return _ReceivedCmdDecorator(commandData, getPlayerVehicleID())
+    from gui.battle_control import avatar_getter
+    return _ReceivedCmdDecorator(commandData, avatar_getter.getPlayerVehicleID())
 
 
 class _SendCmdDecorator(OutChatCommand):
@@ -110,6 +110,11 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return data[2]
         return 0
 
+    def getCellIndex(self):
+        if self.isOnMinimap():
+            return self.getSecondTargetID()
+        return 0
+
     def getReloadingTime(self):
         data = self._protoData.data
         if len(data) > 1:
@@ -160,8 +165,8 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         return i18n.makeString(command.msgText, cellName=getMinimapCellName(self.getSecondTargetID()))
 
     def _makeTargetedCommandMessage(self, command):
-        from gui.BattleContext import g_battleContext
-        target = g_battleContext.getFullPlayerName(vID=self.getFirstTargetID())
+        from gui.battle_control import g_sessionProvider
+        target = g_sessionProvider.getCtx().getFullPlayerName(vID=self.getFirstTargetID())
         text = command.msgText
         if self.isReceiver():
             target = g_settings.battle.targetFormat % {'target': target}
@@ -171,12 +176,12 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
         reloadingTime = self.getReloadingTime()
         ammoQuantityLeft = self.getAmmoQuantityLeft()
         text = command.msgText
-        return i18n.makeString(text, floatArg2=reloadingTime, int32Arg1=ammoQuantityLeft)
+        return i18n.makeString(text, floatArg1=reloadingTime, int32Arg1=ammoQuantityLeft)
 
     def _reloadingGunFormatter(self, command):
         reloadingTime = self.getReloadingTime()
         text = command.msgText
-        return i18n.makeString(text, floatArg2=reloadingTime)
+        return i18n.makeString(text, floatArg1=reloadingTime)
 
     def _reloadingGunReadyFormatter(self, command):
         ammoInCassete = self.getAmmoQuantityInCassete()

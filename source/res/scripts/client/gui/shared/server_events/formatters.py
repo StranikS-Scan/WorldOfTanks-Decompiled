@@ -426,12 +426,13 @@ def packVehiclesBlock(uniqueListID, header, vehs = None, showFilters = True, sho
      'tableID': uniqueListID})
 
 
-def packTextBlock(label, value = None, relation = None, questID = None, isAvailable = True, battlesLeft = 0, showDone = False, relationI18nType = RELATIONS_SCHEME.DEFAULT):
+def packTextBlock(label, value = None, relation = None, questID = None, isAvailable = True, fullLabel = None, battlesLeft = 0, showDone = False, relationI18nType = RELATIONS_SCHEME.DEFAULT):
     if value is not None:
         value = _formatRelation(value, relation, relationI18nType)
     raise not (not isAvailable and showDone) or AssertionError
     blockData = {'linkage': 'CounterTextElement_UI',
      'label': label,
+     'fullLabel': fullLabel,
      'value': value,
      'linkID': questID,
      'isNotAvailable': not isAvailable,
@@ -508,6 +509,11 @@ def packSeparator(label, needAlign = False):
     return UiElement({'linkage': 'ConditionSeparator_UI',
      'text': label,
      'needAlign': needAlign})
+
+
+def packCustomizations(list):
+    return UiElement({'linkage': 'CustomizationsBlock_UI',
+     'list': list})
 
 
 def packConditionsBlock(battlesCount = None, battlesLeft = None, inrow = False, conditions = None):

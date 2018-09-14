@@ -2,6 +2,7 @@
 import BigWorld
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
+from gui.prb_control.events_dispatcher import TOOLTIP_PRB_DATA
 DEFAULT_FIELDS = {'clientID': 0,
  'label': '',
  'canClose': False,
@@ -11,7 +12,8 @@ DEFAULT_FIELDS = {'clientID': 0,
  'isInProgress': False,
  'isWindowOpened': False,
  'readyData': None,
- 'isWindowFocused': False}
+ 'isWindowFocused': False,
+ 'tooltipData': None}
 
 class ChannelsDataProvider(DAAPIDataProvider):
 
@@ -37,8 +39,12 @@ class ChannelsDataProvider(DAAPIDataProvider):
         self.__list = []
 
     def addItem(self, clientID, data):
+        label = data['label']
+        tooltipData = data.get('tooltipData', None)
+        if tooltipData is None:
+            tooltipData = TOOLTIP_PRB_DATA(tooltipId=None, label=label)._asdict()
         item = {'clientID': clientID,
-         'label': data['label'],
+         'label': label,
          'canClose': data.get('canClose', False),
          'isNotified': data.get('isNotified', False),
          'icon': data.get('icon'),
@@ -46,7 +52,8 @@ class ChannelsDataProvider(DAAPIDataProvider):
          'isInProgress': data.get('isInProgress', False),
          'isWindowOpened': data.get('isWindowOpened', False),
          'readyData': data.get('readyData', None),
-         'isWindowFocused': data.get('isWindowFocused', False)}
+         'isWindowFocused': data.get('isWindowFocused', False),
+         'tooltipData': tooltipData}
         if clientID in self.__data:
             self.__data[clientID].update(item)
         else:

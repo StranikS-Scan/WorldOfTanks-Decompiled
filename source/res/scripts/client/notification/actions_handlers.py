@@ -1,13 +1,14 @@
 # Embedded file name: scripts/client/notification/actions_handlers.py
 import BigWorld
 from adisp import process
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control.prb_helpers import prbInvitesProperty, prbDispatcherProperty
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE
-from gui.shared.utils.requesters import StatsRequester
+from gui.shared.utils.requesters import DeprecatedStatsRequester
+from gui.shared.fortifications import fort_helpers
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
@@ -100,7 +101,7 @@ class ShowBattleResultsHandler(_ShowArenaResultHandler):
     @process
     def _showWindow(self, notification, arenaUniqueID):
         Waiting.show('loadStats')
-        results = yield StatsRequester().getBattleResults(long(arenaUniqueID))
+        results = yield DeprecatedStatsRequester().getBattleResults(long(arenaUniqueID))
         Waiting.hide('loadStats')
         if results:
             super(ShowBattleResultsHandler, self)._showWindow(notification, arenaUniqueID)
@@ -209,6 +210,33 @@ class DeclinePrbInviteHandler(_ActionHandler):
             LOG_ERROR('Invite is invalid', entityID)
 
 
+class AcceptPrbFortInviteHandler(_ActionHandler):
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        pass
+
+    @prbInvitesProperty
+    def prbInvites(self):
+        pass
+
+    def isRequiredType(self, typeID):
+        return typeID == NOTIFICATION_TYPE.INVITE
+
+    def handleAction(self, model, entityID):
+        notification = model.collection.getItem(NOTIFICATION_TYPE.MESSAGE, entityID)
+        if not notification:
+            LOG_ERROR('Notification not found', NOTIFICATION_TYPE.MESSAGE, entityID)
+            return
+        else:
+            battleID, peripheryID = notification.getSavedData()
+            if battleID is not None and peripheryID is not None:
+                fort_helpers.tryToConnectFortBattle(battleID, peripheryID)
+            else:
+                LOG_ERROR('Invalid fort battle data', battleID, peripheryID)
+            return
+
+
 class NotificationsActionsHandlers(object):
 
     def __init__(self):
@@ -218,6 +246,7 @@ class NotificationsActionsHandlers(object):
          (nType.MESSAGE, 'showTutorialBattleHistory'): ShowTutorialBattleHistoryHandler,
          (nType.MESSAGE, 'showFortBattleResults'): ShowFortBattleResultsHandler,
          (nType.MESSAGE, 'openPollInBrowser'): OpenPollHandler,
+         (nType.MESSAGE, 'acceptFortInvite'): AcceptPrbFortInviteHandler,
          (nType.INVITE, 'acceptInvite'): AcceptPrbInviteHandler,
          (nType.INVITE, 'declineInvite'): DeclinePrbInviteHandler}
 

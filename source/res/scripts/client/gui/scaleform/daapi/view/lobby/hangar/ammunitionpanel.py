@@ -2,9 +2,10 @@
 from CurrentVehicle import g_currentVehicle
 from adisp import process
 from constants import QUEUE_TYPE
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips import getItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.framework import AppRef
@@ -111,6 +112,12 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
 
                 self.as_setDataS(dataProvider, type)
 
+            statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
+            rentAvailable = False
+            if statusId == Vehicle.VEHICLE_STATE.RENTAL_IS_ORVER:
+                canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+                rentAvailable = vehicle.isRentable and canBuyOrRent
+            self.as_updateVehicleStatusS(statusId, msg, msgLvl, rentAvailable)
         return
 
     def __updateAmmo(self, shellsData = None, historicalBattleID = -1):
@@ -118,8 +125,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
          'maxAmmo': 0,
          'defaultAmmoCount': 0,
          'vehicleLocked': True,
-         'stateMsg': '',
-         'stateLevel': 'info',
          'shells': [],
          'stateWarning': 0}
         if g_currentVehicle.isPresent():
@@ -131,13 +136,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
             for compactDescr, count in default_ammo.iteritems():
                 default_ammo_count += count
 
-            msg, msgLvl = g_currentVehicle.getHangarMessage()
             ammo.update({'gunName': vehicle.gun.longUserName,
              'maxAmmo': vehicle.ammoMaxSize,
              'defaultAmmoCount': default_ammo_count,
              'vehicleLocked': g_currentVehicle.isLocked(),
-             'stateMsg': msg,
-             'stateLevel': msgLvl,
              'stateWarning': int(stateWarning)})
             if shellsData is None:
                 shellsData = map(lambda shell: (shell, shell.count), vehicle.shells)
@@ -161,6 +163,14 @@ class AmmunitionPanel(AmmunitionPanelMeta, GlobalListener, AppRef):
 
     def highlightParams(self, type):
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIGHLIGHT_TANK_PARAMS, {'type': type}), EVENT_BUS_SCOPE.LOBBY)
+
+    def toRentContinue(self):
+        if g_currentVehicle.isPresent():
+            vehicle = g_currentVehicle.item
+            canBuyOrRent, _ = vehicle.mayRentOrBuy(g_itemsCache.items.stats.money)
+            if vehicle.isRentable and vehicle.rentalIsOver and canBuyOrRent:
+                self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': vehicle.nationID,
+                 'itemID': vehicle.innationID}))
 
     def showModuleInfo(self, moduleId):
         if moduleId is None:

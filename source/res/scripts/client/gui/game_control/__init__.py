@@ -1,6 +1,8 @@
 # Embedded file name: scripts/client/gui/game_control/__init__.py
 import BigWorld
 from gui.game_control.LanguageController import LanguageController
+from gui.game_control.RefSystem import RefSystem
+from gui.game_control.RentalsController import RentalsController
 from gui.game_control.links import ExternalLinksHandler
 from gui.game_control.roaming import RoamingController
 from gui.game_control.AOGAS import AOGASController
@@ -18,6 +20,7 @@ class _GameControllers(object):
         super(_GameControllers, self).__init__()
         self.__roaming = RoamingController()
         self.__captcha = CaptchaController()
+        self.__rentals = RentalsController()
         self.__aogas = AOGASController()
         self.__gameSession = GameSessionController()
         self.__igr = IGRController()
@@ -27,12 +30,17 @@ class _GameControllers(object):
         self.__links = ExternalLinksHandler()
         self.__soundChecker = SoundEventChecker()
         self.__serverStats = ServerStats()
+        self.__refSystem = RefSystem()
         self.__collectUiStats = False
         self.__logUXEvents = False
 
     @property
     def collectUiStats(self):
         return self.__collectUiStats
+
+    @property
+    def rentals(self):
+        return self.__rentals
 
     @property
     def needLogUXEvents(self):
@@ -82,6 +90,10 @@ class _GameControllers(object):
     def serverStats(self):
         return self.__serverStats
 
+    @property
+    def refSystem(self):
+        return self.__refSystem
+
     def init(self):
         self.__captcha.init()
         self.__aogas.init()
@@ -94,6 +106,8 @@ class _GameControllers(object):
         self.__links.init()
         self.__soundChecker.init()
         self.__serverStats.init()
+        self.__refSystem.init()
+        self.__rentals.init()
 
     def fini(self):
         self.__igr.fini()
@@ -107,6 +121,8 @@ class _GameControllers(object):
         self.__links.fini()
         self.__soundChecker.fini()
         self.__serverStats.fini()
+        self.__refSystem.fini()
+        self.__rentals.fini()
 
     def onAccountShowGUI(self, ctx):
         self.__language.start()
@@ -115,9 +131,11 @@ class _GameControllers(object):
         self.__gameSession.start(ctx.get('sessionStartedAt', -1))
         self.__igr.start(ctx)
         self.__wallet.start()
+        self.__rentals.start()
         self.__notifier.start()
         self.__soundChecker.start()
         self.__serverStats.start()
+        self.__refSystem.start()
         self.__collectUiStats = ctx.get('collectUiStats', False)
         self.__logUXEvents = ctx.get('logUXEvents', False)
 
@@ -125,9 +143,11 @@ class _GameControllers(object):
         self.__aogas.disableNotifyAccount()
         self.__gameSession.stop(True)
         self.__roaming.stop()
+        self.__rentals.stop()
         self.__wallet.stop()
         self.__soundChecker.stop()
         self.__serverStats.stop()
+        self.__refSystem.stop()
 
     def onAccountBecomePlayer(self):
         self.__roaming.start(BigWorld.player().serverSettings)
@@ -137,12 +157,14 @@ class _GameControllers(object):
         self.__captcha.stop()
         self.__aogas.stop()
         self.__gameSession.stop()
+        self.__rentals.stop()
         self.__igr.clear()
         self.__roaming.onDisconnected()
         self.__wallet.stop()
         self.__notifier.stop()
         self.__soundChecker.stop()
         self.__serverStats.stop()
+        self.__refSystem.stop()
 
 
 g_instance = _GameControllers()

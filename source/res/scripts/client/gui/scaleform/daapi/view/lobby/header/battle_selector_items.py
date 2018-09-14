@@ -20,9 +20,9 @@ _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
 class _SelectorItem(object):
-    __slots__ = ('_label', '_data', '_tooltip', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_selectorType')
+    __slots__ = ('_label', '_data', '_tooltip', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
 
-    def __init__(self, label, data, tooltip, order, selectorType = None):
+    def __init__(self, label, data, tooltip, order, selectorType = None, _isVisible = True):
         super(_SelectorItem, self).__init__()
         self._label = label
         self._data = data
@@ -32,6 +32,7 @@ class _SelectorItem(object):
         self._isNew = False
         self._isLocked = False
         self._isDisabled = True
+        self._isVisible = _isVisible
         self._selectorType = selectorType
 
     def __cmp__(self, other):
@@ -48,6 +49,9 @@ class _SelectorItem(object):
 
     def isDisabled(self):
         return self._isDisabled
+
+    def isVisible(self):
+        return self._isVisible
 
     def getSmallIcon(self):
         return _SMALL_ICON_PATH.format(self._data)
@@ -115,9 +119,6 @@ class _SelectorItem(object):
 
 class _DisabledSelectorItem(_SelectorItem):
 
-    def __init__(self, label, data, tooltip, order, selectorType = None):
-        super(_DisabledSelectorItem, self).__init__(label, data, tooltip, order, selectorType)
-
     def update(self, state):
         pass
 
@@ -153,6 +154,7 @@ class _HistoricalItem(_SelectorItem):
         else:
             self._isSelected = False
             self._isDisabled = True
+        self._isVisible = not self._isDisabled
 
 
 class _CommandItem(_SelectorItem):
@@ -238,7 +240,7 @@ class _BattleTutorialItem(_SelectorItem):
 
     @process
     def _doSelect(self, dispatcher):
-        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL)
+        result = yield dispatcher.unlock(FUNCTIONAL_EXIT.BATTLE_TUTORIAL, True)
         if result:
             g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.RESTART, ctx={'reloadIfRun': True}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
@@ -284,7 +286,7 @@ class _BattleSelectorItems(object):
             LOG_ERROR('Can not invoke action', action)
 
     def getVOs(self):
-        return (map(lambda item: item.getVO(), sorted(self.__items.itervalues())), self.__isDemonstrator, self.__isDemoButtonEnabled)
+        return (map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__items.itervalues()))), self.__isDemonstrator, self.__isDemoButtonEnabled)
 
 
 _g_items = None
@@ -294,7 +296,7 @@ _DEFAULT_PAN = PREBATTLE_ACTION_NAME.JOIN_RANDOM_QUEUE
 def _createItems():
     isInRoaming = game_control.g_instance.roaming.isInRoaming()
     items = [_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, _PAN.JOIN_RANDOM_QUEUE, TOOLTIPS.BATTLETYPES_STANDART, 0),
-     (_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, TOOLTIPS.BATTLETYPES_HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL),
+     (_DisabledSelectorItem if isInRoaming else _HistoricalItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_HISTORICALBATTLES, PREBATTLE_ACTION_NAME.HISTORICAL, TOOLTIPS.BATTLETYPES_HISTORICAL, 1, SELECTOR_BATTLE_TYPES.HISTORICAL, False),
      _CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.UNIT, TOOLTIPS.BATTLETYPES_UNIT, 2, SELECTOR_BATTLE_TYPES.UNIT),
      _CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANY, TOOLTIPS.BATTLETYPES_COMPANY, 3),
      (_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, TOOLTIPS.BATTLETYPES_FORTIFICATION, 4, SELECTOR_BATTLE_TYPES.SORTIE),

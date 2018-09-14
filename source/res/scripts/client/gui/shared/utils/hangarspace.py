@@ -93,6 +93,8 @@ class _HangarSpace(object):
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
         self.onSpaceCreate = Event.Event()
+        from helpers.statistics import g_statistics
+        g_statistics.subscribeToHangarSpaceCreate(self.onSpaceCreate)
         return
 
     @property

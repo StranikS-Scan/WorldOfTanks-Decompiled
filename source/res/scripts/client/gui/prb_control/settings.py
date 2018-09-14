@@ -74,7 +74,9 @@ UNIT_ERRORS_TRANSLATE_AS_WARNINGS = (UNIT_ERROR.KICKED_PLAYER,
  UNIT_ERROR.INVITE_REMOVED,
  UNIT_ERROR.ALREADY_INVITED,
  UNIT_ERROR.WAITING_FOR_JOIN,
- UNIT_ERROR.CLAN_CHANGED)
+ UNIT_ERROR.CLAN_CHANGED,
+ UNIT_ERROR.CANT_PICK_LEADER,
+ UNIT_ERROR.NO_CLAN_MEMBERS)
 RETURN_INTRO_UNIT_MGR_ERRORS = (UNIT_ERROR.KICKED_CANDIDATE, UNIT_ERROR.KICKED_PLAYER)
 UNIT_ERROR_NAMES = dict([ (v, k) for k, v in UNIT_ERROR.__dict__.iteritems() ])
 UNIT_BROWSER_ERROR_NAMES = dict([ (v, k) for k, v in UNIT_BROWSER_ERROR.__dict__.iteritems() ])
@@ -85,10 +87,6 @@ class UNIT_NOTIFICATION_KEY(object):
     PLAYER_ADDED = 'playerAdded'
     PLAYER_REMOVED = 'playerRemoved'
     GIVE_LEADERSHIP = 'giveLeadership'
-
-
-class UNIT_GUI_ERROR(object):
-    UNKNOWN, UNIT_IS_FULL, UNIT_IS_LOCKED, VEHICLES_NOT_FOUND = range(0, 4)
 
 
 class PREBATTLE_ACTION_NAME(object):
@@ -181,8 +179,10 @@ class PREBATTLE_RESTRICTION:
     VEHICLE_IN_BATTLE = 'vehicle/inBattle'
     VEHICLE_BROKEN = 'vehicle/broken'
     VEHICLE_ROAMING = 'vehicle/roaming'
+    VEHICLE_RENTALS_IS_OVER = 'vehicle/rentalsIsOver'
+    VEHICLE_IGR_RENTALS_IS_OVER = 'vehicle/igrRentalsIsOver'
+    VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
-    VEHICLE_ONLY_EVENT_BATTLES = 'vehicle/only_event_battles'
     CREW_NOT_FULL = 'crew/notFull'
     SERVER_LIMITS = (LIMIT_MIN_COUNT,
      LIMIT_MAX_COUNT,
@@ -204,7 +204,8 @@ class PREBATTLE_RESTRICTION:
      VEHICLE_NOT_PRESENT,
      VEHICLE_IN_BATTLE,
      VEHICLE_BROKEN,
-     VEHICLE_ROAMING)
+     VEHICLE_ROAMING,
+     VEHICLE_RENTALS_IS_OVER)
 
     @classmethod
     def getVehClassRestrictions(cls):
@@ -221,6 +222,24 @@ class PREBATTLE_RESTRICTION:
                 return True
 
         return False
+
+
+class UNIT_RESTRICTION(object):
+    UNDEFINED = ''
+    NOT_READY_IN_SLOTS = 'slots/notReadyPlayers'
+    MIN_SLOTS = 'slots/minOccupiedSlots'
+    ZERO_TOTAL_LEVEL = 'roster/zeroTotalLevel'
+    MIN_TOTAL_LEVEL = 'roster/minTotalLevel'
+    MAX_TOTAL_LEVEL = 'roster/maxTotalLevel'
+    INVALID_TOTAL_LEVEL = 'roster/invalidTotalLevel'
+    NEED_PLAYERS_SEARCH = 'roster/needPlayersSearch'
+    IS_IN_IDLE = 'state/isInIdle'
+    IS_IN_ARENA = 'state/isInArena'
+    UNIT_IS_FULL = 'state/full'
+    UNIT_IS_LOCKED = 'state/locked'
+    VEHICLE_NOT_SELECTED = 'vehicle/notSelected'
+    VEHICLE_NOT_VALID = 'vehicle/notValid'
+    VEHICLE_NOT_FOUND = 'vehicle/notFound'
 
 
 class PREBATTLE_ROSTER(object):

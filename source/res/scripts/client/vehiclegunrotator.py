@@ -265,6 +265,8 @@ class VehicleGunRotator(object):
             self.__time = BigWorld.time()
             self.__rotate(shotPoint, timeDiff)
             self.__updateGunMarker()
+            if replayCtrl.isPlaying:
+                replayCtrl.resetUpdateGunOnRewind()
             return
 
     def __getTimeDiff(self):
@@ -311,8 +313,13 @@ class VehicleGunRotator(object):
                 self.estimatedTurretRotationTime = 0
             gunPitchLimits = calcPitchLimitsFromDesc(turretYaw, descr.gun['pitchLimits'])
             self.__gunPitch = self.__getNextGunPitch(self.__gunPitch, shotGunPitch, self.__maxGunRotationSpeed * timeDiff, gunPitchLimits)
-            self.__updateTurretMatrix(turretYaw, self.__ROTATION_TICK_LENGTH)
-            self.__updateGunMatrix(self.__gunPitch, self.__ROTATION_TICK_LENGTH)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnRewind:
+                self.__updateTurretMatrix(turretYaw, 0.001)
+                self.__updateGunMatrix(self.__gunPitch, 0.001)
+            else:
+                self.__updateTurretMatrix(turretYaw, self.__ROTATION_TICK_LENGTH)
+                self.__updateGunMatrix(self.__gunPitch, self.__ROTATION_TICK_LENGTH)
             diff = abs(turretYaw - prevTurretYaw)
             if diff > pi:
                 diff = 2 * pi - diff
@@ -328,7 +335,11 @@ class VehicleGunRotator(object):
             replayCtrl.setGunMarkerParams(markerSize, markerPos, markerDir)
         if not self.__targetLastShotPoint:
             self.__lastShotPoint = markerPos
-        self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, self.__ROTATION_TICK_LENGTH, collData)
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isUpdateGunOnRewind:
+            self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, 0.001, collData)
+        else:
+            self.__avatar.inputHandler.updateGunMarker(markerPos, markerDir, markerSize, self.__ROTATION_TICK_LENGTH, collData)
         self.__markerInfo = (markerPos, markerDir, markerSize)
 
     def __getNextTurretYaw(self, curAngle, shotAngle, speedLimit, angleLimits):
@@ -552,10 +563,33 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
     __GEAR_KEYOFF_PARAM = 'on_off'
     __MANUAL_WAIT_TIME = 0.4
     __GEAR_DELAY_TIME = 0.2
+    __GEAR_STOP_DELAY_TIME = 0.2
+    __SPEED_IDLE = 0
+    __SPEED_SLOW = 1
+    __SPEED_PRE_FAST = 2
+    __SPEED_FAST = 3
 
     def __init__(self, updatePeriod = 0.0):
         CallbackDelayer.__init__(self)
         self.__updatePeriod = updatePeriod
+        self.__currentSpeedState = self.__SPEED_IDLE
+        self.__stateTable = ((None,
+          self.__startManualSound,
+          self.__initHighSpeed,
+          None),
+         (self.__stopManualSound,
+          None,
+          self.__initHighSpeed,
+          None),
+         (self.__stopManualSound,
+          self.__startManualSoundFromFast,
+          None,
+          None),
+         (self.__stopGearSoundPlaying,
+          self.__startManualSoundFromFast,
+          None,
+          self.__checkGearSound))
+        return
 
     def init_sound(self):
         if _ENABLE_TURRET_ROTATOR_SOUND:
@@ -568,6 +602,7 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
             self.__manualSound.stop()
         if self.__gearSound is not None:
             self.__gearSound.stop()
+        self.__stateTable = None
         return
 
     def enable(self, enableSound):
@@ -613,21 +648,19 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
         if self.__manualSound is None:
             return
         else:
-            enableGear = self.__gearSound is not None and angleDiff >= _PlayerTurretRotationSoundEffect.__MIN_ANGLE_TO_ENABLE_GEAR
-            if enableGear:
-                if not self.hasDelayedCallback(self.__startGearSound) and not self.__gearSound.isPlaying:
-                    self.delayCallback(_PlayerTurretRotationSoundEffect.__GEAR_DELAY_TIME, self.__startGearSound)
-                self.stopCallback(self.__stopManualSound)
+            if self.__gearSound is not None and angleDiff >= _PlayerTurretRotationSoundEffect.__MIN_ANGLE_TO_ENABLE_GEAR:
+                if self.__currentSpeedState != self.__SPEED_FAST and self.__currentSpeedState != self.__SPEED_PRE_FAST:
+                    nextSpeedState = self.__SPEED_PRE_FAST
+                else:
+                    nextSpeedState = self.__currentSpeedState
             elif angleDiff >= _PlayerTurretRotationSoundEffect.__MIN_ANGLE_TO_ENABLE_MANUAL:
-                if not (self.__gearSound is not None and self.__gearSound.isPlaying or self.__manualSound.isPlaying):
-                    self.__manualSound.play()
-                self.stopCallback(self.__startGearSound)
-                self.stopCallback(self.__stopManualSound)
+                nextSpeedState = self.__SPEED_SLOW
             else:
-                if not self.hasDelayedCallback(self.__stopManualSound) and self.__manualSound.isPlaying:
-                    self.delayCallback(_PlayerTurretRotationSoundEffect.__MANUAL_WAIT_TIME, self.__stopManualSound)
-                if self.__gearSound is not None:
-                    self.__stopByKeyOff(self.__gearSound)
+                nextSpeedState = self.__SPEED_IDLE
+            stateFn = self.__stateTable[self.__currentSpeedState][nextSpeedState]
+            if stateFn is not None:
+                stateFn()
+            self.__currentSpeedState = nextSpeedState
             if g__attachToCam:
                 __p = BigWorld.camera().position
             else:
@@ -645,6 +678,9 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
                 self.__gearSound.position = __p
             return
 
+    def __stopGearByKeyOff(self):
+        self.__stopByKeyOff(self.__gearSound)
+
     def __stopByKeyOff(self, sound):
         if sound is not None and sound.isPlaying:
             param = sound.param(_PlayerTurretRotationSoundEffect.__GEAR_KEYOFF_PARAM)
@@ -654,13 +690,39 @@ class _PlayerTurretRotationSoundEffect(CallbackDelayer):
                 sound.stop()
         return
 
-    def __startGearSound(self):
-        if self.__gearSound is not None:
-            self.__stopManualSound()
-            self.__gearSound.play()
-        return
+    def __startManualSound(self):
+        self.stopCallback(self.__stopManualSoundCallback)
+        self.__manualSound.play()
 
     def __stopManualSound(self):
-        if self.__manualSound is not None:
-            self.__manualSound.stop()
+        if not self.hasDelayedCallback(self.__stopManualSoundCallback) and self.__manualSound.isPlaying:
+            self.delayCallback(_PlayerTurretRotationSoundEffect.__MANUAL_WAIT_TIME, self.__stopManualSoundCallback)
+        self.__stopGearSoundPlaying()
+
+    def __initHighSpeed(self):
+        self.stopCallback(self.__stopGearByKeyOff)
+        self.delayCallback(_PlayerTurretRotationSoundEffect.__GEAR_DELAY_TIME, self.__startGearSoundCallback)
+
+    def __startManualSoundFromFast(self):
+        self.__manualSound.play()
+        self.__stopGearSoundPlaying()
+
+    def __checkGearSound(self):
+        if self.__gearSound.isPlaying is False:
+            self.__gearSound.play()
+
+    def __stopGearSoundPlaying(self):
+        if self.__gearSound is not None:
+            self.stopCallback(self.__startGearSoundCallback)
+            if self.__gearSound.isPlaying and not self.hasDelayedCallback(self.__stopGearByKeyOff):
+                self.delayCallback(_PlayerTurretRotationSoundEffect.__GEAR_STOP_DELAY_TIME, self.__stopGearByKeyOff)
         return
+
+    def __startGearSoundCallback(self):
+        self.__currentSpeed = self.__SPEED_FAST
+        if self.__manualSound.isPlaying:
+            self.__manualSound.stop()
+        self.__gearSound.play()
+
+    def __stopManualSoundCallback(self):
+        self.__manualSound.stop()

@@ -262,6 +262,7 @@ class VehicleStickers(object):
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun['animateEmblemSlots']
+        self.__currentInsigniaRank = insigniaRank
         componentSlots = ((TankComponentNames.HULL, vehicleDesc.hull['emblemSlots']),
          (TankComponentNames.GUN if self.__showEmblemsOnGun else TankComponentNames.TURRET, vehicleDesc.turret['emblemSlots']),
          (TankComponentNames.TURRET if self.__showEmblemsOnGun else TankComponentNames.GUN, []),
@@ -270,6 +271,9 @@ class VehicleStickers(object):
         for componentName, emblemSlots in componentSlots:
             modelStickers = ModelStickers(vehicleDesc, emblemSlots, componentName == TankComponentNames.HULL, insigniaRank)
             self.__stickers[componentName] = ComponentStickers(modelStickers, {}, 1.0)
+
+    def getCurrentInsigniaRank(self):
+        return self.__currentInsigniaRank
 
     def attach(self, modelsWithParentNodes, isDamaged, showDamageStickers):
         for componentName, (model, parentNode) in zip(VehicleStickers.COMPONENT_NAMES, modelsWithParentNodes):

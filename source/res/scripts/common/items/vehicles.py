@@ -10,7 +10,7 @@ import nations, items
 from items import _xml
 from debug_utils import *
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT, IS_CELLAPP, IS_BASEAPP, IS_WEB, ITEM_DEFS_PATH
-from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IGR_TYPE
+from constants import DEFAULT_GUN_PITCH_LIMITS_TRANSITION, IGR_TYPE, IS_RENTALS_ENABLED
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -47,6 +47,7 @@ VEHICLE_TANKMAN_TYPE_NAMES = ('commander',
  'gunner',
  'loader')
 OBLIGATORY_HB_TAGS = frozenset(('secret', 'cannot_be_sold', 'historical_battles'))
+PREMIUM_IGR_TAGS = frozenset(('premiumIGR',))
 NUM_OPTIONAL_DEVICE_SLOTS = 3
 NUM_EQUIPMENT_SLOTS = 3
 CAMOUFLAGE_KINDS = {'winter': 0,
@@ -99,7 +100,9 @@ def init(preloadEverything, pricesToCollect):
     _g_prices = pricesToCollect
     if pricesToCollect is not None:
         pricesToCollect['itemPrices'] = {}
+        pricesToCollect['vehiclesRentPrices'] = {}
         pricesToCollect['notInShopItems'] = set()
+        pricesToCollect['vehiclesNotToBuy'] = set()
         pricesToCollect['vehiclesToSellForGold'] = set()
         pricesToCollect['vehicleSellPriceFactors'] = {}
         pricesToCollect['vehicleCamouflagePriceFactors'] = {}
@@ -1009,10 +1012,14 @@ class VehicleType(object):
                 _xml.raiseWrongXml(xmlCtx, 'customizationNation', 'unknown nation name:' + customizationNation)
         self.speedLimits = (KMH_TO_MS * _xml.readPositiveFloat(xmlCtx, section, 'speedLimits/forward'), KMH_TO_MS * _xml.readPositiveFloat(xmlCtx, section, 'speedLimits/backward'))
         self.repairCost = _xml.readNonNegativeFloat(xmlCtx, section, 'repairCost')
+        self.crewXpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'crewXpFactor')
+        self.premiumVehicleXPFactor = 0.0
+        if section.has_key('premiumVehicleXPFactor'):
+            self.premiumVehicleXPFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'premiumVehicleXPFactor')
+        self.premiumVehicleXPFactor = max(self.premiumVehicleXPFactor, 0.0)
         if not IS_CLIENT or IS_DEVELOPMENT:
             self.xpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'xpFactor')
             self.freeXpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'freeXpFactor')
-            self.crewXpFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'crewXpFactor')
             self.creditsFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'creditsFactor')
             self.healthBurnPerSec = _xml.readNonNegativeFloat(xmlCtx, section, 'healthBurnPerSec')
             self.healthBurnPerSecLossFraction = _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION
@@ -1498,11 +1505,15 @@ class VehicleList(object):
                 pricesDest['itemPrices'][compactDescr] = price
                 if vsection.readBool('notInShop', False):
                     pricesDest['notInShopItems'].add(compactDescr)
+                if IS_RENTALS_ENABLED and vsection.readBool('cannotBeBought', False):
+                    pricesDest['vehiclesNotToBuy'].add(compactDescr)
                 sellPriceFactor = vsection.readFloat('sellPriceFactor', SELL_PRICE_FACTOR)
                 if abs(sellPriceFactor - SELL_PRICE_FACTOR) > 0.001:
                     pricesDest['vehicleSellPriceFactors'][compactDescr] = sellPriceFactor
                 if price[1] and vsection.readBool('sellForGold', False):
                     pricesDest['vehiclesToSellForGold'].add(compactDescr)
+                rentPrice = _xml.readRentPrice(ctx, vsection, 'rent') if IS_RENTALS_ENABLED else {}
+                pricesDest['vehiclesRentPrices'][compactDescr] = rentPrice
 
         for histModelID, baseModelName in historicalModelsOf.iteritems():
             compactDescr = makeIntCompactDescrByID('vehicle', nationID, histModelID)
@@ -1907,8 +1918,9 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
                     _xml.raiseWrongSection(ctx, 'turretPositions')
                 variant['turretPositions'] = tuple(v)
                 continue
-            if IS_CLIENT and name == 'turretHardPoints':
-                variant['turretHardPoints'] = __readTurretHardPoints(section, numTurrets)
+            if name == 'turretHardPoints':
+                if IS_CLIENT:
+                    variant['turretHardPoints'] = __readTurretHardPoints(section, numTurrets)
                 continue
             if name == 'chassis':
                 if variantMatch[0] is not None:
@@ -3132,8 +3144,10 @@ def _readShotEffects(xmlCtx, section):
             res['deepWaterHit'] = v if v else res[defSubEffName]
         if not res.has_key('shallowWaterHit'):
             res['shallowWaterHit'] = res['deepWaterHit']
-        res['physicsParams'] = {'impact': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/impact'),
-         'radius': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/radius')}
+        res['physicsParams'] = {'shellVelocity': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/shellVelocity'),
+         'shellMass': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/shellMass'),
+         'splashRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/splashRadius'),
+         'splashStrength': _xml.readNonNegativeFloat(xmlCtx, section, 'physicsParams/splashStrength')}
     return res
 
 
@@ -3460,7 +3474,7 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
     if IS_CLIENT:
         isNew = section.readBool('isNew', False)
         descr['isNew'] = isNew
-        descr['description'] = i18n.makeString(section.readString('description'))
+        descr['description'] = section.readString('description')
         descr['texture'] = _xml.readNonEmptyString(xmlCtx, section, 'texture')
         descr['colors'] = _readColors(xmlCtx, section, 'colors', 4)
         descr['gloss'] = _readGloss(xmlCtx, section, nationID)

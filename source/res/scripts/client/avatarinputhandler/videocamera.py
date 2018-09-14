@@ -1,20 +1,16 @@
 # Embedded file name: scripts/client/AvatarInputHandler/VideoCamera.py
+import math
 import Math
 from Math import Vector3, Matrix
 import BigWorld
 from AvatarInputHandler import mathUtils, AimingSystems
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler.aims import createAim
-from AvatarInputHandler.mathUtils import MatrixProviders
 import GUI
 import Keys
-import functools
-import math
 from ProjectileMover import collideDynamicAndStatic
-import constants
 import BattleReplay
-from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.BattleContext import g_battleContext
+from gui.battle_control import g_sessionProvider
 from helpers import isPlayerAvatar
 from DetachedTurret import DetachedTurret
 
@@ -313,7 +309,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         self.__basisMProv.bind(None)
         self.__rotateAroundPointEnabled = False
         self.__alignerToLand.disable()
-        if isPlayerAvatar() and g_battleContext.isPlayerObserver():
+        if isPlayerAvatar() and g_sessionProvider.getCtx().isPlayerObserver():
             BigWorld.player().positionControl.moveTo(self.__position)
             BigWorld.player().positionControl.followCamera(True)
         return

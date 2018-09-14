@@ -5,10 +5,10 @@ import BigWorld
 import constants
 import dossiers2
 import AccountCommands
+from abstract import AbstractRequester
 from adisp import async
 from debug_utils import LOG_ERROR
 from gui.shared.utils import code2str
-from gui.shared.utils.requesters.abstract import RequesterAbstract
 
 class RequestProcessor(object):
 
@@ -185,7 +185,7 @@ class UserDossier(object):
         return not self.isHidden and self.isAvailable
 
 
-class DossierRequester(RequesterAbstract):
+class DossierRequester(AbstractRequester):
     """
     This requester store only vehicles dossiers (server architecture).
     Account dossier is stored in Stats and tankmen dossiers - in its own

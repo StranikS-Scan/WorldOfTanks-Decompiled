@@ -86,6 +86,9 @@ class TechTree(ResearchView, TechTreeMeta):
         self.invalidateFreeXP()
         self.invalidateGold()
 
+    def invalidateRent(self, vehicles):
+        pass
+
     def _resolveLoadCtx(self, ctx = None):
         nation = ctx['nation'] if ctx is not None and 'nation' in ctx else None
         if nation is not None and nation in nations.INDICES:

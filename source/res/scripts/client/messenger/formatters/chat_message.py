@@ -1,6 +1,6 @@
 # Embedded file name: scripts/client/messenger/formatters/chat_message.py
-from gui.BattleContext import g_battleContext
 from gui.LobbyContext import g_lobbyContext
+from gui.battle_control import g_sessionProvider
 from helpers import i18n
 from messenger import g_settings
 from messenger.ext.player_helpers import isCurrentPlayer
@@ -28,7 +28,7 @@ class _BattleMessageBuilder(object):
     def setName(self, dbID, pName = None):
         if pName:
             pName = i18n.encodeUtf8(pName)
-        self._ctx['playerName'] = g_battleContext.getFullPlayerName(accID=dbID, pName=pName)
+        self._ctx['playerName'] = g_sessionProvider.getCtx().getFullPlayerName(accID=dbID, pName=pName)
         return self
 
     def setText(self, text):
@@ -44,7 +44,7 @@ class TeamMessageBuilder(_BattleMessageBuilder):
     def setColors(self, dbID):
         pColorScheme = g_settings.getColorScheme('battle/player')
         pColor = pColorScheme.getHexStr('teammate')
-        ctx = g_battleContext
+        ctx = g_sessionProvider.getCtx()
         if isCurrentPlayer(dbID):
             pColor = pColorScheme.getHexStr('himself')
         elif ctx.isTeamKiller(accID=dbID):
@@ -64,11 +64,11 @@ class CommonMessageBuilder(_BattleMessageBuilder):
         if isCurrentPlayer(dbID):
             pColor = pColorScheme.getHexStr('himself')
         else:
-            ctx = g_battleContext
+            ctx = g_sessionProvider.getCtx()
             if ctx.isInTeam(accID=dbID):
-                if g_battleContext.isTeamKiller(accID=dbID):
+                if ctx.isTeamKiller(accID=dbID):
                     pColor = pColorScheme.getHexStr('teamkiller')
-                elif g_battleContext.isSquadMan(accID=dbID):
+                elif ctx.isSquadMan(accID=dbID):
                     pColor = pColorScheme.getHexStr('squadman')
                 else:
                     pColor = pColorScheme.getHexStr('teammate')
@@ -79,7 +79,7 @@ class CommonMessageBuilder(_BattleMessageBuilder):
         return self
 
     def setName(self, dbID, pName = None):
-        ctx = g_battleContext
+        ctx = g_sessionProvider.getCtx()
         fullName = ctx.getFullPlayerName(accID=dbID, pName=pName)
         if not len(fullName):
             if ctx.isInTeam(accID=dbID):
@@ -97,7 +97,7 @@ class SquadMessageBuilder(_BattleMessageBuilder):
         pColor = pColorScheme.getHexStr('squadman')
         if isCurrentPlayer(dbID):
             pColor = pColorScheme.getHexStr('himself')
-        elif g_battleContext.isTeamKiller(accID=dbID):
+        elif g_sessionProvider.getCtx().isTeamKiller(accID=dbID):
             pColor = pColorScheme.getHexStr('teamkiller')
         self._ctx['playerColor'] = pColor
         self._ctx['messageColor'] = g_settings.getColorScheme('battle/message').getHexStr('squad')

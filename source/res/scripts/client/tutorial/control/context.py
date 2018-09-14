@@ -2,10 +2,16 @@
 from abc import ABCMeta, abstractmethod
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY
-__all__ = ['StartReqs',
+__all__ = ['isInPrebattle',
+ 'StartReqs',
  'BonusesRequester',
  'SoundPlayer',
  'GlobalStorage']
+
+def isInPrebattle():
+    from gui.prb_control import hasModalEntity
+    return hasModalEntity()
+
 
 class StartReqs(object):
     __meta__ = ABCMeta
@@ -126,10 +132,12 @@ class GLOBAL_FLAG(object):
     SHOW_HISTORY = '_TutorialShowHistory'
     HISTORY_NOT_AVAILABLE = '_TutorialHistoryNotAvailable'
     IN_QUEUE = '_InTutorialQueue'
+    ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
     ALL = [IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
-     IN_QUEUE]
+     IN_QUEUE,
+     ALL_BONUSES_RECEIVED]
 
 
 class GlobalStorage(object):

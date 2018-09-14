@@ -20,7 +20,7 @@ class FunctionalCollection(object):
         return
 
     def reset(self):
-        for item in self.__items:
+        for item in self.__items.itervalues():
             if hasattr(item, 'reset'):
                 item.reset()
 
@@ -150,3 +150,10 @@ class FunctionalCollection(object):
                 continue
             if item and ctx:
                 yield (item, ctx)
+
+    def canSendInvite(self, playerDBID):
+        for func in self.getIterator():
+            if func.getPermissions().canSendInvite():
+                return True
+
+        return False

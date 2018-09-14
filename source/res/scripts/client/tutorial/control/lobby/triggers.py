@@ -5,9 +5,9 @@ from account_helpers.Inventory import _VEHICLE, _TANKMAN
 from AccountCommands import RES_SUCCESS
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
+from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
 from items import vehicles, ITEM_TYPE_NAMES, tankmen
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.utils.requesters import ShopDataParser
 from tutorial.control.triggers import _Trigger, _TriggerWithValidateVar
 from tutorial.logger import LOG_ERROR
 __all__ = ['BonusTrigger',

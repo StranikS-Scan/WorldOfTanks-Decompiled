@@ -2,24 +2,29 @@
 from operator import attrgetter
 import BigWorld
 import constants
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_DEBUG
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, CAROUSEL_FILTER
-from adisp import process
+from gui.Scaleform.framework import AppRef
+from gui.Scaleform.framework.managers.TextManager import TextIcons
+from gui.game_control import g_instance as g_gameCtrl
+from gui.shared.formatters.time_formatters import getRentLeftTimeStr
 from gui.shared.tooltips import ACTION_TOOLTIPS_STATE, ACTION_TOOLTIPS_TYPE
+from helpers import i18n
 from items.vehicles import VEHICLE_CLASS_TAGS
 from gui import SystemMessages
 from gui.prb_control.prb_helpers import GlobalListener
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache, REQ_CRITERIA
 from gui.shared.utils import decorators
 from gui.shared.gui_items import CLAN_LOCK
-from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer, VehicleFavoriteProcessor
+from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, Vehicle
 from gui.Scaleform import getVehicleTypeAssetPath
 from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
 
-class TankCarousel(TankCarouselMeta, GlobalListener):
+class TankCarousel(TankCarouselMeta, GlobalListener, AppRef):
     UPDATE_LOCKS_PERIOD = 60
+    IGR_FILTER_ID = 100
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -51,6 +56,8 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
         if self.__updateVehiclesTimerId is not None:
             BigWorld.cancelCallback(self.__updateVehiclesTimerId)
             self.__updateVehiclesTimerId = None
+        g_gameCtrl.rentals.onRentChangeNotify += self._updateRent
+        g_gameCtrl.igr.onIgrTypeChanged += self._updateIgrType
         self.as_setCarouselFilterS(self.vehiclesFilter)
         return
 
@@ -58,28 +65,10 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
         if self.__updateVehiclesTimerId is not None:
             BigWorld.cancelCallback(self.__updateVehiclesTimerId)
             self.__updateVehiclesTimerId = None
+        g_gameCtrl.rentals.onRentChangeNotify -= self._updateRent
+        g_gameCtrl.igr.onIgrTypeChanged -= self._updateIgrType
         super(TankCarousel, self)._dispose()
         return
-
-    def showVehicleInfo(self, vehInvID):
-        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
-        if vehicle is not None:
-            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW, {'vehicleCompactDescr': vehicle.intCD}))
-        return
-
-    def toResearch(self, intCD):
-        if intCD is not None:
-            Event = events.LoadEvent
-            exitEvent = Event(Event.LOAD_HANGAR)
-            loadEvent = Event(Event.LOAD_RESEARCH, ctx={'rootCD': intCD,
-             'exit': exitEvent})
-            self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            LOG_ERROR("Can't go to Research because id for current vehicle is None")
-        return
-
-    def vehicleSell(self, vehInvID):
-        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG, {'vehInvID': int(vehInvID)}))
 
     def vehicleChange(self, vehInvID):
         g_currentVehicle.selectVehicle(int(vehInvID))
@@ -105,6 +94,15 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
 
         return result
 
+    def _updateRent(self, vehicles):
+        self.updateVehicles(vehicles)
+
+    def _updateIgrType(self, *args):
+        filterCriteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
+        items = g_itemsCache.items
+        filteredVehs = items.getVehicles(filterCriteria)
+        self.updateVehicles(filteredVehs)
+
     def __getProviderObject(self, vehicleType):
         assetPath = {'label': self.__getVehicleTypeLabel(vehicleType),
          'data': vehicleType,
@@ -113,15 +111,6 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
 
     def __getVehicleTypeLabel(self, vehicleType):
         return '#menu:carousel_tank_filter/' + vehicleType
-
-    @process
-    def favoriteVehicle(self, vehInvID, isFavorite):
-        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
-        if vehicle is not None:
-            result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
-            if not result.success:
-                LOG_ERROR('Cannot set selected vehicle as favorite due to following error: ', result.userMsg)
-        return
 
     def setVehiclesFilter(self, nation, tankType, ready):
         self.vehiclesFilter['nation'] = nation
@@ -145,7 +134,10 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
     def showVehicles(self):
         filterCriteria = REQ_CRITERIA.INVENTORY
         if self.vehiclesFilter['nation'] != -1:
-            filterCriteria |= REQ_CRITERIA.NATIONS([self.vehiclesFilter['nation']])
+            if self.vehiclesFilter['nation'] == 100:
+                filterCriteria |= REQ_CRITERIA.VEHICLE.IN_PREMIUM_IGR
+            else:
+                filterCriteria |= REQ_CRITERIA.NATIONS([self.vehiclesFilter['nation']])
         if self.vehiclesFilter['tankType'] != 'none':
             filterCriteria |= REQ_CRITERIA.VEHICLE.CLASSES([self.vehiclesFilter['tankType']])
         if self.vehiclesFilter['ready']:
@@ -188,11 +180,12 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
                     vState, vStateLvl = Vehicle.VEHICLE_STATE.NOT_SUITABLE, Vehicle.VEHICLE_STATE_LEVEL.WARNING
                 data = {'id': vehicle.invID,
                  'inventoryId': vehicle.invID,
-                 'label': vehicle.userName,
+                 'label': vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName,
                  'image': vehicle.icon,
                  'nation': vehicle.nationID,
                  'level': vehicle.level,
                  'stat': vState,
+                 'statStr': self.getStringStatus(vState),
                  'stateLevel': vStateLvl,
                  'doubleXPReceived': vehicle.dailyXPFactor,
                  'compactDescr': vehicle.intCD,
@@ -204,8 +197,9 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
                  'tankType': vehicle.type,
                  'exp': vehicle.xp,
                  'current': 0,
-                 'enabled': True}
-            vehsData[intCD] = data
+                 'enabled': True,
+                 'rentLeft': self.getRentLeftInfo(vehicle.isPremiumIGR, vehicle.rentLeftTime)}
+                vehsData[intCD] = data
 
         LOG_DEBUG('Updating carousel vehicles: ', vehsData if not isSet else 'full sync')
         self.as_updateVehiclesS(vehsData, isSet)
@@ -238,9 +232,6 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
          'slotPriceActionData': action})
         return
 
-    def showVehicleStats(self, intCD):
-        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_PROFILE, {'itemCD': intCD}), scope=EVENT_BUS_SCOPE.LOBBY)
-
     def updateLockTimers(self):
         self.__updateVehiclesTimerId = None
         items = g_itemsCache.items
@@ -250,3 +241,15 @@ class TankCarousel(TankCarouselMeta, GlobalListener):
             vehicles = items.stats.vehicleTypeLocks.keys()
         self.updateVehicles(vehicles)
         return
+
+    def getStringStatus(self, vState):
+        if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
+            icon = self.app.utilsManager.textManager.getIcon(TextIcons.PREMIUM_IGR_SMALL)
+            return i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState, icon=icon)
+        return i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState)
+
+    def getRentLeftInfo(self, isPremIgr, rentLeftTime):
+        if isPremIgr:
+            return ''
+        localization = '#menu:vehicle/rentLeft/%s'
+        return getRentLeftTimeStr(localization, rentLeftTime)

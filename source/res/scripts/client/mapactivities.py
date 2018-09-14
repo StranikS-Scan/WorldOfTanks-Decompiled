@@ -215,6 +215,7 @@ class WarplaneActivity(IMapActivity):
     def start(self):
         if self.__firstLaunch is True:
             BigWorld.addModel(self.__model)
+            self.__model.forceReflect = True
             self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
             self.__model.addMotor(self.__motor)
             self.__endTime = self.__motor.totalTime + self.__startTime

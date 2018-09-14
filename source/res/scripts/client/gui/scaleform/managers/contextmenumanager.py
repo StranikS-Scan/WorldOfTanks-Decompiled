@@ -2,7 +2,7 @@
 import BigWorld
 from adisp import process
 import constants
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from account_helpers import isMoneyTransfer
 from gui import DialogsInterface, game_control
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
@@ -20,6 +20,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.gui_items.processors.vehicle import VehicleFavoriteProcessor
 
 class ContextMenuManager(ContextMenuManagerMeta):
     DENUNCIATIONS = {'bot': constants.DENUNCIATION.BOT,
@@ -58,6 +59,71 @@ class ContextMenuManager(ContextMenuManagerMeta):
         else:
             self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_PROFILE_WINDOW, {'userName': userName,
              'databaseID': int(uid)}), EVENT_BUS_SCOPE.LOBBY)
+        return
+
+    def getContextMenuVehicleData(self, vehInvID):
+        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
+        if vehicle is not None:
+            canBuyOrRent = False
+            if vehicle.isRented:
+                money = g_itemsCache.items.stats.money
+                canRentResult, rentErrorStr = vehicle.mayRent(money)
+                canBuyResult, buyErrorStr = vehicle.mayPurchase(money)
+                canBuyOrRent = canRentResult or canBuyResult
+            vehicleWasInBattle = False
+            accDossier = g_itemsCache.items.getAccountDossier(None)
+            if accDossier:
+                wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
+                if vehicle.intCD in wasInBattleSet:
+                    vehicleWasInBattle = True
+            return {'inventoryId': vehicle.invID,
+             'compactDescr': vehicle.intCD,
+             'favorite': vehicle.isFavorite,
+             'canSell': vehicle.canSell,
+             'wasInBattle': vehicleWasInBattle,
+             'isRented': vehicle.isRented,
+             'rentalIsOver': vehicle.rentalIsOver,
+             'canBuyOrRent': canBuyOrRent}
+        else:
+            return
+
+    def vehicleBuy(self, vehInvID):
+        item = g_itemsCache.items.getVehicle(int(vehInvID))
+        if item is not None:
+            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_BUY_WINDOW, {'nationID': item.nationID,
+             'itemID': item.innationID}))
+        return
+
+    def showVehicleInfo(self, vehInvID):
+        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
+        if vehicle is not None:
+            self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_INFO_WINDOW, {'vehicleCompactDescr': vehicle.intCD}))
+        return
+
+    def toResearch(self, intCD):
+        if intCD is not None:
+            Event = events.LoadEvent
+            exitEvent = Event(Event.LOAD_HANGAR)
+            loadEvent = Event(Event.LOAD_RESEARCH, ctx={'rootCD': intCD,
+             'exit': exitEvent})
+            self.fireEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            LOG_ERROR("Can't go to Research because id for current vehicle is None")
+        return
+
+    def vehicleSell(self, vehInvID):
+        self.fireEvent(events.ShowWindowEvent(events.ShowWindowEvent.SHOW_VEHICLE_SELL_DIALOG, {'vehInvID': int(vehInvID)}))
+
+    def showVehicleStats(self, intCD):
+        self.fireEvent(events.LoadEvent(events.LoadEvent.LOAD_PROFILE, {'itemCD': intCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    @process
+    def favoriteVehicle(self, vehInvID, isFavorite):
+        vehicle = g_itemsCache.items.getVehicle(int(vehInvID))
+        if vehicle is not None:
+            result = yield VehicleFavoriteProcessor(vehicle, bool(isFavorite)).request()
+            if not result.success:
+                LOG_ERROR('Cannot set selected vehicle as favorite due to following error: ', result.userMsg)
         return
 
     def showMoneyTransfer(self, uid, userName):
@@ -126,11 +192,7 @@ class ContextMenuManager(ContextMenuManagerMeta):
             self.__showInviteMessage(user)
 
     def canInvite(self, databaseID):
-        for func in self.prbDispatcher.getFunctionalCollection().getIterator():
-            if func.getPermissions().canSendInvite():
-                return True
-
-        return False
+        return self.prbDispatcher.getFunctionalCollection().canSendInvite(databaseID)
 
     def invite(self, databaseID, data):
         user = self.proto.users.usersStorage.getUser(databaseID)
@@ -169,14 +231,6 @@ class ContextMenuManager(ContextMenuManagerMeta):
 
     def _isMoneyTransfer(self):
         return isMoneyTransfer(g_itemsCache.items.stats.attributes)
-
-    def isVehicleWasInBattle(self, intCD):
-        accDossier = g_itemsCache.items.getAccountDossier(None)
-        if accDossier:
-            wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
-            if intCD in wasInBattleSet:
-                return True
-        return False
 
     def fortDirection(self):
         self.fireEvent(events.ShowViewEvent(FORTIFICATION_ALIASES.FORT_CREATE_DIRECTION_WINDOW_EVENT), EVENT_BUS_SCOPE.LOBBY)

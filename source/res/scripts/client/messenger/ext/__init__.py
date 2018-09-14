@@ -1,6 +1,10 @@
 # Embedded file name: scripts/client/messenger/ext/__init__.py
 import types
 import BigWorld
+from helpers import i18n
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from external_strings_utils import isAccountNameValid
+from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH
 import constants
 from debug_utils import LOG_ERROR
 from messenger import g_settings
@@ -47,3 +51,14 @@ def getMinimapCellName(cellIdx):
     else:
         cellName = 'N/A'
     return cellName
+
+
+def checkAccountName(token):
+    if not len(token):
+        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_EMPTYUSERSEARCHTOKEN_MESSAGE)
+        return (False, reason)
+    elif not isAccountNameValid(token):
+        reason = i18n.makeString(MESSENGER.CLIENT_WARNING_INVALIDUSERSEARCHTOKEN_MESSAGE, _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH)
+        return (False, reason)
+    else:
+        return (True, None)

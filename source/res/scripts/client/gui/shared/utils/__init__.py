@@ -133,6 +133,15 @@ def findFirst(function_or_None, sequence, default = None):
         return default
 
 
+def isEmpty(sequence):
+    try:
+        next(sequence)
+    except StopIteration:
+        return True
+
+    return False
+
+
 def sortByFields(fields, sequence, valueGetter = dict.get):
 
     def comparator(x, y):

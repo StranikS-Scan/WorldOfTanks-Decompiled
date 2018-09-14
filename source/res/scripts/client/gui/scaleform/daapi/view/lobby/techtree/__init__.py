@@ -31,6 +31,7 @@ class NODE_STATE:
     SHOP_ACTION = 4096
     CAN_SELL = 8192
     VEHICLE_CAN_BE_CHANGED = 16384
+    VEHICLE_IN_RENT = 32768
 
     @classmethod
     def add(cls, state, flag):
@@ -72,7 +73,7 @@ class NODE_STATE:
 
     @classmethod
     def isBuyForGold(cls, state):
-        return state & cls.UNLOCKED and not state & cls.IN_INVENTORY and state & cls.PREMIUM
+        return state & cls.UNLOCKED and (not state & cls.IN_INVENTORY or state & cls.VEHICLE_IN_RENT) and state & cls.PREMIUM
 
     @classmethod
     def change2Unlocked(cls, state):

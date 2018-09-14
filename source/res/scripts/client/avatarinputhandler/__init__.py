@@ -1,14 +1,20 @@
 # Embedded file name: scripts/client/AvatarInputHandler/__init__.py
 import functools
+import math
 from AvatarInputHandler.CallbackDelayer import CallbackDelayer
-import BigWorld, Math, math, ResMgr, Keys, FMOD
+import BigWorld
+import Math
+import ResMgr
+import Keys
+import FMOD
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-import Settings
 import GUI
 from Event import Event
 from debug_utils import *
 from gui import g_guiResetters
 from gui.Scaleform.CursorDelegator import g_cursorDelegator
+from gui.battle_control import g_sessionProvider
+from gui.battle_control.consumables.ammo_ctrl import SHELL_SET_RESULT
 from post_processing.post_effect_controllers import g_postProcessingEvents
 import control_modes
 import constants
@@ -285,6 +291,7 @@ class AvatarInputHandler(CallbackDelayer):
         for control in self.__ctrls.itervalues():
             control.create()
 
+        self.__addBattleCtrlListeners()
         g_cursorDelegator.detachCursor()
         if not self.__curCtrl.isManualBind():
             BigWorld.player().positionControl.bindToVehicle(True)
@@ -312,6 +319,7 @@ class AvatarInputHandler(CallbackDelayer):
     def stop(self):
         self.__isStarted = False
         FMOD.setEventsParam('viewPlayMode', 0)
+        self.__removeBattleCtrlListeners()
         for control in self.__ctrls.itervalues():
             control.destroy()
 
@@ -392,6 +400,12 @@ class AvatarInputHandler(CallbackDelayer):
         self.__curCtrl.setReloading(duration, startTime)
         if self.aim is not None:
             self.aim.setReloading(duration, startTime, baseTime)
+        return
+
+    def setReloadingInPercent(self, percent):
+        self.__curCtrl.setReloadingInPercent(percent)
+        if self.aim is not None:
+            self.aim.setReloadingInPercent(percent)
         return
 
     def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
@@ -557,6 +571,47 @@ class AvatarInputHandler(CallbackDelayer):
             horStabilizationSnp = g_settingsCore.getSetting('horStabilizationSnp')
             self.enableDynamicCamera(dynamicCamera, horStabilizationSnp)
 
+    def __addBattleCtrlListeners(self):
+        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        self.__onGunSettingsSet(ammoCtrl.getGunSettings())
+        ammoCtrl.onGunSettingsSet += self.__onGunSettingsSet
+        ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
+        ammoCtrl.onGunReloadTimeSetInPercent += self.__onGunReloadTimeSetInPercent
+        ammoCtrl.onCurrentShellChanged += self.__onCurrentShellChanged
+        ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+
+    def __removeBattleCtrlListeners(self):
+        ammoCtrl = g_sessionProvider.getAmmoCtrl()
+        ammoCtrl.onGunSettingsSet -= self.__onGunSettingsSet
+        ammoCtrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
+        ammoCtrl.onGunReloadTimeSetInPercent -= self.__onGunReloadTimeSetInPercent
+        ammoCtrl.onCurrentShellChanged -= self.__onCurrentShellChanged
+        ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
+
+    def __onGunSettingsSet(self, gunSettings):
+        aim = self.__curCtrl.getAim()
+        if aim:
+            self.__curCtrl.getAim().setClipParams(gunSettings.clip.size, gunSettings.burst.size)
+
+    def __onGunReloadTimeSet(self, _, timeLeft, baseTime):
+        self.setReloading(timeLeft, None, baseTime)
+        return
+
+    def __onGunReloadTimeSetInPercent(self, _, percent):
+        self.setReloadingInPercent(percent)
+
+    def __onCurrentShellChanged(self, _):
+        aim = self.__curCtrl.getAim()
+        if aim:
+            aim.setAmmoStock(*g_sessionProvider.getAmmoCtrl().getCurrentShells())
+
+    def __onShellsUpdated(self, _, quantity, quantityInClip, result):
+        if not result & SHELL_SET_RESULT.CURRENT:
+            return
+        aim = self.__curCtrl.getAim()
+        if aim:
+            aim.setAmmoStock(quantity, quantityInClip, result & SHELL_SET_RESULT.CASSETTE_RELOAD > 0)
+
 
 class _Targeting():
 
@@ -595,7 +650,7 @@ class _VertScreenshotCamera(object):
 
     def __init__(self):
         self.__isEnabled = False
-        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Client Settings/std fog/enabled', 'Client Settings/Script tick')
+        self.__watcherNames = ('Render/Fov', 'Render/Near Plane', 'Render/Far Plane', 'Render/Objects Far Plane/Enabled', 'Render/Shadows/dynamicEnabled', 'Render/Shadows/dynamicViewDistanceTo', 'Visibility/Draw tanks', 'Visibility/Control Points', 'Visibility/GUI', 'Visibility/particles', 'Client Settings/std fog/enabled', 'Client Settings/Script tick')
 
     def destroy(self):
         self.enable(False)
@@ -644,5 +699,7 @@ class _VertScreenshotCamera(object):
         BigWorld.setWatcher('Render/Near Plane', max(0.1, camPos.y - 1000.0))
         BigWorld.setWatcher('Render/Far Plane', camPos.y + 1000.0)
         BigWorld.setWatcher('Render/Objects Far Plane/Enabled', False)
+        BigWorld.setWatcher('Render/Shadows/dynamicEnabled', False)
+        BigWorld.setWatcher('Render/Shadows/dynamicViewDistanceTo', 1000000)
         BigWorld.setWatcher('Client Settings/Script tick', False)
         LOG_DEBUG('Vertical screenshot camera is enabled')

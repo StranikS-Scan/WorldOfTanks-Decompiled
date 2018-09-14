@@ -2,12 +2,13 @@
 import MusicController
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.meta.StoreMeta import StoreMeta
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.locale.MENU import MENU
+from gui.game_control import g_instance
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -39,6 +40,7 @@ class Store(LobbySubView, StoreMeta):
         self.__setNations()
         g_clientUpdateManager.addCallbacks({'inventory': self._onFiltersUpdate})
         g_itemsCache.onSyncCompleted += self._update
+        g_instance.rentals.onRentChangeNotify += self._onTableUpdate
         MusicController.g_musicController.play(MusicController.MUSIC_EVENT_LOBBY)
         MusicController.g_musicController.play(MusicController.AMBIENT_EVENT_SHOP)
         self.__filterHash = self.__listToNationFilterData(self._getCurrentFilter())
@@ -54,6 +56,7 @@ class Store(LobbySubView, StoreMeta):
         self.__filterHash = None
         self.__clearSubFilter()
         g_itemsCache.onSyncCompleted -= self._update
+        g_instance.rentals.onRentChangeNotify -= self._onTableUpdate
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._table = None
         return

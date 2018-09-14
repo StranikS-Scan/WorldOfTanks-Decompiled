@@ -179,6 +179,10 @@ class Research(ResearchView, ResearchMeta):
         self.as_setFreeXPS(g_itemsCache.items.stats.actualFreeXP)
         super(Research, self).invalidateFreeXP()
 
+    def invalidateRent(self, vehicles):
+        if self._data.getRootCD() in vehicles:
+            self.redraw()
+
     def invalidateVehLocks(self, locks):
         if self._data.invalidateLocks(locks):
             self.redraw()

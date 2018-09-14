@@ -16,6 +16,8 @@ class CustomizationInterface(DAAPIModule):
         super(CustomizationInterface, self).__init__()
         self._name = name
         self._position = position
+        self._positionShift = 0
+        self.isTurret = False
         self._nationID = nationId
         self._type = type
 

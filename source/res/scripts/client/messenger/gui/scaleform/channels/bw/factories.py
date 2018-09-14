@@ -37,6 +37,8 @@ class LobbyControllersFactory(IControllerFactory):
             else:
                 controller = lobby_controllers.LazyChannelController(channel)
         elif channel.isPrebattle():
+            if g_settings.server.BW_CHAT2.isEnabled():
+                return
             prbType = channel.getPrebattleType()
             if prbType is 0:
                 LOG_ERROR('Prebattle type is not found', channel)

@@ -20,6 +20,10 @@ class RallyMainWindowWithSearchMeta(BaseRallyMainWindow):
         if self._isDAAPIInited():
             return self.flashObject.as_changeAutoSearchState(value)
 
+    def as_changeAutoSearchBtnsStateS(self, waitingPlayers, searchEnemy):
+        if self._isDAAPIInited():
+            return self.flashObject.as_changeAutoSearchBtnsState(waitingPlayers, searchEnemy)
+
     def as_hideAutoSearchS(self):
         if self._isDAAPIInited():
             return self.flashObject.as_hideAutoSearch()

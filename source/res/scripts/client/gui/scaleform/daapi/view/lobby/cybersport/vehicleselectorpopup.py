@@ -18,7 +18,7 @@ class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, V
         self.__section = ctx.get('section')
         self.__vehicles = ctx.get('vehicles')
         self.__selectedVehicles = ctx.get('selectedVehicles')
-        self.__maxLevel = ctx.get('maxLevel', 10)
+        self.__levelsRange = ctx.get('levelsRange', (1, 10))
         self.showNotReadyVehicles = ctx.get('showNotReady', True)
 
     def _populate(self):
@@ -63,9 +63,9 @@ class VehicleSelectorPopup(View, VehicleSelectorPopupMeta, AbstractWindowView, V
 
     def updateData(self):
         if not self.getFilters().get('compatibleOnly', True) or self.__vehicles is None:
-            vehicles = self._updateData(g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY), self.__maxLevel)
+            vehicles = self._updateData(g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY), self.__levelsRange)
         else:
-            vehicles = self._updateData(self.__vehicles, self.__maxLevel)
+            vehicles = self._updateData(self.__vehicles, self.__levelsRange)
         if self.__selectedVehicles is not None:
             vehicleGetter = g_itemsCache.items.getItemByCD
             selected = [ makeVehicleVO(vehicleGetter(int(item))) for item in self.__selectedVehicles ]

@@ -23,6 +23,8 @@ def _getBattleDescriptor():
 
 
 class OffbattleStartReqs(context.StartReqs):
+    _isHistory = GlobalStorage(GLOBAL_FLAG.SHOW_HISTORY, False)
+    _areAllBonusesReceived = GlobalStorage(GLOBAL_FLAG.ALL_BONUSES_RECEIVED, False)
 
     def isEnabled(self):
         isTutorialEnabled = IS_TUTORIAL_ENABLED
@@ -54,12 +56,12 @@ class OffbattleStartReqs(context.StartReqs):
                 self._clear()
                 return
             finishReason = OffBattleClientCtx.fetch(cache).finishReason
-            isHistory = GlobalStorage(GLOBAL_FLAG.SHOW_HISTORY, False).value()
-            if isHistory or not cache.isRefused() and loader.isAfterBattle and finishReason not in [-1, FINISH_REASON.FAILURE]:
+            if self._isHistory or not cache.isRefused() and loader.isAfterBattle and finishReason not in [-1, FINISH_REASON.FAILURE]:
                 cache.setAfterBattle(True)
             else:
                 cache.setAfterBattle(False)
-            if not battleDesc.areAllBonusesReceived(completed):
+            self._areAllBonusesReceived = battleDesc.areAllBonusesReceived(completed)
+            if not self._areAllBonusesReceived:
                 if cache.getPlayerXPLevel() == PLAYER_XP_LEVEL.NEWBIE:
                     BigWorld.player().stats.get('dossier', self.__cb_onGetDossier)
                 else:
@@ -67,6 +69,8 @@ class OffbattleStartReqs(context.StartReqs):
                     self._resolveTutorialState(loader, ctx)
             else:
                 cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
+                if cache.wasReset():
+                    cache.setRefused(True)
                 self._clear()
                 self._resolveTutorialState(loader, ctx)
             return
@@ -98,13 +102,21 @@ class OffbattleStartReqs(context.StartReqs):
     def _resolveTutorialState(self, loader, ctx):
         cache = ctx.cache
         tutorial = loader.tutorial
+        if (ctx.isInPrebattle or not ctx.isFirstStart and not cache.isAfterBattle()) and not ctx.restart:
+            tutorial.pause(ctx)
+            cache.setRefused(True).write()
+            return
         if cache.isRefused():
-            if ctx.restart and not ctx.isInPrebattle:
+            if ctx.restart:
                 tutorial.restart(ctx)
+            elif not self._areAllBonusesReceived and not loader.isAfterBattle and cache.doStartOnNextLogin():
+                loader._doRun(ctx)
             else:
                 tutorial.pause(ctx)
             return
         if cache.isAfterBattle():
+            loader._doRun(ctx)
+        elif not loader.isAfterBattle and cache.doStartOnNextLogin():
             loader._doRun(ctx)
         else:
             tutorial.pause(ctx)

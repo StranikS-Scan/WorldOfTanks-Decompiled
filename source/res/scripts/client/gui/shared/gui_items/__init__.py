@@ -1,6 +1,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import BigWorld
 from debug_utils import *
+from gui.shared.economics import getActionPrc
 from helpers import i18n
 from items import ITEM_TYPE_NAMES, vehicles, getTypeInfoByName, ITEM_TYPE_INDICES
 from gui import nationCompareByIndex, GUI_SETTINGS
@@ -216,12 +217,11 @@ class FittingItem(GUIItem, HasIntCD):
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
         self.defaultPrice = (0, 0)
-        self.buyPrice = (0, 0)
+        self._buyPrice = (0, 0)
         self.sellPrice = (0, 0)
         self.defaultSellPrice = (0, 0)
         self.altPrice = None
         self.defaultAltPrice = None
-        self.actionPrc = 0
         self.sellActionPrc = 0
         self.isHidden = False
         self.inventoryCount = 0
@@ -232,9 +232,9 @@ class FittingItem(GUIItem, HasIntCD):
             self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
             if self.defaultPrice is None:
                 self.defaultPrice = (0, 0)
-            self.buyPrice, self.isHidden, self.sellForGold = proxy.shop.getItem(self.intCompactDescr)
-            if self.buyPrice is None:
-                self.buyPrice = (0, 0)
+            self._buyPrice, self.isHidden, self.sellForGold = proxy.shop.getItem(self.intCompactDescr)
+            if self._buyPrice is None:
+                self._buyPrice = (0, 0)
             self.defaultSellPrice = BigWorld.player().shop.getSellPrice(self.defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID)
             self.sellPrice = BigWorld.player().shop.getSellPrice(self.buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID)
             self.inventoryCount = proxy.inventory.getItems(self.itemTypeID, self.intCompactDescr)
@@ -243,12 +243,19 @@ class FittingItem(GUIItem, HasIntCD):
             self.isUnlocked = self.intCD in proxy.stats.unlocks
             self.altPrice = self._getAltPrice(self.buyPrice, proxy.shop)
             self.defaultAltPrice = self._getAltPrice(self.defaultPrice, proxy.shop.defaults)
-            self.actionPrc = proxy.shop.getActionPrc(self.altPrice or self.buyPrice, self.defaultAltPrice or self.defaultPrice)
-            self.sellActionPrc = -1 * proxy.shop.getActionPrc(self.sellPrice, self.defaultSellPrice)
+            self.sellActionPrc = -1 * getActionPrc(self.sellPrice, self.defaultSellPrice)
         return
 
     def _getAltPrice(self, buyPrice, proxy):
         return None
+
+    @property
+    def buyPrice(self):
+        return self._buyPrice
+
+    @property
+    def actionPrc(self):
+        return getActionPrc(self.altPrice or self.buyPrice, self.defaultAltPrice or self.defaultPrice)
 
     @property
     def isSecret(self):
@@ -259,12 +266,32 @@ class FittingItem(GUIItem, HasIntCD):
         return self.buyPrice[1] > 0
 
     @property
+    def isPremiumIGR(self):
+        return False
+
+    @property
+    def isRentable(self):
+        return False
+
+    @property
+    def isRented(self):
+        return False
+
+    @property
     def descriptor(self):
         return vehicles.getDictDescr(self.intCompactDescr)
 
     @property
     def isRemovable(self):
         return True
+
+    @property
+    def minRentPrice(self):
+        return None
+
+    @property
+    def rentLeftTime(self):
+        return 0
 
     @property
     def userType(self):
@@ -341,6 +368,12 @@ class FittingItem(GUIItem, HasIntCD):
          'subtype': 'small/',
          'unicName': self.name.replace(':', '-')}
 
+    @property
+    def iconUnique(self):
+        return _ICONS_MASK % {'type': self.itemTypeName,
+         'subtype': 'unique/',
+         'unicName': self.name.replace(':', '-')}
+
     def getBuyPriceCurrency(self):
         if self.altPrice is not None:
             if self.altPrice[1] and not self.isBoughtForCredits:
@@ -363,9 +396,14 @@ class FittingItem(GUIItem, HasIntCD):
     def mayRemove(self, vehicle):
         return (True, '')
 
+    def mayRent(self, money):
+        return False
+
     def mayPurchase(self, money):
         if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL) and not self.isUnlocked:
             return (False, 'unlock_error')
+        if self.isHidden:
+            return (False, 'isHidden')
         price = self.altPrice or self.buyPrice
         if price[0] == 0 and price[1] == 0:
             return (True, '')

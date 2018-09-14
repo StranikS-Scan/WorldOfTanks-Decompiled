@@ -1,21 +1,20 @@
 # Embedded file name: scripts/client/gui/shared/utils/requesters/InventoryRequester.py
 import time
-import types
 from collections import namedtuple, defaultdict
 import BigWorld
 from adisp import async
 from items import vehicles, tankmen, getTypeOfCompactDescr
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.requesters.abstract import RequesterAbstract
+from abstract import AbstractRequester
 
-class InventoryRequester(RequesterAbstract):
+class InventoryRequester(AbstractRequester):
     VEH_DATA = namedtuple('VEH_DATA', ','.join(['compDescr',
      'descriptor',
      'invID',
      'repair',
-     'customizations',
-     'igrCustomizationsLayout',
+     'customizationExpiryTime',
+     'igrCustomizationLayout',
      'crew',
      'lock',
      'settings',
@@ -71,6 +70,8 @@ class InventoryRequester(RequesterAbstract):
                 self.__makeTankman(invID)
 
         else:
+            if itemTypeID == 'customizations':
+                return invData
             for typeCompDescr in invData.iterkeys():
                 self.__makeSimpleItem(typeCompDescr)
 
@@ -111,7 +112,7 @@ class InventoryRequester(RequesterAbstract):
             if compactDescr is None:
                 return
             try:
-                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('customizations', time.time()), value('igrCustomizationsLayout', time.time()), value('crew', []), value('lock', 0), value('settings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
+                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('customizationExpiryTime', time.time()), value('igrCustomizationLayout', time.time()), value('crew', []), value('lock', 0), value('settings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
             except Exception:
                 LOG_DEBUG('Error while building vehicle from inventory', vehInvID, typeCompDescr)
                 return
@@ -202,7 +203,7 @@ class InventoryRequester(RequesterAbstract):
         
         @return: layout or empty dict
         """
-        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationsLayout', {})
+        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
 
     def __getItemsData(self, itemTypeIdx, compactDescr = None):
         """

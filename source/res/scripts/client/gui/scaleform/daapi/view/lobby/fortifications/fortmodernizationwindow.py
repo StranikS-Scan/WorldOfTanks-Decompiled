@@ -6,7 +6,6 @@ from constants import FORT_BUILDING_TYPE, MAX_FORTIFICATION_LEVEL, FORT_ORDER_TY
 from FortifiedRegionBase import BuildingDescr
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_text
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortSoundController import g_fortSoundController
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
@@ -14,6 +13,7 @@ from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.daapi.view.meta.FortModernizationWindowMeta import FortModernizationWindowMeta
 from gui.Scaleform.framework import AppRef
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.framework.managers.TextManager import TextType, TextIcons
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -89,7 +89,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         if result:
             g_fortSoundController.playUpgradeBuilding()
             SystemMessages.g_instance.pushI18nMessage(SYSTEM_MESSAGES.FORTIFICATION_MODERNIZATIONBUILDING, buildingName=building.userName, buildingLevel=building.getUserLevel(True), type=SystemMessages.SM_TYPE.Warning)
-            self.onWindowClose()
+        self.destroy()
 
     def _populate(self):
         super(FortModernizationWindow, self)._populate()
@@ -117,7 +117,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         super(FortModernizationWindow, self)._dispose()
         return
 
-    def onUpdated(self):
+    def onUpdated(self, isFullUpdate):
         self.__buildData()
 
     def onBuildingChanged(self, buildingTypeID, reason, ctx = None):
@@ -133,7 +133,7 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         LOG_DEBUG(upgradeRestriction)
         cndPostfix = ''
         isCanModernization = canUpgrade
-        conditionIcon = fort_text.getIcon(fort_text.CHECKMARK_ICON)
+        conditionIcon = self.app.utilsManager.textManager.getIcon(TextIcons.CHECKMARK_ICON)
         canUpgradeByDefPeriod = True
         isBaseBuilding = self.__uid == FORTIFICATION_ALIASES.FORT_BASE_BUILDING
         if self.__uid != FORTIFICATION_ALIASES.FORT_BASE_BUILDING:
@@ -146,36 +146,36 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
                 if self.__isFortBattleAvailable:
                     cndBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_DEFENCEPERIODANDBASEBUILDING, level=fort_formatters.getTextLevel(self.__buildingLevel + 1))
                     if not self.__defencePeriod or self.__baseBuildingLevel < MAX_LEVEL.MAX_BASE_LEVEL_SECOND_ITERATION:
-                        cndPostfix = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
+                        cndPostfix = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
                         isCanModernization = False
                         canUpgradeByDefPeriod = False
-                        conditionIcon = fort_text.getText(fort_text.STANDARD_TEXT, '-')
+                        conditionIcon = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, '-')
                 elif self.__buildingLevel == self.__baseBuildingLevel:
-                    cndPostfix = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
+                    cndPostfix = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
             elif self.__buildingLevel == self.__baseBuildingLevel:
-                cndPostfix = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
+                cndPostfix = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
                 isCanModernization = False
         elif self.__buildingLevel == baseBuildingMaxLevel:
             cndBody = i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_BASEBUILDINGFIVELEVEL)
             if not self.__defencePeriod and self.__isFortBattleAvailable:
-                cndPostfix = fort_text.getText(fort_text.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
+                cndPostfix = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_NOTFULFILLED))
                 isCanModernization = False
                 canUpgradeByDefPeriod = False
-                conditionIcon = fort_text.getText(fort_text.STANDARD_TEXT, '-')
+                conditionIcon = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, '-')
             elif not self.__isFortBattleAvailable:
                 isCanModernization = False
                 canUpgradeByDefPeriod = False
-                cndBody = fort_text.getText(fort_text.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL))
+                cndBody = self.app.utilsManager.textManager.getText(TextType.ALERT_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_CONDITIONS_FORTMAXLEVEL))
                 conditionIcon = ''
-        prefixBody = fort_text.getText(fort_text.MAIN_TEXT, cndBody)
+        prefixBody = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, cndBody)
         result['condition'] = prefixBody + cndPostfix
-        result['costUpgrade'] = fort_text.getText(fort_text.PURPLE_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_COUNTCOST))
+        result['costUpgrade'] = self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_COUNTCOST))
         result['intBuildingID'] = self.intBuildingID
         if not canUpgrade and upgradeRestriction != FORT_RESTRICTION.BUILDING_NOT_ENOUGH_RESOURCE:
-            conditionIcon = fort_text.getText(fort_text.STANDARD_TEXT, '-')
+            conditionIcon = self.app.utilsManager.textManager.getText(TextType.STANDARD_TEXT, '-')
         if self._buildingDescr.storage < self.__cost:
-            costMsg = fort_text.getText(fort_text.ERROR_TEXT, BigWorld.wg_getIntegralFormat(self.__cost))
-            constIcon = fort_text.getIcon(fort_text.NUT_ICON)
+            costMsg = self.app.utilsManager.textManager.getText(TextType.ERROR_TEXT, BigWorld.wg_getIntegralFormat(self.__cost))
+            constIcon = self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
             costMsg = costMsg + ' ' + constIcon
         else:
             costMsg = fort_formatters.getDefRes(self.__cost, True)
@@ -213,14 +213,14 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         before['buildingLevel'] = self.__buildingLevel
         before['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, False)
         before['defResInfo'] = self.__prepareOrderInfo(False, orderCount)
-        before['titleText'] = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_BEFORELABEL))
+        before['titleText'] = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_BEFORELABEL))
         result['beforeUpgradeData'] = before
         after = {}
         after['buildingType'] = self.__uid
         after['buildingLevel'] = self.__buildingLevel + 1
         after['buildingIndicators'] = self.__prepareIndicatorData(isCanModernization, True, resLeft)
         after['defResInfo'] = self.__prepareOrderInfo(True, newCount)
-        after['titleText'] = fort_text.getText(fort_text.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_AFTERLABEL))
+        after['titleText'] = self.app.utilsManager.textManager.getText(TextType.MIDDLE_TITLE, i18n.makeString(FORTIFICATIONS.MODERNIZATION_MODERNIZATIONINFO_AFTERLABEL))
         result['afterUpgradeData'] = after
         return result
 
@@ -235,30 +235,30 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
             hpVal = self.__hpVal
             defResVal = self.__defResVal
             maxDerResVal = self.__maxDerResVal
-        textStyle = fort_text.PURPLE_TEXT
+        textStyle = TextType.DEFRES_TEXT
         if self.__progress == FORTIFICATION_ALIASES.STATE_FOUNDATION_DEF or self.__progress == FORTIFICATION_ALIASES.STATE_FOUNDATION:
-            textStyle = fort_text.ALERT_TEXT
+            textStyle = TextType.ALERT_TEXT
         if not isCanModernization and increment:
-            currentHpLabel = fort_text.getText(fort_text.MAIN_TEXT, '--')
+            currentHpLabel = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, '--')
             currentHpValue = 0
         else:
             currentHpLabel = str(BigWorld.wg_getIntegralFormat(hpVal))
             currentHpValue = hpVal
-        formattedHpValue = fort_text.getText(textStyle, currentHpLabel)
-        hpTextColor = fort_text.STANDARD_TEXT
+        formattedHpValue = self.app.utilsManager.textManager.getText(textStyle, currentHpLabel)
+        hpTextColor = TextType.STANDARD_TEXT
         if increment:
-            hpTextColor = fort_text.NEUTRAL_TEXT
-        formattedHpTotal = fort_text.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(hpTotalVal)))
-        formattedHpTotal += ' ' + fort_text.getIcon(fort_text.NUT_ICON)
+            hpTextColor = TextType.NEUTRAL_TEXT
+        formattedHpTotal = self.app.utilsManager.textManager.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(hpTotalVal)))
+        formattedHpTotal += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
         if not isCanModernization and increment:
-            currentDefResLabel = fort_text.getText(fort_text.MAIN_TEXT, '--')
+            currentDefResLabel = self.app.utilsManager.textManager.getText(TextType.MAIN_TEXT, '--')
             currentDefResValue = 0
         else:
             currentDefResLabel = str(BigWorld.wg_getIntegralFormat(defResVal))
             currentDefResValue = defResVal
-        formattedDefResValue = fort_text.getText(fort_text.PURPLE_TEXT, currentDefResLabel)
-        formattedDefResTotal = fort_text.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
-        formattedDefResTotal += ' ' + fort_text.getIcon(fort_text.NUT_ICON)
+        formattedDefResValue = self.app.utilsManager.textManager.getText(TextType.DEFRES_TEXT, currentDefResLabel)
+        formattedDefResTotal = self.app.utilsManager.textManager.getText(hpTextColor, str(BigWorld.wg_getIntegralFormat(maxDerResVal)))
+        formattedDefResTotal += ' ' + self.app.utilsManager.textManager.getIcon(TextIcons.NUT_ICON)
         result = {}
         result['hpLabel'] = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_HPLBL)
         result['defResLabel'] = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_INDICATORS_DEFRESLBL)
@@ -283,28 +283,28 @@ class FortModernizationWindow(AbstractWindowView, View, FortModernizationWindowM
         if self.__uid == 'base_building':
             if increment:
                 building_bonus = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_HEADER_LEVELSLBL, buildLevel=fort_formatters.getTextLevel(min(self.__baseBuildingLevel + 1, MAX_FORTIFICATION_LEVEL)))
-                defresDescr = fort_text.concatStyles(((fort_text.NEUTRAL_TEXT, building_bonus + ' '), (fort_text.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
+                defresDescr = self.app.utilsManager.textManager.concatStyles(((TextType.NEUTRAL_TEXT, building_bonus + ' '), (TextType.MAIN_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
             else:
                 building_bonus = i18n.makeString(FORTIFICATIONS.BUILDINGPOPOVER_HEADER_LEVELSLBL, buildLevel=fort_formatters.getTextLevel(self.__baseBuildingLevel))
-                defresDescr = fort_text.concatStyles(((fort_text.STANDARD_TEXT, building_bonus + ' '), (fort_text.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
+                defresDescr = self.app.utilsManager.textManager.concatStyles(((TextType.STANDARD_TEXT, building_bonus + ' '), (TextType.STANDARD_TEXT, i18n.makeString(FORTIFICATIONS.BUILDINGS_MODERNIZATIONDESCR_BASE_BUILDING))))
         else:
             orderTypeID = self._buildingDescr.typeRef.orderType
             _, _, orderLevel, orderData = self.fortCtrl.getFort().getOrderData(orderTypeID)
             foundedLevel = orderLevel
             if increment:
-                bodyTextColor = fort_text.MAIN_TEXT
-                bonusTextColor = fort_text.NEUTRAL_TEXT
+                bodyTextColor = TextType.MAIN_TEXT
+                bonusTextColor = TextType.NEUTRAL_TEXT
                 foundedLevel = orderLevel + 1
                 _, _, _, orderData = self.fortCtrl.getFort().getOrderData(orderTypeID, foundedLevel)
                 textPadding = '     '
             else:
-                bodyTextColor = fort_text.STANDARD_TEXT
-                bonusTextColor = fort_text.STANDARD_TEXT
+                bodyTextColor = TextType.STANDARD_TEXT
+                bonusTextColor = TextType.STANDARD_TEXT
                 textPadding = ''
             if orderTypeID == FORT_ORDER_TYPE.SPECIAL_MISSION:
                 awardText = textPadding + i18n.makeString(FORTIFICATIONS.ORDERS_SPECIALMISSION_POSSIBLEAWARD) + ' '
                 bonusDescr = i18n.makeString(FORTIFICATIONS.orders_specialmission_possibleaward_description_level(foundedLevel))
-                defresDescr = fort_text.concatStyles(((bonusTextColor, awardText), (bodyTextColor, bonusDescr)))
+                defresDescr = self.app.utilsManager.textManager.concatStyles(((bonusTextColor, awardText), (bodyTextColor, bonusDescr)))
             else:
                 colorStyle = (bonusTextColor, bodyTextColor)
                 bonus = str(abs(orderData.effectValue))

@@ -122,6 +122,9 @@ class IListenersCollection(object):
 
 class IPrbFunctional(IClientFunctional, IListenersCollection):
 
+    def __init__(self):
+        LOG_DEBUG('Prebattle functional inited:', self)
+
     def __del__(self):
         LOG_DEBUG('Prebattle functional deleted:', self)
 
@@ -227,6 +230,9 @@ class IPrbListener(IIntoPrbListener):
 
 class IPreQueueFunctional(IListenersCollection):
 
+    def __init__(self):
+        LOG_DEBUG('Queue functional inited:', self)
+
     def __del__(self):
         LOG_DEBUG('Queue functional deleted:', self)
 
@@ -308,6 +314,9 @@ class IPreQueueListener(object):
 
 class IUnitFunctional(IClientFunctional, IListenersCollection):
 
+    def __init__(self):
+        LOG_DEBUG('Unit functional inited:', self)
+
     def __del__(self):
         LOG_DEBUG('Unit functional deleted:', self)
 
@@ -369,7 +378,7 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
         return unit_items.UnitState(0)
 
     def getStats(self, unitIdx = None):
-        return unit_items.UnitStats(0, 0, 0, 0, 0, 0)
+        return unit_items.UnitStats(0, 0, 0, 0, [], 0, 0)
 
     def getComment(self, unitIdx = None):
         return ''
@@ -385,6 +394,12 @@ class IUnitFunctional(IClientFunctional, IListenersCollection):
 
     def doLeadershipNotificationShown(self):
         pass
+
+    def validateLevels(self, stats = None, state = None, vInfo = None):
+        return (True, '')
+
+    def getUnitInvalidLevels(self, stats = None):
+        return []
 
 
 class IIntroUnitListener(object):

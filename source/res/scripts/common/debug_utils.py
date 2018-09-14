@@ -120,8 +120,13 @@ def LOG_DAN_DEV(msg, *kargs):
         _doLog('DAN', msg, kargs)
 
 
-def LOG_VLK(msg, *kargs):
+def LOG_VLK_DEV(msg, *kargs):
     if IS_DEVELOPMENT:
+        _doLog('VLK', msg, kargs)
+
+
+def LOG_VLK(msg, *kargs):
+    if IS_DEVELOPMENT or not IS_CLIENT:
         _doLog('VLK', msg, kargs)
 
 

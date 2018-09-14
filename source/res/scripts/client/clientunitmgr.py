@@ -141,7 +141,7 @@ class ClientUnitMgr(object):
         for rosterSlotIdx, rosterDict in rosterDefsDict.iteritems():
             vehTypeID = rosterDict.get('vehTypeID', None)
             nationNames = rosterDict.get('nationNames', [])
-            levels = rosterDict.get('levels', (1, 8))
+            levels = rosterDict.get('levels', None)
             vehClassNames = rosterDict.get('vehClassNames', [])
             rSlot = UnitRosterSlot(vehTypeID, nationNames, levels, vehClassNames)
             rosterSlots[rosterSlotIdx] = rSlot.pack()

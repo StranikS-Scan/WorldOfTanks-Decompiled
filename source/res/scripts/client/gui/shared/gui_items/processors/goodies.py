@@ -38,7 +38,7 @@ class BoosterProcessor(Processor):
                 msg = 'server_error_centerDown'
         else:
             msg = errStr
-        return makeI18nError(self._formMessage(msg), **self._getMsgCtx())
+        return makeI18nError(self._formMessage(msg), defaultSysMsgKey=self._formMessage('server_error'), **self._getMsgCtx())
 
 
 class BoosterActivator(BoosterProcessor):

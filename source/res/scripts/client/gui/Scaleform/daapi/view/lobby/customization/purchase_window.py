@@ -122,6 +122,8 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.__setTotalData()
 
     def __setTotalData(self, *args):
+        if self.__controller.cart.processingMultiplePurchase:
+            return
         priceGold = self.__controller.cart.totalPriceGold
         priceCredits = self.__controller.cart.totalPriceCredits
         notEnoughGoldTooltip = notEnoughCreditsTooltip = ''
@@ -137,11 +139,11 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         self.as_setTotalDataS({'credits': formatPriceCredits(priceCredits),
          'gold': formatPriceGold(priceGold),
          'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=len(self.__searchDP.selectedItems), total=len(self.__searchDP.items))),
-         'buyEnabled': canBuy,
          'enoughGold': enoughGold,
          'enoughCredits': enoughCredits,
          'notEnoughGoldTooltip': notEnoughGoldTooltip,
          'notEnoughCreditsTooltip': notEnoughCreditsTooltip})
+        self.as_setBuyBtnEnabledS(canBuy)
 
     @process
     def __buyElements(self, purchaseItems, replacedElementGroups):
@@ -150,6 +152,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         else:
             isContinue = True
         if isContinue:
+            self.as_setBuyBtnEnabledS(False)
             self.__controller.cart.purchaseMultiple(purchaseItems)
 
 

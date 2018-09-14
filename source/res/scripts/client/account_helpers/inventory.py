@@ -4,9 +4,9 @@ import AccountCommands
 import items
 import collections
 from functools import partial
+from adisp import async
 from diff_utils import synchronizeDicts
 from items import vehicles, tankmen
-from debug_utils import *
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -312,6 +312,7 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_VEH_SETTINGS, vehInvID, setting, isOn, proxy)
             return
 
+    @async
     def changeVehicleCamouflage(self, vehInvID, camouflageKind, camouflageID, periodDays, callback):
         if self.__ignore:
             if callback is not None:
@@ -321,6 +322,7 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__changeVehCamouflage_onShopSynced, vehInvID, camouflageKind, camouflageID, periodDays, callback))
             return
 
+    @async
     def changeVehicleEmblem(self, vehInvID, position, emblemID, periodDays, callback):
         if self.__ignore:
             if callback is not None:
@@ -330,6 +332,7 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__changeVehEmblem_onShopSynced, vehInvID, position, emblemID, periodDays, callback))
             return
 
+    @async
     def changeVehicleInscription(self, vehInvID, position, inscriptionID, periodDays, colorID, callback):
         if self.__ignore:
             if callback is not None:

@@ -4,6 +4,7 @@ import functools
 import itertools
 import BigWorld
 from Event import Event
+from adisp import async, process
 from items import vehicles
 from CurrentVehicle import g_currentVehicle
 from helpers.i18n import makeString as _ms
@@ -53,12 +54,12 @@ class Cart(object):
         self.__events.onDisplayedElementsAndGroupsUpdated += self.__saveDisplayedElements
         self.__events.onSlotsSet += self.__update
         self.__events.onInitialSlotsSet += self.__saveInitialSlotsData
-        self.__events.onTankSlotCleared += self.purchaseSingle
-        self.__events.onOwnedElementPicked += self.purchaseSingle
+        self.__events.onTankSlotCleared += self.__purchaseSingleEventHandler
+        self.__events.onOwnedElementPicked += self.__purchaseSingleEventHandler
 
     def fini(self):
-        self.__events.onOwnedElementPicked -= self.purchaseSingle
-        self.__events.onTankSlotCleared -= self.purchaseSingle
+        self.__events.onOwnedElementPicked -= self.__purchaseSingleEventHandler
+        self.__events.onTankSlotCleared -= self.__purchaseSingleEventHandler
         self.__events.onInitialSlotsSet -= self.__saveInitialSlotsData
         self.__events.onSlotsSet -= self.__update
         self.__events.onDisplayedElementsAndGroupsUpdated -= self.__saveDisplayedElements
@@ -79,6 +80,10 @@ class Cart(object):
     def totalPriceCredits(self):
         return self.__totalPriceCredits
 
+    @property
+    def processingMultiplePurchase(self):
+        return self.__processingMultiplePurchase
+
     def recalculateTotalPrice(self):
         self.__markDuplicates()
         self.__totalPriceCredits = 0
@@ -91,23 +96,20 @@ class Cart(object):
                 else:
                     self.__totalPriceCredits += price
 
+    @process
     def purchaseMultiple(self, purchaseWindowItems):
         self.__processingMultiplePurchase = True
         self.__events.onMultiplePurchaseStarted()
-        sortedItems = sorted(purchaseWindowItems, key=lambda item: item['price'])
-        self.__elementsToProcess = 0
-        for item in sortedItems:
-            if item['selected']:
-                self.__elementsToProcess += 1
-
-        for item in sortedItems:
-            itemIndex = purchaseWindowItems.index(item)
-            cartItem = self.__purchaseData[itemIndex]
+        sortedItems = sorted(zip(purchaseWindowItems, self.__purchaseData), key=lambda (wItem, _): wItem['price'])
+        self.__elementsToProcess = len(filter(lambda (wItem, _): wItem['selected'], sortedItems))
+        for wItem, cartItem in sortedItems:
             isGold = cartItem['duration'] == DURATION.PERMANENT
-            if item['selected']:
-                self.purchaseSingle(item['cType'], cartItem['spot'], getAdjustedSlotIndex(item['slotIdx'], item['cType'], self.__initialSlotsData), item['id'], cartItem['duration'], item['price'], isGold)
+            if wItem['selected']:
+                yield self.__purchaseSingle(wItem['cType'], cartItem['spot'], getAdjustedSlotIndex(wItem['slotIdx'], wItem['cType'], self.__initialSlotsData), wItem['id'], cartItem['duration'], installationFlag=wItem['price'], isGold=isGold)
 
-    def purchaseSingle(self, cType, cSpot, slotIdx, cItemID, duration, installationFlag=INSTALLATION.REMOVAL, isGold=True):
+    @async
+    @process
+    def __purchaseSingle(self, cType, cSpot, slotIdx, cItemID, duration, callback, installationFlag=INSTALLATION.REMOVAL, isGold=True):
         purchaseFunction = {CUSTOMIZATION_TYPE.CAMOUFLAGE: BigWorld.player().inventory.changeVehicleCamouflage,
          CUSTOMIZATION_TYPE.EMBLEM: BigWorld.player().inventory.changeVehicleEmblem,
          CUSTOMIZATION_TYPE.INSCRIPTION: BigWorld.player().inventory.changeVehicleInscription}[cType]
@@ -121,11 +123,16 @@ class Cart(object):
             arguments.append(1)
         if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
             self._activeCamouflage[self._currentVehicle.item.intCD] = slotIdx
+        resultID = yield purchaseFunction(*arguments)
         if installationFlag == INSTALLATION.REMOVAL:
-            arguments.append(lambda resultID: self.__onCustomizationDrop(resultID, cItemID, cType))
+            self.__onCustomizationDrop(resultID, cItemID, cType)
         else:
-            arguments.append(functools.partial(self.__onCustomizationChange, (installationFlag, isGold), cType))
-        purchaseFunction(*arguments)
+            self.__onCustomizationChange((installationFlag, isGold), cType, resultID)
+        callback(resultID)
+
+    @process
+    def __purchaseSingleEventHandler(self, *args, **kwargs):
+        yield self.__purchaseSingle(*args, **kwargs)
 
     def __markDuplicates(self):
         duplicateSuspected = []

@@ -36,3 +36,6 @@ class CustomizationBuyWindowMeta(AbstractWindowView):
         :param data: Represented by PurchasesTotalVO (AS)
         """
         return self.flashObject.as_setTotalData(data) if self._isDAAPIInited() else None
+
+    def as_setBuyBtnEnabledS(self, isEnabled):
+        return self.flashObject.as_setBuyBtnEnabled(isEnabled) if self._isDAAPIInited() else None

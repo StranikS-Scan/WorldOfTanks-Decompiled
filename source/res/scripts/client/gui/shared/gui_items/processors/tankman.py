@@ -35,7 +35,7 @@ class TankmanDismiss(ItemProcessor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('dismiss_tankman/%s' % errStr) if len(errStr) else makeI18nError('dismiss_tankman/server_error')
+        return makeI18nError('dismiss_tankman/%s' % errStr, defaultSysMsgKey='dismiss_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('dismiss_tankman/success', type=SM_TYPE.Information)
@@ -58,7 +58,7 @@ class TankmanRecruit(Processor):
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('recruit_window/%s' % errStr) if len(errStr) else makeI18nError('recruit_window/server_error', auxData=ctx)
+        return makeI18nError('recruit_window/%s' % errStr, defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
 
     def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
@@ -95,7 +95,7 @@ class TankmanEquip(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        return makeI18nError('%s/%s' % (prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % prefix)
+        return makeI18nError('%s/%s' % (prefix, errStr), defaultSysMsgKey='%s/server_error' % prefix)
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self.__getSysMsgPrefix(), type=SM_TYPE.Information)
@@ -132,7 +132,7 @@ class TankmanRecruitAndEquip(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         prefix = self.__getSysMsgPrefix()
-        return makeI18nError('%s/%s' % (prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % prefix, auxData=ctx)
+        return makeI18nError('%s/%s' % (prefix, errStr), defaultSysMsgKey='%s/server_error' % prefix, auxData=ctx)
 
     def _successHandler(self, code, ctx=None):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
@@ -170,7 +170,7 @@ class TankmanUnload(Processor):
         self.addPlugins([plugins.VehicleValidator(vehicle, False, prop={'isLocked': True}), plugins.BarracksSlotsValidator(berthsNeeded)])
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % self.__sysMsgPrefix)
+        return makeI18nError('%s/%s' % (self.__sysMsgPrefix, errStr), defaultSysMsgKey='%s/server_error' % self.__sysMsgPrefix)
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self.__sysMsgPrefix, type=SM_TYPE.Information)
@@ -192,7 +192,7 @@ class TankmanReturn(Processor):
         return makeI18nSuccess('%s/success' % self.__prefix, type=SM_TYPE.Information)
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('%s/%s' % (self.__prefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % self.__prefix)
+        return makeI18nError('%s/%s' % (self.__prefix, errStr), defaultSysMsgKey='%s/server_error' % self.__prefix)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to return crew. VehicleItem :', self.__vehicle)
@@ -207,9 +207,7 @@ class TankmanRetraining(ItemProcessor):
         self.tmanCostTypeIdx = tmanCostTypeIdx
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if len(errStr):
-            makeI18nError('retraining_tankman/%s' % errStr)
-        return makeI18nError('retraining_tankman/server_error')
+        return makeI18nError('retraining_tankman/%s' % errStr, defaultSysMsgKey='retraining_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         tmanCost = self._getRecruitPrice(self.tmanCostTypeIdx)
@@ -240,7 +238,7 @@ class TankmanCrewRetraining(Processor):
         messagePrefix = 'retraining_crew'
         if crewMembersCount == 1:
             messagePrefix = 'retraining_tankman'
-        return makeI18nError('%s/%s' % (messagePrefix, errStr)) if len(errStr) else makeI18nError('%s/server_error' % messagePrefix)
+        return makeI18nError('%s/%s' % (messagePrefix, errStr), defaultSysMsgKey='%s/server_error' % messagePrefix)
 
     def _successHandler(self, code, ctx=None):
         crewMembersCount = len(self.tankmen)
@@ -273,7 +271,7 @@ class TankmanFreeToOwnXpConvertor(Processor):
         self.__selectedXpForConvert = selectedXpForConvert
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('free_xp_to_tman_skill/error/%s' % errStr) if len(errStr) else makeI18nError('free_xp_to_tman_skill/server_error')
+        return makeI18nError('free_xp_to_tman_skill/error/%s' % errStr, defaultSysMsgKey='free_xp_to_tman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('free_xp_to_tman_skill/success', freeXP=BigWorld.wg_getIntegralFormat(self.__selectedXpForConvert), type=SM_TYPE.Information)
@@ -290,7 +288,7 @@ class TankmanAddSkill(ItemProcessor):
         self.skillName = skillName
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('add_tankman_skill/%s' % errStr) if len(errStr) else makeI18nError('add_tankman_skill/server_error')
+        return makeI18nError('add_tankman_skill/%s' % errStr, defaultSysMsgKey='add_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('add_tankman_skill/success', type=SM_TYPE.Information)
@@ -313,7 +311,7 @@ class TankmanChangeRole(ItemProcessor):
          plugins.MoneyValidator(Money(gold=self.__changeRoleCost))])
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('change_tankman_role/%s' % errStr) if len(errStr) else makeI18nError('change_tankman_role/server_error')
+        return makeI18nError('change_tankman_role/%s' % errStr, defaultSysMsgKey='change_tankman_role/server_error')
 
     def _successHandler(self, code, ctx=None):
         msgType = SM_TYPE.FinancialTransactionWithGold
@@ -339,7 +337,7 @@ class TankmanDropSkills(ItemProcessor):
         self.dropSkillCostIdx = dropSkillCostIdx
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('drop_tankman_skill/%s' % errStr) if len(errStr) else makeI18nError('drop_tankman_skill/server_error')
+        return makeI18nError('drop_tankman_skill/%s' % errStr, defaultSysMsgKey='drop_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
         msgType = self.__getTankmanSysMsgType(self.dropSkillCostIdx)
@@ -409,7 +407,7 @@ class TankmanRestore(ItemProcessor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('restore_tankman/%s' % errStr) if len(errStr) else makeI18nError('restore_tankman/server_error')
+        makeI18nError('restore_tankman/%s' % errStr, defaultSysMsgKey='restore_tankman/server_error')
 
     def _successHandler(self, code, ctx=None):
         restorePrice, _ = getTankmenRestoreInfo(self.__tankman)

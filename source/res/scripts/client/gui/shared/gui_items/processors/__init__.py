@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/__init__.py
 from collections import namedtuple
 from debug_utils import *
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from helpers import i18n
 from adisp import process, async
 from gui.SystemMessages import SM_TYPE
@@ -21,8 +22,11 @@ def makeI18nSuccess(sysMsgKey='', auxData=None, *args, **kwargs):
     return makeSuccess(i18n.makeString(('#system_messages:%s' % sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Information), auxData)
 
 
-def makeI18nError(sysMsgKey='', auxData=None, *args, **kwargs):
-    return makeError(i18n.makeString(('#system_messages:%s' % sysMsgKey), *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
+def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwargs):
+    localKey = '#system_messages:%s' % sysMsgKey
+    if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
+        localKey = '#system_messages:%s' % defaultSysMsgKey
+    return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
 
 
 class Processor(object):

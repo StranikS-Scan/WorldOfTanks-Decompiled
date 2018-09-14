@@ -109,7 +109,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
             msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
         else:
             msg = 'vehicle_buy/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -173,7 +173,7 @@ class VehicleRenter(VehicleReceiveProcessor):
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
             msg = 'vehicle_rent/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -230,7 +230,7 @@ class VehicleRestoreProcessor(VehicleBuyer):
             msg = 'vehicle_restore/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_restore/server_error_centerDown'
         else:
             msg = 'vehicle_restore/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -302,7 +302,7 @@ class VehicleTradeInProcessor(VehicleBuyer):
             msg = 'vehicle_trade_in/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_trade_in/server_error_centerDown'
         else:
             msg = 'vehicle_trade_in/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName)
+        return makeI18nError(msg, vehName=self.item.userName, defaultSysMsgKey='vehicle_trade_in/server_error', tradeOffVehName=self.itemToTradeOff.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -343,7 +343,7 @@ class VehicleSlotBuyer(Processor):
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_slot_buy/%s' % errStr) if len(errStr) else makeI18nError('vehicle_slot_buy/server_error')
+        return makeI18nError('vehicle_slot_buy/%s' % errStr, defaultSysMsgKey='vehicle_slot_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
         price = self.__getSlotPrice()
@@ -403,15 +403,12 @@ class VehicleSeller(ItemProcessor):
         self.isRemovedAfterRent = vehicle.isRented
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if len(errStr):
-            localKey = 'vehicle_sell/%s'
-            if self.isRemovedAfterRent:
-                localKey = 'vehicle_remove/%s'
-            return makeI18nError(localKey % errStr, vehName=self.vehicle.userName)
-        localKey = 'vehicle_sell/server_error'
+        localKey = 'vehicle_sell/%s'
+        defaultKey = 'vehicle_sell/server_error'
         if self.isRemovedAfterRent:
-            localKey = 'vehicle_remove/server_error'
-        return makeI18nError(localKey, vehName=self.vehicle.userName)
+            localKey = 'vehicle_remove/%s'
+            defaultKey = 'vehicle_remove/server_error'
+        return makeI18nError(localKey % errStr, defaultSysMsgKey=defaultKey, vehName=self.vehicle.userName)
 
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
@@ -506,7 +503,7 @@ class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
         super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (plugins.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, vehName=self.item.userName) if len(errStr) else makeI18nError('vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
+        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
@@ -588,7 +585,7 @@ class VehicleLayoutProcessor(Processor):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
             msg = errStr
-        return makeI18nError('layout_apply/%s' % msg, vehName=self.vehicle.userName, type=SM_TYPE.Error)
+        return makeI18nError('layout_apply/%s' % msg, defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
 
     def getShellsLayoutPrice(self):
         """
@@ -647,10 +644,8 @@ class VehicleRepairer(ItemProcessor):
         BigWorld.player().inventory.repair(self.item.invID, lambda code: self._response(code, callback))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if len(errStr):
-            needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
-            return makeI18nError('vehicle_repair/%s' % errStr, vehName=self.item.userName, needed=formatPrice(needed))
-        return makeI18nError('vehicle_repair/server_error', vehName=self.item.userName)
+        needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
+        return makeI18nError('vehicle_repair/%s' % errStr, defaultSysMsgKey='vehicle_repair/server_error', vehName=self.item.userName, needed=formatPrice(needed))
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
